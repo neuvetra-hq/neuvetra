@@ -7,7 +7,7 @@
     {
       "methodVersionId": "scope3.cat1_2.supplier_specific.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -19,7 +19,7 @@
     {
       "methodVersionId": "scope3.cat3.td_losses.egrid2023.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -31,7 +31,7 @@
     {
       "methodVersionId": "scope3.cat3a.upstream_fuels.us_netl2024_cagreet3.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -43,7 +43,7 @@
     {
       "methodVersionId": "scope3.cat3b.upstream_electricity.egrid2023_netl2024.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -55,7 +55,7 @@
     {
       "methodVersionId": "scope3.cat3c.td_losses_upstream.egrid2023_netl2024.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -67,7 +67,7 @@
     {
       "methodVersionId": "scope3.cat4_9.transport_distance.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -79,7 +79,7 @@
     {
       "methodVersionId": "scope3.cat5_12.waste.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -91,7 +91,7 @@
     {
       "methodVersionId": "scope3.cat6.business_travel_distance.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -103,7 +103,7 @@
     {
       "methodVersionId": "scope3.cat7.employee_commuting_distance.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -115,7 +115,7 @@
     {
       "methodVersionId": "scope3.spend.epa_scghg_v1_3.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -202,7 +202,7 @@
           }
         ],
         "conversions": [],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [
           {
@@ -287,7 +287,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat6.business_travel_distance",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "2c101c03b45b70a53c84ad5ca0e4471024cad5b82ff3fc4973eae5922d330c38",
+        "resultSha256": "46d3635ea19abbaca46acd311fc21e4daea78d8c8753396ca8e5ccc6133de7e2",
         "status": "complete",
         "total": {
           "display": "1578.1901",
@@ -384,7 +384,7 @@
           }
         ],
         "conversions": [],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [
           {
@@ -468,7 +468,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat7.employee_commuting_distance",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "e244da5a9c896d11222f7a3064ef6930ea1a2fdcda5a8888b83115e3982e3207",
+        "resultSha256": "c219c0e06c4b0f61f14f288519df543977316346457ba3f175809b738f7bae8b",
         "status": "complete",
         "total": {
           "display": "652.9965",
@@ -603,7 +603,7 @@
             "rounding": "half_even"
           }
         ],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [
           "economy_wide_price_index"
         ],
@@ -638,7 +638,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.spend.epa_scghg_v1_3",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "2014d14ae4b636aa0ad3f277f43ec8f4099090df9254e33aebcf0c0956567a0f",
+        "resultSha256": "dfbc47f7b1adadcc91f35346e29c4b9c661ad15d6e9ec0eaedbc44d4838e53ee",
         "status": "complete",
         "total": {
           "display": "12276.5596",
@@ -777,7 +777,7 @@
             "rounding": "half_even"
           }
         ],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [],
         "findings": [],
@@ -807,7 +807,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat1_2.supplier_specific",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "50657a69e564ee81dc268156484ec07ad8034159f38fab09a7e68ab48c9caec5",
+        "resultSha256": "6bf7f26054410dd3a3ceeb07b393bb5a75cfc0ccbb896fa149c4678118216dbe",
         "status": "complete",
         "total": {
           "display": "3625.0000",
@@ -918,7 +918,7 @@
           }
         ],
         "conversions": [],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [
           {
@@ -1005,7 +1005,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat4_9.transport_distance",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "d6bbc64faec613c2159ca77f210e3c26f5bdd8ce70185068831fa142b02fe55b",
+        "resultSha256": "76184a9a17213fbddf43b27dc50282383c7a035342fb6894020de436fe732490",
         "status": "complete",
         "total": {
           "display": "25.4233",
@@ -1173,7 +1173,7 @@
             "rounding": "half_even"
           }
         ],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [
           {
@@ -1203,7 +1203,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat5_12.waste",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "2702896e52dee3f76fd05d0694cc6e555fbccabadda759138392f6d6c6664a38",
+        "resultSha256": "f9ff879a675bb60f32b13884fa95fdfe7b5af5b381461a74d5190ad3fc44c3d5",
         "status": "complete",
         "total": {
           "display": "66.4575",
@@ -1410,7 +1410,7 @@
             "rounding": "half_even"
           }
         ],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [
           {
@@ -1501,7 +1501,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat3.td_losses",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "811cdc794a0772b2d4035ecc3d662eba7a9db2944efa244f2ce6f3ca997e0fe5",
+        "resultSha256": "ba5ae6e7ab0027394c90c2aff932ec2032e58ab3c0cdcf4a56c5e53675d7692e",
         "status": "complete",
         "total": {
           "display": "2084.4815",
@@ -1862,7 +1862,7 @@
             "rounding": "half_even"
           }
         ],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [
           {
@@ -2025,7 +2025,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat3c.td_losses_upstream.egrid2023_netl2024",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "ffa1fe79f50cc91cef1c01d809e178e185b616562c2dcd321167bd6237d9f1b1",
+        "resultSha256": "a1af326e4b1098b4994c967f44e92570375448aa70e4a798d297b9cccd5bce3d",
         "status": "complete",
         "total": {
           "display": "278.8267",
@@ -2374,7 +2374,7 @@
             "rounding": "half_even"
           }
         ],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [
           {
@@ -2530,7 +2530,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat3b.upstream_electricity.egrid2023_netl2024",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "aa9c5916f5fb4f2d657f6cef50ea97eae9575c2daeba386afdd211a2ae7e3eee",
+        "resultSha256": "d0a0180130b76e508d1d1381c4eb7fd6f52f5cf4bdacf87837329ace9bfe34b6",
         "status": "complete",
         "total": {
           "display": "6521.8244",
@@ -2669,7 +2669,7 @@
           }
         ],
         "conversions": [],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [
           {
@@ -2697,7 +2697,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat3a.upstream_fuels.us_netl2024_cagreet3",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "10081ab6abe5286f5d310dd197b0713e8eb56e4070772199f018e24ad8c8bc2b",
+        "resultSha256": "9e06bc89c13d5323dbfd9bebcae2820cf85f809d6c38bbe2af768a496c6454cf",
         "status": "complete",
         "total": {
           "display": "11605.6144",
@@ -5621,7 +5621,7 @@
         "text": "Spend-based figures use U.S. national sector averages per dollar (EPA Supply Chain GHG Emission Factors v1.3), not the supplier’s own emissions."
       }
     ],
-    "aggregateSha256": "131c8b35637db049172bb062d8e362b73addc2931b2f4ea5d77c5f71f70baf8d"
+    "aggregateSha256": "f642ee6c9fd281de0d337f6203c1235f56ab3dde88b2ab549c00dc9322bfbb7c"
   },
   "unmatchedScreening": [],
   "warnings": [],

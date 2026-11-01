@@ -696,7 +696,7 @@ export const SCOPE3_CAPACITY_TEXT = {
   /** Round 3 (owner decision 7): a whole import withdrawn in one action. */
   importWithdrawn: (withdrawn: number, already: number) => `${withdrawn.toLocaleString('en-US')} line${withdrawn === 1 ? '' : 's'} withdrawn${already > 0 ? `; ${already.toLocaleString('en-US')} already withdrawn` : ''}. Withdrawn lines stay in the history and no longer count.`,
   /** Bug hunt (PR 22): a bulk spend write over lines whose location is no longer in company setup (0030 refuses it, 23503). */
-  spendLocationNotInSetup: (lines: number) => `${lines.toLocaleString('en-US')} imported spend line${lines === 1 ? ' is' : 's are'} at a location that is no longer in company setup, so nothing was changed. Add the location back in company setup (it can be marked as excluded), then try again.`,
+  spendLocationNotInSetup: (lines: number) => `${lines.toLocaleString('en-US')} imported spend line${lines === 1 ? ' is' : 's are'} at a location that is no longer in company setup, so nothing was changed. Open each affected record in Activity and evidence, choose a saved location and save a correction with a reason, then try again. If needed, add a replacement location in company setup first.`,
 } as const
 // --- end round 2, lane B ---
 // --- R2-A --- Round 2, lane A (ROUND2.md owner decisions 1-4; ACC-5, ACC-7, ACC-14, ACC-17): the engine's new notes and findings,

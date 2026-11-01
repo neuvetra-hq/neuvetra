@@ -7,7 +7,7 @@
     {
       "methodVersionId": "scope3.cat11.sold_energy_product.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -19,7 +19,7 @@
     {
       "methodVersionId": "scope3.cat11.sold_fuel.hub2025.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -31,7 +31,7 @@
     {
       "methodVersionId": "scope3.cat11.sold_ghg_product.hub2025.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -43,7 +43,7 @@
     {
       "methodVersionId": "scope3.cat12.end_of_life_split.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -55,7 +55,7 @@
     {
       "methodVersionId": "scope3.cat15.investment_reported.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -67,7 +67,7 @@
     {
       "methodVersionId": "scope3.cat15.investment_revenue_eeio.epa_scghg_v1_3.v1",
       "scope": 3,
-      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
       "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
       "releaseStatus": "unreleased_beta",
       "releaseId": null,
@@ -178,7 +178,7 @@
           }
         ],
         "conversions": [],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [
           {
@@ -229,7 +229,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat12.end_of_life_split",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "3443c8cbcc3588f01144a0da296dbf22b8010ca9d762604e292091c890f0fa9a",
+        "resultSha256": "47cb4f8bae650ff68623d3352d8b77614b83cc0a721321ffa4558d909e851fa9",
         "status": "complete",
         "total": {
           "display": "24367.5000",
@@ -385,7 +385,7 @@
             "rounding": "half_even"
           }
         ],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [
           {
@@ -436,7 +436,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat12.end_of_life_split",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "dd1a6554d5e19f54d9dc8f2cff438b9be43de59047b1bc70e7b1aa489d48fae2",
+        "resultSha256": "bce1c9ca17d86dab35c72dc15b93bdefe6ed4959254acf539cf74afc93d0ef95",
         "status": "complete",
         "total": {
           "display": "4127.0535",
@@ -533,7 +533,7 @@
         "co2eWithoutGasSplit": null,
         "constantsUsed": [],
         "conversions": [],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [],
         "findings": [
@@ -557,7 +557,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat12.end_of_life_split",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "cd4e3412a9e92eba5ed9d1c24efdb4a86ba976a6c3838413955eeb141ca0b2b2",
+        "resultSha256": "4e098252965179bb0b8890b8f1d0a7b2bff83430b4c6569baf799ee5ba76301b",
         "status": "input_needed",
         "total": null
       },
@@ -671,7 +671,7 @@
             "rounding": "half_even"
           }
         ],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [],
         "findings": [],
@@ -703,7 +703,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat15.investment_reported",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "b18e18c6f1a66c4256e063450d71cdc6bc9aaeaaf01ade3741e8af679bea7452",
+        "resultSha256": "10f223ef45eae94203f474e575e1b00d71517e34dc3d9da98d92094593d2c547",
         "status": "complete",
         "total": {
           "display": "616250.0000",
@@ -838,7 +838,7 @@
             "rounding": "half_even"
           }
         ],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [],
         "findings": [],
@@ -879,7 +879,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat15.investment_reported",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "ed7daa25ad4020d5f841316743fd1f3c6c8506f384f08c2d77e197417b121e30",
+        "resultSha256": "1b70899e2e0433a4ca6d612f268779fdc3148fe9904c0b01b0d04b97cf564cc7",
         "status": "complete",
         "total": {
           "display": "300000000.0000",
@@ -1041,7 +1041,7 @@
             "rounding": "half_even"
           }
         ],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [
           "revenue_economy_wide_price_index"
         ],
@@ -1084,7 +1084,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat15.investment_revenue_eeio.epa_scghg_v1_3",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "cad290a31e9a44e203aad85d7f44f93610cef1494af033cbe950510e03bdc656",
+        "resultSha256": "c2b488456062a7b64f76e8a38a021f61e07cc9c73407b03d55ee1b7c532f6f85",
         "status": "complete",
         "total": {
           "display": "22103.9719",
@@ -1215,7 +1215,7 @@
           }
         ],
         "conversions": [],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [
           {
@@ -1301,7 +1301,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat11.sold_energy_product",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "b263ceb3b5126b0194057bba1c13d49d21e257d3871f2fa56fd28da05b1fce67",
+        "resultSha256": "1044e4d895c69f0489b81e386ca8c6512579969d5d57d5bbba7120b1f41d5aae",
         "status": "complete",
         "total": {
           "display": "21864098.2576",
@@ -1412,7 +1412,7 @@
           }
         ],
         "conversions": [],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [
           {
@@ -1498,7 +1498,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat11.sold_energy_product",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "313a7e0ff1dbb611e813b248d2e76ddf8f47f7188eed2bfdbb0114fb76cbb9a2",
+        "resultSha256": "66e84f30952fff3db4768ee51ee5ae187b98e2ae2312bba923f44e39e752517f",
         "status": "complete",
         "total": {
           "display": "487565.3045",
@@ -1597,7 +1597,7 @@
         "co2eWithoutGasSplit": null,
         "constantsUsed": [],
         "conversions": [],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [],
         "findings": [
@@ -1623,7 +1623,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat11.sold_energy_product",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "420d26cfa5aa7012c144541e0a712d09b3da67f2250a224e33c3cf94079ccfcd",
+        "resultSha256": "5e2a2e75e7f1bedea0a7a4b72b14975b24aa1289e1381fc3bece85e5ffa8a70b",
         "status": "input_needed",
         "total": null
       },
@@ -1734,7 +1734,7 @@
           }
         ],
         "conversions": [],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [
           "fuel_default_heat_content"
         ],
@@ -1829,7 +1829,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat11.sold_energy_product",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "5b4f334ae2e124dbea761154d09ee621f289bbd38d64b256e9f895761599875a",
+        "resultSha256": "274e4513620735c8f45adbea771d2e48405059c20a876bb61a976de7efe2990d",
         "status": "complete",
         "total": {
           "display": "310137.2820",
@@ -1941,7 +1941,7 @@
           }
         ],
         "conversions": [],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [
           "fuel_default_heat_content"
         ],
@@ -2033,7 +2033,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat11.sold_fuel.hub2025",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "10fa06c882c7240a08d22fc9cbf8d3f78ea51a63300040f6dd5a2ec8512bf126",
+        "resultSha256": "efbcf306a5fdce7931acefabde217658bca812efbf28ea932c5c28adc2e6ba8f",
         "status": "complete",
         "total": {
           "display": "689193.9600",
@@ -2145,7 +2145,7 @@
           }
         ],
         "conversions": [],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [
           "fuel_default_heat_content"
         ],
@@ -2231,7 +2231,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat11.sold_fuel.hub2025",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "6e9e0636c92d793489f4b69b5d161b8bff1e8991ca458b2edcd1621fd0d4b87d",
+        "resultSha256": "8873e78c1499118bcad241bfd6d2c9ff61f2d4e860932ebbc51dcb4a7f037454",
         "status": "complete",
         "total": {
           "display": "7.6736",
@@ -2334,7 +2334,7 @@
         },
         "constantsUsed": [],
         "conversions": [],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [],
         "findings": [],
@@ -2355,7 +2355,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat11.sold_fuel.hub2025",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "1cb2fe3b3aa1f387bc0d3375c7e90fab39463f3f0f913fb4f72de78da522e5b1",
+        "resultSha256": "835a5dc2d67414755c6af32b3b93c748b6127d85b844e9e95436dca99b147aab",
         "status": "complete",
         "total": {
           "display": "0.0000",
@@ -2462,7 +2462,7 @@
         },
         "constantsUsed": [],
         "conversions": [],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [
           {
@@ -2500,7 +2500,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat11.sold_ghg_product.hub2025",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "c7e3611cfe8ef455b8d7a8f39b6e442721f3cc8aa7103d2dc0d4d12cf8c3b25a",
+        "resultSha256": "da4575f271d75a360273193584758aa240c456b724fe10cd63ca6ad0825d7d87",
         "status": "complete",
         "total": {
           "display": "15600000.0000",
@@ -2616,7 +2616,7 @@
           }
         ],
         "conversions": [],
-        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "engineSha256": "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f",
         "estimates": [],
         "factorsUsed": [
           {
@@ -2654,7 +2654,7 @@
         "profile": "neuvetra.scope3-engine.v1",
         "profileId": "scope3.cat11.sold_ghg_product.hub2025",
         "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
-        "resultSha256": "dded757435ae939f6a4f4d47a8f33bb26cce47774a2a64f29a2d74c4f7419589",
+        "resultSha256": "e84e03a1acb15c8433f39a797ccef49c1c6d641e2836056af63e52912b272201",
         "status": "complete",
         "total": {
           "display": "253854.3851",
@@ -4631,7 +4631,7 @@
         "text": "Products containing greenhouse gases count only the share of the gas released during use, as the company states with its basis; release at end of life belongs in category 12."
       }
     ],
-    "aggregateSha256": "156f9a6024a3b2dc5729ac676005e80e917ec905e862f5b82f487ba9f9878d0d"
+    "aggregateSha256": "ca10250c8bef2044c473a3c4fd19c30ac49c89488d5149a7ceda12e522f3d12c"
   },
   "unmatchedScreening": [],
   "warnings": [],

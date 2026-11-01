@@ -63,4 +63,33 @@ describe("report versions: the last version asked for is the one shown; a failed
     expect(app.text()).not.toContain("Report list failed.")
     expect(app.nodes().some((node: any) => Array.isArray(node.props.versions) && node.props.versions.length === 2)).toBe(true)
   })
+
+  test("a delayed approval never replaces a newer opened version", async () => {
+    const approval = deferred<unknown>()
+    const app = await mount({ loadScope3Reports: async () => view,
+      loadScope3ReportVersion: async (_: string, id: string) => id === v1.id ? report1 : report2,
+      approveScope3Report: () => approval.promise })
+    const history = () => app.nodes().find((node: any) => typeof node.props.onOpen === "function")!
+    const frozen = () => app.nodes().find((node: any) => typeof node.props.onApprove === "function")!
+    history().props.onOpen(v1.id); await app.settle()
+    frozen().props.onApprove({ acknowledgeOpenIssues: true, confirmSelfApproval: true }); await app.settle()
+    history().props.onOpen(v2.id); await app.settle()
+    expect(frozen().props.report.version.revision).toBe(2)
+    approval.resolve({}); await app.settle()
+    expect(frozen().props.report.version.revision).toBe(2)
+  })
+
+  test("a delayed prepare never replaces a version opened after the prepare began", async () => {
+    const prepared = deferred<unknown>()
+    const app = await mount({ loadScope3Reports: async () => view,
+      loadScope3ReportVersion: async (_: string, id: string) => id === v1.id ? report1 : report2,
+      prepareScope3Report: () => prepared.promise })
+    app.nodes().find((node: any) => node.props["aria-label"] === "Why a new version?")!.props.onChange({ target: { value: "Corrected activity" } })
+    await app.settle()
+    app.button("Prepare report version")!.props.onClick(); await app.settle()
+    app.nodes().find((node: any) => typeof node.props.onOpen === "function")!.props.onOpen(v2.id)
+    await app.settle()
+    prepared.resolve({ version: v1 }); await app.settle()
+    expect(app.nodes().find((node: any) => typeof node.props.onApprove === "function")!.props.report.version.revision).toBe(2)
+  })
 })

@@ -16,6 +16,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from decimal import Decimal, ROUND_HALF_EVEN, localcontext
 from fractions import Fraction as F
 from pathlib import Path
@@ -77,7 +78,7 @@ def calc(req):
 
 class CalculateMany(unittest.TestCase):
     def test_every_item_is_identical_to_calculate_including_refusals_and_failures(self):
-        # All golden requests (6,411: every existing kind, the r3 inputs, refusals and one failure) in chunks of 2,000.
+        # All 6,411 frozen requests. The historical malformed-unit failure is now a typed refusal (S-1).
         reqs = [c['request'] if 'request' in c else {'kind': c['kind'], 'input': c['result']['input']} for c in GOLDEN['cases']]
         seen = {'ok': 0, 'refused': 0, 'error': 0}
         for i in range(0, len(reqs), 2000):
@@ -93,19 +94,29 @@ class CalculateMany(unittest.TestCase):
                     expected = {'status': 'error', 'code': 'scope3_engine_unavailable'}
                 self.assertEqual(e.canonical(item), e.canonical(expected), req)
                 seen[item['status']] += 1
-        # Round 2, owner decision 1: the golden's January 2026 commuting case calculates now (6372 + 1 ok, 38 - 1 refused).
-        self.assertEqual(seen, {'ok': 6373, 'refused': 37, 'error': 1})
+        # January 2026 commuting now calculates; S-1 turns the historical malformed-unit error into a refusal.
+        self.assertEqual(seen, {'ok': 6373, 'refused': 38, 'error': 0})
 
     def test_order_is_kept_and_one_bad_item_never_stops_the_others(self):
         bad_unit = {'kind': 'transport', 'input': {'period': P, 'category': 4, 'vehicle': 'passenger_car', 'loadBasis': 'dedicated_vehicle', 'activity': {'value': '1', 'unit': []}, 'thirdPartyFacilities': 'none'}}
         out = e.handle({'action': 'calculate_many', 'requests': [BUS, {'kind': 'hotel', 'input': {}}, 'not a request', bad_unit, LANDFILL]})
-        self.assertEqual([i['status'] for i in out['results']], ['ok', 'refused', 'refused', 'error', 'ok'])
-        self.assertEqual([i.get('code') for i in out['results']], [None, 'unsupported_kind', 'invalid_input_shape', 'scope3_engine_unavailable', None])
+        self.assertEqual([i['status'] for i in out['results']], ['ok', 'refused', 'refused', 'refused', 'ok'])
+        self.assertEqual([i.get('code') for i in out['results']], [None, 'unsupported_kind', 'invalid_input_shape', 'unsupported_unit', None])
         self.assertEqual(out['results'][0]['result'], e.calculate(BUS))
         self.assertEqual(out['results'][4]['result']['total']['display'], '1160.0000')
-        # The single-call CLI fails the same input outright (exit 2), never with a figure.
+        # The single-call CLI refuses the same invalid unit, never with a figure or service-unavailable error.
         code, single = cli({'action': 'calculate', 'request': bad_unit})
-        self.assertEqual((code, single), (2, {'status': 'error', 'code': 'scope3_engine_unavailable'}))
+        self.assertEqual((code, single), (1, {'status': 'refused', 'code': 'unsupported_unit'}))
+
+    def test_unexpected_calculator_failure_is_isolated_and_never_a_figure(self):
+        expected = e.calculate(LANDFILL)
+        def broken(_):
+            raise RuntimeError('deliberate internal failure')
+        with patch.dict(e.CALCULATORS, business_travel=broken):
+            self.assertEqual(e.calculate_many([BUS, LANDFILL]), [
+                {'status': 'error', 'code': 'scope3_engine_unavailable'},
+                {'status': 'ok', 'result': expected},
+            ])
 
     def test_malformed_envelope_and_counts(self):
         for bad in ({'action': 'calculate_many'}, {'action': 'calculate_many', 'requests': {}}, {'action': 'calculate_many', 'requests': []},

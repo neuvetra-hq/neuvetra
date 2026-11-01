@@ -7,7 +7,8 @@ import type { Scope3ResultsDocument } from './scope3-trace'
 import baseline from './testdata/scope3-csv-byte-baseline.json'
 
 const sha = (text: string) => createHash('sha256').update(text).digest('hex')
-const fixture = async (name: string): Promise<Scope3ResultsDocument> => Bun.file(new URL(`../../../apps/site-web/src/lib/${name}`, import.meta.url)).json()
+// Keep the exact inputs behind the historical byte baseline when current UI fixtures acquire a new engine pin.
+const fixture = async (name: string): Promise<Scope3ResultsDocument> => Bun.file(new URL(`./testdata/scope3-csv-frozen-inputs/${name}`, import.meta.url)).json()
 
 test('CSV and frozen v3 bytes keep record order, quoting, Unicode and formula protection', async () => {
   for (const file of ['scope3-results.fixture.json', 'scope3-results-downstream.fixture.json']) {

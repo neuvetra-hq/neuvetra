@@ -346,7 +346,7 @@ describe("round 3: spend import refusals and withdraw-import", () => {
 // 0030 requires each line's location to be in it (23503). After a location was removed from company setup, natively,
 // "withdraw this import" answered 404 "Scope 3 spend imports not found." for an import the same screen lists, and a mapping
 // save or currency conversion over such lines said "Reload and try again", which can never succeed. The route now says which
-// lines and how to recover: put the location back in company setup (it may be marked excluded), then try again.
+// lines and how to recover: correct each affected record to a saved location, then try again.
 describe("bug hunt: spend lines at a location removed from company setup", () => {
   const gone = "93900000-0000-4000-8000-0000000000b9"
   const coded = (code: string) => async () => { throw Object.assign(new Error("db"), { code }) }
@@ -361,7 +361,7 @@ describe("bug hunt: spend lines at a location removed from company setup", () =>
     ;(record.currentVersion.activity.payload as { importId: string }).importId = importId
     h.imports[0] = { ...saved, id: importId, locationId, lines: saved.lines }
   }
-  const refusal = { code: "location_not_in_setup", lines: 1, error: "1 imported spend line is at a location that is no longer in company setup, so nothing was changed. Add the location back in company setup (it can be marked as excluded), then try again." }
+  const refusal = { code: "location_not_in_setup", lines: 1, error: "1 imported spend line is at a location that is no longer in company setup, so nothing was changed. Open each affected record in Activity and evidence, choose a saved location and save a correction with a reason, then try again. If needed, add a replacement location in company setup first." }
   test("withdraw this import: 409 location_not_in_setup, never 404 for an import that exists", async () => {
     const h = harness({ withdrawScope3SpendImport: coded("23503") })
     await withLineAt(h, gone)

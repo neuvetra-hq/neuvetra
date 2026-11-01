@@ -53,7 +53,7 @@ export const SCOPE3_RESULTS_PROFILE = "neuvetra.scope3-results.v1" as const
  * CA-GREET3.0, CARB LCFS energy densities), category 3A, 3B, 3C upstream and 3D upstream, and the aggregate's boundaryClosures,
  * with the golden still passing. Technical review only: the methods remain unreleased beta until AG2 and a release.
  */
-export const REVIEWED_SCOPE3_ENGINE_SHA256 = "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730"
+export const REVIEWED_SCOPE3_ENGINE_SHA256 = "dfecc365ce06ddba2fe0658b8f71e96b36aad9d3dfb2c7fbbcccdecbdada662f"
 /** The engine's other pinned registers (I-03: R2, the EPA SC v1.3 spend register; I-05: R3, the supplement register; I-12u: R5, US upstream; I-12h: R6, buildings and hotels); the boundary refuses an aggregate naming any other. */
 export const REVIEWED_SCOPE3_ADDITIONAL_REGISTERS: Readonly<Record<string, string>> = { spend: SCOPE3_SPEND_REGISTER_SHA256, supplement: SCOPE3_SUPPLEMENT_REGISTER_SHA256, us_upstream: SCOPE3_US_UPSTREAM_REGISTER_SHA256,
   // I-12h: R6 (CBECS 2018 and the EPA events guidance hotel table).

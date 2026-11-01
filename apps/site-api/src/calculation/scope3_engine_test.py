@@ -211,6 +211,31 @@ class Categories6And7Travel(unittest.TestCase):
             e.employee_commuting({'period': {'start': '2027-01-01', 'endExclusive': '2027-02-01'}, 'mode': 'bus', 'activity': {'value': '1', 'unit': 'passenger-mile'}})
 
 
+class MalformedDistanceUnits(unittest.TestCase):
+    def test_non_string_units_are_refused_without_breaking_the_batch(self):
+        requests = [
+            ('transport', {'period': P, 'category': 4, 'vehicle': 'medium_and_heavy_duty_truck',
+                           'loadBasis': 'dedicated_vehicle', 'thirdPartyFacilities': 'none'}, 'activity', 'vehicle-mile'),
+            ('business_travel', {'period': P, 'mode': 'bus'}, 'activity', 'passenger-mile'),
+            ('business_travel', {'period': P, 'mode': 'air', 'passengerSegments': 2}, 'segmentDistance', 'mile'),
+            ('employee_commuting', {'period': P, 'mode': 'bus'}, 'activity', 'passenger-mile'),
+        ]
+        for kind, fields, key, valid_unit in requests:
+            valid = {'kind': kind, 'input': dict(fields, **{key: {'value': '10', 'unit': valid_unit}})}
+            expected = e.calculate(valid)
+            self.assertEqual(expected['status'], 'complete')
+            for unit in ([], {}, ['mile'], {'value': 'mile'}, None, True, 1):
+                with self.subTest(kind=kind, field=key, unit=unit):
+                    bad = {'kind': kind, 'input': dict(fields, **{key: {'value': '10', 'unit': unit}})}
+                    with self.assertRaises(e.Refused) as raised:
+                        e.calculate(bad)
+                    self.assertEqual(raised.exception.code, 'unsupported_unit')
+                    self.assertEqual(e.calculate_many([bad, valid]), [
+                        {'status': 'refused', 'code': 'unsupported_unit'},
+                        {'status': 'ok', 'result': expected},
+                    ])
+
+
 class Aggregate(unittest.TestCase):
     def test_category_subtotals_rounded_once_and_disclosures(self):
         results = [e.td_losses({'period': P, 'quantity': '10000', 'unit': 'kWh', 'subregion': 'CAMX', 'zip': '94105'}),

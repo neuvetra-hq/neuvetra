@@ -336,7 +336,7 @@ def distance_miles(v, allowed: dict, what: str, used: dict, conversions: list) -
     """allowed maps an input unit to (hub unit, needs km conversion)."""
     require_keys(v, {'value', 'unit'})
     q = quantity(v['value'], 'invalid_quantity')
-    if v['unit'] not in allowed:
+    if not isinstance(v['unit'], str) or v['unit'] not in allowed:
         raise Refused('unsupported_unit')
     hub_unit, from_km = allowed[v['unit']]
     if from_km:

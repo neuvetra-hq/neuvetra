@@ -139,8 +139,8 @@ export function Scope3ReportVersions({ companyId, actor, results }: { companyId:
   // Shown only where a version can be prepared and something is screened ("ready" would mislead an empty company).
   const live = results && view?.reportingYear != null && results.coverage.categories.some(row => row.status !== "not_screened") ? scope3LiveOpenIssues(results) : null
   /** Shows the version `read` returns (null closes it), unless another version was asked for in the meantime. */
-  const setOpen = async (read: () => Promise<Scope3FrozenReport | null>) => {
-    const request = ++openRequest.current
+  const setOpen = async (read: () => Promise<Scope3FrozenReport | null>, request = ++openRequest.current) => {
+    if (request !== openRequest.current) return
     const report = await read()
     if (request !== openRequest.current) return
     setOpenReport(report); setPrevious(null)
@@ -149,19 +149,21 @@ export function Scope3ReportVersions({ companyId, actor, results }: { companyId:
     try { const loaded = await loadScope3ReportVersion(companyId, before.versionId, actorRef.current); if (request === openRequest.current) setPrevious(loaded.document) } catch { /* the log still names what this version holds */ }
   }
   const prepare = () => run(async () => {
+    const request = ++openRequest.current
     if (needsReason && reason.trim().length < 3) throw new Error("Say why this version replaces the earlier one (at least 3 characters).")
     key.current ??= crypto.randomUUID()
     const saved = await prepareScope3Report(companyId, { idempotencyKey: key.current, expectedRevision: next, reason: needsReason ? reason : null }, actorRef.current)
     key.current = null; setReason("")
     await load()
-    await setOpen(() => loadScope3ReportVersion(companyId, saved.version.id, actorRef.current))
+    await setOpen(() => loadScope3ReportVersion(companyId, saved.version.id, actorRef.current), request)
   })
   const openVersion = (id: string) => run(async () => { await setOpen(() => loadScope3ReportVersion(companyId, id, actorRef.current)) })
   const approve = (confirmations: Scope3ApprovalConfirmations) => run(async () => {
     if (!open) return
+    const request = ++openRequest.current
     await approveScope3Report(companyId, open.version.id, open.version.reportSha256, actorRef.current, confirmations)
     await load()
-    await setOpen(() => loadScope3ReportVersion(companyId, open.version.id, actorRef.current))
+    await setOpen(() => loadScope3ReportVersion(companyId, open.version.id, actorRef.current), request)
   })
   return <section aria-labelledby="scope3-report-versions" style={{ marginTop: 18 }}>
     <h3 className="nv-h3" id="scope3-report-versions">Report versions{view?.reportingYear ? ` · reporting year ${view.reportingYear}` : ""}</h3>

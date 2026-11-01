@@ -1,0 +1,4668 @@
+{
+  "profile": "neuvetra.scope3-results.v1",
+  "label": "Draft — synthetic test data calculated with unreleased beta methods; not for reporting and not externally assured",
+  "syntheticOnly": true,
+  "environment": "synthetic_staging",
+  "methods": [
+    {
+      "methodVersionId": "scope3.cat11.sold_energy_product.v1",
+      "scope": 3,
+      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+      "releaseStatus": "unreleased_beta",
+      "releaseId": null,
+      "releaseLabel": null,
+      "title": "Category 11: products that use electricity or fuel directly, over their expected lifetime (eGRID2023 rev2; Hub 2025 Table 1)",
+      "methodType": "activity_average_data",
+      "formula": "lifetime energy = units sold x lifetime (years or uses) x energy per year or use; electricity: MWh (kWh x 0.001) x eGRID2023 rev2 output emission rate of the region of use (subregion SRL23, or U.S. US23) x 0.45359237 per gas; fuel: as fuels sold (Hub Table 1); kg CO2e = CO2 + CH4 x 28 + N2O x 265 (calculation guidance formula 11.1)"
+    },
+    {
+      "methodVersionId": "scope3.cat11.sold_fuel.hub2025.v1",
+      "scope": 3,
+      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+      "releaseStatus": "unreleased_beta",
+      "releaseId": null,
+      "releaseLabel": null,
+      "title": "Category 11: fuels sold, combusted by their users (Hub 2025 Table 1; biogenic CO2 of biomass fuels reported separately)",
+      "methodType": "activity_average_data",
+      "formula": "MMBtu = quantity x Hub Table 1 default heat content (or MMBtu as stated); kg CO2 = MMBtu x kg CO2 per MMBtu (biomass fuels: biogenic CO2, reported separately and never in the total); kg CH4 and N2O = MMBtu x g per MMBtu x 0.001; kg CO2e = CO2 + CH4 x 28 + N2O x 265; a feedstock not combusted in use is a known zero (calculation guidance formula 11.2)"
+    },
+    {
+      "methodVersionId": "scope3.cat11.sold_ghg_product.hub2025.v1",
+      "scope": 3,
+      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+      "releaseStatus": "unreleased_beta",
+      "releaseId": null,
+      "releaseLabel": null,
+      "title": "Category 11: products that contain greenhouse gases released during use (Hub 2025 Tables 11 and 12, AR5)",
+      "methodType": "activity_average_data",
+      "formula": "kg gas released = units sold x charge per unit (kg, or lb x 0.45359237) x use-phase release percent / 100; kg CO2e = kg released x AR5 100-year GWP (Hub Table 11, or Table 12 for a blend) (calculation guidance formula 11.3); memo (outside totals, an upper bound): the charge left at end of life = units sold x charge per unit x (100 - use-phase release percent) / 100 x the same GWP"
+    },
+    {
+      "methodVersionId": "scope3.cat12.end_of_life_split.v1",
+      "scope": 3,
+      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+      "releaseStatus": "unreleased_beta",
+      "releaseId": null,
+      "releaseLabel": null,
+      "title": "Category 12: end of life of sold products and their packaging, by treatment split (Hub Table 9)",
+      "methodType": "activity_average_data",
+      "formula": "short tons = mass as for waste (lb / 2000, kg / (0.45359237 x 2000) or metric tons x 1000 / (0.45359237 x 2000), rounded half-even to 12 dp); per treatment: short tons x share / 100 x factor (metric tons CO2e per short ton) x 1000; kg CO2e = sum over the treatments (calculation guidance formula 12.1)"
+    },
+    {
+      "methodVersionId": "scope3.cat15.investment_reported.v1",
+      "scope": 3,
+      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+      "releaseStatus": "unreleased_beta",
+      "releaseId": null,
+      "releaseLabel": null,
+      "title": "Category 15: investments and project finance, investee- or project-reported scope 1 and 2 x the investment-specific attribution share",
+      "methodType": "partner_reported",
+      "formula": "attribution share = outstanding amount / denominator (EVIC, total equity plus debt, or total project cost; rounded half-even to 12 dp), or equity share percent / 100; kg CO2e = reported scope 1 and 2 (metric tons CO2e x 1000) x share (calculation guidance formulas 15.1 and 15.3); projected lifetime emissions of a project (annual x years x share) are a memo item, reported separately and never in the total"
+    },
+    {
+      "methodVersionId": "scope3.cat15.investment_revenue_eeio.epa_scghg_v1_3.v1",
+      "scope": 3,
+      "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+      "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+      "releaseStatus": "unreleased_beta",
+      "releaseId": null,
+      "releaseLabel": null,
+      "title": "Category 15: investments, investee revenue x EPA Supply Chain GHG Emission Factors v1.3 without margins x attribution share (an upper-bound proxy)",
+      "methodType": "proxy",
+      "formula": "kg CO2e = investee revenue (USD) x factor without margins (kg CO2e per 2022 USD, NAICS-6 of the investee) x r x attribution share; r = I2022 / I(revenue year) of the BEA GDP implicit price deflator, rounded half-even to 12 dp (none for 2022 dollars); share as for reported investments (calculation guidance formula 15.2)"
+    }
+  ],
+  "generatedAt": "2026-10-30T00:00:00.000Z",
+  "companyId": "93900000-0000-4000-8000-000000000001",
+  "setup": {
+    "revision": 1,
+    "legalName": "Synthetic Products and Holdings Co",
+    "period": {
+      "start": "2025-01-01",
+      "endExclusive": "2026-01-01"
+    }
+  },
+  "gridLosses": {
+    "included": false,
+    "electricityRecords": 0
+  },
+  "registerSha256s": {
+    "main": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+    "spend": "24d59c826e23b72b41a2a22db5f1c51c793c00a94e14ebe391e3982d76d1088c",
+    "supplement": "b9d3c4b9676c539eeb0caece70a81d1713be4646673115033649fed031c8176b",
+    "us_upstream": "66e9658a6743a3eabe460211dbaa6842082d4459666a80076ef795caa89b7d7c",
+    "building_hotel": "0902516554d063eb5cb3f3491a277ddb7ae0767180c335cbca52e7b714fe20e7"
+  },
+  "records": [
+    {
+      "recordId": "93900000-0000-4000-8000-000000001008",
+      "versionId": "94900000-0000-4000-8000-000000001008",
+      "revision": 1,
+      "kind": "end_of_life_split",
+      "category": 12,
+      "sourceId": "D-8",
+      "locationId": "93900000-0000-4000-8000-000000000003",
+      "locationName": "Office",
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "quantity": {
+        "value": "85.5",
+        "unit": "short_ton"
+      },
+      "quality": "actual",
+      "estimateBasis": null,
+      "evidence": [],
+      "plan": {
+        "action": "calculate",
+        "status": null,
+        "reasons": [],
+        "notes": []
+      },
+      "periodCheck": "inside",
+      "outcome": "calculated",
+      "refusalCode": null,
+      "result": {
+        "activity": {
+          "basis": "packaging",
+          "material": "corrugated_containers",
+          "shortTons": "85.5",
+          "treatments": [
+            {
+              "co2e": "7053.75",
+              "sharePercent": "75",
+              "shortTons": "64.125",
+              "treatment": "recycled"
+            },
+            {
+              "co2e": "17100",
+              "sharePercent": "20",
+              "shortTons": "17.1",
+              "treatment": "landfilled"
+            },
+            {
+              "co2e": "213.75",
+              "sharePercent": "5",
+              "shortTons": "4.275",
+              "treatment": "combusted"
+            }
+          ]
+        },
+        "boundary": {
+          "minimumBoundary": "met",
+          "notes": [
+            "ar4_gwp_embedded_in_factor",
+            "avoided_emissions_excluded",
+            "includes_transport_to_facility",
+            "sold_product_end_of_life_assumed_split"
+          ]
+        },
+        "category": 12,
+        "co2eWithoutGasSplit": {
+          "co2e": "24367.5",
+          "co2eUnit": "kg CO2e",
+          "gwpSetId": "AR4-100",
+          "reason": "EPA Hub Table 9 publishes CO2e only"
+        },
+        "constantsUsed": [
+          {
+            "id": "metric_ton_to_kg",
+            "unit": "kg per metric ton",
+            "value": "1000"
+          }
+        ],
+        "conversions": [],
+        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "estimates": [],
+        "factorsUsed": [
+          {
+            "cell": "F449",
+            "key": "waste.corrugated_containers.combusted",
+            "label": "Corrugated Containers, combusted",
+            "unit": "metric ton CO2e (AR4 GWP) per short ton",
+            "value": "0.05"
+          },
+          {
+            "cell": "E449",
+            "key": "waste.corrugated_containers.landfilled",
+            "label": "Corrugated Containers, landfilled",
+            "unit": "metric ton CO2e (AR4 GWP) per short ton",
+            "value": "1"
+          },
+          {
+            "cell": "D449",
+            "key": "waste.corrugated_containers.recycled",
+            "label": "Corrugated Containers, recycled",
+            "unit": "metric ton CO2e (AR4 GWP) per short ton",
+            "value": "0.11"
+          }
+        ],
+        "findings": [],
+        "gases": {},
+        "gwpSetId": "AR4-100",
+        "input": {
+          "basis": "packaging",
+          "material": "corrugated_containers",
+          "period": {
+            "endExclusive": "2026-01-01",
+            "start": "2025-01-01"
+          },
+          "quantity": "85.5",
+          "split": {
+            "anaerobic_digestion_dry": "0",
+            "anaerobic_digestion_wet": "0",
+            "combusted": "5",
+            "composted": "0",
+            "landfilled": "20",
+            "recycled": "75"
+          },
+          "unit": "short_ton"
+        },
+        "inputSha256": "c8fa2f5be013066fb3832556cf90e1e39004e991299e90dd305bfdd1fe5005ad",
+        "methodVersionId": "scope3.cat12.end_of_life_split.v1",
+        "profile": "neuvetra.scope3-engine.v1",
+        "profileId": "scope3.cat12.end_of_life_split",
+        "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+        "resultSha256": "3443c8cbcc3588f01144a0da296dbf22b8010ca9d762604e292091c890f0fa9a",
+        "status": "complete",
+        "total": {
+          "display": "24367.5000",
+          "rounding": "half_even_4dp",
+          "unit": "kg CO2e",
+          "unrounded": "24367.5"
+        }
+      },
+      "reference": "Synthetic",
+      "derivedFrom": null,
+      "payload": {
+        "material": "corrugated_containers",
+        "basis": "packaging",
+        "split": {
+          "recycled": "75",
+          "landfilled": "20",
+          "combusted": "5",
+          "composted": "0",
+          "anaerobic_digestion_dry": "0",
+          "anaerobic_digestion_wet": "0"
+        },
+        "splitBasis": "EPA Facts and Figures 2018, containers and packaging",
+        "productLabel": "Synthetic shipping box"
+      },
+      "methodType": "activity_average_data",
+      "effectiveDataQuality": {
+        "indicators": {
+          "technological": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "temporal": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "geographical": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "completeness": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "reliability": {
+            "rating": "good",
+            "setBy": "method_default"
+          }
+        },
+        "activityDataOrigin": {
+          "origin": "company_records",
+          "setBy": "method_default"
+        }
+      }
+    },
+    {
+      "recordId": "93900000-0000-4000-8000-000000001009",
+      "versionId": "94900000-0000-4000-8000-000000001009",
+      "revision": 1,
+      "kind": "end_of_life_split",
+      "category": 12,
+      "sourceId": "D-9",
+      "locationId": "93900000-0000-4000-8000-000000000003",
+      "locationName": "Office",
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "quantity": {
+        "value": "12",
+        "unit": "metric_ton"
+      },
+      "quality": "actual",
+      "estimateBasis": null,
+      "evidence": [],
+      "plan": {
+        "action": "calculate",
+        "status": null,
+        "reasons": [],
+        "notes": [
+          "same_product_in_cat11_ghg_release"
+        ]
+      },
+      "periodCheck": "inside",
+      "outcome": "calculated",
+      "refusalCode": null,
+      "result": {
+        "activity": {
+          "basis": "sold_products",
+          "material": "mixed_plastics",
+          "shortTons": "13.227735731093",
+          "treatments": [
+            {
+              "co2e": "873.030558252138",
+              "sharePercent": "30",
+              "shortTons": "3.9683207193279",
+              "treatment": "recycled"
+            },
+            {
+              "co2e": "158.732828773116",
+              "sharePercent": "60",
+              "shortTons": "7.9366414386558",
+              "treatment": "landfilled"
+            },
+            {
+              "co2e": "3095.290161075762",
+              "sharePercent": "10",
+              "shortTons": "1.3227735731093",
+              "treatment": "combusted"
+            }
+          ]
+        },
+        "boundary": {
+          "minimumBoundary": "met",
+          "notes": [
+            "ar4_gwp_embedded_in_factor",
+            "avoided_emissions_excluded",
+            "includes_transport_to_facility",
+            "sold_product_end_of_life_assumed_split"
+          ]
+        },
+        "category": 12,
+        "co2eWithoutGasSplit": {
+          "co2e": "4127.053548101016",
+          "co2eUnit": "kg CO2e",
+          "gwpSetId": "AR4-100",
+          "reason": "EPA Hub Table 9 publishes CO2e only"
+        },
+        "constantsUsed": [
+          {
+            "id": "lb_per_short_ton",
+            "unit": "lb per short ton",
+            "value": "2000"
+          },
+          {
+            "id": "lb_to_kg",
+            "unit": "kg per lb",
+            "value": "0.45359237"
+          },
+          {
+            "id": "metric_ton_to_kg",
+            "unit": "kg per metric ton",
+            "value": "1000"
+          }
+        ],
+        "conversions": [
+          {
+            "denominator": "907.18474",
+            "numerator": "12000",
+            "places": 12,
+            "quantity": "short tons = metric tons x 1000 / (0.45359237 x 2000)",
+            "result": "13.227735731093",
+            "rounded": true,
+            "rounding": "half_even"
+          }
+        ],
+        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "estimates": [],
+        "factorsUsed": [
+          {
+            "cell": "F473",
+            "key": "waste.mixed_plastics.combusted",
+            "label": "Mixed Plastics, combusted",
+            "unit": "metric ton CO2e (AR4 GWP) per short ton",
+            "value": "2.34"
+          },
+          {
+            "cell": "E473",
+            "key": "waste.mixed_plastics.landfilled",
+            "label": "Mixed Plastics, landfilled",
+            "unit": "metric ton CO2e (AR4 GWP) per short ton",
+            "value": "0.02"
+          },
+          {
+            "cell": "D473",
+            "key": "waste.mixed_plastics.recycled",
+            "label": "Mixed Plastics, recycled",
+            "unit": "metric ton CO2e (AR4 GWP) per short ton",
+            "value": "0.22"
+          }
+        ],
+        "findings": [],
+        "gases": {},
+        "gwpSetId": "AR4-100",
+        "input": {
+          "basis": "sold_products",
+          "material": "mixed_plastics",
+          "period": {
+            "endExclusive": "2026-01-01",
+            "start": "2025-01-01"
+          },
+          "quantity": "12",
+          "split": {
+            "anaerobic_digestion_dry": "0",
+            "anaerobic_digestion_wet": "0",
+            "combusted": "10",
+            "composted": "0",
+            "landfilled": "60",
+            "recycled": "30"
+          },
+          "unit": "metric_ton"
+        },
+        "inputSha256": "25478c473d1ddda4adaa7402d23c673972a41b17d310a5f1893176c7c13dfa72",
+        "methodVersionId": "scope3.cat12.end_of_life_split.v1",
+        "profile": "neuvetra.scope3-engine.v1",
+        "profileId": "scope3.cat12.end_of_life_split",
+        "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+        "resultSha256": "dd1a6554d5e19f54d9dc8f2cff438b9be43de59047b1bc70e7b1aa489d48fae2",
+        "status": "complete",
+        "total": {
+          "display": "4127.0535",
+          "rounding": "half_even_4dp",
+          "unit": "kg CO2e",
+          "unrounded": "4127.053548101016"
+        }
+      },
+      "reference": "Synthetic",
+      "derivedFrom": null,
+      "payload": {
+        "material": "mixed_plastics",
+        "basis": "sold_products",
+        "split": {
+          "recycled": "30",
+          "landfilled": "60",
+          "combusted": "10",
+          "composted": "0",
+          "anaerobic_digestion_dry": "0",
+          "anaerobic_digestion_wet": "0"
+        },
+        "splitBasis": "EPA Facts and Figures 2018, containers and packaging",
+        "productLabel": "Synthetic aerosol duster"
+      },
+      "methodType": "activity_average_data",
+      "effectiveDataQuality": {
+        "indicators": {
+          "technological": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "temporal": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "geographical": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "completeness": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "reliability": {
+            "rating": "good",
+            "setBy": "method_default"
+          }
+        },
+        "activityDataOrigin": {
+          "origin": "company_records",
+          "setBy": "method_default"
+        }
+      }
+    },
+    {
+      "recordId": "93900000-0000-4000-8000-000000001010",
+      "versionId": "94900000-0000-4000-8000-000000001010",
+      "revision": 1,
+      "kind": "end_of_life_split",
+      "category": 12,
+      "sourceId": "D-10",
+      "locationId": "93900000-0000-4000-8000-000000000003",
+      "locationName": "Office",
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "quantity": {
+        "value": "3",
+        "unit": "short_ton"
+      },
+      "quality": "actual",
+      "estimateBasis": null,
+      "evidence": [],
+      "plan": {
+        "action": "calculate",
+        "status": null,
+        "reasons": [],
+        "notes": []
+      },
+      "periodCheck": "inside",
+      "outcome": "held",
+      "refusalCode": null,
+      "result": {
+        "activity": {
+          "basis": "packaging",
+          "material": "corrugated_containers"
+        },
+        "boundary": {
+          "minimumBoundary": "met",
+          "notes": []
+        },
+        "category": 12,
+        "co2eWithoutGasSplit": null,
+        "constantsUsed": [],
+        "conversions": [],
+        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "estimates": [],
+        "factorsUsed": [],
+        "findings": [
+          "treatment_split_unknown"
+        ],
+        "gases": {},
+        "gwpSetId": "AR4-100",
+        "input": {
+          "basis": "packaging",
+          "material": "corrugated_containers",
+          "period": {
+            "endExclusive": "2026-01-01",
+            "start": "2025-01-01"
+          },
+          "quantity": "3",
+          "split": null,
+          "unit": "short_ton"
+        },
+        "inputSha256": "9c5725f5c242b23efa117b03f4c27b4ada4ee0ae512d1fa8e405c05abf7932da",
+        "methodVersionId": "scope3.cat12.end_of_life_split.v1",
+        "profile": "neuvetra.scope3-engine.v1",
+        "profileId": "scope3.cat12.end_of_life_split",
+        "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+        "resultSha256": "cd4e3412a9e92eba5ed9d1c24efdb4a86ba976a6c3838413955eeb141ca0b2b2",
+        "status": "input_needed",
+        "total": null
+      },
+      "reference": "Synthetic",
+      "derivedFrom": null,
+      "payload": {
+        "material": "corrugated_containers",
+        "basis": "packaging",
+        "split": null,
+        "splitBasis": null,
+        "productLabel": "Synthetic shipping box"
+      },
+      "methodType": "activity_average_data",
+      "effectiveDataQuality": {
+        "indicators": {
+          "technological": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "temporal": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "geographical": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "completeness": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "reliability": {
+            "rating": "good",
+            "setBy": "method_default"
+          }
+        },
+        "activityDataOrigin": {
+          "origin": "company_records",
+          "setBy": "method_default"
+        }
+      }
+    },
+    {
+      "recordId": "93900000-0000-4000-8000-000000001011",
+      "versionId": "94900000-0000-4000-8000-000000001011",
+      "revision": 1,
+      "kind": "investment",
+      "category": 15,
+      "sourceId": "D-11",
+      "locationId": "93900000-0000-4000-8000-000000000003",
+      "locationName": "Office",
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "quantity": {
+        "value": "2500000",
+        "unit": "USD"
+      },
+      "quality": "actual",
+      "estimateBasis": null,
+      "evidence": [],
+      "plan": {
+        "action": "calculate",
+        "status": null,
+        "reasons": [],
+        "notes": []
+      },
+      "periodCheck": "inside",
+      "outcome": "calculated",
+      "refusalCode": null,
+      "result": {
+        "activity": {
+          "attributionBasis": "equity_share_percent",
+          "attributionShare": "0.125",
+          "holdingType": "equity_unlisted",
+          "investeeEmissionsTonnes": "4930",
+          "path": "investee_reported",
+          "pcafScore": 1
+        },
+        "boundary": {
+          "minimumBoundary": "met",
+          "notes": [
+            "investee_gwp_basis_ar5",
+            "investee_scope3_excluded",
+            "pcaf_style_score_1"
+          ]
+        },
+        "category": 15,
+        "co2eWithoutGasSplit": {
+          "co2e": "616250",
+          "co2eUnit": "kg CO2e",
+          "gwpSetId": "AS-REPORTED",
+          "reason": "Investee-reported scope 1 and 2 CO2e (declared GWP basis AR5) x attribution share; used as reported, not split by gas or restated"
+        },
+        "constantsUsed": [
+          {
+            "id": "metric_ton_to_kg",
+            "unit": "kg per metric ton",
+            "value": "1000"
+          }
+        ],
+        "conversions": [
+          {
+            "denominator": "100",
+            "numerator": "12.5",
+            "places": 12,
+            "quantity": "attribution share = equity share percent / 100",
+            "result": "0.125",
+            "rounded": false,
+            "rounding": "half_even"
+          }
+        ],
+        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "estimates": [],
+        "factorsUsed": [],
+        "findings": [],
+        "gases": {},
+        "gwpSetId": "AS-REPORTED",
+        "input": {
+          "attribution": {
+            "basis": "equity_share_percent",
+            "percent": "12.5"
+          },
+          "emissionsVerified": true,
+          "gwpBasis": "AR5",
+          "holdingType": "equity_unlisted",
+          "investeeEmissions": "4930",
+          "lifetimeYears": null,
+          "naicsCode": null,
+          "outstandingAmount": "2500000",
+          "path": "investee_reported",
+          "period": {
+            "endExclusive": "2026-01-01",
+            "start": "2025-01-01"
+          },
+          "projectedAnnual": null,
+          "revenue": null,
+          "revenueYear": null
+        },
+        "inputSha256": "66d75977eae691427dca70a38ebd0e32edda24c1f05d8995fabd66bff63eb980",
+        "methodVersionId": "scope3.cat15.investment_reported.v1",
+        "profile": "neuvetra.scope3-engine.v1",
+        "profileId": "scope3.cat15.investment_reported",
+        "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+        "resultSha256": "b18e18c6f1a66c4256e063450d71cdc6bc9aaeaaf01ade3741e8af679bea7452",
+        "status": "complete",
+        "total": {
+          "display": "616250.0000",
+          "rounding": "half_even_4dp",
+          "unit": "kg CO2e",
+          "unrounded": "616250"
+        }
+      },
+      "reference": "Synthetic",
+      "derivedFrom": null,
+      "payload": {
+        "investeeName": "Synthetic Solar Holdings",
+        "holdingType": "equity_unlisted",
+        "path": "investee_reported",
+        "attribution": {
+          "basis": "equity_share_percent",
+          "percent": "12.5"
+        },
+        "investeeEmissions": "4930",
+        "emissionsVerified": true,
+        "revenue": null,
+        "revenueYear": null,
+        "naicsCode": null,
+        "initialSponsor": false,
+        "projectedAnnual": null,
+        "lifetimeYears": null,
+        "snapshotDate": "2025-12-31",
+        "gwpBasis": "AR5"
+      },
+      "methodType": "partner_reported",
+      "effectiveDataQuality": {
+        "indicators": {
+          "technological": {
+            "rating": "very_good",
+            "setBy": "method_default"
+          },
+          "temporal": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "geographical": {
+            "rating": "very_good",
+            "setBy": "method_default"
+          },
+          "completeness": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "reliability": {
+            "rating": "very_good",
+            "setBy": "method_default"
+          }
+        },
+        "activityDataOrigin": {
+          "origin": "value_chain_partner",
+          "setBy": "method_type"
+        }
+      }
+    },
+    {
+      "recordId": "93900000-0000-4000-8000-000000001012",
+      "versionId": "94900000-0000-4000-8000-000000001012",
+      "revision": 1,
+      "kind": "investment",
+      "category": 15,
+      "sourceId": "D-12",
+      "locationId": "93900000-0000-4000-8000-000000000003",
+      "locationName": "Office",
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "quantity": {
+        "value": "20000000",
+        "unit": "USD"
+      },
+      "quality": "actual",
+      "estimateBasis": null,
+      "evidence": [],
+      "plan": {
+        "action": "calculate",
+        "status": null,
+        "reasons": [],
+        "notes": []
+      },
+      "periodCheck": "inside",
+      "outcome": "calculated",
+      "refusalCode": null,
+      "result": {
+        "activity": {
+          "attributionBasis": "outstanding_over_denominator",
+          "attributionShare": "0.25",
+          "holdingType": "project_finance",
+          "investeeEmissionsTonnes": "1200000",
+          "lifetimeYears": 25,
+          "path": "project_reported",
+          "pcafScore": 2,
+          "projectedAnnualTonnes": "1200000"
+        },
+        "boundary": {
+          "minimumBoundary": "met",
+          "notes": [
+            "investee_data_unverified",
+            "investee_gwp_basis_ar5",
+            "investee_scope3_excluded",
+            "pcaf_style_score_2",
+            "projected_lifetime_emissions_reported_separately"
+          ]
+        },
+        "category": 15,
+        "co2eWithoutGasSplit": {
+          "co2e": "300000000",
+          "co2eUnit": "kg CO2e",
+          "gwpSetId": "AS-REPORTED",
+          "reason": "Investee-reported scope 1 and 2 CO2e (declared GWP basis AR5) x attribution share; used as reported, not split by gas or restated"
+        },
+        "constantsUsed": [
+          {
+            "id": "metric_ton_to_kg",
+            "unit": "kg per metric ton",
+            "value": "1000"
+          }
+        ],
+        "conversions": [
+          {
+            "denominator": "80000000",
+            "numerator": "20000000",
+            "places": 12,
+            "quantity": "attribution share = outstanding amount / total project cost",
+            "result": "0.25",
+            "rounded": false,
+            "rounding": "half_even"
+          }
+        ],
+        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "estimates": [],
+        "factorsUsed": [],
+        "findings": [],
+        "gases": {},
+        "gwpSetId": "AS-REPORTED",
+        "input": {
+          "attribution": {
+            "basis": "outstanding_over_denominator",
+            "denominator": "80000000",
+            "denominatorType": "total_project_cost"
+          },
+          "emissionsVerified": false,
+          "gwpBasis": "AR5",
+          "holdingType": "project_finance",
+          "investeeEmissions": "1200000",
+          "lifetimeYears": 25,
+          "naicsCode": null,
+          "outstandingAmount": "20000000",
+          "path": "project_reported",
+          "period": {
+            "endExclusive": "2026-01-01",
+            "start": "2025-01-01"
+          },
+          "projectedAnnual": "1200000",
+          "revenue": null,
+          "revenueYear": null
+        },
+        "inputSha256": "5cb40c543bd546a20f74a5422d40ef3faed7d7a6228c2aa722abcb26301a8c38",
+        "memoItems": [
+          {
+            "code": "projected_lifetime_emissions",
+            "kg": "7500000000",
+            "reportedSeparately": true,
+            "unit": "kg CO2e"
+          }
+        ],
+        "methodVersionId": "scope3.cat15.investment_reported.v1",
+        "profile": "neuvetra.scope3-engine.v1",
+        "profileId": "scope3.cat15.investment_reported",
+        "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+        "resultSha256": "ed7daa25ad4020d5f841316743fd1f3c6c8506f384f08c2d77e197417b121e30",
+        "status": "complete",
+        "total": {
+          "display": "300000000.0000",
+          "rounding": "half_even_4dp",
+          "unit": "kg CO2e",
+          "unrounded": "300000000"
+        }
+      },
+      "reference": "Synthetic",
+      "derivedFrom": null,
+      "payload": {
+        "investeeName": "Synthetic Solar Holdings",
+        "holdingType": "project_finance",
+        "path": "project_reported",
+        "attribution": {
+          "basis": "outstanding_over_denominator",
+          "denominatorType": "total_project_cost",
+          "denominator": "80000000"
+        },
+        "investeeEmissions": "1200000",
+        "emissionsVerified": false,
+        "revenue": null,
+        "revenueYear": null,
+        "naicsCode": null,
+        "initialSponsor": true,
+        "projectedAnnual": "1200000",
+        "lifetimeYears": 25,
+        "snapshotDate": "2025-12-31",
+        "gwpBasis": "AR5"
+      },
+      "methodType": "partner_reported",
+      "effectiveDataQuality": {
+        "indicators": {
+          "technological": {
+            "rating": "very_good",
+            "setBy": "method_default"
+          },
+          "temporal": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "geographical": {
+            "rating": "very_good",
+            "setBy": "method_default"
+          },
+          "completeness": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "reliability": {
+            "rating": "fair",
+            "setBy": "method_default"
+          }
+        },
+        "activityDataOrigin": {
+          "origin": "value_chain_partner",
+          "setBy": "method_type"
+        }
+      }
+    },
+    {
+      "recordId": "93900000-0000-4000-8000-000000001013",
+      "versionId": "94900000-0000-4000-8000-000000001013",
+      "revision": 1,
+      "kind": "investment",
+      "category": 15,
+      "sourceId": "D-13",
+      "locationId": "93900000-0000-4000-8000-000000000003",
+      "locationName": "Office",
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "quantity": {
+        "value": "1000000",
+        "unit": "USD"
+      },
+      "quality": "actual",
+      "estimateBasis": null,
+      "evidence": [],
+      "plan": {
+        "action": "calculate",
+        "status": null,
+        "reasons": [],
+        "notes": []
+      },
+      "periodCheck": "inside",
+      "outcome": "calculated",
+      "refusalCode": null,
+      "result": {
+        "activity": {
+          "attributionBasis": "outstanding_over_denominator",
+          "attributionShare": "0.008",
+          "holdingType": "equity_unlisted",
+          "naicsCode": "541511",
+          "nominalCo2e": "23520",
+          "path": "revenue_eeio",
+          "pcafScore": 4,
+          "priceRatio": "0.939794723976",
+          "revenue": "35000000",
+          "revenueYear": 2024
+        },
+        "additionalRegisters": [
+          {
+            "name": "spend",
+            "sha256": "24d59c826e23b72b41a2a22db5f1c51c793c00a94e14ebe391e3982d76d1088c"
+          }
+        ],
+        "boundary": {
+          "minimumBoundary": "met",
+          "notes": [
+            "eeio_upper_bound_proxy_includes_investee_upstream",
+            "factor_ghg_year_2022",
+            "pcaf_style_score_4",
+            "revenue_proxy"
+          ]
+        },
+        "category": 15,
+        "co2eWithoutGasSplit": {
+          "co2e": "22103.97190791552",
+          "co2eUnit": "kg CO2e",
+          "gwpSetId": "AR5-100",
+          "reason": "EPA Supply Chain GHG Emission Factors v1.3 without margins publish CO2e only (AR5 100-year GWPs applied by EPA)"
+        },
+        "constantsUsed": [
+          {
+            "id": "price_index.base_year",
+            "unit": "year (dollar year of every factor)",
+            "value": "2022"
+          },
+          {
+            "id": "price_index.gdp_deflator.2022",
+            "unit": "index (2017 = 100)",
+            "value": "118.026"
+          },
+          {
+            "id": "price_index.gdp_deflator.2024",
+            "unit": "index (2017 = 100)",
+            "value": "125.587"
+          }
+        ],
+        "conversions": [
+          {
+            "denominator": "125000000",
+            "numerator": "1000000",
+            "places": 12,
+            "quantity": "attribution share = outstanding amount / evic",
+            "result": "0.008",
+            "rounded": false,
+            "rounding": "half_even"
+          },
+          {
+            "denominator": "125.587",
+            "numerator": "118.026",
+            "places": 12,
+            "quantity": "price ratio = I2022 / I2024 (BEA GDP implicit price deflator, FRED A191RD3A086NBEA; economy-wide, not commodity-specific)",
+            "result": "0.939794723976",
+            "rounded": true,
+            "rounding": "half_even"
+          }
+        ],
+        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "estimates": [
+          "revenue_economy_wide_price_index"
+        ],
+        "factorsUsed": [
+          {
+            "cell": "row 798 column Supply Chain Emission Factors without Margins",
+            "key": "epa_scghg_v130.541511.without_margins",
+            "label": "Custom Computer Programming Services",
+            "unit": "kg CO2e/2022 USD, purchaser price",
+            "value": "0.084"
+          }
+        ],
+        "findings": [],
+        "gases": {},
+        "gwpSetId": "AR5-100",
+        "input": {
+          "attribution": {
+            "basis": "outstanding_over_denominator",
+            "denominator": "125000000",
+            "denominatorType": "evic"
+          },
+          "emissionsVerified": null,
+          "gwpBasis": null,
+          "holdingType": "equity_unlisted",
+          "investeeEmissions": null,
+          "lifetimeYears": null,
+          "naicsCode": "541511",
+          "outstandingAmount": "1000000",
+          "path": "revenue_eeio",
+          "period": {
+            "endExclusive": "2026-01-01",
+            "start": "2025-01-01"
+          },
+          "projectedAnnual": null,
+          "revenue": "35000000",
+          "revenueYear": 2024
+        },
+        "inputSha256": "61529dc83b008940726993d31497b487f4ecc4cbd5aeaaef4769816b68cb1dbf",
+        "methodVersionId": "scope3.cat15.investment_revenue_eeio.epa_scghg_v1_3.v1",
+        "profile": "neuvetra.scope3-engine.v1",
+        "profileId": "scope3.cat15.investment_revenue_eeio.epa_scghg_v1_3",
+        "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+        "resultSha256": "cad290a31e9a44e203aad85d7f44f93610cef1494af033cbe950510e03bdc656",
+        "status": "complete",
+        "total": {
+          "display": "22103.9719",
+          "rounding": "half_even_4dp",
+          "unit": "kg CO2e",
+          "unrounded": "22103.97190791552"
+        }
+      },
+      "reference": "Synthetic",
+      "derivedFrom": null,
+      "payload": {
+        "investeeName": "Synthetic Solar Holdings",
+        "holdingType": "equity_unlisted",
+        "path": "revenue_eeio",
+        "attribution": {
+          "basis": "outstanding_over_denominator",
+          "denominatorType": "evic",
+          "denominator": "125000000"
+        },
+        "investeeEmissions": null,
+        "emissionsVerified": null,
+        "revenue": "35000000",
+        "revenueYear": 2024,
+        "naicsCode": "541511",
+        "initialSponsor": false,
+        "projectedAnnual": null,
+        "lifetimeYears": null,
+        "snapshotDate": "2025-12-31",
+        "gwpBasis": "AR5"
+      },
+      "methodType": "proxy",
+      "effectiveDataQuality": {
+        "indicators": {
+          "technological": {
+            "rating": "poor",
+            "setBy": "method_default"
+          },
+          "temporal": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "geographical": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "completeness": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "reliability": {
+            "rating": "fair",
+            "setBy": "method_default"
+          }
+        },
+        "activityDataOrigin": {
+          "origin": "estimate",
+          "setBy": "method_type"
+        }
+      }
+    },
+    {
+      "recordId": "93900000-0000-4000-8000-000000001004",
+      "versionId": "94900000-0000-4000-8000-000000001004",
+      "revision": 1,
+      "kind": "sold_energy_product",
+      "category": 11,
+      "sourceId": "D-4",
+      "locationId": "93900000-0000-4000-8000-000000000003",
+      "locationName": "Office",
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "quantity": {
+        "value": "5000",
+        "unit": "unit"
+      },
+      "quality": "actual",
+      "estimateBasis": null,
+      "evidence": [],
+      "plan": {
+        "action": "calculate",
+        "status": null,
+        "reasons": [],
+        "notes": []
+      },
+      "periodCheck": "inside",
+      "outcome": "calculated",
+      "refusalCode": null,
+      "result": {
+        "activity": {
+          "energyCarrier": "electricity",
+          "energyPerBasis": "1250.5",
+          "energyUnit": "kWh",
+          "lifetimeBasis": "years",
+          "lifetimeEnergy": "62525000",
+          "lifetimeQuantity": "10",
+          "mwh": "62525",
+          "unitsSold": "5000",
+          "useRegion": "US"
+        },
+        "additionalRegisters": [
+          {
+            "name": "supplement",
+            "sha256": "b9d3c4b9676c539eeb0caece70a81d1713be4646673115033649fed031c8176b"
+          }
+        ],
+        "boundary": {
+          "minimumBoundary": "met",
+          "notes": [
+            "direct_use_phase_only",
+            "indirect_use_phase_excluded",
+            "reporting_year_grid_factor"
+          ]
+        },
+        "category": 11,
+        "co2eWithoutGasSplit": null,
+        "constantsUsed": [
+          {
+            "id": "kwh_to_mwh",
+            "unit": "MWh per kWh",
+            "value": "0.001"
+          },
+          {
+            "id": "lb_to_kg",
+            "unit": "kg per lb",
+            "value": "0.45359237"
+          }
+        ],
+        "conversions": [],
+        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "estimates": [],
+        "factorsUsed": [
+          {
+            "cell": "V3",
+            "key": "egrid2023_us.ch4",
+            "label": "U.S. (eGRID2023 rev2)",
+            "unit": "lb CH4 per MWh",
+            "value": "0.057"
+          },
+          {
+            "cell": "U3",
+            "key": "egrid2023_us.co2",
+            "label": "U.S. (eGRID2023 rev2)",
+            "unit": "lb CO2 per MWh",
+            "value": "767.209"
+          },
+          {
+            "cell": "W3",
+            "key": "egrid2023_us.n2o",
+            "label": "U.S. (eGRID2023 rev2)",
+            "unit": "lb N2O per MWh",
+            "value": "0.008"
+          },
+          {
+            "cell": "E525",
+            "key": "gwp_ar5.CH4",
+            "label": "CH4",
+            "unit": "kg CO2e per kg gas",
+            "value": "28"
+          },
+          {
+            "cell": "E524",
+            "key": "gwp_ar5.CO2",
+            "label": "CO2",
+            "unit": "kg CO2e per kg gas",
+            "value": "1"
+          },
+          {
+            "cell": "E526",
+            "key": "gwp_ar5.N2O",
+            "label": "N2O",
+            "unit": "kg CO2e per kg gas",
+            "value": "265"
+          }
+        ],
+        "findings": [],
+        "gases": {
+          "ch4": {
+            "co2e": "45263.937243063",
+            "co2eUnit": "kg CO2e",
+            "mass": "1616.56918725225",
+            "massUnit": "kg CH4"
+          },
+          "co2": {
+            "co2e": "21758709.29092300825",
+            "co2eUnit": "kg CO2e",
+            "mass": "21758709.29092300825",
+            "massUnit": "kg CO2"
+          },
+          "n2o": {
+            "co2e": "60125.02942061",
+            "co2eUnit": "kg CO2e",
+            "mass": "226.886903474",
+            "massUnit": "kg N2O"
+          }
+        },
+        "gwpSetId": "AR5-100",
+        "input": {
+          "energyCarrier": "electricity",
+          "energyPerBasis": "1250.5",
+          "energyUnit": "kWh",
+          "lifetimeBasis": "years",
+          "lifetimeQuantity": "10",
+          "period": {
+            "endExclusive": "2026-01-01",
+            "start": "2025-01-01"
+          },
+          "quantity": "5000",
+          "useRegion": "US"
+        },
+        "inputSha256": "212e2f3410bdea24baa53be2ea31b9acaa3a93c34b350fd4c18a9c76f1d91edf",
+        "methodVersionId": "scope3.cat11.sold_energy_product.v1",
+        "profile": "neuvetra.scope3-engine.v1",
+        "profileId": "scope3.cat11.sold_energy_product",
+        "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+        "resultSha256": "b263ceb3b5126b0194057bba1c13d49d21e257d3871f2fa56fd28da05b1fce67",
+        "status": "complete",
+        "total": {
+          "display": "21864098.2576",
+          "rounding": "half_even_4dp",
+          "unit": "kg CO2e",
+          "unrounded": "21864098.25758668125"
+        }
+      },
+      "reference": "Synthetic",
+      "derivedFrom": null,
+      "payload": {
+        "productLabel": "Synthetic 2 kW space heater",
+        "lifetimeBasis": "years",
+        "lifetimeQuantity": "10",
+        "energyPerBasis": "1250.5",
+        "energyCarrier": "electricity",
+        "energyUnit": "kWh",
+        "useRegion": "US",
+        "lifetimeSource": "Manufacturer test standard"
+      },
+      "methodType": "activity_average_data",
+      "effectiveDataQuality": {
+        "indicators": {
+          "technological": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "temporal": {
+            "rating": "very_good",
+            "setBy": "method_default"
+          },
+          "geographical": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "completeness": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "reliability": {
+            "rating": "fair",
+            "setBy": "method_default"
+          }
+        },
+        "activityDataOrigin": {
+          "origin": "company_records",
+          "setBy": "method_default"
+        }
+      }
+    },
+    {
+      "recordId": "93900000-0000-4000-8000-000000001005",
+      "versionId": "94900000-0000-4000-8000-000000001005",
+      "revision": 1,
+      "kind": "sold_energy_product",
+      "category": 11,
+      "sourceId": "D-5",
+      "locationId": "93900000-0000-4000-8000-000000000003",
+      "locationName": "Office",
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "quantity": {
+        "value": "200",
+        "unit": "unit"
+      },
+      "quality": "actual",
+      "estimateBasis": null,
+      "evidence": [],
+      "plan": {
+        "action": "calculate",
+        "status": null,
+        "reasons": [],
+        "notes": []
+      },
+      "periodCheck": "inside",
+      "outcome": "calculated",
+      "refusalCode": null,
+      "result": {
+        "activity": {
+          "energyCarrier": "electricity",
+          "energyPerBasis": "1.25",
+          "energyUnit": "MWh",
+          "lifetimeBasis": "years",
+          "lifetimeEnergy": "2500",
+          "lifetimeQuantity": "10",
+          "mwh": "2500",
+          "unitsSold": "200",
+          "useRegion": "CAMX"
+        },
+        "additionalRegisters": [],
+        "boundary": {
+          "minimumBoundary": "met",
+          "notes": [
+            "direct_use_phase_only",
+            "indirect_use_phase_excluded",
+            "reporting_year_grid_factor"
+          ]
+        },
+        "category": 11,
+        "co2eWithoutGasSplit": null,
+        "constantsUsed": [
+          {
+            "id": "lb_to_kg",
+            "unit": "kg per lb",
+            "value": "0.45359237"
+          }
+        ],
+        "conversions": [],
+        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "estimates": [],
+        "factorsUsed": [
+          {
+            "cell": "X6",
+            "key": "egrid2023.CAMX.ch4",
+            "label": "WECC California (CAMX)",
+            "unit": "lb CH4 per MWh",
+            "value": "0.025"
+          },
+          {
+            "cell": "W6",
+            "key": "egrid2023.CAMX.co2",
+            "label": "WECC California (CAMX)",
+            "unit": "lb CO2 per MWh",
+            "value": "428.464"
+          },
+          {
+            "cell": "Y6",
+            "key": "egrid2023.CAMX.n2o",
+            "label": "WECC California (CAMX)",
+            "unit": "lb N2O per MWh",
+            "value": "0.003"
+          },
+          {
+            "cell": "E525",
+            "key": "gwp_ar5.CH4",
+            "label": "CH4",
+            "unit": "kg CO2e per kg gas",
+            "value": "28"
+          },
+          {
+            "cell": "E524",
+            "key": "gwp_ar5.CO2",
+            "label": "CO2",
+            "unit": "kg CO2e per kg gas",
+            "value": "1"
+          },
+          {
+            "cell": "E526",
+            "key": "gwp_ar5.N2O",
+            "label": "N2O",
+            "unit": "kg CO2e per kg gas",
+            "value": "265"
+          }
+        ],
+        "findings": [],
+        "gases": {
+          "ch4": {
+            "co2e": "793.7866475",
+            "co2eUnit": "kg CO2e",
+            "mass": "28.349523125",
+            "massUnit": "kg CH4"
+          },
+          "co2": {
+            "co2e": "485870.0030492",
+            "co2eUnit": "kg CO2e",
+            "mass": "485870.0030492",
+            "massUnit": "kg CO2"
+          },
+          "n2o": {
+            "co2e": "901.514835375",
+            "co2eUnit": "kg CO2e",
+            "mass": "3.401942775",
+            "massUnit": "kg N2O"
+          }
+        },
+        "gwpSetId": "AR5-100",
+        "input": {
+          "energyCarrier": "electricity",
+          "energyPerBasis": "1.25",
+          "energyUnit": "MWh",
+          "lifetimeBasis": "years",
+          "lifetimeQuantity": "10",
+          "period": {
+            "endExclusive": "2026-01-01",
+            "start": "2025-01-01"
+          },
+          "quantity": "200",
+          "useRegion": "CAMX"
+        },
+        "inputSha256": "c696a374345a5c8e98774eed86fc89df305cbf2bc7851e5e720cc43f83f45a66",
+        "methodVersionId": "scope3.cat11.sold_energy_product.v1",
+        "profile": "neuvetra.scope3-engine.v1",
+        "profileId": "scope3.cat11.sold_energy_product",
+        "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+        "resultSha256": "313a7e0ff1dbb611e813b248d2e76ddf8f47f7188eed2bfdbb0114fb76cbb9a2",
+        "status": "complete",
+        "total": {
+          "display": "487565.3045",
+          "rounding": "half_even_4dp",
+          "unit": "kg CO2e",
+          "unrounded": "487565.304532075"
+        }
+      },
+      "reference": "Synthetic",
+      "derivedFrom": null,
+      "payload": {
+        "productLabel": "Synthetic 2 kW space heater",
+        "lifetimeBasis": "years",
+        "lifetimeQuantity": "10",
+        "energyPerBasis": "1.25",
+        "energyCarrier": "electricity",
+        "energyUnit": "MWh",
+        "useRegion": "CAMX",
+        "lifetimeSource": "Manufacturer test standard"
+      },
+      "methodType": "activity_average_data",
+      "effectiveDataQuality": {
+        "indicators": {
+          "technological": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "temporal": {
+            "rating": "very_good",
+            "setBy": "method_default"
+          },
+          "geographical": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "completeness": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "reliability": {
+            "rating": "fair",
+            "setBy": "method_default"
+          }
+        },
+        "activityDataOrigin": {
+          "origin": "company_records",
+          "setBy": "method_default"
+        }
+      }
+    },
+    {
+      "recordId": "93900000-0000-4000-8000-000000001006",
+      "versionId": "94900000-0000-4000-8000-000000001006",
+      "revision": 1,
+      "kind": "sold_energy_product",
+      "category": 11,
+      "sourceId": "D-6",
+      "locationId": "93900000-0000-4000-8000-000000000003",
+      "locationName": "Office",
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "quantity": {
+        "value": "300",
+        "unit": "unit"
+      },
+      "quality": "actual",
+      "estimateBasis": null,
+      "evidence": [],
+      "plan": {
+        "action": "calculate",
+        "status": null,
+        "reasons": [],
+        "notes": []
+      },
+      "periodCheck": "inside",
+      "outcome": "held",
+      "refusalCode": null,
+      "result": {
+        "activity": {
+          "energyCarrier": "electricity",
+          "energyPerBasis": "1250.5",
+          "energyUnit": "kWh",
+          "lifetimeBasis": "years",
+          "lifetimeQuantity": "10",
+          "unitsSold": "300",
+          "useRegion": "non_US"
+        },
+        "additionalRegisters": [],
+        "boundary": {
+          "minimumBoundary": "met",
+          "notes": []
+        },
+        "category": 11,
+        "co2eWithoutGasSplit": null,
+        "constantsUsed": [],
+        "conversions": [],
+        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "estimates": [],
+        "factorsUsed": [],
+        "findings": [
+          "use_region_outside_us"
+        ],
+        "gases": {},
+        "gwpSetId": "AR5-100",
+        "input": {
+          "energyCarrier": "electricity",
+          "energyPerBasis": "1250.5",
+          "energyUnit": "kWh",
+          "lifetimeBasis": "years",
+          "lifetimeQuantity": "10",
+          "period": {
+            "endExclusive": "2026-01-01",
+            "start": "2025-01-01"
+          },
+          "quantity": "300",
+          "useRegion": "non_US"
+        },
+        "inputSha256": "8092857213736534831889326932b7a78f0c472b378b5e31510eacf978c12063",
+        "methodVersionId": "scope3.cat11.sold_energy_product.v1",
+        "profile": "neuvetra.scope3-engine.v1",
+        "profileId": "scope3.cat11.sold_energy_product",
+        "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+        "resultSha256": "420d26cfa5aa7012c144541e0a712d09b3da67f2250a224e33c3cf94079ccfcd",
+        "status": "input_needed",
+        "total": null
+      },
+      "reference": "Synthetic",
+      "derivedFrom": null,
+      "payload": {
+        "productLabel": "Synthetic 2 kW space heater",
+        "lifetimeBasis": "years",
+        "lifetimeQuantity": "10",
+        "energyPerBasis": "1250.5",
+        "energyCarrier": "electricity",
+        "energyUnit": "kWh",
+        "useRegion": "non_US",
+        "lifetimeSource": "Manufacturer test standard"
+      },
+      "methodType": "activity_average_data",
+      "effectiveDataQuality": {
+        "indicators": {
+          "technological": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "temporal": {
+            "rating": "very_good",
+            "setBy": "method_default"
+          },
+          "geographical": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "completeness": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "reliability": {
+            "rating": "fair",
+            "setBy": "method_default"
+          }
+        },
+        "activityDataOrigin": {
+          "origin": "company_records",
+          "setBy": "method_default"
+        }
+      }
+    },
+    {
+      "recordId": "93900000-0000-4000-8000-000000001014",
+      "versionId": "94900000-0000-4000-8000-000000001014",
+      "revision": 1,
+      "kind": "sold_energy_product",
+      "category": 11,
+      "sourceId": "D-14",
+      "locationId": "93900000-0000-4000-8000-000000000003",
+      "locationName": "Office",
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "quantity": {
+        "value": "150",
+        "unit": "unit"
+      },
+      "quality": "actual",
+      "estimateBasis": null,
+      "evidence": [],
+      "plan": {
+        "action": "calculate",
+        "status": null,
+        "reasons": [],
+        "notes": []
+      },
+      "periodCheck": "inside",
+      "outcome": "calculated",
+      "refusalCode": null,
+      "result": {
+        "activity": {
+          "energyCarrier": "propane",
+          "energyPerBasis": "45",
+          "energyUnit": "US_gallon",
+          "lifetimeBasis": "years",
+          "lifetimeEnergy": "54000",
+          "lifetimeQuantity": "8",
+          "mmbtuHhv": "4914",
+          "unitsSold": "150",
+          "useRegion": "non_US"
+        },
+        "additionalRegisters": [
+          {
+            "name": "supplement",
+            "sha256": "b9d3c4b9676c539eeb0caece70a81d1713be4646673115033649fed031c8176b"
+          }
+        ],
+        "boundary": {
+          "minimumBoundary": "met",
+          "notes": [
+            "direct_use_phase_only",
+            "indirect_use_phase_excluded",
+            "stationary_ch4_n2o_proxy_for_transport_fuels"
+          ]
+        },
+        "category": 11,
+        "co2eWithoutGasSplit": null,
+        "constantsUsed": [
+          {
+            "id": "g_to_kg",
+            "unit": "kg per g",
+            "value": "0.001"
+          }
+        ],
+        "conversions": [],
+        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "estimates": [
+          "fuel_default_heat_content"
+        ],
+        "factorsUsed": [
+          {
+            "cell": "E525",
+            "key": "gwp_ar5.CH4",
+            "label": "CH4",
+            "unit": "kg CO2e per kg gas",
+            "value": "28"
+          },
+          {
+            "cell": "E524",
+            "key": "gwp_ar5.CO2",
+            "label": "CO2",
+            "unit": "kg CO2e per kg gas",
+            "value": "1"
+          },
+          {
+            "cell": "E526",
+            "key": "gwp_ar5.N2O",
+            "label": "N2O",
+            "unit": "kg CO2e per kg gas",
+            "value": "265"
+          },
+          {
+            "cell": "F72",
+            "key": "hub2025_t1.propane.ch4",
+            "label": "Propane",
+            "unit": "g CH4 per mmBtu",
+            "value": "3"
+          },
+          {
+            "cell": "E72",
+            "key": "hub2025_t1.propane.co2",
+            "label": "Propane",
+            "unit": "kg CO2 per mmBtu",
+            "value": "62.87"
+          },
+          {
+            "cell": "D72",
+            "key": "hub2025_t1.propane.heat_content",
+            "label": "Propane",
+            "unit": "mmBtu per gallon (HHV)",
+            "value": "0.091"
+          },
+          {
+            "cell": "G72",
+            "key": "hub2025_t1.propane.n2o",
+            "label": "Propane",
+            "unit": "g N2O per mmBtu",
+            "value": "0.6"
+          }
+        ],
+        "findings": [],
+        "gases": {
+          "ch4": {
+            "co2e": "412.776",
+            "co2eUnit": "kg CO2e",
+            "mass": "14.742",
+            "massUnit": "kg CH4"
+          },
+          "co2": {
+            "co2e": "308943.18",
+            "co2eUnit": "kg CO2e",
+            "mass": "308943.18",
+            "massUnit": "kg CO2"
+          },
+          "n2o": {
+            "co2e": "781.326",
+            "co2eUnit": "kg CO2e",
+            "mass": "2.9484",
+            "massUnit": "kg N2O"
+          }
+        },
+        "gwpSetId": "AR5-100",
+        "input": {
+          "energyCarrier": "propane",
+          "energyPerBasis": "45",
+          "energyUnit": "US_gallon",
+          "lifetimeBasis": "years",
+          "lifetimeQuantity": "8",
+          "period": {
+            "endExclusive": "2026-01-01",
+            "start": "2025-01-01"
+          },
+          "quantity": "150",
+          "useRegion": "non_US"
+        },
+        "inputSha256": "1ebf621b9a2112e62f18477405f0b2875ccf53f19c8cce29424bb10e8e3af9b4",
+        "methodVersionId": "scope3.cat11.sold_energy_product.v1",
+        "profile": "neuvetra.scope3-engine.v1",
+        "profileId": "scope3.cat11.sold_energy_product",
+        "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+        "resultSha256": "5b4f334ae2e124dbea761154d09ee621f289bbd38d64b256e9f895761599875a",
+        "status": "complete",
+        "total": {
+          "display": "310137.2820",
+          "rounding": "half_even_4dp",
+          "unit": "kg CO2e",
+          "unrounded": "310137.282"
+        }
+      },
+      "reference": "Synthetic",
+      "derivedFrom": null,
+      "payload": {
+        "productLabel": "Synthetic patio heater",
+        "lifetimeBasis": "years",
+        "lifetimeQuantity": "8",
+        "energyPerBasis": "45",
+        "energyCarrier": "propane",
+        "energyUnit": "US_gallon",
+        "useRegion": "non_US",
+        "lifetimeSource": "Manufacturer test standard"
+      },
+      "methodType": "activity_average_data",
+      "effectiveDataQuality": {
+        "indicators": {
+          "technological": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "temporal": {
+            "rating": "very_good",
+            "setBy": "method_default"
+          },
+          "geographical": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "completeness": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "reliability": {
+            "rating": "fair",
+            "setBy": "method_default"
+          }
+        },
+        "activityDataOrigin": {
+          "origin": "company_records",
+          "setBy": "method_default"
+        }
+      }
+    },
+    {
+      "recordId": "93900000-0000-4000-8000-000000001001",
+      "versionId": "94900000-0000-4000-8000-000000001001",
+      "revision": 1,
+      "kind": "sold_fuel",
+      "category": 11,
+      "sourceId": "D-1",
+      "locationId": "93900000-0000-4000-8000-000000000003",
+      "locationName": "Office",
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "quantity": {
+        "value": "120000",
+        "unit": "US_gallon"
+      },
+      "quality": "actual",
+      "estimateBasis": null,
+      "evidence": [],
+      "plan": {
+        "action": "calculate",
+        "status": null,
+        "reasons": [],
+        "notes": []
+      },
+      "periodCheck": "inside",
+      "outcome": "calculated",
+      "refusalCode": null,
+      "result": {
+        "activity": {
+          "biomass": false,
+          "combustedInUse": "yes",
+          "fuel": "propane",
+          "mmbtuHhv": "10920",
+          "quantity": "120000",
+          "unit": "US_gallon"
+        },
+        "additionalRegisters": [
+          {
+            "name": "supplement",
+            "sha256": "b9d3c4b9676c539eeb0caece70a81d1713be4646673115033649fed031c8176b"
+          }
+        ],
+        "boundary": {
+          "minimumBoundary": "met",
+          "notes": [
+            "combustion_only",
+            "stationary_ch4_n2o_proxy_for_transport_fuels"
+          ]
+        },
+        "category": 11,
+        "co2eWithoutGasSplit": null,
+        "constantsUsed": [
+          {
+            "id": "g_to_kg",
+            "unit": "kg per g",
+            "value": "0.001"
+          }
+        ],
+        "conversions": [],
+        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "estimates": [
+          "fuel_default_heat_content"
+        ],
+        "factorsUsed": [
+          {
+            "cell": "E525",
+            "key": "gwp_ar5.CH4",
+            "label": "CH4",
+            "unit": "kg CO2e per kg gas",
+            "value": "28"
+          },
+          {
+            "cell": "E524",
+            "key": "gwp_ar5.CO2",
+            "label": "CO2",
+            "unit": "kg CO2e per kg gas",
+            "value": "1"
+          },
+          {
+            "cell": "E526",
+            "key": "gwp_ar5.N2O",
+            "label": "N2O",
+            "unit": "kg CO2e per kg gas",
+            "value": "265"
+          },
+          {
+            "cell": "F72",
+            "key": "hub2025_t1.propane.ch4",
+            "label": "Propane",
+            "unit": "g CH4 per mmBtu",
+            "value": "3"
+          },
+          {
+            "cell": "E72",
+            "key": "hub2025_t1.propane.co2",
+            "label": "Propane",
+            "unit": "kg CO2 per mmBtu",
+            "value": "62.87"
+          },
+          {
+            "cell": "D72",
+            "key": "hub2025_t1.propane.heat_content",
+            "label": "Propane",
+            "unit": "mmBtu per gallon (HHV)",
+            "value": "0.091"
+          },
+          {
+            "cell": "G72",
+            "key": "hub2025_t1.propane.n2o",
+            "label": "Propane",
+            "unit": "g N2O per mmBtu",
+            "value": "0.6"
+          }
+        ],
+        "findings": [],
+        "gases": {
+          "ch4": {
+            "co2e": "917.28",
+            "co2eUnit": "kg CO2e",
+            "mass": "32.76",
+            "massUnit": "kg CH4"
+          },
+          "co2": {
+            "co2e": "686540.4",
+            "co2eUnit": "kg CO2e",
+            "mass": "686540.4",
+            "massUnit": "kg CO2"
+          },
+          "n2o": {
+            "co2e": "1736.28",
+            "co2eUnit": "kg CO2e",
+            "mass": "6.552",
+            "massUnit": "kg N2O"
+          }
+        },
+        "gwpSetId": "AR5-100",
+        "input": {
+          "combustedInUse": "yes",
+          "fuel": "propane",
+          "period": {
+            "endExclusive": "2026-01-01",
+            "start": "2025-01-01"
+          },
+          "quantity": "120000",
+          "unit": "US_gallon"
+        },
+        "inputSha256": "8df1f982d765fdfdf7bbd5d1d667c7d07cf2417d560a454dcb973ba81b7448f0",
+        "methodVersionId": "scope3.cat11.sold_fuel.hub2025.v1",
+        "profile": "neuvetra.scope3-engine.v1",
+        "profileId": "scope3.cat11.sold_fuel.hub2025",
+        "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+        "resultSha256": "10fa06c882c7240a08d22fc9cbf8d3f78ea51a63300040f6dd5a2ec8512bf126",
+        "status": "complete",
+        "total": {
+          "display": "689193.9600",
+          "rounding": "half_even_4dp",
+          "unit": "kg CO2e",
+          "unrounded": "689193.96"
+        }
+      },
+      "reference": "Synthetic",
+      "derivedFrom": null,
+      "payload": {
+        "fuel": "propane",
+        "combustedInUse": "yes"
+      },
+      "methodType": "activity_average_data",
+      "effectiveDataQuality": {
+        "indicators": {
+          "technological": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "temporal": {
+            "rating": "very_good",
+            "setBy": "method_default"
+          },
+          "geographical": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "completeness": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "reliability": {
+            "rating": "fair",
+            "setBy": "method_default"
+          }
+        },
+        "activityDataOrigin": {
+          "origin": "company_records",
+          "setBy": "method_default"
+        }
+      }
+    },
+    {
+      "recordId": "93900000-0000-4000-8000-000000001002",
+      "versionId": "94900000-0000-4000-8000-000000001002",
+      "revision": 1,
+      "kind": "sold_fuel",
+      "category": 11,
+      "sourceId": "D-2",
+      "locationId": "93900000-0000-4000-8000-000000000003",
+      "locationName": "Office",
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "quantity": {
+        "value": "1000",
+        "unit": "US_gallon"
+      },
+      "quality": "actual",
+      "estimateBasis": null,
+      "evidence": [],
+      "plan": {
+        "action": "calculate",
+        "status": null,
+        "reasons": [],
+        "notes": []
+      },
+      "periodCheck": "inside",
+      "outcome": "calculated",
+      "refusalCode": null,
+      "result": {
+        "activity": {
+          "biomass": true,
+          "combustedInUse": "yes",
+          "fuel": "biodiesel_100",
+          "mmbtuHhv": "128",
+          "quantity": "1000",
+          "unit": "US_gallon"
+        },
+        "additionalRegisters": [
+          {
+            "name": "supplement",
+            "sha256": "b9d3c4b9676c539eeb0caece70a81d1713be4646673115033649fed031c8176b"
+          }
+        ],
+        "biogenicCo2": {
+          "basis": "Biogenic CO2 of biodiesel_100 (EPA Hub 2025 Table 1, Biomass Fuels - Liquid), reported separately and never in a total",
+          "mass": "9451.52",
+          "massUnit": "kg CO2"
+        },
+        "boundary": {
+          "minimumBoundary": "met",
+          "notes": [
+            "biogenic_co2_reported_separately",
+            "combustion_only",
+            "stationary_ch4_n2o_proxy_for_transport_fuels"
+          ]
+        },
+        "category": 11,
+        "co2eWithoutGasSplit": null,
+        "constantsUsed": [
+          {
+            "id": "g_to_kg",
+            "unit": "kg per g",
+            "value": "0.001"
+          }
+        ],
+        "conversions": [],
+        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "estimates": [
+          "fuel_default_heat_content"
+        ],
+        "factorsUsed": [
+          {
+            "cell": "E525",
+            "key": "gwp_ar5.CH4",
+            "label": "CH4",
+            "unit": "kg CO2e per kg gas",
+            "value": "28"
+          },
+          {
+            "cell": "E524",
+            "key": "gwp_ar5.CO2",
+            "label": "CO2",
+            "unit": "kg CO2e per kg gas",
+            "value": "1"
+          },
+          {
+            "cell": "E526",
+            "key": "gwp_ar5.N2O",
+            "label": "N2O",
+            "unit": "kg CO2e per kg gas",
+            "value": "265"
+          },
+          {
+            "cell": "F80",
+            "key": "hub2025_t1.biodiesel_100.ch4",
+            "label": "Biodiesel (100%)",
+            "unit": "g CH4 per mmBtu",
+            "value": "1.1"
+          },
+          {
+            "cell": "E80",
+            "key": "hub2025_t1.biodiesel_100.co2",
+            "label": "Biodiesel (100%)",
+            "unit": "kg CO2 per mmBtu",
+            "value": "73.84"
+          },
+          {
+            "cell": "D80",
+            "key": "hub2025_t1.biodiesel_100.heat_content",
+            "label": "Biodiesel (100%)",
+            "unit": "mmBtu per gallon (HHV)",
+            "value": "0.128"
+          },
+          {
+            "cell": "G80",
+            "key": "hub2025_t1.biodiesel_100.n2o",
+            "label": "Biodiesel (100%)",
+            "unit": "g N2O per mmBtu",
+            "value": "0.11"
+          }
+        ],
+        "findings": [],
+        "gases": {
+          "ch4": {
+            "co2e": "3.9424",
+            "co2eUnit": "kg CO2e",
+            "mass": "0.1408",
+            "massUnit": "kg CH4"
+          },
+          "n2o": {
+            "co2e": "3.7312",
+            "co2eUnit": "kg CO2e",
+            "mass": "0.01408",
+            "massUnit": "kg N2O"
+          }
+        },
+        "gwpSetId": "AR5-100",
+        "input": {
+          "combustedInUse": "yes",
+          "fuel": "biodiesel_100",
+          "period": {
+            "endExclusive": "2026-01-01",
+            "start": "2025-01-01"
+          },
+          "quantity": "1000",
+          "unit": "US_gallon"
+        },
+        "inputSha256": "d2162e0c58719e1a4745014189e9766d43e4059a63decb57b4de130ac189da31",
+        "methodVersionId": "scope3.cat11.sold_fuel.hub2025.v1",
+        "profile": "neuvetra.scope3-engine.v1",
+        "profileId": "scope3.cat11.sold_fuel.hub2025",
+        "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+        "resultSha256": "6e9e0636c92d793489f4b69b5d161b8bff1e8991ca458b2edcd1621fd0d4b87d",
+        "status": "complete",
+        "total": {
+          "display": "7.6736",
+          "rounding": "half_even_4dp",
+          "unit": "kg CO2e",
+          "unrounded": "7.6736"
+        }
+      },
+      "reference": "Synthetic",
+      "derivedFrom": null,
+      "payload": {
+        "fuel": "biodiesel_100",
+        "combustedInUse": "yes"
+      },
+      "methodType": "activity_average_data",
+      "effectiveDataQuality": {
+        "indicators": {
+          "technological": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "temporal": {
+            "rating": "very_good",
+            "setBy": "method_default"
+          },
+          "geographical": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "completeness": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "reliability": {
+            "rating": "fair",
+            "setBy": "method_default"
+          }
+        },
+        "activityDataOrigin": {
+          "origin": "company_records",
+          "setBy": "method_default"
+        }
+      }
+    },
+    {
+      "recordId": "93900000-0000-4000-8000-000000001003",
+      "versionId": "94900000-0000-4000-8000-000000001003",
+      "revision": 1,
+      "kind": "sold_fuel",
+      "category": 11,
+      "sourceId": "D-3",
+      "locationId": "93900000-0000-4000-8000-000000000003",
+      "locationName": "Office",
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "quantity": {
+        "value": "5000",
+        "unit": "US_gallon"
+      },
+      "quality": "actual",
+      "estimateBasis": null,
+      "evidence": [],
+      "plan": {
+        "action": "calculate",
+        "status": null,
+        "reasons": [],
+        "notes": []
+      },
+      "periodCheck": "inside",
+      "outcome": "calculated",
+      "refusalCode": null,
+      "result": {
+        "activity": {
+          "biomass": false,
+          "combustedInUse": "no_feedstock",
+          "fuel": "propane",
+          "quantity": "5000",
+          "unit": "US_gallon"
+        },
+        "additionalRegisters": [
+          {
+            "name": "supplement",
+            "sha256": "b9d3c4b9676c539eeb0caece70a81d1713be4646673115033649fed031c8176b"
+          }
+        ],
+        "boundary": {
+          "minimumBoundary": "met",
+          "notes": [
+            "feedstock_not_combusted"
+          ]
+        },
+        "category": 11,
+        "co2eWithoutGasSplit": {
+          "co2e": "0",
+          "co2eUnit": "kg CO2e",
+          "gwpSetId": "AR5-100",
+          "reason": "Sold as a feedstock and not combusted in use: a known zero (calculation guidance [11.2], p.118)"
+        },
+        "constantsUsed": [],
+        "conversions": [],
+        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "estimates": [],
+        "factorsUsed": [],
+        "findings": [],
+        "gases": {},
+        "gwpSetId": "AR5-100",
+        "input": {
+          "combustedInUse": "no_feedstock",
+          "fuel": "propane",
+          "period": {
+            "endExclusive": "2026-01-01",
+            "start": "2025-01-01"
+          },
+          "quantity": "5000",
+          "unit": "US_gallon"
+        },
+        "inputSha256": "2fd22f5703f90c633359e8ed51ca67f528457bf7d7559f659589dceb5eb9f67b",
+        "methodVersionId": "scope3.cat11.sold_fuel.hub2025.v1",
+        "profile": "neuvetra.scope3-engine.v1",
+        "profileId": "scope3.cat11.sold_fuel.hub2025",
+        "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+        "resultSha256": "1cb2fe3b3aa1f387bc0d3375c7e90fab39463f3f0f913fb4f72de78da522e5b1",
+        "status": "complete",
+        "total": {
+          "display": "0.0000",
+          "rounding": "half_even_4dp",
+          "unit": "kg CO2e",
+          "unrounded": "0"
+        }
+      },
+      "reference": "Synthetic",
+      "derivedFrom": null,
+      "payload": {
+        "fuel": "propane",
+        "combustedInUse": "no_feedstock"
+      },
+      "methodType": "activity_average_data",
+      "effectiveDataQuality": {
+        "indicators": {
+          "technological": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "temporal": {
+            "rating": "very_good",
+            "setBy": "method_default"
+          },
+          "geographical": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "completeness": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "reliability": {
+            "rating": "fair",
+            "setBy": "method_default"
+          }
+        },
+        "activityDataOrigin": {
+          "origin": "company_records",
+          "setBy": "method_default"
+        }
+      }
+    },
+    {
+      "recordId": "93900000-0000-4000-8000-000000001007",
+      "versionId": "94900000-0000-4000-8000-000000001007",
+      "revision": 1,
+      "kind": "sold_ghg_product",
+      "category": 11,
+      "sourceId": "D-7",
+      "locationId": "93900000-0000-4000-8000-000000000003",
+      "locationName": "Office",
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "quantity": {
+        "value": "40000",
+        "unit": "unit"
+      },
+      "quality": "actual",
+      "estimateBasis": null,
+      "evidence": [],
+      "plan": {
+        "action": "calculate",
+        "status": null,
+        "reasons": [],
+        "notes": [
+          "same_product_in_cat11_ghg_release"
+        ]
+      },
+      "periodCheck": "inside",
+      "outcome": "calculated",
+      "refusalCode": null,
+      "result": {
+        "activity": {
+          "chargeKgPerUnit": "0.3",
+          "gas": "HFC-134a",
+          "releasedKg": "12000",
+          "remainingAtEndOfLifeKg": "0",
+          "unitsSold": "40000",
+          "useReleasePercent": "100"
+        },
+        "additionalRegisters": [
+          {
+            "name": "supplement",
+            "sha256": "b9d3c4b9676c539eeb0caece70a81d1713be4646673115033649fed031c8176b"
+          }
+        ],
+        "boundary": {
+          "minimumBoundary": "met",
+          "notes": [
+            "end_of_life_remaining_charge_memo_upper_bound",
+            "use_phase_release_only"
+          ]
+        },
+        "category": 11,
+        "co2eWithoutGasSplit": {
+          "co2e": "15600000",
+          "co2eUnit": "kg CO2e",
+          "gwpSetId": "AR5-100",
+          "reason": "Gas released during use x AR5 100-year GWP (EPA Hub Table 11, or Table 12 for a blend); not split by gas"
+        },
+        "constantsUsed": [],
+        "conversions": [],
+        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "estimates": [],
+        "factorsUsed": [
+          {
+            "cell": "E532",
+            "key": "hub2025_gwp.HFC-134a",
+            "label": "HFC-134a",
+            "unit": "kg CO2e per kg gas",
+            "value": "1300"
+          }
+        ],
+        "findings": [],
+        "gases": {},
+        "gwpSetId": "AR5-100",
+        "input": {
+          "chargePerUnit": "0.3",
+          "chargeUnit": "kg",
+          "gas": "HFC-134a",
+          "period": {
+            "endExclusive": "2026-01-01",
+            "start": "2025-01-01"
+          },
+          "quantity": "40000",
+          "useReleasePercent": "100"
+        },
+        "inputSha256": "5c64a0789520f9efcbb32097b7a7a77e3440ed2f6b22e9f1ac843b11fc9ae94c",
+        "memoItems": [
+          {
+            "code": "ghg_product_end_of_life_remaining_charge",
+            "kg": "0",
+            "reportedSeparately": true,
+            "unit": "kg CO2e"
+          }
+        ],
+        "methodVersionId": "scope3.cat11.sold_ghg_product.hub2025.v1",
+        "profile": "neuvetra.scope3-engine.v1",
+        "profileId": "scope3.cat11.sold_ghg_product.hub2025",
+        "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+        "resultSha256": "c7e3611cfe8ef455b8d7a8f39b6e442721f3cc8aa7103d2dc0d4d12cf8c3b25a",
+        "status": "complete",
+        "total": {
+          "display": "15600000.0000",
+          "rounding": "half_even_4dp",
+          "unit": "kg CO2e",
+          "unrounded": "15600000"
+        }
+      },
+      "reference": "Synthetic",
+      "derivedFrom": null,
+      "payload": {
+        "productLabel": "Synthetic aerosol duster",
+        "gas": "HFC-134a",
+        "chargePerUnit": "0.3",
+        "chargeUnit": "kg",
+        "useReleasePercent": "100",
+        "releaseBasis": "Aerosol: the whole charge is released in use"
+      },
+      "methodType": "activity_average_data",
+      "effectiveDataQuality": {
+        "indicators": {
+          "technological": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "temporal": {
+            "rating": "very_good",
+            "setBy": "method_default"
+          },
+          "geographical": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "completeness": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "reliability": {
+            "rating": "fair",
+            "setBy": "method_default"
+          }
+        },
+        "activityDataOrigin": {
+          "origin": "company_records",
+          "setBy": "method_default"
+        }
+      }
+    },
+    {
+      "recordId": "93900000-0000-4000-8000-000000001015",
+      "versionId": "94900000-0000-4000-8000-000000001015",
+      "revision": 1,
+      "kind": "sold_ghg_product",
+      "category": 11,
+      "sourceId": "D-15",
+      "locationId": "93900000-0000-4000-8000-000000000003",
+      "locationName": "Office",
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "quantity": {
+        "value": "1200",
+        "unit": "unit"
+      },
+      "quality": "actual",
+      "estimateBasis": null,
+      "evidence": [],
+      "plan": {
+        "action": "calculate",
+        "status": null,
+        "reasons": [],
+        "notes": []
+      },
+      "periodCheck": "inside",
+      "outcome": "calculated",
+      "refusalCode": null,
+      "result": {
+        "activity": {
+          "chargeKgPerUnit": "2.7487697622",
+          "gas": "R-410A",
+          "releasedKg": "131.9409485856",
+          "remainingAtEndOfLifeKg": "3166.5827660544",
+          "unitsSold": "1200",
+          "useReleasePercent": "4"
+        },
+        "additionalRegisters": [
+          {
+            "name": "supplement",
+            "sha256": "b9d3c4b9676c539eeb0caece70a81d1713be4646673115033649fed031c8176b"
+          }
+        ],
+        "boundary": {
+          "minimumBoundary": "met",
+          "notes": [
+            "blend_gwp_hfc_pfc_constituents_only",
+            "end_of_life_remaining_charge_memo_upper_bound",
+            "use_phase_release_only"
+          ]
+        },
+        "category": 11,
+        "co2eWithoutGasSplit": {
+          "co2e": "253854.3850786944",
+          "co2eUnit": "kg CO2e",
+          "gwpSetId": "AR5-100",
+          "reason": "Gas released during use x AR5 100-year GWP (EPA Hub Table 11, or Table 12 for a blend); not split by gas"
+        },
+        "constantsUsed": [
+          {
+            "id": "lb_to_kg",
+            "unit": "kg per lb",
+            "value": "0.45359237"
+          }
+        ],
+        "conversions": [],
+        "engineSha256": "e0b5b600bfac265c2374eba98748a9604703e30f374d2a0788e5a6dfc496b730",
+        "estimates": [],
+        "factorsUsed": [
+          {
+            "cell": "D575",
+            "key": "hub2025_gwp.R-410A",
+            "label": "R-410A",
+            "unit": "kg CO2e per kg blend",
+            "value": "1924"
+          }
+        ],
+        "findings": [],
+        "gases": {},
+        "gwpSetId": "AR5-100",
+        "input": {
+          "chargePerUnit": "6.06",
+          "chargeUnit": "lb",
+          "gas": "R-410A",
+          "period": {
+            "endExclusive": "2026-01-01",
+            "start": "2025-01-01"
+          },
+          "quantity": "1200",
+          "useReleasePercent": "4"
+        },
+        "inputSha256": "b613df4dbce9561e57cb148e1ad3c746741b8e30f0df974dd09970bd8de62f9f",
+        "memoItems": [
+          {
+            "code": "ghg_product_end_of_life_remaining_charge",
+            "kg": "6092505.2418886656",
+            "reportedSeparately": true,
+            "unit": "kg CO2e"
+          }
+        ],
+        "methodVersionId": "scope3.cat11.sold_ghg_product.hub2025.v1",
+        "profile": "neuvetra.scope3-engine.v1",
+        "profileId": "scope3.cat11.sold_ghg_product.hub2025",
+        "registerSha256": "5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2",
+        "resultSha256": "dded757435ae939f6a4f4d47a8f33bb26cce47774a2a64f29a2d74c4f7419589",
+        "status": "complete",
+        "total": {
+          "display": "253854.3851",
+          "rounding": "half_even_4dp",
+          "unit": "kg CO2e",
+          "unrounded": "253854.3850786944"
+        }
+      },
+      "reference": "Synthetic",
+      "derivedFrom": null,
+      "payload": {
+        "productLabel": "Synthetic split AC unit",
+        "gas": "R-410A",
+        "chargePerUnit": "6.06",
+        "chargeUnit": "lb",
+        "useReleasePercent": "4",
+        "releaseBasis": "Annual operating leak rate, EPA Vintaging Model"
+      },
+      "methodType": "activity_average_data",
+      "effectiveDataQuality": {
+        "indicators": {
+          "technological": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "temporal": {
+            "rating": "very_good",
+            "setBy": "method_default"
+          },
+          "geographical": {
+            "rating": "good",
+            "setBy": "method_default"
+          },
+          "completeness": {
+            "rating": "fair",
+            "setBy": "method_default"
+          },
+          "reliability": {
+            "rating": "fair",
+            "setBy": "method_default"
+          }
+        },
+        "activityDataOrigin": {
+          "origin": "company_records",
+          "setBy": "method_default"
+        }
+      }
+    }
+  ],
+  "coverage": {
+    "profile": "neuvetra.scope3-coverage.v1",
+    "categories": [
+      {
+        "category": 1,
+        "title": "Purchased goods and services",
+        "proposedMandatory": true,
+        "support": "engine",
+        "screening": {
+          "decision": "not_screened",
+          "reason": null,
+          "description": null
+        },
+        "status": "not_screened",
+        "counts": {
+          "records": 0,
+          "calculated": 0,
+          "partialBoundary": 0,
+          "inputNeeded": 0,
+          "outsidePeriod": 0,
+          "excluded": 0,
+          "withdrawn": 0,
+          "unavailable": 0,
+          "methodPending": 0,
+          "optionalPending": 0
+        },
+        "quality": {
+          "actual": 0,
+          "estimated": 0,
+          "unknown": 0
+        },
+        "subtotal": null,
+        "subtotalBasis": null,
+        "methods": [],
+        "reasons": [],
+        "disclosures": [],
+        "assessment": null,
+        "profile": null,
+        "reviewFlags": [],
+        "dataQualityLabel": {
+          "label": null,
+          "engineLabel": null,
+          "capped": false,
+          "reasons": []
+        },
+        "linesWithoutEvidence": 0,
+        "methodology": [
+          {
+            "topic": "decision",
+            "text": "Not screened: the company has not yet decided whether this category is relevant. Nothing is calculated and nothing is shown as zero."
+          }
+        ]
+      },
+      {
+        "category": 2,
+        "title": "Capital goods",
+        "proposedMandatory": false,
+        "support": "engine",
+        "screening": {
+          "decision": "not_screened",
+          "reason": null,
+          "description": null
+        },
+        "status": "not_screened",
+        "counts": {
+          "records": 0,
+          "calculated": 0,
+          "partialBoundary": 0,
+          "inputNeeded": 0,
+          "outsidePeriod": 0,
+          "excluded": 0,
+          "withdrawn": 0,
+          "unavailable": 0,
+          "methodPending": 0,
+          "optionalPending": 0
+        },
+        "quality": {
+          "actual": 0,
+          "estimated": 0,
+          "unknown": 0
+        },
+        "subtotal": null,
+        "subtotalBasis": null,
+        "methods": [],
+        "reasons": [],
+        "disclosures": [],
+        "assessment": null,
+        "profile": null,
+        "reviewFlags": [],
+        "dataQualityLabel": {
+          "label": null,
+          "engineLabel": null,
+          "capped": false,
+          "reasons": []
+        },
+        "linesWithoutEvidence": 0,
+        "methodology": [
+          {
+            "topic": "decision",
+            "text": "Not screened: the company has not yet decided whether this category is relevant. Nothing is calculated and nothing is shown as zero."
+          }
+        ]
+      },
+      {
+        "category": 3,
+        "title": "Fuel- and energy-related activities",
+        "proposedMandatory": true,
+        "support": "engine",
+        "screening": {
+          "decision": "not_screened",
+          "reason": null,
+          "description": null
+        },
+        "status": "not_screened",
+        "counts": {
+          "records": 0,
+          "calculated": 0,
+          "partialBoundary": 0,
+          "inputNeeded": 0,
+          "outsidePeriod": 0,
+          "excluded": 0,
+          "withdrawn": 0,
+          "unavailable": 0,
+          "methodPending": 0,
+          "optionalPending": 0
+        },
+        "quality": {
+          "actual": 0,
+          "estimated": 0,
+          "unknown": 0
+        },
+        "subtotal": null,
+        "subtotalBasis": null,
+        "methods": [],
+        "reasons": [],
+        "disclosures": [],
+        "assessment": null,
+        "profile": null,
+        "reviewFlags": [],
+        "dataQualityLabel": {
+          "label": null,
+          "engineLabel": null,
+          "capped": false,
+          "reasons": []
+        },
+        "linesWithoutEvidence": 0,
+        "methodology": [
+          {
+            "topic": "decision",
+            "text": "Not screened: the company has not yet decided whether this category is relevant. Nothing is calculated and nothing is shown as zero."
+          }
+        ]
+      },
+      {
+        "category": 4,
+        "title": "Upstream transportation and distribution",
+        "proposedMandatory": false,
+        "support": "engine",
+        "screening": {
+          "decision": "not_screened",
+          "reason": null,
+          "description": null
+        },
+        "status": "not_screened",
+        "counts": {
+          "records": 0,
+          "calculated": 0,
+          "partialBoundary": 0,
+          "inputNeeded": 0,
+          "outsidePeriod": 0,
+          "excluded": 0,
+          "withdrawn": 0,
+          "unavailable": 0,
+          "methodPending": 0,
+          "optionalPending": 0
+        },
+        "quality": {
+          "actual": 0,
+          "estimated": 0,
+          "unknown": 0
+        },
+        "subtotal": null,
+        "subtotalBasis": null,
+        "methods": [],
+        "reasons": [],
+        "disclosures": [],
+        "assessment": null,
+        "profile": null,
+        "reviewFlags": [],
+        "dataQualityLabel": {
+          "label": null,
+          "engineLabel": null,
+          "capped": false,
+          "reasons": []
+        },
+        "linesWithoutEvidence": 0,
+        "methodology": [
+          {
+            "topic": "decision",
+            "text": "Not screened: the company has not yet decided whether this category is relevant. Nothing is calculated and nothing is shown as zero."
+          }
+        ]
+      },
+      {
+        "category": 5,
+        "title": "Waste generated in operations",
+        "proposedMandatory": true,
+        "support": "engine",
+        "screening": {
+          "decision": "not_screened",
+          "reason": null,
+          "description": null
+        },
+        "status": "not_screened",
+        "counts": {
+          "records": 0,
+          "calculated": 0,
+          "partialBoundary": 0,
+          "inputNeeded": 0,
+          "outsidePeriod": 0,
+          "excluded": 0,
+          "withdrawn": 0,
+          "unavailable": 0,
+          "methodPending": 0,
+          "optionalPending": 0
+        },
+        "quality": {
+          "actual": 0,
+          "estimated": 0,
+          "unknown": 0
+        },
+        "subtotal": null,
+        "subtotalBasis": null,
+        "methods": [],
+        "reasons": [],
+        "disclosures": [],
+        "assessment": null,
+        "profile": null,
+        "reviewFlags": [],
+        "dataQualityLabel": {
+          "label": null,
+          "engineLabel": null,
+          "capped": false,
+          "reasons": []
+        },
+        "linesWithoutEvidence": 0,
+        "methodology": [
+          {
+            "topic": "decision",
+            "text": "Not screened: the company has not yet decided whether this category is relevant. Nothing is calculated and nothing is shown as zero."
+          }
+        ]
+      },
+      {
+        "category": 6,
+        "title": "Business travel",
+        "proposedMandatory": true,
+        "support": "engine",
+        "screening": {
+          "decision": "not_screened",
+          "reason": null,
+          "description": null
+        },
+        "status": "not_screened",
+        "counts": {
+          "records": 0,
+          "calculated": 0,
+          "partialBoundary": 0,
+          "inputNeeded": 0,
+          "outsidePeriod": 0,
+          "excluded": 0,
+          "withdrawn": 0,
+          "unavailable": 0,
+          "methodPending": 0,
+          "optionalPending": 0
+        },
+        "quality": {
+          "actual": 0,
+          "estimated": 0,
+          "unknown": 0
+        },
+        "subtotal": null,
+        "subtotalBasis": null,
+        "methods": [],
+        "reasons": [],
+        "disclosures": [],
+        "assessment": null,
+        "profile": null,
+        "reviewFlags": [],
+        "dataQualityLabel": {
+          "label": null,
+          "engineLabel": null,
+          "capped": false,
+          "reasons": []
+        },
+        "linesWithoutEvidence": 0,
+        "methodology": [
+          {
+            "topic": "decision",
+            "text": "Not screened: the company has not yet decided whether this category is relevant. Nothing is calculated and nothing is shown as zero."
+          }
+        ]
+      },
+      {
+        "category": 7,
+        "title": "Employee commuting",
+        "proposedMandatory": true,
+        "support": "engine",
+        "screening": {
+          "decision": "not_screened",
+          "reason": null,
+          "description": null
+        },
+        "status": "not_screened",
+        "counts": {
+          "records": 0,
+          "calculated": 0,
+          "partialBoundary": 0,
+          "inputNeeded": 0,
+          "outsidePeriod": 0,
+          "excluded": 0,
+          "withdrawn": 0,
+          "unavailable": 0,
+          "methodPending": 0,
+          "optionalPending": 0
+        },
+        "quality": {
+          "actual": 0,
+          "estimated": 0,
+          "unknown": 0
+        },
+        "subtotal": null,
+        "subtotalBasis": null,
+        "methods": [],
+        "reasons": [],
+        "disclosures": [],
+        "assessment": null,
+        "profile": null,
+        "reviewFlags": [],
+        "dataQualityLabel": {
+          "label": null,
+          "engineLabel": null,
+          "capped": false,
+          "reasons": []
+        },
+        "linesWithoutEvidence": 0,
+        "methodology": [
+          {
+            "topic": "decision",
+            "text": "Not screened: the company has not yet decided whether this category is relevant. Nothing is calculated and nothing is shown as zero."
+          }
+        ]
+      },
+      {
+        "category": 8,
+        "title": "Upstream leased assets",
+        "proposedMandatory": false,
+        "support": "engine",
+        "screening": {
+          "decision": "not_screened",
+          "reason": null,
+          "description": null
+        },
+        "status": "not_screened",
+        "counts": {
+          "records": 0,
+          "calculated": 0,
+          "partialBoundary": 0,
+          "inputNeeded": 0,
+          "outsidePeriod": 0,
+          "excluded": 0,
+          "withdrawn": 0,
+          "unavailable": 0,
+          "methodPending": 0,
+          "optionalPending": 0
+        },
+        "quality": {
+          "actual": 0,
+          "estimated": 0,
+          "unknown": 0
+        },
+        "subtotal": null,
+        "subtotalBasis": null,
+        "methods": [],
+        "reasons": [],
+        "disclosures": [],
+        "assessment": null,
+        "profile": null,
+        "reviewFlags": [],
+        "dataQualityLabel": {
+          "label": null,
+          "engineLabel": null,
+          "capped": false,
+          "reasons": []
+        },
+        "linesWithoutEvidence": 0,
+        "methodology": [
+          {
+            "topic": "decision",
+            "text": "Not screened: the company has not yet decided whether this category is relevant. Nothing is calculated and nothing is shown as zero."
+          }
+        ]
+      },
+      {
+        "category": 9,
+        "title": "Downstream transportation and distribution",
+        "proposedMandatory": false,
+        "support": "engine",
+        "screening": {
+          "decision": "not_screened",
+          "reason": null,
+          "description": null
+        },
+        "status": "not_screened",
+        "counts": {
+          "records": 0,
+          "calculated": 0,
+          "partialBoundary": 0,
+          "inputNeeded": 0,
+          "outsidePeriod": 0,
+          "excluded": 0,
+          "withdrawn": 0,
+          "unavailable": 0,
+          "methodPending": 0,
+          "optionalPending": 0
+        },
+        "quality": {
+          "actual": 0,
+          "estimated": 0,
+          "unknown": 0
+        },
+        "subtotal": null,
+        "subtotalBasis": null,
+        "methods": [],
+        "reasons": [],
+        "disclosures": [],
+        "assessment": null,
+        "profile": null,
+        "reviewFlags": [],
+        "dataQualityLabel": {
+          "label": null,
+          "engineLabel": null,
+          "capped": false,
+          "reasons": []
+        },
+        "linesWithoutEvidence": 0,
+        "methodology": [
+          {
+            "topic": "decision",
+            "text": "Not screened: the company has not yet decided whether this category is relevant. Nothing is calculated and nothing is shown as zero."
+          }
+        ]
+      },
+      {
+        "category": 10,
+        "title": "Processing of sold products",
+        "proposedMandatory": false,
+        "support": "engine",
+        "screening": {
+          "decision": "not_screened",
+          "reason": null,
+          "description": null
+        },
+        "status": "not_screened",
+        "counts": {
+          "records": 0,
+          "calculated": 0,
+          "partialBoundary": 0,
+          "inputNeeded": 0,
+          "outsidePeriod": 0,
+          "excluded": 0,
+          "withdrawn": 0,
+          "unavailable": 0,
+          "methodPending": 0,
+          "optionalPending": 0
+        },
+        "quality": {
+          "actual": 0,
+          "estimated": 0,
+          "unknown": 0
+        },
+        "subtotal": null,
+        "subtotalBasis": null,
+        "methods": [],
+        "reasons": [],
+        "disclosures": [],
+        "assessment": null,
+        "profile": null,
+        "reviewFlags": [],
+        "dataQualityLabel": {
+          "label": null,
+          "engineLabel": null,
+          "capped": false,
+          "reasons": []
+        },
+        "linesWithoutEvidence": 0,
+        "methodology": [
+          {
+            "topic": "decision",
+            "text": "Not screened: the company has not yet decided whether this category is relevant. Nothing is calculated and nothing is shown as zero."
+          }
+        ]
+      },
+      {
+        "category": 11,
+        "title": "Use of sold products",
+        "proposedMandatory": false,
+        "support": "engine",
+        "screening": {
+          "decision": "included",
+          "reason": null,
+          "description": null
+        },
+        "status": "input_needed",
+        "counts": {
+          "records": 9,
+          "calculated": 8,
+          "partialBoundary": 0,
+          "inputNeeded": 1,
+          "outsidePeriod": 0,
+          "excluded": 0,
+          "withdrawn": 0,
+          "unavailable": 0,
+          "methodPending": 0,
+          "optionalPending": 0
+        },
+        "quality": {
+          "actual": 9,
+          "estimated": 0,
+          "unknown": 0
+        },
+        "subtotal": {
+          "display": "39204856.8628",
+          "rounding": "half_even_4dp_once",
+          "unit": "kg CO2e",
+          "unrounded": "39204856.86279745065"
+        },
+        "subtotalBasis": "known_sources_only",
+        "methods": [
+          "scope3.cat11.sold_energy_product.v1",
+          "scope3.cat11.sold_fuel.hub2025.v1",
+          "scope3.cat11.sold_ghg_product.hub2025.v1"
+        ],
+        "reasons": [
+          "use_region_outside_us"
+        ],
+        "disclosures": [
+          "biogenic_co2_reported_separately",
+          "blend_gwp_hfc_pfc_constituents_only",
+          "combustion_only",
+          "data_quality_label_capped",
+          "direct_use_phase_only",
+          "end_of_life_remaining_charge_memo_upper_bound",
+          "factor_data_years",
+          "feedstock_not_combusted",
+          "fuel_default_heat_content",
+          "indirect_use_phase_excluded",
+          "lines_without_evidence",
+          "reporting_year_grid_factor",
+          "same_product_in_cat11_ghg_release",
+          "stationary_ch4_n2o_proxy_for_transport_fuels",
+          "use_phase_release_only"
+        ],
+        "assessment": null,
+        "profile": {
+          "biogenicCo2": {
+            "display": "9451.5200",
+            "rounding": "half_even_4dp_once",
+            "unit": "kg CO2",
+            "unrounded": "9451.52"
+          },
+          "dataQuality": {
+            "indicators": {
+              "completeness": {
+                "ratingKg": {
+                  "fair": {
+                    "display": "39204856.8628",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "39204856.86279745065"
+                  }
+                },
+                "score": {
+                  "display": "3.00",
+                  "value": "3"
+                }
+              },
+              "geographical": {
+                "ratingKg": {
+                  "good": {
+                    "display": "39204856.8628",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "39204856.86279745065"
+                  }
+                },
+                "score": {
+                  "display": "2.00",
+                  "value": "2"
+                }
+              },
+              "reliability": {
+                "ratingKg": {
+                  "fair": {
+                    "display": "39204856.8628",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "39204856.86279745065"
+                  }
+                },
+                "score": {
+                  "display": "3.00",
+                  "value": "3"
+                }
+              },
+              "technological": {
+                "ratingKg": {
+                  "fair": {
+                    "display": "39204856.8628",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "39204856.86279745065"
+                  }
+                },
+                "score": {
+                  "display": "3.00",
+                  "value": "3"
+                }
+              },
+              "temporal": {
+                "ratingKg": {
+                  "very_good": {
+                    "display": "39204856.8628",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "39204856.86279745065"
+                  }
+                },
+                "score": {
+                  "display": "1.00",
+                  "value": "1"
+                }
+              }
+            },
+            "overall": {
+              "label": "good",
+              "score": {
+                "display": "2.40",
+                "value": "2.4"
+              }
+            },
+            "overrides": 0
+          },
+          "deflationEffect": null,
+          "dominantMethodType": "activity_average_data",
+          "largestResultShare": {
+            "display": "55.8",
+            "value": "55.76885112501"
+          },
+          "memoItems": {
+            "ghg_product_end_of_life_remaining_charge": {
+              "display": "6092505.2419",
+              "rounding": "half_even_4dp_once",
+              "unit": "kg CO2e",
+              "unrounded": "6092505.2418886656"
+            }
+          },
+          "methodTypes": {
+            "activity_average_data": {
+              "display": "39204856.8628",
+              "rounding": "half_even_4dp_once",
+              "unit": "kg CO2e",
+              "unrounded": "39204856.86279745065"
+            }
+          },
+          "results": 8,
+          "shareOfKnownTotal": {
+            "display": "11.5",
+            "value": "11.535192909928"
+          },
+          "subtotalTonnes": {
+            "display": "39204.857",
+            "rounding": "half_even_3dp_once",
+            "unit": "t CO2e"
+          },
+          "valueChain": {
+            "denominator": {
+              "display": "39204856.8628",
+              "rounding": "half_even_4dp_once",
+              "unit": "kg CO2e",
+              "unrounded": "39204856.86279745065"
+            },
+            "numerator": {
+              "display": "0.0000",
+              "rounding": "half_even_4dp_once",
+              "unit": "kg CO2e",
+              "unrounded": "0"
+            },
+            "percent": {
+              "display": "0.0",
+              "value": "0"
+            }
+          }
+        },
+        "reviewFlags": [
+          "largest_record_over_tenth_of_category"
+        ],
+        "dataQualityLabel": {
+          "label": "fair",
+          "engineLabel": "good",
+          "capped": true,
+          "reasons": [
+            "lines_not_quantified"
+          ]
+        },
+        "linesWithoutEvidence": 9,
+        "methodology": [
+          {
+            "topic": "activities",
+            "text": "Activities included: not described in a category assessment."
+          },
+          {
+            "topic": "method",
+            "text": "Method: Category 11: products that use electricity or fuel directly, over their expected lifetime (eGRID2023 rev2; Hub 2025 Table 1) (average data; scope3.cat11.sold_energy_product.v1)."
+          },
+          {
+            "topic": "method",
+            "text": "Method: Category 11: fuels sold, combusted by their users (Hub 2025 Table 1; biogenic CO2 of biomass fuels reported separately) (average data; scope3.cat11.sold_fuel.hub2025.v1)."
+          },
+          {
+            "topic": "method",
+            "text": "Method: Category 11: products that contain greenhouse gases released during use (Hub 2025 Tables 11 and 12, AR5) (average data; scope3.cat11.sold_ghg_product.hub2025.v1)."
+          },
+          {
+            "topic": "factor_source",
+            "text": "Factor source: EPA eGRID2023 (revision 2) subregion emission rates and grid gross loss."
+          },
+          {
+            "topic": "factor_source",
+            "text": "Factor source: EPA eGRID2023 (revision 2) U.S. output emission rates (US23), subregion annual net generation (SRL23) and plant heat input (PLNT23)."
+          },
+          {
+            "topic": "factor_source",
+            "text": "Factor source: EPA GHG Emission Factors Hub, edition last modified 15 January 2025 (Table 1 stationary combustion; Tables 11 and 12 AR5 GWPs, blends by HFC and PFC constituents only)."
+          },
+          {
+            "topic": "factor_source",
+            "text": "Factor source: EPA GHG Emission Factors Hub, edition last modified 15 January 2025 (Tables 8, 9 and 10)."
+          },
+          {
+            "topic": "gwp",
+            "text": "GWP set: IPCC AR5 100-year GWPs."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Biogenic CO2 from biomass fuels (EPA Hub Table 1 \"Biomass Fuels\") is reported separately and never added to any total; the CH4 and N2O from burning them are counted."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Refrigerant blends use EPA’s published GWP, which counts only their HFC and PFC constituents (Hub Table 12); HCFC constituents are not included."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Fuels sold count the combustion of the fuel by its users (the minimum boundary); the upstream emissions of producing and delivering the fuel are not included."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: The category’s data-quality label is capped at fair because some of its activity is not quantified (held or pending lines, or a partial boundary that is not a documented exclusion). The methodology says why."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Energy-using products count the direct use-phase emissions of the electricity or fuel they consume over their expected lifetime (the minimum boundary)."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: The gas left in these products after use (units x charge x the share not released during use) is reported separately in CO2e (same GWP), outside every total. It is an upper bound for its release at end of life: assuming no recharge during use and no recovery or destruction at end of life."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Fuel sold as a feedstock that is not combusted in use is counted as a known zero, not left out."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: An estimate: fuel recorded in its physical unit (gallons, standard cubic feet or short tons) was converted to energy with the EPA Hub Table 1 default heat content, not a supplier-stated value."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: The optional indirect use-phase emissions of products (for example the energy to heat water a detergent is used with) are not included."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Some counted lines have no supporting evidence file linked (or only files that are missing or were rejected in review), so their figures rest on the entered data alone. The methodology gives the count."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Electricity used by products sold uses the eGRID2023 rev2 output emission rate of the U.S. region of use (an eGRID subregion or the U.S. average) for the reporting year, with no projected change in the grid over the products’ lifetime."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: A product recorded for its end of life (category 12) is also recorded as a greenhouse-gas product whose gas is released in full during use (category 11). Nothing of that gas remains at end of life, so the category 12 record must count only the product’s material; the overlap is disclosed, not removed."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Some fuels sold are also transport fuels (EPA Hub Table 2; propane as the main component of LPG). Their CH4 and N2O use the Hub Table 1 stationary-combustion factors as a proxy, because mobile CH4 and N2O depend on vehicles the seller does not know; their CO2 is not affected. Pipeline natural gas is not treated as a transport fuel."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Products containing greenhouse gases count only the share of the gas released during use, as the company states with its basis; release at end of life belongs in category 12."
+          },
+          {
+            "topic": "data_quality",
+            "text": "Data quality (Scope 3 Standard Table 7.6; scores weighted by kg CO2e, 1 = very good to 4 = poor): technological 3.00, temporal 1.00, geographical 2.00, completeness 3.00, reliability 3.00; overall fair (2.40)."
+          },
+          {
+            "topic": "data_quality",
+            "text": "0 of 8 calculated records carry ratings set by the company; the rest use their method’s defaults."
+          },
+          {
+            "topic": "data_quality",
+            "text": "Data-quality labels are a product convention: each of the five indicators is scored very good = 1, good = 2, fair = 3 and poor = 4 and weighted by kg CO2e; the overall score is the mean of the five; 1.5 or less is very good, 2.5 or less good, 3.5 or less fair, otherwise poor."
+          },
+          {
+            "topic": "data_quality",
+            "text": "Data-quality label shown: fair (capped) because lines held for input or waiting for a factor source are not quantified. The numerical weighted scores are unchanged."
+          },
+          {
+            "topic": "value_chain",
+            "text": "0.0% of this category’s kg CO2e comes from supplier or other value-chain partner data. Secondary factors typed in by the company are not supplier data."
+          },
+          {
+            "topic": "data_quality",
+            "text": "9 of 9 counted lines have no supporting evidence file linked."
+          },
+          {
+            "topic": "biogenic",
+            "text": "Biogenic CO2 of 9,451.5200 kg CO2 is reported separately, outside every total."
+          },
+          {
+            "topic": "uncertainty",
+            "text": "Uncertainty (qualitative): moderate. The activity data are the company’s own records, but the factors are published averages for the type of activity and region, not the specific vehicles, facilities, products or suppliers involved."
+          },
+          {
+            "topic": "uncertainty",
+            "text": "Why uncertainty is not quantified: no confidence interval is estimated for this category’s figure. The factors applied are published without confidence intervals (any NETL range is stated above and covers that factor only; EIA CBECS publishes relative standard errors, which are not loaded in this beta), supplier and partner figures come without a stated uncertainty, and the activity data carry no stated measurement error, so a quantified range would rest on assumptions this beta does not make. The qualitative assessment above is given instead, as CARB proposes where quantitative estimation is not feasible (SB 253 staff workshop, 21 July 2026, slide 14)."
+          },
+          {
+            "topic": "time_boundary",
+            "text": "Use of sold products counts the expected lifetime use-phase emissions of the products sold in the reporting year."
+          },
+          {
+            "topic": "time_boundary",
+            "text": "Reported separately and not in any total: the gas left in the products sold at the end of their life, 6,092,505.2419 kg CO2e, an upper bound for its release (assuming no recharge during use and no recovery or destruction at end of life); category 12 discloses that this release is not quantified there."
+          },
+          {
+            "topic": "exclusion",
+            "text": "1 record needs input and is not counted."
+          },
+          {
+            "topic": "base_year",
+            "text": "Scope 3 base year: not yet established."
+          },
+          {
+            "topic": "limitation",
+            "text": "Scope 3 records may cover 2025 and 2026 in this beta (fiscal year 2026, the first expected SB 253 Scope 3 report, and fiscal years spanning two calendar years), inside the reporting period in company setup. Factors stay the latest published editions, disclosed on each later line; Scope 1 and 2 for periods after 2025 are a separate package."
+          },
+          {
+            "topic": "review",
+            "text": "Analytical review: a single record is more than 10% of this category. Sample it first."
+          }
+        ]
+      },
+      {
+        "category": 12,
+        "title": "End-of-life treatment of sold products",
+        "proposedMandatory": false,
+        "support": "engine",
+        "screening": {
+          "decision": "included",
+          "reason": null,
+          "description": null
+        },
+        "status": "input_needed",
+        "counts": {
+          "records": 3,
+          "calculated": 2,
+          "partialBoundary": 0,
+          "inputNeeded": 1,
+          "outsidePeriod": 0,
+          "excluded": 0,
+          "withdrawn": 0,
+          "unavailable": 0,
+          "methodPending": 0,
+          "optionalPending": 0
+        },
+        "quality": {
+          "actual": 3,
+          "estimated": 0,
+          "unknown": 0
+        },
+        "subtotal": {
+          "display": "28494.5535",
+          "rounding": "half_even_4dp_once",
+          "unit": "kg CO2e",
+          "unrounded": "28494.553548101016"
+        },
+        "subtotalBasis": "known_sources_only",
+        "methods": [
+          "scope3.cat12.end_of_life_split.v1"
+        ],
+        "reasons": [
+          "treatment_split_unknown"
+        ],
+        "disclosures": [
+          "ar4_gwp_embedded_in_factor",
+          "avoided_emissions_excluded",
+          "data_quality_label_capped",
+          "factor_data_years",
+          "ghg_product_end_of_life_release_not_quantified",
+          "includes_transport_to_facility",
+          "lines_without_evidence",
+          "same_product_in_cat11_ghg_release",
+          "sold_product_end_of_life_assumed_split"
+        ],
+        "assessment": null,
+        "profile": {
+          "biogenicCo2": null,
+          "dataQuality": {
+            "indicators": {
+              "completeness": {
+                "ratingKg": {
+                  "fair": {
+                    "display": "28494.5535",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "28494.553548101016"
+                  }
+                },
+                "score": {
+                  "display": "3.00",
+                  "value": "3"
+                }
+              },
+              "geographical": {
+                "ratingKg": {
+                  "good": {
+                    "display": "28494.5535",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "28494.553548101016"
+                  }
+                },
+                "score": {
+                  "display": "2.00",
+                  "value": "2"
+                }
+              },
+              "reliability": {
+                "ratingKg": {
+                  "good": {
+                    "display": "28494.5535",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "28494.553548101016"
+                  }
+                },
+                "score": {
+                  "display": "2.00",
+                  "value": "2"
+                }
+              },
+              "technological": {
+                "ratingKg": {
+                  "fair": {
+                    "display": "28494.5535",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "28494.553548101016"
+                  }
+                },
+                "score": {
+                  "display": "3.00",
+                  "value": "3"
+                }
+              },
+              "temporal": {
+                "ratingKg": {
+                  "good": {
+                    "display": "28494.5535",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "28494.553548101016"
+                  }
+                },
+                "score": {
+                  "display": "2.00",
+                  "value": "2"
+                }
+              }
+            },
+            "overall": {
+              "label": "good",
+              "score": {
+                "display": "2.40",
+                "value": "2.4"
+              }
+            },
+            "overrides": 0
+          },
+          "deflationEffect": null,
+          "dominantMethodType": "activity_average_data",
+          "largestResultShare": {
+            "display": "85.5",
+            "value": "85.516342478803"
+          },
+          "memoItems": {},
+          "methodTypes": {
+            "activity_average_data": {
+              "display": "28494.5535",
+              "rounding": "half_even_4dp_once",
+              "unit": "kg CO2e",
+              "unrounded": "28494.553548101016"
+            }
+          },
+          "results": 2,
+          "shareOfKnownTotal": {
+            "display": "0.0",
+            "value": "0.008383914606"
+          },
+          "subtotalTonnes": {
+            "display": "28.495",
+            "rounding": "half_even_3dp_once",
+            "unit": "t CO2e"
+          },
+          "valueChain": {
+            "denominator": {
+              "display": "28494.5535",
+              "rounding": "half_even_4dp_once",
+              "unit": "kg CO2e",
+              "unrounded": "28494.553548101016"
+            },
+            "numerator": {
+              "display": "0.0000",
+              "rounding": "half_even_4dp_once",
+              "unit": "kg CO2e",
+              "unrounded": "0"
+            },
+            "percent": {
+              "display": "0.0",
+              "value": "0"
+            }
+          }
+        },
+        "reviewFlags": [
+          "largest_record_over_tenth_of_category"
+        ],
+        "dataQualityLabel": {
+          "label": "fair",
+          "engineLabel": "good",
+          "capped": true,
+          "reasons": [
+            "lines_not_quantified"
+          ]
+        },
+        "linesWithoutEvidence": 3,
+        "methodology": [
+          {
+            "topic": "activities",
+            "text": "Activities included: not described in a category assessment."
+          },
+          {
+            "topic": "method",
+            "text": "Method: Category 12: end of life of sold products and their packaging, by treatment split (Hub Table 9) (average data; scope3.cat12.end_of_life_split.v1)."
+          },
+          {
+            "topic": "factor_source",
+            "text": "Factor source: EPA GHG Emission Factors Hub, edition last modified 15 January 2025 (Tables 8, 9 and 10)."
+          },
+          {
+            "topic": "gwp",
+            "text": "GWP set: IPCC AR4 100-year GWPs, as embedded by EPA in the factor (CO2e only, not split by gas)."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Waste is reported as CO2e calculated by EPA with IPCC AR4 GWPs, with no split by gas; other Scope 3 figures use AR5."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Waste excludes avoided emissions from recycling or energy recovery."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: The category’s data-quality label is capped at fair because some of its activity is not quantified (held or pending lines, or a partial boundary that is not a documented exclusion). The methodology says why."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Products the company sold that contain greenhouse gases (category 11 records) may release the gas left in them at end of life. That release is not quantified in category 12; the category 11 memo “gas left in sold products at end of life” gives its upper bound (assuming no recharge during use and no recovery or destruction at end of life), outside every total."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Waste factors include transport to the treatment facility."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Some counted lines have no supporting evidence file linked (or only files that are missing or were rejected in review), so their figures rest on the entered data alone. The methodology gives the count."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: A product recorded for its end of life (category 12) is also recorded as a greenhouse-gas product whose gas is released in full during use (category 11). Nothing of that gas remains at end of life, so the category 12 record must count only the product’s material; the overlap is disclosed, not removed."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: The end of life of sold products and packaging uses the treatment split the company states with its basis (for example EPA Facts and Figures), not measured disposal data."
+          },
+          {
+            "topic": "data_quality",
+            "text": "Data quality (Scope 3 Standard Table 7.6; scores weighted by kg CO2e, 1 = very good to 4 = poor): technological 3.00, temporal 2.00, geographical 2.00, completeness 3.00, reliability 2.00; overall fair (2.40)."
+          },
+          {
+            "topic": "data_quality",
+            "text": "0 of 2 calculated records carry ratings set by the company; the rest use their method’s defaults."
+          },
+          {
+            "topic": "data_quality",
+            "text": "Data-quality labels are a product convention: each of the five indicators is scored very good = 1, good = 2, fair = 3 and poor = 4 and weighted by kg CO2e; the overall score is the mean of the five; 1.5 or less is very good, 2.5 or less good, 3.5 or less fair, otherwise poor."
+          },
+          {
+            "topic": "data_quality",
+            "text": "Data-quality label shown: fair (capped) because lines held for input or waiting for a factor source are not quantified. The numerical weighted scores are unchanged."
+          },
+          {
+            "topic": "value_chain",
+            "text": "0.0% of this category’s kg CO2e comes from supplier or other value-chain partner data. Secondary factors typed in by the company are not supplier data."
+          },
+          {
+            "topic": "data_quality",
+            "text": "3 of 3 counted lines have no supporting evidence file linked."
+          },
+          {
+            "topic": "biogenic",
+            "text": "Biogenic CO2 is not quantified: the published factors used here do not report it separately."
+          },
+          {
+            "topic": "uncertainty",
+            "text": "Uncertainty (qualitative): moderate. The activity data are the company’s own records, but the factors are published averages for the type of activity and region, not the specific vehicles, facilities, products or suppliers involved."
+          },
+          {
+            "topic": "uncertainty",
+            "text": "Why uncertainty is not quantified: no confidence interval is estimated for this category’s figure. The factors applied are published without confidence intervals (any NETL range is stated above and covers that factor only; EIA CBECS publishes relative standard errors, which are not loaded in this beta), supplier and partner figures come without a stated uncertainty, and the activity data carry no stated measurement error, so a quantified range would rest on assumptions this beta does not make. The qualitative assessment above is given instead, as CARB proposes where quantitative estimation is not feasible (SB 253 staff workshop, 21 July 2026, slide 14)."
+          },
+          {
+            "topic": "exclusion",
+            "text": "1 record needs input and is not counted."
+          },
+          {
+            "topic": "base_year",
+            "text": "Scope 3 base year: not yet established."
+          },
+          {
+            "topic": "limitation",
+            "text": "Scope 3 records may cover 2025 and 2026 in this beta (fiscal year 2026, the first expected SB 253 Scope 3 report, and fiscal years spanning two calendar years), inside the reporting period in company setup. Factors stay the latest published editions, disclosed on each later line; Scope 1 and 2 for periods after 2025 are a separate package."
+          }
+        ]
+      },
+      {
+        "category": 13,
+        "title": "Downstream leased assets",
+        "proposedMandatory": false,
+        "support": "engine",
+        "screening": {
+          "decision": "not_screened",
+          "reason": null,
+          "description": null
+        },
+        "status": "not_screened",
+        "counts": {
+          "records": 0,
+          "calculated": 0,
+          "partialBoundary": 0,
+          "inputNeeded": 0,
+          "outsidePeriod": 0,
+          "excluded": 0,
+          "withdrawn": 0,
+          "unavailable": 0,
+          "methodPending": 0,
+          "optionalPending": 0
+        },
+        "quality": {
+          "actual": 0,
+          "estimated": 0,
+          "unknown": 0
+        },
+        "subtotal": null,
+        "subtotalBasis": null,
+        "methods": [],
+        "reasons": [],
+        "disclosures": [],
+        "assessment": null,
+        "profile": null,
+        "reviewFlags": [],
+        "dataQualityLabel": {
+          "label": null,
+          "engineLabel": null,
+          "capped": false,
+          "reasons": []
+        },
+        "linesWithoutEvidence": 0,
+        "methodology": [
+          {
+            "topic": "decision",
+            "text": "Not screened: the company has not yet decided whether this category is relevant. Nothing is calculated and nothing is shown as zero."
+          }
+        ]
+      },
+      {
+        "category": 14,
+        "title": "Franchises",
+        "proposedMandatory": false,
+        "support": "engine",
+        "screening": {
+          "decision": "not_screened",
+          "reason": null,
+          "description": null
+        },
+        "status": "not_screened",
+        "counts": {
+          "records": 0,
+          "calculated": 0,
+          "partialBoundary": 0,
+          "inputNeeded": 0,
+          "outsidePeriod": 0,
+          "excluded": 0,
+          "withdrawn": 0,
+          "unavailable": 0,
+          "methodPending": 0,
+          "optionalPending": 0
+        },
+        "quality": {
+          "actual": 0,
+          "estimated": 0,
+          "unknown": 0
+        },
+        "subtotal": null,
+        "subtotalBasis": null,
+        "methods": [],
+        "reasons": [],
+        "disclosures": [],
+        "assessment": null,
+        "profile": null,
+        "reviewFlags": [],
+        "dataQualityLabel": {
+          "label": null,
+          "engineLabel": null,
+          "capped": false,
+          "reasons": []
+        },
+        "linesWithoutEvidence": 0,
+        "methodology": [
+          {
+            "topic": "decision",
+            "text": "Not screened: the company has not yet decided whether this category is relevant. Nothing is calculated and nothing is shown as zero."
+          }
+        ]
+      },
+      {
+        "category": 15,
+        "title": "Investments",
+        "proposedMandatory": false,
+        "support": "engine",
+        "screening": {
+          "decision": "included",
+          "reason": null,
+          "description": null
+        },
+        "status": "calculated",
+        "counts": {
+          "records": 3,
+          "calculated": 3,
+          "partialBoundary": 0,
+          "inputNeeded": 0,
+          "outsidePeriod": 0,
+          "excluded": 0,
+          "withdrawn": 0,
+          "unavailable": 0,
+          "methodPending": 0,
+          "optionalPending": 0
+        },
+        "quality": {
+          "actual": 3,
+          "estimated": 0,
+          "unknown": 0
+        },
+        "subtotal": {
+          "display": "300638353.9719",
+          "rounding": "half_even_4dp_once",
+          "unit": "kg CO2e",
+          "unrounded": "300638353.97190791552"
+        },
+        "subtotalBasis": "all_counted_records",
+        "methods": [
+          "scope3.cat15.investment_reported.v1",
+          "scope3.cat15.investment_revenue_eeio.epa_scghg_v1_3.v1"
+        ],
+        "reasons": [],
+        "disclosures": [
+          "eeio_upper_bound_proxy_includes_investee_upstream",
+          "factor_ghg_year_2022",
+          "investee_data_unverified",
+          "investee_gwp_basis_ar5",
+          "investee_scope3_excluded",
+          "lines_without_evidence",
+          "pcaf_style_score_1",
+          "pcaf_style_score_2",
+          "pcaf_style_score_4",
+          "projected_lifetime_emissions_reported_separately",
+          "revenue_economy_wide_price_index",
+          "revenue_proxy"
+        ],
+        "assessment": null,
+        "profile": {
+          "biogenicCo2": null,
+          "dataQuality": {
+            "indicators": {
+              "completeness": {
+                "ratingKg": {
+                  "fair": {
+                    "display": "22103.9719",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "22103.97190791552"
+                  },
+                  "good": {
+                    "display": "300616250.0000",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "300616250"
+                  }
+                },
+                "score": {
+                  "display": "2.00",
+                  "value": "2.00007352346"
+                }
+              },
+              "geographical": {
+                "ratingKg": {
+                  "fair": {
+                    "display": "22103.9719",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "22103.97190791552"
+                  },
+                  "very_good": {
+                    "display": "300616250.0000",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "300616250"
+                  }
+                },
+                "score": {
+                  "display": "1.00",
+                  "value": "1.000147046919"
+                }
+              },
+              "reliability": {
+                "ratingKg": {
+                  "fair": {
+                    "display": "300022103.9719",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "300022103.97190791552"
+                  },
+                  "very_good": {
+                    "display": "616250.0000",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "616250"
+                  }
+                },
+                "score": {
+                  "display": "3.00",
+                  "value": "2.995900390008"
+                }
+              },
+              "technological": {
+                "ratingKg": {
+                  "poor": {
+                    "display": "22103.9719",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "22103.97190791552"
+                  },
+                  "very_good": {
+                    "display": "300616250.0000",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "300616250"
+                  }
+                },
+                "score": {
+                  "display": "1.00",
+                  "value": "1.000220570379"
+                }
+              },
+              "temporal": {
+                "ratingKg": {
+                  "good": {
+                    "display": "300638353.9719",
+                    "rounding": "half_even_4dp_once",
+                    "unit": "kg CO2e",
+                    "unrounded": "300638353.97190791552"
+                  }
+                },
+                "score": {
+                  "display": "2.00",
+                  "value": "2"
+                }
+              }
+            },
+            "overall": {
+              "label": "good",
+              "score": {
+                "display": "1.80",
+                "value": "1.799268306153"
+              }
+            },
+            "overrides": 0
+          },
+          "deflationEffect": {
+            "display": "1416.0281",
+            "rounding": "half_even_4dp_once",
+            "unit": "kg CO2e",
+            "unrounded": "1416.02809208448"
+          },
+          "dominantMethodType": "partner_reported",
+          "largestResultShare": {
+            "display": "99.8",
+            "value": "99.787667154415"
+          },
+          "memoItems": {
+            "projected_lifetime_emissions": {
+              "display": "7500000000.0000",
+              "rounding": "half_even_4dp_once",
+              "unit": "kg CO2e",
+              "unrounded": "7500000000"
+            }
+          },
+          "methodTypes": {
+            "partner_reported": {
+              "display": "300616250.0000",
+              "rounding": "half_even_4dp_once",
+              "unit": "kg CO2e",
+              "unrounded": "300616250"
+            },
+            "proxy": {
+              "display": "22103.9719",
+              "rounding": "half_even_4dp_once",
+              "unit": "kg CO2e",
+              "unrounded": "22103.97190791552"
+            }
+          },
+          "results": 3,
+          "shareOfKnownTotal": {
+            "display": "88.5",
+            "value": "88.456423175466"
+          },
+          "subtotalTonnes": {
+            "display": "300638.354",
+            "rounding": "half_even_3dp_once",
+            "unit": "t CO2e"
+          },
+          "valueChain": {
+            "denominator": {
+              "display": "300638353.9719",
+              "rounding": "half_even_4dp_once",
+              "unit": "kg CO2e",
+              "unrounded": "300638353.97190791552"
+            },
+            "numerator": {
+              "display": "300616250.0000",
+              "rounding": "half_even_4dp_once",
+              "unit": "kg CO2e",
+              "unrounded": "300616250"
+            },
+            "percent": {
+              "display": "100.0",
+              "value": "99.992647654028"
+            }
+          }
+        },
+        "reviewFlags": [
+          "category_over_half_of_known_total",
+          "largest_record_over_tenth_of_category"
+        ],
+        "dataQualityLabel": {
+          "label": "good",
+          "engineLabel": "good",
+          "capped": false,
+          "reasons": []
+        },
+        "linesWithoutEvidence": 3,
+        "methodology": [
+          {
+            "topic": "activities",
+            "text": "Activities included: not described in a category assessment."
+          },
+          {
+            "topic": "method",
+            "text": "Method: Category 15: investments and project finance, investee- or project-reported scope 1 and 2 x the investment-specific attribution share (partner-reported; scope3.cat15.investment_reported.v1)."
+          },
+          {
+            "topic": "method",
+            "text": "Method: Category 15: investments, investee revenue x EPA Supply Chain GHG Emission Factors v1.3 without margins x attribution share (an upper-bound proxy) (proxy; scope3.cat15.investment_revenue_eeio.epa_scghg_v1_3.v1)."
+          },
+          {
+            "topic": "factor_source",
+            "text": "Factor source: Investee- or project-reported scope 1 and 2 emissions in metric tons CO2e, as entered with evidence on each record (GWP basis as declared; verification as stated)."
+          },
+          {
+            "topic": "factor_source",
+            "text": "Factor source: EPA Supply Chain GHG Emission Factors v1.3.0 (2017 NAICS-6, kg CO2e per 2022 USD purchaser price, U.S. GHG data for 2022, AR5; doi 10.23719/1531143)."
+          },
+          {
+            "topic": "factor_source",
+            "text": "Factor source: BEA GDP implicit price deflator (FRED A191RD3A086NBEA), annual, transcribed 30 October 2026 (FRED last updated 30 September 2026); an economy-wide index."
+          },
+          {
+            "topic": "price_year",
+            "text": "Price conversion effect: the figures before conversion to 2022 dollars minus the converted figures come to 1,416.0281 kg CO2e for this category (positive: conversion lowered it; negative: conversion raised it)."
+          },
+          {
+            "topic": "gwp",
+            "text": "GWP set: IPCC AR5 100-year GWPs."
+          },
+          {
+            "topic": "gwp",
+            "text": "GWP set: CO2e as reported by the supplier or partner on its declared GWP basis, not restated."
+          },
+          {
+            "topic": "gwp",
+            "text": "Declared GWP bases of reported figures: AR5."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Upper-bound proxy: a revenue-based investment figure uses an EPA sector factor per dollar that covers the investee’s whole supply chain up to its factory gate, not only its own scope 1 and 2, so it overstates the minimum boundary."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: EPA Supply Chain GHG Emission Factors v1.3 use U.S. greenhouse gas data for 2022 in 2022 dollars, with IPCC AR5 GWPs applied by EPA (CO2e only, not split by gas)."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Some investee figures have not been verified by a third party; unless the company rates them, their reliability is rated fair."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Some investee figures are CO2e as the investee reported it, with IPCC AR5 GWPs."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Investments count the investee’s or project’s scope 1 and 2 (the minimum boundary); the investee’s own scope 3 is not included."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Some counted lines have no supporting evidence file linked (or only files that are missing or were rejected in review), so their figures rest on the entered data alone. The methodology gives the count."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: PCAF-style data-quality score 1: verified emissions reported by the investee or project."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: PCAF-style data-quality score 2: emissions reported by the investee or project that are not verified."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: PCAF-style data-quality score 4: the investee’s revenue with a sector emission factor per dollar."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Projected lifetime emissions of financed projects are reported separately as memo items and never added to any total."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: An estimate: investee revenue not in 2022 dollars was converted with the BEA GDP implicit price deflator, an economy-wide index; EPA recommends commodity-specific price indexes."
+          },
+          {
+            "topic": "assumption",
+            "text": "Assumption or limitation: Some investments are estimated from the investee’s revenue and its NAICS sector (EPA Supply Chain GHG Emission Factors v1.3 without margins), because the investee’s own emissions are not available."
+          },
+          {
+            "topic": "data_quality",
+            "text": "Data quality (Scope 3 Standard Table 7.6; scores weighted by kg CO2e, 1 = very good to 4 = poor): technological 1.00, temporal 2.00, geographical 1.00, completeness 2.00, reliability 3.00; overall good (1.80)."
+          },
+          {
+            "topic": "data_quality",
+            "text": "0 of 3 calculated records carry ratings set by the company; the rest use their method’s defaults."
+          },
+          {
+            "topic": "data_quality",
+            "text": "Data-quality labels are a product convention: each of the five indicators is scored very good = 1, good = 2, fair = 3 and poor = 4 and weighted by kg CO2e; the overall score is the mean of the five; 1.5 or less is very good, 2.5 or less good, 3.5 or less fair, otherwise poor."
+          },
+          {
+            "topic": "value_chain",
+            "text": "100.0% of this category’s kg CO2e comes from supplier or other value-chain partner data. Secondary factors typed in by the company are not supplier data."
+          },
+          {
+            "topic": "data_quality",
+            "text": "3 of 3 counted lines have no supporting evidence file linked."
+          },
+          {
+            "topic": "biogenic",
+            "text": "Biogenic CO2 is not separated: supplier and partner figures are taken as reported."
+          },
+          {
+            "topic": "biogenic",
+            "text": "Biogenic CO2 is not quantified: the published factors used here do not report it separately."
+          },
+          {
+            "topic": "uncertainty",
+            "text": "Uncertainty (qualitative): lower than for secondary methods, because most of the figure is the partners’ own reported emissions; it still depends on each partner’s inventory quality and on the allocation of its total to the company, and unverified partner data adds to it."
+          },
+          {
+            "topic": "uncertainty",
+            "text": "Why uncertainty is not quantified: no confidence interval is estimated for this category’s figure. The factors applied are published without confidence intervals (any NETL range is stated above and covers that factor only; EIA CBECS publishes relative standard errors, which are not loaded in this beta), supplier and partner figures come without a stated uncertainty, and the activity data carry no stated measurement error, so a quantified range would rest on assumptions this beta does not make. The qualitative assessment above is given instead, as CARB proposes where quantitative estimation is not feasible (SB 253 staff workshop, 21 July 2026, slide 14)."
+          },
+          {
+            "topic": "time_boundary",
+            "text": "Projected lifetime emissions of project finance are reported separately as memo items, never in the total."
+          },
+          {
+            "topic": "time_boundary",
+            "text": "Reported separately and not in any total: projected lifetime emissions, 7,500,000,000.0000 kg CO2e."
+          },
+          {
+            "topic": "exclusion",
+            "text": "Every counted record in this category is calculated."
+          },
+          {
+            "topic": "base_year",
+            "text": "Scope 3 base year: not yet established."
+          },
+          {
+            "topic": "limitation",
+            "text": "Scope 3 records may cover 2025 and 2026 in this beta (fiscal year 2026, the first expected SB 253 Scope 3 report, and fiscal years spanning two calendar years), inside the reporting period in company setup. Factors stay the latest published editions, disclosed on each later line; Scope 1 and 2 for periods after 2025 are a separate package."
+          },
+          {
+            "topic": "review",
+            "text": "Analytical review: this category is more than half of the known-source Scope 3 total. Check that it is complete and classified correctly before relying on it."
+          }
+        ]
+      }
+    ],
+    "knownSourceSubtotal": {
+      "display": "339871705.3883",
+      "rounding": "half_even_4dp_once",
+      "unit": "kg CO2e",
+      "unrounded": "339871705.388253467186"
+    },
+    "addedToScope1And2": false,
+    "proposedMandatory": {
+      "categories": [
+        1,
+        3,
+        5,
+        6,
+        7
+      ],
+      "proposal": true,
+      "adopted": false,
+      "complete": false,
+      "gaps": [
+        {
+          "category": 1,
+          "status": "not_screened"
+        },
+        {
+          "category": 3,
+          "status": "not_screened"
+        },
+        {
+          "category": 5,
+          "status": "not_screened"
+        },
+        {
+          "category": 6,
+          "status": "not_screened"
+        },
+        {
+          "category": 7,
+          "status": "not_screened"
+        }
+      ],
+      "line": "Incomplete: category 1 not screened; category 3 not screened; category 5 not screened; category 6 not screened; category 7 not screened.",
+      "basis": "CARB proposed in July 2026 that categories 1, 3, 5, 6 and 7 become mandatory from the 2027 reporting cycle. This is a proposal, not an adopted rule."
+    },
+    "disclosures": [
+      {
+        "code": "ar4_gwp_embedded_in_factor",
+        "categories": [
+          12
+        ],
+        "text": "Waste is reported as CO2e calculated by EPA with IPCC AR4 GWPs, with no split by gas; other Scope 3 figures use AR5."
+      },
+      {
+        "code": "avoided_emissions_excluded",
+        "categories": [
+          12
+        ],
+        "text": "Waste excludes avoided emissions from recycling or energy recovery."
+      },
+      {
+        "code": "biogenic_co2_reported_separately",
+        "categories": [
+          11
+        ],
+        "text": "Biogenic CO2 from biomass fuels (EPA Hub Table 1 \"Biomass Fuels\") is reported separately and never added to any total; the CH4 and N2O from burning them are counted."
+      },
+      {
+        "code": "blend_gwp_hfc_pfc_constituents_only",
+        "categories": [
+          11
+        ],
+        "text": "Refrigerant blends use EPA’s published GWP, which counts only their HFC and PFC constituents (Hub Table 12); HCFC constituents are not included."
+      },
+      {
+        "code": "combustion_only",
+        "categories": [
+          11
+        ],
+        "text": "Fuels sold count the combustion of the fuel by its users (the minimum boundary); the upstream emissions of producing and delivering the fuel are not included."
+      },
+      {
+        "code": "data_quality_label_capped",
+        "categories": [
+          11,
+          12
+        ],
+        "text": "The category’s data-quality label is capped at fair because some of its activity is not quantified (held or pending lines, or a partial boundary that is not a documented exclusion). The methodology says why."
+      },
+      {
+        "code": "direct_use_phase_only",
+        "categories": [
+          11
+        ],
+        "text": "Energy-using products count the direct use-phase emissions of the electricity or fuel they consume over their expected lifetime (the minimum boundary)."
+      },
+      {
+        "code": "eeio_upper_bound_proxy_includes_investee_upstream",
+        "categories": [
+          15
+        ],
+        "text": "Upper-bound proxy: a revenue-based investment figure uses an EPA sector factor per dollar that covers the investee’s whole supply chain up to its factory gate, not only its own scope 1 and 2, so it overstates the minimum boundary."
+      },
+      {
+        "code": "end_of_life_remaining_charge_memo_upper_bound",
+        "categories": [
+          11
+        ],
+        "text": "The gas left in these products after use (units x charge x the share not released during use) is reported separately in CO2e (same GWP), outside every total. It is an upper bound for its release at end of life: assuming no recharge during use and no recovery or destruction at end of life."
+      },
+      {
+        "code": "factor_data_years",
+        "categories": [
+          11,
+          12
+        ],
+        "text": "EPA GHG Emission Factors Hub, edition last modified 15 January 2025 (Tables 8, 9 and 10); EPA eGRID2023 (revision 2) subregion emission rates and grid gross loss."
+      },
+      {
+        "code": "factor_ghg_year_2022",
+        "categories": [
+          15
+        ],
+        "text": "EPA Supply Chain GHG Emission Factors v1.3 use U.S. greenhouse gas data for 2022 in 2022 dollars, with IPCC AR5 GWPs applied by EPA (CO2e only, not split by gas)."
+      },
+      {
+        "code": "feedstock_not_combusted",
+        "categories": [
+          11
+        ],
+        "text": "Fuel sold as a feedstock that is not combusted in use is counted as a known zero, not left out."
+      },
+      {
+        "code": "fuel_default_heat_content",
+        "categories": [
+          11
+        ],
+        "text": "An estimate: fuel recorded in its physical unit (gallons, standard cubic feet or short tons) was converted to energy with the EPA Hub Table 1 default heat content, not a supplier-stated value."
+      },
+      {
+        "code": "ghg_product_end_of_life_release_not_quantified",
+        "categories": [
+          12
+        ],
+        "text": "Products the company sold that contain greenhouse gases (category 11 records) may release the gas left in them at end of life. That release is not quantified in category 12; the category 11 memo “gas left in sold products at end of life” gives its upper bound (assuming no recharge during use and no recovery or destruction at end of life), outside every total."
+      },
+      {
+        "code": "includes_transport_to_facility",
+        "categories": [
+          12
+        ],
+        "text": "Waste factors include transport to the treatment facility."
+      },
+      {
+        "code": "indirect_use_phase_excluded",
+        "categories": [
+          11
+        ],
+        "text": "The optional indirect use-phase emissions of products (for example the energy to heat water a detergent is used with) are not included."
+      },
+      {
+        "code": "investee_data_unverified",
+        "categories": [
+          15
+        ],
+        "text": "Some investee figures have not been verified by a third party; unless the company rates them, their reliability is rated fair."
+      },
+      {
+        "code": "investee_gwp_basis_ar5",
+        "categories": [
+          15
+        ],
+        "text": "Some investee figures are CO2e as the investee reported it, with IPCC AR5 GWPs."
+      },
+      {
+        "code": "investee_scope3_excluded",
+        "categories": [
+          15
+        ],
+        "text": "Investments count the investee’s or project’s scope 1 and 2 (the minimum boundary); the investee’s own scope 3 is not included."
+      },
+      {
+        "code": "lines_without_evidence",
+        "categories": [
+          11,
+          12,
+          15
+        ],
+        "text": "Some counted lines have no supporting evidence file linked (or only files that are missing or were rejected in review), so their figures rest on the entered data alone. The methodology gives the count."
+      },
+      {
+        "code": "mixed_gwp_sets_including_reported",
+        "categories": [
+          11,
+          12,
+          15
+        ],
+        "text": "More than one GWP basis is used in this Scope 3 total, including CO2e taken as reported by suppliers or other value-chain partners on their own declared basis, or as published by a factor source. Figures are not restated to one GWP set, so the total combines GWP bases; the GWP set of every figure is listed per record."
+      },
+      {
+        "code": "pcaf_style_score_1",
+        "categories": [
+          15
+        ],
+        "text": "PCAF-style data-quality score 1: verified emissions reported by the investee or project."
+      },
+      {
+        "code": "pcaf_style_score_2",
+        "categories": [
+          15
+        ],
+        "text": "PCAF-style data-quality score 2: emissions reported by the investee or project that are not verified."
+      },
+      {
+        "code": "pcaf_style_score_4",
+        "categories": [
+          15
+        ],
+        "text": "PCAF-style data-quality score 4: the investee’s revenue with a sector emission factor per dollar."
+      },
+      {
+        "code": "projected_lifetime_emissions_reported_separately",
+        "categories": [
+          15
+        ],
+        "text": "Projected lifetime emissions of financed projects are reported separately as memo items and never added to any total."
+      },
+      {
+        "code": "reporting_year_grid_factor",
+        "categories": [
+          11
+        ],
+        "text": "Electricity used by products sold uses the eGRID2023 rev2 output emission rate of the U.S. region of use (an eGRID subregion or the U.S. average) for the reporting year, with no projected change in the grid over the products’ lifetime."
+      },
+      {
+        "code": "revenue_economy_wide_price_index",
+        "categories": [
+          15
+        ],
+        "text": "An estimate: investee revenue not in 2022 dollars was converted with the BEA GDP implicit price deflator, an economy-wide index; EPA recommends commodity-specific price indexes."
+      },
+      {
+        "code": "revenue_proxy",
+        "categories": [
+          15
+        ],
+        "text": "Some investments are estimated from the investee’s revenue and its NAICS sector (EPA Supply Chain GHG Emission Factors v1.3 without margins), because the investee’s own emissions are not available."
+      },
+      {
+        "code": "same_product_in_cat11_ghg_release",
+        "categories": [
+          11,
+          12
+        ],
+        "text": "A product recorded for its end of life (category 12) is also recorded as a greenhouse-gas product whose gas is released in full during use (category 11). Nothing of that gas remains at end of life, so the category 12 record must count only the product’s material; the overlap is disclosed, not removed."
+      },
+      {
+        "code": "sold_product_end_of_life_assumed_split",
+        "categories": [
+          12
+        ],
+        "text": "The end of life of sold products and packaging uses the treatment split the company states with its basis (for example EPA Facts and Figures), not measured disposal data."
+      },
+      {
+        "code": "stationary_ch4_n2o_proxy_for_transport_fuels",
+        "categories": [
+          11
+        ],
+        "text": "Some fuels sold are also transport fuels (EPA Hub Table 2; propane as the main component of LPG). Their CH4 and N2O use the Hub Table 1 stationary-combustion factors as a proxy, because mobile CH4 and N2O depend on vehicles the seller does not know; their CO2 is not affected. Pipeline natural gas is not treated as a transport fuel."
+      },
+      {
+        "code": "use_phase_release_only",
+        "categories": [
+          11
+        ],
+        "text": "Products containing greenhouse gases count only the share of the gas released during use, as the company states with its basis; release at end of life belongs in category 12."
+      }
+    ],
+    "aggregateSha256": "156f9a6024a3b2dc5729ac676005e80e917ec905e862f5b82f487ba9f9878d0d"
+  },
+  "unmatchedScreening": [],
+  "warnings": [],
+  "lineBudget": {
+    "max": 3000,
+    "used": 15,
+    "remaining": 2985
+  },
+  "readiness": {
+    "ready": false,
+    "openIssues": [
+      {
+        "category": 11,
+        "code": "input_needed"
+      },
+      {
+        "category": 11,
+        "code": "assessment_missing"
+      },
+      {
+        "category": 12,
+        "code": "input_needed"
+      },
+      {
+        "category": 12,
+        "code": "assessment_missing"
+      },
+      {
+        "category": 15,
+        "code": "assessment_missing"
+      }
+    ]
+  }
+}
