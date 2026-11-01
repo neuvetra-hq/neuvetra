@@ -139,6 +139,9 @@ describe('I-07: engine inputs and holds before the engine (DESIGN §5.1)', () =>
       ['ghg product in kg', record('sold_ghg_product', q('5', 'kg', false), GHG), ['quantity_not_calculable', 'unit_not_an_engine_token']],
       ['end of life unknown material', record('end_of_life_split', q('5', 'kg'), { ...EOL, material: 'unobtainium' }), ['material_not_an_engine_token']],
       ['end of life in tonnes as written', record('end_of_life_split', q('5', 'tonne', false), EOL), ['quantity_not_calculable', 'unit_not_an_engine_token']],
+      // PR22 bug hunt A-1: a share above 100% is contract-valid (DEC3) but the engine refuses it (`invalid_split`), so the line
+      // became "unavailable" with a "try again" warning. It can never total 100%, so it is held here, as commuting shares are.
+      ['end of life share above 100%', record('end_of_life_split', q('5', 'kg'), { ...EOL, split: { ...SPLIT, recycled: '150', landfilled: '100.001' } }), ['treatment_split_must_total_100']],
       ['investment in EUR', record('investment', q('5', 'EUR', false), INVEST), ['quantity_not_calculable', 'investment_currency_not_supported']],
       ['revenue missing', record('investment', q('5', 'USD'), { ...EEIO, revenue: null }), ['investee_revenue_required']],
       ['investee NAICS missing', record('investment', q('5', 'USD'), { ...EEIO, naicsCode: null }), ['investee_naics_code_required']],

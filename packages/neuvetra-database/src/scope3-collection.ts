@@ -538,6 +538,9 @@ function planScope3ProductsAndInvestments(state: Scope3PlanState): Scope3Calcula
     const p = a.payload
     need((SCOPE3_WASTE_MATERIALS as readonly string[]).includes(p.material), 'material_not_an_engine_token')
     need((SCOPE3_WASTE_UNITS as readonly string[]).includes(q.originalUnit), 'unit_not_an_engine_token')
+    // A share above 100% can never be part of a split that adds up to 100% (the engine refuses it rather than holding it), so
+    // it is held here with the engine's own total reason, as commuting mode shares are (PR22 bug hunt A-1).
+    if (p.split !== null) need(SCOPE3_WASTE_TREATMENTS.every(t => decimalAtMost(p.split![t], 100)), 'treatment_split_must_total_100')
     return send({ period, material: p.material, basis: p.basis, split: p.split === null ? null : { ...p.split }, quantity: q.normalizedValue, unit: q.normalizedUnit })
   }
   if (a.kind === 'investment') {
