@@ -341,3 +341,47 @@ describe("round 3: spend import refusals and withdraw-import", () => {
     expect(racedBody.error).toContain("3,000 active lines")
   })
 })
+
+// Bug hunt (PR 22, lane B, 1 November 2026): every bulk spend write saves the lines against the current setup version, and
+// 0030 requires each line's location to be in it (23503). After a location was removed from company setup, natively,
+// "withdraw this import" answered 404 "Scope 3 spend imports not found." for an import the same screen lists, and a mapping
+// save or currency conversion over such lines said "Reload and try again", which can never succeed. The route now says which
+// lines and how to recover: put the location back in company setup (it may be marked excluded), then try again.
+describe("bug hunt: spend lines at a location removed from company setup", () => {
+  const gone = "93900000-0000-4000-8000-0000000000b9"
+  const coded = (code: string) => async () => { throw Object.assign(new Error("db"), { code }) }
+  const importId = "93900000-0000-4000-8000-0000000000a9"
+  const json = (body: unknown) => ({ method: "POST", type: "application/json", body: JSON.stringify(body) })
+  /** One active imported line of `importId` at a location the current setup no longer has (and the import that saved it). */
+  async function withLineAt(h: ReturnType<typeof harness>, locationId: string) {
+    const text = `${HEADER}\nL1,2025-03-01,Acme,6100,Office,Toner,10,USD,2025,1,339940,with_margins,\n`
+    expect((await h.send(importPath(), csv(text))).status).toBe(201)
+    const record = h.records[0]!, saved = h.imports[0]!
+    ;(record.currentVersion.activity as { locationId: string }).locationId = locationId
+    ;(record.currentVersion.activity.payload as { importId: string }).importId = importId
+    h.imports[0] = { ...saved, id: importId, locationId, lines: saved.lines }
+  }
+  const refusal = { code: "location_not_in_setup", lines: 1, error: "1 imported spend line is at a location that is no longer in company setup, so nothing was changed. Add the location back in company setup (it can be marked as excluded), then try again." }
+  test("withdraw this import: 409 location_not_in_setup, never 404 for an import that exists", async () => {
+    const h = harness({ withdrawScope3SpendImport: coded("23503") })
+    await withLineAt(h, gone)
+    const r = await h.send(`${root}/${importId}/withdrawal`, json({ reason: "Wrong month." }))
+    expect([r.status, await r.json()]).toEqual([409, refusal])
+  })
+  test("a mapping save or a currency conversion over such lines: 409 location_not_in_setup, not reload_required", async () => {
+    for (const [path, body, override] of [["/scope3/spend-mappings", { expectedRevision: 0, mapping: { glAccount: "6100", vendor: "Acme", description: "Toner", category: 1, naicsCode: "339940", marginChoice: "with_margins" }, categoryConfirmed: null, activityOverlapConfirmed: null }, "saveScope3SpendMapping"],
+      ["/scope3/spend-currency-conversions", { currency: "EUR", rate: "1.08", rateSource: "ECB", rateDate: "2025-03-01" }, "convertScope3SpendCurrency"]] as const) {
+      const h = harness({ [override]: coded("23503") })
+      await withLineAt(h, gone)
+      const r = await h.send(`/workspace/${company}${path}`, json(body))
+      expect([r.status, await r.json()]).toEqual([409, refusal])
+    }
+  })
+  test("otherwise unchanged: an unknown import is 404; with every location still in setup a mapping 23503 is reload_required", async () => {
+    expect((await harness({ withdrawScope3SpendImport: coded("23503") }).send(`${root}/${importId}/withdrawal`, json({ reason: "Wrong month." }))).status).toBe(404)
+    const h = harness({ saveScope3SpendMapping: coded("23503") })
+    await withLineAt(h, location)
+    const r = await h.send(`/workspace/${company}/scope3/spend-mappings`, json({ expectedRevision: 0, mapping: { glAccount: "6100", vendor: "Acme", description: "Toner", category: 1, naicsCode: "339940", marginChoice: "with_margins" }, categoryConfirmed: null, activityOverlapConfirmed: null }))
+    expect([r.status, (await r.json()).code]).toEqual([409, "reload_required"])
+  })
+})

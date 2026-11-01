@@ -689,6 +689,8 @@ export const SCOPE3_CAPACITY_TEXT = {
   lineBudgetSaveRefused: (max: number) => `This would take Scope 3 past its limit of ${max.toLocaleString('en-US')} active lines, so nothing was saved. Category 3 lines derived from electricity and fuel records count too. Withdraw lines or a whole import you no longer need (withdrawn lines don’t count), then try again.`,
   /** Round 3 (owner decision 7): a whole import withdrawn in one action. */
   importWithdrawn: (withdrawn: number, already: number) => `${withdrawn.toLocaleString('en-US')} line${withdrawn === 1 ? '' : 's'} withdrawn${already > 0 ? `; ${already.toLocaleString('en-US')} already withdrawn` : ''}. Withdrawn lines stay in the history and no longer count.`,
+  /** Bug hunt (PR 22): a bulk spend write over lines whose location is no longer in company setup (0030 refuses it, 23503). */
+  spendLocationNotInSetup: (lines: number) => `${lines.toLocaleString('en-US')} imported spend line${lines === 1 ? ' is' : 's are'} at a location that is no longer in company setup, so nothing was changed. Add the location back in company setup (it can be marked as excluded), then try again.`,
 } as const
 // --- end round 2, lane B ---
 // --- R2-A --- Round 2, lane A (ROUND2.md owner decisions 1-4; ACC-5, ACC-7, ACC-14, ACC-17): the engine's new notes and findings,
