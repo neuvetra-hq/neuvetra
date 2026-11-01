@@ -314,9 +314,10 @@ function SupersededMemos({ results }: { results: Scope3ResultsResponse }) {
 
 /**
  * The printed Scope 3 section of the draft report (S3-04 and S3-13: the same labels as the screen and CSV; I-06: every detail open).
- * `frozen`: inside a frozen report version, which prints alone (no Scope 1 and 2 totals above it).
+ * `frozen`: inside a frozen report version, which prints alone (no Scope 1 and 2 totals above it); `statements`: the
+ * statement lines the version stored (bug hunt D), printed instead of today's.
  */
-export function Scope3ReportSection({ results, frozen = false }: { results: Scope3ResultsResponse; frozen?: boolean }) {
+export function Scope3ReportSection({ results, frozen = false, statements }: { results: Scope3ResultsResponse; frozen?: boolean; statements?: readonly string[] | null }) {
   const coverage = results.coverage
   const printClosed = scope3ClosedLines(results.records)  // round 3 (AC-5): closed 3C/3D combustion lines print as closed
   return <section aria-labelledby="scope3-report-title">
@@ -339,7 +340,7 @@ export function Scope3ReportSection({ results, frozen = false }: { results: Scop
     <SupersededMemos results={results} />
     {coverage.disclosures.length > 0 && <ul>{coverage.disclosures.map(item => <li key={item.code} className="nv-report__small">{item.text}</li>)}</ul>}
     <p className="nv-report__small">Scope 3 methods: {results.methods.length ? results.methods.map(item => `${item.methodVersionId} (${item.releaseStatus === "released_beta" ? "released beta" : "unreleased beta"})`).join("; ") : "none calculated"}.</p>
-    {scope3StatementLines(results).map(line => <p key={line} className="nv-report__small">{line}</p>)}
+    {(statements ?? scope3StatementLines(results)).map(line => <p key={line} className="nv-report__small">{line}</p>)}
     <h4>Methodology by category</h4>
     {coverage.categories.map(row => <div key={row.category}><p className="nv-report__small"><strong>{row.category}. {row.title} · {statusText(row.status)}</strong></p><ul>{row.methodology.map((sentence, i) => <li key={i} className="nv-report__small">{sentence.text}</li>)}</ul></div>)}
     <ExclusionRegister results={results} />

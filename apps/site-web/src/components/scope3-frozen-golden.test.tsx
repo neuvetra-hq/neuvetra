@@ -94,3 +94,14 @@ test("bug hunt D: a v1 version, prepared before readiness existed, never claims 
   expect(shown).not.toContain("Approved with no open issues.")
   expect(shown).toContain("Readiness was not recorded with this version")
 })
+
+// Bug hunt D (1 November 2026): the frozen view printed today's statement lines (deadline, beta limitation, base year)
+// next to the version's stored methodology, so the v1 golden said both "limited to calendar 2025" (stored) and "may
+// cover 2025 and 2026" (live). A frozen version shows the statement lines its stored CSV carries.
+test("bug hunt D: a frozen version prints the statement lines it stored, never today's", async () => {
+  const report = await goldenV1()
+  const shown = render(report)
+  expect(report.csvText).toContain("# Scope 3 records are limited to calendar 2025 in this beta.")
+  expect(shown).toContain("Scope 3 records are limited to calendar 2025 in this beta.")
+  expect(shown).not.toContain("Scope 3 records may cover 2025 and 2026")
+})
