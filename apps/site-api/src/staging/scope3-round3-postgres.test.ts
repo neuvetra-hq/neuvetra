@@ -256,7 +256,8 @@ integration("round 3 owner decision 6 natively: preparing, approving and re-prep
     const activity = { locationId: w.site, setupVersionId: w.setupVersionId, state: "active", withdrawalReason: null, quality: "estimated", estimateBasis: "B".repeat(2000), period: { start: "2025-01-01", endExclusive: "2026-01-01" },
       reference: "R".repeat(1000), notes: "N".repeat(4000), evidenceIds: files, kind: "commuting_average", sourceId: `${String(i).padStart(6, "0")}${"S".repeat(114)}`,
       quantity: { originalValue: employees, originalUnit: "employee", normalizedValue: employees, normalizedUnit: "employee" },
-      payload: { workingDays: 366, modes, sharesBasis: "H".repeat(300), distanceBasis: "K".repeat(300), activityOverlap: "none_confirmed", dataQuality } }
+      // PR22 bug hunt A-3: 365, the most working days a calendar-2025 profile can have (366 is now held as more than its period).
+      payload: { workingDays: 365, modes, sharesBasis: "H".repeat(300), distanceBasis: "K".repeat(300), activityOverlap: "none_confirmed", dataQuality } }
     await fixture.database.saveCollectionActivity(w.owner, w.id, crypto.randomUUID(), { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity })
   }
   console.info(`round 3 decision 6 native: ${records} worst-case commuting records saved in ${Math.round(performance.now() - started)} ms`)
