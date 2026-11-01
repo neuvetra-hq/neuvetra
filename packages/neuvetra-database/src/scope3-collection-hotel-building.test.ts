@@ -149,6 +149,14 @@ describe('I-12h: buildings by floor area (DESIGN 13.2)', () => {
     // Round 3, lane A (AC-10): natural gas use not known is the engine's hold (its own finding and trace), no longer the adapter's.
     expect(plan(record('building_average', q('100', 'sqft'), { ...BUILDING, usesNaturalGas: 'unknown' })).action).toBe('calculate')
     expect(plan(record('building_average', q('100', 'sqft'), { ...BUILDING, coveredDays: 366 })).reasons).toEqual(['covered_days_exceed_days_in_year'])
+    // PR22 bug hunt A-2: "days covered in the period" cannot exceed the days of the record's own period. A first-quarter record
+    // (90 days) with 365 covered days was calculated as a whole year of the building's energy (four times the quarter).
+    const quarter = { period: { start: '2025-01-01', endExclusive: '2025-04-01' } }
+    expect(plan(record('building_average', q('100', 'sqft'), { ...BUILDING, coveredDays: 365 }, quarter)).reasons).toEqual(['covered_days_exceed_days_in_period'])
+    expect(plan(record('building_average', q('100', 'sqft'), { ...BUILDING, coveredDays: 91 }, quarter)).reasons).toEqual(['covered_days_exceed_days_in_period'])
+    expect(plan(record('building_average', q('100', 'sqft'), { ...BUILDING, coveredDays: 90 }, quarter)).action).toBe('calculate')
+    expect(plan(record('building_average', q('100', 'sqft'), { ...BUILDING, coveredDays: 365 }, { period: { start: '2025-07-01', endExclusive: '2026-07-01' } }), { ...COUNTRIES, reportingPeriod: { start: '2025-07-01', endExclusive: '2026-07-01' } }).action).toBe('calculate')
+    expect(SCOPE3_REASON_TEXT_I12H.covered_days_exceed_days_in_period).toBeTruthy()
     expect(plan(record('building_average', q('100', 'sqft'), { ...BUILDING, cbecsActivity: 'data_center', usesNaturalGas: 'unknown' })).reasons).toEqual(['cbecs_activity_not_an_engine_token'])
     expect(plan(record('building_average', q('100', 'sqft'), { ...BUILDING, leaseType: 'finance' })).reasons).toEqual(['finance_lease_in_scope1_2'])
     const off = plan(record('building_average', q('100', 'sqft'), BUILDING), { ...COUNTRIES, lateSources: { usUpstream2025: true, usBuildingHotel2025: false } })

@@ -259,6 +259,8 @@ function daysInYearOf(period: Scope3ReportingPeriod): number {
   const year = yearOf(period)
   return year !== null && (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) ? 366 : 365
 }
+/** The days of a record's own period (end exclusive; calendar dates the contract validated). PR22 bug hunt A-2. */
+const daysInPeriodOf = (period: Scope3ReportingPeriod): number => Math.round((Date.parse(`${period.endExclusive}T00:00:00Z`) - Date.parse(`${period.start}T00:00:00Z`)) / 86_400_000)
 // --- end I-12h ---
 
 export function planScope3Calculation(version: Scope3CollectionVersion, context: CollectionContext, evidence: CollectionEvidenceMetadata[], options: Scope3PlanOptions = {}): Scope3CalculationPlan {
@@ -474,6 +476,9 @@ function planScope3EnergyAndBuildings(state: Scope3PlanState): Scope3Calculation
     // engine result and trace; the adapter sends "unknown" as saved and no longer holds it first.
     // The engine spreads the year's intensity over the days of the reporting year (365 or 366).
     need(p.coveredDays <= daysInYearOf(period), 'covered_days_exceed_days_in_year')
+    // PR22 bug hunt A-2: the days covered are days of the record's own period; more than it has would spread a whole year of the
+    // building's energy over a shorter record (a first-quarter record with 365 days counted four quarters).
+    if (p.coveredDays <= daysInYearOf(period)) need(p.coveredDays <= daysInPeriodOf(period), 'covered_days_exceed_days_in_period')
     if (known && !SCOPE3_CBECS_ACTIVITIES_LOADED.includes(p.cbecsActivity)) return waiting('building_average', false, 'cbecs_activity_not_loaded')
     return send({ period, category: p.category, cbecsActivity: p.cbecsActivity, usesNaturalGas: p.usesNaturalGas, area: q.normalizedValue, areaUnit: q.normalizedUnit,
       coveredDays: p.coveredDays, gridBasis: p.gridBasis, ...location })

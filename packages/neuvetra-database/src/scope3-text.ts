@@ -633,6 +633,7 @@ export const SCOPE3_REASON_TEXT_I12H: Readonly<Record<string, string>> = {
   natural_gas_use_unknown: 'Say whether the building uses natural gas. CBECS gas intensity averages only buildings that use gas, so it can be neither applied nor left out while this is not known. The record isn’t counted until then.',
   cbecs_activity_not_loaded: 'This building type is a CBECS 2018 activity whose intensities are not loaded in this beta yet. It isn’t counted until they are; nothing needs to change on the record.',
   covered_days_exceed_days_in_year: 'The days covered are more than the days in the reporting year. Correct them; the record isn’t counted until then.',
+  covered_days_exceed_days_in_period: 'The days covered are more than the days in this record’s period. Correct the days or the period; the record isn’t counted until then.',
   hotel_country_required: 'Give the hotel’s country. The stay has none and its reporting location is not in the U.S. (or its country is not recorded in company setup). It isn’t counted until then.',
   hotel_country_not_in_factor_set: 'This hotel stay is outside the U.S., and no verified hotel factor for that country is loaded in this beta. It is an optional activity, listed but not counted; nothing needs to change on the record.',
   hotel_country_from_reporting_location: 'No hotel country was given, so the reporting location’s country (the U.S.) was used (an estimate).',
