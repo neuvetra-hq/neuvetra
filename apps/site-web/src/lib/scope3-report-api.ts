@@ -135,5 +135,27 @@ export type Scope3ApprovalR2 = NonNullable<Scope3ReportVersionSummary["approval"
 export function scope3ApprovalBody(reportSha256: string, confirmations: Scope3ApprovalConfirmations = { acknowledgeOpenIssues: false, confirmSelfApproval: false }): { reportSha256: string; acknowledgeOpenIssues: boolean; confirmSelfApproval: boolean } {
   return { reportSha256, acknowledgeOpenIssues: confirmations.acknowledgeOpenIssues, confirmSelfApproval: confirmations.confirmSelfApproval }
 }
+/**
+ * Bug hunt D (1 November 2026): the statement lines a stored CSV carries (the provisional deadline, the beta limitation and
+ * the base year, as `scope3StatementLines` wrote them when the version was prepared): the `#` lines after the grid-losses
+ * line, up to the first disclosure, warning, unmatched-screening or layout line, in the order `scope3Csv` writes them. A
+ * frozen version prints these, never today's wording. Null when the stored CSV does not have that shape.
+ */
+export function scope3StoredStatementLines(csvText: string): string[] | null {
+  const lines: string[] = []
+  let start = 0, quoted = false, grid = false
+  for (let i = 0; i <= csvText.length; i++) {
+    const c = csvText[i]
+    if (c === "\"") { quoted = !quoted; continue }
+    if (i < csvText.length && (c !== "\n" || quoted)) continue
+    const raw = csvText.slice(start, i); start = i + 1
+    const cell = raw.startsWith("\"") && raw.endsWith("\"") ? raw.slice(1, -1).replace(/""/g, "\"") : raw
+    if (!cell.startsWith("# ")) return null
+    if (!grid) { grid = cell.startsWith("# Grid losses (3C): "); continue }
+    if (/^# (Disclosure \(|Warning: |Unmatched Scope 3 screening answer|CSV layout version )/.test(cell)) return lines
+    lines.push(cell.slice(2))
+  }
+  return null
+}
 /** The download name of a stored CSV. */
 export const scope3ReportCsvName = (version: Scope3ReportVersionSummary) => `neuvetra-scope3-report-${version.reportingYear}-r${version.revision}-${version.reportSha256.slice(0, 12)}.csv`

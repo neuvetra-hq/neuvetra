@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { Icon } from "../Icon"
 import { Scope3ReportSection } from "../Scope3Results"
 import { groupDigits, periodLabel } from "@/lib/plain-language"
-import { approveScope3Report, loadScope3ReportVersion, loadScope3Reports, prepareScope3Report, Scope3ReportApiError, scope3ReportCsvName, scope3ReportExportCsv, type Scope3ApprovalConfirmations, type Scope3ApprovalR2, type Scope3FrozenReport, type Scope3ReportsView, type Scope3ReportVersionSummary } from "@/lib/scope3-report-api"
+import { approveScope3Report, loadScope3ReportVersion, loadScope3Reports, prepareScope3Report, Scope3ReportApiError, scope3ReportCsvName, scope3ReportExportCsv, scope3StoredStatementLines, SCOPE3_REPORT_PROFILE_V1, type Scope3ApprovalConfirmations, type Scope3ApprovalR2, type Scope3FrozenReport, type Scope3ReportsView, type Scope3ReportVersionSummary } from "@/lib/scope3-report-api"
 import { SCOPE3_STATUS_TEXT, type Scope3ResultsResponse } from "@/lib/scope3-results-api"
 import { scope3FrozenOpenIssues, scope3IssueOf, scope3LiveOpenIssues, scope3Tonnes } from "@/lib/scope3-checklist"
 import { scope3Sentence } from "@/lib/scope3-display-r3d"
@@ -66,6 +66,8 @@ export function Scope3FrozenReportView({ report, previous, actorId, canManage, b
     ...(previous.key === confirmationKey ? previous : { key: confirmationKey, acknowledged: false, selfConfirmed: false }), [field]: value,
   }))
   const issues = scope3FrozenOpenIssues(report), self = version.createdBy === actorId, approval = approvalOf(version)
+  // Bug hunt D: a v1 document predates the readiness gate (its stored open issues are empty, not "ready").
+  const readinessRecorded = d.profile !== SCOPE3_REPORT_PROFILE_V1
   const canApprove = canManage && !version.approval
   const approveReady = (!issues.length || acknowledged) && (!self || selfConfirmed)
   const approveLabel = self ? SCOPE3_READINESS_TEXT.approveSelf : issues.length ? SCOPE3_READINESS_TEXT.approveWithIssues : SCOPE3_READINESS_TEXT.approve
@@ -100,11 +102,11 @@ export function Scope3FrozenReportView({ report, previous, actorId, canManage, b
       <p className="nv-report__small">{d.baseYear.statement}</p>
       {/* Round 2 lane D (decision 7; ACC-10): the readiness frozen with this version and how it was approved, printed with it. */}
       <h4>{SCOPE3_READINESS_TEXT.frozenHeading}</h4>
-      {issues.length ? <ul>{issues.map(issue => <li key={issue.key} className="nv-report__small">{issue.text}</li>)}</ul> : <p className="nv-report__small">{SCOPE3_READINESS_TEXT.ready}</p>}
-      {approval && <p className="nv-report__small">{approval.acknowledgedOpenIssues?.length ? `${SCOPE3_READINESS_TEXT.acknowledged(approval.acknowledgedOpenIssues.length)} ${approval.acknowledgedOpenIssues.map(issue => scope3IssueOf(issue).text).join(" ")}` : issues.length ? "" : SCOPE3_READINESS_TEXT.approvedReady}{approval.selfApproved ? ` ${SCOPE3_READINESS_TEXT.controlException}.` : ""}</p>}
+      {issues.length ? <ul>{issues.map(issue => <li key={issue.key} className="nv-report__small">{issue.text}</li>)}</ul> : <p className="nv-report__small">{readinessRecorded ? SCOPE3_READINESS_TEXT.ready : SCOPE3_READINESS_TEXT.notRecorded}</p>}
+      {approval && <p className="nv-report__small">{approval.acknowledgedOpenIssues?.length ? `${SCOPE3_READINESS_TEXT.acknowledged(approval.acknowledgedOpenIssues.length)} ${approval.acknowledgedOpenIssues.map(issue => scope3IssueOf(issue).text).join(" ")}` : issues.length ? "" : readinessRecorded ? SCOPE3_READINESS_TEXT.approvedReady : SCOPE3_READINESS_TEXT.approvedNotRecorded}{approval.selfApproved ? ` ${SCOPE3_READINESS_TEXT.controlException}.` : ""}</p>}
       <h4>Changes since the previous approved version</h4>
       <ul>{changes.map((line, i) => <li key={i} className="nv-report__small">{line}</li>)}</ul>
-      <Scope3ReportSection results={d.results} />
+      <Scope3ReportSection results={d.results} frozen statements={scope3StoredStatementLines(report.csvText)} />
     </article>
   </div>
 }

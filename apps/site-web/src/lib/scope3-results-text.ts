@@ -138,6 +138,9 @@ export const SCOPE3_READINESS_TEXT = {
   controlExceptionChip: "Self-approved · control exception",
   acknowledged: (n: number) => `Approved with ${n} open issue${n === 1 ? "" : "s"} acknowledged:`,
   approvedReady: "Approved with no open issues.",
+  /** Bug hunt D: a v1 version was prepared before the readiness gate existed; its open issues were never frozen. */
+  notRecorded: "Readiness was not recorded with this version: it was prepared before the readiness check existed. Each category’s frozen status is shown below.",
+  approvedNotRecorded: "Approved (readiness was not recorded with this version).",
 } as const
 
 /** The empty company (UX-23): what to do first, and no empty CSV. */
@@ -181,7 +184,8 @@ export const SCOPE3_CHANGE_LOG_TEXT = {
   assessment: (category: number, before: number | null, after: number | null) => before === null ? `Assessment of category ${category} added (revision ${after})` : after === null ? `Assessment of category ${category} removed (was revision ${before})` : `Assessment of category ${category} changed: revision ${before} → ${after}`,
   assessmentDetail: (category: number) => `Assessment of category ${category} changed (reason or documented exclusions)`,
   mapping: (record: string, before: string, after: string) => `Spend mapping changed for ${record}: ${before} → ${after}`,
-  mappingSide: (category: number, naics: string | null) => `category ${category}, NAICS ${naics ?? "none"}`,
+  /** Bug hunt D: with the price basis and where the mapping came from, so a margin- or source-only change shows what changed. */
+  mappingSide: (category: number, naics: string | null, margin?: string | null, source?: string | null) => `category ${category}, NAICS ${naics ?? "none"}${margin ? `, ${({ with_margins: "with margins", without_margins: "without margins" } as Readonly<Record<string, string>>)[margin] ?? margin.replace(/_/g, " ")}` : ""}${source ? ` (${({ file: "from the imported file", memory: "from a remembered mapping", user: "entered by hand", unmatched: "not matched yet" } as Readonly<Record<string, string>>)[source] ?? source.replace(/_/g, " ")})` : ""}`,
   added: (record: string, category: number) => `Record added: ${record} (category ${category})`,
   removed: (record: string, category: number) => `Record removed: ${record} (category ${category})`,
   edited: (record: string, category: number) => `Record changed: ${record} (category ${category})`,

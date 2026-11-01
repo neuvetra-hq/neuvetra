@@ -114,3 +114,24 @@ describe("frozen Scope 3 report versions in the browser (I-10)", () => {
     } finally { globalThis.fetch = original }
   })
 })
+
+// Bug hunt D (1 November 2026): the statement lines a stored CSV carries, for the frozen print (never today's wording).
+test("bug hunt D: scope3StoredStatementLines reads back exactly the statement lines the CSV writer stored", async () => {
+  const { scope3StoredStatementLines } = await import("./scope3-report-api")
+  const { scope3StatementLines } = await import("./scope3-results-api")
+  for (const results of [fixture, downstream]) {
+    const document = buildScope3ReportDocument({ results, reportingYear: 2025, revision: 1, setupVersionId: "93300000-0000-4000-8000-0000000000c1", consolidationApproach: "operational_control", preparedBy: preparer, preparedAt: "2026-10-30T10:00:00.000Z", previous: null })
+    // A label with a comma and a quote makes the meta lines quoted cells.
+    const csv = scope3ReportCsv(document, { ...SCOPE3_CSV_LABELS, kind: (kind: string) => `${kind}, "x"` })
+    expect(scope3StoredStatementLines(csv)).toEqual(scope3StatementLines(results))
+    expect(scope3StoredStatementLines(scope3Csv(results, SCOPE3_CSV_LABELS))).toEqual(scope3StatementLines(results))
+  }
+  for (const name of ["scope3-report-v1-golden.json", "scope3-report-v2-golden.json"]) {
+    const golden = await Bun.file(new URL(`../../../../packages/neuvetra-database/src/testdata/${name}`, import.meta.url)).json() as { csvText: string }
+    const lines = scope3StoredStatementLines(golden.csvText)!
+    expect(lines.at(-1)).toBe("Scope 3 base year: not yet established.")
+    for (const line of lines) expect(golden.csvText).toContain(line.includes(",") ? `"# ${line.replace(/"/g, '""')}"` : `# ${line}`)
+  }
+  expect(scope3StoredStatementLines("Section,Category\n")).toBeNull()
+  expect(scope3StoredStatementLines("# a\n# b\n")).toBeNull()
+})

@@ -77,3 +77,13 @@ export const SCOPE3_FROZEN_TEXT_R3D = {
   tonnesHeading: "t CO2e (2 decimals)",
   kgHeading: "kg CO2e (exact, as stored)",
 } as const
+
+/**
+ * Bug hunt D (1 November 2026): the printed Scope 3 section (draft report and frozen version). The CARB line is named as the
+ * screen ("CARB’s proposed five") and the CSV ("CARB proposed mandatory categories") name it, so it is never read as the
+ * completeness of every category; a frozen version prints alone, without Scope 1 and 2 totals above it.
+ */
+export const SCOPE3_PRINT_TEXT_D = {
+  notAdded: (frozen: boolean) => frozen ? "Scope 3 is never added to the Scope 1 and 2 totals." : "Scope 3 is never added to the Scope 1 and 2 totals above.",
+  proposedFive: (line: string) => `CARB’s proposed five categories (a proposal, not adopted): ${line}`,
+} as const
