@@ -89,6 +89,9 @@ function focusTarget(target: HTMLElement, isControl: boolean, doc: Document, cen
   }
   const view = doc.defaultView
   for (const delay of [250, 800]) view?.setTimeout(() => {
+    // Bug hunt C (C-02): only while this target still has focus. Once the named field (found after the form's chunk
+    // loaded) takes focus, the heading's re-checks must not scroll the page back to the heading, away from the field.
+    if (doc.activeElement !== target) return
     const box = target.getBoundingClientRect()
     if (box.top < 0 || box.bottom > (view.innerHeight || 0)) target.scrollIntoView({ block })
   }, delay)
