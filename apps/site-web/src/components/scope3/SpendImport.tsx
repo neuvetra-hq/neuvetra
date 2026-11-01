@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { parseScope3SpendCsv, scope3DecimalSum, scope3SpendImportTemplate, type Scope3SpendImportLine, type Scope3SpendParse } from "../../../../../packages/neuvetra-database/src/scope3-spend-import"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { reasonText } from "@/lib/plain-language"
@@ -59,6 +59,8 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
   const [withdrawal, setWithdrawal] = useState<{ importId: string; reason: string } | null>(null)
   // Round 3 lane C (PR-11): one rate per currency (US dollars per unit), its source and date, as typed.
   const [rates, setRates] = useState<Record<string, { rate: string; rateSource: string; rateDate: string }>>({})
+  // Bug hunt C (C-06): set when the guided path asked for the review; the effect below focuses it once it has rendered.
+  const focusReview = useRef(false)
 
   useEffect(() => {
     let live = true
@@ -68,8 +70,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
       // Round 3 lane C (PR-3): opened from the Overview, the to-do list or a category row: show the asked-for tab and come into view.
       const asked = takeSpendImportFocus()
       if (!asked) return
-      setTab(asked); setShown(PAGE)
-      if (typeof document !== "undefined") requestAnimationFrame(() => { const panel = document.getElementById(SPEND_IMPORT_ANCHOR), heading = panel?.querySelector("[data-spend-review-heading]") as HTMLElement | null; (heading ?? panel)?.scrollIntoView({ block: "start" }); heading?.focus({ preventScroll: true }) })
+      setTab(asked); setShown(PAGE); focusReview.current = true
     })
       .catch(error => { if (live) {
         const problem = error instanceof Scope3SpendImportApiError && error.unavailable ? "Spend import needs database schema 30." : "Spend imports could not be loaded."
@@ -77,6 +78,15 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
       } })
     return () => { live = false }
   }, [companyId, actor, reload])
+  // Bug hunt C (C-06): the review heading is brought into view and focused once the list has rendered it (a frame asked
+  // for with the state update could run first, find no heading and leave focus at the top of the screen).
+  useEffect(() => {
+    if (!focusReview.current || !view || typeof document === "undefined") return
+    focusReview.current = false
+    const panel = document.getElementById(SPEND_IMPORT_ANCHOR), heading = panel?.querySelector("[data-spend-review-heading]") as HTMLElement | null
+    const target = heading ?? panel
+    target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true })
+  }, [view])
 
   // Round 3 lane C (decision 9, PR-4): a new file always clears the previous file's preview and errors first, and a file
   // that cannot be read says so (never a silent, stale preview).

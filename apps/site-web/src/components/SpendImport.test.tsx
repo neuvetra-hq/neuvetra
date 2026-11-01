@@ -28,7 +28,7 @@ const view = (lines: any[], extra: Record<string, unknown> = {}) => api.decodeSc
     fileTotals: { USD: String(lines.length * 75) }, reconciliation: { reconciled: true, nonNumericRows: { file: 0, imported: 0 }, currencies: [{ currency: "USD", fileTotal: String(lines.length * 75), importedTotal: String(lines.length * 75), lines: lines.length, matches: true }] } }] : [],
   mappings: [], lines, superseded: [], superseders: [], ...extra }, company)
 
-async function panel(initial: any = view([]), onOpenRecord?: (id: string) => void, withdrawalError?: Error, correctionFailure = false, loadFailures = 0) {
+async function panel(initial: any = view([]), onOpenRecord?: (id: string) => void, withdrawalError?: Error, correctionFailure = false, loadFailures = 0, globals: Record<string, unknown> = {}) {
   const calls: any[] = []
   let current = initial
   let changed = 0, saves = 0
@@ -52,7 +52,7 @@ async function panel(initial: any = view([]), onOpenRecord?: (id: string) => voi
     convertScope3SpendCurrency: async (...args: any[]) => { calls.push(["convert", args[1]]); return { converted: [{ recordId: rec(1), sourceId: "L1", versionId: rec(51), revision: 2, from: "75", usd: "81.17" }], skipped: [{ recordId: rec(2), sourceId: "L2", reason: "negative_amount_not_supported" }] } },
   })
   const actor = { userId: user, accessToken: "t" }
-  const app = harness(make, () => ({ companyId: company, actor, onOpenRecord, onChanged: () => { changed++ } }), { crypto: { randomUUID: () => "93920000-0000-4000-8000-0000000000aa" }, File })
+  const app = harness(make, () => ({ companyId: company, actor, onOpenRecord, onChanged: () => { changed++ } }), { crypto: { randomUUID: () => "93920000-0000-4000-8000-0000000000aa" }, File, ...globals })
   await app.settle()
   const node = (label: string) => app.nodes().find(n => n.props["aria-label"] === label)
   const choose = async (text: string) => { node("Spend file")!.props.onChange({ target: { files: [new File([text], "ledger.csv", { type: "text/csv" })] } }); await new Promise(r => setTimeout(r, 5)); await app.settle() }
@@ -326,5 +326,32 @@ describe("SpendImport (I-09)", () => {
     const row = await groupRow(converted, "Events")
     row.app.button("Map")!.props.onClick(); await row.app.settle()
     row.says("from EUR 75.00 at 1.0823 USD per EUR (ECB euro reference rate, 2025-06-30)")
+  })
+})
+
+// Bug hunt C (pr22, Claude, 1 November 2026), C-06: "Open the spend import" (Overview, to-do list, category row) asked for
+// the review heading in an animation frame queued with the list's state update; when that frame ran before React had
+// rendered the review (reproduced live at 390 px), the heading was not found: the page scrolled to the panel's top and
+// keyboard focus stayed on the screen heading thousands of pixels above. The heading is focused once it is rendered.
+describe("Open the spend import lands on the review heading", () => {
+  test("the review heading is scrolled to and focused after the review has rendered", async () => {
+    const { requestSpendImportFocus, SPEND_IMPORT_ANCHOR } = await import("@/lib/spend-import-target")
+    const log: string[] = []
+    let rendered = () => false
+    const heading = { scrollIntoView: () => log.push("heading scrolled"), focus: () => log.push("heading focused") }
+    const panelNode = { querySelector: () => rendered() ? heading : null, scrollIntoView: () => log.push("panel scrolled") }
+    const globals = { document: { getElementById: (id: string) => id === SPEND_IMPORT_ANCHOR ? panelNode : null }, requestAnimationFrame: (run: () => void) => setTimeout(run, 0) }
+    // The list answers after the panel has mounted (a real network read), so the panel's first render has no review.
+    let answer!: (value: unknown) => void
+    const listed = view([line(1, {}), line(2, { possibleDuplicateOf: { importId: imp, row: 1 }, plan: { action: "hold", status: "input_needed", reasons: ["possible_duplicate_spend_line"] } })])
+    requestSpendImportFocus("duplicates")
+    const p = await panel(view([]), undefined, undefined, false, 0, { ...globals, loadScope3SpendImports: () => new Promise(resolve => { answer = resolve }) })
+    rendered = () => p.app.nodes().some(node => node.props["data-spend-review-heading"] !== undefined)
+    expect(rendered()).toBe(false)
+    // The answer is handled (state set, frame asked for) before React renders it, as in the browser.
+    answer(listed); for (let tick = 0; tick < 3; tick++) await Promise.resolve()
+    await p.app.settle()
+    expect(rendered()).toBe(true)
+    expect(log).toEqual(["heading scrolled", "heading focused"])
   })
 })

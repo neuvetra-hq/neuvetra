@@ -400,6 +400,10 @@
 .nv-app .collection-legacy-hold { border-left-color: var(--warn); background: var(--warn-bg); color: var(--text); }
 .nv-app .collection-record-list .setup-subcard p { margin: 4px 0; color: var(--muted); }
 .nv-app #collection-record-editor { scroll-margin-top: 90px; }
+/* Bug hunt C (C-03): the spend import, its review heading and the Scope 3 to-do groups are jumped to with block "start";
+   they land below the sticky top bar (about 69px), and under 1080px below the sticky step bar as well (about 118px). */
+.nv-app #spend-import, .nv-app [data-spend-review-heading], .nv-app #scope3-todo, .nv-app .s3-todo__group { scroll-margin-top: 84px; }
+@media (max-width: 1080px) { .nv-app #spend-import, .nv-app [data-spend-review-heading], .nv-app #scope3-todo, .nv-app .s3-todo__group, .nv-app #collection-record-editor { scroll-margin-top: 132px; } }
 .nv-app .worksheet .worksheet-nav[aria-label="Activity types"] button[aria-pressed="true"], .nv-app .worksheet .setup-steps button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
 .nv-app .setup-steps { gap: 8px; }
 .nv-app .setup-steps button { font-size: .86rem; }
