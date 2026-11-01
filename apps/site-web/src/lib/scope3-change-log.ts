@@ -2,6 +2,7 @@ import { groupDigits, kindLabel } from "./plain-language"
 import { SCOPE3_STATUS_TEXT } from "./scope3-results-api"
 import { SCOPE3_CHANGE_LOG_TEXT as T } from "./scope3-results-text"
 import { formatTimeR2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
+import { SCOPE3_SCREENING_TEXT_R3D, SCOPE3_STATUS_TEXT_R3D } from "./scope3-text-r3d"
 import type { Scope3StoredReportDocument } from "../../../../packages/neuvetra-database/src/scope3-report-document"
 
 /**
@@ -14,8 +15,9 @@ import type { Scope3StoredReportDocument } from "../../../../packages/neuvetra-d
 type Line = Scope3StoredReportDocument["results"]["records"][number]
 const short = (sha: string) => sha.slice(0, 12)
 const kg = (value: string | null) => value === null ? T.noFigure : `${groupDigits(value)} kg CO2e`
-const statusWords = (status: string) => (SCOPE3_STATUS_TEXT as Readonly<Record<string, string>>)[status] ?? (status === "screening_conflict" ? "Screening conflict" : status.replace(/_/g, " "))
-const decisionWords = (decision: string | undefined) => decision ? decision.replace(/_/g, " ") : T.none
+// Bug hunt D: company setup's words (PR-9: "Not applicable", never "not relevant"), as the rest of the frozen view says them.
+const statusWords = (status: string) => SCOPE3_STATUS_TEXT_R3D[status] ?? (SCOPE3_STATUS_TEXT as Readonly<Record<string, string>>)[status] ?? (status === "screening_conflict" ? "Screening conflict" : status.replace(/_/g, " "))
+const decisionWords = (decision: string | undefined) => decision ? (SCOPE3_SCREENING_TEXT_R3D[decision] ?? decision.replace(/_/g, " ")).toLowerCase() : T.none
 const DESCRIPTION_FIELDS = ["description", "supplierName", "product", "investeeName"] as const
 
 /** A record's words: activity, source ID and, when the record has one, its description; a derived line names its source. */
@@ -49,7 +51,10 @@ export function scope3ChangeLogLines(document: Scope3StoredReportDocument, previ
     ...(log.methods.removed.length ? [T.methodsRemoved(log.methods.removed.map(method))] : []),
     ...log.assessments.map(item => item.before?.decision !== item.after?.decision ? T.screening(item.category, decisionWords(item.before?.decision), decisionWords(item.after?.decision))
       : (item.before?.revision ?? null) !== (item.after?.revision ?? null) ? T.assessment(item.category, item.before?.revision ?? null, item.after?.revision ?? null) : T.assessmentDetail(item.category)),
-    ...log.mappings.map(item => T.mapping(spendRecord(item.recordId), T.mappingSide(item.before.category, item.before.naicsCode), T.mappingSide(item.after.category, item.after.naicsCode))),
+    // Bug hunt D: the price basis and the mapping source are named when they changed, so no change reads as the same on both sides.
+    ...log.mappings.map(item => { const margin = item.before.marginChoice !== item.after.marginChoice, source = item.before.mappingSource !== item.after.mappingSource
+      const side = (m: typeof item.before) => T.mappingSide(m.category, m.naicsCode, margin ? m.marginChoice ?? "none" : null, source ? m.mappingSource ?? "none" : null)
+      return T.mapping(spendRecord(item.recordId), side(item.before), side(item.after)) }),
     ...log.records.added.map(item => T.added(record(item), item.category)),
     ...log.records.removed.map(item => T.removed(record(item), item.category)),
     ...log.records.edited.map(item => [T.edited(record(item), item.category), T.revision(item.revisionBefore, item.revisionAfter),
