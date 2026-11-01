@@ -68,11 +68,11 @@ test("the image manifest is 0001–0030, ending with the reviewed 0027, 0028, 00
     { name: "0027_collection.sql", sha256: "1a0f64c82c9b771f318c06ede468276395f6642bf13fdb86e9146eabfbf7d59e" },
     { name: "0028_collection_zip_check.sql", sha256: "5ae7da9aef3b0d9f5fe4cd679a200722d0603fd201597df67897eec57b212917" },
     { name: "0029_scope3_collection.sql", sha256: "f191ce06fd50edd8c65b7d3f6f659c6713392123a9ea8cba074e3f0c4954f0ad" },
-    { name: "0030_scope3_completion.sql", sha256: "641d2179cd97b7afbdb438a6b745c3ad8d3100b98d4eaf90376e34aacca0445f" },
+    { name: "0030_scope3_completion.sql", sha256: "8aaec185c30443b0c4f8b2434f0fb4c3565d207c6bba5e1050319860d924105b" },
   ])
   expect(new TextEncoder().encode(manifest[27]!.sql).byteLength).toBe(3155532)
   expect(new TextEncoder().encode(manifest[28]!.sql).byteLength).toBe(26375)
-  expect(new TextEncoder().encode(manifest[29]!.sql).byteLength).toBe(161952)
+  expect(new TextEncoder().encode(manifest[29]!.sql).byteLength).toBe(162929)
 })
 
 test("explicit database CA accepts certificates only and never disables TLS verification", async () => {

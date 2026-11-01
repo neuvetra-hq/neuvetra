@@ -154,6 +154,21 @@ export function scope3SpendLineViews(records: readonly CollectionActivityRecord[
   return { lines, superseded, superseders }
 }
 
+/**
+ * Bug hunt (PR 22, 1 November 2026): the company's active imported spend lines (only `importId`'s, when given) whose location
+ * is not in the current setup version, which 0030's bulk spend writes refuse (23503).
+ */
+export async function scope3LinesAtRemovedLocations(database: Pick<Scope3SpendImportRouteDatabase, "findCompanySetup" | "findCollectionActivities">, actorId: string, companyId: string, importId: string | null): Promise<number> {
+  const [setup, records] = await Promise.all([database.findCompanySetup(actorId, companyId), database.findCollectionActivities(actorId, companyId)])
+  const locations = new Set((setup?.currentVersion?.setup.locations ?? []).map(location => location.id))
+  return records.filter(record => {
+    const a = record.currentVersion.activity
+    if (record.kind !== "purchase_spend" || a.kind !== "purchase_spend" || a.state !== "active") return false
+    const p = a.payload as PurchaseSpendCollectionPayload
+    return p.importId !== null && (importId === null || p.importId === importId) && !locations.has(a.locationId)
+  }).length
+}
+
 export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImportRouteDatabase; validateUser: (token: string) => Promise<AuthenticatedUser | null>; origin: string }) {
   return async (request: Request): Promise<Response> => {
     const respond = scope3Respond
@@ -267,6 +282,13 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
           if (!setup) return respond(404, NOT_FOUND)
           return capRefusal(scope3LineBudget(records, setup))
         } catch { return respond(503, { error: "The current Scope 3 line budget could not be read. Nothing was saved. Reload and try again." }) }
+      }
+      // Bug hunt (PR 22, 1 November 2026): every bulk spend write saves its lines against the current setup version, and 0030
+      // refuses a line whose location is no longer in it (23503). Say so, with the way back, rather than "not found" for an
+      // import the same screen lists, or "reload", which can never succeed.
+      if (code === "23503" && request.method === "POST" && (withdrawImportId !== null || resource !== "spend-imports")) {
+        const stranded = await scope3LinesAtRemovedLocations(deps.database, actor.id, companyId, withdrawImportId).catch(() => 0)
+        if (stranded > 0) return respond(409, { code: "location_not_in_setup", lines: stranded, error: SCOPE3_CAPACITY_TEXT.spendLocationNotInSetup(stranded) })
       }
       if (code === "23503" && withdrawImportId !== null) return respond(404, NOT_FOUND)
       if (code === "setup_required") return respond(409, { code, error: "Save company setup with a reporting period before importing spend." })

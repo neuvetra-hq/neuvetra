@@ -286,6 +286,11 @@ export async function convertScope3SpendCurrency(tx: WorkspaceSql, actorId: stri
   if (!UUID.test(actorId) || !UUID.test(companyId)) throw new Error('Scope 3 currency conversion unavailable.')
   await checkActor(tx, actorId, 'Scope 3 currency conversion unavailable.')
   const conversion = validateScope3SpendConversionInput(input)
+  // Bug hunt (PR 22, 1 November 2026): each converted line is saved against the current setup version, as every correction
+  // is (save_collection_activity requires it); a line imported before the latest setup save kept its old version and the
+  // conversion was refused (23503) for good.
+  const setupHead = (await tx.query<{ version_id: string }>('select version_id from neuvetra.company_setup_heads where company_id=$1', [companyId])).rows[0]?.version_id
+  if (!setupHead) throw problem('Save company setup before converting spend.', 'setup_required')
   const lines = (await readCollectionActivities(tx, companyId)).filter(record => {
     const a = record.currentVersion.activity, p = a.payload as PurchaseSpendCollectionPayload
     return record.kind === 'purchase_spend' && a.state === 'active' && p.importId !== null && a.quantity.originalUnit === conversion.currency
@@ -301,7 +306,7 @@ export async function convertScope3SpendCurrency(tx: WorkspaceSql, actorId: stri
     const version = record.currentVersion, a = version.activity
     const full = { ...conversion, amount: from, usd }
     const request = validateCollectionSaveInput({ idempotencyKey: crypto.randomUUID(), expectedRevision: version.revision, expectedVersionId: version.id, correctionReason: scope3SpendConversionReason(full),
-      activity: { ...a, quantity: { originalValue: usd, originalUnit: 'USD', normalizedValue: usd, normalizedUnit: 'USD' }, notes: scope3SpendNotesWithConversion(a.notes, full) } })
+      activity: { ...a, setupVersionId: setupHead, quantity: { originalValue: usd, originalUnit: 'USD', normalizedValue: usd, normalizedUnit: 'USD' }, notes: scope3SpendNotesWithConversion(a.notes, full) } })
     const receipt = (await tx.query<{ record_id: string; version_id: string; replayed: boolean }>('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)', [companyId, record.id, JSON.stringify(request)])).rows[0]
     if (!receipt || receipt.record_id !== record.id || receipt.replayed) throw new Error('Scope 3 currency conversion returned no receipt.')
   }

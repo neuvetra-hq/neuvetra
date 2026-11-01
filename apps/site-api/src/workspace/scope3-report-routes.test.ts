@@ -269,3 +269,48 @@ describe("round 3: the prepare gate and the streamed version", () => {
     expect(await scope3ReportVersionResponse(body).text()).toBe(JSON.stringify(body))
   })
 })
+
+// Bug hunt (PR 22, lane B, 1 November 2026): the prepare reason reaches 0030 as jsonb and in both stored texts. PostgreSQL
+// refuses U+0000 in jsonb and text (22P05/22021) and 0030 refuses other control characters (scope3_assert_text, 22023);
+// natively the route answered a NUL with 503 "Try again shortly" (a retry can never succeed) after a full results run and
+// document build, and every other control character with 422 only after that work. Refused at once now, before any run.
+describe("bug hunt: an unstorable prepare reason is refused before any results run", () => {
+  /** The in-memory database with PostgreSQL's text rules for the reason (jsonb: no NUL; 0030: no other control character). */
+  function strict() {
+    const a = app()
+    const prepare = a.database.prepareScope3Report
+    a.database.prepareScope3Report = async (actor, companyId, call) => {
+      const reason = call.request.reason ?? ""
+      if (reason.includes("\u0000")) throw coded("22P05")
+      if (/[\u0001-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f]/.test(reason) || /\p{Cs}/u.test(reason)) throw coded("22023")
+      return prepare(actor, companyId, call)
+    }
+    return a
+  }
+  for (const [name, reason] of [["NUL", "Wrong\u0000month."], ["a C0 control", "Wrong\u0001month."], ["a C1 control", "Wrong\u0085month."], ["DEL", "Wrong\u007fmonth."], ["a lone surrogate", "Wrong\ud800month."]] as const) {
+    test(`a reason with ${name}: 422, no results run, nothing prepared`, async () => {
+      const a = strict()
+      const first = await a.json(await a.call("POST", base, owner, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, reason: null }))
+      expect(first.status).toBe(201)
+      const runs = a.runs()
+      const refused = await a.json(await a.call("POST", base, owner, { idempotencyKey: crypto.randomUUID(), expectedRevision: 1, reason }))
+      expect(refused.status).toBe(422)
+      expect(refused.body.error).toBe("The reason contains a control character that can't be saved. Remove it and try again.")
+      expect(a.runs()).toBe(runs)
+      expect(a.rows).toHaveLength(1)
+    })
+  }
+  test("tab, line feed and carriage return stay allowed in a reason", async () => {
+    const a = strict()
+    expect((await a.call("POST", base, owner, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, reason: null })).status).toBe(201)
+    expect((await a.call("POST", base, owner, { idempotencyKey: crypto.randomUUID(), expectedRevision: 1, reason: "Line one\n\tline two\r\n" })).status).toBe(201)
+  })
+  test("a database 22P05 or 22021 (text PostgreSQL can't store) is 422, never a retryable 503", async () => {
+    for (const code of ["22P05", "22021"]) {
+      const a = app()
+      a.database.prepareScope3Report = async () => { throw coded(code) }
+      const refused = await a.json(await a.call("POST", base, owner, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, reason: null }))
+      expect(refused.status).toBe(422)
+    }
+  })
+})
