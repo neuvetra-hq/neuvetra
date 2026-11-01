@@ -82,3 +82,15 @@ describe("EN-4: stored versions render through the real frozen view", () => {
     expect(shown).not.toContain("This version was stored before data-quality labels were capped")
   })
 })
+
+// Bug hunt D (1 November 2026): a v1 version predates the readiness gate (its summary's openIssues is []), so the frozen
+// view must not say it was "Ready" or "Approved with no open issues" while its own frozen categories need input.
+test("bug hunt D: a v1 version, prepared before readiness existed, never claims it was ready", async () => {
+  const report = await goldenV1()
+  const shown = render(report)
+  const stored = JSON.parse(report.reportText) as { results: { coverage: { categories: Array<{ category: number; status: string }> } } }
+  expect(stored.results.coverage.categories.filter(row => row.status === "input_needed").map(row => row.category)).toEqual([5, 9])
+  expect(shown).not.toContain("Ready: no category needs input")
+  expect(shown).not.toContain("Approved with no open issues.")
+  expect(shown).toContain("Readiness was not recorded with this version")
+})

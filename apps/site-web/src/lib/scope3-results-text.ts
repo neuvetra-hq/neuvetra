@@ -138,6 +138,9 @@ export const SCOPE3_READINESS_TEXT = {
   controlExceptionChip: "Self-approved · control exception",
   acknowledged: (n: number) => `Approved with ${n} open issue${n === 1 ? "" : "s"} acknowledged:`,
   approvedReady: "Approved with no open issues.",
+  /** Bug hunt D: a v1 version was prepared before the readiness gate existed; its open issues were never frozen. */
+  notRecorded: "Readiness was not recorded with this version: it was prepared before the readiness check existed. Each category’s frozen status is shown below.",
+  approvedNotRecorded: "Approved (readiness was not recorded with this version).",
 } as const
 
 /** The empty company (UX-23): what to do first, and no empty CSV. */
