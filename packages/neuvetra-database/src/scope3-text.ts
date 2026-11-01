@@ -135,6 +135,8 @@ export const SCOPE3_REASON_TEXT_I03: Readonly<Record<string, string>> = {
   possible_duplicate_spend_line: 'This line looks like a line already imported (same line ID, date, vendor, amount and currency). Confirm it is a different purchase or withdraw it; it isn’t counted until then.',
   dollar_year_required: 'Give the year of the dollars this amount is in, so it can be converted to 2022 dollars; it isn’t counted until then.',
   dollar_year_from_reporting_year: 'No dollar year was given, so the reporting year was used.',
+  // PR 22 integration (S-2): a line inside a fiscal year that ends before the reporting year does (its own year is used).
+  dollar_year_from_line_period: 'No dollar year was given, so the year in which this line’s own period ends was used.',
   factor_unit_mismatch: 'The supplier’s factor must be per unit of exactly the quantity recorded (for example kg CO2e per kg for a quantity in kg). Correct the factor unit or the quantity; it isn’t counted until then.',
   allocation_not_applicable_to_product_factor: 'A product factor already applies to the quantity you bought, so it takes no share. Remove the share, or record the supplier’s total with your share instead; it isn’t counted until then.',
   superseded_by_supplier_record: 'A supplier-specific record covers this supplier’s purchases, so this spend line is replaced by it and not counted again.',
@@ -510,6 +512,8 @@ export const SCOPE3_REASON_TEXT_I07: Readonly<Record<string, string>> = {
   investee_naics_code_required: 'Assign the investee’s 2017 NAICS code so its revenue can be matched to an EPA factor; the investment isn’t counted until then.',
   revenue_year_required: 'Give the year of the investee’s revenue, so it can be converted to 2022 dollars; the investment isn’t counted until then.',
   revenue_year_from_reporting_year: 'No revenue year was given, so the reporting year was used.',
+  // PR 22 integration (S-2): a record inside a fiscal year that ends before the reporting year does (its own year is used).
+  revenue_year_from_record_period: 'No revenue year was given, so the year in which this record’s own period ends was used.',
   same_product_in_cat11_ghg_release: 'The same product is also recorded as a greenhouse-gas product released in full during use (category 11): count only its material here.',
   projected_lifetime_emissions_not_provided: 'As an initial sponsor or lender, enter the project’s projected annual emissions and lifetime, which are reported separately.',
 }

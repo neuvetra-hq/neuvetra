@@ -169,6 +169,25 @@ describe('I-07: engine inputs and holds before the engine (DESIGN §5.1)', () =>
   }, TIMEOUT)
 })
 
+// PR 22 integration (S-2; Claude, 1 November 2026): in a fiscal year spanning two calendar years, a revenue-based investment
+// without a revenue year whose own period ends in the first calendar year was given the fiscal year's end year; the engine
+// then held it `revenue_year_index_missing`, although the index of that year is registered. The default is now the year the
+// record's own period ends in; a record covering the whole reporting period keeps the reporting year (as before).
+describe('integration S-2: a revenue-based investment without a revenue year in a fiscal year', () => {
+  test('uses the year its own period ends in, and is calculated as with that revenue year', () => {
+    const fiscal = { start: '2025-07-01', endExclusive: '2026-07-01' }
+    const holding = (period: { start: string; endExclusive: string }, revenueYear: number | null = null) => record('investment', q('1000000', 'USD'), { ...EEIO, revenueYear, snapshotDate: '2025-09-30' }, { period })
+    const quarter = { start: '2025-07-01', endExclusive: '2025-10-01' }
+    const plans = [holding(quarter), holding(quarter, 2025), holding(fiscal)].map(v => plan(v, { reportingPeriod: fiscal }))
+    expect(plans.map(p => [p.action, p.call?.request.input.revenueYear ?? null, p.notes.filter(note => note.startsWith('revenue_year'))])).toEqual([
+      ['calculate', 2025, ['revenue_year_from_record_period']], ['calculate', 2025, []], ['calculate', 2026, ['revenue_year_from_reporting_year']]])
+    expect(SCOPE3_REASON_TEXT_I07.revenue_year_from_record_period).toBe('No revenue year was given, so the year in which this record’s own period ends was used.')
+    const [own, stated, whole] = runAll(plans).map(item => item.result!)
+    expect([own!.status, own!.findings, own!.total?.display]).toEqual([stated!.status, [], stated!.total?.display])
+    expect([whole!.status, whole!.findings, whole!.boundary.notes.includes('price_index_latest_published_year_used')]).toEqual(['complete', [], true])
+  }, TIMEOUT)
+})
+
 describe('I-07: 320 random records per kind reach the engine or are held, and the boundary verifies them (DESIGN 8.3)', () => {
   test('fuzz: 320 records of each kind with junk, blanks and unknowns', async () => {
     let seed = 20261107

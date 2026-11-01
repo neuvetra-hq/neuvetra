@@ -35,7 +35,7 @@ const MESSAGES: Readonly<Record<string, string>> = {
   // purchase_spend
   "spend category": "Choose the category this purchase belongs in.",
   "NAICS code": "Choose a 2017 NAICS code from the list, or leave it empty (the line is then held until it has one).",
-  "dollar year": "The dollar year must be a year from 2012 to 2035, or leave it empty to use the reporting year.",
+  "dollar year": "The dollar year must be a year from 2012 to 2035, or leave it empty to use the year in which the line’s period ends.",
   "margin choice": "Say whether the price includes the distributor’s and retailer’s margins.",
   "tax treatment": "Say whether the amount includes sales tax.",
   "purchase_spend:supplier name": "The supplier name can be up to 200 characters.",

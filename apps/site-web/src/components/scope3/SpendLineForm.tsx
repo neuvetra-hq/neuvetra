@@ -58,7 +58,7 @@ export function SpendLineForm({ activity, onEdit, env }: Scope3FormProps) {
       <NaicsField category={p.category} value={p.naicsCode} onChange={code => set(next => { if (code !== next.naicsCode) next.categoryConfirmed = false; next.naicsCode = code; next.mappingSource = next.importId === null || code !== null ? "user" : next.mappingSource })}
         hint={fallback ? `Category ${p.category} takes only its own list of codes.` : undefined} />
       <TextField label="Dollar year" type="number" value={p.dollarYear === null ? "" : String(p.dollarYear)} onChange={value => set(next => { next.dollarYear = value.trim() === "" ? null : Number(value) })}
-        hint="The year of the dollars the amount is in (2012 to 2035). Leave it empty to use the reporting year; amounts are converted to 2022 dollars." />
+        hint="The year of the dollars the amount is in (2012 to 2035). Leave it empty to use the year in which the line’s period ends (the reporting year for a dated line); amounts are converted to 2022 dollars." />
       <SelectField label="What does this line cover?" value={coversPeriod ? "period" : "date"} options={[["date", "One purchase on a date"], ["period", "Purchases over a period"]]}
         onChange={value => { setCoversPeriod(value === "period"); if (value === "period") set(next => { next.lineDate = null }); else setPeriod(reporting) }}
         hint={reporting ? `A dated line counts in the reporting period from company setup (${reporting.start} to ${nextDay(reporting.endExclusive, -1)}).` : undefined} />

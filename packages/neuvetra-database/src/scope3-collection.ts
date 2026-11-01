@@ -382,11 +382,15 @@ function planScope3Purchases(state: Scope3PlanState): Scope3CalculationPlan | nu
     const reportingPeriod = usableReportingPeriod(options.reportingPeriod)
     if (p.lineDate !== null) need(within(p.lineDate, period) && (!reportingPeriod || within(p.lineDate, reportingPeriod)), 'spend_line_date_outside_reporting_period')
     need(p.possibleDuplicateOf === null || p.duplicateConfirmedDistinct, 'possible_duplicate_spend_line')
-    // The dollar year: as recorded, else the reporting year (DESIGN §3.1), which is listed on the line.
+    // The dollar year: as recorded, else the year in which the line's own period ends (listed on the line). PR 22 integration
+    // (S-2): that is owner decision 1's "line year", the year the engine's price-index fallback compares with; a line covering
+    // the reporting period (every imported line) keeps the reporting year (DESIGN §3.1). A line inside a fiscal year that spans
+    // two calendar years used to take the fiscal year's end year and was held `dollar_year_index_missing` although its own
+    // year's index is registered.
     let dollarYear = p.dollarYear
     if (dollarYear === null) {
-      dollarYear = yearOf(reportingPeriod ?? period)
-      notes.push('dollar_year_from_reporting_year')
+      dollarYear = yearOf(period)
+      notes.push(dollarYear === yearOf(reportingPeriod ?? period) ? 'dollar_year_from_reporting_year' : 'dollar_year_from_line_period')
     }
     need(dollarYear !== null && dollarYear >= SCOPE3_YEAR_MIN && dollarYear <= SCOPE3_YEAR_MAX, 'dollar_year_required')
     // Round 3, lane A (AC-14): the recorded tax treatment is disclosed on the line and for the category; the amount is used as
@@ -554,7 +558,7 @@ function planScope3ProductsAndInvestments(state: Scope3PlanState): Scope3Calcula
   }
   if (a.kind === 'investment') {
     // The outstanding amount is USD; investee and projected emissions are metric tons CO2e. A revenue-based record needs the
-    // revenue and the investee's NAICS code; its revenue year defaults to the reporting year (listed). Projected lifetime
+    // revenue and the investee's NAICS code; its revenue year defaults to its own period's year (listed). Projected lifetime
     // emissions are sent only for an initial sponsor, and only both together (else a disclosure, never a hold).
     const p = a.payload
     need(q.originalUnit === 'USD', 'investment_currency_not_supported')
@@ -565,8 +569,9 @@ function planScope3ProductsAndInvestments(state: Scope3PlanState): Scope3Calcula
       need(p.naicsCode !== null, 'investee_naics_code_required')
       revenueYear = p.revenueYear
       if (revenueYear === null) {
-        revenueYear = yearOf(usableReportingPeriod(options.reportingPeriod) ?? period)
-        notes.push('revenue_year_from_reporting_year')
+        // PR 22 integration (S-2): the year in which the record's own period ends, as for a spend line's dollar year.
+        revenueYear = yearOf(period)
+        notes.push(revenueYear === yearOf(usableReportingPeriod(options.reportingPeriod) ?? period) ? 'revenue_year_from_reporting_year' : 'revenue_year_from_record_period')
       }
       need(revenueYear !== null && revenueYear >= SCOPE3_YEAR_MIN && revenueYear <= SCOPE3_YEAR_MAX, 'revenue_year_required')
     }

@@ -114,7 +114,9 @@ describe("the contract decides, the form names it (scope3PayloadProblem)", () =>
     expect(forms.scope3PayloadProblem("purchase_spend", { ...spend, description: "" })).toBe("Describe the purchase (1 to 200 characters).")
     expect(forms.scope3PayloadProblem("purchase_spend", { ...spend, category: 9, paidByReportingCompany: null, spendEstimateBasis: "Rate cards" })).toBe("Category 9 needs the attestation that the company did not pay for this transport, and how the amount was estimated.")
     expect(forms.scope3PayloadProblem("purchase_spend", { ...spend, category: 9, paidByReportingCompany: false, spendEstimateBasis: "" })).toBe("Say how the category 9 amount was estimated (3 to 300 characters).")
-    expect(forms.scope3PayloadProblem("purchase_spend", { ...spend, dollarYear: 2011 })).toBe("The dollar year must be a year from 2012 to 2035, or leave it empty to use the reporting year.")
+    // PR 22 integration (S-2): an empty dollar year is the year in which the line's own period ends (the reporting year for a
+    // line covering the reporting period), so the message says that.
+    expect(forms.scope3PayloadProblem("purchase_spend", { ...spend, dollarYear: 2011 })).toBe("The dollar year must be a year from 2012 to 2035, or leave it empty to use the year in which the line’s period ends.")
     expect(forms.scope3PayloadProblem("purchase_spend", { ...spend, supplierName: "x".repeat(201) })).toBe("The supplier name can be up to 200 characters.")
     expect(forms.scope3PayloadProblem("sold_ghg_product", { ...scope3BlankPayload("sold_ghg_product"), productLabel: "AC", gas: "R-410A", chargePerUnit: "2", useReleasePercent: "101", releaseBasis: "EPA" })).toBe("The share released during use can’t be more than 100%.")
     expect(forms.scope3PayloadProblem("transport", { category: 7, vehicle: "rail", loadBasis: null, thirdPartyFacilities: "none" })).toBe("Transport is category 4 (upstream) or 9 (downstream).")

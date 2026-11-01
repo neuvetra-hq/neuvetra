@@ -138,6 +138,30 @@ describe('I-03: spend lines (purchase_spend)', () => {
     expect(run(own).result!.total!.display).toBe('36032.3920')
   }, TIMEOUT)
 
+  // PR 22 integration (S-2; Claude, 1 November 2026): in a fiscal year spanning two calendar years, a hand-entered line
+  // without a dollar year whose own period ends in the first calendar year was given the fiscal year's end year (2026);
+  // the engine then held it `dollar_year_index_missing` (2026 is after the line's own year), although the 2025 index is
+  // registered and the same line with dollar year 2025 calculates. The default is now the year the line's own period ends
+  // in (owner decision 1's "line year", A24's year of a period); a line covering the whole reporting period keeps the
+  // reporting year, so imported lines and calendar-year companies are unchanged.
+  test('integration S-2: in a fiscal year, a line without a dollar year uses the year its own period ends in', () => {
+    const fiscal = { start: '2025-07-01', endExclusive: '2026-07-01' }
+    const line = (period: { start: string; endExclusive: string }, dollarYear: number | null = null) => spend({ naicsCode: '331110', dollarYear }, q('50000', 'USD'), { period })
+    const versions = [line({ start: '2025-08-01', endExclusive: '2025-09-01' }), line({ start: '2025-08-01', endExclusive: '2025-09-01' }, 2025),
+      line({ start: '2026-01-01', endExclusive: '2026-02-01' }), line({ start: '2025-12-01', endExclusive: '2026-02-01' }), line(fiscal)]
+    const plans = versions.map(v => plan(v, { reportingPeriod: fiscal }))
+    expect(plans.map(p => [p.action, p.call?.request.input.dollarYear ?? null, p.notes.filter(note => note.startsWith('dollar_year'))])).toEqual([
+      ['calculate', 2025, ['dollar_year_from_line_period']], ['calculate', 2025, []],
+      ['calculate', 2026, ['dollar_year_from_reporting_year']], ['calculate', 2026, ['dollar_year_from_reporting_year']], ['calculate', 2026, ['dollar_year_from_reporting_year']]])
+    expect(SCOPE3_REASON_TEXT_I03.dollar_year_from_line_period).toBe('No dollar year was given, so the year in which this line’s own period ends was used.')
+    const out = runAll(plans).map(item => item.result!)
+    // 50000 x 0.787 x round12(118.026 / 128.893) = 36032.3920 for every line: the August line with its own 2025 index (as the
+    // same line with dollar year 2025), the 2026 lines with the latest published (2025) index, disclosed (owner decision 1).
+    expect(out.map(r => [r.status, r.findings, r.total?.display ?? null, r.boundary.notes.includes('price_index_latest_published_year_used')])).toEqual([
+      ['complete', [], '36032.3920', false], ['complete', [], '36032.3920', false],
+      ['complete', [], '36032.3920', true], ['complete', [], '36032.3920', true], ['complete', [], '36032.3920', true]])
+  }, TIMEOUT)
+
   test('every §5.1 spend hold, one at a time, with its own reason and no engine call', () => {
     const cases: Array<[string, Scope3CollectionVersion, string[], Scope3PlanOptions?]> = [
       ['euro amount', spend({}, q('5000', 'EUR', false)), ['currency_not_supported']],
