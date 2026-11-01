@@ -559,3 +559,21 @@ test('currency provenance appears in Results details and printed report', () => 
   expect(words).toContain('Currency conversion: EUR 100 × 1.2 USD per EUR = USD 120')
   expect(words).toContain('ECB reference; rate date: 2025-02-03')
 })
+
+// Bug hunt D (1 November 2026): the printed proposed-mandatory line followed the known-source subtotal with no label, so
+// "Incomplete: category 1 …; category 3 …; category 5 …" read as the whole Scope 3 state although category 9 also needs
+// input (it is not one of CARB's proposed five). The screen and the CSV name it; the print (draft and frozen) must too.
+test("bug hunt D: the printed CARB line names CARB's proposed five, as the screen and the CSV do", () => {
+  const c = load()
+  expect(fixture.coverage.categories.find(row => row.category === 9)!.status).toBe("input_needed")
+  expect(fixture.coverage.proposedMandatory.line).not.toContain("category 9")
+  const paragraph = (nodes: Node[]) => text(nodes.find(node => node.type === "p" && text(node).includes(fixture.coverage.proposedMandatory.line))!)
+  const live = paragraph(flatten(c.Scope3ReportSection({ results: fixture })))
+  expect(live).toContain(`CARB’s proposed five categories (a proposal, not adopted): ${fixture.coverage.proposedMandatory.line}`)
+  expect(live).toContain("Scope 3 is never added to the Scope 1 and 2 totals above.")
+  // A frozen version prints alone (journey.css hides the live draft report), so there are no Scope 1 and 2 totals "above".
+  const frozen = paragraph(flatten(c.Scope3ReportSection({ results: fixture, frozen: true })))
+  expect(frozen).toContain(`CARB’s proposed five categories (a proposal, not adopted): ${fixture.coverage.proposedMandatory.line}`)
+  expect(frozen).not.toContain("totals above")
+  expect(frozen).toContain("Scope 3 is never added to the Scope 1 and 2 totals.")
+})

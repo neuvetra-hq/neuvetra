@@ -15,7 +15,7 @@ import { SCOPE3_ACTION_TEXT, SCOPE3_DISCLOSURE_GROUP_TEXT, SCOPE3_EMPTY_TEXT, SC
 import { scope3ClosedLines, scope3LineState } from "../../../../packages/neuvetra-database/src/scope3-trace"
 import { scope3LineMemoText, scope3MemoText, SCOPE3_SUPERSEDED_MEMO_TEXT_R3A } from "@/lib/scope3-results-api"
 import { scope3CategoryDq, scope3ConflictInHeadline, scope3DqScoresText, scope3ProvenanceText, scope3QuantityText, scope3ScreeningWord } from "@/lib/scope3-display-r3d"
-import { SCOPE3_CONFLICT_TEXT_R3D, SCOPE3_CSV_TEXT_R3D, SCOPE3_DQ_TEXT_R3D, SCOPE3_STATUS_TEXT_R3D } from "@/lib/scope3-text-r3d"
+import { SCOPE3_CONFLICT_TEXT_R3D, SCOPE3_CSV_TEXT_R3D, SCOPE3_DQ_TEXT_R3D, SCOPE3_PRINT_TEXT_D, SCOPE3_STATUS_TEXT_R3D } from "@/lib/scope3-text-r3d"
 // Round 2 lane D (UX-3): a derived line (3A, 3B, 3C, 3C upstream, 3D upstream, hotel) is fixed on its source record
 // (`derivedFrom`), and only when it carries a hold reason; the kind list that hid every derived Fix button is gone.
 
@@ -312,13 +312,16 @@ function SupersededMemos({ results }: { results: Scope3ResultsResponse }) {
   return items.length ? <p className="nv-report__small"><strong>{SCOPE3_SUPERSEDED_MEMO_TEXT_R3A.heading}:</strong> {items.join("; ")}.</p> : null
 }
 
-/** The printed Scope 3 section of the draft report (S3-04 and S3-13: the same labels as the screen and CSV; I-06: every detail open). */
-export function Scope3ReportSection({ results }: { results: Scope3ResultsResponse }) {
+/**
+ * The printed Scope 3 section of the draft report (S3-04 and S3-13: the same labels as the screen and CSV; I-06: every detail open).
+ * `frozen`: inside a frozen report version, which prints alone (no Scope 1 and 2 totals above it).
+ */
+export function Scope3ReportSection({ results, frozen = false }: { results: Scope3ResultsResponse; frozen?: boolean }) {
   const coverage = results.coverage
   const printClosed = scope3ClosedLines(results.records)  // round 3 (AC-5): closed 3C/3D combustion lines print as closed
   return <section aria-labelledby="scope3-report-title">
     <h3 id="scope3-report-title">Scope 3 (reported separately)</h3>
-    <p className="nv-report__small">Scope 3 is never added to the Scope 1 and 2 totals above. Known-source subtotal: {coverage.knownSourceSubtotal ? `${groupDigits(coverage.knownSourceSubtotal.display)} kg CO2e` : "nothing calculated"}. {coverage.proposedMandatory.line}</p>
+    <p className="nv-report__small">{SCOPE3_PRINT_TEXT_D.notAdded(frozen)} Known-source subtotal: {coverage.knownSourceSubtotal ? `${groupDigits(coverage.knownSourceSubtotal.display)} kg CO2e` : "nothing calculated"}. {SCOPE3_PRINT_TEXT_D.proposedFive(coverage.proposedMandatory.line)}</p>
     {results.warnings.length > 0 && <ul>{results.warnings.map(warning => <li key={warning} className="nv-report__small"><strong>Warning:</strong> {warning}</li>)}</ul>}
     {results.unmatchedScreening.length > 0 && <p className="nv-report__small">Scope 3 screening answers not matched to any of the 15 categories (not counted for any category): {results.unmatchedScreening.map(name => `“${name}”`).join(", ")}.</p>}
     <div className="nv-report__scroll"><table><thead><tr><th>Category</th><th>Status</th><th>Screening</th><th className="nv-right">t CO2e</th><th className="nv-right">kg CO2e</th><th>Method types</th><th className="nv-right">From suppliers / value chain</th><th>{SCOPE3_DQ_TEXT_R3D.printLabelHeading}</th><th>{SCOPE3_DQ_TEXT_R3D.printScoresHeading}</th><th className="nv-right">Biogenic CO2 (outside totals)</th></tr></thead><tbody>

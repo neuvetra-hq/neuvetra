@@ -104,7 +104,7 @@ export function Scope3FrozenReportView({ report, previous, actorId, canManage, b
       {approval && <p className="nv-report__small">{approval.acknowledgedOpenIssues?.length ? `${SCOPE3_READINESS_TEXT.acknowledged(approval.acknowledgedOpenIssues.length)} ${approval.acknowledgedOpenIssues.map(issue => scope3IssueOf(issue).text).join(" ")}` : issues.length ? "" : SCOPE3_READINESS_TEXT.approvedReady}{approval.selfApproved ? ` ${SCOPE3_READINESS_TEXT.controlException}.` : ""}</p>}
       <h4>Changes since the previous approved version</h4>
       <ul>{changes.map((line, i) => <li key={i} className="nv-report__small">{line}</li>)}</ul>
-      <Scope3ReportSection results={d.results} />
+      <Scope3ReportSection results={d.results} frozen />
     </article>
   </div>
 }
