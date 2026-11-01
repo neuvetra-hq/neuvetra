@@ -259,6 +259,8 @@ function daysInYearOf(period: Scope3ReportingPeriod): number {
   const year = yearOf(period)
   return year !== null && (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) ? 366 : 365
 }
+/** The days of a record's own period (end exclusive; calendar dates the contract validated). PR22 bug hunt A-2. */
+const daysInPeriodOf = (period: Scope3ReportingPeriod): number => Math.round((Date.parse(`${period.endExclusive}T00:00:00Z`) - Date.parse(`${period.start}T00:00:00Z`)) / 86_400_000)
 // --- end I-12h ---
 
 export function planScope3Calculation(version: Scope3CollectionVersion, context: CollectionContext, evidence: CollectionEvidenceMetadata[], options: Scope3PlanOptions = {}): Scope3CalculationPlan {
@@ -297,7 +299,8 @@ function createScope3PlanState(version: Scope3CollectionVersion, context: Collec
   const period = { start: a.period.start, endExclusive: a.period.endExclusive }
   const q = a.quantity
   const reasons: string[] = []
-  const need = (ok: boolean, reason: string) => { if (!ok) reasons.push(reason) }
+  // PR22 bug hunt A-4: each reason once (a profile with several bad modes repeated the same sentence on its to-do list).
+  const need = (ok: boolean, reason: string) => { if (!ok && !reasons.includes(reason)) reasons.push(reason) }
   // I-05 (A14): a hotel stay is recognised from the mode text, also on a record saved before 0030 (unit written, not normalized).
   const hotel = a.kind === 'business_travel' && scope3IsHotelMode(a.payload.mode)
   // A spend line's amount and currency get their own, more specific reasons (I-03, below); so does a hotel stay.
@@ -431,6 +434,9 @@ function planScope3EnergyAndBuildings(state: Scope3PlanState): Scope3Calculation
       need(decimalAtMost(m.sharePercent, 100), 'mode_shares_must_total_100')
     }
     // B5(c): a survey profile may not count the same employees' commuting as distance records do.
+    // PR22 bug hunt A-3: working days on site are days of the profile's own period; more than the period has would count a whole
+    // year of commuting in a shorter profile (a first-quarter profile with 220 days counted the year).
+    need(p.workingDays <= daysInPeriodOf(period), 'working_days_exceed_days_in_period')
     const overlaps = options.distanceCommutingPeriods?.some(other => other.start < period.endExclusive && period.start < other.endExclusive) ?? false
     need(p.activityOverlap === 'none_confirmed' || !overlaps, 'commuting_overlap_not_confirmed')
     return send({ period, headcount: q.normalizedValue, workingDays: p.workingDays,
@@ -474,6 +480,9 @@ function planScope3EnergyAndBuildings(state: Scope3PlanState): Scope3Calculation
     // engine result and trace; the adapter sends "unknown" as saved and no longer holds it first.
     // The engine spreads the year's intensity over the days of the reporting year (365 or 366).
     need(p.coveredDays <= daysInYearOf(period), 'covered_days_exceed_days_in_year')
+    // PR22 bug hunt A-2: the days covered are days of the record's own period; more than it has would spread a whole year of the
+    // building's energy over a shorter record (a first-quarter record with 365 days counted four quarters).
+    if (p.coveredDays <= daysInYearOf(period)) need(p.coveredDays <= daysInPeriodOf(period), 'covered_days_exceed_days_in_period')
     if (known && !SCOPE3_CBECS_ACTIVITIES_LOADED.includes(p.cbecsActivity)) return waiting('building_average', false, 'cbecs_activity_not_loaded')
     return send({ period, category: p.category, cbecsActivity: p.cbecsActivity, usesNaturalGas: p.usesNaturalGas, area: q.normalizedValue, areaUnit: q.normalizedUnit,
       coveredDays: p.coveredDays, gridBasis: p.gridBasis, ...location })
@@ -538,6 +547,9 @@ function planScope3ProductsAndInvestments(state: Scope3PlanState): Scope3Calcula
     const p = a.payload
     need((SCOPE3_WASTE_MATERIALS as readonly string[]).includes(p.material), 'material_not_an_engine_token')
     need((SCOPE3_WASTE_UNITS as readonly string[]).includes(q.originalUnit), 'unit_not_an_engine_token')
+    // A share above 100% can never be part of a split that adds up to 100% (the engine refuses it rather than holding it), so
+    // it is held here with the engine's own total reason, as commuting mode shares are (PR22 bug hunt A-1).
+    if (p.split !== null) need(SCOPE3_WASTE_TREATMENTS.every(t => decimalAtMost(p.split![t], 100)), 'treatment_split_must_total_100')
     return send({ period, material: p.material, basis: p.basis, split: p.split === null ? null : { ...p.split }, quantity: q.normalizedValue, unit: q.normalizedUnit })
   }
   if (a.kind === 'investment') {

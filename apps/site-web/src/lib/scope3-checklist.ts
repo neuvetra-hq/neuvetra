@@ -68,9 +68,13 @@ export const SCOPE3_FIX_FIELDS: Readonly<Record<string, readonly string[]>> = {
   // Round 2 polish (lane D): the freight load basis and the category 4-6 spend overlap confirmation.
   load_basis_required: ["Did the goods have the vehicle to themselves?"], spend_overlap_not_confirmed: ["Covered by another record?"],
   commuting_overlap_not_confirmed: ["Covered by distance-based commuting records?"],
+  // PR22 bug hunt A-3: more working days than the profile's period has.
+  working_days_exceed_days_in_period: ["Working days on site per employee", "Period start"],
   naics_not_valid_for_category: ["Search NAICS codes"],
   lease_in_scope1_2_under_boundary: [COPY_TEXT_R2E.leaseNoControlLabel, "Lease"],
   natural_gas_use_unknown: ["Does the building use natural gas?"],
+  // PR22 bug hunt A-2: more covered days than the record's period has; the days field, then the period.
+  covered_days_exceed_days_in_period: ["Days covered in the period", "Period start"],
   hotel_country_not_in_factor_set: ["Hotel country (two-letter code)"], hotel_country_required: ["Hotel country (two-letter code)"],
   treatment_split_unknown: ["Treatment split"], treatment_split_must_total_100: ["Treatment split"],
   // Round 3 lane D (PR-7): the waste hold is about the treatment (the end-of-life form's is its split); then the material.
