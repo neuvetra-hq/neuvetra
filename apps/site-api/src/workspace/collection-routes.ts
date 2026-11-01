@@ -1,4 +1,11 @@
+import { MAX_SCOPE3_LINES } from "./scope3-results-routes"
+import { SCOPE3_CAPACITY_TEXT } from "../../../../packages/neuvetra-database/src/scope3-text"
 import {
+  isScope3CollectionKind,
+  scope3ActivityAvailable,
+  scope3KindsAvailable,
+  STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION,
+  STAGING_SCOPE3_SCHEMA_VERSION,
   COLLECTION_EVIDENCE_BUCKET,
   COLLECTION_EVIDENCE_MAX_BYTES,
   COLLECTION_PROFILE,
@@ -51,6 +58,13 @@ export interface CollectionRouteDeps {
   validateUser: (token: string) => Promise<AuthenticatedUser | null>
   origin: string
   lookupZip?: (zip: string) => Promise<Scope2Lookup>
+  /**
+   * The database schema version (Scope 3 package 2, D5; Scope 3 completion I-02). A Scope 3 save that needs a higher
+   * schema than the database has is refused here with 503, before any SQL runs, never with a 422 from the database: the
+   * 0029 kinds need 29; the 0030 kinds, `dataQuality`, the business travel v2 keys and room-night need 30. Omitted: no
+   * Scope 3 kind is available.
+   */
+  schemaVersion?: () => Promise<number>
 }
 
 class RequestProblem extends Error {
@@ -145,7 +159,10 @@ function mappedError(error: unknown): Response {
   if (code === "42501") return fail(404, "Collection resource not found.")
   if (["23505", "40001", "23P01"].includes(code ?? "")) return fail(409, "Collection record changed. Refresh and try again.", "revision_conflict")
   if (code === "54000") return fail(422, "Collection history capacity reached.", "history_limit")
-  if (["22023", "22P02", "22007", "22008", "22003", "23514", "23503", "23502"].includes(code ?? "")) return fail(422, "Invalid or unsupported collection record.")
+  // Round 3 (owner decision 7, EN-3): 0030 refuses a Scope 3 save that adds a line past the 3,000-line cap.
+  if (code === "54N30") return fail(409, SCOPE3_CAPACITY_TEXT.lineBudgetSaveRefused(MAX_SCOPE3_LINES), "line_budget_exceeded")
+  // DB-01 (Scope 3 package 2 r2): text the database can't store (22P05, 22021) is invalid input, never an outage.
+  if (["22023", "22P02", "22P05", "22021", "22007", "22008", "22003", "23514", "23503", "23502"].includes(code ?? "")) return fail(422, "Invalid or unsupported collection record.")
   return fail(503, "Collection service is unavailable.")
 }
 
@@ -172,7 +189,9 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
       if (!context) return fail(404, "Collection resource not found.")
       if (!collection) {
         if (request.method !== "GET") return fail(405, "Method not allowed.")
-        return respond(200, { profile: COLLECTION_PROFILE, context, capabilities: { calculations: false, zipLookup: "available", scope3: { gridLossLineage: true, calculations: false } } })
+        const schema = await (deps.schemaVersion?.() ?? 0)
+        // `kinds`: the Scope 3 kinds this database stores; `completion`: the 0030 payload features (data quality, travel v2).
+        return respond(200, { profile: COLLECTION_PROFILE, context, capabilities: { calculations: false, zipLookup: "available", scope3: { gridLossLineage: true, calculations: schema >= STAGING_SCOPE3_SCHEMA_VERSION, kinds: scope3KindsAvailable(schema), completion: schema >= STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION } } })
       }
 
       if (collection === "zip-lookup") {
@@ -197,6 +216,11 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
         const input = await jsonBody(request)
         let validated: ReturnType<typeof validateCollectionSaveInput>
         try { validated = validateCollectionSaveInput(input) } catch { throw new RequestProblem(422, "Invalid or unsupported collection record.") }
+        if (isScope3CollectionKind(validated.activity.kind)) {
+          const schema = await (deps.schemaVersion?.() ?? 0)
+          if (schema < STAGING_SCOPE3_SCHEMA_VERSION) throw new RequestProblem(503, "Scope 3 activity is not available yet.", "scope3_unavailable")
+          if (!scope3ActivityAvailable(validated.activity, schema)) throw new RequestProblem(503, "This record type needs database schema 30.", "scope3_schema_30_required")
+        }
         if (validated.activity.kind === "electricity") {
           const lookup = await (deps.lookupZip ?? lookupCollectionZip)(validated.activity.payload.zip)
           validateElectricityLookup(validated.activity, lookup)

@@ -1,0 +1,120 @@
+/* Spend import and review grid (round 2 UX-1; Claude, 31 October 2026). Built on the journey design system tokens and
+   components (.nv-btn, .nv-chip, .nv-table, .nv-progress, .nv-field, .nv-notice); this file only lays them out. It sits
+   inside the Activity screen's .worksheet card, whose generic `button` rule is overridden here for the design-system
+   buttons. Works down to 390 px: fields stack, tables become cards, nothing scrolls sideways. */
+.nv-app .spend-import { display: grid; gap: 18px; min-width: 0; overflow-wrap: anywhere; }
+.nv-app .spend-import p { margin: 0; }
+.nv-app .spend-import h3, .nv-app .spend-import h4 { margin: 0; }
+.nv-app .spend-import__head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.nv-app .spend-import__head > div { flex: 1 1 320px; min-width: 0; display: grid; gap: 4px; }
+.nv-app .spend-import__status { padding: 10px 14px; border: 1px solid var(--ok-line); border-left: 4px solid #6f9a55; border-radius: 10px; background: var(--ok-bg); }
+.nv-app .spend-import__step { display: grid; gap: 14px; min-width: 0; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); }
+.nv-app .spend-import__step-title { display: flex; align-items: center; gap: 10px; font-size: 1.02rem; font-weight: 600; }
+.nv-app .spend-import__num { display: inline-grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: 50%; border: 1px solid #4f6a3f; background: var(--accent-soft); color: var(--accent); font-size: .85rem; }
+
+/* Design-system buttons win over the worksheet's generic button rule. */
+.nv-app .spend-import .nv-btn { min-height: 40px; border-radius: 10px; }
+.nv-app .spend-import .nv-btn--sm { min-height: 36px; }
+.nv-app .spend-import .nv-btn--primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.nv-app .spend-import .nv-btn--primary:hover:not(:disabled) { background: var(--accent-hi); border-color: var(--accent-hi); }
+.nv-app .spend-import .nv-btn--ghost { background: transparent; border-color: transparent; color: var(--muted); }
+.nv-app .spend-import .nv-btn--ghost:hover:not(:disabled) { background: var(--surface-3); color: var(--text); }
+.nv-app .spend-import .nv-btn--danger { background: transparent; border-color: var(--danger-line); color: var(--danger); }
+.nv-app .spend-import .nv-chip { white-space: normal; }
+
+/* Step 1: upload, preview, result */
+.nv-app .spend-import__upload { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto; gap: 14px; align-items: end; }
+.nv-app .spend-import input[type=file] { width: 100%; min-width: 0; min-height: 46px; padding: 10px; border: 1px dashed var(--line-2); border-radius: 10px; background: #0e120d; color: var(--muted); font: inherit; }
+.nv-app .spend-import__preview, .nv-app .spend-import__result { display: grid; gap: 10px; min-width: 0; }
+.nv-app .spend-import__counts, .nv-app .spend-import__holds { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.nv-app .spend-import__counts li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--muted); }
+.nv-app .spend-import__withdraw { display: grid; grid-template-columns: minmax(0, 1fr); width: 100%; min-width: 0; }
+.nv-app .spend-import__holds li { padding: 8px 12px; border-left: 3px solid var(--warn-line); background: var(--surface); border-radius: 0 8px 8px 0; color: var(--muted); }
+.nv-app .spend-import__table-wrap { max-height: 440px; overflow: auto; background: var(--surface); }
+.nv-app .spend-import__table td { overflow-wrap: anywhere; }
+.nv-app .spend-import__table th, .nv-app .spend-import__table td.nv-num, .nv-app .spend-import__table td[data-label="Date"] { white-space: nowrap; overflow-wrap: normal; }
+.nv-app .spend-import li { margin: 0; }
+.nv-app .spend-import button, .nv-app .spend-import .nv-btn { overflow-wrap: normal; white-space: nowrap; }
+.nv-app .spend-import .spend-import__suggestion { white-space: normal; }
+.nv-app .spend-import__table td[data-label="Line"], .nv-app .spend-import__table td[data-label="Spend line"] { white-space: nowrap; overflow-wrap: normal; }
+.nv-app .spend-import__table td .nv-actions { flex-wrap: nowrap; justify-content: flex-end; }
+.nv-app .spend-import__chips { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+
+/* Step 2: progress, tabs, groups */
+.nv-app .spend-import__progress { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.nv-app .spend-import__progress > p { grid-column: 1 / -1; }
+.nv-app .spend-import__meter-label { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 10px; margin-bottom: 6px; color: var(--muted); }
+.nv-app .spend-import__meter-label strong { color: var(--text); font-weight: 600; }
+.nv-app .spend-import__tabs button { min-height: 40px; }
+.nv-app .spend-import__tabs button[aria-pressed="true"] { background: var(--accent-soft); border-color: #6f9a55; color: var(--text); }
+.nv-app .spend-import__panel { display: grid; gap: 12px; min-width: 0; }
+.nv-app .spend-import__search { max-width: 460px; }
+.nv-app .spend-import__groups { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.nv-app .spend-import__group { min-width: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.nv-app .spend-import__group.is-selected { border-color: #6f9a55; box-shadow: 0 0 0 1px #6f9a55 inset; }
+.nv-app .spend-import__group-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 14px 16px; }
+.nv-app .spend-import__select { padding-top: 2px; }
+.nv-app .spend-import__group-main { display: grid; gap: 4px; min-width: 0; }
+.nv-app .spend-import__group-title { font-size: 1rem; }
+.nv-app .spend-import__suggest-line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; color: var(--muted); font-size: .92rem; }
+.nv-app .spend-import__group-side { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-align: right; }
+.nv-app .spend-import__amount { font-size: 1.05rem; font-weight: 500; }
+.nv-app .spend-import__group-body { display: grid; gap: 14px; min-width: 0; padding: 14px 16px 16px; border-top: 1px solid var(--line); }
+.nv-app .spend-import__bulk { padding: 2px; border-radius: 14px; background: linear-gradient(180deg, #2a3a22, transparent); }
+
+/* Mapping form */
+.nv-app .spend-import__form { display: grid; gap: 14px; }
+.nv-app .spend-import__form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; }
+.nv-app .spend-import__suggestions { display: grid; gap: 6px; }
+.nv-app .spend-import .spend-import__suggestion { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; width: 100%; min-height: 42px; padding: 8px 12px; border: 1px solid var(--line-2); border-radius: 10px; background: transparent; color: var(--text); font: inherit; text-align: left; cursor: pointer; }
+.nv-app .spend-import .spend-import__suggestion:hover { background: var(--surface-3); }
+.nv-app .spend-import .spend-import__suggestion[aria-pressed="true"] { background: var(--accent-soft); border-color: #6f9a55; }
+.nv-app .spend-import__suggestion-code { font-weight: 600; color: var(--accent); }
+
+/* Other holds, duplicates, supersession */
+.nv-app .spend-import__hold, .nv-app .spend-import__replace, .nv-app .spend-import__pair { display: grid; gap: 10px; min-width: 0; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.nv-app .spend-import__hold { border-color: var(--warn-line); }
+.nv-app .spend-import__hold-head { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px; }
+.nv-app .spend-import__hold-head p { flex: 1 1 280px; min-width: 0; }
+.nv-app .spend-import__fix { color: var(--muted); }
+.nv-app .spend-import__fix .nv-attn-label { display: inline; margin: 0 6px 0 0; }
+.nv-app .spend-import__pairs, .nv-app .spend-import__supersession { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.nv-app .spend-import__compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; }
+.nv-app .spend-import__compare > div { padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); }
+.nv-app .spend-import__compare dt { color: var(--muted); font-size: .86rem; }
+.nv-app .spend-import__compare dd { margin: 4px 0 0; font-size: 1.15rem; }
+
+@media (max-width: 720px) {
+  .nv-app .spend-import__step { padding: 14px; }
+  .nv-app .spend-import__upload, .nv-app .spend-import__progress, .nv-app .spend-import__form-grid, .nv-app .spend-import__compare { grid-template-columns: minmax(0, 1fr); }
+  .nv-app .spend-import__upload .nv-btn { width: 100%; }
+  .nv-app .spend-import__group-head { grid-template-columns: auto minmax(0, 1fr); padding: 12px; }
+  .nv-app .spend-import__group-side { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; text-align: left; }
+  .nv-app .spend-import__group-body { padding: 12px; }
+  /* Tables become cards: one block per row, each cell labelled. */
+  .nv-app .spend-import__table-wrap { max-height: none; overflow: visible; border: 0; background: transparent; }
+  .nv-app .spend-import__table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .nv-app .spend-import__table, .nv-app .spend-import__table tbody { display: block; }
+  .nv-app .spend-import__table tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 12px; margin: 0 0 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+  .nv-app .spend-import__table td { display: block; padding: 0; border: 0; text-align: left; white-space: normal; }
+  .nv-app .spend-import__table td.nv-right { text-align: left; }
+  .nv-app .spend-import__table td[data-label]::before { content: attr(data-label); display: block; color: var(--subtle); font-size: .76rem; white-space: normal; overflow-wrap: anywhere; }
+  .nv-app .spend-import__table td[data-label=""]::before { content: none; }
+  .nv-app .spend-import__table td[data-label="Description"], .nv-app .spend-import__table td[data-label=""], .nv-app .spend-import__table td[data-label="Code"], .nv-app .spend-import__table td[data-label="On import"] { grid-column: 1 / -1; }
+  .nv-app .spend-import__table td .nv-actions { flex-wrap: wrap; justify-content: flex-start; }
+}
+
+/* Round 3 lane C (PR-11, PR-3, decision 8): currency conversion, converted amounts, withdraw suggestions; the Activity list's filters, pages and links. */
+.nv-app .spend-import__convert { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: 14px 16px; margin-bottom: 16px; }
+.nv-app .spend-import__convert-title { margin: 0 0 4px; font-size: 1rem; }
+.nv-app .spend-import__convert-row { margin-top: 12px; }
+.nv-app .spend-import__convert-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.nv-app .spend-import__converted { display: block; font-size: 0.82em; color: var(--muted); white-space: normal; }
+.nv-app .spend-import__withdraw-suggest { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.nv-app .collection-jump { flex-wrap: wrap; margin: 6px 0 14px; }
+.nv-app .collection-list-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 14px; align-items: end; margin: 6px 0 12px; }
+.nv-app .collection-list-filters > p { grid-column: 1 / -1; margin: 0; }
+.nv-app .collection-list-pages { align-items: center; flex-wrap: wrap; margin: 10px 0; }
+@media (max-width: 720px) {
+  .nv-app .spend-import__convert-grid, .nv-app .collection-list-filters { grid-template-columns: minmax(0, 1fr); }
+}

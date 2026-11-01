@@ -43,7 +43,7 @@ async function fixture() {
       if (!allowed) return null
       return { companyId: allowed.id, role: userId === OWNER ? "owner" as const : userId === ADMIN ? "admin" as const : "member" as const, evidenceId }
     },
-    async checkReadiness() { if (!healthy) throw new Error("sensitive-driver-value"); return { profile: STAGING_PROFILE, schemaVersion: 28 } },
+    async checkReadiness() { if (!healthy) throw new Error("sensitive-driver-value"); return { profile: STAGING_PROFILE, schemaVersion: 30 } },
   }) as StagingDatabase
   const app = await createStagingServer(readStagingConfig(environment), {
     database, validateUser: async (token) => token === "broken-session" ? Promise.reject(new Error("sensitive-auth-value")) : users[token] ? { id: users[token]!, phone: null, email: "private@example.invalid", fullName: "Private fixture" } : null,
@@ -56,8 +56,8 @@ async function fixture() {
 }
 
 describe("M63 private staging boundary", () => {
-  test("nonexisting-project runtime refuses the schema-27 bridge and older prefixes before serving", async () => {
-    for (const schemaVersion of [23, 26, 27]) {
+  test("nonexisting-project runtime refuses the schema-28 and schema-29 bridges and older prefixes before serving", async () => {
+    for (const schemaVersion of [23, 26, 27, 28, 29]) {
       let closed=false
       const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion}),close:async()=>{closed=true}} as unknown as StagingDatabase
       await expect(createStagingServer(readStagingConfig(environment),{database,validateUser:async()=>null,verifyAssets:async()=>{}})).rejects.toThrow("Private staging dependencies are unavailable.")
@@ -65,9 +65,9 @@ describe("M63 private staging boundary", () => {
     }
   })
 
-  test("existing-project schema-27 bridge serves setup, collection and results, and keeps serving them at 28", async () => {
+  test("existing-project schema-28 bridge serves setup, collection and results, and keeps serving them at 29 and 30", async () => {
     const company = "80000000-0000-4000-8000-000000000901"
-    let schemaVersion = 27, setupReads = 0, collectionReads = 0
+    let schemaVersion = 28, setupReads = 0, collectionReads = 0
     const database = {
       checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion, legacyContainmentVerified: true }),
       close: async () => {},
@@ -81,8 +81,8 @@ describe("M63 private staging boundary", () => {
     cleanup = app.close
     const request = (pathname: string, token?: string) => app.fetch(new Request(`${ORIGIN}${pathname}`, { headers: token ? { authorization: `Bearer ${token}` } : undefined }))
     const routes = [`/workspace-api/workspace/${company}/collection`, `/workspace-api/workspace/${company}/collection/evidence`, `/workspace-api/workspace/${company}/results`]
-    // Before and after the operator applies 0028: same readiness, same routes.
-    for (const version of [27, 28]) {
+    // Before and after the operator applies 0029 and 0030 (hosted 0029 is on hold): same readiness, same routes.
+    for (const version of [28, 29, 30]) {
       schemaVersion = version
       const ready = await request("/ready")
       expect(ready.status).toBe(200)
@@ -106,12 +106,39 @@ describe("M63 private staging boundary", () => {
       const upload = await app.fetch(new Request(`${ORIGIN}/workspace-api/workspace/${company}/collection/evidence`, { method: "POST", headers: { origin: ORIGIN, authorization: "Bearer ok" }, body: "x".repeat(350_000) }))
       expect(upload.status).toBe(404)
       expect(collectionReads).toBe(before + 1)
+      // Scope 3 results exist only at 29 (0029, D5): at the bridge they are refused before any database read.
+      const scope3 = `/workspace-api/workspace/${company}/results/scope3`
+      expect((await request(scope3)).status).toBe(401)
+      const beforeScope3 = collectionReads
+      const reachedScope3 = await request(scope3, "ok")
+      if (version === 28) {
+        expect(reachedScope3.status).toBe(503)
+        expect(await reachedScope3.json()).toMatchObject({ code: "scope3_unavailable" })
+        expect(collectionReads).toBe(beforeScope3)
+      } else {
+        expect(reachedScope3.status).toBe(404)
+        expect(collectionReads).toBe(beforeScope3 + 1)
+      }
+      // Scope 3 assessments, spend imports and report versions exist only at 30 (0030): below it they are refused first.
+      for (const path of ["assessments/1", "spend-imports", "reports"]) {
+        const route = `/workspace-api/workspace/${company}/scope3/${path}`
+        expect((await request(route)).status).toBe(401)
+        const before = collectionReads + setupReads
+        const reached = await request(route, "ok")
+        if (version < 30) {
+          expect([path, reached.status]).toEqual([path, 503])
+          expect(await reached.json()).toMatchObject({ code: "scope3_schema_30_required" })
+        } else expect([path, reached.status === 503]).toEqual([path, false])
+        // Below 30 nothing is read. At 30 the spend-import route (I-09) and the report-version route (I-10) exist and read company
+        // setup first (this fixture has none: 404).
+        expect(collectionReads + setupReads).toBe(before + (version >= 30 && (path === "spend-imports" || path === "reports") ? 1 : 0))
+      }
     }
   })
 
-  test("existing-project runtime refuses to start at any prefix other than the schema-27 bridge or 28", async () => {
+  test("existing-project runtime refuses to start at any prefix other than 28, 29 or 30", async () => {
     const config = readStagingConfig({ ...environment, NEUVETRA_STAGING_PROJECT_REF: "icockcoguyadhryzydvl", NEUVETRA_STAGING_REUSE_EXISTING: "confirmed", SUPABASE_URL: "https://icockcoguyadhryzydvl.supabase.co", DATABASE_URL: environment.DATABASE_URL.replace(REF, "icockcoguyadhryzydvl") })
-    for (const schemaVersion of [22, 23, 26, 29]) {
+    for (const schemaVersion of [22, 23, 26, 27, 31]) {
       let closed = false
       const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion, legacyContainmentVerified: true }), close: async () => { closed = true } } as unknown as StagingDatabase
       await expect(createStagingServer(config, { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {} })).rejects.toThrow("Private staging dependencies are unavailable.")
@@ -119,14 +146,14 @@ describe("M63 private staging boundary", () => {
     }
   })
 
-  test("a running existing-project server stops serving if the database leaves the bridge or 28", async () => {
+  test("a running existing-project server stops serving if the database leaves 28, 29 or 30", async () => {
     const config = readStagingConfig({ ...environment, NEUVETRA_STAGING_PROJECT_REF: "icockcoguyadhryzydvl", NEUVETRA_STAGING_REUSE_EXISTING: "confirmed", SUPABASE_URL: "https://icockcoguyadhryzydvl.supabase.co", DATABASE_URL: environment.DATABASE_URL.replace(REF, "icockcoguyadhryzydvl") })
-    let schemaVersion = 27
+    let schemaVersion = 28
     const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion, legacyContainmentVerified: true }), close: async () => {} } as unknown as StagingDatabase
     const app = await createStagingServer(config, { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {} })
     cleanup = app.close
     expect((await app.fetch(new Request(`${ORIGIN}/ready`))).status).toBe(200)
-    for (const version of [26, 29]) {
+    for (const version of [27, 31]) {
       schemaVersion = version
       expect((await app.fetch(new Request(`${ORIGIN}/health`))).status).toBe(200)
       expect((await app.fetch(new Request(`${ORIGIN}/ready`))).status).toBe(503)
@@ -152,12 +179,12 @@ describe("M63 private staging boundary", () => {
 
   test("explicit existing-project reuse still requires verified database containment at startup", async () => {
     let closed = false
-    const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion: 27 }), close: async () => { closed = true } } as unknown as StagingDatabase
+    const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion: 28 }), close: async () => { closed = true } } as unknown as StagingDatabase
     const config = readStagingConfig({ ...environment, NEUVETRA_STAGING_PROJECT_REF: "icockcoguyadhryzydvl", NEUVETRA_STAGING_REUSE_EXISTING: "confirmed", SUPABASE_URL: "https://icockcoguyadhryzydvl.supabase.co", DATABASE_URL: environment.DATABASE_URL.replace(REF, "icockcoguyadhryzydvl") })
     await expect(createStagingServer(config, { database, validateUser: async () => null, verifyAssets: async () => {} })).rejects.toThrow("Private staging dependencies are unavailable.")
     expect(closed).toBe(true)
     let contained = true
-    database.checkReadiness = async () => ({ profile: STAGING_PROFILE, schemaVersion: 27, legacyContainmentVerified: contained })
+    database.checkReadiness = async () => ({ profile: STAGING_PROFILE, schemaVersion: 28, legacyContainmentVerified: contained })
     const app = await createStagingServer(config, { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {} })
     cleanup = app.close
     expect((await app.fetch(new Request(`${ORIGIN}/workspace-api/config`))).status).toBe(200)
@@ -304,9 +331,35 @@ describe("BF1 staging boundary fixes", () => {
     const { request } = await fixture()
     for (let i = 0; i < 400; i++) expect((await request("/workspace-api/session")).status).toBe(401)
     // The public config endpoint has its own budget: exhausting it doesn't touch the authenticated one either.
-    for (let i = 0; i < 360; i++) expect((await request("/workspace-api/config")).status).toBe(200)
+    for (let i = 0; i < 1200; i++) expect((await request("/workspace-api/config")).status).toBe(200)
     expect((await request("/workspace-api/config")).status).toBe(429)
     expect((await request("/workspace-api/session", "test-owner-session")).status).toBe(200)
+  })
+
+  // Round 3 lane C (PR-3): a refused request says what to do and when (Retry-After), so the screens can wait and retry.
+  test("a user over the per-user limit gets 429 with Retry-After, code rate_limited and a message that says to wait", async () => {
+    const { request } = await fixture()
+    let last: Response | null = null
+    for (let i = 0; i < 300; i++) expect((await request("/workspace-api/session", "test-owner-session")).status).toBe(200)
+    last = await request("/workspace-api/session", "test-owner-session")
+    expect(last!.status).toBe(429)
+    const seconds = Number(last!.headers.get("retry-after"))
+    expect(seconds).toBeGreaterThan(0)
+    expect(seconds).toBeLessThanOrEqual(60)
+    expect(await last!.json()).toEqual({ code: "rate_limited", error: "Too many requests in the last minute. Wait about a minute, then try again; nothing you saved was lost." })
+  })
+
+  test("the shared limit admits 1,200 requests independently of each user's 300-request allowance", async () => {
+    const { request } = await fixture()
+    for (const token of ["test-owner-session", "test-admin-session", "test-member-session"])
+      for (let i = 0; i < 300; i++) expect((await request("/workspace-api/session", token)).status).toBe(200)
+    for (let i = 0; i < 299; i++) expect((await request("/workspace-api/session", "test-outsider-session")).status).toBe(403)
+    // The 1,200th request still reaches authentication. The outsider has one personal request left,
+    // but its next request is refused by the exhausted shared admission budget before the role check.
+    expect((await request("/workspace-api/session", "unknown-synthetic-session")).status).toBe(401)
+    const over = await request("/workspace-api/session", "test-outsider-session")
+    expect([over.status, (await over.json()).code]).toEqual([429, "rate_limited"])
+    expect(Number(over.headers.get("retry-after"))).toBeGreaterThan(0)
   })
 
   test("an auth provider failure is 503 (retry), never 401 (signed out)", async () => {
@@ -321,5 +374,25 @@ describe("BF1 staging boundary fixes", () => {
       `postgres://neuvetra_runtime.${REF}:synthetic-password@us-west-1.pooler.supabase.com:6543/postgres`,
     ]) expect(() => readStagingConfig({ ...environment, DATABASE_URL: url })).toThrow()
     expect(() => readStagingConfig({ ...environment, DATABASE_URL: `postgres://neuvetra_runtime.${REF}:synthetic-password@aws-0-us-west-1.pooler.supabase.com:6543/postgres` })).not.toThrow()
+  })
+})
+
+// Round 3 (EN-7, lane B): the longer listener allowance is granted by the server after authentication and the route match,
+// never by path alone (the listener hands the server `extendTimeout`; listener-timeout.test.ts covers the socket side).
+describe("round 3 EN-7: long request limits only after authentication", () => {
+  test("prepare and Scope 3 results are extended only for a user with staging access; anonymous, unknown and other routes never", async () => {
+    const { app, workspace } = await fixture()
+    const extended = async (pathname: string, method: string, token?: string) => {
+      const seen: number[] = []
+      await app.fetch(new Request(`${ORIGIN}${pathname}`, { method, body: method === "POST" ? "{}" : undefined, headers: { origin: ORIGIN, "content-type": "application/json", ...(token ? { authorization: `Bearer ${token}` } : {}) } }), { extendTimeout: seconds => seen.push(seconds) })
+      return seen
+    }
+    const prepare = `/workspace-api/workspace/${workspace.id}/scope3/reports`, results = `/workspace-api/workspace/${workspace.id}/results/scope3`
+    expect(await extended(prepare, "POST")).toEqual([])
+    expect(await extended(prepare, "POST", "unknown-session")).toEqual([])
+    expect(await extended(prepare, "POST", "test-owner-session")).toEqual([120])
+    expect(await extended(results, "GET", "test-member-session")).toEqual([90])
+    expect(await extended(prepare, "GET", "test-owner-session")).toEqual([])
+    expect(await extended(`/workspace-api/workspace/${workspace.id}/scope3/spend-imports`, "GET", "test-owner-session")).toEqual([])
   })
 })

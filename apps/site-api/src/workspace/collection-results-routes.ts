@@ -1,10 +1,12 @@
 import type { CollectionActivityRecord, CollectionContext, CollectionEvidenceMetadata, CompanySetupView } from "@neuvetra/database"
 import { instrumentEvidenceClaims, planCollectionCalculation, type CollectionCalculationPlan } from "../../../../packages/neuvetra-database/src/collection-engine-input"
+import { isScope3CollectionKind } from "../../../../packages/neuvetra-database/src/scope3-collection-contract"
 import { assertEngineMatchesRelease, type ReleasedMethod } from "../../../../packages/neuvetra-database/src/method-reference"
 import { extractBearerToken, type AuthenticatedUser } from "../lib/auth"
 import { EngineRefusal } from "../calculation/method-engine-runner"
 import type { Scope1Aggregate, Scope1Kind, Scope1Result } from "../calculation/scope1-authority"
 import type { Scope2Aggregate, Scope2Input, Scope2Result } from "../calculation/scope2-authority"
+import { createResultsScheduler } from "./results-scheduler"
 
 /**
  * Draft results for the collection journey (Claude UX journey, 2026-09-29).
@@ -180,12 +182,14 @@ export async function buildCollectionResults(input: {
   releases?: ReleaseEvidence | null
   now?: () => Date
 }): Promise<CollectionResultsResponse> {
-  const { context, records, evidence, engines } = input
+  const { context, evidence, engines } = input
   // Context and setup are read separately: an intervening save must not mix old boundary decisions with a new report header.
   const setupVersion = input.setup?.currentVersion ?? null
   if (context.companyId !== input.companyId || context.setupVersionId !== (setupVersion?.id ?? null)
     || context.setupRevision !== (setupVersion?.revision ?? null) || (setupVersion && setupVersion.companyId !== input.companyId))
     throw Object.assign(new Error("Company setup changed while preparing results."), { code: "SETUP_CHANGED" })
+  // Scope 3 package 2 (S3-02): Scope 3 records have their own route and response and never enter these rows, counts or subtotals.
+  const records = input.records.filter(record => !isScope3CollectionKind(record.kind))
   const locations = new Map(context.locations.map(location => [location.id, location]))
   const rows: CollectionResultRow[] = []
   const scope1Results: Scope1Result[] = []
@@ -323,26 +327,11 @@ export function createCollectionResultsRoutes(deps: {
   log?: (event: ResultsReleaseCheckLog) => void
 }) {
   if (deps.environment !== DRAFT_RESULTS_ENVIRONMENT) throw new Error("Draft results are only available in the private synthetic staging environment; admitting a real company needs its own board decision.")
-  // One results run per company at a time (shared by its members): the engines admit two concurrent processes in total.
-  // A request that arrives while a run is in progress waits for one follow-up run, shared by every request that arrived
-  // after that run began, so it always reflects saves made before it was sent (BF1: it used to join the earlier run and
-  // could return results that missed the user's last save). At most one run per company computes at a time.
-  type Slot = { current: Promise<CollectionResultsResponse>; next: Promise<CollectionResultsResponse> | null }
-  const running = new Map<string, Slot>()
-  const schedule = (key: string, compute: () => Promise<CollectionResultsResponse>): Promise<CollectionResultsResponse> => {
-    const slot = running.get(key)
-    if (slot) return slot.next ??= slot.current.then(compute, compute)
-    const entry: Slot = { current: compute(), next: null }
-    const settle = (): void => {
-      if (running.get(key) !== entry) return
-      if (!entry.next) { running.delete(key); return }
-      entry.current = entry.next; entry.next = null
-      entry.current.then(settle, settle)
-    }
-    running.set(key, entry)
-    entry.current.then(settle, settle)
-    return entry.current
-  }
+  // One results run per company at a time: the engines admit two concurrent processes in total. A request that arrives
+  // while a run is in progress waits for a follow-up run, so it always reflects saves made before it was sent (BF1: it
+  // used to join the earlier run and could return results that missed the user's last save). A follow-up run is shared
+  // only by requests from the same actor, so every response was read under its own caller's access (API-01).
+  const schedule = createResultsScheduler<CollectionResultsResponse>()
   const report = (stage: ResultsReleaseCheckLog["stage"]) => (error: unknown): null => {
     try { (deps.log ?? (event => console.warn(JSON.stringify(event))))({ event: "results_release_check_unavailable", stage, errorCode: errorCode(error) }) } catch { /* logging never blocks results */ }
     return null
@@ -371,7 +360,7 @@ export function createCollectionResultsRoutes(deps: {
     try {
       const context = await deps.database.findCollectionContext(actor.id, companyId)
       if (!context || context.companyId.toLowerCase() !== companyId) return respond(404, { error: "Results not found." })
-      const job = schedule(companyId, async () => {
+      const job = schedule(companyId, actor.id, async () => {
         const [records, evidence, setup, current] = await Promise.all([
           deps.database.findCollectionActivities(actor.id, companyId),
           deps.database.findCollectionEvidence(actor.id, companyId),
@@ -379,7 +368,8 @@ export function createCollectionResultsRoutes(deps: {
           // A failed release lookup never blocks draft results: every method is then shown as unreleased, with a warning.
           deps.database.findCurrentMethodReleases(actor.id).catch(report("release_lookup")),
         ])
-        if (records.length > MAX_RECORDS) throw Object.assign(new Error("Too many records."), { code: "54000" })
+        // Round 3 lane C: the cap counts the records this route calculates (Scope 1 and 2); Scope 3 lines have their own route and cap.
+        if (records.filter(record => !isScope3CollectionKind(record.kind)).length > MAX_RECORDS) throw Object.assign(new Error("Too many records."), { code: "54000" })
         if (records.some(record => record.companyId.toLowerCase() !== companyId)) throw Object.assign(new Error("Company mismatch."), { code: "42501" })
         const facts = current && current.length ? await describeEngines().catch(report("engine_description")) : new Map<string, EngineMethodFacts>()
         return buildCollectionResults({ companyId, context, records, evidence, setup, engines: deps.engines, releases: { current, engines: facts } })

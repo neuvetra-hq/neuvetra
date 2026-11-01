@@ -1,11 +1,23 @@
 import type { CompanySetup } from './company-setup-contract'
+import {
+  SCOPE3_COLLECTION_KINDS, SCOPE3_COLLECTION_UNITS, isScope3CollectionKind, validateScope3Payload, type BusinessTravelCollectionPayload, type CommutingCollectionPayload, type Scope3CollectionKind,
+  type Scope3CompletionPayload, type Scope3PayloadByKind, type TransportCollectionPayload, type WasteCollectionPayload,
+} from './scope3-collection-contract'
 
 export const COLLECTION_PROFILE = 'neuvetra.collection.v1' as const
 export const COLLECTION_EVIDENCE_BUCKET = 'neuvetra-private-company-evidence' as const
 export const COLLECTION_EVIDENCE_MAX_BYTES = 10 * 1024 * 1024
 
 export type CollectionQuality = 'actual' | 'estimated' | 'unknown'
-export type CollectionActivityKind = 'natural_gas' | 'distillate_no2' | 'vehicle' | 'fugitive' | 'electricity'
+/** Scope 1 and 2 kinds (0027). */
+export type CollectionScope12Kind = 'natural_gas' | 'distillate_no2' | 'vehicle' | 'fugitive' | 'electricity'
+export const COLLECTION_SCOPE12_KINDS: readonly CollectionScope12Kind[] = ['natural_gas', 'distillate_no2', 'vehicle', 'fugitive', 'electricity']
+/** Every stored kind: Scope 1 and 2 (0027), the four Scope 3 kinds of 0029 (Scope 3 package 2) and the thirteen of 0030 (Scope 3 completion I-02). */
+export type CollectionActivityKind = CollectionScope12Kind | Scope3CollectionKind
+/** The scope a stored kind belongs to, as the save function (0029, 0030) records it. */
+export const collectionScope = (kind: CollectionActivityKind): 1 | 2 | 3 => isScope3CollectionKind(kind) ? 3 : kind === 'electricity' ? 2 : 1
+/** I-02: narrows an activity to the Scope 3 kinds (every kind of 0029 and 0030), so Scope 1 and 2 code can set them aside. */
+export const isScope3Activity = <T extends { kind: string }>(activity: T): activity is Extract<T, { kind: Scope3CollectionKind }> => isScope3CollectionKind(activity.kind)
 export type CollectionQuarantineStatus = 'pending' | 'clean' | 'rejected' | 'error'
 
 export interface CollectionPeriod { start: string; endExclusive: string }
@@ -30,6 +42,7 @@ export type VehicleCollectionPayload = { vehicleGroupId: string; fuel: string; v
 export type FugitiveCollectionPayload = { gas: 'HFC-134a' | 'HFC-227ea' | 'R-404A' | 'R-407C' | 'R-410A' | 'R-507A' | 'R-22' | 'R-12' | 'R-502'; unit: 'kg' | 'lb'; terms: { PN: string; CN: string; PS: string; CD: string; RD: string }; insideBoundary: boolean | null; maintainsRefrigerantStock: boolean | null; retrofitInPeriod: boolean | null; contractorRecordsComplete: boolean; eventChronologyComplete: boolean }
 export type ElectricityCollectionPayload = { meterOrAccountNumber: string; utilityName: string; site: string; zip: string; subregion: string; utilityEiaId: string | null; instruments: CollectionInstrument[] }
 export type CollectionPayload = NaturalGasCollectionPayload | DistillateCollectionPayload | VehicleCollectionPayload | FugitiveCollectionPayload | ElectricityCollectionPayload
+  | TransportCollectionPayload | WasteCollectionPayload | BusinessTravelCollectionPayload | CommutingCollectionPayload | Scope3CompletionPayload
 
 export interface CollectionContext {
   companyId: string
@@ -87,6 +100,11 @@ export type CollectionActivity = CollectionActivityCommon & (
   | {kind:'vehicle';payload:VehicleCollectionPayload}
   | {kind:'fugitive';payload:FugitiveCollectionPayload}
   | {kind:'electricity';payload:ElectricityCollectionPayload}
+  | {kind:'transport';payload:TransportCollectionPayload}
+  | {kind:'waste';payload:WasteCollectionPayload}
+  | {kind:'business_travel';payload:BusinessTravelCollectionPayload}
+  | {kind:'employee_commuting';payload:CommutingCollectionPayload}
+  | { [K in Exclude<Scope3CollectionKind, 'transport' | 'waste' | 'business_travel' | 'employee_commuting'>]: { kind: K; payload: Scope3PayloadByKind[K] } }[Exclude<Scope3CollectionKind, 'transport' | 'waste' | 'business_travel' | 'employee_commuting'>]
 )
 export interface CollectionActivitySaveInput {
   idempotencyKey: string
@@ -200,6 +218,9 @@ function validateInstrument(value: unknown): CollectionInstrument {
 }
 
 function validatePayload(kind: CollectionActivityKind, value: unknown): CollectionPayload {
+  if (isScope3CollectionKind(kind)) {
+    try { return validateScope3Payload(kind, value) } catch { return fail() }
+  }
   if (kind === 'natural_gas') {
     const p = object(value, ['heatContent'])
     if (p.heatContent === null) return { heatContent: null }
@@ -237,7 +258,7 @@ function validatePayload(kind: CollectionActivityKind, value: unknown): Collecti
 
 export function validateCollectionActivity(value: unknown): CollectionActivity {
   const row = object(value, ['kind','locationId','setupVersionId','sourceId','state','withdrawalReason','quantity','quality','estimateBasis','period','reference','notes','evidenceIds','payload'])
-  const kind = enumeration(row.kind, ['natural_gas','distillate_no2','vehicle','fugitive','electricity'] as const)
+  const kind = enumeration(row.kind, [...COLLECTION_SCOPE12_KINDS, ...SCOPE3_COLLECTION_KINDS] as const)
   const locationId=uuid(row.locationId), setupVersionId=uuid(row.setupVersionId), sourceId=text(row.sourceId,120,false)
   const state=enumeration(row.state,['active','withdrawn'] as const), withdrawalReason=nullableText(row.withdrawalReason,2000)
   if(state==='withdrawn' ? !withdrawalReason || withdrawalReason.trim().length<3 : withdrawalReason!==null)fail('Withdrawal requires a reason.')
@@ -252,12 +273,16 @@ export function validateCollectionActivity(value: unknown): CollectionActivity {
   if (quality === 'estimated' ? !estimateBasis?.trim() : estimateBasis !== null) fail('Only estimated records carry an estimate basis.')
   const period = object(row.period, ['start','endExclusive'])
   const start = calendarDate(period.start), endExclusive = calendarDate(period.endExclusive)
-  if (start < '2025-01-01' || endExclusive > '2026-01-01' || start >= endExclusive) fail('Collection periods must fall inside calendar 2025.')
+  // Round 2 (owner decision 1): a Scope 3 record may cover 2025 or 2026 (FY2026, fiscal years spanning two calendar years); Scope 1
+  // and 2 records keep calendar 2025. The adapter applies setup's reporting period (else calendar 2025) before calculating.
+  if ((SCOPE3_COLLECTION_KINDS as readonly string[]).includes(kind)) {
+    if (start < '2025-01-01' || endExclusive > '2027-01-01' || start >= endExclusive) fail('Scope 3 periods must fall between 1 January 2025 and 31 December 2026.')
+  } else if (start < '2025-01-01' || endExclusive > '2026-01-01' || start >= endExclusive) fail('Collection periods must fall inside calendar 2025.')
   if (!Array.isArray(row.evidenceIds) || row.evidenceIds.length > 20) fail()
   const evidenceIds = (row.evidenceIds as unknown[]).map(uuid)
   if (new Set(evidenceIds).size !== evidenceIds.length) fail()
   const payload=validatePayload(kind,row.payload)
-  const supportedUnits:Record<CollectionActivityKind,readonly string[]>={natural_gas:['therm','MMBtu','scf','ccf','mcf'],distillate_no2:['US_gallon'],vehicle:['US_gallon'],fugitive:['kg','lb'],electricity:['kWh','MWh']}
+  const supportedUnits:Record<CollectionActivityKind,readonly string[]>={natural_gas:['therm','MMBtu','scf','ccf','mcf'],distillate_no2:['US_gallon'],vehicle:['US_gallon'],fugitive:['kg','lb'],electricity:['kWh','MWh'],...SCOPE3_COLLECTION_UNITS}
   if(normalizedUnit!==null&&!supportedUnits[kind].includes(normalizedUnit))fail('Only engine unit tokens may be normalized; unsupported units remain saved with null normalized fields.')
   if(kind==='electricity'&&!(payload as ElectricityCollectionPayload).instruments.every(i=>i.evidenceReference===null||evidenceIds.includes(i.evidenceReference)))fail('Instrument evidence must be linked to the activity version.')
   if(kind==='vehicle' && (payload as VehicleCollectionPayload).vehicleGroupId!==sourceId || kind==='electricity' && (payload as ElectricityCollectionPayload).meterOrAccountNumber!==sourceId)fail('Source identifier must match the meter or vehicle group.')

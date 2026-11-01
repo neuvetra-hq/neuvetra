@@ -1,0 +1,637 @@
+{
+ "calculator": "s3/sources/2026-10-26-beta/epa-calculator/calculator_tool.original.xlsm (EPA Simplified GHG Emissions Calculator; staged copy, never modified)",
+ "calculator_version": "September 2024",
+ "cases": [
+  {
+   "id": "ng-therm-85",
+   "independent": {
+    "g_ch4": "8.533138398095",
+    "g_n2o": "0.82846003865",
+    "kg_co2": "451.013645041060",
+    "kg_co2e": "451.472114826448910",
+    "scf": "8284.6003865"
+   },
+   "input": {
+    "fuel": "Natural Gas",
+    "qty": 85,
+    "sheet": "stationary",
+    "unit": "Therm"
+   },
+   "libreoffice": {
+    "cells": "Stationary Combustion!C118:E118",
+    "g_ch4": 8.533138398095,
+    "g_n2o": 0.82846003865,
+    "kg_co2": 451.01364504106
+   },
+   "match_1e-9_relative": true,
+   "row": "Stationary Combustion!16"
+  },
+  {
+   "id": "el-camx-3200kwh",
+   "independent": {
+    "kg_co2e": null,
+    "lb_ch4": "0.080",
+    "lb_co2": "1371.0848",
+    "lb_n2o": "0.0096"
+   },
+   "input": {
+    "qty": 3200,
+    "sheet": "electricity",
+    "subregion": "WECC California"
+   },
+   "libreoffice": {
+    "cells": "Electricity!L21:N21",
+    "lb_ch4": 0.08,
+    "lb_co2": 1371.0848,
+    "lb_n2o": 0.0096
+   },
+   "match_1e-9_relative": true,
+   "row": "Electricity!21"
+  },
+  {
+   "id": "el-rfcw-48000kwh",
+   "independent": {
+    "kg_co2e": null,
+    "lb_ch4": "3.408",
+    "lb_co2": "43748.352",
+    "lb_n2o": "0.48"
+   },
+   "input": {
+    "qty": 48000,
+    "sheet": "electricity",
+    "subregion": "RFC West"
+   },
+   "libreoffice": {
+    "cells": "Electricity!L22:N22",
+    "lb_ch4": 3.408,
+    "lb_co2": 43748.352,
+    "lb_n2o": 0.48
+   },
+   "match_1e-9_relative": true,
+   "row": "Electricity!22"
+  },
+  {
+   "id": "el-nycw-1200500kwh",
+   "independent": {
+    "kg_co2e": null,
+    "lb_ch4": "26.411",
+    "lb_co2": "1037795.0345",
+    "lb_n2o": "2.401"
+   },
+   "input": {
+    "qty": 1200500,
+    "sheet": "electricity",
+    "subregion": "NPCC NYC/Westchester"
+   },
+   "libreoffice": {
+    "cells": "Electricity!L23:N23",
+    "lb_ch4": 26.411,
+    "lb_co2": 1037795.0345,
+    "lb_n2o": 2.401
+   },
+   "match_1e-9_relative": true,
+   "row": "Electricity!23"
+  },
+  {
+   "id": "el-us-250kwh",
+   "independent": {
+    "kg_co2e": null,
+    "lb_ch4": "0.01425",
+    "lb_co2": "191.80225",
+    "lb_n2o": "0.002"
+   },
+   "input": {
+    "qty": 250,
+    "sheet": "electricity",
+    "subregion": "US Average"
+   },
+   "libreoffice": {
+    "cells": "Electricity!L24:N24",
+    "lb_ch4": 0.01425,
+    "lb_co2": 191.80225,
+    "lb_n2o": 0.002
+   },
+   "match_1e-9_relative": true,
+   "row": "Electricity!24"
+  },
+  {
+   "id": "el-erct-64000kwh",
+   "independent": {
+    "kg_co2e": null,
+    "lb_ch4": "2.752",
+    "lb_co2": "46967.168",
+    "lb_n2o": "0.384"
+   },
+   "input": {
+    "qty": 64000,
+    "sheet": "electricity",
+    "subregion": "ERCOT All"
+   },
+   "libreoffice": {
+    "cells": "Electricity!L25:N25",
+    "lb_ch4": 2.752,
+    "lb_co2": 46967.168,
+    "lb_n2o": 0.384
+   },
+   "match_1e-9_relative": true,
+   "row": "Electricity!25"
+  },
+  {
+   "id": "ng-mmbtu-8.5",
+   "independent": {
+    "g_ch4": "8.533138398095",
+    "g_n2o": "0.82846003865",
+    "kg_co2": "451.013645041060",
+    "kg_co2e": "451.472114826448910",
+    "scf": "8284.6003865"
+   },
+   "input": {
+    "fuel": "Natural Gas",
+    "qty": 8.5,
+    "sheet": "stationary",
+    "unit": "MMBtu"
+   },
+   "libreoffice": {
+    "cells": "Stationary Combustion!C118:E118",
+    "g_ch4": 8.533138398095,
+    "g_n2o": 0.82846003865,
+    "kg_co2": 451.01364504106
+   },
+   "match_1e-9_relative": true,
+   "row": "Stationary Combustion!16"
+  },
+  {
+   "id": "ng-scf-8500",
+   "independent": {
+    "g_ch4": "8.75500",
+    "g_n2o": "0.8500",
+    "kg_co2": "462.74000",
+    "kg_co2e": "463.210390",
+    "scf": "8500"
+   },
+   "input": {
+    "fuel": "Natural Gas",
+    "qty": 8500,
+    "sheet": "stationary",
+    "unit": "scf"
+   },
+   "libreoffice": {
+    "cells": "Stationary Combustion!C118:E118",
+    "g_ch4": 8.755,
+    "g_n2o": 0.85,
+    "kg_co2": 462.74
+   },
+   "match_1e-9_relative": true,
+   "row": "Stationary Combustion!16"
+  },
+  {
+   "id": "ng-therm-5200",
+   "independent": {
+    "g_ch4": "522.02729023640",
+    "g_n2o": "50.6822611880",
+    "kg_co2": "27591.42299074720",
+    "kg_co2e": "27619.4705540886392",
+    "scf": "506822.611880"
+   },
+   "input": {
+    "fuel": "Natural Gas",
+    "qty": 5200,
+    "sheet": "stationary",
+    "unit": "Therm"
+   },
+   "libreoffice": {
+    "cells": "Stationary Combustion!C118:E118",
+    "g_ch4": 522.0272902364,
+    "g_n2o": 50.682261188,
+    "kg_co2": 27591.4229907472
+   },
+   "match_1e-9_relative": true,
+   "row": "Stationary Combustion!16"
+  }
+ ],
+ "egrid": {
+  "file": "egrid2023_data_rev2.xlsx",
+  "sha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+ },
+ "factor_edition_text": "PATCHED in scratch copy: EPA GHG Emission Factors Hub, Last Modified January 15, 2025 (Tables 8, 9, 10, GWP D8:D9); Table 1 natural gas per-unit factors (H38:J38) and eGRID2023 rev2 output emission rates (SRL23, US23)",
+ "factor_set": "hub2025-patched",
+ "formulaRewrites": [
+  {
+   "cell": "Stationary Combustion!C103",
+   "from": "=_xlfn.XLOOKUP($A103,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A103,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A103,$A$66:$A$98,0))*VLOOKUP($A103,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C104",
+   "from": "=_xlfn.XLOOKUP($A104,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A104,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A104,$A$66:$A$98,0))*VLOOKUP($A104,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C105",
+   "from": "=_xlfn.XLOOKUP($A105,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A105,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A105,$A$66:$A$98,0))*VLOOKUP($A105,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C106",
+   "from": "=_xlfn.XLOOKUP($A106,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A106,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A106,$A$66:$A$98,0))*VLOOKUP($A106,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C107",
+   "from": "=_xlfn.XLOOKUP($A107,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A107,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A107,$A$66:$A$98,0))*VLOOKUP($A107,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C108",
+   "from": "=_xlfn.XLOOKUP($A108,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A108,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A108,$A$66:$A$98,0))*VLOOKUP($A108,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C109",
+   "from": "=_xlfn.XLOOKUP($A109,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A109,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A109,$A$66:$A$98,0))*VLOOKUP($A109,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C110",
+   "from": "=_xlfn.XLOOKUP($A110,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A110,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A110,$A$66:$A$98,0))*VLOOKUP($A110,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C111",
+   "from": "=_xlfn.XLOOKUP($A111,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A111,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A111,$A$66:$A$98,0))*VLOOKUP($A111,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C113",
+   "from": "=_xlfn.XLOOKUP($A113,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A113,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A113,$A$66:$A$98,0))*VLOOKUP($A113,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C114",
+   "from": "=_xlfn.XLOOKUP($A114,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A114,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A114,$A$66:$A$98,0))*VLOOKUP($A114,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C115",
+   "from": "=_xlfn.XLOOKUP($A115,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A115,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A115,$A$66:$A$98,0))*VLOOKUP($A115,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C116",
+   "from": "=_xlfn.XLOOKUP($A116,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A116,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A116,$A$66:$A$98,0))*VLOOKUP($A116,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C118",
+   "from": "=_xlfn.XLOOKUP($A118,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A118,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A118,$A$66:$A$98,0))*VLOOKUP($A118,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C119",
+   "from": "=_xlfn.XLOOKUP($A119,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A119,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A119,$A$66:$A$98,0))*VLOOKUP($A119,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C120",
+   "from": "=_xlfn.XLOOKUP($A120,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A120,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A120,$A$66:$A$98,0))*VLOOKUP($A120,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C122",
+   "from": "=_xlfn.XLOOKUP($A122,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A122,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A122,$A$66:$A$98,0))*VLOOKUP($A122,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C123",
+   "from": "=_xlfn.XLOOKUP($A123,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A123,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A123,$A$66:$A$98,0))*VLOOKUP($A123,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C124",
+   "from": "=_xlfn.XLOOKUP($A124,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A124,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A124,$A$66:$A$98,0))*VLOOKUP($A124,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C125",
+   "from": "=_xlfn.XLOOKUP($A125,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A125,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A125,$A$66:$A$98,0))*VLOOKUP($A125,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C128",
+   "from": "=_xlfn.XLOOKUP($A128,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A128,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A128,$A$66:$A$98,0))*VLOOKUP($A128,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C129",
+   "from": "=_xlfn.XLOOKUP($A129,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A129,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A129,$A$66:$A$98,0))*VLOOKUP($A129,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C130",
+   "from": "=_xlfn.XLOOKUP($A130,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A130,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A130,$A$66:$A$98,0))*VLOOKUP($A130,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C131",
+   "from": "=_xlfn.XLOOKUP($A131,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A131,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A131,$A$66:$A$98,0))*VLOOKUP($A131,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C133",
+   "from": "=_xlfn.XLOOKUP($A133,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A133,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A133,$A$66:$A$98,0))*VLOOKUP($A133,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C134",
+   "from": "=_xlfn.XLOOKUP($A134,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A134,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A134,$A$66:$A$98,0))*VLOOKUP($A134,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!C135",
+   "from": "=_xlfn.XLOOKUP($A135,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A135,Stationary_Fuel_Fctrs_unit,5,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A135,$A$66:$A$98,0))*VLOOKUP($A135,Stationary_Fuel_Fctrs_unit,5,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D103",
+   "from": "=_xlfn.XLOOKUP($A103,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A103,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A103,$A$66:$A$98,0))*VLOOKUP($A103,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D104",
+   "from": "=_xlfn.XLOOKUP($A104,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A104,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A104,$A$66:$A$98,0))*VLOOKUP($A104,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D105",
+   "from": "=_xlfn.XLOOKUP($A105,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A105,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A105,$A$66:$A$98,0))*VLOOKUP($A105,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D106",
+   "from": "=_xlfn.XLOOKUP($A106,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A106,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A106,$A$66:$A$98,0))*VLOOKUP($A106,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D107",
+   "from": "=_xlfn.XLOOKUP($A107,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A107,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A107,$A$66:$A$98,0))*VLOOKUP($A107,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D108",
+   "from": "=_xlfn.XLOOKUP($A108,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A108,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A108,$A$66:$A$98,0))*VLOOKUP($A108,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D109",
+   "from": "=_xlfn.XLOOKUP($A109,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A109,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A109,$A$66:$A$98,0))*VLOOKUP($A109,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D110",
+   "from": "=_xlfn.XLOOKUP($A110,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A110,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A110,$A$66:$A$98,0))*VLOOKUP($A110,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D111",
+   "from": "=_xlfn.XLOOKUP($A111,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A111,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A111,$A$66:$A$98,0))*VLOOKUP($A111,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D113",
+   "from": "=_xlfn.XLOOKUP($A113,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A113,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A113,$A$66:$A$98,0))*VLOOKUP($A113,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D114",
+   "from": "=_xlfn.XLOOKUP($A114,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A114,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A114,$A$66:$A$98,0))*VLOOKUP($A114,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D115",
+   "from": "=_xlfn.XLOOKUP($A115,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A115,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A115,$A$66:$A$98,0))*VLOOKUP($A115,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D116",
+   "from": "=_xlfn.XLOOKUP($A116,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A116,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A116,$A$66:$A$98,0))*VLOOKUP($A116,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D118",
+   "from": "=_xlfn.XLOOKUP($A118,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A118,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A118,$A$66:$A$98,0))*VLOOKUP($A118,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D119",
+   "from": "=_xlfn.XLOOKUP($A119,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A119,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A119,$A$66:$A$98,0))*VLOOKUP($A119,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D120",
+   "from": "=_xlfn.XLOOKUP($A120,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A120,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A120,$A$66:$A$98,0))*VLOOKUP($A120,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D122",
+   "from": "=_xlfn.XLOOKUP($A122,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A122,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A122,$A$66:$A$98,0))*VLOOKUP($A122,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D123",
+   "from": "=_xlfn.XLOOKUP($A123,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A123,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A123,$A$66:$A$98,0))*VLOOKUP($A123,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D124",
+   "from": "=_xlfn.XLOOKUP($A124,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A124,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A124,$A$66:$A$98,0))*VLOOKUP($A124,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D125",
+   "from": "=_xlfn.XLOOKUP($A125,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A125,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A125,$A$66:$A$98,0))*VLOOKUP($A125,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D128",
+   "from": "=_xlfn.XLOOKUP($A128,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A128,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A128,$A$66:$A$98,0))*VLOOKUP($A128,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D129",
+   "from": "=_xlfn.XLOOKUP($A129,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A129,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A129,$A$66:$A$98,0))*VLOOKUP($A129,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D130",
+   "from": "=_xlfn.XLOOKUP($A130,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A130,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A130,$A$66:$A$98,0))*VLOOKUP($A130,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D131",
+   "from": "=_xlfn.XLOOKUP($A131,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A131,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A131,$A$66:$A$98,0))*VLOOKUP($A131,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D133",
+   "from": "=_xlfn.XLOOKUP($A133,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A133,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A133,$A$66:$A$98,0))*VLOOKUP($A133,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D134",
+   "from": "=_xlfn.XLOOKUP($A134,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A134,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A134,$A$66:$A$98,0))*VLOOKUP($A134,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!D135",
+   "from": "=_xlfn.XLOOKUP($A135,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A135,Stationary_Fuel_Fctrs_unit,6,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A135,$A$66:$A$98,0))*VLOOKUP($A135,Stationary_Fuel_Fctrs_unit,6,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E103",
+   "from": "=_xlfn.XLOOKUP($A103,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A103,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A103,$A$66:$A$98,0))*VLOOKUP($A103,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E104",
+   "from": "=_xlfn.XLOOKUP($A104,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A104,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A104,$A$66:$A$98,0))*VLOOKUP($A104,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E105",
+   "from": "=_xlfn.XLOOKUP($A105,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A105,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A105,$A$66:$A$98,0))*VLOOKUP($A105,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E106",
+   "from": "=_xlfn.XLOOKUP($A106,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A106,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A106,$A$66:$A$98,0))*VLOOKUP($A106,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E107",
+   "from": "=_xlfn.XLOOKUP($A107,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A107,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A107,$A$66:$A$98,0))*VLOOKUP($A107,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E108",
+   "from": "=_xlfn.XLOOKUP($A108,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A108,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A108,$A$66:$A$98,0))*VLOOKUP($A108,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E109",
+   "from": "=_xlfn.XLOOKUP($A109,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A109,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A109,$A$66:$A$98,0))*VLOOKUP($A109,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E110",
+   "from": "=_xlfn.XLOOKUP($A110,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A110,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A110,$A$66:$A$98,0))*VLOOKUP($A110,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E111",
+   "from": "=_xlfn.XLOOKUP($A111,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A111,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A111,$A$66:$A$98,0))*VLOOKUP($A111,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E113",
+   "from": "=_xlfn.XLOOKUP($A113,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A113,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A113,$A$66:$A$98,0))*VLOOKUP($A113,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E114",
+   "from": "=_xlfn.XLOOKUP($A114,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A114,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A114,$A$66:$A$98,0))*VLOOKUP($A114,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E115",
+   "from": "=_xlfn.XLOOKUP($A115,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A115,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A115,$A$66:$A$98,0))*VLOOKUP($A115,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E116",
+   "from": "=_xlfn.XLOOKUP($A116,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A116,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A116,$A$66:$A$98,0))*VLOOKUP($A116,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E118",
+   "from": "=_xlfn.XLOOKUP($A118,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A118,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A118,$A$66:$A$98,0))*VLOOKUP($A118,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E119",
+   "from": "=_xlfn.XLOOKUP($A119,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A119,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A119,$A$66:$A$98,0))*VLOOKUP($A119,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E120",
+   "from": "=_xlfn.XLOOKUP($A120,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A120,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A120,$A$66:$A$98,0))*VLOOKUP($A120,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E122",
+   "from": "=_xlfn.XLOOKUP($A122,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A122,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A122,$A$66:$A$98,0))*VLOOKUP($A122,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E123",
+   "from": "=_xlfn.XLOOKUP($A123,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A123,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A123,$A$66:$A$98,0))*VLOOKUP($A123,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E124",
+   "from": "=_xlfn.XLOOKUP($A124,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A124,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A124,$A$66:$A$98,0))*VLOOKUP($A124,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E125",
+   "from": "=_xlfn.XLOOKUP($A125,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A125,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A125,$A$66:$A$98,0))*VLOOKUP($A125,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E128",
+   "from": "=_xlfn.XLOOKUP($A128,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A128,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A128,$A$66:$A$98,0))*VLOOKUP($A128,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E129",
+   "from": "=_xlfn.XLOOKUP($A129,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A129,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A129,$A$66:$A$98,0))*VLOOKUP($A129,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E130",
+   "from": "=_xlfn.XLOOKUP($A130,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A130,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A130,$A$66:$A$98,0))*VLOOKUP($A130,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E131",
+   "from": "=_xlfn.XLOOKUP($A131,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A131,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A131,$A$66:$A$98,0))*VLOOKUP($A131,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E133",
+   "from": "=_xlfn.XLOOKUP($A133,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A133,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A133,$A$66:$A$98,0))*VLOOKUP($A133,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E134",
+   "from": "=_xlfn.XLOOKUP($A134,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A134,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A134,$A$66:$A$98,0))*VLOOKUP($A134,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  },
+  {
+   "cell": "Stationary Combustion!E135",
+   "from": "=_xlfn.XLOOKUP($A135,$A$66:$A$98,$C$66:$C$98)*VLOOKUP($A135,Stationary_Fuel_Fctrs_unit,7,FALSE)",
+   "to": "=INDEX($C$66:$C$98,MATCH($A135,$A$66:$A$98,0))*VLOOKUP($A135,Stationary_Fuel_Fctrs_unit,7,FALSE)"
+  }
+ ],
+ "gwp": {
+  "CH4": 28.0,
+  "N2O": 265.0
+ },
+ "hub": {
+  "file": "epa-factors-hub-2025.xlsx",
+  "sha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7"
+ },
+ "producedBy": "$S/s3/p4tools/epa_calc_oracle.py --i05 --factor-set hub2025 (LibreOffice 24.2.7.2 headless recalculation of a scratch copy), 2026-10-30, Scope 3 completion I-05",
+ "runs": 4,
+ "sha256": "47bd1b100597d0972049425c3686a6edf50f6b7518de2551749363fef34fe8f9",
+ "sha256_matches_receipt": true
+}

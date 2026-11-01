@@ -1,0 +1,3 @@
+line_id,date,vendor,gl_account,gl_description,description,amount,currency,dollar_year,category,naics_code,margin_choice,capital_full_cost
+INV-2025-0103,2025-11-20,Mission Catering TEST,6300,Meals,Client meeting catering,1275.25,USD,2024,1,722320,with_margins,
+INV-2025-0104,2025-12-05,Mission Catering TEST,6300,Meals,Year-end team lunch,980,USD,2025,1,722320,with_margins,

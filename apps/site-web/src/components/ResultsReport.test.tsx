@@ -8,8 +8,16 @@ import * as journeyStatus from "@/lib/journey-status"
 import * as plainLanguage from "@/lib/plain-language"
 import * as resultsApi from "@/lib/results-api"
 import * as resultsView from "@/lib/results-view"
+import * as scope3ResultsApi from "@/lib/scope3-results-api"
+import * as scope3Results from "./Scope3Results"
+import * as scope3Checklist from "@/lib/scope3-checklist"
+import * as scope3ResultsText from "@/lib/scope3-results-text"
+import { formatTimeR2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
 import type { Coverage } from "@/lib/journey-status"
 import type { ResultRow, ResultsResponse } from "@/lib/results-api"
+// Round 3 lane D: the display rules and texts the Scope 3 panel now uses (decision 5, PR-7..PR-13).
+import * as scope3DisplayR3d from "@/lib/scope3-display-r3d"
+import * as scope3TextR3d from "@/lib/scope3-text-r3d"
 
 const source = await Bun.file(new URL("./ResultsReport.tsx", import.meta.url)).text()
 const script = new Bun.Transpiler({ loader: "tsx", tsconfig: { compilerOptions: { jsx: "react", jsxFactory: "h" } } })
@@ -25,7 +33,9 @@ const csvLines = (csv: string) => csv.split("\n").map(line => /^"[^\n]*"$/.test(
 function render(results: ResultsResponse, coverage: Coverage = READY) {
   let csv = ""
   const env: Record<string, unknown> = {
-    ...journeyStatus, ...plainLanguage, ...resultsApi, ...resultsView,
+    ...journeyStatus, ...plainLanguage, ...resultsApi, ...resultsView, ...scope3ResultsApi, ...scope3Results, ...scope3Checklist, ...scope3ResultsText, ...scope3DisplayR3d, ...scope3TextR3d, formatTimeR2E,
+    // Round 2 lane D: the Results screen renders the panel through its stateful wrapper; here the pure panel stands in.
+    Scope3ResultsPanel: scope3Results.Scope3Panel,
     h: (type: any, props: any, ...children: any[]) => typeof type === "function" ? type({ ...props, children }) : { type, props: props ?? {}, children },
     React: { Fragment: "fragment" }, Icon: () => null,
     useReducer: () => [{ results, error: null, busy: false }, () => {}], useState: (initial: any) => [initial, () => {}], useRef: (current: any) => ({ current }),
@@ -48,6 +58,7 @@ function render(results: ResultsResponse, coverage: Coverage = READY) {
     printed: text(article),
     totals: nodes.filter(node => node.props.className === "nv-stat__value").map(text),
     totalNotes: nodes.filter(node => node.props.className === "nv-stat__foot").map(text),
+    lead: text(nodes.find(node => node.props.className === "nv-lead")),
     warnings: nodes.filter(node => node.props.className === "nv-stat__warn").map(text),
     banner: nodes.filter(node => node.props.className === "nv-notice nv-notice--warn").map(text).find(line => / counted yet| partly calculated/.test(line)) ?? null,
     csv,
@@ -211,5 +222,16 @@ describe("B02 on the actual Request B captures", () => {
     const subtotals = (csv: string) => csv.split("\n").filter(line => line.startsWith("Subtotal,"))
     expect(subtotals(view.csv)).toEqual(subtotals(downloaded))
     expect(subtotals(view.csv)).toHaveLength(3)
+  })
+})
+
+// Round 2 polish, lane D (Claude, 31 October 2026; product review UX-21): the Results header and the printed "Prepared" time
+// use the Activity screens' one format, date and 24-hour time in UTC, labelled (it was "Oct 15, 2026, 12:00 AM" in the
+// browser's zone).
+describe("round 2 polish: one time format on Results", () => {
+  test("the header and the printed report say when the results were calculated as YYYY-MM-DD HH:MM UTC", () => {
+    const view = render({ ...synthetic, generatedAt: "2026-10-15T21:07:09.000Z" } as ResultsResponse)
+    expect(view.lead).toContain("calculated 2026-10-15 21:07 UTC")
+    expect(view.printed).toContain("Prepared2026-10-15 21:07 UTC")
   })
 })

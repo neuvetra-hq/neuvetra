@@ -19,6 +19,11 @@ import { buildInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type Evi
 import { buildDraftInventoryReport, hashReportBytes } from "./m60"
 import { M61_PROFILE, hashDraftReportDecisionSnapshot, validateDraftReportReviewInput, type DraftReportReviewInput } from "./m61"
 import { readCurrentReleasedMethods } from './method-reference'
+import {readScope3Assessments,saveScope3Assessment as storeScope3Assessment} from './scope3-assessments'
+import {convertScope3SpendCurrency as storeScope3SpendCurrencyConversion,importScope3SpendFile,readScope3SpendImports,readScope3SpendMappings,saveScope3SpendCorrections as storeScope3SpendCorrections,saveScope3SpendMapping as storeScope3SpendMapping,withdrawScope3SpendImport as storeScope3SpendImportWithdrawal} from './scope3-spend-imports'
+import type {Scope3SpendParse} from './scope3-spend-import'
+import {approveScope3Report as storeScope3ReportApproval,prepareScope3Report as storeScope3Report,readLatestApprovedScope3Report,readScope3ReportRequest,readScope3ReportVersion,readScope3ReportVersions} from './scope3-reports'
+import type {Scope3ReportApproveRequest,Scope3ReportPrepareCall} from './scope3-assessment-contract'
 import {readCollectionContext,readCollectionActivities,readCollectionActivityVersion,saveCollectionActivity as storeCollectionActivity,readCollectionEvidence,reserveCollectionEvidenceUpload as reserveEvidenceUpload,registerCollectionEvidence as storeCollectionEvidence,markCollectionEvidenceRegistrationFailed as markEvidenceRegistrationFailed,findDownloadableCollectionEvidence as readDownloadableCollectionEvidence,readGridLossLineage,createGridLossLineage as storeGridLossLineage} from './collection'
 export { M58_FACTOR, M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
 export { M59_PROFILE, M59_ENTRY_COUNT, M59_ENTRY_NAMES, M59_MAX_ARCHIVE_BYTES, buildInventoryEvidenceArchive, inspectInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackExpectation, type EvidencePackInputs, type EvidencePackReceipt } from "./m59"
@@ -147,6 +152,15 @@ export interface EvidencePackRecord {
 export interface DraftInventoryReportRecord{id:string;companyId:string;inventoryId:string;evidencePackId:string;profile:"neuvetra.synthetic.inventory-draft-report.v1";inventorySnapshotSha256:string;sourceArchiveSha256:string;sourceManifestSha256:string;sourceLineageRootSha256:string;reportSha256:string;reportByteLength:number;createdBy:string;createdAt:string;report:Uint8Array}
 export interface DraftInventoryReportReviewRecord{id:string;companyId:string;reportId:string;profile:typeof M61_PROFILE;decision:"accept_bounded_internal_draft"|"changes_requested";outcome:"accepted_bounded_internal_draft"|"changes_requested";reasonCode:"exact_report_reviewed_for_bounded_internal_use"|"report_revision_required";acknowledgedLimitations:string[];changeRouteCode:DraftReportReviewInput["changeRouteCode"];changeNote:string|null;reportSha256:string;reportCreatedBy:string;inventorySnapshotSha256:string;sourceArchiveSha256:string;sourceManifestSha256:string;sourceLineageRootSha256:string;decisionSnapshotSha256:string;releaseEligible:false;decidedBy:string;decidedAt:string}
 
+/** Round 2 (ENG-10): a spend import is retried once exactly when the database refused it with SQLSTATE 40001 (0030's possible-duplicate race), never on message text. */
+/**
+ * Round 3 (EN-1): a second import of a company waits on the company lock that a first import holds for a few seconds;
+ * under the runtime's 5-second lock_timeout it gets 55P03 with nothing saved. That is retried once like 40001 (a new
+ * transaction re-reads the earlier lines); a second 55P03, or a statement timeout (57014), reaches the route, which answers
+ * 503 with a specific code and Retry-After instead of a generic error.
+ */
+export const SCOPE3_RETRYABLE_SQLSTATES: readonly string[] = ['40001', '55P03']
+export const scope3ImportRetryable = (error: unknown): boolean => SCOPE3_RETRYABLE_SQLSTATES.includes(String((error as { code?: unknown } | null)?.code))
 export const M57_WARNINGS = [
   "annual_coverage_incomplete_1_of_12_months",
   "market_based_scope2_not_included",
@@ -315,6 +329,36 @@ export class WorkspaceDatabase {
   /** Current method releases (0024) for the Results route. Read with asTrustedUser, as the connection's own role: the release store grants no read to `authenticated`. On hosted both helpers run as neuvetra_runtime behind the staging-access gate, and the store's row-level security admits only a user with staging access. */
   async findCurrentMethodReleases(userId:string){return this.asTrustedUser(userId,tx=>readCurrentReleasedMethods(tx))}
   async saveCompanySetup(userId:string,companyId:string,input:unknown){return this.asTrustedUser(userId,tx=>saveCompanySetup(tx,userId,companyId,input))}
+  /** Scope 3 completion I-04: the latest category assessments of one reporting year (0030; callers check schema 30 first). */
+  async findScope3Assessments(userId:string,companyId:string,reportingYear:number){return this.asUser(userId,tx=>readScope3Assessments(tx,companyId,reportingYear))}
+  async saveScope3Assessment(userId:string,companyId:string,category:number,input:unknown){return this.asTrustedUser(userId,tx=>storeScope3Assessment(tx,userId,companyId,category,input))}
+  /** Scope 3 completion I-09: spend imports (with lines and reconciliation) and remembered mappings (0030; callers check schema 30 first). */
+  async findScope3SpendImports(userId:string,companyId:string){return this.asUser(userId,tx=>readScope3SpendImports(tx,companyId))}
+  async findScope3SpendMappings(userId:string,companyId:string){return this.asUser(userId,tx=>readScope3SpendMappings(tx,companyId))}
+  /** One transaction per attempt; when another import of the company committed between reading its lines and 0030's re-check, the duplicate references are read again once. */
+  async importScope3Spend(userId:string,companyId:string,input:{parsed:Scope3SpendParse;fileSha256:string;evidenceId:string;locationId:string}){
+    try{return await this.asTrustedUser(userId,tx=>importScope3SpendFile(tx,userId,companyId,input))}
+    // Round 2 (ENG-10): one retry in a new transaction on SQLSTATE 40001 (0030: another import committed between this
+    // import's read of earlier lines and its call, so a possible duplicate it names is stale); never on message text.
+    // Round 3 (EN-1): and on 55P03 (the company lock was held past lock_timeout by another write; nothing was saved).
+    catch(error){if(scope3ImportRetryable(error))return this.asTrustedUser(userId,tx=>importScope3SpendFile(tx,userId,companyId,input));throw error}
+  }
+  async saveScope3SpendMapping(userId:string,companyId:string,input:unknown){return this.asTrustedUser(userId,tx=>storeScope3SpendMapping(tx,userId,companyId,input))}
+  /** Round 3 (owner decision 7): withdraws every active line of one import in one set-based statement (owner or admin). */
+  async withdrawScope3SpendImport(userId:string,companyId:string,importId:string,input:unknown){return this.asTrustedUser(userId,tx=>storeScope3SpendImportWithdrawal(tx,userId,companyId,importId,input))}
+  /** Round 3 (lane C's bulk actions): corrects imported spend lines in bulk in one set-based statement (owner or admin). */
+  async saveScope3SpendCorrections(userId:string,companyId:string,input:{reason:string;corrections:Array<{recordId:string;expectedVersionId:string;activity:unknown}>}){return this.asTrustedUser(userId,tx=>storeScope3SpendCorrections(tx,userId,companyId,input))}
+  /** Round 3 lane C (PR-11): every held imported line in one currency converted to US dollars, in one transaction. */
+  async convertScope3SpendCurrency(userId:string,companyId:string,input:unknown){return this.asTrustedUser(userId,tx=>storeScope3SpendCurrencyConversion(tx,userId,companyId,input))}
+  /** Scope 3 completion I-10: frozen report versions of one reporting year, one version with its exact texts, the latest approved one, an idempotency key's version (0030; callers check schema 30 first). */
+  async findScope3ReportVersions(userId:string,companyId:string,reportingYear:number){return this.asUser(userId,tx=>readScope3ReportVersions(tx,companyId,reportingYear))}
+  async findScope3ReportVersion(userId:string,companyId:string,versionId:string){return this.asUser(userId,tx=>readScope3ReportVersion(tx,companyId,versionId))}
+  async findLatestApprovedScope3Report(userId:string,companyId:string,reportingYear:number){return this.asUser(userId,tx=>readLatestApprovedScope3Report(tx,companyId,reportingYear))}
+  async findScope3ReportRequest(userId:string,companyId:string,idempotencyKey:string){return this.asUser(userId,tx=>readScope3ReportRequest(tx,companyId,idempotencyKey))}
+  /** I-10: stores a prepared version (owner or admin) and approves one bound to its report hash, through 0030's RPCs. */
+  /** Round 3 (owner decision 6): the small request plus the two texts as separate text parameters. */
+  async prepareScope3Report(userId:string,companyId:string,call:Scope3ReportPrepareCall){return this.asTrustedUser(userId,tx=>storeScope3Report(tx,userId,companyId,call))}
+  async approveScope3Report(userId:string,companyId:string,input:Scope3ReportApproveRequest){return this.asTrustedUser(userId,tx=>storeScope3ReportApproval(tx,userId,companyId,input))}
   protected constructor(protected readonly db: WorkspaceConnection) {}
 
   async findFugitive(userId:string,companyId:string,authority:M77Authority){return this.asUser(userId,tx=>readFugitive(tx,companyId,authority))}

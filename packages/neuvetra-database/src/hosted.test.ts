@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test"
 import { fileURLToPath } from "node:url"
-import { HostedWorkspaceDatabase, STAGING_SCHEMA_BRIDGE_VERSION, STAGING_SCHEMA_VERSION, createPostgresConnection, validateHostedSchemaReceipts, validateHostedTarget } from "./hosted"
+import { HostedWorkspaceDatabase, STAGING_SCHEMA_BRIDGE_VERSION, STAGING_SCHEMA_VERSION, STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION, STAGING_SCOPE3_SCHEMA_VERSION, STAGING_SERVED_SCHEMA_VERSIONS, createPostgresConnection, scope3ActivityAvailable, scope3KindsAvailable, validateHostedSchemaReceipts, validateHostedTarget } from "./hosted"
+import { SCOPE3_COLLECTION_KINDS, SCOPE3_COLLECTION_SCHEMA, SCOPE3_COMPLETION_SCHEMA, SCOPE3_LEGACY_KINDS } from "./scope3-collection-contract"
 import { loadStagingDatabaseCa, validateDatabaseCaPem } from "./staging-tls"
 import { auditLegacyStagingExposure, planLegacyStagingContainment } from "./staging-audit"
 import { migratePrivateStaging, provisionStagingRoster, readMigrationManifest, revokeStagingAccess } from "./staging-migrations"
@@ -21,33 +22,57 @@ test("hosted target binding refuses wrong projects, privileged users and connect
   for (const value of [options.connectionString.replace(REF, "z".repeat(20)), options.connectionString.replace("neuvetra_runtime", "postgres"), `${options.connectionString}?sslmode=disable`, options.connectionString.replace("supabase.co", "supabase.co.attacker.test"), options.connectionString.replace("/postgres", "/customer")]) expect(() => validateHostedTarget({ ...options, connectionString: value })).toThrow()
 })
 
-test("schema 27 readiness bridge is exact and limited to confirmed existing-project reuse", () => {
-  const manifest = Array.from({ length: 28 }, (_, index) => ({ name: `${String(index + 1).padStart(4, "0")}_migration.sql`, sha256: String(index + 1).padStart(64, "0") }))
-  const schema27 = manifest.slice(0, 27)
+test("the schema-30 image serves the existing project at exactly 28, 29 or 30, and a new project only at 30", () => {
+  const manifest = Array.from({ length: 30 }, (_, index) => ({ name: `${String(index + 1).padStart(4, "0")}_migration.sql`, sha256: String(index + 1).padStart(64, "0") }))
+  const schema28 = manifest.slice(0, 28), schema29 = manifest.slice(0, 29)
   const existing = { expectedProjectRef: "icockcoguyadhryzydvl", reuseExistingProject: true }
-  expect(STAGING_SCHEMA_VERSION).toBe(28)
-  expect(STAGING_SCHEMA_BRIDGE_VERSION).toBe(27)
-  expect(validateHostedSchemaReceipts(manifest, manifest, options)).toBe(28)
-  expect(validateHostedSchemaReceipts(manifest, manifest, existing)).toBe(28)
-  expect(validateHostedSchemaReceipts(schema27, manifest, existing)).toBe(27)
-  expect(() => validateHostedSchemaReceipts(schema27, manifest, options)).toThrow("Staging schema receipt mismatch.")
-  expect(() => validateHostedSchemaReceipts(schema27, manifest, { ...existing, reuseExistingProject: false })).toThrow("Staging schema receipt mismatch.")
-  // The old schema-23 bridge and its 24–26 steps are closed: hosted is already at 27.
-  for (const length of [22, 23, 24, 25, 26]) expect(() => validateHostedSchemaReceipts(manifest.slice(0, length), manifest, existing)).toThrow("Staging schema receipt mismatch.")
-  expect(() => validateHostedSchemaReceipts([...manifest, { name: "0029_unknown.sql", sha256: "f".repeat(64) }], manifest, existing)).toThrow("Staging schema receipt mismatch.")
-  expect(() => validateHostedSchemaReceipts(schema27.map((receipt, index) => index === 26 ? { ...receipt, sha256: "f".repeat(64) } : receipt), manifest, existing)).toThrow("Staging schema receipt mismatch.")
-  expect(() => validateHostedSchemaReceipts(manifest.map((receipt, index) => index === 27 ? { ...receipt, sha256: "f".repeat(64) } : receipt), manifest, existing)).toThrow("Staging schema receipt mismatch.")
-  expect(() => validateHostedSchemaReceipts(schema27, schema27, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(STAGING_SCHEMA_VERSION).toBe(30)
+  expect(STAGING_SCHEMA_BRIDGE_VERSION).toBe(28)
+  expect([STAGING_SCOPE3_SCHEMA_VERSION, STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION]).toEqual([SCOPE3_COLLECTION_SCHEMA, SCOPE3_COMPLETION_SCHEMA])
+  expect(STAGING_SERVED_SCHEMA_VERSIONS).toEqual([28, 29, 30])
+  expect(validateHostedSchemaReceipts(manifest, manifest, options)).toBe(30)
+  expect(validateHostedSchemaReceipts(manifest, manifest, existing)).toBe(30)
+  // Hosted 0029 is on hold: the existing project may be at 28 or 29 when the schema-30 image starts.
+  expect(validateHostedSchemaReceipts(schema29, manifest, existing)).toBe(29)
+  expect(validateHostedSchemaReceipts(schema28, manifest, existing)).toBe(28)
+  for (const prefix of [schema28, schema29]) {
+    expect(() => validateHostedSchemaReceipts(prefix, manifest, options)).toThrow("Staging schema receipt mismatch.")
+    expect(() => validateHostedSchemaReceipts(prefix, manifest, { ...existing, reuseExistingProject: false })).toThrow("Staging schema receipt mismatch.")
+  }
+  // The schema-27 bridge is closed: hosted is already at 28.
+  for (const length of [22, 23, 24, 25, 26, 27]) expect(() => validateHostedSchemaReceipts(manifest.slice(0, length), manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts([...manifest, { name: "0031_unknown.sql", sha256: "f".repeat(64) }], manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(schema28.map((receipt, index) => index === 27 ? { ...receipt, sha256: "f".repeat(64) } : receipt), manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(schema29.map((receipt, index) => index === 28 ? { ...receipt, sha256: "f".repeat(64) } : receipt), manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(manifest.map((receipt, index) => index === 29 ? { ...receipt, sha256: "f".repeat(64) } : receipt), manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(schema28, schema28, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(schema29, schema29, existing)).toThrow("Staging schema receipt mismatch.")
 })
 
-test("the image manifest is 0001–0028, ending with the reviewed 0027 and 0028 bytes", async () => {
+test("Scope 3 gates: the 0029 kinds from 29, everything 0030 added from 30", () => {
+  const travel = (payload: Record<string, unknown>, normalizedUnit: string | null = "mile") => ({ kind: "business_travel", payload, quantity: { normalizedUnit } })
+  const legacy = { mode: "air", passengerSegments: 4, haulBasis: null }
+  expect([28, 29, 30].map(scope3KindsAvailable)).toEqual([[], SCOPE3_LEGACY_KINDS, SCOPE3_COLLECTION_KINDS])
+  expect([28, 29, 30].map(v => scope3ActivityAvailable(travel(legacy), v))).toEqual([false, true, true])
+  expect([28, 29, 30].map(v => scope3ActivityAvailable(travel({ ...legacy, dataQuality: null }), v))).toEqual([false, false, true])
+  expect([28, 29, 30].map(v => scope3ActivityAvailable(travel({ ...legacy, cabinClass: null, hotelCountry: null }), v))).toEqual([false, false, true])
+  expect([28, 29, 30].map(v => scope3ActivityAvailable(travel({ mode: "hotel", passengerSegments: null, haulBasis: null }, "room-night"), v))).toEqual([false, false, true])
+  expect([28, 29, 30].map(v => scope3ActivityAvailable(travel({ mode: "hotel", passengerSegments: null, haulBasis: null }, null), v))).toEqual([false, true, true])
+  expect([28, 29, 30].map(v => scope3ActivityAvailable({ kind: "purchase_spend", payload: {}, quantity: { normalizedUnit: "USD" } }, v))).toEqual([false, false, true])
+})
+
+test("the image manifest is 0001–0030, ending with the reviewed 0027, 0028, 0029 and 0030 bytes", async () => {
   const manifest = await readMigrationManifest()
   expect(manifest).toHaveLength(STAGING_SCHEMA_VERSION)
   expect(manifest.slice(26).map(({ name, sha256 }) => ({ name, sha256 }))).toEqual([
     { name: "0027_collection.sql", sha256: "1a0f64c82c9b771f318c06ede468276395f6642bf13fdb86e9146eabfbf7d59e" },
     { name: "0028_collection_zip_check.sql", sha256: "5ae7da9aef3b0d9f5fe4cd679a200722d0603fd201597df67897eec57b212917" },
+    { name: "0029_scope3_collection.sql", sha256: "f191ce06fd50edd8c65b7d3f6f659c6713392123a9ea8cba074e3f0c4954f0ad" },
+    { name: "0030_scope3_completion.sql", sha256: "8aaec185c30443b0c4f8b2434f0fb4c3565d207c6bba5e1050319860d924105b" },
   ])
   expect(new TextEncoder().encode(manifest[27]!.sql).byteLength).toBe(3155532)
+  expect(new TextEncoder().encode(manifest[28]!.sql).byteLength).toBe(26375)
+  expect(new TextEncoder().encode(manifest[29]!.sql).byteLength).toBe(162929)
 })
 
 test("explicit database CA accepts certificates only and never disables TLS verification", async () => {

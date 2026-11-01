@@ -1,0 +1,201 @@
+Document Number,Posting Date,Vendor Name,Account,Account Name,Memo,Amount,Currency,Label NAICS 2017,Label category,Justification
+AP-250131,05/17/2025,Prologis,6200,Rent,Warehouse rent,18000.00,USD,531120,1,Rent to a building lessor: 531120 Lessors of Nonresidential Buildings (check the overlap with Scope 1 and 2 or category 8).
+AP-250179,11/26/2025,Haas Automation,1500,Machinery and equipment,CNC vertical mill VF-2,135345.80,USD,333517,2,"A CNC mill is a machine tool: 333517 Machine Tool Manufacturing; a fixed asset, category 2."
+AP-250048,08/28/2025,Grainger,6110,MRO supplies,Safety gloves,"1,226.53",USD,339113,1,Personal safety equipment and protective gloves are in 339113 Surgical Appliance and Supplies Manufacturing.
+AP-250123,04/15/2025,Cintas,6120,Uniforms and facility services,Uniform rental,889.43,USD,812332,1,Uniform rental and laundering: 812332 Industrial Launderers.
+AP-250104,10/19/2025,Baker Lyman LLP,6600,Legal fees,Patent filing,10903.60,USD,541110,1,Patent work by a law firm: 541110 Offices of Lawyers.
+AP-250028,06/05/2025,Allied Electronics,5040,Components,Bare printed circuit boards,"5,100.99",USD,334412,1,Bare boards: 334412 Bare Printed Circuit Board Manufacturing.
+AP-250095,01/27/2025,ADP,6500,Payroll services,Payroll processing fee,"1,659.04",USD,541214,1,A fee for processing payroll is a purchased service: 541214 Payroll Services.
+AP-250044,11/14/2025,Sherwin-Williams,5050,Paint and coatings,Industrial powder coating,4823.22,USD,325510,1,Coatings: 325510 Paint and Coating Manufacturing.
+AP-250076,06/06/2025,Microsoft,6400,Software and cloud,Microsoft 365 licenses,"1,800.00",USD,511210,1,Software licences: 511210 Software Publishers.
+AP-250149,12/09/2025,UPS,5310,Freight out,Outbound parcels,963.35,USD,492110,4,Outbound parcels paid by the company are category 4: 492110 Couriers and Express Delivery Services.
+AP-250113,06/05/2025,McKinsey & Company,6620,Consulting,Operations strategy consulting,60000.00,USD,541611,1,Management consulting: 541611 Administrative Management and General Management Consulting Services.
+AP-250110,04/16/2025,Bright Orbit Marketing,6630,Marketing,Ad campaign management,"10,308.11",USD,541810,1,Campaign management by an agency: 541810 Advertising Agencies.
+AP-250061,03/09/2025,Staples Business Advantage,6100,Office supplies,Toner cartridges,855.48,USD,339940,1,Toner cartridges are office supplies (except paper): 339940.
+AP-250165,09/12/2025,United Airlines,6750,Travel - airfare,Airfare,1434.45,USD,481111,6,"Flights: 481111, category 6."
+AP-250128,05/15/2025,BrightView,6150,Landscaping,Grounds maintenance,"1,110.09",USD,561730,1,Grounds care: 561730 Landscaping Services.
+AP-250067,01/04/2025,Amazon Business,6100,Office supplies,Break room coffee,233.30,USD,311920,1,Coffee: 311920 Coffee and Tea Manufacturing.
+AP-250019,05/23/2025,ResinTech Polymers,5020,Raw materials - plastics,ABS resin pellets,8530.57,USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-250079,02/22/2025,Salesforce,6400,Software and cloud,CRM subscription,5200.00,USD,511210,1,A software subscription (SaaS) from its publisher: 511210 Software Publishers.
+AP-250049,03/22/2025,Grainger,6110,MRO supplies,Safety gloves,"1,200.91",USD,339113,1,Personal safety equipment and protective gloves are in 339113 Surgical Appliance and Supplies Manufacturing.
+AP-250052,02/24/2025,Grainger,6110,MRO supplies,Lubricants,256.30,USD,324191,1,Lubricants: 324191 Petroleum Lubricating Oil and Grease Manufacturing.
+AP-250066,12/15/2025,Amazon Business,6100,Office supplies,Office chairs,994.26,USD,337214,1,Non-wood office chairs: 337214 Office Furniture (except Wood) Manufacturing.
+AP-250163,01/02/2025,Delta Air Lines,6750,Travel - airfare,Airfare - sales team,"1,431.08",USD,481111,6,"Flights: 481111 Scheduled Passenger Air Transportation, category 6."
+AP-250198,08/20/2025,Acme Holdings Canada,7700,Intercompany,Intercompany management fee,50000.00,USD,not_a_purchase,,"An intercompany charge is inside the group, not a purchase from a supplier."
+AP-250030,09/15/2025,Allied Electronics,5040,Components,Electrical connectors,2907.51,USD,334417,1,Connectors: 334417 Electronic Connector Manufacturing.
+AP-250020,04/02/2025,ResinTech Polymers,5020,Raw materials - plastics,ABS resin pellets,"12,676.03",USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-250075,06/26/2025,Amazon Web Services,6400,Software and cloud,AWS cloud hosting,3119.50,USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-250195,03/18/2025,Wells Fargo,7600,Interest expense,Term loan interest,6361.56,USD,not_a_purchase,,"Interest is a financing cost, not a purchase."
+AP-250015,07/05/2025,Northwest Aluminum,5010,Raw materials - metals,Aluminum sheet 5052,5873.53,USD,331315,1,"Aluminum sheet and plate: 331315 Aluminum Sheet, Plate, and Foil Manufacturing."
+AP-250013,06/21/2025,Northwest Aluminum,5010,Raw materials - metals,Aluminum extrusions 6061,"8,181.58",USD,331318,1,"Extruded aluminum shapes: 331318 Other Aluminum Rolling, Drawing, and Extruding."
+AP-250103,08/12/2025,Baker Lyman LLP,6600,Legal fees,Patent filing,"11,301.89",USD,541110,1,Patent work by a law firm: 541110 Offices of Lawyers.
+AP-250177,09/04/2025,Employee expense reports,6780,Travel - meals,Meals while traveling,890.88,USD,722511,1,"Meals are purchased services, not travel transport or lodging: 722511 Full-Service Restaurants, category 1."
+AP-250027,03/07/2025,Bosch Rexroth Corp,5040,Components,Hydraulic cylinders,3615.91,USD,333995,1,Hydraulic cylinders: 333995 Fluid Power Cylinder and Actuator Manufacturing.
+AP-250090,02/26/2025,Comcast Business,6420,Telephone and internet,Internet service,406.70,USD,517311,1,Business internet over cable: 517311 Wired Telecommunications Carriers.
+AP-250039,11/17/2025,Uline,5030,Packaging,Stretch wrap,"1,078.98",USD,326112,1,Stretch film: 326112 Plastics Packaging Film and Sheet Manufacturing.
+AP-250187,01/01/2025,IRS - EFTPS,7010,Payroll taxes,Federal payroll tax deposit,48663.42,USD,not_a_purchase,,Payroll taxes are not a purchase.
+AP-250181,02/27/2025,Dell Technologies,1520,Computer equipment,Laptops (25),31000.00,USD,334111,2,"Laptops: 334111 Electronic Computer Manufacturing; capitalised, category 2."
+AP-250139,08/23/2025,WEX Fleet,6730,Fuel - fleet vehicles,Diesel fuel,2310.04,USD,energy_scope_1_2,,"Fleet fuel is Scope 1 mobile combustion, so this spend line is withdrawn."
+AP-250171,12/10/2025,Enterprise Rent-A-Car,6770,Travel - ground transportation,Car rental,590.36,USD,532111,6,"Rental cars: 532111 Passenger Car Rental, category 6."
+AP-250169,06/25/2025,Hilton,6760,Travel - lodging,Hotel stay,1383.89,USD,721110,6,"Hotel stays: 721110, category 6."
+AP-250004,04/17/2025,Pacific Steel Supply,5010,Raw materials - metals,Hot rolled steel coil,38970.73,USD,331110,1,Hot-rolled coil is made at steel mills: 331110 Iron and Steel Mills.
+AP-250106,05/28/2025,Deloitte,6610,Audit and accounting,Tax return preparation,9000.00,USD,541213,1,Preparing tax returns is a purchased service: 541213 Tax Preparation Services.
+AP-250111,10/16/2025,Vistaprint,6630,Marketing,Printed brochures,1726.49,USD,323111,1,Brochure printing: 323111 Commercial Printing (except Screen and Books).
+AP-250164,03/10/2025,Delta Air Lines,6750,Travel - airfare,Airfare - sales team,2225.59,USD,481111,6,"Flights: 481111 Scheduled Passenger Air Transportation, category 6."
+AP-250190,08/14/2025,Fresno County Tax Collector,7410,Property taxes,Property tax installment,"16,000.00",USD,not_a_purchase,,Property tax is not a purchase.
+AP-250006,10/27/2025,Pacific Steel Supply,5010,Raw materials - metals,Cold rolled steel sheet,"27,346.95",USD,331221,1,Cold-rolling purchased steel into sheet is 331221 Rolled Steel Shape Manufacturing.
+AP-250102,01/10/2025,Baker Lyman LLP,6600,Legal fees,Contract review,8540.41,USD,541110,1,Legal work by a law firm: 541110 Offices of Lawyers.
+AP-250051,11/18/2025,Grainger,6110,MRO supplies,Fasteners,617.79,USD,332722,1,"Fasteners: 332722 Bolt, Nut, Screw, Rivet, and Washer Manufacturing (the goods, not Grainger's wholesale code)."
+AP-250021,07/02/2025,ResinTech Polymers,5020,Raw materials - plastics,Polypropylene resin,7903.13,USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-250135,10/08/2025,PG&E,6900,Utilities - electricity,Electricity - plant,20486.14,USD,energy_scope_1_2,,"Purchased electricity is Scope 2 (and category 3 from the bill), so this spend line is withdrawn."
+AP-250172,11/16/2025,Enterprise Rent-A-Car,6770,Travel - ground transportation,Car rental,609.01,USD,532111,6,"Rental cars: 532111 Passenger Car Rental, category 6."
+AP-250153,03/12/2025,J.B. Hunt Transport,5310,Freight out,Truckload outbound,6767.94,USD,484121,4,"Truckload: 484121 General Freight Trucking, Long-Distance, Truckload, category 4 (paid by the company)."
+AP-250136,10/07/2025,PG&E,6900,Utilities - electricity,Electricity - plant,"17,938.35",USD,energy_scope_1_2,,"Purchased electricity is Scope 2 (and category 3 from the bill), so this spend line is withdrawn."
+AP-250199,01/08/2025,Fidelity Investments,7020,Employee benefits - 401k,401(k) employer match,"14,959.55",USD,not_a_purchase,,"An employer retirement contribution is compensation, not a purchase."
+AP-250162,01/27/2025,Delta Air Lines,6750,Travel - airfare,Airfare - sales team,"1,321.26",USD,481111,6,"Flights: 481111 Scheduled Passenger Air Transportation, category 6."
+AP-250016,05/11/2025,Copperline Wire & Cable,5040,Components,Bare copper wire,5536.39,USD,331420,1,"Drawing copper wire: 331420 Copper Rolling, Drawing, Extruding, and Alloying."
+AP-250098,04/13/2025,ADP,6500,Payroll services,Payroll processing fee,"1,697.13",USD,541214,1,A fee for processing payroll is a purchased service: 541214 Payroll Services.
+AP-250112,02/05/2025,Freeman,6630,Marketing,Trade show registration,6000.00,USD,561920,1,Paying a trade show: 561920 Convention and Trade Show Organizers.
+AP-250092,09/07/2025,Comcast Business,6420,Telephone and internet,Internet service,631.16,USD,517311,1,Business internet over cable: 517311 Wired Telecommunications Carriers.
+AP-250141,01/11/2025,FedEx,5300,Freight in,Inbound parcels,1023.88,USD,492110,4,"Parcel delivery paid by the company: 492110 Couriers and Express Delivery Services, category 4."
+AP-250072,06/27/2025,Amazon Web Services,6400,Software and cloud,AWS cloud hosting,"3,197.67",USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-250003,05/18/2025,Pacific Steel Supply,5010,Raw materials - metals,Hot rolled steel coil,"33,331.01",USD,331110,1,Hot-rolled coil is made at steel mills: 331110 Iron and Steel Mills.
+AP-250011,05/15/2025,Northwest Aluminum,5010,Raw materials - metals,Aluminum extrusions 6061,"6,107.72",USD,331318,1,"Extruded aluminum shapes: 331318 Other Aluminum Rolling, Drawing, and Extruding."
+AP-250196,03/18/2025,Wells Fargo,7610,Bank fees,Monthly account service charge,168.50,USD,not_a_purchase,,Bank fees are not counted as a purchase (owner decision 8).
+AP-250031,06/21/2025,Midwest Fasteners,5040,Components,Hex bolts and nuts,719.94,USD,332722,1,"Bolts and nuts: 332722 Bolt, Nut, Screw, Rivet, and Washer Manufacturing."
+AP-250108,07/11/2025,Robert Half,6520,Temporary staffing,Temp accounting staff,3511.89,USD,561320,1,Temporary staff: 561320 Temporary Help Services.
+AP-250137,01/15/2025,SoCalGas,6910,Utilities - natural gas,Natural gas - plant,6470.17,USD,energy_scope_1_2,,"Natural gas burned on site is Scope 1 (and category 3 from the bill), so this spend line is withdrawn."
+AP-250012,03/04/2025,Northwest Aluminum,5010,Raw materials - metals,Aluminum extrusions 6061,"10,639.34",USD,331318,1,"Extruded aluminum shapes: 331318 Other Aluminum Rolling, Drawing, and Extruding."
+AP-250002,11/14/2025,Pacific Steel Supply,5010,Raw materials - metals,Hot rolled steel coil,36041.55,USD,331110,1,Hot-rolled coil is made at steel mills: 331110 Iron and Steel Mills.
+AP-250045,06/10/2025,Airgas,5060,Shop gases and welding,Argon cylinders,"1,463.56",USD,325120,1,Argon: 325120 Industrial Gas Manufacturing.
+AP-250014,11/10/2025,Northwest Aluminum,5010,Raw materials - metals,Aluminum ingot A356,"21,135.69",USD,331313,1,Primary aluminum ingot: 331313 Alumina Refining and Primary Aluminum Production.
+AP-250010,04/09/2025,Pacific Steel Supply,5010,Raw materials - metals,Steel tube 2in sch 40,9541.36,USD,331210,1,Tube made from purchased steel: 331210 Iron and Steel Pipe and Tube Manufacturing from Purchased Steel.
+AP-250055,11/14/2025,Grainger,6110,MRO supplies,Shop supplies,482.11,USD,332999,1,"Unspecified MRO consumables: the goods sector, not the distributor's margin-only code 423840; 332999 All Other Miscellaneous Fabricated Metal Product Manufacturing as the proxy."
+AP-250167,05/17/2025,Marriott,6760,Travel - lodging,Hotel,804.86,USD,721110,6,"Hotel stays: 721110 Hotels (except Casino Hotels) and Motels, category 6."
+AP-250070,02/16/2025,Amazon Web Services,6400,Software and cloud,AWS cloud hosting,2160.76,USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-250174,12/07/2025,Uber for Business,6770,Travel - ground transportation,Rideshare,132.38,USD,485310,6,"Ride-hailing is classed with taxis in NAICS 2017: 485310 Taxi Service, category 6."
+AP-250077,09/09/2025,Microsoft,6400,Software and cloud,Microsoft 365 licenses,1800.00,USD,511210,1,Software licences: 511210 Software Publishers.
+AP-250084,08/26/2025,Accenture,6620,Consulting,ERP implementation consulting,"24,108.15",USD,541512,1,Implementing an ERP system: 541512 Computer Systems Design Services.
+AP-250182,11/08/2025,Carrier Commercial,1600,Building improvements,Rooftop HVAC unit,42000.00,USD,333415,2,"A rooftop unit: 333415 Air-Conditioning and Warm Air Heating Equipment Manufacturing; capitalised, category 2."
+AP-250147,07/09/2025,UPS,5310,Freight out,Outbound parcels,2374.64,USD,492110,4,Outbound parcels paid by the company are category 4: 492110 Couriers and Express Delivery Services.
+AP-250078,05/28/2025,Salesforce,6400,Software and cloud,CRM subscription,"5,200.00",USD,511210,1,A software subscription (SaaS) from its publisher: 511210 Software Publishers.
+AP-250036,03/12/2025,Uline,5030,Packaging,Corrugated boxes,2397.17,USD,322211,1,Corrugated boxes: 322211 Corrugated and Solid Fiber Box Manufacturing.
+AP-250170,03/22/2025,Hilton,6760,Travel - lodging,Hotel stay,1191.99,USD,721110,6,"Hotel stays: 721110, category 6."
+AP-250146,04/25/2025,FedEx,5300,Freight in,,843.63,USD,492110,4,"Blank memo; FedEx under freight in is parcel delivery: 492110, category 4."
+AP-250138,10/05/2025,SoCalGas,6910,Utilities - natural gas,Natural gas - plant,3550.04,USD,energy_scope_1_2,,"Natural gas burned on site is Scope 1 (and category 3 from the bill), so this spend line is withdrawn."
+AP-250054,02/11/2025,Grainger,6110,MRO supplies,Shop supplies,"1,742.37",USD,332999,1,"Unspecified MRO consumables: the goods sector, not the distributor's margin-only code 423840; 332999 All Other Miscellaneous Fabricated Metal Product Manufacturing as the proxy."
+AP-250191,12/28/2025,,7500,Depreciation expense,Monthly depreciation,"21,000.00",USD,not_a_purchase,,Depreciation is a book entry; the asset was counted when bought (category 2).
+AP-250186,04/04/2025,ADP,7000,Salaries and wages,Payroll funding,187892.00,USD,not_a_purchase,,"Wages paid through the payroll provider are compensation, not a purchase."
+AP-250193,10/17/2025,,7510,Amortization expense,Software amortization,"4,000.00",USD,not_a_purchase,,"Amortisation is a book entry, not a purchase."
+AP-250183,09/01/2025,Steelcase,1700,Furniture and fixtures,Office desks,14000.00,USD,337214,2,"Steel office desks: 337214 Office Furniture (except Wood) Manufacturing; capitalised, category 2."
+AP-250178,12/10/2025,Corporate Caterers Inc,6310,Meals and entertainment,Catered lunch - all hands,1600.00,USD,722320,1,Catering: 722320 Caterers.
+AP-250119,05/25/2025,Marsh,6250,Insurance,Insurance brokerage fee,3500.00,USD,524210,1,A broker's fee: 524210 Insurance Agencies and Brokerages.
+AP-250083,05/13/2025,CDW,6410,Computer hardware - expensed,Docking stations,"1,367.29",USD,334118,1,Docking stations are computer peripherals: 334118.
+AP-250173,08/07/2025,Uber for Business,6770,Travel - ground transportation,Rideshare,113.40,USD,485310,6,"Ride-hailing is classed with taxis in NAICS 2017: 485310 Taxi Service, category 6."
+AP-250093,02/17/2025,Comcast Business,6420,Telephone and internet,Internet service,520.24,USD,517311,1,Business internet over cable: 517311 Wired Telecommunications Carriers.
+AP-250033,02/09/2025,Gates Industrial,5040,Components,Rubber V-belts,1876.23,USD,326220,1,V-belts: 326220 Rubber and Plastics Hoses and Belting Manufacturing.
+AP-250099,09/27/2025,ADP,6500,Payroll services,Payroll processing fee,1465.81,USD,541214,1,A fee for processing payroll is a purchased service: 541214 Payroll Services.
+AP-250105,04/07/2025,Deloitte,6610,Audit and accounting,Annual audit fee,"48,000.00",USD,541211,1,The financial audit: 541211 Offices of Certified Public Accountants.
+AP-250144,01/17/2025,FedEx,5300,Freight in,Inbound parcels,2237.98,USD,492110,4,"Parcel delivery paid by the company: 492110 Couriers and Express Delivery Services, category 4."
+AP-250096,08/19/2025,ADP,6500,Payroll services,Payroll processing fee,1531.21,USD,541214,1,A fee for processing payroll is a purchased service: 541214 Payroll Services.
+AP-250148,09/01/2025,UPS,5310,Freight out,Outbound parcels,914.19,USD,492110,4,Outbound parcels paid by the company are category 4: 492110 Couriers and Express Delivery Services.
+AP-250145,02/12/2025,FedEx,5300,Freight in,,1722.13,USD,492110,4,"Blank memo; FedEx under freight in is parcel delivery: 492110, category 4."
+AP-250117,09/23/2025,Blue Shield of California,6260,Employee health insurance,Group health premium,18041.56,USD,524114,1,Employee health cover bought from a carrier: 524114 Direct Health and Medical Insurance Carriers.
+AP-250197,03/08/2025,Wells Fargo,7610,Bank fees,Monthly account service charge,135.45,USD,not_a_purchase,,Bank fees are not counted as a purchase (owner decision 8).
+AP-250100,05/10/2025,ADP,6500,Payroll services,Payroll processing fee,1470.74,USD,541214,1,A fee for processing payroll is a purchased service: 541214 Payroll Services.
+AP-250120,12/10/2025,Cintas,6120,Uniforms and facility services,Uniform rental,724.56,USD,812332,1,Uniform rental and laundering: 812332 Industrial Launderers.
+AP-250088,11/26/2025,Verizon Wireless,6420,Telephone and internet,Mobile phone service,1221.86,USD,517312,1,Mobile service: 517312 Wireless Telecommunications Carriers (except Satellite).
+AP-250068,05/11/2025,Amazon Web Services,6400,Software and cloud,AWS cloud hosting,3043.14,USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-250200,05/24/2025,Fidelity Investments,7020,Employee benefits - 401k,401(k) employer match,13142.00,USD,not_a_purchase,,"An employer retirement contribution is compensation, not a purchase."
+AP-250032,01/26/2025,Midwest Fasteners,5040,Components,Hex bolts and nuts,731.54,USD,332722,1,"Bolts and nuts: 332722 Bolt, Nut, Screw, Rivet, and Washer Manufacturing."
+AP-250161,09/16/2025,Delta Air Lines,6750,Travel - airfare,Airfare - sales team,"2,436.47",USD,481111,6,"Flights: 481111 Scheduled Passenger Air Transportation, category 6."
+AP-250126,01/09/2025,Allied Universal,6140,Security,Security guard services,"4,489.08",USD,561612,1,Guards: 561612 Security Guards and Patrol Services.
+AP-250062,01/28/2025,Staples Business Advantage,6100,Office supplies,Copy paper,442.51,USD,322121,1,Copy paper is made at paper mills: 322121 Paper (except Newsprint) Mills.
+AP-250155,03/07/2025,Maersk,5300,Freight in,Ocean freight container,"6,500.00",USD,483111,4,"Ocean container freight: 483111 Deep Sea Freight Transportation, category 4."
+AP-250037,10/09/2025,Uline,5030,Packaging,Corrugated boxes,789.90,USD,322211,1,Corrugated boxes: 322211 Corrugated and Solid Fiber Box Manufacturing.
+AP-250022,11/18/2025,ResinTech Polymers,5020,Raw materials - plastics,Polypropylene resin,"6,518.83",USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-250142,05/14/2025,FedEx,5300,Freight in,Inbound parcels,1572.66,USD,492110,4,"Parcel delivery paid by the company: 492110 Couriers and Express Delivery Services, category 4."
+AP-250121,01/07/2025,Cintas,6120,Uniforms and facility services,Uniform rental,807.61,USD,812332,1,Uniform rental and laundering: 812332 Industrial Launderers.
+AP-250050,11/24/2025,Grainger,6110,MRO supplies,Fasteners,1238.64,USD,332722,1,"Fasteners: 332722 Bolt, Nut, Screw, Rivet, and Washer Manufacturing (the goods, not Grainger's wholesale code)."
+AP-250089,05/16/2025,Verizon Wireless,6420,Telephone and internet,Mobile phone service,"1,312.46",USD,517312,1,Mobile service: 517312 Wireless Telecommunications Carriers (except Satellite).
+AP-250180,09/16/2025,Toyota Material Handling,1500,Machinery and equipment,Electric forklift,"38,000.00",USD,333924,2,"Forklift: 333924 Industrial Truck, Tractor, Trailer, and Stacker Machinery Manufacturing; category 2."
+AP-250023,10/16/2025,ResinTech Polymers,5020,Raw materials - plastics,,3449.92,USD,325211,1,Blank memo; the account is plastics raw material from a resin supplier: 325211.
+AP-250132,08/13/2025,Prologis,6200,Rent,Warehouse rent,18000.00,USD,531120,1,Rent to a building lessor: 531120 Lessors of Nonresidential Buildings (check the overlap with Scope 1 and 2 or category 8).
+AP-250130,04/12/2025,Toyota Material Handling,6160,Repairs and maintenance,Forklift repair,1675.86,USD,811310,1,Repair of industrial equipment: 811310 Commercial and Industrial Machinery and Equipment Repair and Maintenance.
+AP-250009,11/28/2025,Pacific Steel Supply,5010,Raw materials - metals,Steel tube 2in sch 40,"3,536.28",USD,331210,1,Tube made from purchased steel: 331210 Iron and Steel Pipe and Tube Manufacturing from Purchased Steel.
+AP-250189,03/05/2025,Franchise Tax Board,7400,Income taxes,CA estimated tax payment,"25,000.00",USD,not_a_purchase,,Income tax is not a purchase.
+AP-250151,08/16/2025,XPO Logistics,5300,Freight in,LTL inbound,1679.39,USD,484122,4,"Less-than-truckload: 484122 General Freight Trucking, Long-Distance, Less Than Truckload, category 4."
+AP-250086,06/07/2025,Verizon Wireless,6420,Telephone and internet,Mobile phone service,"1,091.59",USD,517312,1,Mobile service: 517312 Wireless Telecommunications Carriers (except Satellite).
+AP-250140,08/07/2025,WEX Fleet,6730,Fuel - fleet vehicles,Diesel fuel,3523.65,USD,energy_scope_1_2,,"Fleet fuel is Scope 1 mobile combustion, so this spend line is withdrawn."
+AP-250024,02/08/2025,ResinTech Polymers,5020,Raw materials - plastics,,"14,820.03",USD,325211,1,Blank memo; the account is plastics raw material from a resin supplier: 325211.
+AP-250087,04/25/2025,Verizon Wireless,6420,Telephone and internet,Mobile phone service,1215.83,USD,517312,1,Mobile service: 517312 Wireless Telecommunications Carriers (except Satellite).
+AP-250188,05/07/2025,IRS - EFTPS,7010,Payroll taxes,Federal payroll tax deposit,"42,181.03",USD,not_a_purchase,,Payroll taxes are not a purchase.
+AP-250005,07/09/2025,Pacific Steel Supply,5010,Raw materials - metals,Hot rolled steel coil,"38,731.36",USD,331110,1,Hot-rolled coil is made at steel mills: 331110 Iron and Steel Mills.
+AP-250184,03/26/2025,AutoNation Ford,1800,Vehicles,Ford Transit van,"52,000.00",USD,336112,2,"A van: 336112 Light Truck and Utility Vehicle Manufacturing; capitalised, category 2."
+AP-250097,09/25/2025,ADP,6500,Payroll services,Payroll processing fee,1406.84,USD,541214,1,A fee for processing payroll is a purchased service: 541214 Payroll Services.
+AP-250056,09/15/2025,Fastenal,6110,MRO supplies,Cutting tools,1552.09,USD,333515,1,Cutting tools: 333515 Cutting Tool and Machine Tool Accessory Manufacturing.
+AP-250157,02/12/2025,Waste Management,6800,Waste disposal,Monthly trash hauling,"1,084.98",USD,562111,5,"Trash collection: 562111 Solid Waste Collection, category 5."
+AP-250118,11/27/2025,Blue Shield of California,6260,Employee health insurance,Group health premium,"20,416.72",USD,524114,1,Employee health cover bought from a carrier: 524114 Direct Health and Medical Insurance Carriers.
+AP-250047,08/15/2025,Airgas,5060,Shop gases and welding,MIG welder,"1,860.75",USD,333992,1,A welder: 333992 Welding and Soldering Equipment Manufacturing.
+AP-250094,11/13/2025,Comcast Business,6420,Telephone and internet,Internet service,547.71,USD,517311,1,Business internet over cable: 517311 Wired Telecommunications Carriers.
+AP-250073,11/09/2025,Amazon Web Services,6400,Software and cloud,AWS cloud hosting,2104.10,USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-250040,02/28/2025,Uline,5030,Packaging,Stretch wrap,506.84,USD,326112,1,Stretch film: 326112 Plastics Packaging Film and Sheet Manufacturing.
+AP-250059,12/14/2025,McMaster-Carr,6110,MRO supplies,Ball bearings,737.26,USD,332991,1,Bearings: 332991 Ball and Roller Bearing Manufacturing.
+AP-250122,09/14/2025,Cintas,6120,Uniforms and facility services,Uniform rental,704.81,USD,812332,1,Uniform rental and laundering: 812332 Industrial Launderers.
+AP-250134,11/26/2025,PG&E,6900,Utilities - electricity,Electricity - plant,19866.71,USD,energy_scope_1_2,,"Purchased electricity is Scope 2 (and category 3 from the bill), so this spend line is withdrawn."
+AP-250042,05/17/2025,Pallet Pros,5030,Packaging,Wooden pallets,2693.08,USD,321920,1,Pallets: 321920 Wood Container and Pallet Manufacturing.
+AP-250143,06/10/2025,FedEx,5300,Freight in,Inbound parcels,"1,765.00",USD,492110,4,"Parcel delivery paid by the company: 492110 Couriers and Express Delivery Services, category 4."
+AP-250124,03/25/2025,ABM Industries,6130,Janitorial,Office cleaning,2544.85,USD,561720,1,Cleaning: 561720 Janitorial Services.
+AP-250127,09/25/2025,Allied Universal,6140,Security,Security guard services,4302.37,USD,561612,1,Guards: 561612 Security Guards and Patrol Services.
+AP-250160,02/15/2025,Republic Services,6800,Waste disposal,Cardboard recycling pickup,458.61,USD,562111,5,"Collecting recyclables is in 562111 Solid Waste Collection, category 5."
+AP-250085,06/21/2025,Verizon Wireless,6420,Telephone and internet,Mobile phone service,917.82,USD,517312,1,Mobile service: 517312 Wireless Telecommunications Carriers (except Satellite).
+AP-250156,02/23/2025,Waste Management,6800,Waste disposal,Monthly trash hauling,934.80,USD,562111,5,"Trash collection: 562111 Solid Waste Collection, category 5."
+AP-250107,08/13/2025,Robert Half,6520,Temporary staffing,Temp accounting staff,3055.74,USD,561320,1,Temporary staff: 561320 Temporary Help Services.
+AP-250114,05/08/2025,ERM,6620,Consulting,Environmental compliance consulting,12000.00,USD,541620,1,Environmental consulting: 541620 Environmental Consulting Services.
+AP-250034,03/18/2025,Uline,5030,Packaging,Corrugated boxes,2817.78,USD,322211,1,Corrugated boxes: 322211 Corrugated and Solid Fiber Box Manufacturing.
+AP-250046,03/17/2025,Airgas,5060,Shop gases and welding,Argon cylinders,735.31,USD,325120,1,Argon: 325120 Industrial Gas Manufacturing.
+AP-250057,11/17/2025,Fastenal,6110,MRO supplies,Cutting tools,1720.25,USD,333515,1,Cutting tools: 333515 Cutting Tool and Machine Tool Accessory Manufacturing.
+AP-250166,05/04/2025,United Airlines,6750,Travel - airfare,Airfare,2069.26,USD,481111,6,"Flights: 481111, category 6."
+AP-250150,09/11/2025,XPO Logistics,5300,Freight in,LTL inbound,"4,615.83",USD,484122,4,"Less-than-truckload: 484122 General Freight Trucking, Long-Distance, Less Than Truckload, category 4."
+AP-250029,01/02/2025,Allied Electronics,5040,Components,Relays and contactors,2574.39,USD,335314,1,Relays and contactors: 335314 Relay and Industrial Control Manufacturing.
+AP-250168,07/18/2025,Marriott,6760,Travel - lodging,Hotel,185.64,USD,721110,6,"Hotel stays: 721110 Hotels (except Casino Hotels) and Motels, category 6."
+AP-250154,09/15/2025,Expeditors International,5320,Freight forwarding and customs,Import freight forwarding,2232.38,USD,488510,4,"Forwarding: 488510 Freight Transportation Arrangement, category 4."
+AP-250060,04/25/2025,Staples Business Advantage,6100,Office supplies,Toner cartridges,711.30,USD,339940,1,Toner cartridges are office supplies (except paper): 339940.
+AP-250082,12/18/2025,CDW,6410,Computer hardware - expensed,Monitors,1060.37,USD,334118,1,Monitors: 334118 Computer Terminal and Other Computer Peripheral Equipment Manufacturing.
+AP-250043,12/01/2025,Pallet Pros,5030,Packaging,Wooden pallets,"2,754.25",USD,321920,1,Pallets: 321920 Wood Container and Pallet Manufacturing.
+AP-250035,09/06/2025,Uline,5030,Packaging,Corrugated boxes,884.13,USD,322211,1,Corrugated boxes: 322211 Corrugated and Solid Fiber Box Manufacturing.
+AP-250109,05/04/2025,Korn Ferry,6530,Recruiting,Executive search fee,35000.00,USD,561312,1,Executive search: 561312 Executive Search Services.
+AP-250081,10/17/2025,Zoom Video Communications,6400,Software and cloud,Video conferencing subscription,450.00,USD,511210,1,A software subscription from its publisher: 511210 Software Publishers.
+AP-250053,04/12/2025,Grainger,6110,MRO supplies,Lubricants,239.19,USD,324191,1,Lubricants: 324191 Petroleum Lubricating Oil and Grease Manufacturing.
+AP-250074,02/08/2025,Amazon Web Services,6400,Software and cloud,AWS cloud hosting,"2,290.85",USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-250080,03/25/2025,Adobe,6400,Software and cloud,Creative Cloud subscription,650.00,USD,511210,1,A software subscription from its publisher: 511210 Software Publishers.
+AP-250026,10/21/2025,Bosch Rexroth Corp,5040,Components,Hydraulic valves,"11,931.38",USD,332912,1,Hydraulic (fluid power) valves: 332912 Fluid Power Valve and Hose Fitting Manufacturing.
+AP-250038,01/15/2025,Uline,5030,Packaging,Corrugated boxes,"4,121.37",USD,322211,1,Corrugated boxes: 322211 Corrugated and Solid Fiber Box Manufacturing.
+AP-250192,07/24/2025,,7500,Depreciation expense,Monthly depreciation,21000.00,USD,not_a_purchase,,Depreciation is a book entry; the asset was counted when bought (category 2).
+AP-250159,05/05/2025,Safety-Kleen,6810,Hazardous waste,Hazardous waste pickup,1610.50,USD,562112,5,"Hazardous waste collection: 562112, category 5."
+AP-250176,10/05/2025,Employee expense reports,6780,Travel - meals,Meals while traveling,628.14,USD,722511,1,"Meals are purchased services, not travel transport or lodging: 722511 Full-Service Restaurants, category 1."
+AP-250101,07/27/2025,Baker Lyman LLP,6600,Legal fees,Contract review,3429.35,USD,541110,1,Legal work by a law firm: 541110 Offices of Lawyers.
+AP-250091,02/15/2025,Comcast Business,6420,Telephone and internet,Internet service,575.71,USD,517311,1,Business internet over cable: 517311 Wired Telecommunications Carriers.
+AP-250064,10/11/2025,Staples Business Advantage,6100,Office supplies,Office supplies,403.37,USD,339940,1,General office supplies: 339940 Office Supplies (except Paper) Manufacturing.
+AP-250018,12/13/2025,ResinTech Polymers,5020,Raw materials - plastics,ABS resin pellets,15503.74,USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-250007,03/13/2025,Pacific Steel Supply,5010,Raw materials - metals,Cold rolled steel sheet,"11,365.29",USD,331221,1,Cold-rolling purchased steel into sheet is 331221 Rolled Steel Shape Manufacturing.
+AP-250185,04/02/2025,ADP,7000,Salaries and wages,Payroll funding,208360.82,USD,not_a_purchase,,"Wages paid through the payroll provider are compensation, not a purchase."
+AP-250071,03/22/2025,Amazon Web Services,6400,Software and cloud,AWS cloud hosting,2257.26,USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-250025,03/10/2025,Bosch Rexroth Corp,5040,Components,Hydraulic valves,"9,992.75",USD,332912,1,Hydraulic (fluid power) valves: 332912 Fluid Power Valve and Hose Fitting Manufacturing.
+AP-250133,03/19/2025,City of Fresno Utilities,6920,Utilities - water,Water and sewer,1241.51,USD,221310,1,Water supply: 221310 Water Supply and Irrigation Systems.
+AP-250001,09/24/2025,Pacific Steel Supply,5010,Raw materials - metals,Hot rolled steel coil,"18,587.42",USD,331110,1,Hot-rolled coil is made at steel mills: 331110 Iron and Steel Mills.
+AP-250194,02/12/2025,Wells Fargo,7600,Interest expense,Term loan interest,6606.84,USD,not_a_purchase,,"Interest is a financing cost, not a purchase."
+AP-250069,10/27/2025,Amazon Web Services,6400,Software and cloud,AWS cloud hosting,"2,129.64",USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-250008,11/28/2025,Pacific Steel Supply,5010,Raw materials - metals,Cold rolled steel sheet,"17,324.39",USD,331221,1,Cold-rolling purchased steel into sheet is 331221 Rolled Steel Shape Manufacturing.
+AP-250175,01/26/2025,Amtrak,6770,Travel - ground transportation,Rail ticket,244.45,USD,482111,6,"Intercity rail: 482111 Line-Haul Railroads (the only rail passenger code in v1.3), category 6."
+AP-250125,02/02/2025,ABM Industries,6130,Janitorial,Office cleaning,"3,084.03",USD,561720,1,Cleaning: 561720 Janitorial Services.
+AP-250041,05/10/2025,Uline,5030,Packaging,Packing tape,272.92,USD,322220,1,Pressure-sensitive packing tape from purchased materials is in 322220 Paper Bag and Coated and Treated Paper Manufacturing.
+AP-250116,12/11/2025,Travelers,6250,Insurance,General liability insurance premium,"24,000.00",USD,524126,1,Liability cover: 524126 Direct Property and Casualty Insurance Carriers.
+AP-250158,08/23/2025,Waste Management,6800,Waste disposal,Monthly trash hauling,"1,063.09",USD,562111,5,"Trash collection: 562111 Solid Waste Collection, category 5."
+AP-250017,08/16/2025,Copperline Wire & Cable,5040,Components,Insulated power cable,5859.39,USD,335929,1,Insulated energy cable: 335929 Other Communication and Energy Wire Manufacturing.
+AP-250058,06/07/2025,Fastenal,6110,MRO supplies,Grinding wheels,1176.01,USD,327910,1,Grinding wheels: 327910 Abrasive Product Manufacturing.
+AP-250063,09/10/2025,Staples Business Advantage,6100,Office supplies,Copy paper,620.55,USD,322121,1,Copy paper is made at paper mills: 322121 Paper (except Newsprint) Mills.
+AP-250129,06/04/2025,Comfort Systems USA,6160,Repairs and maintenance,HVAC maintenance contract,2433.75,USD,238220,1,"HVAC service by a mechanical contractor: 238220 Plumbing, Heating, and Air-Conditioning Contractors."
+AP-250065,12/13/2025,Staples Business Advantage,6100,Office supplies,Office supplies,248.48,USD,339940,1,General office supplies: 339940 Office Supplies (except Paper) Manufacturing.
+AP-250115,12/03/2025,SGS North America,6640,Testing and certification,Product safety testing,5608.38,USD,541380,1,Product testing by a lab: 541380 Testing Laboratories.
+AP-250152,03/14/2025,J.B. Hunt Transport,5310,Freight out,Truckload outbound,4941.73,USD,484121,4,"Truckload: 484121 General Freight Trucking, Long-Distance, Truckload, category 4 (paid by the company)."

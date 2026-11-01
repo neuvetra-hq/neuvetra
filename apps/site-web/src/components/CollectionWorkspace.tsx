@@ -1,15 +1,55 @@
-import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react"
-import { deriveCollectionQuantity, savedAgainstCurrentSetup, withCurrentSetupVersion, type CollectionActivity, type CollectionActivityKind, type CollectionInstrument, type CollectionPayload } from "../../../../packages/neuvetra-database/src/collection-contract"
+import { Fragment, useEffect, useRef, useState, type ReactNode, type RefObject } from "react"
+import { deriveCollectionQuantity, savedAgainstCurrentSetup, validateCollectionActivity, withCurrentSetupVersion, type CollectionActivity, type CollectionActivityKind, type CollectionInstrument, type CollectionPayload } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { instrumentEvidenceClaims, planCollectionCalculation, type InstrumentEvidenceClaims } from "../../../../packages/neuvetra-database/src/collection-engine-input"
+import { isScope3CollectionKind, isScope3CompletionKind, planScope3Calculation, scope3IsHotelMode, SCOPE3_LEGACY_KINDS, SCOPE3_AIR_BY_DISTANCE, SCOPE3_AIR_HAULS, SCOPE3_CABIN_CLASSES, SCOPE3_COLLECTION_UNITS, SCOPE3_COMMUTING_MODES, SCOPE3_HOTEL_MODE, SCOPE3_TRANSPORT_FACILITIES, SCOPE3_TRANSPORT_UNITS, SCOPE3_TRANSPORT_VEHICLES, SCOPE3_TRAVEL_MODES, SCOPE3_WASTE_MATERIALS, type BusinessTravelCollectionPayload, type Scope3CollectionKind, type Scope3CollectionVersion, type Scope3PlanOptions } from "../../../../packages/neuvetra-database/src/scope3-collection"
+import { SCOPE3_DISCLOSURE_TEXT, SCOPE3_RECORD_STATE_TEXT_I08 } from "../../../../packages/neuvetra-database/src/scope3-text"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
-import { reasonText } from "@/lib/plain-language"
-import { CollectionApiError, downloadCollectionEvidence, listCollectionActivities, listCollectionEvidence, listGridLossLineages, loadCollectionContext, loadCollectionVersion, lookupCollectionZip, saveCollectionActivity, saveGridLossLineage, uploadCollectionEvidence, type CollectionActivityRecord, type CollectionActivitySaveInput, type CollectionActivityVersion, type CollectionContext, type CollectionEvidenceMetadata, type CollectionZipLookup, type GridLossLineage } from "@/lib/collection-api"
+import { reasonText, SCOPE3_ACTIVITY_KINDS, unitLabel } from "@/lib/plain-language"
+import { CollectionApiError, downloadCollectionEvidence, listCollectionActivities, listCollectionEvidence, listGridLossLineages, loadCollectionContext, loadCollectionOverview, loadCollectionVersion, lookupCollectionZip, saveCollectionActivity, saveGridLossLineage, uploadCollectionEvidence, type CollectionActivityRecord, type CollectionActivitySaveInput, type CollectionActivityVersion, type CollectionContext, type CollectionEvidenceMetadata, type CollectionZipLookup, type GridLossLineage } from "@/lib/collection-api"
+import { loadCompanySetup } from "@/lib/company-setup-api"
+import { SCOPE3_FORM_KINDS, SCOPE3_FORM_SOURCE_LABELS, scope3BlankPayload, scope3FormGroups, scope3InitialQuantity, scope3Payload, type Scope3SpendLineChoice } from "@/lib/scope3-form-defaults"
+import { scope3DataQualityProblem, scope3PayloadLines, scope3PayloadProblem, scope3ReadinessOptions, scope3SetupFacts, scope3SpendLineChoices, scope3TokenOptions, type Scope3SetupFacts } from "@/lib/scope3-forms"
+// Round 2 lane E (ENG-13): the record forms, the data-quality editor and the spend import load on first use.
+import { DataQualityEditor, Scope3RecordForm, SpendImport } from "./scope3/lazy-forms"
+import { COPY_TEXT_R2E, egridSubregionLabel, formatTimeR2E, LOCATION_CONTROL_TEXT_R2E, LOCATION_INCLUSION_TEXT_R2E, SAVE_TEXT_R2E, SAVED_LIST_TEXT_R2E, SCOPE3_TRANSPORT_ANSWER_TEXT_R2E, SCOPE3_TRANSPORT_VEHICLE_TEXT_R2E, SCOPE3_WASTE_MATERIAL_TEXT_R2E, SCOPE3_WASTE_TREATMENT_TEXT_R2E, unitsHintR2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
+import { focusRecordEditor } from "@/lib/scope3-fix-target"
+// Round 3 lane C (PR-3): the saved-records list is filtered and paged, links to the spend import, and a failed load says so.
+import { ACTIVITY_LIST_TEXT_R3C } from "@/lib/scope3-text-r3c"
+import { SPEND_IMPORT_ANCHOR } from "@/lib/spend-import-target"
+// Round 2c integration: the amount label of the 0029 Scope 3 forms at schema 30 and the estimate-basis message (new texts).
+import { SAVE_TEXT_R2C, scope3AmountLabelR2C } from "@/lib/scope3-text-r2c"
+import { scope3GroupedAmount, scope3PreSaveProblems, scope3SavedRecordWhen, scope3WasteTreatmentsFor } from "@/lib/scope3-display-r3d"
+import { SCOPE3_PRESAVE_TEXT_R3D } from "@/lib/scope3-text-r3d"
 
 const kinds: readonly [CollectionActivityKind, string][] = [
   ["natural_gas", "Natural gas"], ["distillate_no2", "Diesel or fuel-oil generator"],
   ["vehicle", "Road vehicle or vehicle group"], ["fugitive", "Refrigerants and fire suppression"],
   ["electricity", "Purchased electricity"],
 ]
+/** Scope 3 package 2: offered only when the server stores Scope 3 activity (schema 29). */
+const scope3Kinds: readonly [CollectionActivityKind, string][] = SCOPE3_ACTIVITY_KINDS.map(item => [item.kind, `${item.label} (Scope 3)`])
+const allKinds = [...kinds, ...scope3Kinds]
+/**
+ * I-02: the Scope 3 kinds this screen has a form for. I-08: every Scope 3 kind (the 0029 kinds here, the 0030 kinds in
+ * components/scope3). A kind is offered only when it has a form here and the server lists it as stored by its database
+ * (the per-kind capability: the four 0029 kinds at schema 29, every kind at schema 30), grouped by category.
+ */
+const FORM_KINDS: ReadonlySet<string> = SCOPE3_FORM_KINDS
+const kindName = (kind: string) => allKinds.find(([id]) => id === kind)?.[1] ?? kind
+const titleCase = (token: string) => token ? token.charAt(0).toUpperCase() + token.slice(1).replace(/_/g, " ") : token
+const MODE_LABELS: Record<string, string> = {
+  air: "Air, by flight distance", air_short_haul: "Air, short haul (declared)", air_medium_haul: "Air, medium haul (declared)", air_long_haul: "Air, long haul (declared)",
+  passenger_car: "Car", light_duty_truck: "Light truck, van or SUV", motorcycle: "Motorcycle", bus: "Bus", commuter_rail: "Commuter rail", transit_rail: "Subway or light rail",
+  intercity_rail_northeast_corridor: "Intercity rail, Northeast Corridor", intercity_rail_other_routes: "Intercity rail, other routes", intercity_rail_national_average: "Intercity rail, route not known",
+}
+const VEHICLE_LABELS: Record<string, string> = SCOPE3_TRANSPORT_VEHICLE_TEXT_R2E
+/** The units the Scope 3 engine takes for a travel or commuting mode. */
+function travelUnits(mode: string): readonly string[] {
+  if (mode === SCOPE3_AIR_BY_DISTANCE) return ["mile", "km"]
+  if ((SCOPE3_AIR_HAULS as readonly string[]).includes(mode)) return ["passenger-mile", "passenger-km"]
+  const basis = (SCOPE3_TRAVEL_MODES as Record<string, string>)[mode]
+  return basis ? [`${basis}-mile`, `${basis}-km`] : []
+}
 const gases = ["HFC-134a", "HFC-227ea", "R-404A", "R-407C", "R-410A", "R-507A", "R-22", "R-12", "R-502"] as const
 const technologies = ["wind", "solar_photovoltaic", "hydro", "nuclear", "geothermal", "natural_gas", "coal", "oil", "biomass", "biogas", "landfill_gas", "mixed", "unknown"] as const
 const instrumentTypes: readonly [CollectionInstrument["type"], string][] = [["energy_attribute_certificate", "Energy attribute certificate"], ["power_purchase_agreement", "Power purchase agreement"], ["green_tariff", "Green tariff"], ["supplier_specific_rate", "Supplier-specific rate"]]
@@ -22,7 +62,21 @@ const vehicleTypes = [...vehicleTypesByFuel.gasoline, ...vehicleTypesByFuel.dies
 const supportedUnits: Record<CollectionActivityKind, readonly string[]> = {
   natural_gas: ["therm", "MMBtu", "scf", "ccf", "mcf"],
   distillate_no2: ["US_gallon"], vehicle: ["US_gallon"], fugitive: ["kg", "lb"], electricity: ["kWh", "MWh"],
+  ...SCOPE3_COLLECTION_UNITS,
+  // I-02: 0030 lets business travel normalize room-night (the hotel form of I-08 sends it to a schema-30 server). This
+  // form keeps 0029's units, so a hotel written under "Something else" is saved as written at any schema, never refused.
+  business_travel: SCOPE3_COLLECTION_UNITS.business_travel.filter(unit => unit !== "room-night"),
 }
+/**
+ * I-08: the units the screen accepts for a record. A hotel stay (mode "hotel_stay", or a hotel written under "Something
+ * else", A14) is counted in room-nights, which the adapter takes as written or normalized; the screen no longer calls them
+ * unsupported. Normalizing room-nights needs schema 30 (`completion`), so only then is it normalized on save.
+ */
+function screenUnits(activity: Pick<CollectionActivity, "kind" | "payload">): readonly string[] {
+  if (activity.kind === "business_travel" && "passengerSegments" in activity.payload && scope3IsHotelMode(activity.payload.mode)) return ["room-night"]
+  return supportedUnits[activity.kind]
+}
+const normalizableUnits = (kind: CollectionActivityKind, completion: boolean): readonly string[] => kind === "business_travel" && completion ? SCOPE3_COLLECTION_UNITS.business_travel : supportedUnits[kind]
 const DECIMAL = /^(0|[1-9][0-9]{0,11})(\.[0-9]{1,3})?$/
 const THOUSANDS_DECIMAL = /^(?:[1-9][0-9]{0,2})(?:,[0-9]{3})+(?:\.[0-9]{1,3})?$/
 const VOLUMETRIC_GAS_UNITS = new Set(["scf", "ccf", "mcf"])
@@ -95,8 +149,10 @@ function scaledDecimal(value: string): bigint | null {
 }
 
 /** `waitingOnEvidence` (BF2): only waiting for a file's quarantine review, nothing to fix. Since A-03 the market-based
- *  result is held meanwhile (shown as partial); the location-based result still calculates. */
-export type CollectionReadinessFinding = { status: "input_needed" | "partial" | "review_required" | "excluded" | "memo_only" | "withdrawn"; reason: string; waitingOnEvidence?: true }
+ *  result is held meanwhile (shown as partial); the location-based result still calculates.
+ *  I-08: `method_pending`: a Scope 3 record whose method is designed but whose factor source isn't loaded yet (DESIGN A6);
+ *  it is held, but nothing on the record needs to change, so it is its own state ("Waiting for a factor source"). */
+export type CollectionReadinessFinding = { status: "input_needed" | "partial" | "review_required" | "excluded" | "memo_only" | "withdrawn" | "method_pending"; reason: string; waitingOnEvidence?: true }
 export function locationReadinessFindings(activity: CollectionActivity, context: CollectionContext | null): CollectionReadinessFinding[] {
   if (!context || !activity.locationId) return []
   const location = context.locations.find(item => item.id === activity.locationId)
@@ -121,7 +177,7 @@ export function collectionReadinessFindings(activity: CollectionActivity, eviden
   // Tank-level fuel is checked field by field below; its derived quantity is blank when the balance is negative.
   const tankLevels = activity.kind === "distillate_no2" && "consumption" in activity.payload && activity.payload.consumption.basis === "purchases_with_tank_levels"
   if (activity.kind !== "fugitive" && !tankLevels && quantityReason) add("input_needed", quantityReason)
-  if (activity.kind !== "fugitive" && !supportedUnits[activity.kind].includes(activity.quantity.originalUnit)) add("input_needed", `Unit “${activity.quantity.originalUnit || "blank"}” is not supported for this activity.`)
+  if (activity.kind !== "fugitive" && !screenUnits(activity).includes(activity.quantity.originalUnit)) add("input_needed", `Unit “${activity.quantity.originalUnit || "blank"}” is not supported for this activity.`)
   const p = activity.payload
   if (activity.kind === "natural_gas" && "heatContent" in p && VOLUMETRIC_GAS_UNITS.has(activity.quantity.originalUnit)) {
     // Heat content is a conversion factor: up to 6 decimal places (0.1037 MMBtu per ccf is typical), never zero, as the engine takes it.
@@ -248,23 +304,37 @@ const DRAFT_ID = "00000000-0000-4000-8000-000000000000"
  * - adapter holds: every adapter reason is shown (in the screen's words where it has them), at least one finding blocks,
  *   and nothing is called partly calculated (N7: a held record isn't partly calculated);
  * - adapter calculates: an instrument problem only holds the market-based result (engine v3), so it is shown as partial;
- *   a pending or shared instrument file holds market-based only; a rejected record-level file stays a review finding.
+ *   an instrument file waiting for quarantine review holds only the market-based result (A-03), so it is shown as
+ *   partial and marked waitingOnEvidence (nothing to fix; BF2); a rejected record-level file doesn't stop the engines,
+ *   so it is shown for review. A certificate file that also supports another claim (A-01, `claims`) holds the
+ *   market-based result the same way, with the adapter's reason.
  *   Holds only the engines decide (purchases-only fuel, refrigerant answers, a negative balance) stay as the screen says.
  * Without a company context the screen's own rules are returned unchanged.
+ * I-08: a Scope 3 hold whose status is `method_pending` is shown as its own state ("Waiting for a factor source"), not as
+ * input needed: nothing on the record needs to change (an optional activity, such as a hotel stay, also says it is listed
+ * and not counted). `scope3` passes the plan options the results route uses (reporting period, consolidation approach,
+ * distance commuting periods, supersession keyed by record ID) and the record's own ID, so the screen shows the holds
+ * Results will apply; without it a Scope 3 record is planned on its own, as before.
  */
-export function recordReadiness(activity: CollectionActivity, context: CollectionContext | null, evidence: CollectionEvidenceMetadata[] = [], claims?: InstrumentEvidenceClaims): CollectionReadinessFinding[] {
+export function recordReadiness(activity: CollectionActivity, context: CollectionContext | null, evidence: CollectionEvidenceMetadata[] = [], claims?: InstrumentEvidenceClaims, scope3?: { options: Scope3PlanOptions; recordId: string }): CollectionReadinessFinding[] {
   const screen = [...collectionReadinessFindings(activity, evidence), ...locationReadinessFindings(activity, context)]
   if (!context) return screen
-  let plan: ReturnType<typeof planCollectionCalculation>
+  let plan: Pick<ReturnType<typeof planCollectionCalculation>, "action" | "reasons" | "notes"> & { status: ReturnType<typeof planCollectionCalculation>["status"] | "method_pending"; optional?: true }
   try {
-    plan = planCollectionCalculation({ id: DRAFT_ID, recordId: DRAFT_ID, companyId: context.companyId, revision: 0, previousVersionId: null, correctionReason: null, activity, payloadSha256: "0".repeat(64), createdBy: DRAFT_ID, createdAt: "1970-01-01T00:00:00.000Z" }, context, evidence, claims)
+    const version = { id: DRAFT_ID, recordId: DRAFT_ID, companyId: context.companyId, revision: 0, previousVersionId: null, correctionReason: null, activity, payloadSha256: "0".repeat(64), createdBy: DRAFT_ID, createdAt: "1970-01-01T00:00:00.000Z" }
+    // The supersession map is keyed by record ID, and this version stands in for the record under DRAFT_ID.
+    const superseding = scope3?.options.supersession?.get(scope3.recordId)
+    const options: Scope3PlanOptions = scope3 ? { ...scope3.options, supersession: new Map(superseding === undefined ? [] : [[DRAFT_ID, superseding]]) } : {}
+    // Scope 3 package 2: Scope 3 records are planned by the Scope 3 adapter, exactly as Results plans them.
+    plan = isScope3CollectionKind(activity.kind) ? planScope3Calculation(version as unknown as Scope3CollectionVersion, context, evidence, options) : planCollectionCalculation(version, context, evidence, claims)
   } catch { return screen }
   const unique = (items: CollectionReadinessFinding[]) => items.filter((item, index) => items.findIndex(other => other.status === item.status && other.reason === item.reason) === index)
   if (plan.action === "hold") {
     const status = (plan.status ?? "input_needed") as CollectionReadinessFinding["status"]
     const kept = screen.filter(finding => finding.status !== "partial")
     const explained = (code: string) => { const pattern = SCREEN_EXPLAINS[code]; return !!pattern && kept.some(finding => BLOCKING.has(finding.status) && pattern.test(finding.reason)) }
-    return unique([...kept, ...plan.reasons.filter(code => !explained(code)).map(code => ({ status, reason: reasonText(code) }))])
+    const optional = plan.status === "method_pending" && plan.optional ? [{ status, reason: SCOPE3_DISCLOSURE_TEXT.optional_activity_not_yet_quantified! }] : []
+    return unique([...kept, ...plan.reasons.filter(code => !explained(code)).map(code => ({ status, reason: reasonText(code) })), ...optional])
   }
   const shared = (plan.notes ?? []).filter(note => /^instrument_\d+_evidence_shared$/.test(note)).map((note): CollectionReadinessFinding => ({ status: "partial", reason: `Market-based result held — ${reasonText(note)}` }))
   return unique([...screen.map((finding): CollectionReadinessFinding => {
@@ -305,27 +375,68 @@ export function isDefiniteUploadFailure(cause: unknown): cause is CollectionApiE
   return cause instanceof CollectionApiError && ([401, 403, 413, 415].includes(cause.status) || cause.status === 422 && cause.code === "file_type_mismatch")
 }
 
-function initial(kind: CollectionActivityKind): CollectionDraft {
+/** The units offered for a Scope 3 draft: the engine's own units for what has been chosen so far. I-08: a hotel stay at schema 30 is in room-nights. */
+function scope3UnitChoices(draft: CollectionDraft, completion: boolean): readonly string[] {
+  if (draft.kind === "transport") return draft.payload.loadBasis ? SCOPE3_TRANSPORT_UNITS[draft.payload.loadBasis] : SCOPE3_COLLECTION_UNITS.transport
+  if (draft.kind === "waste") return SCOPE3_COLLECTION_UNITS.waste
+  if (draft.kind === "business_travel" && completion && scope3IsHotelMode(draft.payload.mode)) return ["room-night"]
+  if (draft.kind === "business_travel") return travelUnits(draft.payload.mode).length ? travelUnits(draft.payload.mode) : supportedUnits.business_travel
+  if (draft.kind === "employee_commuting") return travelUnits(draft.payload.mode).length ? travelUnits(draft.payload.mode) : SCOPE3_COLLECTION_UNITS.employee_commuting
+  return []
+}
+
+/** A new record of the kind. I-08: the 0030 kinds start from their empty payload; business travel at schema 30 uses the v2 payload (cabin class, hotel country). */
+function initial(kind: CollectionActivityKind, completion = false): CollectionDraft {
+  if (isScope3CompletionKind(kind)) return { kind, locationId: "", setupVersionId: "", sourceId: "", state: "active", withdrawalReason: null, quantity: scope3InitialQuantity(kind), quality: "unknown", estimateBasis: null,
+    period: { start: "2025-01-01", endExclusive: "2026-01-01" }, reference: "", notes: "", evidenceIds: [], payload: scope3BlankPayload(kind) } as CollectionDraft
   const unit = supportedUnits[kind][0]!
   const payload: CollectionPayload = kind === "natural_gas" ? { heatContent: null }
     : kind === "distillate_no2" ? { consumption: { basis: "measured", gallons: "" }, statedHhvMmbtuPerGallon: null }
     : kind === "vehicle" ? { vehicleGroupId: "", fuel: "", vehicleType: "", modelYear: 2025, gallons: "", vehicleCount: null, miles: null, fuelEconomy: null }
     : kind === "fugitive" ? { gas: "HFC-134a", unit: "kg", terms: { PN: "", CN: "", PS: "", CD: "", RD: "" }, insideBoundary: null, maintainsRefrigerantStock: null, retrofitInPeriod: null, contractorRecordsComplete: false, eventChronologyComplete: false }
+    : kind === "transport" ? { category: 4, vehicle: "", loadBasis: null, thirdPartyFacilities: "unknown" }
+    : kind === "waste" ? { category: 5, material: "", treatment: "" }
+    : kind === "business_travel" ? (completion ? { mode: "", passengerSegments: null, haulBasis: null, cabinClass: null, hotelCountry: null } : { mode: "", passengerSegments: null, haulBasis: null })
+    : kind === "employee_commuting" ? { mode: "" }
     : { meterOrAccountNumber: "", utilityName: "", site: "", zip: "", subregion: "", utilityEiaId: null, instruments: [] }
   return { kind, locationId: "", setupVersionId: "", sourceId: "", state: "active", withdrawalReason: null, quantity: { originalValue: "", originalUnit: unit, normalizedValue: null, normalizedUnit: null }, quality: "unknown", estimateBasis: null, period: { start: "2025-01-01", endExclusive: "2026-01-01" }, reference: "", notes: "", evidenceIds: [], payload } as CollectionDraft
 }
 
-function Field({ label, value, onChange, hint, type = "text", required = false }: { label: string; value: string; onChange: (value: string) => void; hint?: string; type?: string; required?: boolean }) {
-  return <label className="setup-field"><span>{label}</span><input type={type} required={required} value={value} onChange={event => onChange(event.target.value)} />{hint && <small>{hint}</small>}</label>
+// Round 3 lane D (PR-12): a field named by a problem that keeps Save off is marked invalid and described by that list.
+const invalidProps = (invalid: boolean) => invalid ? { "aria-invalid": true, "aria-describedby": "collection-save-problems" } as const : {}
+function Field({ label, value, onChange, hint, type = "text", required = false, invalid = false }: { label: string; value: string; onChange: (value: string) => void; hint?: string; type?: string; required?: boolean; invalid?: boolean }) {
+  return <label className="setup-field"><span>{label}</span><input type={type} required={required} value={value} onChange={event => onChange(event.target.value)} {...invalidProps(invalid)} />{hint && <small>{hint}</small>}</label>
 }
-function Select({ label, value, options, onChange, hint }: { label: string; value: string; options: readonly (readonly [string, string])[]; onChange: (value: string) => void; hint?: string }) {
-  return <label className="setup-field"><span>{label}</span><select value={value} onChange={event => onChange(event.target.value)}>{options.map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select>{hint && <small>{hint}</small>}</label>
+function Select({ label, value, options, onChange, hint, invalid = false }: { label: string; value: string; options: readonly (readonly [string, string])[]; onChange: (value: string) => void; hint?: string; invalid?: boolean }) {
+  return <label className="setup-field"><span>{label}</span><select value={value} onChange={event => onChange(event.target.value)} {...invalidProps(invalid)}>{options.map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select>{hint && <small>{hint}</small>}</label>
+}
+/**
+ * Scope 3 package 2 (beta client run, 26 October 2026): a list of supported choices plus "Something else". An activity
+ * the beta can't calculate (a hotel stay, an unlisted material or unit) is still recorded: it is saved with the client's
+ * own words, shown as needing input with the reason, and never counted as zero. Up to 80 characters, as the database
+ * stores it.
+ */
+const OTHER = "__other__"
+function ChoiceOrOther({ label, value, choices, placeholder, otherLabel, describeLabel, onChange, hint, invalid = false }: { label: string; value: string; choices: readonly (readonly [string, string])[]; placeholder: string; otherLabel: string; describeLabel: string; onChange: (value: string) => void; hint?: string; invalid?: boolean }) {
+  const known = choices.some(([id]) => id === value)
+  const selected = value === "" ? "" : known ? value : OTHER
+  return <>
+    <Select label={label} value={selected} options={[["", placeholder] as const, ...choices, [OTHER, otherLabel] as const]} onChange={next => onChange(next === OTHER ? (known || value === "" ? "other" : value) : next)} hint={hint} invalid={invalid} />
+    {selected === OTHER && <Field label={describeLabel} value={value} onChange={next => onChange(next.slice(0, 80) || "other")} hint="Saved and shown as needing input. It isn’t calculated in this beta and is never counted as zero." />}
+  </>
 }
 function Tri({ label, value, onChange }: { label: string; value: boolean | null; onChange: (value: boolean | null) => void }) {
   return <Select label={label} value={value === null ? "unknown" : value ? "yes" : "no"} options={[["unknown", "I don't know yet"], ["yes", "Yes"], ["no", "No"]]} onChange={item => onChange(item === "unknown" ? null : item === "yes")} />
 }
 const answer = (value: boolean | null) => value === null ? "Unknown" : value ? "Yes" : "No"
-const readinessLabels: Record<CollectionReadinessFinding["status"], string> = { input_needed: "Input needed", partial: "Partial calculation", review_required: "Review required", excluded: "Excluded", memo_only: "Reported separately", withdrawn: "Withdrawn" }
+/** Air by distance or a declared air haul: the modes whose cabin class the v2 business travel payload records. */
+const isAirMode = (mode: string) => mode === SCOPE3_AIR_BY_DISTANCE || (SCOPE3_AIR_HAULS as readonly string[]).includes(mode)
+/** I-08: business travel's v2 payload (schema 30) has both cabin class and hotel country, or neither (0030's rule). */
+function withTravelV2(payload: BusinessTravelCollectionPayload) {
+  if (!("cabinClass" in payload)) payload.cabinClass = null
+  if (!("hotelCountry" in payload)) payload.hotelCountry = null
+}
+const readinessLabels: Record<CollectionReadinessFinding["status"], string> = { input_needed: "Input needed", partial: "Partial calculation", review_required: "Review required", excluded: "Excluded", memo_only: "Reported separately", withdrawn: "Withdrawn", method_pending: SCOPE3_RECORD_STATE_TEXT_I08.method_pending }
 function ReadinessPanel({ findings }: { findings: CollectionReadinessFinding[] }) {
   if (!findings.length) return null
   const statuses = [...new Set(findings.map(finding => finding.status))]
@@ -337,12 +448,12 @@ function HistoricalActivityDetail({ version, evidence }: { version: CollectionAc
   const findings = collectionReadinessFindings(activity, evidence)
   return <div className="setup-history-detail">
     <h4>Saved version {version.revision}</h4>
-    <p>Saved {new Date(version.createdAt).toLocaleString()}. Read only. {version.correctionReason || "Initial entry"}</p>
+    <p>Saved {formatTimeR2E(version.createdAt)}. Read only. {version.correctionReason || "Initial entry"}</p>
     <dl className="collection-history-fields">
-      <dt>Activity</dt><dd>{kinds.find(([kind]) => kind === activity.kind)?.[1]}</dd>
+      <dt>Activity</dt><dd>{kindName(activity.kind)}</dd>
       <dt>Status</dt><dd>{activity.state === "withdrawn" ? `Withdrawn · ${activity.withdrawalReason || "reason unavailable"}` : "Active"}</dd>
       <dt>Period</dt><dd>{activity.period.start} to {inclusivePeriodEnd(activity.period.endExclusive)} (last day covered)</dd>
-      <dt>{activity.kind === "fugitive" ? "Derived net refrigerant release" : "Original quantity"}</dt><dd>{activity.quantity.originalValue || "Unknown"} {activity.quantity.originalUnit}</dd>
+      <dt>{activity.kind === "fugitive" ? "Derived net refrigerant release" : "Original quantity"}</dt><dd>{activity.quantity.originalValue || "Unknown"} {unitLabel(activity.quantity.originalUnit)}</dd>
       <dt>Normalized quantity</dt><dd>{activity.quantity.normalizedValue === null ? "Not calculable yet" : `${activity.quantity.normalizedValue} ${activity.quantity.normalizedUnit}`}</dd>
       <dt>Quality</dt><dd>{activity.quality}{activity.estimateBasis ? ` · ${activity.estimateBasis}` : ""}</dd>
       <dt>Reference</dt><dd>{activity.reference || "None entered"}</dd>
@@ -353,13 +464,19 @@ function HistoricalActivityDetail({ version, evidence }: { version: CollectionAc
       {activity.kind === "distillate_no2" && "consumption" in p && <><dt>Generator basis</dt><dd>{p.consumption.basis.replace(/_/g, " ")}</dd><dt>Fuel amounts</dt><dd>{p.consumption.basis === "measured" ? `${p.consumption.gallons || "unknown"} gallons used` : `${p.consumption.purchasedGallons || "unknown"} gallons purchased${p.consumption.basis === "purchases_with_tank_levels" ? `; opening ${p.consumption.openingGallons || "unknown"}; closing ${p.consumption.closingGallons || "unknown"}` : ""}`}</dd><dt>Stated heating value</dt><dd>{p.statedHhvMmbtuPerGallon || "None"}</dd></>}
       {activity.kind === "vehicle" && "vehicleGroupId" in p && <><dt>Vehicle or group ID</dt><dd>{p.vehicleGroupId}</dd><dt>Fuel and vehicle</dt><dd>{p.fuel}; {p.vehicleType}; model year {p.modelYear}; {p.gallons || "unknown"} US gallons; {p.vehicleCount ?? "unknown"} vehicles</dd><dt>Distance</dt><dd>{p.miles ? `${p.miles.value || "unknown"} miles (${p.miles.basis})` : "No miles recorded"}</dd><dt>Fuel economy</dt><dd>{p.fuelEconomy ? `${p.fuelEconomy.mpg || "unknown"} mpg (${p.fuelEconomy.source})` : "No MPG recorded"}</dd></>}
       {activity.kind === "fugitive" && "terms" in p && <><dt>Gas and unit</dt><dd>{p.gas}, {p.unit}</dd><dt>Five material-balance terms</dt><dd>PN {p.terms.PN || "unknown"}; CN {p.terms.CN || "unknown"}; PS {p.terms.PS || "unknown"}; CD {p.terms.CD || "unknown"}; RD {p.terms.RD || "unknown"}</dd><dt>Boundary</dt><dd>{answer(p.insideBoundary)}</dd><dt>Refrigerant stock tracked</dt><dd>{answer(p.maintainsRefrigerantStock)}</dd><dt>Retrofit during period</dt><dd>{answer(p.retrofitInPeriod)}</dd><dt>Contractor records complete</dt><dd>{answer(p.contractorRecordsComplete)}</dd><dt>Event chronology complete</dt><dd>{answer(p.eventChronologyComplete)}</dd></>}
-      {activity.kind === "electricity" && "instruments" in p && <><dt>Site and meter</dt><dd>{p.site}; {p.meterOrAccountNumber}; utility {p.utilityName}</dd><dt>Grid location</dt><dd>ZIP {p.zip}; subregion {p.subregion || "unresolved"}; utility EIA ID {p.utilityEiaId || "unresolved"}</dd><dt>Instruments</dt><dd>{p.instruments.length ? <ol>{p.instruments.map((instrument, index) => <li key={index}>{instrument.type.replace(/_/g, " ")}; {instrument.mwh || "unknown"} MWh; vintage {instrument.vintageYear}; {instrument.generationTechnology.replace(/_/g, " ")}; quality criteria {answer(instrument.qualityCriteriaMet)}; evidence {instrument.evidenceReference ? evidence.find(item => item.id === instrument.evidenceReference)?.originalName ?? instrument.evidenceReference : "missing"}; rate {instrument.rateLbPerMwh ? `CO2 ${instrument.rateLbPerMwh.co2 || "unknown"}, CH4 ${instrument.rateLbPerMwh.ch4 ?? "unknown"}, N2O ${instrument.rateLbPerMwh.n2o ?? "unknown"} lb/MWh` : "missing"}</li>)}</ol> : "None"}</dd></>}
+      {activity.kind === "transport" && "loadBasis" in p && <><dt>Freight</dt><dd>Category {p.category}; {VEHICLE_LABELS[p.vehicle] ?? (p.vehicle || "vehicle not chosen")}; {p.loadBasis ? SCOPE3_TRANSPORT_ANSWER_TEXT_R2E[p.loadBasis] ?? p.loadBasis : "load basis unknown"}; third-party facilities {SCOPE3_TRANSPORT_ANSWER_TEXT_R2E[p.thirdPartyFacilities] ?? p.thirdPartyFacilities}</dd></>}
+      {activity.kind === "waste" && "treatment" in p && <><dt>Waste</dt><dd>Category {p.category}; {SCOPE3_WASTE_MATERIAL_TEXT_R2E[p.material] ?? (p.material || "material not chosen")}; {SCOPE3_WASTE_TREATMENT_TEXT_R2E[p.treatment] ?? (p.treatment || "treatment not chosen")}</dd></>}
+      {activity.kind === "business_travel" && "passengerSegments" in p && <><dt>Travel</dt><dd>{MODE_LABELS[p.mode] ?? (p.mode || "mode not chosen")}{p.passengerSegments !== null ? `; ${p.passengerSegments} passenger segments` : ""}{p.haulBasis ? `; haul basis: ${p.haulBasis}` : ""}{p.cabinClass ? `; cabin class ${p.cabinClass.replace(/_/g, " ")}` : ""}{p.hotelCountry ? `; hotel country ${p.hotelCountry}` : ""}</dd></>}
+      {isScope3CompletionKind(activity.kind) && scope3PayloadLines(p).filter(([label]) => label !== "Data quality").map(([label, value]) => <Fragment key={label}><dt>{label}</dt><dd>{value}</dd></Fragment>)}
+      {isScope3CollectionKind(activity.kind) && "dataQuality" in p && p.dataQuality && <><dt>Data quality set by the company</dt><dd>{Object.entries(p.dataQuality.indicators).filter(([, rating]) => rating !== null).map(([name, rating]) => `${name} ${rating!.replace(/_/g, " ")}`).join("; ") || "No ratings"}{p.dataQuality.activityDataOrigin ? `; origin ${p.dataQuality.activityDataOrigin.replace(/_/g, " ")}` : ""}{p.dataQuality.basis ? `; ${p.dataQuality.basis}` : ""}</dd></>}
+      {activity.kind === "employee_commuting" && "mode" in p && !("passengerSegments" in p) && <><dt>Commuting</dt><dd>{MODE_LABELS[p.mode] ?? (p.mode || "mode not chosen")}</dd></>}
+      {activity.kind === "electricity" && "instruments" in p && <><dt>Site and meter</dt><dd>{p.site}; {p.meterOrAccountNumber}; utility {p.utilityName}</dd><dt>Grid location</dt><dd>ZIP {p.zip}; subregion {p.subregion ? egridSubregionLabel(p.subregion) : "unresolved"}; utility EIA ID {p.utilityEiaId || "unresolved"}</dd><dt>Instruments</dt><dd>{p.instruments.length ? <ol>{p.instruments.map((instrument, index) => <li key={index}>{instrument.type.replace(/_/g, " ")}; {instrument.mwh || "unknown"} MWh; vintage {instrument.vintageYear}; {instrument.generationTechnology.replace(/_/g, " ")}; quality criteria {answer(instrument.qualityCriteriaMet)}; evidence {instrument.evidenceReference ? evidence.find(item => item.id === instrument.evidenceReference)?.originalName ?? instrument.evidenceReference : "missing"}; rate {instrument.rateLbPerMwh ? `CO2 ${instrument.rateLbPerMwh.co2 || "unknown"}, CH4 ${instrument.rateLbPerMwh.ch4 ?? "unknown"}, N2O ${instrument.rateLbPerMwh.n2o ?? "unknown"} lb/MWh` : "missing"}</li>)}</ol> : "None"}</dd></>}
     </dl>
   </div>
 }
 
 /** The activity exactly as save() sends it: trimmed identifiers, derived quantities, identity normalization. */
-function prepareActivityForSave(draft: CollectionActivity): CollectionActivity {
+function prepareActivityForSave(draft: CollectionActivity, completion = false): CollectionActivity {
   const copy = structuredClone(draft)
   copy.sourceId = copy.sourceId.trim()
   // BF1: the meter or vehicle-group ID is the source ID. Keep them identical after trimming, or the contract refuses the
@@ -371,11 +488,19 @@ function prepareActivityForSave(draft: CollectionActivity): CollectionActivity {
   if (copy.kind === "distillate_no2" && !copy.quantity.originalValue) copy.quantity.originalValue = copy.payload.consumption.basis === "measured" ? copy.payload.consumption.gallons : copy.payload.consumption.purchasedGallons
   if (copy.kind === "natural_gas" && !VOLUMETRIC_GAS_UNITS.has(copy.quantity.originalUnit)) copy.payload.heatContent = null
   const quantity = copy.quantity
-  if (DECIMAL.test(quantity.originalValue) && supportedUnits[copy.kind].includes(quantity.originalUnit)) {
+  if (DECIMAL.test(quantity.originalValue) && normalizableUnits(copy.kind, completion).includes(quantity.originalUnit)) {
     quantity.normalizedValue = quantity.originalValue; quantity.normalizedUnit = quantity.originalUnit
   } else { quantity.normalizedValue = null; quantity.normalizedUnit = null }
   copy.quantity = deriveCollectionQuantity(copy.kind, copy.payload, copy.quantity)
   return copy
+}
+
+/** Round 2 lane E (UX-12): what tells saved Scope 3 records apart in the list (category, supplier, description or product). */
+function savedSummary(activity: CollectionActivity): string {
+  const payload = activity.payload as unknown as Record<string, unknown>
+  const text = (value: unknown) => typeof value === "string" && value.trim() ? value.trim() : null
+  const category = typeof payload.category === "number" ? SAVED_LIST_TEXT_R2E.category(payload.category) : null
+  return [category, text(payload.supplierName), text(payload.description) ?? text(payload.product) ?? text(payload.investeeName), text(payload.glAccount) ? `GL ${text(payload.glAccount)}` : null].filter(Boolean).join(" · ")
 }
 
 export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyChange, openRecordId = null, intro }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; onDirtyChange: (dirty: boolean) => void; openRecordId?: string | null; intro?: ReactNode }) {
@@ -383,6 +508,14 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   const [evidence, setEvidence] = useState<CollectionEvidenceMetadata[]>([])
   const [lineages, setLineages] = useState<GridLossLineage[]>([])
   const [context, setContext] = useState<CollectionContext | null>(null)
+  // Scope 3 package 2: the server stores Scope 3 activity (schema 29).
+  const [scope3, setScope3] = useState(false)
+  const [availableScope3Kinds, setAvailableScope3Kinds] = useState<readonly string[]>([])
+  // I-08: schema 30's payload additions (data quality, business travel v2); company setup's facts for the Scope 3 plan
+  // (undefined until read); the saved spend lines with their mapping keys (supplier and partner records may replace them).
+  const [scope3Completion, setScope3Completion] = useState(false)
+  const [setupFacts, setSetupFacts] = useState<Scope3SetupFacts | undefined>(undefined)
+  const [spendLines, setSpendLines] = useState<Scope3SpendLineChoice[]>([])
   const [zipLookup, setZipLookup] = useState<CollectionZipLookup | null>(null)
   const [recordId, setRecordId] = useState<string>(() => crypto.randomUUID())
   const [draft, setDraft] = useState<CollectionDraft>(() => initial("natural_gas"))
@@ -391,7 +524,15 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState("Loading collection records…")
   const [error, setError] = useState(false)
+  // Round 3 lane C (PR-3): whether the saved records have loaded once (until then the list never says "none saved"),
+  // and the list's filter and page.
+  const [loaded, setLoaded] = useState(false)
+  const [listFilter, setListFilter] = useState<{ status: "all" | "attention" | "ready" | "withdrawn"; kind: string; search: string }>({ status: "all", kind: "", search: "" })
+  const [listPage, setListPage] = useState(0)
   const [dirty, setDirty] = useState(false)
+  // Round 2 lane E (UX-4): a failed save is said next to the Save button (and focused), not only at the top of the page.
+  const [saveProblem, setSaveProblem] = useState<string | null>(null)
+  const saveAlert = useRef<HTMLParagraphElement | null>(null)
   const pending = useRef<CollectionActivitySaveInput | null>(null)
   const pendingUpload = useRef<{ fingerprint: string; id: string } | null>(null)
   const actorRef = useRef(actor)
@@ -405,6 +546,14 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     return () => window.removeEventListener("beforeunload", warn)
   }, [dirty])
   const selected = records.find(item => item.id === recordId) ?? null
+  // Round 2 lane D (UX-3): "Fix" from Results lands on the editor (and the field its hold names) only after it has rendered.
+  const fixTarget = useRef<string | null>(null)
+  useEffect(() => {
+    if (busy || fixTarget.current === null || selected?.id !== fixTarget.current) return
+    const id = fixTarget.current
+    fixTarget.current = null
+    requestAnimationFrame(() => { focusRecordEditor(id) })
+  }, [busy, selected])
   const legacy = legacyVehicleValues(selected?.currentVersion.activity ?? null)
   const canManage = actor.role === "owner" || actor.role === "admin"
 
@@ -413,61 +562,97 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     const controller = new AbortController()
     const requestActor = { ...actorRef.current, signal: controller.signal }
     queueMicrotask(() => { setBusy(true); setMessage("Loading collection records…"); setError(false) })
-    void Promise.all([listCollectionActivities(workspaceId, requestActor), listCollectionEvidence(workspaceId, requestActor), listGridLossLineages(workspaceId, requestActor), loadCollectionContext(workspaceId, requestActor)]).then(([items, files, grid, loadedContext]) => {
+    void Promise.all([listCollectionActivities(workspaceId, requestActor), listCollectionEvidence(workspaceId, requestActor), listGridLossLineages(workspaceId, requestActor), loadCollectionOverview(workspaceId, requestActor)]).then(([items, files, grid, overview]) => {
       if (controller.signal.aborted) return
-      setRecords(items); setEvidence(files); setLineages(grid); setContext(loadedContext)
+      const loadedContext = overview.context
+      setRecords(items); setEvidence(files); setLineages(grid); setContext(loadedContext); setScope3(overview.scope3); setAvailableScope3Kinds(overview.scope3Kinds ?? (overview.scope3 ? SCOPE3_LEGACY_KINDS : []))
+      setScope3Completion(overview.scope3Completion === true)
+      // I-08: the reporting period and consolidation approach the results route plans Scope 3 with (lease and date holds).
+      if (overview.scope3Completion === true) void loadCompanySetup(workspaceId, requestActor).then(view => { if (!controller.signal.aborted) setSetupFacts(scope3SetupFacts(view)) }).catch(() => { if (!controller.signal.aborted) setSetupFacts(undefined) })
       setDraft(current => current.setupVersionId ? current : { ...current, setupVersionId: loadedContext.setupVersionId ?? "" })
       // Opened from the overview or results ("Fix"): show that saved record in the correction form, exactly as "Review or correct" does.
       const requested = openRecordId ? items.find(item => item.id === openRecordId) : undefined
-      if (requested) { setRecordId(requested.id); setDraft(structuredClone(requested.currentVersion.activity) as CollectionDraft); requestAnimationFrame(() => { const editor = document.getElementById("collection-record-editor"); editor?.scrollIntoView({ block: "start" }); const heading = editor?.querySelector("h2"); if (heading) { heading.tabIndex = -1; heading.focus({ preventScroll: true }) } }) }
-      setMessage("Activity and evidence are collected as drafts. No emissions are counted until a reviewed method is released.")
+      // Round 2 lane D (UX-3): the scroll and focus wait until the editor shows this record and the screen is idle (effect below).
+      if (requested) { setRecordId(requested.id); setDraft(structuredClone(requested.currentVersion.activity) as CollectionDraft); fixTarget.current = requested.id }
+      setMessage(overview.scope3 ? COPY_TEXT_R2E.activityLoadedScope3 : "Activity and evidence are collected as drafts. No emissions are counted until a reviewed method is released.")
+      setLoaded(true)
     }).catch(cause => { if (!controller.signal.aborted) { setError(true); setMessage(cause instanceof Error ? cause.message : "Collection is unavailable.") } })
       .finally(() => { if (!controller.signal.aborted) setBusy(false) })
     return () => controller.abort()
   }, [actor.userId, workspaceId, openRecordId])
+  // I-08: the saved spend lines' mapping keys (SHA-256, as the results route hashes them), for the "replaces spend lines" picker and supersession.
+  useEffect(() => {
+    let current = true
+    void scope3SpendLineChoices(records).then(lines => { if (current) setSpendLines(previous => previous.length === 0 && lines.length === 0 ? previous : lines) }).catch(() => { if (current) setSpendLines([]) })
+    return () => { current = false }
+  }, [records])
 
   function edit(change: (next: CollectionDraft) => void) {
     if (!canManage || busy) return
-    const next = structuredClone(draft); change(next); setDraft(next); setDirty(true); setHistorical(null); pending.current = null; setError(false)
+    const next = structuredClone(draft); change(next); setDraft(next); setDirty(true); setHistorical(null); pending.current = null; setError(false); setSaveProblem(null)
     setMessage("Changes are not saved yet. Unknown or unsupported values will remain visible, never counted as zero.")
   }
   function switchKind(kind: CollectionActivityKind) {
     if (selected || kind === draft.kind) return
     if (dirty && !window.confirm("Discard unsaved activity changes?")) return
-    setDraft({ ...initial(kind), setupVersionId: context?.setupVersionId ?? "" }); setRecordId(crypto.randomUUID()); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null
+    setDraft(freshDraft(kind)); setRecordId(crypto.randomUUID()); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null
+  }
+  /** A new draft; round 2 UX-12: a spend line starts in the setup reporting period (its own form asks for a date or a period). */
+  function freshDraft(kind: CollectionActivityKind): CollectionDraft {
+    const next = { ...initial(kind, scope3Completion), setupVersionId: context?.setupVersionId ?? "" } as CollectionDraft
+    if (kind === "purchase_spend" && scope3Completion && setupFacts?.reportingPeriod) next.period = { ...setupFacts.reportingPeriod }
+    return next
   }
   function startNewRecord() {
     if (dirty && !window.confirm("Discard unsaved activity changes?")) return
-    setDraft({ ...initial(draft.kind), setupVersionId: context?.setupVersionId ?? "" }); setRecordId(crypto.randomUUID()); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null
+    setDraft(freshDraft(draft.kind)); setRecordId(crypto.randomUUID()); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null
   }
   function openRecord(row: CollectionActivityRecord) {
     if (dirty && !window.confirm("Discard unsaved activity changes?")) return
     setRecordId(row.id); setDraft(structuredClone(row.currentVersion.activity) as CollectionDraft); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null
+  }
+  /** Round 3 lane C (PR-3): after a spend-import action only the saved records changed: read them alone (one request, not four). */
+  async function refreshRecords() {
+    if (!workspaceId) return
+    try { setRecords(await listCollectionActivities(workspaceId, actorRef.current)) }
+    catch (cause) { setError(true); setMessage(cause instanceof Error ? cause.message : "Collection is unavailable.") }
   }
   async function refresh() {
     if (!workspaceId || busy) return
     if (dirty && !window.confirm("Discard unsaved activity changes and reload saved records?")) return
     setBusy(true); setError(false)
     try {
-      const [items, files, grid, loadedContext] = await Promise.all([listCollectionActivities(workspaceId, actorRef.current), listCollectionEvidence(workspaceId, actorRef.current), listGridLossLineages(workspaceId, actorRef.current), loadCollectionContext(workspaceId, actorRef.current)])
-      setRecords(items); setEvidence(files); setLineages(grid); setContext(loadedContext)
+      const [items, files, grid, overview] = await Promise.all([listCollectionActivities(workspaceId, actorRef.current), listCollectionEvidence(workspaceId, actorRef.current), listGridLossLineages(workspaceId, actorRef.current), loadCollectionOverview(workspaceId, actorRef.current)])
+      const loadedContext = overview.context
+      setRecords(items); setEvidence(files); setLineages(grid); setContext(loadedContext); setScope3(overview.scope3); setAvailableScope3Kinds(overview.scope3Kinds ?? (overview.scope3 ? SCOPE3_LEGACY_KINDS : []))
+      setScope3Completion(overview.scope3Completion === true)
       const current = items.find(item => item.id === recordId)
       if (current) setDraft(structuredClone(current.currentVersion.activity) as CollectionDraft)
       else setDraft(previous => ({ ...previous, setupVersionId: loadedContext.setupVersionId ?? "" }))
-      setDirty(false); setHistorical(null); pending.current = null; setReason(""); setMessage("Latest saved records loaded.")
+      setDirty(false); setHistorical(null); pending.current = null; setReason(""); setMessage("Latest saved records loaded."); setLoaded(true)
     } catch (cause) { setError(true); setMessage(cause instanceof Error ? cause.message : "Collection is unavailable.") }
     finally { setBusy(false) }
   }
+  /** UX-4: the save failed; say so next to Save (focused) and at the top. */
+  function failSave(text: string) { setError(true); setMessage(text); setSaveProblem(text); globalThis.setTimeout(() => saveAlert.current?.focus(), 0) }
   async function save() {
     if (!workspaceId || !canManage || busy) return
-    if (!draft.locationId || !draft.setupVersionId || !draft.sourceId.trim()) { setError(true); setMessage("Choose a company-setup location and enter the source identifier before saving."); return }
-    if (selected && draft.state === "active" && reason.trim().length < 3) { setError(true); setMessage("Explain this correction before saving a new version."); return }
-    if (draft.state === "withdrawn" && (!selected || !draft.withdrawalReason || draft.withdrawalReason.trim().length < 3)) { setError(true); setMessage("Explain why this saved record is being withdrawn."); return }
-    if (draft.kind === "electricity" && !/^\d{5}$/.test((draft.payload as Extract<CollectionPayload, {zip: string}>).zip)) { setError(true); setMessage("A five-digit ZIP is required for every electricity record."); return }
-    if (draft.kind === "electricity" && !draft.payload.utilityName.trim()) { setError(true); setMessage("Choose the verified utility serving this electricity meter before saving."); return }
+    setSaveProblem(null)
+    if (!draft.locationId || !draft.setupVersionId || !draft.sourceId.trim()) { failSave("Choose a company-setup location and enter the source identifier before saving."); return }
+    if (selected && draft.state === "active" && reason.trim().length < 3) { failSave("Explain this correction before saving a new version."); return }
+    if (draft.state === "withdrawn" && (!selected || !draft.withdrawalReason || draft.withdrawalReason.trim().length < 3)) { failSave("Explain why this saved record is being withdrawn."); return }
+    if (draft.kind === "electricity" && !/^\d{5}$/.test((draft.payload as Extract<CollectionPayload, {zip: string}>).zip)) { failSave("A five-digit ZIP is required for every electricity record."); return }
+    if (draft.kind === "electricity" && !draft.payload.utilityName.trim()) { failSave("Choose the verified utility serving this electricity meter before saving."); return }
     const rejectedEvidence = new Set(evidence.filter(file => file.quarantineStatus === "rejected").map(file => file.id))
-    if (draft.evidenceIds.some(id => rejectedEvidence.has(id)) || draft.kind === "electricity" && draft.payload.instruments.some(instrument => instrument.evidenceReference !== null && rejectedEvidence.has(instrument.evidenceReference))) { setError(true); setMessage("Remove rejected evidence before saving this version."); return }
-    const copy = prepareActivityForSave(withCurrentSetupVersion(draft, context))
+    if (draft.evidenceIds.some(id => rejectedEvidence.has(id)) || draft.kind === "electricity" && draft.payload.instruments.some(instrument => instrument.evidenceReference !== null && rejectedEvidence.has(instrument.evidenceReference))) { failSave("Remove rejected evidence before saving this version."); return }
+    const copy = prepareActivityForSave(withCurrentSetupVersion(draft, context), scope3Completion)
+    // I-08: a Scope 3 record is checked against the shared contract first, so its refusal is named in the form's words.
+    const scope3Problem = isScope3CollectionKind(copy.kind) ? scope3PayloadProblem(copy.kind, copy.payload) ?? scope3DataQualityProblem(copy.payload) : null
+    if (scope3Problem) { failSave(`${scope3Problem} Nothing was saved.`); return }
+    // Beta client run (26 October 2026): check the record against the same contract the server applies, so a record the
+    // server would refuse (for example dates outside calendar 2025) says why, and nothing is sent or saved.
+    try { validateCollectionActivity(copy) }
+    catch (cause) { failSave(`${cause instanceof Error ? cause.message : "This record can’t be saved."} Nothing was saved.`); return }
     const correctionReason = selected ? copy.state === "withdrawn" ? `Withdrawn: ${copy.withdrawalReason}` : reason.trim() : null
     const input = pending.current ?? { idempotencyKey: crypto.randomUUID(), expectedRevision: selected?.currentVersion.revision ?? 0, expectedVersionId: selected?.currentVersion.id ?? null, correctionReason, activity: copy }
     pending.current = input; setBusy(true); setError(false); setMessage("Saving and verifying this activity…")
@@ -475,10 +660,10 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       const result = await saveAndVerifyCollectionActivity(workspaceId, recordId, input, actorRef.current)
       const current = result.record
       setRecords(items => replaceSavedCollectionRecord(items, current)); setRecordId(current.id); setDraft(structuredClone(current.currentVersion.activity) as CollectionDraft); setDirty(false); setReason(""); pending.current = null
-      setMessage(result.replayed ? "The earlier save was confirmed. The latest saved version is shown." : "Saved. Previous versions remain in correction history.")
+      setMessage(result.replayed ? "The earlier save was confirmed. The latest saved version is shown." : current.currentVersion.revision > 1 ? "Saved. Previous versions remain in correction history." : "Saved.")
     } catch (cause) {
       setError(true)
-      if (cause instanceof CollectionApiError && cause.conflict) { pending.current = null; setMessage("This record changed elsewhere. Reload before correcting it.") }
+      if (cause instanceof CollectionApiError && cause.conflict) { pending.current = null; failSave("This record changed elsewhere. Reload before correcting it.") }
       else if (cause instanceof CollectionApiError && cause.status === 422) {
         let latestContext: CollectionContext | null = null
         try { latestContext = await loadCollectionContext(workspaceId, actorRef.current) }
@@ -490,7 +675,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
           setContext(next)
           setDraft(current => ({ ...current, setupVersionId: next.setupVersionId ?? "", locationId: "" }))
           pending.current = null
-          setMessage("Company setup changed. Select a current location before retrying this save.")
+          failSave("Company setup changed. Select a current location before retrying this save.")
         } else if (latestContext?.setupVersionId && input.activity.setupVersionId !== latestContext.setupVersionId) {
           // The setup was restored with identical content: keep the location and every unsaved edit, move the draft to the
           // current setup version and start a new request on the next save.
@@ -498,9 +683,9 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
           setContext(next)
           setDraft(current => ({ ...current, setupVersionId: next.setupVersionId ?? current.setupVersionId }))
           pending.current = null
-          setMessage("Company setup was saved again with the same content. Your edits and location are kept; save again to save against the current setup.")
-        } else setMessage(`${cause.message} Retry keeps the same save request.`)
-      } else setMessage(`${cause instanceof Error ? cause.message : "Activity could not be saved."} Retry keeps the same save request.`)
+          failSave("Company setup was saved again with the same content. Your edits and location are kept; save again to save against the current setup.")
+        } else failSave(`${cause.message} Retry keeps the same save request.`)
+      } else failSave(`${cause instanceof Error ? cause.message : "Activity could not be saved."} Retry keeps the same save request.`)
     } finally { setBusy(false) }
   }
   async function runZipLookup() {
@@ -525,6 +710,34 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
         setDirty(true); setHistorical(null); pending.current = null
         setMessage(automatic.utilityName ? `Verified ${automatic.utilityName} in eGRID subregion ${automatic.subregion}.` : `Verified eGRID subregion ${automatic.subregion}. Choose the utility serving this meter.`)
       } else setMessage("Choose the matching utility to verify the eGRID subregion.")
+    } catch (cause) { setError(true); setMessage(cause instanceof Error ? cause.message : "ZIP lookup is unavailable.") }
+    finally { setBusy(false) }
+  }
+  /**
+   * I-08: the same pinned ZIP, utility and eGRID lookup for a Scope 3 record with a grid location (energy resold,
+   * teleworking, asset energy, buildings). A ZIP in one subregion fills the subregion (and the utility's EIA ID when there
+   * is one utility); otherwise the form lists the utilities to choose from.
+   */
+  async function runScope3ZipLookup(zip: string) {
+    if (!workspaceId || busy || !isScope3CompletionKind(draft.kind)) return
+    if (!/^\d{5}$/.test(zip)) { setError(true); setMessage("Enter a five-digit ZIP before lookup."); return }
+    setBusy(true); setError(false); setMessage("Checking the pinned ZIP, utility and eGRID lookup…")
+    try {
+      const lookup = await lookupCollectionZip(workspaceId, zip, actorRef.current)
+      setZipLookup(lookup)
+      if (!lookup.found) { setError(true); setMessage("No verified eGRID lookup was found for this ZIP. Choose the subregion, or the record stays held."); return }
+      const automatic = automaticZipSelection(lookup)
+      if (automatic) {
+        setDraft(current => {
+          const next = structuredClone(current)
+          const payload = scope3Payload(next)
+          if (payload.zip !== zip) return current
+          payload.subregion = automatic.subregion; payload.utilityEiaId = automatic.utilityEiaId
+          return next
+        })
+        setDirty(true); setHistorical(null); pending.current = null
+        setMessage(`Verified eGRID subregion ${automatic.subregion}${automatic.utilityName ? ` (${automatic.utilityName})` : ""}.`)
+      } else setMessage("Choose the utility serving the site to set the eGRID subregion.")
     } catch (cause) { setError(true); setMessage(cause instanceof Error ? cause.message : "ZIP lookup is unavailable.") }
     finally { setBusy(false) }
   }
@@ -582,11 +795,51 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   }
 
   const p = draft.payload
+  const kindButton = (kind: CollectionActivityKind, label: string) => <button type="button" key={kind} aria-pressed={draft.kind === kind} disabled={busy || Boolean(selected)} onClick={() => switchKind(kind)}>{label}</button>
   // A-01: claims across the company, with the draft in place of the record it edits.
   const savedClaims = context ? instrumentEvidenceClaims(records.map(row => row.currentVersion.activity), context, evidence) : undefined
   const draftClaims = context ? instrumentEvidenceClaims([...records.filter(row => row.id !== selected?.id).map(row => row.currentVersion.activity), draft], context, evidence) : undefined
-  const draftFindings = recordReadiness(draft, context, evidence, draftClaims)
+  // I-08: a Scope 3 draft is judged as it would be saved (its amount normalized), with the plan options the results route
+  // uses: setup's reporting period and consolidation approach, distance commuting periods and supersession.
+  const scope3Draft = isScope3CollectionKind(draft.kind)
+  const completionDraft = isScope3CompletionKind(draft.kind)
+  const readinessDraft = scope3Draft ? prepareActivityForSave(withCurrentSetupVersion(draft, context), scope3Completion) : draft
+  const mappingKeys = new Map(spendLines.map(line => [line.mappingKeyInput, line.mappingKey]))
+  const savedScope3Options = context ? scope3ReadinessOptions({ setup: setupFacts, context, records, draft: null, mappingKeys }) : null
+  const draftScope3Options = context && scope3Draft ? scope3ReadinessOptions({ setup: setupFacts, context, records, draft: { recordId, activity: readinessDraft }, mappingKeys }) : null
+  const draftFindings = recordReadiness(readinessDraft, context, evidence, draftClaims, draftScope3Options ? { options: draftScope3Options, recordId } : undefined)
+  const scope3Problem = scope3Draft ? scope3PayloadProblem(draft.kind as Scope3CollectionKind, readinessDraft.payload) ?? scope3DataQualityProblem(readinessDraft.payload) : null
   const separatorSuggestion = thousandsSeparatorSuggestion(draft.quantity.originalValue)
+  // Round 2 lane E (UX-4): every problem that would stop a save, listed next to Save, which stays off while any is shown.
+  // The same checks as save() and the shared contract (validateCollectionActivity), so nothing the server refuses is sent.
+  const blocking: string[] = []
+  // Round 3 lane D (PR-6, PR-12): the labels of the fields a problem names, marked invalid; freight, travel and waste problems
+  // the engine would only report after save (no vehicle, a declared haul without its basis, a waste pair EPA has no factor for).
+  const invalid = new Set<string>()
+  // A saved record opened by Fix shows its problem (and marks the field) before any edit, too.
+  const presave = canManage && scope3Draft && draft.state === "active" ? scope3PreSaveProblems(draft) : []
+  for (const problem of presave) { invalid.add(problem.field); blocking.push(problem.text) }
+  if (dirty && canManage) {
+    if (!draft.locationId) invalid.add("Company-setup location")
+    if (!draft.sourceId.trim()) invalid.add("source")
+    if (selected && draft.state === "active" && reason.trim().length < 3) invalid.add("Reason for this correction")
+    if (draft.state === "withdrawn" && (!draft.withdrawalReason || draft.withdrawalReason.trim().length < 3)) invalid.add("Reason for withdrawal")
+    if (scope3Draft && draft.quality === "estimated" && !draft.estimateBasis?.trim()) invalid.add("How was this estimate made?")
+    if (!draft.locationId) blocking.push("Choose a company-setup location.")
+    if (!draft.setupVersionId && !context?.setupVersionId) blocking.push("Save company setup first: every record is linked to a saved setup version.")
+    if (!draft.sourceId.trim()) blocking.push("Enter the source identifier.")
+    if (selected && draft.state === "active" && reason.trim().length < 3) blocking.push("Explain this correction (at least 3 characters).")
+    if (draft.state === "withdrawn" && (!draft.withdrawalReason || draft.withdrawalReason.trim().length < 3)) blocking.push("Explain why this record is being withdrawn (at least 3 characters).")
+    if (draft.kind === "electricity" && !/^\d{5}$/.test((draft.payload as Extract<CollectionPayload, { zip: string }>).zip)) blocking.push("Enter the meter’s five-digit ZIP code.")
+    if (draft.kind === "electricity" && !draft.payload.utilityName.trim()) blocking.push("Choose the verified utility serving this meter.")
+    const rejected = new Set(evidence.filter(file => file.quarantineStatus === "rejected").map(file => file.id))
+    if (draft.evidenceIds.some(id => rejected.has(id)) || draft.kind === "electricity" && draft.payload.instruments.some(instrument => instrument.evidenceReference !== null && rejected.has(instrument.evidenceReference))) blocking.push("Remove rejected evidence.")
+    if (scope3Problem) blocking.push(scope3Problem)
+    // Round 2c integration (walk item 2): an estimated Scope 3 record without its basis is told what to fill in; the shared
+    // contract's message ("Only estimated records carry an estimate basis.") is shipped and stays the server's, and Scope 1.
+    if (scope3Draft && draft.quality === "estimated" && !draft.estimateBasis?.trim()) blocking.push(SAVE_TEXT_R2C.estimateBasisMissing)
+    if (blocking.length === 0) { try { validateCollectionActivity(prepareActivityForSave(withCurrentSetupVersion(draft, context), scope3Completion)) } catch (cause) { blocking.push(cause instanceof Error ? cause.message : "This record can’t be saved.") } }
+  }
   const duplicateRows = records.filter(row => {
     if (row.id === selected?.id || row.kind !== draft.kind) return false
     const other = row.currentVersion.activity as CollectionDraft
@@ -596,55 +849,100 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     : draft.kind === "distillate_no2" ? "Generator or equipment ID"
     : draft.kind === "vehicle" ? "Vehicle or group ID"
     : draft.kind === "fugitive" ? "Equipment or group ID"
+    : draft.kind === "transport" ? "Shipment lane or carrier account ID"
+    : draft.kind === "waste" ? "Waste stream or hauler account ID"
+    : draft.kind === "business_travel" ? "Trip, report or booking export ID"
+    : draft.kind === "employee_commuting" ? "Survey or commuting group ID"
+    : isScope3CompletionKind(draft.kind) ? SCOPE3_FORM_SOURCE_LABELS[draft.kind]
     : "Electricity meter or account ID"
+  // Round 2 lane E (UX-12): a Scope 3 record at schema 30 asks "actual or estimated" inside its one data-quality section.
+  const qualityFields = (label: string) => <>
+    <Select label={label} value={draft.quality} options={[["unknown", "Unknown"], ["actual", "Actual"], ["estimated", "Estimated"]]} onChange={value => edit(next => { next.quality = value as CollectionActivity["quality"]; next.estimateBasis = value === "estimated" ? "" : null })} />
+    {draft.quality === "estimated" && <Field label="How was this estimate made?" value={draft.estimateBasis ?? ""} onChange={value => edit(next => { next.estimateBasis = value })} invalid={invalid.has("How was this estimate made?")} />}
+  </>
   const evidenceLabel = (file: CollectionEvidenceMetadata) => file.quarantineStatus === "clean" ? `${file.originalName} · cleared`
     : file.quarantineStatus === "pending" ? `${file.originalName} · quarantine review pending (not cleared)`
     : file.quarantineStatus === "rejected" ? `${file.originalName} · rejected (remove before saving)`
     : `${file.originalName} · quarantine review failed (not cleared)`
+  // Round 3 lane C (PR-3): each saved record's readiness once; the list shows one page of the records the filter keeps.
+  const listed = records.map(row => {
+    const activity = row.currentVersion.activity as CollectionDraft
+    const readiness = recordReadiness(activity, context, evidence, savedClaims, savedScope3Options ? { options: savedScope3Options, recordId: row.id } : undefined)
+    const status: "attention" | "ready" | "withdrawn" = activity.state === "withdrawn" ? "withdrawn" : readiness.some(finding => finding.status === "input_needed" || finding.status === "review_required") ? "attention" : "ready"
+    return { row, activity, readiness, status }
+  })
+  const query = listFilter.search.trim().toLowerCase()
+  const filtered = listed.filter(item => (listFilter.status === "all" || item.status === listFilter.status) && (!listFilter.kind || item.row.kind === listFilter.kind)
+    && (!query || ACTIVITY_LIST_TEXT_R3C.searchText(item.activity, kindName(item.row.kind)).includes(query)))
+  const pages = Math.max(1, Math.ceil(filtered.length / ACTIVITY_LIST_TEXT_R3C.pageSize)), page = Math.min(listPage, pages - 1)
+  const pageRows = filtered.slice(page * ACTIVITY_LIST_TEXT_R3C.pageSize, (page + 1) * ACTIVITY_LIST_TEXT_R3C.pageSize)
+  const presentKinds = [...new Set(records.map(row => row.kind))].sort((a, b) => kindName(a).localeCompare(kindName(b)))
+  const spendImportShown = scope3Completion && !!workspaceId && availableScope3Kinds.includes("purchase_spend")
+  const setFilter = (change: Partial<typeof listFilter>) => { setListFilter(current => ({ ...current, ...change })); setListPage(0) }
   return <section className="worksheet collection-workspace" aria-busy={busy}>
     <p className="worksheet-eyebrow">Activity collection · Synthetic staging</p>
-    <h1 ref={headingRef} tabIndex={-1}>Collect Scope 1 and 2 activity</h1>
-    <p>Save source details and private evidence for each activity. Missing answers remain unresolved. Calculations and reports come only from reviewed, released methods.</p>
-    <p role={error ? "alert" : "status"} className={error ? "worksheet-error" : "worksheet-status"}>{message}</p>
+    {/* Round 3 lane C (PR-3): until the screen has loaded, neither the Scope 1 and 2 nor the Scope 3 wording is guessed. */}
+    <h1 ref={headingRef} tabIndex={-1}>{!loaded ? ACTIVITY_LIST_TEXT_R3C.neutralHeading : scope3 ? "Collect Scope 1, 2 and 3 activity" : "Collect Scope 1 and 2 activity"}</h1>
+    {loaded && <p>{scope3 ? COPY_TEXT_R2E.activityIntroScope3 : "Save source details and private evidence for each activity. Missing answers remain unresolved. Calculations and reports come only from reviewed, released methods."}</p>}
+    <p role={error && !saveProblem ? "alert" : "status"} className={error ? "worksheet-error" : "worksheet-status"}>{message}</p>
+    {!loaded && error && workspaceId && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--sm" disabled={busy} onClick={() => void refresh()}>{ACTIVITY_LIST_TEXT_R3C.retry}</button></div>}
     {!canManage && <p>Owner or admin access is needed to save activity or upload evidence.</p>}
     {intro}
+    {loaded && <nav className="nv-actions collection-jump" aria-label={ACTIVITY_LIST_TEXT_R3C.jumpLabel}>
+      {spendImportShown && <a className="nv-btn nv-btn--sm" href={`#${SPEND_IMPORT_ANCHOR}`} onClick={event => { event.preventDefault(); const target = document.getElementById(SPEND_IMPORT_ANCHOR); target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true }) }}>{ACTIVITY_LIST_TEXT_R3C.jumpSpend}</a>}
+      <a className="nv-btn nv-btn--sm" href="#collection-record-editor" onClick={event => { event.preventDefault(); const target = document.getElementById("collection-record-editor"); target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true }) }}>{ACTIVITY_LIST_TEXT_R3C.jumpNew}</a>
+    </nav>}
 
-    <div className="worksheet-card"><h2>Saved activities</h2>
-      <div className="collection-record-list">{records.length ? records.map(row => {
-        const activity = row.currentVersion.activity as CollectionDraft
-        const readiness = recordReadiness(activity, context, evidence, savedClaims)
+    <div className="worksheet-card" id="saved-activities"><h2>Saved activities</h2>
+      {loaded && records.length > 0 && <div className="collection-list-filters" role="group" aria-label={ACTIVITY_LIST_TEXT_R3C.filterLabel}>
+        <label className="setup-field"><span>{ACTIVITY_LIST_TEXT_R3C.statusLabel}</span><select aria-label={ACTIVITY_LIST_TEXT_R3C.statusLabel} value={listFilter.status} onChange={event => setFilter({ status: event.target.value as typeof listFilter.status })}>{ACTIVITY_LIST_TEXT_R3C.statuses.map(([value, label]) => <option key={value} value={value}>{`${label} (${value === "all" ? listed.length : listed.filter(item => item.status === value).length})`}</option>)}</select></label>
+        <label className="setup-field"><span>{ACTIVITY_LIST_TEXT_R3C.kindLabel}</span><select aria-label={ACTIVITY_LIST_TEXT_R3C.kindLabel} value={listFilter.kind} onChange={event => setFilter({ kind: event.target.value })}><option value="">{ACTIVITY_LIST_TEXT_R3C.allKinds}</option>{presentKinds.map(kind => <option key={kind} value={kind}>{kindName(kind)}</option>)}</select></label>
+        <label className="setup-field"><span>{ACTIVITY_LIST_TEXT_R3C.searchLabel}</span><input aria-label={ACTIVITY_LIST_TEXT_R3C.searchLabel} value={listFilter.search} onChange={event => setFilter({ search: event.target.value })} /></label>
+        <p className="nv-subtle" role="status">{ACTIVITY_LIST_TEXT_R3C.showing(filtered.length ? page * ACTIVITY_LIST_TEXT_R3C.pageSize + 1 : 0, page * ACTIVITY_LIST_TEXT_R3C.pageSize + pageRows.length, filtered.length, records.length)}</p>
+      </div>}
+      <div className="collection-record-list">{!loaded ? <p>{error ? ACTIVITY_LIST_TEXT_R3C.notLoaded : "Loading collection records…"}</p> : records.length === 0 ? <p>No activity records saved yet.</p> : filtered.length === 0 ? <p>{ACTIVITY_LIST_TEXT_R3C.noMatch}</p> : pageRows.map(({ row, activity, readiness }) => {
         return <div key={row.id} className="setup-subcard">
-          <strong>{kinds.find(([id]) => id === row.kind)?.[1] ?? row.kind}</strong> · version {row.currentVersion.revision} {activity.state === "withdrawn" && <span className="collection-status-badge">Withdrawn</span>}
-          <p>{activity.period.start} to {inclusivePeriodEnd(activity.period.endExclusive)} (last day covered) · {activity.kind === "fugitive" ? "Derived net release" : "Quantity"}: {activity.quantity.originalValue || "unknown"} {activity.quantity.originalUnit}</p>
+          <strong>{kindName(row.kind)}</strong> · version {row.currentVersion.revision} {activity.state === "withdrawn" && <span className="collection-status-badge">Withdrawn</span>}
+          {/* Round 3 lane D (PR-8): a dated spend line shows its invoice date; a Scope 3 amount has grouped digits. */}
+          <p>{scope3SavedRecordWhen(activity, inclusivePeriodEnd(activity.period.endExclusive))} · {activity.kind === "fugitive" ? "Derived net release" : "Quantity"}: {(isScope3CollectionKind(activity.kind) ? scope3GroupedAmount(activity.quantity.originalValue) : activity.quantity.originalValue) || "unknown"} {isScope3CollectionKind(activity.kind) ? unitLabel(activity.quantity.originalUnit) : activity.quantity.originalUnit}</p>
+          {savedSummary(activity) && <p className="nv-subtle">{savedSummary(activity)}</p>}
           <p>Source {activity.sourceId} · {context?.locations.find(location => location.id === activity.locationId)?.name ?? "Saved location"}</p>
           <ReadinessPanel findings={readiness} />
           <button type="button" disabled={busy} onClick={() => openRecord(row)}>Review or correct</button>
-          {row.kind === "electricity" && activity.state === "active" && <button type="button" disabled={busy || !canManage || lineages.some(item => item.electricityRecordId === row.id)} onClick={() => void addGridLoss(row)}>{lineages.some(item => item.electricityRecordId === row.id) ? "Grid-loss source linked" : "Link grid-loss source"}</button>}
+          {row.kind === "electricity" && activity.state === "active" && !scope3 && <button type="button" disabled={busy || !canManage || lineages.some(item => item.electricityRecordId === row.id)} onClick={() => void addGridLoss(row)}>{lineages.some(item => item.electricityRecordId === row.id) ? "Grid-loss source linked" : "Link grid-loss source"}</button>}
+          {row.kind === "electricity" && scope3 && <p className="nv-subtle">Grid losses for this meter (Scope 3 category 3C) are calculated automatically when company setup includes category 3.</p>}
         </div>
-      }) : <p>No activity records saved yet.</p>}</div>
+      })}</div>
+      {loaded && pages > 1 && <div className="nv-actions collection-list-pages"><button type="button" className="nv-btn nv-btn--sm" disabled={page === 0} onClick={() => setListPage(page - 1)}>{ACTIVITY_LIST_TEXT_R3C.previous}</button><span className="nv-subtle">{ACTIVITY_LIST_TEXT_R3C.pageOf(page + 1, pages)}</span><button type="button" className="nv-btn nv-btn--sm" disabled={page >= pages - 1} onClick={() => setListPage(page + 1)}>{ACTIVITY_LIST_TEXT_R3C.next}</button></div>}
       <button type="button" disabled={busy} onClick={() => void refresh()}>Reload saved records</button>
     </div>
 
-    <div className="worksheet-card worksheet-form" id="collection-record-editor"><h2>{selected ? `Correct saved ${kinds.find(([id]) => id === selected.kind)?.[1]}` : "New activity record"}</h2>
+    <div className="worksheet-card worksheet-form" id="collection-record-editor" tabIndex={-1}><h2>{selected ? `Correct saved ${kindName(selected.kind)}` : "New activity record"}</h2>
       {selected && <button type="button" disabled={busy || !canManage} onClick={startNewRecord}>Start a new record</button>}
-      <div className="worksheet-nav" aria-label="Activity types">{kinds.map(([kind, label]) => <button type="button" key={kind} aria-pressed={draft.kind === kind} disabled={busy || Boolean(selected)} onClick={() => switchKind(kind)}>{label}</button>)}</div>
+      <div className="worksheet-nav" aria-label="Activity types">{kinds.map(([kind, label]) => kindButton(kind, label))}</div>
+      {scope3FormGroups(availableScope3Kinds.filter(kind => FORM_KINDS.has(kind))).map(group => <div key={group.title} className="worksheet-nav" role="group" aria-label={group.title}><span className="nv-subtle">{group.title}</span>{group.kinds.map(kind => kindButton(kind, kindName(kind)))}</div>)}
       {selected && <p>Activity type is fixed while correcting this record. Use “Start a new record” to collect another activity.</p>}
       <fieldset className="setup-inputs" disabled={busy || !canManage}>
         <div className="setup-grid">
-          <Select label="Company-setup location" value={draft.locationId} options={[["", context?.setupVersionId ? "Choose a saved location" : "Save company setup locations first"], ...(context?.locations ?? []).map(location => [location.id, `${location.name || "Unnamed location"} · ${location.inclusion} · ${location.control}`] as const)]} onChange={value => edit(next => { next.locationId = value; next.setupVersionId = context?.setupVersionId ?? ""; if (next.kind === "electricity") next.payload.site = context?.locations.find(location => location.id === value)?.name ?? "" })} hint={context?.setupRevision ? `Linked to company setup version ${context.setupRevision}. Excluded and unknown locations remain visible.` : "A saved company setup version is required."} />
-          <Field label={sourceLabel} value={draft.sourceId} onChange={value => edit(next => { next.sourceId = value; if (next.kind === "vehicle") next.payload.vehicleGroupId = value; if (next.kind === "electricity") next.payload.meterOrAccountNumber = value })} hint="Use the same stable identifier on every record from this source." />
+          <Select label="Company-setup location" value={draft.locationId} options={[["", context?.setupVersionId ? "Choose a saved location" : "Save company setup locations first"], ...(context?.locations ?? []).map(location => [location.id, `${location.name || "Unnamed location"} · ${LOCATION_INCLUSION_TEXT_R2E[location.inclusion] ?? location.inclusion} · ${LOCATION_CONTROL_TEXT_R2E[location.control] ?? location.control}`] as const)]} invalid={invalid.has("Company-setup location")} onChange={value => edit(next => { next.locationId = value; next.setupVersionId = context?.setupVersionId ?? ""; if (next.kind === "electricity") next.payload.site = context?.locations.find(location => location.id === value)?.name ?? "" })} hint={context?.setupRevision ? `Linked to company setup version ${context.setupRevision}. Excluded and unknown locations remain visible.` : "A saved company setup version is required."} />
+          <Field label={sourceLabel} value={draft.sourceId} invalid={invalid.has("source")} onChange={value => edit(next => { next.sourceId = value; if (next.kind === "vehicle") next.payload.vehicleGroupId = value; if (next.kind === "electricity") next.payload.meterOrAccountNumber = value })} hint="Use the same stable identifier on every record from this source." />
+          {/* Round 2 UX-12: a spend line asks for its date or period once, in its own form (SpendLineForm). */}
+          {!(completionDraft && draft.kind === "purchase_spend") && <>
           <Field label="Period start" type="date" value={draft.period.start} onChange={value => edit(next => { next.period.start = value })} />
           <Field label="Last day covered" type="date" value={inclusivePeriodEnd(draft.period.endExclusive)} onChange={value => edit(next => { next.period.endExclusive = exclusivePeriodEnd(value) })} hint="Enter the inclusive last day shown on the source. Neuvetra stores the following day as the calculation boundary." />
-          {(draft.kind === "natural_gas" || draft.kind === "electricity") && <Field label="Original quantity from source" value={draft.quantity.originalValue} onChange={value => edit(next => { next.quantity.originalValue = value })} hint="Keep the source text. Unknown or more than 3 decimals is saved but not calculated." />}
-          {draft.kind !== "fugitive" && <Field label="Original unit as printed" value={draft.quantity.originalUnit} onChange={value => edit(next => { next.quantity.originalUnit = value; if (next.kind === "natural_gas" && !VOLUMETRIC_GAS_UNITS.has(value)) next.payload.heatContent = null })} hint={`Engine tokens for this kind: ${supportedUnits[draft.kind].join(", ")}. Other units stay saved but uncalculated.`} />}
-          <Select label="Data quality" value={draft.quality} options={[["unknown", "Unknown"], ["actual", "Actual"], ["estimated", "Estimated"]]} onChange={value => edit(next => { next.quality = value as CollectionActivity["quality"]; next.estimateBasis = value === "estimated" ? "" : null })} />
-          {draft.quality === "estimated" && <Field label="How was this estimate made?" value={draft.estimateBasis ?? ""} onChange={value => edit(next => { next.estimateBasis = value })} />}
+          </>}
+          {(draft.kind === "natural_gas" || draft.kind === "electricity" || (scope3Draft && !completionDraft)) && <Field label={scope3Draft ? scope3Completion ? scope3AmountLabelR2C(draft.kind, draft.quantity.originalUnit, "mode" in p ? p.mode : "") : "Amount (distance, or mass of waste)" : "Original quantity from source"} value={draft.quantity.originalValue} onChange={value => edit(next => { next.quantity.originalValue = value })} hint="Keep the source text. Unknown or more than 3 decimals is saved but not calculated." />}
+          {scope3Draft && !completionDraft && <ChoiceOrOther label="Unit" value={draft.quantity.originalUnit} choices={scope3UnitChoices(draft, scope3Completion).map(unit => [unit, unitLabel(unit)] as const)} placeholder="Choose a unit" otherLabel="Another unit (saved, not calculated)" describeLabel="Unit as written on the source" onChange={value => edit(next => { next.quantity.originalUnit = value })} hint="The units this method takes are listed. Another unit is kept but not calculated." />}
+          {draft.kind !== "fugitive" && !scope3Draft && <Field label="Original unit as printed" value={draft.quantity.originalUnit} onChange={value => edit(next => { next.quantity.originalUnit = value; if (next.kind === "natural_gas" && !VOLUMETRIC_GAS_UNITS.has(value)) next.payload.heatContent = null })} hint={unitsHintR2E(supportedUnits[draft.kind])} />}
+          {!(scope3Draft && scope3Completion) && qualityFields("Data quality")}
           <Field label="Source reference" value={draft.reference} onChange={value => edit(next => { next.reference = value })} hint="Bill number, log, contractor record or other locator." />
           <label className="setup-field"><span>Notes and unresolved questions</span><textarea value={draft.notes} onChange={event => edit(next => { next.notes = event.target.value })} /></label>
         </div>
         {separatorSuggestion && <div className="collection-suggestion"><p>The quantity includes thousands separators. It remains uncalculated unless you explicitly accept the plain-decimal form.</p><button type="button" onClick={() => edit(next => { next.quantity.originalValue = separatorSuggestion; if (next.kind === "vehicle") next.payload.gallons = separatorSuggestion; if (next.kind === "distillate_no2" && next.payload.consumption.basis === "measured") next.payload.consumption.gallons = separatorSuggestion; if (next.kind === "distillate_no2" && next.payload.consumption.basis !== "measured") next.payload.consumption.purchasedGallons = separatorSuggestion })}>Use {separatorSuggestion}</button></div>}
         {duplicateRows.length > 0 && <div className="collection-duplicate-warning" role="alert"><strong>Probable duplicate</strong><p>{duplicateRows.length} active record{duplicateRows.length === 1 ? "" : "s"} use this activity type and source ID during an overlapping period. Review the saved record before adding another.</p></div>}
         <ReadinessPanel findings={draftFindings} />
+        {scope3Problem && <p className="worksheet-error" role="note">Before saving: {scope3Problem}</p>}
+        {completionDraft && <Scope3RecordForm activity={draft} onEdit={edit} disabled={busy || !canManage} env={{ consolidationApproach: setupFacts === undefined ? undefined : setupFacts.consolidationApproach, zipLookup, onZipLookup: zip => void runScope3ZipLookup(zip), spendLines, context, reportingPeriod: setupFacts?.reportingPeriod ?? null }} />}
         {draft.kind === "natural_gas" && "heatContent" in p && VOLUMETRIC_GAS_UNITS.has(draft.quantity.originalUnit) && <div className="setup-subcard"><h3>Natural gas</h3><p>Use the heat content printed on the bill. Do not assume a conversion.</p><div className="setup-grid">
           <Field label="Bill heat content" value={p.heatContent?.value ?? ""} onChange={value => edit(next => { (next.payload as typeof p).heatContent = value ? { value, unit: p.heatContent?.unit ?? "MMBtu per ccf" } : null })} hint="Natural gas is about 1.026 therms per ccf (0.1026 MMBtu per ccf, 1.026 MMBtu per mcf); bills at high elevation show less. A value far outside that is held: check the unit." />
           <Select label="Heat-content unit" value={p.heatContent?.unit ?? "MMBtu per ccf"} options={[["MMBtu per scf", "MMBtu per scf"], ["MMBtu per ccf", "MMBtu per ccf"], ["MMBtu per mcf", "MMBtu per mcf"], ["therm per ccf", "therm per ccf"]]} onChange={value => edit(next => { (next.payload as typeof p).heatContent = { value: p.heatContent?.value ?? "", unit: value as NonNullable<typeof p.heatContent>["unit"] } })} />
@@ -678,11 +976,42 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
           <Select label="Contractor records complete?" value={p.contractorRecordsComplete ? "yes" : "no"} options={[["no", "No / unresolved"], ["yes", "Yes"]]} onChange={value => edit(next => { (next.payload as typeof p).contractorRecordsComplete = value === "yes" })} />
           <Select label="Event chronology complete?" value={p.eventChronologyComplete ? "yes" : "no"} options={[["no", "No / unresolved"], ["yes", "Yes"]]} onChange={value => edit(next => { (next.payload as typeof p).eventChronologyComplete = value === "yes" })} />
         </div><p>A yes to stock or retrofit needs method review; an unknown answer needs input. Only an explicit outside-boundary answer excludes.</p></div>}
+        {draft.kind === "transport" && "loadBasis" in p && <div className="setup-subcard"><h3>Freight transport (Scope 3)</h3><p>Distance-based, tank-to-wheel. Use vehicle-miles when the goods had a vehicle to themselves, and ton-miles when they shared it with other loads.</p><div className="setup-grid">
+          <Select label="Which way did the goods travel?" value={String(p.category)} options={[["4", "Category 4: to us (goods we bought, carrier we paid)"], ["9", "Category 9: to customers (goods we sold, carrier we didn’t pay)"]]} onChange={value => edit(next => { if (next.kind === "transport") next.payload.category = value === "9" ? 9 : 4 })} />
+          <ChoiceOrOther label="Vehicle" value={p.vehicle} invalid={invalid.has("Vehicle")} choices={Object.keys(SCOPE3_TRANSPORT_VEHICLES).map(vehicle => [vehicle, VEHICLE_LABELS[vehicle] ?? titleCase(vehicle)] as const)} placeholder="Choose a vehicle" otherLabel="Something else (saved, not calculated yet)" describeLabel="What vehicle?" onChange={value => edit(next => { if (next.kind === "transport") next.payload.vehicle = value })} />
+          <Select label="Did the goods have the vehicle to themselves?" value={p.loadBasis ?? ""} options={[["", "Not known yet"], ["dedicated_vehicle", "Yes: dedicated vehicle (vehicle-miles)"], ["shared_vehicle", "No: shared with other loads (ton-miles)"]]} onChange={value => edit(next => { if (next.kind !== "transport") return; next.payload.loadBasis = value === "dedicated_vehicle" || value === "shared_vehicle" ? value : null; if (next.payload.loadBasis && !SCOPE3_TRANSPORT_UNITS[next.payload.loadBasis].includes(next.quantity.originalUnit as never)) next.quantity.originalUnit = SCOPE3_TRANSPORT_UNITS[next.payload.loadBasis][0] })} />
+          <Select label="Did the goods pass through third-party warehouses or distribution centres?" value={p.thirdPartyFacilities} options={[["none", "No, none"], ["present_not_included", "Yes, but their emissions aren’t included"], ["unknown", "Not known"]]} onChange={value => edit(next => { if (next.kind === "transport") next.payload.thirdPartyFacilities = value as typeof SCOPE3_TRANSPORT_FACILITIES[number] })} hint="Only “No, none” meets the category’s minimum boundary; the other answers are disclosed as partial." />
+        </div></div>}
+        {draft.kind === "waste" && "treatment" in p && <div className="setup-subcard"><h3>Waste (Scope 3)</h3><p>One material sent to one treatment per record, by mass. EPA factors include transport to the facility and exclude avoided emissions.</p><div className="setup-grid">
+          <Select label="Whose waste is it?" value={String(p.category)} options={[["5", "Category 5: waste from our operations"], ["12", "Category 12: end of life of products we sold"]]} onChange={value => edit(next => { if (next.kind === "waste") next.payload.category = value === "12" ? 12 : 5 })} />
+          <ChoiceOrOther label="Material" value={p.material} choices={SCOPE3_WASTE_MATERIALS.map(material => [material, SCOPE3_WASTE_MATERIAL_TEXT_R2E[material] ?? titleCase(material)] as const)} placeholder="Choose a material" otherLabel="Something else (saved, not calculated yet)" describeLabel="What material?" onChange={value => edit(next => { if (next.kind === "waste") next.payload.material = value })} />
+          <ChoiceOrOther label="Treatment" value={p.treatment} invalid={invalid.has("Treatment")} choices={scope3WasteTreatmentsFor(p.material).map(treatment => [treatment, SCOPE3_WASTE_TREATMENT_TEXT_R2E[treatment] ?? titleCase(treatment)] as const)} placeholder="Choose a treatment" otherLabel="Something else (saved, not calculated yet)" describeLabel="What treatment?" onChange={value => edit(next => { if (next.kind === "waste") next.payload.treatment = value })} hint="Only the treatments EPA publishes a factor for with this material are listed." />
+        </div></div>}
+        {draft.kind === "business_travel" && "passengerSegments" in p && <div className="setup-subcard"><h3>Business travel (Scope 3)</h3><p>{scope3Completion ? "By distance, tank-to-wheel. Air excludes radiative forcing; its cabin class is recorded and disclosed but the factor is an average for all classes. Hotel stays are recorded in room-nights, an optional activity: U.S. stays are estimated from EPA’s energy per available room-night for the highest hotel class (2005 data), because the class isn’t recorded." : "By distance, tank-to-wheel. Air excludes radiative forcing and doesn’t distinguish cabin class. Hotel stays aren’t calculated in this beta: record them under “Something else” so they stay visible as needing input."}</p><div className="setup-grid">
+          <ChoiceOrOther label="Mode" value={p.mode} choices={[[SCOPE3_AIR_BY_DISTANCE, MODE_LABELS.air!] as const, ...Object.keys(SCOPE3_TRAVEL_MODES).map(mode => [mode, MODE_LABELS[mode] ?? titleCase(mode)] as const), ...(scope3Completion ? [[SCOPE3_HOTEL_MODE, "Hotel stay (room-nights)"] as const] : [])]} placeholder="Choose a mode" otherLabel={scope3Completion ? "Something else (saved, not calculated yet)" : "Something else, such as a hotel stay (saved, not calculated yet)"} describeLabel="What was it?" onChange={value => edit(next => {
+            if (next.kind !== "business_travel") return
+            next.payload.mode = value; if (value !== SCOPE3_AIR_BY_DISTANCE) next.payload.passengerSegments = null; if (!(SCOPE3_AIR_HAULS as readonly string[]).includes(value)) next.payload.haulBasis = null
+            const units = scope3Completion && scope3IsHotelMode(value) ? ["room-night"] : travelUnits(value); if (units.length && !units.includes(next.quantity.originalUnit)) next.quantity.originalUnit = units[0]!
+            // I-08 (schema 30): the v2 payload records the cabin class of a flight and the country of a hotel stay.
+            if (scope3Completion && scope3IsHotelMode(value)) withTravelV2(next.payload)
+            if ("cabinClass" in next.payload && !isAirMode(value)) next.payload.cabinClass = null
+            if ("hotelCountry" in next.payload && !scope3IsHotelMode(value)) next.payload.hotelCountry = null
+          })} />
+          {scope3Completion && isAirMode(p.mode) && <Select label="Cabin class" value={p.cabinClass ?? ""} options={[["", "Not recorded"] as const, ...scope3TokenOptions("cabinClass", SCOPE3_CABIN_CLASSES)]} onChange={value => edit(next => { if (next.kind !== "business_travel") return; withTravelV2(next.payload); next.payload.cabinClass = (value || null) as typeof next.payload.cabinClass })} hint="Recorded and disclosed; the air factor is the average for all classes." />}
+          {scope3Completion && scope3IsHotelMode(p.mode) && <Field label="Hotel country (two-letter code)" value={p.hotelCountry ?? ""} onChange={value => edit(next => { if (next.kind !== "business_travel") return; withTravelV2(next.payload); next.payload.hotelCountry = value.trim().toUpperCase() || null })} hint="ISO 3166, for example US or GB. Blank: the reporting location’s country is used if it is the U.S. Only U.S. stays are calculated (EPA per room-night values, highest hotel class, because the class isn’t recorded); others are listed, not counted." />}
+          {p.mode === SCOPE3_AIR_BY_DISTANCE && <Field label="One-way flights (passenger segments) at this distance" type="number" value={p.passengerSegments === null ? "" : String(p.passengerSegments)} onChange={value => edit(next => { if (next.kind === "business_travel") next.payload.passengerSegments = /^[1-9][0-9]{0,7}$/.test(value) && Number(value) <= 10_000_000 ? Number(value) : null })} hint="The amount above is the distance of one flight; the engine works out short, medium or long haul from it." />}
+          {(SCOPE3_AIR_HAULS as readonly string[]).includes(p.mode) && <Field label="How do you know the haul length?" invalid={invalid.has("How do you know the haul length?")} value={p.haulBasis ?? ""} onChange={value => edit(next => { if (next.kind === "business_travel") next.payload.haulBasis = value || null })} hint="For example, the travel agency’s booking export. The amount above is passenger-miles or km." />}
+        </div></div>}
+        {draft.kind === "employee_commuting" && "mode" in p && !("passengerSegments" in p) && <div className="setup-subcard"><h3>Employee commuting (Scope 3)</h3><p>{scope3Completion ? COPY_TEXT_R2E.commutingByDistance : "By distance, tank-to-wheel. Survey extrapolation and teleworking aren’t calculated in this beta; if the distance is scaled from a sample, mark it Estimated and say how."}</p><div className="setup-grid">
+          <ChoiceOrOther label="Mode" value={p.mode} choices={SCOPE3_COMMUTING_MODES.map(mode => [mode, MODE_LABELS[mode] ?? titleCase(mode)] as const)} placeholder="Choose a mode" otherLabel={scope3Completion ? COPY_TEXT_R2E.commutingOther : "Something else, such as teleworking (saved, not calculated yet)"} describeLabel="What was it?" onChange={value => edit(next => { if (next.kind !== "employee_commuting") return; next.payload.mode = value; const units = travelUnits(value); if (units.length && !units.includes(next.quantity.originalUnit)) next.quantity.originalUnit = units[0]! })} />
+        </div></div>}
+        {/* Round 3 lane D (PR-6): the kind's key choice (mode, material, vehicle, the record form) comes before the data-quality block. */}
+        {scope3Draft && scope3Completion && <DataQualityEditor activity={draft} onEdit={edit} lead={qualityFields("Is the amount actual or estimated?")} />}
         {draft.kind === "electricity" && "instruments" in p && <div className="setup-subcard"><h3>Electricity, site and grid region</h3><div className="setup-grid">
           <Field label="ZIP code" value={p.zip} onChange={value => edit(next => { (next.payload as typeof p).zip = value; (next.payload as typeof p).subregion = ""; (next.payload as typeof p).utilityEiaId = null; (next.payload as typeof p).utilityName = ""; setZipLookup(null) })} hint="Required. Run the pinned lookup; unresolved values stay visible but cannot be saved as validated." />
         </div><button type="button" disabled={busy || !/^\d{5}$/.test(p.zip)} onClick={() => void runZipLookup()}>Look up ZIP and utility</button>
           {zipLookup?.found && (zipLookup.needsUtilityChoice || zipLookup.utilities.length > 1) && <Select label="Verified utility and eGRID subregion" value={p.utilityName ? `${p.subregion}|${p.utilityEiaId ?? ""}|${p.utilityName}` : ""} options={[["", "Choose the utility serving this meter"] as const, ...zipLookup.utilities.map(utility => [`${utility.subregion}|${utility.eiaId}|${utility.utility}`, `${utility.utility} · ${utility.subregion}${utility.predominantUtility ? " · predominant" : ""}`] as const)]} onChange={value => edit(next => { if (next.kind !== "electricity") return; const utility = zipLookup.utilities.find(item => `${item.subregion}|${item.eiaId}|${item.utility}` === value); next.payload.subregion = utility?.subregion ?? ""; next.payload.utilityEiaId = utility?.eiaId || null; next.payload.utilityName = utility?.utility ?? "" })} hint={zipLookup.needsUtilityChoice ? "A utility selection is required because this ZIP maps to more than one subregion." : "Choose the utility named on the source document."} />}
-          {zipLookup?.found && p.subregion && p.utilityName && <p>Verified utility: <strong>{p.utilityName}</strong> · eGRID subregion <strong>{p.subregion}</strong>. Source: {zipLookup.source}</p>}
+          {zipLookup?.found && p.subregion && p.utilityName && <p>Verified utility: <strong>{p.utilityName}</strong> · eGRID subregion <strong>{egridSubregionLabel(p.subregion)}</strong>. Source: {zipLookup.source}</p>}
           {zipLookup && !zipLookup.found && <p className="worksheet-error">No verified eGRID match was found for ZIP {zipLookup.zip}.</p>}
           <p>Location-based and market-based results have separate statuses. Uncovered consumption uses the reviewed Green-e residual mix. “Provisional” appears only if a subregion has no residual-mix rate.</p>
           <h4>Certificates and other contractual instruments</h4>
@@ -702,14 +1031,21 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
           <p>Biomass, biogas and landfill gas are collected but remain input needed in this beta. No instrument is silently counted at zero.</p>
         </div>}
         <div className="setup-subcard"><h3>Evidence linked to this version</h3>{evidence.some(file => file.quarantineStatus !== "rejected" || draft.evidenceIds.includes(file.id)) ? evidence.filter(file => file.quarantineStatus !== "rejected" || draft.evidenceIds.includes(file.id)).map(file => <label className="collection-evidence-choice" key={file.id}><input type="checkbox" checked={draft.evidenceIds.includes(file.id)} disabled={file.quarantineStatus === "rejected" && !draft.evidenceIds.includes(file.id)} onChange={event => edit(next => { next.evidenceIds = event.target.checked ? [...next.evidenceIds, file.id] : next.evidenceIds.filter(id => id !== file.id); if (!event.target.checked && next.kind === "electricity") next.payload.instruments.forEach(instrument => { if (instrument.evidenceReference === file.id) instrument.evidenceReference = null }) })} /> {evidenceLabel(file)}</label>) : <p>No linkable evidence uploaded yet.</p>}</div>
-        {selected && draft.state === "active" && <Field label="Reason for this correction" value={reason} onChange={setReason} hint="Required for a new version. Earlier versions remain available." />}
+        {/* Bug hunt C (C-08): rewriting the reason retires a failed request too (as editing any field does), so a retry saves the reason shown. */}
+        {selected && draft.state === "active" && <Field label="Reason for this correction" value={reason} invalid={invalid.has("Reason for this correction")} onChange={value => { setReason(value); pending.current = null }} hint="Required for a new version. Earlier versions remain available." />}
         {selected && draft.state === "active" && <button type="button" className="collection-withdraw" onClick={() => edit(next => { next.state = "withdrawn"; next.withdrawalReason = "" })}>Withdraw this record</button>}
-        {selected && draft.state === "withdrawn" && <><Field label="Reason for withdrawal" value={draft.withdrawalReason ?? ""} onChange={value => edit(next => { next.withdrawalReason = value })} hint="Required. The withdrawn version remains in history and is excluded from calculation." /><button type="button" onClick={() => edit(next => { next.state = "active"; next.withdrawalReason = null })}>Restore as active record</button></>}
-        <button type="button" disabled={busy || !canManage || !dirty} onClick={() => void save()}>{selected ? draft.state === "withdrawn" ? "Save withdrawal" : "Save correction" : "Save activity"}</button>
+        {selected && draft.state === "withdrawn" && <><Field label="Reason for withdrawal" invalid={invalid.has("Reason for withdrawal")} value={draft.withdrawalReason ?? ""} onChange={value => edit(next => { next.withdrawalReason = value })} hint="Required. The withdrawn version remains in history and is excluded from calculation." /><button type="button" onClick={() => edit(next => { next.state = "active"; next.withdrawalReason = null })}>Restore as active record</button></>}
+        <button type="button" className="collection-save" disabled={busy || !canManage || !dirty || blocking.length > 0} aria-describedby={blocking.length > 0 ? "collection-save-problems" : saveProblem ? "collection-save-error" : !dirty && canManage ? "collection-save-unchanged" : undefined} onClick={() => void save()}>{selected ? draft.state === "withdrawn" ? "Save withdrawal" : "Save correction" : "Save activity"}</button>
+        {!dirty && canManage && !saveProblem && blocking.length === 0 && <small className="nv-subtle collection-save-unchanged" id="collection-save-unchanged">{SCOPE3_PRESAVE_TEXT_R3D.unchanged}</small>}
+        {blocking.length > 0 && <div className="collection-save-problems" id="collection-save-problems"><p>{SAVE_TEXT_R2E.blocked}</p><ul>{blocking.map(text => <li key={text}>{text}</li>)}</ul></div>}
+        {saveProblem && <p ref={saveAlert} id="collection-save-error" tabIndex={-1} role="alert" className="worksheet-error collection-save-error"><strong>{SAVE_TEXT_R2E.notSaved}</strong> {saveProblem}</p>}
       </fieldset>
-      {selected && <><h3>Correction history</h3><ol className="setup-history">{selected.history.map(item => <li key={item.id}><button type="button" disabled={busy} onClick={() => void showVersion(item.id)}>Version {item.revision} · {new Date(item.createdAt).toLocaleString()}</button><span>{item.correctionReason || "Initial entry"}</span></li>)}</ol>{historical && <HistoricalActivityDetail version={historical} evidence={evidence} />}</>}
+      {selected && <><h3>Correction history</h3><ol className="setup-history">{selected.history.map(item => <li key={item.id}><button type="button" disabled={busy} onClick={() => void showVersion(item.id)}>Version {item.revision} · {formatTimeR2E(item.createdAt)}</button><span>{item.correctionReason || "Initial entry"}</span></li>)}</ol>{historical && <HistoricalActivityDetail version={historical} evidence={evidence} />}</>}
     </div>
 
+    {/* I-09: spend CSV import (0030; schema 30 only) and its unmatched, duplicate and supersession queues. */}
+    {scope3Completion && workspaceId && availableScope3Kinds.includes("purchase_spend") && <div className="worksheet-card"><SpendImport companyId={workspaceId} actor={actor} onChanged={() => void refreshRecords()}
+      onOpenRecord={id => { const row = records.find(item => item.id === id); if (!row) return; openRecord(row); requestAnimationFrame(() => document.getElementById("collection-record-editor")?.scrollIntoView({ block: "start" })) }} /></div>}
     <div className="worksheet-card"><h2>Private evidence</h2><p>Originals are hashed, company-scoped and quarantined on upload. A pending or rejected file cannot be downloaded as cleared evidence.</p>
       {canManage && <label className="setup-field"><span>Upload PDF, image, CSV or XLSX (up to 10 MiB)</span><input type="file" accept="application/pdf,image/jpeg,image/png,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" disabled={busy} onChange={event => { const file = event.target.files?.[0]; if (file) void upload(file); event.target.value = "" }} /></label>}
       <ul>{evidence.map(file => <li key={file.id}>{file.originalName} · {file.byteLength.toLocaleString()} bytes · {file.quarantineStatus} · SHA-256 {file.sha256.slice(0, 12)}… {file.quarantineStatus === "clean" && <button type="button" disabled={busy} onClick={() => void download(file)}>Download original</button>}</li>)}</ul>

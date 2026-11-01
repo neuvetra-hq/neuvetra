@@ -20,6 +20,8 @@ REG = json.loads((REF / 'verified-scope3-register-2025.json').read_text('utf-8')
 V = {x['id']: F(x['value']) for x in REG['entries']}
 CELL = {x['id']: x['valueCell'] for x in REG['entries']}
 LB, GWP = F('0.45359237'), {'co2': 1, 'ch4': 28, 'n2o': 265}
+R1_METHODS = ('scope3.cat3.td_losses.egrid2023.v1', 'scope3.cat4_9.transport_distance.v1', 'scope3.cat5_12.waste.v1',
+              'scope3.cat6.business_travel_distance.v1', 'scope3.cat7.employee_commuting_distance.v1')
 
 
 def r12(q: F) -> F:
@@ -204,8 +206,34 @@ class Categories6And7Travel(unittest.TestCase):
         for mode in ('air', 'air_short_haul'):
             with self.assertRaises(e.Refused):
                 e.employee_commuting({'period': P, 'mode': mode, 'activity': {'value': '1', 'unit': 'passenger-mile'}})
+        # Round 2, owner decision 1: the envelope is 2025-2026, so January 2026 calculates; 2027 is outside it.
         with self.assertRaises(e.Refused):
-            e.employee_commuting({'period': {'start': '2026-01-01', 'endExclusive': '2026-02-01'}, 'mode': 'bus', 'activity': {'value': '1', 'unit': 'passenger-mile'}})
+            e.employee_commuting({'period': {'start': '2027-01-01', 'endExclusive': '2027-02-01'}, 'mode': 'bus', 'activity': {'value': '1', 'unit': 'passenger-mile'}})
+
+
+class MalformedDistanceUnits(unittest.TestCase):
+    def test_non_string_units_are_refused_without_breaking_the_batch(self):
+        requests = [
+            ('transport', {'period': P, 'category': 4, 'vehicle': 'medium_and_heavy_duty_truck',
+                           'loadBasis': 'dedicated_vehicle', 'thirdPartyFacilities': 'none'}, 'activity', 'vehicle-mile'),
+            ('business_travel', {'period': P, 'mode': 'bus'}, 'activity', 'passenger-mile'),
+            ('business_travel', {'period': P, 'mode': 'air', 'passengerSegments': 2}, 'segmentDistance', 'mile'),
+            ('employee_commuting', {'period': P, 'mode': 'bus'}, 'activity', 'passenger-mile'),
+        ]
+        for kind, fields, key, valid_unit in requests:
+            valid = {'kind': kind, 'input': dict(fields, **{key: {'value': '10', 'unit': valid_unit}})}
+            expected = e.calculate(valid)
+            self.assertEqual(expected['status'], 'complete')
+            for unit in ([], {}, ['mile'], {'value': 'mile'}, None, True, 1):
+                with self.subTest(kind=kind, field=key, unit=unit):
+                    bad = {'kind': kind, 'input': dict(fields, **{key: {'value': '10', 'unit': unit}})}
+                    with self.assertRaises(e.Refused) as raised:
+                        e.calculate(bad)
+                    self.assertEqual(raised.exception.code, 'unsupported_unit')
+                    self.assertEqual(e.calculate_many([bad, valid]), [
+                        {'status': 'refused', 'code': 'unsupported_unit'},
+                        {'status': 'ok', 'result': expected},
+                    ])
 
 
 class Aggregate(unittest.TestCase):
@@ -246,6 +274,80 @@ class Aggregate(unittest.TestCase):
         self.assertEqual((a['complete'], a['resultCount'], a['categorySubtotals']), (False, 0, {}))
 
 
+class ContextIndependence(unittest.TestCase):
+    """S3A-01 (Codex review, 25 October 2026): every accepted result is the same whatever Decimal context calls the
+    engine, and the aggregate (which recomputes every result in precision 96) accepts it. Exhaustive over the catalog's
+    tokens and units, with ordinary, smallest, longest and maximum quantities."""
+    QUANTITIES = ('17.125', '0.001', '123456789.987', '999999999999.999')
+
+    def requests(self):
+        cat = e.catalog()
+        for m in cat['wasteMaterials']:
+            for t in e.WASTE_TREATMENTS:
+                for unit in cat['wasteUnits']:
+                    for q in self.QUANTITIES:
+                        yield {'kind': 'waste', 'input': {'period': P, 'category': 5, 'material': m['id'], 'treatment': t, 'quantity': q, 'unit': unit}}
+        for v in cat['transportVehicles']:
+            for basis, units in (('dedicated_vehicle', ('vehicle-mile', 'vehicle-km')), ('shared_vehicle', ('short ton-mile', 'tonne-km'))):
+                if not v['dedicatedVehicle' if basis == 'dedicated_vehicle' else 'sharedVehicle']:
+                    continue
+                for unit in units:
+                    for q in self.QUANTITIES:
+                        yield {'kind': 'transport', 'input': {'period': P, 'category': 9, 'vehicle': v['id'], 'loadBasis': basis, 'activity': {'value': q, 'unit': unit}, 'thirdPartyFacilities': 'none'}}
+        for mode in cat['travelModes']:
+            basis = mode['activity'].split('-')[0]
+            for unit in (f'{basis}-mile', f'{basis}-km'):
+                for q in self.QUANTITIES:
+                    inp = {'period': P, 'mode': mode['id'], 'activity': {'value': q, 'unit': unit}}
+                    if mode['id'].startswith('air_'):
+                        inp['haulBasis'] = 'Itinerary'
+                    yield {'kind': 'business_travel', 'input': inp}
+                    if mode['employeeCommuting']:
+                        yield {'kind': 'employee_commuting', 'input': inp}
+        for unit in ('mile', 'km'):
+            for q in self.QUANTITIES:
+                for segments in (1, 37, 10_000_000):
+                    yield {'kind': 'business_travel', 'input': {'period': P, 'mode': 'air', 'segmentDistance': {'value': q, 'unit': unit}, 'passengerSegments': segments}}
+        single = {}
+        for z, rows in sorted(e.zip_table().items()):
+            if len({r[0] for r in rows}) == 1:
+                single.setdefault(rows[0][0], z)
+        for sub, z in sorted(single.items()):
+            for unit in ('kWh', 'MWh'):
+                for q in self.QUANTITIES:
+                    yield {'kind': 'td_losses', 'input': {'period': P, 'quantity': q, 'unit': unit, 'subregion': sub, 'zip': z}}
+
+    def test_results_do_not_depend_on_the_callers_context_and_always_aggregate(self):
+        from decimal import localcontext
+        n = complete = 0
+        for req in self.requests():
+            n += 1
+            plain = e.calculate(req)
+            with localcontext() as ctx:
+                ctx.prec = 200
+                wide = e.calculate(req)
+            with localcontext() as ctx:
+                ctx.prec = 12
+                narrow = e.calculate(req)
+            self.assertEqual(e.canonical(plain), e.canonical(wide), req)
+            self.assertEqual(e.canonical(plain), e.canonical(narrow), req)
+            agg = e.aggregate([plain])
+            if plain['status'] == 'complete':
+                complete += 1
+                self.assertEqual(agg['knownSourceSubtotal']['unrounded'], plain['total']['unrounded'], req)
+        self.assertGreater(n, 6000)
+        self.assertGreater(complete, 3000)
+
+    def test_the_two_reported_cases(self):
+        asphalt = e.calculate({'kind': 'waste', 'input': {'period': P, 'category': 12, 'material': 'asphalt_concrete', 'treatment': 'recycled', 'quantity': '17.125', 'unit': 'metric_ton'}})
+        # Codex's independent value: 17.125 t -> 18.877081199580 short tons (12-place half-even) x D490 x 1000.
+        self.assertEqual(asphalt['total']['unrounded'], '66.457491045171486235096879692')
+        self.assertEqual(asphalt['total']['display'], '66.4575')
+        self.assertEqual(e.aggregate([asphalt])['knownSourceSubtotal']['unrounded'], '66.457491045171486235096879692')
+        air = e.calculate({'kind': 'business_travel', 'input': {'period': P, 'mode': 'air', 'segmentDistance': {'value': '999999999999.999', 'unit': 'km'}, 'passengerSegments': 10_000_000}})
+        self.assertEqual(e.aggregate([air])['knownSourceSubtotal']['unrounded'], air['total']['unrounded'])
+
+
 class Dates(unittest.TestCase):
     def test_impossible_dates_refused(self):
         for fn, inp in ((e.waste, {'category': 5, 'material': 'mixed_msw', 'treatment': 'landfilled', 'quantity': '1', 'unit': 'short_ton'}),
@@ -258,6 +360,8 @@ class Dates(unittest.TestCase):
 class DataIntegrity(unittest.TestCase):
     def test_describe_matches_register(self):
         d = e.describe()
+        # The five R1 methods; the I-03 methods (R2 and supplier data) are checked in scope3_engine_purchases_test.
+        d = dict(d, methods=[m for m in d['methods'] if m['id'] in R1_METHODS])
         self.assertEqual([(m['id'], len(m['factorKeys']), m['gwpSetId']) for m in d['methods']], [
             ('scope3.cat3.td_losses.egrid2023.v1', 90, 'AR5-100'), ('scope3.cat4_9.transport_distance.v1', 24, 'AR5-100'),
             ('scope3.cat5_12.waste.v1', 183, 'AR4-100'), ('scope3.cat6.business_travel_distance.v1', 39, 'AR5-100'),

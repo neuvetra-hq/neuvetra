@@ -14,6 +14,35 @@ export const ELECTRICITY_REGISTER_GREENE2025_URL = new URL('./method-reference/v
 /** EPA Hub 2025 Tables 8-11 plus eGRID2023 rev2 rates and grid gross loss (Scope 3), approved for loading by migration 0024. */
 export const SCOPE3_REGISTER_2025_SHA256 = '5a534d33e70f7eb83bd8b0870da4cd8530e1d3429b3cb7e610b7941abce354f2'
 export const SCOPE3_REGISTER_2025_URL = new URL('./method-reference/verified-scope3-register-2025.json', import.meta.url)
+/**
+ * R2 (Scope 3 completion I-03): EPA Supply Chain GHG Emission Factors v1.3 (2022 USD, AR5) and the BEA GDP deflator (FRED
+ * A191RD3A086NBEA), built by tools/method-reference/build_scope3_spend_register.py. Pinned by the Scope 3 engine; not
+ * approved for loading into the method store (no release: DESIGN A5).
+ */
+export const SCOPE3_SPEND_REGISTER_SHA256 = '24d59c826e23b72b41a2a22db5f1c51c793c00a94e14ebe391e3982d76d1088c'
+export const SCOPE3_SPEND_REGISTER_URL = new URL('./method-reference/verified-scope3-spend-register-epa-scghg-v1.3.json', import.meta.url)
+/**
+ * R3 (Scope 3 completion I-05): EPA GHG Emission Factors Hub 2025 Tables 1, 11 and 12 and eGRID2023 rev2 U.S. rates, net
+ * generation and plant heat input, built by tools/method-reference/build_scope3_supplement_register.py. Pinned by the Scope 3
+ * engine; not approved for loading into the method store (no release: DESIGN A5).
+ */
+export const SCOPE3_SUPPLEMENT_REGISTER_SHA256 = 'b9d3c4b9676c539eeb0caece70a81d1713be4646673115033649fed031c8176b'
+export const SCOPE3_SUPPLEMENT_REGISTER_URL = new URL('./method-reference/verified-scope3-supplement-register-2025.json', import.meta.url)
+/**
+ * R5 (Scope 3 completion I-12u, DESIGN 13.1): category 3 upstream factors from US free sources (NETL 2024 natural gas supply
+ * chain; CA-GREET3.0 and CARB LCFS energy densities; eGRID heat-input basis), hand-transcribed twice and built by
+ * tools/method-reference/build_scope3_us_upstream_register.py from the committed transcription files. Pinned by the Scope 3
+ * engine; not approved for loading into the method store (no release: DESIGN A5).
+ */
+export const SCOPE3_US_UPSTREAM_REGISTER_SHA256 = '66e9658a6743a3eabe460211dbaa6842082d4459666a80076ef795caa89b7d7c'
+export const SCOPE3_US_UPSTREAM_REGISTER_URL = new URL('./method-reference/verified-scope3-us-upstream-register-2025.json', import.meta.url)
+/**
+ * R6 (Scope 3 completion I-12h): EIA CBECS 2018 Tables C14 and C24 and EPA's events and conferences guidance (2018) Table 5 hotel
+ * energy per room-night, built by tools/method-reference/build_scope3_us_building_hotel_register.py from the committed double-read
+ * transcriptions (tools/method-reference/sources/). Pinned by the Scope 3 engine; not approved for loading into the method store.
+ */
+export const SCOPE3_BUILDING_HOTEL_REGISTER_SHA256 = '0902516554d063eb5cb3f3491a277ddb7ae0767180c335cbca52e7b714fe20e7'
+export const SCOPE3_BUILDING_HOTEL_REGISTER_URL = new URL('./method-reference/verified-scope3-us-building-hotel-register-2025.json', import.meta.url)
 export const METHOD_REFERENCE_MIGRATION = '0024_method_reference.sql'
 /** Scope 3 extension; merge only after the board approves notes/decisions/2026-09-28-scope3-beta-methods.md. */
 export const SCOPE3_METHOD_MIGRATION = '0025_scope3_method_reference.sql'

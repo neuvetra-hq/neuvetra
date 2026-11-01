@@ -1,3 +1,4 @@
+import { sharedFetch } from "./shared-get"
 import type { CompanySetup, CompanySetupSaveInput, CompanySetupSaveResult, CompanySetupVersion, CompanySetupView } from "../../../../packages/neuvetra-database/src/company-setup-contract"
 import type { HostedWorkspaceActor } from "./workspace-api"
 
@@ -61,7 +62,8 @@ function url(companyId: string, versionId?: string) {
 async function request<T>(actor: HostedWorkspaceActor, path: string, input?: CompanySetupSaveInput): Promise<T> {
   if (!actor.accessToken || /[\r\n]/.test(actor.accessToken)) throw new Error("Sign in again to continue.")
   actor.signal?.throwIfAborted()
-  const response = await fetch(path, {
+  // Round 3 lane C (PR-3): GETs shared across screens and retried once on 429; writes clear them.
+  const response = await sharedFetch(actor, path, {
     method: input ? "POST" : "GET",
     headers: { authorization: `Bearer ${actor.accessToken}`, ...(input ? { "content-type": "application/json" } : {}) },
     body: input ? JSON.stringify(input) : undefined,

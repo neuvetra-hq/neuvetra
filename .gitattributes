@@ -425,3 +425,6 @@ operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-C
 operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE3.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW3.json -text whitespace=cr-at-eol
 prototypes/company-onboarding/readiness-review.md -text whitespace=cr-at-eol
+
+# Original EPA source bytes are hashed by the Scope 3 register builder, including CRLF.
+tools/method-reference/sources/epa-scghg-v1.3/SupplyChainGHGEmissionFactors_v1.3.0_NAICS_CO2e_USD2022.csv -text whitespace=cr-at-eol

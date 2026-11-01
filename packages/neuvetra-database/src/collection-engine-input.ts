@@ -14,7 +14,7 @@
  * An instrument counts only with a certificate or contract file that supports it alone (A-01) and has cleared quarantine
  * review (A-03); otherwise its reference is sent as "" and the engine holds only the market-based result.
  */
-import { savedAgainstCurrentSetup, type CollectionActivity, type CollectionActivityVersion, type CollectionContext, type CollectionEvidenceMetadata, type CollectionInstrument } from './collection-contract'
+import { isScope3Activity, savedAgainstCurrentSetup, type CollectionActivity, type CollectionActivityVersion, type CollectionContext, type CollectionEvidenceMetadata, type CollectionInstrument } from './collection-contract'
 
 export const COLLECTION_ENGINE_INPUT_PROFILE = 'neuvetra.collection-engine-input.v1' as const
 
@@ -140,8 +140,11 @@ const decimal = (value: string) => QUANTITY.test(value)
 /** Normalization is identity: only a plain decimal in an engine unit is normalized, so the pair must equal the bill's. */
 const billed = (q: CollectionActivity['quantity']) => q.normalizedValue !== null && q.normalizedValue === q.originalValue && q.normalizedUnit === q.originalUnit && decimal(q.normalizedValue)
 
+/** `claims`: every claim in the company (instrumentEvidenceClaims). Results always passes it; without it no file is treated as shared. */
 export function planCollectionCalculation(version: CollectionActivityVersion, context: CollectionContext, evidence: CollectionEvidenceMetadata[], claims?: InstrumentEvidenceClaims): CollectionCalculationPlan {
   const a = version.activity
+  // Scope 3 package 2: Scope 3 records are planned only by planScope3Calculation and never reach a Scope 1 or 2 engine.
+  if (isScope3Activity(a)) throw new Error('Scope 3 records are planned by planScope3Calculation.')
   const base = { profile: COLLECTION_ENGINE_INPUT_PROFILE, recordId: version.recordId, versionId: version.id, revision: version.revision, kind: a.kind,
     sourceId: a.sourceId, locationId: a.locationId, quality: a.quality, estimateBasis: a.estimateBasis }
   const hold = (status: 'withdrawn' | 'excluded' | 'input_needed', reasons: string[], notes: string[] = []): CollectionCalculationPlan =>

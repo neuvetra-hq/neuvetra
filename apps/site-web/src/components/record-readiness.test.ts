@@ -4,7 +4,10 @@ import { describe, expect, test } from "bun:test"
 import { fileURLToPath } from "node:url"
 import { validateCollectionActivity, type CollectionActivity, type CollectionContext, type CollectionEvidenceMetadata } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { planCollectionCalculation } from "../../../../packages/neuvetra-database/src/collection-engine-input"
+import { planScope3Calculation, type Scope3CollectionVersion } from "../../../../packages/neuvetra-database/src/scope3-collection"
 import { reasonText } from "../lib/plain-language"
+import { SCOPE3_PAYLOAD_FIXTURES } from "../../../../packages/neuvetra-database/src/scope3-payload-fixtures"
+import { SCOPE3_DISCLOSURE_TEXT } from "../../../../packages/neuvetra-database/src/scope3-text"
 import { collectionReadinessFindings, legacyVehicleValues, locationReadinessFindings, recordReadiness, type CollectionReadinessFinding } from "./CollectionWorkspace"
 
 const company = "73000000-0000-4000-8000-000000000001", setup = "73000000-0000-4000-8000-000000000002"
@@ -225,6 +228,43 @@ describe.skipIf(!PYTHON)("the screen agrees with the engines", () => {
   }, ENGINE_TEST_TIMEOUT_MS)
 })
 
+// Scope 3 package 2 (Claude, 26 October 2026): the Activity screen's readiness for the four Scope 3 kinds is the Scope 3
+// adapter's own plan, the one Results uses, so the screen never says ready for a record Results will hold.
+describe("Scope 3 readiness agrees with the Scope 3 adapter", () => {
+  const s3q = (value: string, unit: string) => ({ originalValue: value, originalUnit: unit, normalizedValue: value, normalizedUnit: unit })
+  const s3 = (activity: Record<string, unknown>) => validateCollectionActivity({ ...common, ...activity })
+  const freight = (payload: Record<string, unknown> = {}, extra: Record<string, unknown> = {}) => s3({ kind: "transport", sourceId: "LANE-1", quantity: s3q("1200.5", "short ton-mile"), payload: { category: 4, vehicle: "rail", loadBasis: "shared_vehicle", thirdPartyFacilities: "none", ...payload }, ...extra })
+  const waste = (payload: Record<string, unknown> = {}, extra: Record<string, unknown> = {}) => s3({ kind: "waste", sourceId: "W-1", quantity: s3q("17.125", "metric_ton"), payload: { category: 5, material: "asphalt_concrete", treatment: "recycled", ...payload }, ...extra })
+  const travel = (payload: Record<string, unknown> = {}, extra: Record<string, unknown> = {}) => s3({ kind: "business_travel", sourceId: "T-1", quantity: s3q("2400", "mile"), payload: { mode: "air", passengerSegments: 4, haulBasis: null, ...payload }, ...extra })
+  const commute = (payload: Record<string, unknown> = {}, extra: Record<string, unknown> = {}) => s3({ kind: "employee_commuting", sourceId: "C-1", quantity: s3q("9800", "passenger-mile"), payload: { mode: "bus", ...payload }, ...extra })
+  const plan3 = (activity: CollectionActivity) => planScope3Calculation({ id: company, recordId: company, companyId: company, revision: 1, previousVersionId: null, correctionReason: null, activity, payloadSha256: "b".repeat(64), createdBy: company, createdAt: "2025-06-01T00:00:00.000Z" } as unknown as Scope3CollectionVersion, context, evidence)
+
+  test("ready records show nothing blocking; held records show the adapter's reasons in plain words", () => {
+    for (const activity of [freight(), waste(), travel(), commute()]) {
+      expect([activity.kind, plan3(activity).action]).toEqual([activity.kind, "calculate"])
+      expect([activity.kind, recordReadiness(activity, context, evidence).filter(finding => BLOCKING.has(finding.status))]).toEqual([activity.kind, []])
+    }
+    expect(reasons(freight({ vehicle: "single_unit_truck" }))).toContain(reasonText("vehicle_not_an_engine_token"))
+    expect(reasons(freight({ loadBasis: null }))).toContain(reasonText("load_basis_required"))
+    expect(reasons(waste({ material: "unobtainium" }))).toContain(reasonText("material_not_an_engine_token"))
+    expect(reasons(travel({ passengerSegments: null }))).toContain(reasonText("passenger_segments_required"))
+    expect(reasons(commute({ mode: "teleport" }))).toContain(reasonText("mode_not_an_engine_token"))
+    expect(recordReadiness(waste({}, { locationId: warehouse }), context, evidence).map(finding => finding.status)).toContain("excluded")
+    expect(recordReadiness(travel({}, { state: "withdrawn", withdrawalReason: "Trip cancelled." }), context, evidence)[0]).toEqual({ status: "withdrawn", reason: "Withdrawn: Trip cancelled." })
+  })
+
+  test("for every case, the screen blocks exactly when the adapter holds", () => {
+    const cases = [freight(), freight({ vehicle: "single_unit_truck" }), freight({ loadBasis: null }), freight({ vehicle: "aircraft", loadBasis: "dedicated_vehicle" }), freight({ category: 9 }),
+      waste(), waste({ material: "unobtainium" }), waste({ treatment: "buried_at_sea" }), waste({}, { quantity: s3q("40", "lb") }),
+      travel(), travel({ passengerSegments: null }), travel({ mode: "intercity_rail", passengerSegments: null }, { quantity: s3q("300", "passenger-mile") }),
+      commute(), commute({ mode: "teleport" }), commute({}, { locationId: undecided }), commute({}, { locationId: warehouse }), commute({}, { locationId: removed })]
+    for (const activity of cases) {
+      const held = plan3(activity).action === "hold"
+      expect([activity.kind, JSON.stringify(activity.payload), recordReadiness(activity, context, evidence).some(finding => BLOCKING.has(finding.status))]).toEqual([activity.kind, JSON.stringify(activity.payload), held])
+    }
+  })
+})
+
 // A-02 (26 October 2026): the record screen says why an implausible stated heat content is held, before saving.
 describe("A-02: implausible heat content is caught on the record screen", () => {
   test("unresolved corporate and location coverage is blocking and explained", () => {
@@ -243,5 +283,39 @@ describe("A-02: implausible heat content is caught on the record screen", () => 
     expect(reasonText("heat_content_outside_plausible_range")).toContain("high elevation")
     expect(recordReadiness(generator({ basis: "measured", gallons: "100" }, "5.825"), context, evidence)).toEqual([{ status: "input_needed", reason: reasonText("stated_hhv_outside_plausible_range") }])
     expect(recordReadiness(generator({ basis: "measured", gallons: "100" }, "0.138"), context, evidence)).toEqual([])
+  })
+})
+
+// Scope 3 completion I-08 (Claude, 30 October 2026): every Scope 3 kind. For each valid shared fixture saved at the office,
+// with and without the results route's plan options, the screen blocks exactly when the adapter holds for input (or the
+// record is withdrawn or excluded), and a line waiting for a factor source is its own non-blocking state with the
+// adapter's reason; a record the adapter calculates shows nothing blocking. (I-04 gap: it used to show "Input needed".)
+describe("I-08: the readiness of every Scope 3 kind agrees with the adapter; waiting for a factor source is its own state", () => {
+  const options = [undefined, { reportingPeriod: year, consolidationApproach: "operational_control" as const, distanceCommutingPeriods: [{ start: "2025-03-01", endExclusive: "2025-04-01" }], supersession: new Map<string, string>() },
+    { reportingPeriod: year, consolidationApproach: "financial_control" as const, distanceCommutingPeriods: [], supersession: new Map([[company, setup]]) }]
+  test("all valid shared fixtures of the seventeen kinds, under three sets of plan options", () => {
+    const tally: Record<string, number> = {}
+    for (const fixture of SCOPE3_PAYLOAD_FIXTURES.filter(item => item.valid)) {
+      const activity = validateCollectionActivity({ ...common, kind: fixture.kind, sourceId: "S-1", quantity: fixture.quantity, payload: fixture.payload })
+      for (const option of options) {
+        const version = { id: company, recordId: company, companyId: company, revision: 1, previousVersionId: null, correctionReason: null, activity, payloadSha256: "b".repeat(64), createdBy: company, createdAt: "2025-06-01T00:00:00.000Z" } as unknown as Scope3CollectionVersion
+        const adapter = planScope3Calculation(version, context, evidence, option ?? {})
+        const shown = recordReadiness(activity, context, evidence, undefined, option ? { options: option, recordId: company } : undefined)
+        const blocking = adapter.action === "hold" && adapter.status !== "method_pending"
+        expect([fixture.label, shown.some(finding => BLOCKING.has(finding.status))]).toEqual([fixture.label, blocking])
+        // Every adapter reason is shown in plain words, except a missing amount the screen already names in its own words (N8).
+        if (adapter.action === "hold") for (const code of adapter.reasons.filter(code => code !== "quantity_not_calculable")) expect([fixture.label, code, shown.some(finding => finding.reason === reasonText(code))]).toEqual([fixture.label, code, true])
+        if (adapter.reasons.includes("quantity_not_calculable")) expect(shown.some(finding => /^(Quantity |Unit “)/.test(finding.reason) || finding.reason === reasonText("quantity_not_calculable"))).toBe(true)
+        if (adapter.status === "method_pending") {
+          expect([fixture.label, shown.filter(finding => finding.status === "method_pending").map(finding => finding.reason)]).toEqual([fixture.label, [...adapter.reasons.map(reasonText), ...(adapter.optional ? [SCOPE3_DISCLOSURE_TEXT.optional_activity_not_yet_quantified] : [])]])
+          expect(shown.some(finding => finding.status === "input_needed")).toBe(false)
+        }
+        const key = adapter.action === "calculate" ? "calculate" : adapter.status!
+        tally[key] = (tally[key] ?? 0) + 1
+      }
+    }
+    // Every outcome occurs: calculated, held for input and superseded spend (excluded). I-12h: no valid shared fixture waits for a
+    // factor source any more (CBECS 2018 and the U.S. hotel table are loaded; a stay outside the U.S. is tested in scope3-record-forms).
+    expect(Object.keys(tally).sort()).toEqual(["calculate", "excluded", "input_needed"])
   })
 })

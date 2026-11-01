@@ -1,0 +1,4 @@
+line_id,date,vendor,gl_account,gl_description,description,amount,currency,dollar_year,category,naics_code,margin_choice,capital_full_cost
+INV-2025-0101,2025-03-14,Bayview Office Supply TEST,6100,Office supplies,Toner and desk supplies,4820.5,USD,2025,1,339940,with_margins,
+INV-2025-0102,2025-06-30,Studio Nine Design TEST,6150,Marketing,Brochure graphic design,2310,USD,2025,1,541430,with_margins,
+INV-2025-0103,2025-11-20,Mission Catering TEST,6300,Meals,Client meeting catering,1275.25,USD,2024,1,722320,with_margins,

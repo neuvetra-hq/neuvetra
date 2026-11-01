@@ -3,7 +3,6 @@ import { StationaryEquipment } from "./StationaryEquipment"
 import { StationaryGenerator } from "./StationaryGenerator"
 import { FugitiveWorkpapers } from "./FugitiveWorkpapers"
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react"
-import { CompanyWorkspaceDemo } from "./CompanyWorkspaceDemo"
 import { AnnualElectricityWorksheet } from "./AnnualElectricityWorksheet"
 import { AnnualElectricityEvidence } from "./AnnualElectricityEvidence"
 import { SourceElectricityWorksheet } from "./SourceElectricityWorksheet"
@@ -18,7 +17,7 @@ import { CollectionWorkspace } from "./CollectionWorkspace"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { JourneyNav, type JourneyView } from "./JourneyNav"
 import { JourneyHome } from "./JourneyHome"
-import { ResultsReport } from "./ResultsReport"
+import { ResultsReport, CompanyWorkspaceDemo } from "./lazy-results-workspace"
 import { AskNeuvetra } from "./AskNeuvetra"
 import { EarlierViews } from "./EarlierViews"
 import { PanelGuide } from "./PanelGuide"
@@ -229,7 +228,7 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
     ]} />}
     {panel === "collection" && missingRecordNotice && <div className="nv-notice nv-notice--warn" role="status" style={{ marginTop: 0 }}><Icon name="alert" /><p>That record wasn’t found. It may have been withdrawn or belong to another company, so the activity page is shown instead.</p></div>}
     {heldRecord && <div className="nv-notice nv-notice--warn" role="status" style={{ marginTop: 0 }}><Icon name="alert" /><div><p><strong>Outside the reporting period.</strong> {heldRecord.reasons[0]}</p>{canManage && <p><button type="button" className="nv-link" onClick={() => navigate("setup")}>Open company setup</button></p>}</div></div>}
-    {panel === "setup" && <CompanySetup key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onDirtyChange={onSetupDirty}
+    {panel === "setup" && <CompanySetup key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onDirtyChange={onSetupDirty} onNavigate={view => navigate(view)}
       intro={canManage ? <PanelGuide kind="setup" defaultOpen={status ? !status.setup.saved : false} onAsk={() => setAskOpen(true)} /> : null} />}
     {panel === "collection" && <CollectionWorkspace key={`${staging.actor.userId}:${staging.workspaceId}:${openRecordId ?? ""}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onDirtyChange={onCollectionDirty} openRecordId={openRecordId}
       intro={<>

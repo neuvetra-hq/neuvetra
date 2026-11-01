@@ -2,7 +2,11 @@ import type { RefObject } from "react"
 import { Icon } from "./Icon"
 import type { JourneyView } from "./JourneyNav"
 import type { JourneyStatus } from "@/lib/journey-status"
-import { ACTIVITY_KINDS, BOUNDARY_LABELS, kindIcon, periodLabel, RECORD_STATE_LABELS, RECORD_STATE_TONE } from "@/lib/plain-language"
+import { ACTIVITY_KINDS, BOUNDARY_LABELS, kindIcon, periodLabel, RECORD_STATE_LABELS, RECORD_STATE_TONE, SCOPE3_ACTIVITY_KINDS } from "@/lib/plain-language"
+import { COPY_TEXT_R2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
+// Round 3 lane C (PR-3): imported spend lines are one item that opens the spend import's grouped review.
+import { requestSpendImportFocus } from "@/lib/spend-import-target"
+import { TODO_SPEND_TEXT_R3C } from "@/lib/scope3-text-r3c"
 
 function plural(count: number, one: string, many = `${one}s`) { return `${count} ${count === 1 ? one : many}` }
 
@@ -23,27 +27,31 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
     if (progress[key] === "done") return "done"
     return next.panel === key ? "current" : "todo"
   }
-  const mustFix = collection.records.filter(row => row.state === "input_needed" || row.state === "review_required")
+  const allMustFix = collection.records.filter(row => row.state === "input_needed" || row.state === "review_required")
+  const spendFix = allMustFix.filter(row => row.importedSpend), mustFix = allMustFix.filter(row => !row.importedSpend)
+  // Bug hunt C (C-01): step 2's count is every record needing input (imported spend lines too), as the sidebar and the
+  // Activity list count them; the attention list below shows the imported lines as one spend-import item.
+  const openSpendImport = () => { requestSpendImportFocus("code"); onNavigate("collection") }
   const heldRows = collection.records.filter(row => row.state === "held_period")
   const improve: Array<{ key: string; title: string; detail: string }> = []
   if (collection.partial) improve.push({ key: "partial", title: `${plural(collection.partial, "record is", "records are")} only partly calculated`, detail: "For vehicles, add miles driven or fuel economy to include CH4 and N2O." })
   if (collection.noEvidence) improve.push({ key: "evidence", title: `${plural(collection.noEvidence, "record has", "records have")} no evidence linked`, detail: "Attach the bill or log so a reviewer can trace the figure." })
   if (collection.olderSetup && canManage) improve.push({ key: "older-setup", title: `${plural(collection.olderSetup, "record was", "records were")} saved before your latest company-setup change`, detail: "When you next edit one, choose its site again before saving — the form asks for a current site." })
   if (collection.qualityUnknown) improve.push({ key: "quality", title: `${plural(collection.qualityUnknown, "record has", "records have")} data quality “Unknown”`, detail: "Mark each record as actual or estimated." })
-  const nothingFlagged = !setup.missing.length && !mustFix.length && !heldRows.length && !gaps.length && !improve.length && evidence.checking === 0
+  const nothingFlagged = !setup.missing.length && !allMustFix.length && !heldRows.length && !gaps.length && !improve.length && evidence.checking === 0
   return <section>
     <p className="nv-eyebrow">Overview</p>
     <h1 ref={headingRef} tabIndex={-1}>{setup.saved ? name : "Welcome to Neuvetra"}</h1>
     <p className="nv-lead">{setup.saved
       ? `${periodLabel(setup.period.start, setup.period.endExclusive)} · ${BOUNDARY_LABELS[setup.boundary] ?? setup.boundary} · ${setup.sites.included} of ${plural(setup.sites.total, "site")} included`
-      : "Three steps take you from company details to a draft Scope 1 and Scope 2 report. Your progress saves as you go."}</p>
+      : status.scope3 ? COPY_TEXT_R2E.journeyHomeScope3 : "Three steps take you from company details to a draft Scope 1 and Scope 2 report. Your progress saves as you go."}</p>
 
     <div className="nv-card nv-card--accent">
       <p className="nv-eyebrow" style={{ marginBottom: 4 }}>Next step</p>
       <h2 className="nv-h2">{next.title}</h2>
       <p className="nv-muted" style={{ marginTop: 6 }}>{next.body}</p>
       <div className="nv-actions">
-        <button type="button" className="nv-btn nv-btn--primary" onClick={() => next.recordId ? onFix(next.recordId) : onNavigate(next.panel)}>{next.action}<Icon name="arrow" size={18} /></button>
+        <button type="button" className="nv-btn nv-btn--primary" onClick={() => next.spendImport ? openSpendImport() : next.recordId ? onFix(next.recordId) : onNavigate(next.panel)}>{next.action}<Icon name="arrow" size={18} /></button>
         {next.secondary && <button type="button" className="nv-btn" onClick={() => onNavigate(next.secondary!.panel)}>{next.secondary.action}</button>}
         <button type="button" className="nv-btn nv-btn--ghost" onClick={onAsk}><Icon name="help" size={18} />Ask a question</button>
       </div>
@@ -59,7 +67,7 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
       <button type="button" className="nv-journey__step" data-state={stepState("collection")} onClick={() => onNavigate("collection")}>
         <span className="nv-journey__num" aria-hidden="true">{stepState("collection") === "done" ? <Icon name="check" size={16} /> : 2}</span>
         <span className="nv-journey__title">Activity & evidence</span>
-        <span className="nv-journey__meta">{!collection.active ? "No records yet" : [plural(collection.active, "record"), mustFix.length ? `${mustFix.length} input needed` : "", heldRows.length ? `${heldRows.length} held — outside the reporting period` : "", gaps.length ? plural(gaps.length, "possible gap") : "", !mustFix.length && !heldRows.length && !gaps.length ? "none waiting on input" : ""].filter(Boolean).join(" · ")}</span>
+        <span className="nv-journey__meta">{!collection.active ? "No records yet" : [plural(collection.active, "record"), allMustFix.length ? `${allMustFix.length} input needed` : "", heldRows.length ? `${heldRows.length} held — outside the reporting period` : "", gaps.length ? plural(gaps.length, "possible gap") : "", !allMustFix.length && !heldRows.length && !gaps.length ? "none waiting on input" : ""].filter(Boolean).join(" · ")}</span>
       </button>
       <button type="button" className="nv-journey__step" data-state={stepState("results")} onClick={() => onNavigate("results")}>
         <span className="nv-journey__num" aria-hidden="true">3</span>
@@ -72,10 +80,11 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
       <div className="nv-card nv-card--flat" style={{ margin: 0 }}>
         <h2 className="nv-h3">What needs attention</h2>
         {nothingFlagged ? <p className="nv-muted">{collection.active ? "Nothing is flagged. Review your draft results." : "No records yet — start with the next step above."}</p> : <>
-          {(setup.missing.length > 0 || mustFix.length > 0) && <p className="nv-attn-label nv-attn-label--warn">Input needed</p>}
+          {(setup.missing.length > 0 || allMustFix.length > 0) && <p className="nv-attn-label nv-attn-label--warn">Input needed</p>}
           <ul className="nv-list">
             {setup.missing.slice(0, 6).map(item => <li key={item.id}><span className="nv-list__main"><span className="nv-list__title">{item.title}</span><br /><span className="nv-subtle">Company setup · {item.detail}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${canManage ? "Open" : "View"} company setup: ${item.title}`} onClick={() => onNavigate("setup")}>{canManage ? "Open" : "View"}</button></li>)}
             {setup.missing.length > 6 && <li><span className="nv-subtle">and {setup.missing.length - 6} more in Company setup</span></li>}
+            {spendFix.length > 0 && <li key="spend-import"><span className="nv-list__main"><span className="nv-list__title">{TODO_SPEND_TEXT_R3C.attentionTitle(spendFix.length)}</span><br /><span className="nv-subtle">{TODO_SPEND_TEXT_R3C.attentionDetail}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${TODO_SPEND_TEXT_R3C.open}: ${TODO_SPEND_TEXT_R3C.attentionTitle(spendFix.length)}`} onClick={openSpendImport}>{canManage ? TODO_SPEND_TEXT_R3C.open : "View"}</button></li>}
             {mustFix.slice(0, 5).map(row => <li key={row.id}><span className="nv-list__main"><span className="nv-list__title">{row.label} · {row.sourceId}</span><br /><span className="nv-subtle">{row.reasons[0] ?? RECORD_STATE_LABELS[row.state]}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${canManage ? "Fix" : "View"} ${row.label} · ${row.sourceId}`} onClick={() => onFix(row.id)}>{canManage ? "Fix" : "View"}</button></li>)}
             {mustFix.length > 5 && <li><span className="nv-subtle">and {mustFix.length - 5} more in Activity & evidence</span></li>}
           </ul>
@@ -95,8 +104,8 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
       </div>
       <div className="nv-card nv-card--flat" style={{ margin: 0 }}>
         <h2 className="nv-h3">Your records</h2>
-        {!collection.active ? <p className="nv-muted">No activity records yet. Most companies start with a gas or electricity bill.</p> :
-          <ul className="nv-list">{ACTIVITY_KINDS.filter(kind => collection.byKind[kind.kind]).map(kind => <li key={kind.kind}>
+        {!collection.active ? <p className="nv-muted">{status.scope3 ? COPY_TEXT_R2E.journeyActivityScope3 : "No activity records yet. Most companies start with a gas or electricity bill."}</p> :
+          <ul className="nv-list">{[...ACTIVITY_KINDS, ...SCOPE3_ACTIVITY_KINDS.map(kind => ({ ...kind, label: `${kind.label} (Scope 3)` }))].filter(kind => collection.byKind[kind.kind]).map(kind => <li key={kind.kind}>
             <span className="nv-list__main" style={{ display: "flex", gap: 10, alignItems: "center" }}><Icon name={kindIcon(kind.kind)} size={18} /><span>{kind.label}</span></span>
             <span className="nv-num nv-muted">{collection.byKind[kind.kind]}</span>
           </li>)}</ul>}

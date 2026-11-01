@@ -35,6 +35,26 @@ COPY packages/neuvetra-database/src/m78-contract.ts packages/neuvetra-database/s
 COPY packages/neuvetra-database/src/m80-contract.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/company-setup-contract.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/collection-contract.ts packages/neuvetra-database/src/collection-engine-input.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/scope3-collection-contract.ts packages/neuvetra-database/src/scope3-collection.ts packages/neuvetra-database/src/scope3-coverage.ts ./packages/neuvetra-database/src/
+# Scope 3 completion I-01: the method catalog and texts that scope3-coverage.ts re-exports.
+# Scope 3 completion I-02: the assessment contract (scope3-text.ts is copied once, above).
+COPY packages/neuvetra-database/src/scope3-method-catalog.ts packages/neuvetra-database/src/scope3-text.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/scope3-assessment-contract.ts ./packages/neuvetra-database/src/
+# Scope 3 completion I-04: the provisional SB 253 Scope 3 deadline (setup and results screens).
+COPY packages/neuvetra-database/src/scope3-deadline.ts ./packages/neuvetra-database/src/
+# Scope 3 completion I-06: the results v2 trace, methodology and shared CSV modules (the results screen and decoder).
+COPY packages/neuvetra-database/src/scope3-trace.ts packages/neuvetra-database/src/scope3-methodology.ts packages/neuvetra-database/src/scope3-report-csv.ts ./packages/neuvetra-database/src/
+# Round 2 lane E (ENG-6): the plain-language labels the web re-exports (moved from apps/site-web/src/lib/plain-language.ts).
+COPY packages/neuvetra-database/src/plain-language-labels.ts packages/neuvetra-database/src/scope3-text-r2e.ts ./packages/neuvetra-database/src/
+# Round 3 lane A: the shared memo, partial-boundary and superseded-spend helpers (coverage, methodology, CSV, trace, screen).
+COPY packages/neuvetra-database/src/scope3-r3a.ts ./packages/neuvetra-database/src/
+# Scope 3 completion I-09: the shared spend CSV parser (import panel preview and the CSV Mapping section).
+COPY packages/neuvetra-database/src/scope3-spend-import.ts packages/neuvetra-database/src/scope3-spend-grouping.ts packages/neuvetra-database/src/scope3-spend-currency.ts ./packages/neuvetra-database/src/
+# Scope 3 completion I-10: the frozen report document (the report-version panel decodes stored versions with it).
+COPY packages/neuvetra-database/src/scope3-report-document.ts ./packages/neuvetra-database/src/
+# Round 2 (lane B): the frozen report validators the document module imports (owner decision 11).
+COPY packages/neuvetra-database/src/scope3-report-v1.ts packages/neuvetra-database/src/scope3-report-v2.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/scope3-report-v3.ts packages/neuvetra-database/src/scope3-text-v3.ts ./packages/neuvetra-database/src/
 # Full web typechecking resolves this reviewed catalog; it is not a runtime corpus.
 COPY data/research/answer-units/scope2-website.epa-acquisition.v1.json ./data/research/answer-units/
 COPY output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf output/pdf/neuvetra-m66-synthetic-electricity-bill-b.pdf ./output/pdf/
@@ -107,12 +127,47 @@ COPY apps/site-api/src/workspace/company-setup-routes.ts ./apps/site-api/src/wor
 COPY packages/neuvetra-database/src/migrations/0023_company_setup.sql ./packages/neuvetra-database/src/migrations/
 # Collection and reviewed method sources are copied as inert files; the hosted
 # migration manifest and method release state remain separate operational gates.
-COPY apps/site-api/src/workspace/collection-routes.ts apps/site-api/src/workspace/collection-storage.ts apps/site-api/src/workspace/collection-zip.ts apps/site-api/src/workspace/collection-results-routes.ts ./apps/site-api/src/workspace/
+COPY apps/site-api/src/workspace/collection-routes.ts apps/site-api/src/workspace/collection-storage.ts apps/site-api/src/workspace/collection-zip.ts apps/site-api/src/workspace/collection-results-routes.ts apps/site-api/src/workspace/scope3-results-routes.ts ./apps/site-api/src/workspace/
 COPY apps/site-api/src/calculation/method-engine-runner.ts apps/site-api/src/calculation/scope1-authority.ts apps/site-api/src/calculation/scope2-authority.ts apps/site-api/src/calculation/scope3-authority.ts ./apps/site-api/src/calculation/
 COPY apps/site-api/src/calculation/scope1_engine.py apps/site-api/src/calculation/scope2_engine.py apps/site-api/src/calculation/scope3_engine.py ./apps/site-api/src/calculation/
 COPY packages/neuvetra-database/src/collection.ts packages/neuvetra-database/src/collection-contract.ts packages/neuvetra-database/src/collection-engine-input.ts packages/neuvetra-database/src/method-reference.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/scope3-collection-contract.ts packages/neuvetra-database/src/scope3-collection.ts packages/neuvetra-database/src/scope3-coverage.ts packages/neuvetra-database/src/scope3-engine-output.ts ./packages/neuvetra-database/src/
+# Scope 3 completion I-01: the method catalog and texts used by the coverage boundary and the results route, and the
+# per-company results scheduler both results routes import (missing from the image since it was added).
+COPY packages/neuvetra-database/src/scope3-method-catalog.ts packages/neuvetra-database/src/scope3-text.ts ./packages/neuvetra-database/src/
+COPY apps/site-api/src/workspace/results-scheduler.ts ./apps/site-api/src/workspace/
+# Scope 3 completion I-02: the assessment contract (scope3-text.ts is copied once, above).
+COPY packages/neuvetra-database/src/scope3-assessment-contract.ts ./packages/neuvetra-database/src/
+# Scope 3 completion I-04: category assessments (database access and route).
+COPY packages/neuvetra-database/src/scope3-assessments.ts ./packages/neuvetra-database/src/
+COPY apps/site-api/src/workspace/scope3-assessment-routes.ts ./apps/site-api/src/workspace/
+# Scope 3 completion I-09: spend CSV import (shared parser, database access and route).
+COPY packages/neuvetra-database/src/scope3-spend-import.ts packages/neuvetra-database/src/scope3-spend-imports.ts packages/neuvetra-database/src/scope3-spend-grouping.ts packages/neuvetra-database/src/scope3-spend-currency.ts ./packages/neuvetra-database/src/
+COPY apps/site-api/src/workspace/scope3-spend-import-routes.ts ./apps/site-api/src/workspace/
+# Scope 3 completion I-06: the line trace and profile checks (boundary and results route) and the methodology statement.
+COPY packages/neuvetra-database/src/scope3-trace.ts packages/neuvetra-database/src/scope3-methodology.ts ./packages/neuvetra-database/src/
+# Scope 3 completion I-10: frozen report versions: the document and database modules, the route, the shared CSV (and the
+# deadline it states), and the CSV label functions, so a stored CSV is the bytes the Results screen would download.
+COPY packages/neuvetra-database/src/scope3-report-document.ts packages/neuvetra-database/src/scope3-reports.ts packages/neuvetra-database/src/scope3-report-csv.ts packages/neuvetra-database/src/scope3-deadline.ts ./packages/neuvetra-database/src/
+COPY apps/site-api/src/workspace/scope3-report-routes.ts ./apps/site-api/src/workspace/
+# Round 2 (lane B): the frozen report validators (owner decision 11) and the shared Scope 3 route helpers (ENG-14).
+COPY packages/neuvetra-database/src/scope3-report-v1.ts packages/neuvetra-database/src/scope3-report-v2.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/scope3-report-v3.ts packages/neuvetra-database/src/scope3-text-v3.ts ./packages/neuvetra-database/src/
+COPY apps/site-api/src/workspace/scope3-route-helpers.ts ./apps/site-api/src/workspace/
+# Round 2 lane E (ENG-6): the CSV label functions live in the package (the API no longer imports web source).
+COPY packages/neuvetra-database/src/plain-language-labels.ts packages/neuvetra-database/src/scope3-text-r2e.ts ./packages/neuvetra-database/src/
+# Round 3 lane A: the shared memo, partial-boundary and superseded-spend helpers (adapter, coverage, results route, CSV).
+COPY packages/neuvetra-database/src/scope3-r3a.ts ./packages/neuvetra-database/src/
+# Scope 3 completion I-03: R2, the spend register the Scope 3 engine pins (EPA Supply Chain GHG Emission Factors v1.3).
+COPY packages/neuvetra-database/src/method-reference/verified-scope3-spend-register-epa-scghg-v1.3.json ./packages/neuvetra-database/src/method-reference/
+# Scope 3 completion I-05: R3, the supplement register the Scope 3 engine pins (Hub 2025 Tables 1, 11, 12; eGRID2023 rev2).
+COPY packages/neuvetra-database/src/method-reference/verified-scope3-supplement-register-2025.json ./packages/neuvetra-database/src/method-reference/
+# Scope 3 completion I-12u: R5, the US upstream register the Scope 3 engine pins (NETL natural gas, CA-GREET3.0, CARB LCFS energy densities).
+COPY packages/neuvetra-database/src/method-reference/verified-scope3-us-upstream-register-2025.json ./packages/neuvetra-database/src/method-reference/
+# Scope 3 completion I-12h: R6, the building and hotel register the Scope 3 engine pins (CBECS 2018 C14/C24; EPA events guidance 2018 Table 5).
+COPY packages/neuvetra-database/src/method-reference/verified-scope3-us-building-hotel-register-2025.json ./packages/neuvetra-database/src/method-reference/
 COPY packages/neuvetra-database/src/method-reference/verified-factor-register-2025.json packages/neuvetra-database/src/method-reference/verified-electricity-register-egrid2023.json packages/neuvetra-database/src/method-reference/verified-electricity-register-egrid2023-greene2025.json packages/neuvetra-database/src/method-reference/verified-scope3-register-2025.json packages/neuvetra-database/src/method-reference/egrid2023-zip-subregion-utility.csv ./packages/neuvetra-database/src/method-reference/
-COPY packages/neuvetra-database/src/migrations/0024_method_reference.sql packages/neuvetra-database/src/migrations/0025_scope3_method_reference.sql packages/neuvetra-database/src/migrations/0026_scope2_residual_mix.sql packages/neuvetra-database/src/migrations/0027_collection.sql packages/neuvetra-database/src/migrations/0028_collection_zip_check.sql ./packages/neuvetra-database/src/migrations/
+COPY packages/neuvetra-database/src/migrations/0024_method_reference.sql packages/neuvetra-database/src/migrations/0025_scope3_method_reference.sql packages/neuvetra-database/src/migrations/0026_scope2_residual_mix.sql packages/neuvetra-database/src/migrations/0027_collection.sql packages/neuvetra-database/src/migrations/0028_collection_zip_check.sql packages/neuvetra-database/src/migrations/0029_scope3_collection.sql packages/neuvetra-database/src/migrations/0030_scope3_completion.sql ./packages/neuvetra-database/src/migrations/
 # Import and hash verification happen without credentials or network calls.
 RUN bun --version && python --version && bun -e 'await import("./apps/site-api/src/staging/server.ts"); const {verifyStagingAssets}=await import("./apps/site-api/src/staging/assets.ts"); await verifyStagingAssets("/app/apps/site-web/dist-staging");'
 USER 10001:10001

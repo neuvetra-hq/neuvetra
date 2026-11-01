@@ -1,0 +1,38 @@
+{
+ "series": "A191RD3A086NBEA",
+ "title": "Gross domestic product (implicit price deflator)",
+ "publisher": "U.S. Bureau of Economic Analysis",
+ "distributor": "Federal Reserve Bank of St. Louis, FRED",
+ "release": "Gross Domestic Product",
+ "units": "Index 2017=100",
+ "frequency": "Annual",
+ "seasonalAdjustment": "Not Seasonally Adjusted",
+ "licence": "FRED tag: Public Domain: Citation Requested",
+ "citation": "U.S. Bureau of Economic Analysis, Gross domestic product (implicit price deflator) [A191RD3A086NBEA], retrieved from FRED, Federal Reserve Bank of St. Louis; https://fred.stlouisfed.org/series/A191RD3A086NBEA, October 30, 2026.",
+ "retrievedOn": "2026-10-30",
+ "fredLastUpdated": "2026-09-30 7:59 AM CDT",
+ "fredNextReleaseDate": "2026-11-25",
+ "transcription": "Hand transcription (no programmatic access from the build environment: fred.stlouisfed.org answers the shell proxy with 403, and the FRED CSV download is binary to WebFetch). Both FRED pages were read with WebFetch on 2026-10-30; the data page was read twice with different prompts and gave identical values; the series page shows the five latest observations, which equal the data page; 2019-2025 also equal the values in research/methods-purchases.md section 3 (read 2026-10-30 by another agent). Annual observations are dated YYYY-01-01 on FRED and are stored here by year.",
+ "reads": [
+  {"url": "https://fred.stlouisfed.org/data/A191RD3A086NBEA", "read": 1, "years": "1929-2025", "lastUpdatedShown": "2026-09-30 7:59 AM CDT"},
+  {"url": "https://fred.stlouisfed.org/data/A191RD3A086NBEA", "read": 2, "years": "2010-2025", "lastUpdatedShown": "2026-09-30 7:59 AM CDT"},
+  {"url": "https://fred.stlouisfed.org/series/A191RD3A086NBEA", "read": 3, "years": "2021-2025", "lastUpdatedShown": "Sep 30, 2026 7:59 AM CDT",
+   "values": {"2021": "110.159", "2022": "118.026", "2023": "122.451", "2024": "125.587", "2025": "128.893"}}
+ ],
+ "observations": {
+  "2012": "93.185",
+  "2013": "94.771",
+  "2014": "96.421",
+  "2015": "97.316",
+  "2016": "98.241",
+  "2017": "100.000",
+  "2018": "102.291",
+  "2019": "103.979",
+  "2020": "105.377",
+  "2021": "110.159",
+  "2022": "118.026",
+  "2023": "122.451",
+  "2024": "125.587",
+  "2025": "128.893"
+ }
+}

@@ -121,3 +121,23 @@ Development-cloud follow-up on September 9, 2026 UTC: the supplied Pinecone key 
 6. Decide and validate Railway's replacement IaC configuration against the confirmed existing services before the legacy configuration deadline.
 
 Terrascope has no Dockerfile or Railway configuration here because its database/calculator restoration, input/auth validation, working UI, and data verification must precede deployment.
+
+## Scope 3 staging capacity and migration 0030 (round 3, 31 October 2026)
+
+Measured natively at the line cap (3,000 worst-case ten-mode commuting records: an 83.4 MB report text and a 69.6 MB CSV) on a 2-CPU host, by `apps/site-api/src/staging/scope3-round3-postgres.test.ts`, which enforces the budgets on every run:
+
+| Step | API process peak RSS (budget 1,536 MiB) | Largest PostgreSQL backend peak RSS (budget 1,024 MiB) |
+|---|---|---|
+| Prepare revision 1 | 899 MiB | 911 MiB |
+| Approve | 128 MiB | 911 MiB (cumulative peak of the same backends) |
+| Open the stored version (both texts, streamed) | 837 MiB | 911 MiB |
+| Prepare revision 2 (change log against the approved revision 1), a second prepare refused at once | 910 MiB | 947 MiB |
+
+Round 2 measured 3,089 MiB and 2,603 MiB for one prepare at the same cap. What changed: a full garbage collection between prepare phases; the texts reach PostgreSQL in chunks of at most 2,000,000 characters (`stage_scope3_report_text`) instead of inside one jsonb request; nothing parses, re-serialises or reads a text back after prepare or approve; the next change log reads a small stored basis instead of the previous report; the stored version is streamed; one prepare per API instance at a time (others get 503 `report_prepare_busy` with `Retry-After: 30`).
+
+Minimum sizes for the staging footprint:
+- **API container: at least 2 GB of memory** (about 0.9 GB peak for one prepare at the cap, 1.5 GB in runs before the last change, plus the Scope 3 engine subprocess, about 230 MB, and headroom). Prepare is serialised per instance, so this does not grow with traffic; each further API instance can prepare one more report at a time.
+- **Database: at least 1 GB of memory free for one backend per API instance that may prepare at the same time**, on top of the compute tier's normal working set. Choose the Supabase compute tier accordingly (two API instances: two such backends at once).
+- **Proxy time limits:** `POST /workspace-api/workspace/:id/scope3/reports` needs 120 s and `GET /workspace-api/workspace/:id/results/scope3` 90 s; the listener grants them only after authentication. Any proxy in front of the listener must allow at least the same.
+
+Applying 0030 (`migratePrivateStagingFromManifest` applies every pending migration in one transaction): section 1 adds the widened record-table checks `NOT VALID` and then validates them, but inside that one transaction the `ACCESS EXCLUSIVE` lock the `ALTER TABLE` takes is held until commit, through both `VALIDATE` scans. Writes to `collection_activity_records` and `collection_activity_versions` therefore wait for the whole apply. The native rehearsal times the 29→30 apply at about 0.1–0.2 s on staging-sized data; apply it in a quiet window, and expect saves to wait (not fail) for that long. If the tables ever grow large, move the two `VALIDATE` steps into a separate post-migration transaction.

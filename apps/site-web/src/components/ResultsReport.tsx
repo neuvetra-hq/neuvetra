@@ -6,6 +6,12 @@ import { coverageIssues, coverageLines, noteLabel, type Coverage } from "@/lib/j
 import { EVIDENCE_STATUS_TEXT, loadResults, methodLabel, NotSyntheticResultsError, releaseState, ResultsApiError, resultsCsv, unclearedEvidence, type EngineGas, type MethodUsed, type ResultRow, type ResultsResponse } from "@/lib/results-api"
 import { ACTIVITY_KINDS, BOUNDARY_LABELS, groupDigits, kgToTonnes, kindIcon, kindLabel, periodLabel, QUALITY_LABELS, reasonText, shortUnit } from "@/lib/plain-language"
 import { engineHold, factorSource, GAS_LABELS, INITIAL_RESULTS_STATE, KIND_COLORS, needsWork, notYetCounted, resultsReducer, rowReasons, rowStatus } from "@/lib/results-view"
+import { COPY_TEXT_R2E, formatTimeR2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
+import { INITIAL_SCOPE3_STATE, loadScope3Results, Scope3ResultsApiError, type Scope3ResultsResponse, type Scope3State } from "@/lib/scope3-results-api"
+import { Scope3ReportSection, Scope3ResultsPanel } from "./scope3/lazy-results"
+import { scope3Todos } from "@/lib/scope3-checklist"
+import { SCOPE3_ATTENTION_LINK_TEXT } from "@/lib/scope3-results-text"
+import { SCOPE3_FOOTER_TEXT_R3D } from "@/lib/scope3-text-r3d"
 
 const rowKg = (row: ResultRow) => row.scope1?.total?.display ?? row.scope2?.locationBased.total?.display ?? null
 const QUALITY = QUALITY_LABELS
@@ -64,7 +70,7 @@ function methodsNote(state: ReturnType<typeof releaseState>): { summary: string;
 /** Escapes text for a CSS string: anything but plain letters, digits and simple punctuation becomes a CSS escape. */
 const cssString = (text: string) => text.replace(/[^A-Za-z0-9 .,&()_-]/gu, char => `\\${char.codePointAt(0)!.toString(16)} `)
 
-function Report({ results, coverage }: { results: ResultsResponse; coverage: Coverage }) {
+function Report({ results, coverage, scope3, onScope3Ready }: { results: ResultsResponse; coverage: Coverage; scope3: Scope3ResultsResponse | null; onScope3Ready: (results: Scope3ResultsResponse) => void }) {
   const setup = results.setup
   const company = (setup?.legalName || "Company").slice(0, 60)
   const notes = completeness(results, coverage)
@@ -86,14 +92,14 @@ function Report({ results, coverage }: { results: ResultsResponse; coverage: Cov
     {/* Running footer on every printed page names the company as well as the draft status. */}
     <style>{`@media print { @page { @bottom-left { content: "DRAFT \\2014  ${cssString(company)} \\2014  ${methodsText.footer}"; } } }`}</style>
     <div className="nv-report__head">
-      <div><p className="nv-report__small" style={{ margin: 0 }}>Greenhouse-gas inventory · Scope 1 and Scope 2</p><h2 id="report-title" className="nv-report__title">{setup?.legalName || "Company"}{setup?.tradingName ? ` (${setup.tradingName})` : ""}</h2></div>
+      <div><p className="nv-report__small" style={{ margin: 0 }}>Greenhouse-gas inventory · Scope 1 and Scope 2{scope3 ? ", with Scope 3 reported separately" : ""}</p><h2 id="report-title" className="nv-report__title">{setup?.legalName || "Company"}{setup?.tradingName ? ` (${setup.tradingName})` : ""}</h2></div>
       <span className="nv-report__stamp">DRAFT</span>
     </div>
     <p style={{ fontWeight: 600, marginTop: 12 }}>{results.label}. Private beta.</p>
     <div className="nv-report__meta">
       <div><small>Reporting period</small>{periodLabel(setup?.period.start, setup?.period.endExclusive)}</div>
       <div><small>Boundary approach</small>{BOUNDARY_LABELS[setup?.boundaryApproach ?? "unknown"] ?? setup?.boundaryApproach}</div>
-      <div><small>Prepared</small>{new Date(results.generatedAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}</div>
+      <div><small>Prepared</small>{formatTimeR2E(results.generatedAt)}</div>
     </div>
     <h3>Summary</h3>
     <div className="nv-report__scroll"><table><thead><tr><th>Scope</th><th>Basis</th><th className="nv-right">kg CO2e</th><th className="nv-right">t CO2e</th><th>Completeness</th></tr></thead><tbody>
@@ -123,8 +129,21 @@ function Report({ results, coverage }: { results: ResultsResponse; coverage: Cov
     {results.methods.length > 0 ? <div className="nv-report__scroll"><table><thead><tr><th>Method version</th><th>Scope</th><th>Release status</th><th>Engine (SHA-256)</th><th>Factor register (SHA-256)</th></tr></thead><tbody>{results.methods.map(item => <tr key={`${item.methodVersionId}-${item.engineSha256}`}><td>{item.methodVersionId}</td><td>{item.scope}</td><td>{item.releaseStatus === "released_beta" ? "Released beta" : "Unreleased beta (not released)"}</td><td className="nv-subtle" style={{ fontFamily: "monospace" }}>{item.engineSha256.slice(0, 12)}…</td><td className="nv-subtle" style={{ fontFamily: "monospace" }}>{item.registerSha256.slice(0, 12)}…</td></tr>)}</tbody></table></div> : <p>No method calculated a figure.</p>}
     {residual && <p>Market-based electricity not covered by certificates or contracts uses the residual mix: {residual.method}. Sources: {residual.sources.join("; ")}.</p>}
     {factorRows.size > 0 && <div className="nv-report__scroll"><table><thead><tr><th>Factor</th><th className="nv-right">Value</th><th>Unit</th><th>Source (cell)</th></tr></thead><tbody>{[...factorRows.entries()].map(([key, factor]) => <tr key={key}><td>{factor.label}</td><td className="nv-right">{groupDigits(factor.value)}</td><td>{factor.unit}</td><td>{factorSource(key)} ({factor.cell})</td></tr>)}</tbody></table></div>}
+    {scope3 && <Scope3ReportSection results={scope3} onReady={onScope3Ready} />}
     <p className="nv-report__small" style={{ marginTop: 24 }}>{methodsText.closing} It has not been reviewed by an independent assurance provider and must not be filed or published as a final inventory.</p>
   </article>
+}
+
+/**
+ * API-04 (Scope 3 package 2 r2): starts a request as the latest of its kind. The previous one is aborted, so a slow older
+ * response can never replace a newer one on screen, in print or in a CSV. `outer` (the mount effect's signal) aborts it too.
+ */
+function latest(slot: { current: AbortController | null }, outer?: AbortSignal): AbortSignal {
+  slot.current?.abort()
+  const controller = new AbortController()
+  slot.current = controller
+  if (outer) { if (outer.aborted) controller.abort(); else outer.addEventListener("abort", () => controller.abort(), { once: true }) }
+  return controller.signal
 }
 
 export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetryCoverage, canManage, onNavigate, onFix }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; coverage: Coverage; onRetryCoverage: () => void; canManage: boolean; onNavigate: (view: JourneyView) => void; onFix: (recordId: string) => void }) {
@@ -132,9 +151,16 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
   const [{ results, error, busy }, dispatch] = useReducer(resultsReducer, INITIAL_RESULTS_STATE)
   const [showReport, setShowReport] = useState(false)
   const [filter, setFilter] = useState<"all" | "attention">("all")
+  // Scope 3 package 2: Scope 3 results come from their own route; a failure there never hides Scope 1 and 2.
+  const [scope3, setScope3] = useState<Scope3State>(INITIAL_SCOPE3_STATE)
+  const [renderedScope3, setRenderedScope3] = useState<Scope3ResultsResponse | null>(null)
   const actorRef = useRef(actor)
   useEffect(() => { actorRef.current = actor }, [actor])
-  const load = useCallback(async (signal?: AbortSignal) => {
+  // API-04 (Scope 3 package 2 r2): only the latest request of each kind may change what is shown (see `latest`).
+  const results12Request = useRef<AbortController | null>(null), scope3Request = useRef<AbortController | null>(null)
+  useEffect(() => () => { results12Request.current?.abort(); scope3Request.current?.abort() }, [])
+  const load = useCallback(async (outer?: AbortSignal) => {
+    const signal = latest(results12Request, outer)
     if (!workspaceId) { dispatch({ type: "no_workspace" }); return }
     dispatch({ type: "start", workspaceId })
     try { const value = await loadResults(workspaceId, { ...actorRef.current, signal }); if (!signal?.aborted) dispatch({ type: "success", value }) }
@@ -146,6 +172,19 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
     }
   }, [workspaceId])
   useEffect(() => { const controller = new AbortController(); queueMicrotask(() => { void load(controller.signal) }); return () => controller.abort() }, [load])
+  const loadScope3 = useCallback(async (outer?: AbortSignal) => {
+    const signal = latest(scope3Request, outer)
+    if (!workspaceId) { setScope3(INITIAL_SCOPE3_STATE); return }
+    setScope3(current => ({ ...current, busy: true, message: null }))
+    try { const data = await loadScope3Results(workspaceId, { ...actorRef.current, signal }); if (!signal?.aborted) setScope3({ data, message: null, unavailable: false, busy: false }) }
+    catch (cause) {
+      if (signal?.aborted) return
+      // Not switched on (schema 28, or an older server): no Scope 3 section, and no error.
+      const unavailable = cause instanceof Scope3ResultsApiError && (cause.code === "scope3_unavailable" || cause.status === 404 && !/^Results not found/.test(cause.message))
+      setScope3({ data: null, message: unavailable ? null : cause instanceof Error ? cause.message : "Scope 3 results are unavailable right now.", unavailable, busy: false })
+    }
+  }, [workspaceId])
+  useEffect(() => { const controller = new AbortController(); queueMicrotask(() => { void loadScope3(controller.signal) }); return () => controller.abort() }, [loadScope3])
   useEffect(() => { if (!showReport) return; document.getElementById("draft-report")?.scrollIntoView({ behavior: "smooth", block: "start" }) }, [showReport])
 
   const composition = useMemo(() => {
@@ -163,7 +202,8 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
     const link = document.createElement("a"); link.href = url; link.download = `neuvetra-draft-results-${results.generatedAt.slice(0, 10)}.csv`; link.click()
     window.setTimeout(() => URL.revokeObjectURL(url), 30_000)
   }
-  function printReport() { setShowReport(true); window.setTimeout(() => window.print(), 250) }
+  const printPending = scope3.busy || (scope3.data !== null && renderedScope3 !== scope3.data)
+  function printReport() { if (printPending) return; setShowReport(true); window.setTimeout(() => window.print(), 250) }
 
   const header = <>
     <p className="nv-eyebrow">Step 3 of 3 · Results & report</p>
@@ -176,10 +216,21 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
   </section>
   if (!results) return null
   const { counts } = results
-  if (!counts.records) return <section>{header}
-    <div className="nv-empty" style={{ marginTop: 16 }}><Icon name="records" size={28} /><p className="nv-h3" style={{ marginTop: 10 }}>No activity records yet</p><p>{canManage ? "Add a gas bill, an electricity bill or fleet fuel, and your draft results appear here." : "Draft results appear here once an owner or admin adds activity records."}</p>{canManage && <button type="button" className="nv-btn nv-btn--primary" onClick={() => onNavigate("collection")}>Add activity</button>}</div>
-  </section>
+  // API-03 (Scope 3 package 2 r2): "no activity records" is said only once Scope 3 has answered too. While Scope 3 is
+  // loading, or after it failed, the empty Scope 1 and 2 list says only that, and the Scope 3 section keeps its own
+  // loading state, error and Try again. Its coverage (the 15 screened categories) stays visible either way.
+  if (!counts.records && !scope3.data?.records.length) {
+    const scope3Known = scope3.unavailable || (scope3.data !== null && !scope3.message && !scope3.busy)
+    return <section>{header}
+      <div className="nv-empty" style={{ marginTop: 16 }}><Icon name="records" size={28} />
+        {scope3Known ? <><p className="nv-h3" style={{ marginTop: 10 }}>No activity records yet</p><p>{canManage ? scope3.unavailable ? "Add a gas bill, an electricity bill or fleet fuel, and your draft results appear here." : COPY_TEXT_R2E.emptyResultsScope3 : "Draft results appear here once an owner or admin adds activity records."}</p></>
+          : <><p className="nv-h3" style={{ marginTop: 10 }}>No Scope 1 or 2 records yet</p><p>Scope 3 is checked separately below.</p></>}
+        {canManage && <button type="button" className="nv-btn nv-btn--primary" onClick={() => onNavigate("collection")}>Add activity</button>}</div>
+      {!scope3.unavailable && <Scope3ResultsPanel state={scope3} canManage={canManage} onFix={onFix} onRetry={() => void loadScope3()} reports={workspaceId ? { companyId: workspaceId, actor } : undefined} onNavigate={view => onNavigate(view)} />}
+    </section>
+  }
   const attentionRows = results.records.filter(needsWork)
+  const scope3Attention = scope3.data ? (() => { const todos = scope3Todos(scope3.data); return { total: todos.length, blocking: todos.filter(item => item.blocking).length } })() : null
   // BF2: the banner names the two kinds separately, so it agrees with the header (which counts partly calculated records
   // as calculated): records not counted yet, and records only partly calculated.
   const notCountedRows = attentionRows.filter(notYetCounted).length, partlyRows = attentionRows.length - notCountedRows
@@ -197,7 +248,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
   const incompleteText = (complete: boolean, held: number, open: number) => complete && !held && !open ? "" : " · incomplete"
   return <section aria-busy={busy}>
     {header}
-    <p className="nv-lead">{results.setup?.legalName || "Your company"} · {periodLabel(results.setup?.period.start, results.setup?.period.endExclusive)} · calculated {new Date(results.generatedAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}</p>
+    <p className="nv-lead">{results.setup?.legalName || "Your company"} · {periodLabel(results.setup?.period.start, results.setup?.period.endExclusive)} · calculated {formatTimeR2E(results.generatedAt)}</p>
     <div className="nv-notice nv-notice--warn"><Icon name="info" /><p><strong>{results.label}.</strong> Use it to review your data, not to file.</p></div>
     {results.warnings.map(warning => <div key={warning} className="nv-notice nv-notice--error" role="alert"><Icon name="alert" /><p>{warning}</p></div>)}
 
@@ -240,6 +291,8 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
         <div className="nv-segmented" role="group" aria-label="Filter records"><button type="button" aria-pressed={filter === "all"} onClick={() => setFilter("all")}>All ({results.records.length})</button><button type="button" aria-pressed={filter === "attention"} onClick={() => setFilter("attention")}>Needs attention ({attentionRows.length})</button></div>
       </div>
       {attentionRows.length > 0 && filter === "all" && <div className="nv-notice nv-notice--warn"><Icon name="alert" /><p>{[notCountedRows ? `${plural(notCountedRows, "record isn’t", "records aren’t")} counted yet` : "", partlyRows ? `${plural(partlyRows, "record is", "records are")} only partly calculated` : ""].filter(Boolean).join(" and ")}.{canManage ? ` Fix ${attentionRows.length === 1 ? "it" : "them"} to complete your totals.` : ""}</p></div>}
+      {/* Round 2 lane D (UX-2): Scope 3 items are listed in their own to-do list; this names them so "Needs attention" isn't silent about them. */}
+      {scope3Attention && scope3Attention.total > 0 && <div className="nv-notice nv-notice--info"><Icon name="info" /><p>{SCOPE3_ATTENTION_LINK_TEXT.line(scope3Attention.total, scope3Attention.blocking)} <button type="button" className="nv-link" onClick={() => document.getElementById("scope3-todo")?.scrollIntoView({ block: "start" })}>{SCOPE3_ATTENTION_LINK_TEXT.go}</button></p></div>}
       {visible.length === 0 ? <p className="nv-muted">No record needs attention.</p> : visible.map(row => {
         const status = rowStatus(row), reasons = rowReasons(row), kg = rowKg(row)
         return <div className="nv-record-card" key={row.recordId}>
@@ -260,17 +313,19 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
       })}
     </div>
 
+    <Scope3ResultsPanel state={scope3} canManage={canManage} onFix={onFix} onRetry={() => void loadScope3()} reports={workspaceId ? { companyId: workspaceId, actor } : undefined} onNavigate={view => onNavigate(view)} />
+
     <div className="nv-card nv-card--accent">
       <div className="nv-card__head"><div><h2 className="nv-h2">Draft report</h2><p className="nv-muted">A print-ready summary: totals, every source with its evidence, what isn’t counted, estimates, and the factors used.</p></div></div>
       <div className="nv-actions">
         <button type="button" className="nv-btn nv-btn--primary" onClick={() => setShowReport(value => !value)} aria-expanded={showReport} aria-controls="draft-report"><Icon name="file" size={18} />{showReport ? "Hide draft report" : "View draft report"}</button>
-        <button type="button" className="nv-btn" onClick={printReport}><Icon name="print" size={18} />Print or save as PDF</button>
+        <button type="button" className="nv-btn" disabled={printPending} onClick={printReport}><Icon name="print" size={18} />Print or save as PDF</button>
         <button type="button" className="nv-btn" onClick={downloadCsv}><Icon name="download" size={18} />Download CSV</button>
-        <button type="button" className="nv-btn nv-btn--ghost" disabled={busy} onClick={() => void load()}>{busy ? "Recalculating…" : "Recalculate"}</button>
+        <button type="button" className="nv-btn nv-btn--ghost" disabled={busy || scope3.busy} onClick={() => { void load(); void loadScope3() }}>{busy || scope3.busy ? "Recalculating…" : "Recalculate"}</button>
       </div>
     </div>
     {/* Always rendered so printing from the browser menu prints the report; shown on screen only when opened. */}
-    <div id="draft-report" className={showReport ? undefined : "nv-print-only"}><Report results={results} coverage={coverage} /></div>
-    <p className="nv-subtle">Activity types covered: {ACTIVITY_KINDS.map(kind => kind.label).join(", ")}. Scope 3 is not calculated in this beta.</p>
+    <div id="draft-report" className={showReport ? undefined : "nv-print-only"}><Report results={results} coverage={coverage} scope3={scope3.data} onScope3Ready={setRenderedScope3} /></div>
+    <p className="nv-subtle">Activity types covered: {ACTIVITY_KINDS.map(kind => kind.label).join(", ")}{scope3.data ? SCOPE3_FOOTER_TEXT_R3D.scope3 : ". Scope 3 is not calculated in this environment yet"}.</p>
   </section>
 }

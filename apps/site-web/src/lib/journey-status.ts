@@ -2,14 +2,18 @@ import type { CompanySetupView } from "../../../../packages/neuvetra-database/sr
 import { savedAgainstCurrentSetup } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { instrumentEvidenceClaims } from "../../../../packages/neuvetra-database/src/collection-engine-input"
 import type { CollectionActivityRecord, CollectionContext, CollectionEvidenceMetadata } from "./collection-api"
-import { listCollectionActivities, listCollectionEvidence, loadCollectionContext } from "./collection-api"
+import { listCollectionActivities, listCollectionEvidence, loadCollectionOverview } from "./collection-api"
 import { loadCompanySetup } from "./company-setup-api"
 import type { HostedWorkspaceActor } from "./workspace-api"
 import { recordReadiness, type CollectionReadinessFinding } from "@/components/CollectionWorkspace"
 import { kindLabel, periodLabel, type RecordState } from "./plain-language"
+import { TODO_SPEND_TEXT_R3C } from "./scope3-text-r3c"
+import { scope3ReadinessOptions, scope3SetupFacts, scope3SpendLineChoices } from "./scope3-forms"
 
 export type JourneyPanel = "home" | "setup" | "collection" | "results"
-export interface JourneyRecord { id: string; kind: string; label: string; sourceId: string; locationId: string; site: string; state: RecordState; reasons: string[]; evidenceCount: number; quality: string }
+export interface JourneyRecord { id: string; kind: string; label: string; sourceId: string; locationId: string; site: string; state: RecordState; reasons: string[]; evidenceCount: number; quality: string
+  /** Round 3 lane C (PR-3): a line of a spend import (its holds are fixed in the spend import's grouped review). */
+  importedSpend?: true }
 /** A company-setup answer that is still open. `scopes` lists the totals it can leave incomplete (empty: it doesn't affect totals). */
 export interface SetupOpenItem { id: string; title: string; detail: string; scopes: Array<1 | 2> }
 /** Something the saved setup says should exist but no record covers yet. Shown as a gap, never as complete. */
@@ -20,8 +24,12 @@ export interface JourneyStatus {
   collection: { total: number; active: number; ready: number; attention: number; held: number; partial: number; withdrawn: number; excluded: number; noEvidence: number; qualityUnknown: number; olderSetup: number; byKind: Record<string, number>; records: JourneyRecord[] }
   gaps: CoverageGap[]
   evidence: { total: number; checking: number; cleared: number; rejected: number }
-  next: { panel: JourneyPanel; title: string; body: string; action: string; recordId?: string; secondary?: { panel: JourneyPanel; action: string } }
+  next: { panel: JourneyPanel; title: string; body: string; action: string; recordId?: string; secondary?: { panel: JourneyPanel; action: string }
+    /** Round 3 lane C (PR-3): the action opens the spend import's grouped review (at "Needs a code"). */
+    spendImport?: true }
   progress: { setup: "done" | "in_progress" | "not_started"; collection: "done" | "in_progress" | "not_started"; results: "ready" | "waiting" }
+  /** Round 2 lane E (UX-8): present (true) when the server stores Scope 3 activity, so the overview can say so. */
+  scope3?: true
 }
 
 /** One record's journey state from the same readiness rules the activity screen shows. */
@@ -31,6 +39,8 @@ export function recordState(findings: CollectionReadinessFinding[]): RecordState
   if (statuses.has("excluded")) return "excluded"
   if (statuses.has("input_needed")) return "input_needed"
   if (statuses.has("review_required")) return "review_required"
+  // I-08: waiting for a factor source is neither ready nor something to fix.
+  if (statuses.has("method_pending")) return "method_pending"
   if (statuses.has("memo_only")) return "memo_only"
   if (statuses.has("partial")) return "partial"
   return "ready"
@@ -93,7 +103,7 @@ export function coverageGaps(view: CompanySetupView | null, records: JourneyReco
   return gaps
 }
 
-export function computeJourneyStatus(input: { setup: CompanySetupView | null; context: CollectionContext | null; records: CollectionActivityRecord[]; evidence: CollectionEvidenceMetadata[]; canManage: boolean }): JourneyStatus {
+export function computeJourneyStatus(input: { setup: CompanySetupView | null; context: CollectionContext | null; records: CollectionActivityRecord[]; evidence: CollectionEvidenceMetadata[]; canManage: boolean; scope3?: boolean; scope3MappingKeys?: ReadonlyMap<string, string> }): JourneyStatus {
   const setupVersion = input.setup?.currentVersion ?? null
   const setup = setupVersion?.setup
   const locations = setup?.locations ?? []
@@ -103,9 +113,14 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
   const period = setup?.reportingPeriod ?? null
   // A-01: certificate claims are counted across the company, as Results counts them.
   const claims = input.context ? instrumentEvidenceClaims(input.records.map(row => row.currentVersion.activity), input.context, input.evidence) : undefined
+  // Overview and Ask use Activity's same saved setup and cross-record Scope 3 rules.
+  const scope3Options = input.scope3 && input.context ? scope3ReadinessOptions({
+    setup: scope3SetupFacts(input.setup ?? { currentVersion: null }), context: input.context, records: input.records,
+    mappingKeys: input.scope3MappingKeys ?? new Map(),
+  }) : undefined
   const records: JourneyRecord[] = input.records.map(row => {
     const activity = row.currentVersion.activity
-    const findings = recordReadiness(activity, input.context, input.evidence, claims)
+    const findings = recordReadiness(activity, input.context, input.evidence, claims, scope3Options ? { options: scope3Options, recordId: row.id } : undefined)
     // BF2: a file still in quarantine review is waiting, not something to fix, so it never makes the record need input
     // (Results counts it as calculated). A-03: its market-based result is held meanwhile, so the record is partial.
     // Pending files are listed separately.
@@ -121,7 +136,8 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
       // BF2: outside the period takes precedence, as on the Results screen and in its counts: fix the period first.
       state = "held_period"
     }
-    return { id: row.id, kind: row.kind, label: kindLabel(row.kind), sourceId: activity.sourceId, locationId: activity.locationId, site: siteName(activity.locationId), state, reasons, evidenceCount: activity.evidenceIds.length, quality: activity.quality }
+    const imported = row.kind === "purchase_spend" && typeof (activity.payload as { importId?: unknown }).importId === "string"
+    return { id: row.id, kind: row.kind, label: kindLabel(row.kind), sourceId: activity.sourceId, locationId: activity.locationId, site: siteName(activity.locationId), state, reasons, evidenceCount: activity.evidenceIds.length, quality: activity.quality, ...(imported ? { importedSpend: true as const } : {}) }
   })
   const byKind: Record<string, number> = {}
   for (const row of records) if (row.state !== "withdrawn") byKind[row.kind] = (byKind[row.kind] ?? 0) + 1
@@ -146,6 +162,12 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
   else if (!active.length) next = manage
     ? { panel: "collection", title: "Add your first activity record", body: "Start with a gas or electricity bill for one site. Each record takes a couple of minutes, and you can attach the bill as you go.", action: "Add activity" }
     : { panel: "collection", title: "No activity records yet", body: "Draft results appear once an owner or admin adds activity records.", action: "View records" }
+  // Round 3 lane C (PR-3): imported spend lines are fixed in the spend import's grouped review, never one by one.
+  else if (attentionRows.some(row => row.importedSpend)) {
+    const spend = attentionRows.filter(row => row.importedSpend).length
+    next = manage ? { panel: "collection", title: TODO_SPEND_TEXT_R3C.nextTitle(spend), body: TODO_SPEND_TEXT_R3C.nextBody(attentionRows.length - spend), action: TODO_SPEND_TEXT_R3C.open, spendImport: true }
+      : { panel: "collection", title: `${plural(attentionRows.length, "record")} need${attentionRows.length === 1 ? "s" : ""} input`, body: TODO_SPEND_TEXT_R3C.nextBody(attentionRows.length - spend), action: "View records" }
+  }
   else if (attentionRows.length) next = { panel: "collection", title: manage ? `Finish ${plural(attentionRows.length, "record")} that need${attentionRows.length === 1 ? "s" : ""} input` : `${plural(attentionRows.length, "record")} need${attentionRows.length === 1 ? "s" : ""} input`, body: `${attentionRows[0]!.label} · ${attentionRows[0]!.sourceId}: ${attentionRows[0]!.reasons[0] ?? "More information is needed."}`, action: manage ? "Fix records" : "View records", recordId: attentionRows[0]!.id }
   else if (heldRows.length) next = { panel: "setup", title: `Your reporting period doesn’t match ${plural(heldRows.length, "record")}`, body: `${heldRows[0]!.label} · ${heldRows[0]!.sourceId}: ${heldRows[0]!.reasons[0]} Held records aren’t counted.`, action: manage ? "Open company setup" : "View company setup", secondary: { panel: "results", action: "View draft results" } }
   else if (openSetup.length) next = { panel: "setup", title: manage ? `Finish company setup: ${plural(openSetup.length, "open answer")}` : `Company setup has ${plural(openSetup.length, "open answer")}`, body: `${openSetup[0]!.title}. ${openSetup[0]!.detail}`, action: manage ? "Open company setup" : "View company setup", secondary: { panel: "results", action: "View draft results" } }
@@ -161,6 +183,7 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
       collection: !active.length ? "not_started" : attentionRows.length || heldRows.length || gaps.length || collection.partial ? "in_progress" : "done",
       results: collection.ready ? "ready" : "waiting",
     },
+    ...(input.scope3 ? { scope3: true as const } : {}),
   }
 }
 
@@ -186,13 +209,15 @@ export function coverageLines(coverage: Coverage): string[] {
 export async function loadJourneyStatus(workspaceId: string, actor: HostedWorkspaceActor): Promise<JourneyStatus> {
   // Any failed request fails the whole status, so a failed setup read is never mistaken for "setup not saved" and the
   // results page reports coverage as unchecked instead of guessing.
-  const [setup, context, records, evidence] = await Promise.all([
+  const [setup, overview, records, evidence] = await Promise.all([
     loadCompanySetup(workspaceId, actor),
-    loadCollectionContext(workspaceId, actor),
+    loadCollectionOverview(workspaceId, actor),
     listCollectionActivities(workspaceId, actor),
     listCollectionEvidence(workspaceId, actor),
   ])
-  return computeJourneyStatus({ setup, context, records, evidence, canManage: actor.role === "owner" || actor.role === "admin" })
+  const spendLines = overview.scope3 ? await scope3SpendLineChoices(records) : []
+  return computeJourneyStatus({ setup, context: overview.context, records, evidence, canManage: actor.role === "owner" || actor.role === "admin", scope3: overview.scope3,
+    scope3MappingKeys: new Map(spendLines.map(line => [line.mappingKeyInput, line.mappingKey])) })
 }
 
 /** Answers the user's progress question from their own saved data, never from a model. */

@@ -3,17 +3,37 @@ import { validateDatabaseCaPem } from "./staging-tls"
 import { WorkspaceDatabase, type WorkspaceConnection, type WorkspaceSql, type CompanyWorkspaceRecord, type SyntheticWorkspaceInput } from "./workspace"
 import { auditLegacyStagingExposure, EXISTING_PROJECT_REF } from "./staging-audit"
 import { readMigrationManifest, type StagingMigration } from "./staging-migrations"
+import { SCOPE3_COLLECTION_KINDS, SCOPE3_COMPLETION_SCHEMA, SCOPE3_LEGACY_KINDS, scope3SchemaRequired } from "./scope3-collection-contract"
 
 export const STAGING_PROFILE = "neuvetra.private-synthetic-staging.v1" as const
-export const STAGING_SCHEMA_VERSION = 28
+export const STAGING_SCHEMA_VERSION = 30
 /**
  * Temporary image-activation bridge for the pinned existing synthetic project; never migrates.
- * Schema 28 adds only the database ZIP check (0028), so the schema-28 image serves the existing
- * project at exactly 27 until the operator applies 0028, and at 28 afterwards.
+ * Schema 29 adds only Scope 3 collection (0029) and schema 30 only Scope 3 completion (0030). Hosted 0029 is on hold, so
+ * the schema-30 image serves the existing project at exactly 28, 29 or 30 (every prefix from this bridge up). Below 29
+ * every Scope 3 write and Scope 3 result is refused before any SQL runs (D5); below 30 the 0030 record kinds and the
+ * assessment, spend-import and report routes are refused the same way; Scope 1 and 2 behave the same at all three.
  */
-export const STAGING_SCHEMA_BRIDGE_VERSION = 27
+export const STAGING_SCHEMA_BRIDGE_VERSION = 28
 /** First schema with the collection tables and draft results (0027). */
 export const STAGING_COLLECTION_SCHEMA_VERSION = 27
+/** First schema that stores Scope 3 collection records (0029). */
+export const STAGING_SCOPE3_SCHEMA_VERSION = 29
+/** First schema with the Scope 3 completion kinds, assessments, spend imports and report versions (0030). */
+export const STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION = 30
+/** The exact prefixes a schema-30 image serves for the existing project: 28, 29 and 30. A new project must be at 30. */
+export const STAGING_SERVED_SCHEMA_VERSIONS: readonly number[] = Array.from({ length: STAGING_SCHEMA_VERSION - STAGING_SCHEMA_BRIDGE_VERSION + 1 }, (_, i) => STAGING_SCHEMA_BRIDGE_VERSION + i)
+/**
+ * Whether the database at `schemaVersion` stores this Scope 3 activity: the 0029 kinds with 0029 payloads from 29;
+ * anything 0030 added (its kinds, dataQuality, business travel v2, room-night) from 30. See `scope3SchemaRequired`.
+ */
+export function scope3ActivityAvailable(activity: { kind: string; payload: unknown; quantity: { normalizedUnit: string | null } }, schemaVersion: number): boolean {
+  return schemaVersion >= (scope3SchemaRequired(activity) === SCOPE3_COMPLETION_SCHEMA ? STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION : STAGING_SCOPE3_SCHEMA_VERSION)
+}
+/** The Scope 3 kinds the database at `schemaVersion` stores (for the collection capability). */
+export function scope3KindsAvailable(schemaVersion: number): readonly string[] {
+  return schemaVersion >= STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION ? SCOPE3_COLLECTION_KINDS : schemaVersion >= STAGING_SCOPE3_SCHEMA_VERSION ? SCOPE3_LEGACY_KINDS : []
+}
 export interface HostedWorkspaceOptions {
   connectionString: string
   expectedProjectRef: string
@@ -173,8 +193,8 @@ export function validateHostedSchemaReceipts(
   options: Pick<HostedWorkspaceOptions, "expectedProjectRef" | "reuseExistingProject">,
 ): number {
   const current = receipts.length === STAGING_SCHEMA_VERSION
-  // The exact bridge prefix (27) lets the schema-28 image start and serve the
-  // existing project before the operator applies 0028.
+  // The exact bridge prefixes (28 and 29) let the schema-30 image start and serve
+  // the existing project before the operator applies 0029 and 0030.
   const existingProjectUpgrade = options.expectedProjectRef === EXISTING_PROJECT_REF
     && options.reuseExistingProject === true
     && receipts.length >= STAGING_SCHEMA_BRIDGE_VERSION

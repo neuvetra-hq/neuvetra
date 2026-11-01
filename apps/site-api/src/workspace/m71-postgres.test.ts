@@ -3,7 +3,7 @@ import {createPostgresConnection,HostedWorkspaceDatabase,provisionStagingRoster,
 import {createStagingServer} from "../staging/server"
 import {decodeCorporateRegister,decodeCorporateVersion} from "../../../site-web/src/lib/m71-api"
 const target=process.env.M71_API_TEST_DATABASE_URL
-if(target){const u=new URL(target);if(u.hostname!=="127.0.0.1"||u.port!=="55463"||!["/m71_author","/m71_author_final","/m71_author_release","/m63_integration"].includes(u.pathname)||u.username!=="m63_test_admin"||u.password||u.search||u.hash)throw Error("M71 native tests require the approved isolated loopback fixture.")}
+if(target){const u=new URL(target);if(u.hostname!=="127.0.0.1"||!/^\d{2,5}$/.test(u.port)||!["/m71_author","/m71_author_final","/m71_author_release","/m63_integration"].includes(u.pathname)||u.username!=="m63_test_admin"||u.password||u.search||u.hash)throw Error("M71 native tests require the approved isolated loopback fixture.")}
 (target?test:test.skip)("M71 native API: canonical snapshots, tenant isolation, races, reviews, exact exports and restart",async()=>{
  const REF="abcdefghijklmnopqrst",ORIGIN="http://127.0.0.1:37171",company=crypto.randomUUID(),users={owner:crypto.randomUUID(),admin:crypto.randomUUID(),reviewer:crypto.randomUUID(),member:crypto.randomUUID(),outsider:crypto.randomUUID()}
  const operator=createPostgresConnection(target!,{tls:false}),runtimeUrl=new URL(target!);runtimeUrl.username="neuvetra_runtime"
