@@ -55,6 +55,8 @@
 -- in save_collection_activity for saves that add a Scope 3 line; withdraw_scope3_spend_import withdraws an import's active
 -- lines and save_scope3_spend_corrections corrects imported lines in bulk, both through one set-based writer (owner
 -- decision 7). Section 1's lock note is corrected (EN-6).
+-- Bug hunt (PR 22, 1 November 2026, before any hosted apply): save_scope3_spend_mapping saves each corrected line against
+-- the current setup version (as every other correction does), so lines imported before the latest setup save can be mapped.
 -- Never rerun 0001-0029. No reverse migration is planned.
 
 -- 0. Drift guard (I-02b, AM-01). 0030 replaces collection_assert_activity and save_collection_activity with 0029's
@@ -976,7 +978,7 @@ revoke all on function neuvetra.scope3_write_spend_versions(uuid,uuid,jsonb,text
 create function neuvetra.save_scope3_spend_mapping(target_company uuid,request jsonb)
 returns table(mapping_id uuid,revision integer,corrected integer,unchanged integer) language plpgsql security definer set search_path=pg_catalog,neuvetra,pg_temp as $$
 #variable_conflict use_column
-declare actor uuid; m jsonb; att jsonb; current_revision integer; new_id uuid:=gen_random_uuid(); reason text; todo jsonb; x jsonb; listed integer; n_corrected integer;
+declare actor uuid; m jsonb; att jsonb; current_revision integer; new_id uuid:=gen_random_uuid(); reason text; todo jsonb; x jsonb; listed integer; n_corrected integer; setup_head uuid;
   uuid_re text:='^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'; begin
   actor:=neuvetra.scope3_manager_lock(target_company,'Scope 3 spend mapping');
   if octet_length(request::text)>4194304 then raise exception 'Scope 3 spend mapping too large' using errcode='54000'; end if;
@@ -1013,12 +1015,18 @@ declare actor uuid; m jsonb; att jsonb; current_revision integer; new_id uuid:=g
     where v.payload->>'kind' is distinct from 'purchase_spend' or v.state<>'active' or jsonb_typeof(v.payload#>'{payload,importId}') is distinct from 'string' or v.payload#>>'{payload,mappingSource}' is not distinct from 'file') then
     raise exception 'invalid Scope 3 spend mapping correction' using errcode='22023'; end if;
   -- Each line's corrected activity; lines already equal to the mapping (and the attestations) are left as they are.
+  -- Bug hunt (PR 22, 1 November 2026): a corrected line is saved against the current setup version, as every other
+  -- correction is (save_collection_activity and scope3_write_spend_versions require it, and withdraw_scope3_spend_import
+  -- does the same); a line imported before the company's latest setup save was otherwise refused (23503) for good. The
+  -- setup version alone is never a change: a line already equal to the mapping is still left as it is.
+  select h.version_id into setup_head from neuvetra.company_setup_heads h where h.company_id=target_company;
   select coalesce(jsonb_agg(jsonb_build_object('recordId',c.record_id,'versionId',c.version_id,'revision',c.revision,'activity',c.b) order by c.record_id),'[]'::jsonb) into todo from (
     select v.record_id,v.id version_id,v.revision,v.payload a,
       jsonb_set(v.payload,'{payload}',(v.payload->'payload')||jsonb_build_object('category',(m->>'category')::integer,'naicsCode',m->>'naicsCode','marginChoice',m->>'marginChoice','mappingSource','user')
         ||case when att->'categoryConfirmed'='null'::jsonb then '{}'::jsonb else jsonb_build_object('categoryConfirmed',att->'categoryConfirmed') end
-        ||case when att->'activityOverlapConfirmed'='null'::jsonb then '{}'::jsonb else jsonb_build_object('activityOverlap',case when (att->>'activityOverlapConfirmed')::boolean then 'none_confirmed' else 'unknown' end) end) b
-    from jsonb_array_elements(request->'corrections') e join neuvetra.collection_activity_versions v on v.company_id=target_company and v.id=(e->>'expectedVersionId')::uuid) c where c.b is distinct from c.a;
+        ||case when att->'activityOverlapConfirmed'='null'::jsonb then '{}'::jsonb else jsonb_build_object('activityOverlap',case when (att->>'activityOverlapConfirmed')::boolean then 'none_confirmed' else 'unknown' end) end)
+        ||jsonb_build_object('setupVersionId',coalesce(setup_head::text,v.payload->>'setupVersionId')) b
+    from jsonb_array_elements(request->'corrections') e join neuvetra.collection_activity_versions v on v.company_id=target_company and v.id=(e->>'expectedVersionId')::uuid) c where (c.b-'setupVersionId') is distinct from (c.a-'setupVersionId');
   reason:=format('Mapped to NAICS %s (category %s, %s) by spend mapping revision %s.',m->>'naicsCode',m->>'category',replace(m->>'marginChoice','_',' '),coalesce(current_revision,0)+1);
   n_corrected:=neuvetra.scope3_write_spend_versions(target_company,actor,todo,reason);
   mapping_id:=new_id; revision:=coalesce(current_revision,0)+1; corrected:=n_corrected; unchanged:=listed-n_corrected; return next;
