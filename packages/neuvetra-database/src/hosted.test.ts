@@ -72,7 +72,7 @@ test("the image manifest is 0001–0030, ending with the reviewed 0027, 0028, 00
   ])
   expect(new TextEncoder().encode(manifest[27]!.sql).byteLength).toBe(3155532)
   expect(new TextEncoder().encode(manifest[28]!.sql).byteLength).toBe(26375)
-  expect(new TextEncoder().encode(manifest[29]!.sql).byteLength).toBe(161952)
+  expect(new TextEncoder().encode(manifest[29]!.sql).byteLength).toBe(162929)
 })
 
 test("explicit database CA accepts certificates only and never disables TLS verification", async () => {
