@@ -16,7 +16,7 @@ export interface JourneyRecord { id: string; kind: string; label: string; source
   importedSpend?: true }
 /** A company-setup answer that is still open. `scopes` lists the totals it can leave incomplete (empty: it doesn't affect totals). */
 export interface SetupOpenItem { id: string; title: string; detail: string; scopes: Array<1 | 2> }
-/** Something the saved setup says should exist but no record covers yet. Shown as a gap, never as complete. */
+/** A possible coverage gap: missing records, an unsupported source or an unresolved legacy source family. */
 export interface CoverageGap { id: string; scope: 1 | 2; title: string; detail: string; note: string | null; noteFrom: "site" | "source" }
 export interface JourneyStatus {
   canManage: boolean

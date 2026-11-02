@@ -47,7 +47,7 @@ function completeness(results: ResultsResponse, coverage: Coverage) {
   const held = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && notYetCounted(row)).length
   const note = (complete: boolean, scope: 1 | 2) => {
     const count = held(scope), issues = coverageIssues(coverage, scope)
-    const parts = [count ? `${plural(count, "record")} not yet counted` : "", issues.open ? `${plural(issues.open, "setup answer")} still open` : "", issues.gaps ? `${plural(issues.gaps, "expected source")} with no records` : "", !complete ? "some results only partly calculated" : "", issues.unchecked ? "coverage not checked against company setup" : ""].filter(Boolean)
+    const parts = [count ? `${plural(count, "record")} not yet counted` : "", issues.open ? `${plural(issues.open, "setup answer")} still open` : "", issues.gaps ? plural(issues.gaps, "possible coverage gap") : "", !complete ? "some results only partly calculated" : "", issues.unchecked ? "coverage not checked against company setup" : ""].filter(Boolean)
     return parts.length ? `Incomplete — ${parts.join("; ")}` : "No known gaps — each source type and included site in company setup has at least one record"
   }
   // BF1: no subtotal while a record was calculated means the engine's subtotal couldn't be verified, not that there are no records.

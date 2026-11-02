@@ -112,6 +112,18 @@ const synthetic = {
 const reason = plainLanguage.reasonText
 
 describe("B02: records the engine held are counted and explained everywhere", () => {
+  test("an unresolved coverage gap does not claim saved fuel records are absent in the report or CSV", () => {
+    const gap = { id: "legacy-stationary", scope: 1 as const, title: "Setup says you have fuel-burning equipment; natural gas records and generator fuel records are saved. Confirm which fuels or equipment still need records", detail: "Saved records alone do not establish complete fuel coverage.", note: null, noteFrom: "source" as const }
+    expect(synthetic.records.some(row => row.kind === "natural_gas")).toBe(true)
+    expect(synthetic.records.some(row => row.kind === "distillate_no2")).toBe(true)
+    const view = render(synthetic, { state: "ready", setupOpen: [], gaps: [gap] })
+    expect(view.completeness.scope1).toContain("1 possible coverage gap")
+    expect(view.printed).toContain("1 possible coverage gap")
+    expect(csvLines(view.csv).find(line => line.startsWith("# Completeness, Scope 1:"))).toContain("1 possible coverage gap")
+    expect(view.printed + view.csv).not.toContain("expected source with no records")
+    expect(view.csv).toContain(gap.title)
+    expect(view.totals).toEqual(render(synthetic).totals)
+  })
   test("empty aggregate membership is unavailable, while a genuinely calculated zero remains zero", () => {
     const empty = render(synthetic)
     expect(empty.totals[2]).toBe("—t CO2e")
