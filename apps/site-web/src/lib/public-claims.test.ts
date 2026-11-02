@@ -27,6 +27,9 @@ describe("public claims (D5)", () => {
       expect([where, /reviewed methods/i.test(text)]).toEqual([where, false])
       expect([where, /can(?:not|’t|'t) list, open or download/i.test(text)]).toEqual([where, false])
       expect([where, /kept private to your company/i.test(text)]).toEqual([where, false])
+      // Neuvetra's operator checks uploads, so "only members of your company" would be untrue (D5 product review MF1).
+      expect([where, /visible only to members/i.test(text)]).toEqual([where, false])
+      expect([where, /are set by the California Air Resources Board/i.test(text)]).toEqual([where, false])
     }
     expect(landing).toContain("Greenhouse-gas reporting a reviewer can <em>trace</em>.")
     expect(landing).toContain("Calculate with beta methods")

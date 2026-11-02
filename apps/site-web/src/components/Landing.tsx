@@ -22,17 +22,17 @@ const STEPS = [
 const FEATURES: Array<{ icon: IconName; title: string; body: string }> = [
   { icon: "layers", title: "Traceable by design", body: "Each calculated figure links to its record, the evidence attached to it, the emission factor and the method version used." },
   { icon: "alert", title: "Gaps stay visible", body: "Missing or unsupported data is held with a plain reason. Unknown is never quietly turned into zero." },
-  { icon: "file", title: "Evidence kept with the numbers", body: "Bills and records are fingerprinted on upload, linked to each activity, and designed to be visible only to members of your company." },
+  { icon: "file", title: "Evidence kept with the numbers", body: "Bills and records are fingerprinted on upload, linked to each activity and scoped to your company." },
   { icon: "chart", title: "Scope 2, both ways", body: "Location-based and market-based electricity results side by side, including certificates and green tariffs." },
   { icon: "records", title: "Corrections with a history", body: "Every change is a new version with a reason, so the audit trail stays intact from first entry to final draft." },
   { icon: "help", title: "Help where you need it", body: "Ask Neuvetra answers common questions in plain language from written, reviewed guidance — and says so when it doesn’t have an answer." },
 ]
 const FAQ = [
   { q: "Who is Neuvetra for?", a: "Finance, operations and sustainability teams preparing a Scope 1 and Scope 2 inventory — whether for California’s SB 253, a customer’s supplier request, or their own targets." },
-  { q: "Does Neuvetra make us compliant with SB 253?", a: "No. Neuvetra helps you prepare a traceable draft inventory. Whether SB 253 applies to your company, and which deadlines and assurance requirements you face, are set by the California Air Resources Board (CARB), and CARB’s rules and dates can change. Check CARB’s current guidance or ask your advisor." },
+  { q: "Does Neuvetra make us compliant with SB 253?", a: "No. Neuvetra helps you prepare a traceable draft inventory. Whether SB 253 applies to your company, and which deadlines and assurance requirements you face, depend on the law and on regulations from the California Air Resources Board (CARB), which can change. Check CARB’s current guidance or ask your advisor." },
   { q: "Which methods and factors do you use?", a: "Scope 1 uses the EPA GHG Emission Factors Hub (2025). Scope 2 uses EPA eGRID2023 for location-based results and the Green-e 2025 residual mix for market-based results. Gases are combined with IPCC AR5 100-year global warming potentials." },
-  { q: "Is the output an official filing?", a: "Not yet. During the private beta every report is a draft prepared with beta methods and is not externally assured. It is structured so an independent assurance provider can follow each calculated figure." },
-  { q: "How is our data protected?", a: "Records and files are designed to be visible only to members of your company. During the private beta, use synthetic or test data only." },
+  { q: "Is the output an official filing?", a: "No. During the private beta every report is a draft prepared with beta methods and is not externally assured. It is structured so an independent assurance provider can follow each calculated figure." },
+  { q: "How is our data protected?", a: "Records and files are scoped to your company, and the app is designed so that other companies’ accounts can’t see them. In this beta, a Neuvetra operator checks each uploaded file before it can be downloaded. During the private beta, use synthetic or test data only." },
 ]
 
 function tone(message: string): "error" | "info" | null {
