@@ -16,23 +16,23 @@ export interface LandingProps {
 const STEPS = [
   { title: "Describe your company", body: "Legal entity, reporting year, boundary approach and every site — with “not sure yet” allowed wherever you are." },
   { title: "Add activity and evidence", body: "One record per bill, meter, vehicle group, generator or cooling system, with the original document attached." },
-  { title: "Calculate with reviewed methods", body: "Published EPA, eGRID and Green-e factors. Records with missing inputs are held and explained, never counted as zero." },
-  { title: "Review your draft report", body: "Totals by scope, every figure traced to its record and factor, and a list of what’s still open. Print or export." },
+  { title: "Calculate with beta methods", body: "Scope 1 and 2 figures use the EPA GHG Emission Factors Hub (2025 edition), EPA eGRID2023 and the Green-e residual mix. The methods are in beta and not yet formally released; the results page shows each method’s status. Records with missing inputs are held and explained, never counted as zero." },
+  { title: "Review your draft report", body: "Totals by scope, each calculated figure traced to its record and factor, and a list of what’s still open. Print or download it as a draft." },
 ]
 const FEATURES: Array<{ icon: IconName; title: string; body: string }> = [
-  { icon: "layers", title: "Traceable by design", body: "Each figure links to the record, the evidence file, the emission factor and the method version used to produce it." },
+  { icon: "layers", title: "Traceable by design", body: "Each calculated figure links to its record, the evidence attached to it, the emission factor and the method version used." },
   { icon: "alert", title: "Gaps stay visible", body: "Missing or unsupported data is held with a plain reason. Unknown is never quietly turned into zero." },
-  { icon: "file", title: "Evidence kept with the numbers", body: "Bills and records are fingerprinted on upload, kept private to your company and linked to each activity." },
+  { icon: "file", title: "Evidence kept with the numbers", body: "Bills and records are fingerprinted on upload, linked to each activity, and designed to be visible only to members of your company." },
   { icon: "chart", title: "Scope 2, both ways", body: "Location-based and market-based electricity results side by side, including certificates and green tariffs." },
   { icon: "records", title: "Corrections with a history", body: "Every change is a new version with a reason, so the audit trail stays intact from first entry to final draft." },
   { icon: "help", title: "Help where you need it", body: "Ask Neuvetra answers common questions in plain language from written, reviewed guidance — and says so when it doesn’t have an answer." },
 ]
 const FAQ = [
   { q: "Who is Neuvetra for?", a: "Finance, operations and sustainability teams preparing a Scope 1 and Scope 2 inventory — whether for California’s SB 253, a customer’s supplier request, or their own targets." },
-  { q: "What does SB 253 require?", a: "U.S. companies with more than $1 billion in annual revenue that do business in California must report Scope 1 and Scope 2 emissions each year. CARB’s February 2026 regulation set August 10, 2026 as the first deadline; in June 2026 CARB proposed moving it to November 10, 2026, which still needed final approval when we last checked (29 Sep 2026). Under CARB’s current rulemaking, reports submitted from 2027 need limited assurance of Scope 1 and 2, and Scope 3 reporting starts in 2027 for specified categories. Confirm current dates with CARB or your advisor." },
+  { q: "Does Neuvetra make us compliant with SB 253?", a: "No. Neuvetra helps you prepare a traceable draft inventory. Whether SB 253 applies to your company, and which deadlines and assurance requirements you face, are set by the California Air Resources Board (CARB), and CARB’s rules and dates can change. Check CARB’s current guidance or ask your advisor." },
   { q: "Which methods and factors do you use?", a: "Scope 1 uses the EPA GHG Emission Factors Hub (2025). Scope 2 uses EPA eGRID2023 for location-based results and the Green-e 2025 residual mix for market-based results. Gases are combined with IPCC AR5 100-year global warming potentials." },
-  { q: "Is the output an official filing?", a: "Not yet. During the private beta every report is a draft prepared with beta methods and is not externally assured. It is structured so an independent assurance provider can follow every number." },
-  { q: "How is our data protected?", a: "Records and files are scoped to your company — other companies cannot list, open or download them. During the private beta, use synthetic or test data only." },
+  { q: "Is the output an official filing?", a: "Not yet. During the private beta every report is a draft prepared with beta methods and is not externally assured. It is structured so an independent assurance provider can follow each calculated figure." },
+  { q: "How is our data protected?", a: "Records and files are designed to be visible only to members of your company. During the private beta, use synthetic or test data only." },
 ]
 
 function tone(message: string): "error" | "info" | null {
@@ -65,8 +65,8 @@ export function Landing(props: LandingProps) {
       <section className="nv-section nv-hero" aria-labelledby="hero-title">
         <div>
           <p className="nv-eyebrow">Scope 1 & 2 reporting · California SB 253</p>
-          <h1 id="hero-title">Greenhouse-gas reporting your auditor can <em>trace</em>.</h1>
-          <p className="nv-hero__lead">Neuvetra guides your team from company setup to a draft Scope 1 and Scope 2 inventory. Every figure links back to the bill, the record and the published emission factor behind it — and anything missing stays visibly missing.</p>
+          <h1 id="hero-title">Greenhouse-gas reporting a reviewer can <em>trace</em>.</h1>
+          <p className="nv-hero__lead">Neuvetra guides your team from company setup to a draft Scope 1 and Scope 2 inventory. Each calculated figure links to its activity record, the evidence attached to it, the emission factor and the method version — and anything missing stays visibly missing.</p>
           <div className="nv-hero__cta">
             <button type="button" className="nv-btn nv-btn--primary" onClick={goToSignIn}>Sign in to your workspace <Icon name="arrow" size={18} /></button>
             <a className="nv-btn nv-btn--ghost" href="#how">See how it works</a>
