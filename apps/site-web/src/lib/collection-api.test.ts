@@ -92,6 +92,33 @@ describe("collection context and ZIP browser boundary", () => {
       expect((cause as CollectionApiError).code).toBeNull()
     }
   })
+
+  test("declares text/csv for a CSV that Windows with Excel reports as application/vnd.ms-excel, and sends the file unchanged", async () => {
+    const uploadId = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee"
+    const sent: { url: string; method?: string; headers: Headers; body: unknown }[] = []
+    globalThis.fetch = (async (input, init) => {
+      sent.push({ url: String(input), method: init?.method, headers: new Headers(init?.headers), body: init?.body })
+      return Response.json({ receipt: { evidenceId: uploadId, reused: false } }, { status: 201 })
+    }) as typeof fetch
+    const upload = async (name: string, type: string) => {
+      const file = new File(["fuel,gallons\nDiesel,12\n"], name, { type })
+      await uploadCollectionEvidence(companyId, file, uploadId, actor)
+      const request = sent.at(-1)!
+      expect(request.body).toBe(file)
+      return request.headers.get("content-type")
+    }
+    expect(await upload("Fuel Log.CSV", "application/vnd.ms-excel")).toBe("text/csv")
+    expect(sent[0]).toMatchObject({ url: `/workspace-api/workspace/${companyId}/collection/evidence`, method: "POST" })
+    expect(sent[0]!.headers.get("x-neuvetra-original-name")).toBe(encodeURIComponent("Fuel Log.CSV"))
+    expect(sent[0]!.headers.get("x-neuvetra-upload-id")).toBe(uploadId)
+    expect(await upload("fuel-log.csv", "")).toBe("text/csv")
+    expect(await upload("meters.xlsx", "")).toBe("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    expect(await upload("fuel-log.csv", "text/csv")).toBe("text/csv")
+    // A different explicit type is kept, and an unknown file with no type is still sent as octet-stream: the server decides.
+    expect(await upload("fuel-log.csv", "image/png")).toBe("image/png")
+    expect(await upload("old-meters.xls", "application/vnd.ms-excel")).toBe("application/vnd.ms-excel")
+    expect(await upload("notes", "")).toBe("application/octet-stream")
+  })
 })
 
 describe("I-02: the per-kind Scope 3 capability", () => {

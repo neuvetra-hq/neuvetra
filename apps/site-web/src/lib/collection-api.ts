@@ -1,3 +1,4 @@
+import { evidenceUploadType } from "./evidence-upload-type"
 import { sharedFetch } from "./shared-get"
 import type {
   CollectionActivityRecord,
@@ -152,7 +153,7 @@ export async function uploadCollectionEvidence(companyId: string, file: File, up
   idPath(uploadId)
   const response = await request(actor, `${companyPath(companyId)}/evidence`, {
     method: "POST",
-    headers: { "content-type": file.type || "application/octet-stream", "x-neuvetra-original-name": encodeURIComponent(file.name), "x-neuvetra-upload-id": uploadId },
+    headers: { "content-type": evidenceUploadType(file.name, file.type) || "application/octet-stream", "x-neuvetra-original-name": encodeURIComponent(file.name), "x-neuvetra-upload-id": uploadId },
     body: file,
   })
   return json<{ receipt: CollectionEvidenceReceipt }>(response)
