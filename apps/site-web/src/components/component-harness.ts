@@ -29,7 +29,7 @@ async function scope3Defaults(injected: Record<string, unknown>): Promise<Record
   const loadContext = injected.loadCollectionContext as ((...args: unknown[]) => Promise<unknown>) | undefined
   return {
     ...textsR2e, ...textsR2c, ...textsR3c, ...spendTarget, ...displayR3d, ...textsR3d, ...collection, CARB_PROPOSED_MANDATORY_CATEGORIES: coverage.CARB_PROPOSED_MANDATORY_CATEGORIES, SCOPE3_ENGINE_CATEGORIES: coverage.SCOPE3_ENGINE_CATEGORIES, SCOPE3_SETUP_CATEGORY_TOKENS: coverage.SCOPE3_SETUP_CATEGORY_TOKENS,
-    validateCollectionActivity: contract.validateCollectionActivity, instrumentEvidenceClaims: adapter.instrumentEvidenceClaims, M71_CATEGORIES: m71.M71_CATEGORIES, SCOPE3_ACTIVITY_KINDS: language.SCOPE3_ACTIVITY_KINDS, unitLabel: language.unitLabel,
+    validateCollectionActivity: contract.validateCollectionActivity, instrumentEvidenceClaims: adapter.instrumentEvidenceClaims, M71_CATEGORIES: m71.M71_CATEGORIES, SCOPE3_ACTIVITY_KINDS: language.SCOPE3_ACTIVITY_KINDS, unitLabel: language.unitLabel, sourceCategoryLabel: language.sourceCategoryLabel,
     Scope3ResultsApiError: results.Scope3ResultsApiError, loadScope3Results: async () => { throw new results.Scope3ResultsApiError("Scope 3 results are not available yet.", 503, "scope3_unavailable") },
     INITIAL_SCOPE3_STATE: results.INITIAL_SCOPE3_STATE, Scope3Panel: panel.Scope3Panel, Scope3ReportSection: panel.Scope3ReportSection,
     // I-04: company setup's category assessments. Off by default (a database below schema 30), as Scope 3 results are.
