@@ -12,6 +12,7 @@ const KIND_ICONS: Record<string, IconName> = { natural_gas: "flame", electricity
   purchase_spend: "file", purchase_supplier: "file", energy_resold: "bolt", commuting_average: "layers", teleworking: "home", asset_energy: "building", partner_reported: "building",
   building_average: "building", sold_fuel: "flame", sold_energy_product: "bolt", sold_ghg_product: "snow", end_of_life_split: "archive", investment: "chart",
   td_losses_upstream: "bolt", electricity_upstream: "bolt", fuel_upstream: "flame", hotel_stay: "building", energy_resold_upstream: "bolt" }
+export const sourceCategoryLabel = (category: string) => category === "stationary_combustion" ? "Fuel-burning equipment" : category.replace(/_/g, " ")
 export const kindIcon = (kind: string): IconName => KIND_ICONS[kind] ?? "records"
 export const kindScope = (kind: string): 1 | 2 => ACTIVITY_KINDS.find(item => item.kind === kind)?.scope ?? 1
 

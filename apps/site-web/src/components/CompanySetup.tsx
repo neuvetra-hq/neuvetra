@@ -15,6 +15,8 @@ import { scope3SetupNextStep, SETUP_NEXT_TEXT_R2C } from "@/lib/scope3-text-r2c"
 // Round 3 lane C (PR-9): the setup code is the company's own industry (NAICS 2022); spend uses 2017 codes.
 import { SPEND_TEXT_R3C } from "@/lib/scope3-text-r3c"
 
+import { sourceCategoryLabel } from "@/lib/plain-language"
+
 const sections = ["Company", "Reporting period", "Entities & boundary", "Locations", "Changes & shared operations", "Source activities", "Review"] as const
 const changes = ["Acquisitions or disposals", "Site openings or closures", "Changes in ownership or control", "Joint ventures or shared operations", "Franchises, outsourcing or leased assets"] as const
 const families = ["Heating & process equipment", "Backup generators", "Road & off-road vehicles", "Cooling & fire suppression", "Processes & other direct releases"] as const
@@ -247,7 +249,7 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
       <Select label="Did this affect the reporting period?" value={change.state} options={yesNo} onChange={value => update(next => { next.changes[index]!.state = value as Setup["changes"][number]["state"] })} />
       {change.state !== "no" && <><Field label="Effective date, if known" type="date" value={change.effectiveDate ?? ""} onChange={value => update(next => { next.changes[index]!.effectiveDate = value || null })} /><Field label="Affected entities, locations and details" value={change.details} onChange={value => update(next => { next.changes[index]!.details = value })} multiline /></>}
     </div></div>)}<Field label="Other changes or shared operations" value={draft.changeNotes} onChange={value => update(next => { next.changeNotes = value })} multiline /></>}
-    {step === 5 && <><p>A Yes records a possible source. It does not establish a supported calculation method. Unknown is never treated as No.</p>{draft.screening.map((row, index) => row.scope === 3 ? null : <div className="setup-subcard" key={row.id}><h3>Scope {row.scope} · {row.category}</h3><div className="setup-grid">
+    {step === 5 && <><p>A Yes records a possible source. It does not establish a supported calculation method. Unknown is never treated as No.</p>{draft.screening.map((row, index) => row.scope === 3 ? null : <div className="setup-subcard" key={row.id}><h3>Scope {row.scope} · {sourceCategoryLabel(row.category)}</h3><div className="setup-grid">
       <Select label="Does this apply within your proposed boundary?" value={row.state} options={screening} onChange={value => update(next => { next.screening[index]!.state = value as Setup["screening"][number]["state"] })} />
       {(row.state === "no" || row.state === "not_applicable") && <Field label="Reason for this answer" value={row.reason} onChange={value => update(next => { next.screening[index]!.reason = value })} multiline />}
       {(row.state === "yes" || row.state === "unknown") && <><Field label="Equipment / activity names and notes" value={row.details} onChange={value => update(next => { next.screening[index]!.details = value })} multiline /><Select label="Location, if known" value={row.locationId ?? ""} options={[["", "Not linked / company-wide"] as const, ...draft.locations.map(item => [item.id, item.name || "Unnamed location"] as const)]} onChange={value => update(next => { next.screening[index]!.locationId = value || null })} /></>}

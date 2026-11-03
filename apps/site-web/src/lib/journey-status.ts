@@ -6,7 +6,7 @@ import { listCollectionActivities, listCollectionEvidence, loadCollectionOvervie
 import { loadCompanySetup } from "./company-setup-api"
 import type { HostedWorkspaceActor } from "./workspace-api"
 import { recordReadiness, type CollectionReadinessFinding } from "@/components/CollectionWorkspace"
-import { kindLabel, periodLabel, type RecordState } from "./plain-language"
+import { kindLabel, periodLabel, sourceCategoryLabel, type RecordState } from "./plain-language"
 import { TODO_SPEND_TEXT_R3C } from "./scope3-text-r3c"
 import { scope3ReadinessOptions, scope3SetupFacts, scope3SpendLineChoices } from "./scope3-forms"
 
@@ -16,7 +16,7 @@ export interface JourneyRecord { id: string; kind: string; label: string; source
   importedSpend?: true }
 /** A company-setup answer that is still open. `scopes` lists the totals it can leave incomplete (empty: it doesn't affect totals). */
 export interface SetupOpenItem { id: string; title: string; detail: string; scopes: Array<1 | 2> }
-/** Something the saved setup says should exist but no record covers yet. Shown as a gap, never as complete. */
+/** A possible coverage gap: missing records, an unsupported source or an unresolved legacy source family. */
 export interface CoverageGap { id: string; scope: 1 | 2; title: string; detail: string; note: string | null; noteFrom: "site" | "source" }
 export interface JourneyStatus {
   canManage: boolean
@@ -77,7 +77,7 @@ export function setupMissing(view: CompanySetupView | null): SetupOpenItem[] {
   for (const location of setup.locations) if (location.inclusion === "unknown") missing.push({ id: `site-${location.id}`, title: `Decide whether ${location.name || "an unnamed site"} is included`, detail: "04 Locations. Its records aren’t counted until the site is included.", scopes: [1, 2] })
   for (const row of setup.screening) if (row.state === "unknown" && (row.scope === 1 || row.scope === 2)) {
     const family = FAMILY_KINDS[row.category]
-    missing.push({ id: `screen-${row.id}`, title: `Answer “${row.category}” — still “Not sure yet”`, detail: `06 Source activities. Until it’s answered, ${family ? family.noun : "these sources"} may be missing from Scope ${row.scope}.`, scopes: [row.scope] })
+    missing.push({ id: `screen-${row.id}`, title: `Answer “${sourceCategoryLabel(row.category)}” — still “Not sure yet”`, detail: `06 Source activities. Until it’s answered, ${family ? family.noun : "these sources"} may be missing from Scope ${row.scope}.`, scopes: [row.scope] })
   }
   return missing
 }
@@ -93,7 +93,14 @@ export function coverageGaps(view: CompanySetupView | null, records: JourneyReco
     const family = row.scope === 1 ? FAMILY_KINDS[row.category] : ["Purchased electricity", "purchased_electricity", "electricity"].includes(row.category)
       ? { kind: "electricity", noun: "purchased electricity", records: "electricity records" } : undefined
     const note = (row.details ?? "").trim() || null
-    if (!family || family.kind === null) gaps.push({ id: `screen-${row.id}`, scope: row.scope, title: `Setup says you have ${family?.noun ?? row.category}`, detail: "These aren’t calculated in this beta. Describe them in 06 Source activities so the reviewer can see them.", note, noteFrom: "source" })
+    // The saved aggregate category does not tell us which fuels or equipment exist.
+    if (row.scope === 1 && row.category === "stationary_combustion") {
+      const saved = [["natural_gas", "natural gas records"], ["distillate_no2", "generator fuel records"]]
+        .filter(([kind]) => counted.some(record => record.kind === kind && (!row.locationId || record.locationId === row.locationId)))
+        .map(([, label]) => label)
+      gaps.push({ id: `screen-${row.id}`, scope: 1, title: `Setup says you have fuel-burning equipment; ${saved.length ? `${saved.join(" and ")} are saved` : "there are no natural gas or generator fuel records yet"}. Confirm which fuels or equipment still need records`, detail: "Review 06 Source activities and identify all fuels and equipment, then add any missing records. Saved records alone do not establish complete fuel, equipment or reporting-period coverage.", note, noteFrom: "source" })
+    }
+    else if (!family || family.kind === null) gaps.push({ id: `screen-${row.id}`, scope: row.scope, title: `Setup says you have ${family?.noun ?? sourceCategoryLabel(row.category)}`, detail: "These aren’t calculated in this beta. Describe them in 06 Source activities so the reviewer can see them.", note, noteFrom: "source" })
     else if (!counted.some(record => record.kind === family.kind && (!row.locationId || record.locationId === row.locationId))) gaps.push({ id: `screen-${row.id}`, scope: row.scope, title: `Setup says you have ${family.noun}, but there are no ${family.records} yet`, detail: "Add a record, or change the setup answer if it doesn’t apply.", note, noteFrom: "source" })
   }
   for (const location of setup.locations) {
