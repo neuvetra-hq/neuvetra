@@ -589,7 +589,9 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
 
   function edit(change: (next: CollectionDraft) => void) {
     if (!canManage || busy) return
-    const next = structuredClone(draft); change(next); setDraft(next); setDirty(true); setHistorical(null); pending.current = null; setError(false); setSaveProblem(null)
+    // UI rehearsal B1 (3 November 2026): each change applies to the current draft, not the one this render saw, so several
+    // edits in one event compose (a spend line's invoice date, then its reporting period). A change must stay pure.
+    setDraft(current => { const next = structuredClone(current); change(next); return next }); setDirty(true); setHistorical(null); pending.current = null; setError(false); setSaveProblem(null)
     setMessage("Changes are not saved yet. Unknown or unsupported values will remain visible, never counted as zero.")
   }
   function switchKind(kind: CollectionActivityKind) {
@@ -1008,7 +1010,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
         {/* Round 3 lane D (PR-6): the kind's key choice (mode, material, vehicle, the record form) comes before the data-quality block. */}
         {scope3Draft && scope3Completion && <DataQualityEditor activity={draft} onEdit={edit} lead={qualityFields("Is the amount actual or estimated?")} />}
         {draft.kind === "electricity" && "instruments" in p && <div className="setup-subcard"><h3>Electricity, site and grid region</h3><div className="setup-grid">
-          <Field label="ZIP code" value={p.zip} onChange={value => edit(next => { (next.payload as typeof p).zip = value; (next.payload as typeof p).subregion = ""; (next.payload as typeof p).utilityEiaId = null; (next.payload as typeof p).utilityName = ""; setZipLookup(null) })} hint="Required. Run the pinned lookup; unresolved values stay visible but cannot be saved as validated." />
+          <Field label="ZIP code" value={p.zip} onChange={value => { edit(next => { (next.payload as typeof p).zip = value; (next.payload as typeof p).subregion = ""; (next.payload as typeof p).utilityEiaId = null; (next.payload as typeof p).utilityName = "" }); setZipLookup(null) }} hint="Required. Run the pinned lookup; unresolved values stay visible but cannot be saved as validated." />
         </div><button type="button" disabled={busy || !/^\d{5}$/.test(p.zip)} onClick={() => void runZipLookup()}>Look up ZIP and utility</button>
           {zipLookup?.found && (zipLookup.needsUtilityChoice || zipLookup.utilities.length > 1) && <Select label="Verified utility and eGRID subregion" value={p.utilityName ? `${p.subregion}|${p.utilityEiaId ?? ""}|${p.utilityName}` : ""} options={[["", "Choose the utility serving this meter"] as const, ...zipLookup.utilities.map(utility => [`${utility.subregion}|${utility.eiaId}|${utility.utility}`, `${utility.utility} · ${utility.subregion}${utility.predominantUtility ? " · predominant" : ""}`] as const)]} onChange={value => edit(next => { if (next.kind !== "electricity") return; const utility = zipLookup.utilities.find(item => `${item.subregion}|${item.eiaId}|${item.utility}` === value); next.payload.subregion = utility?.subregion ?? ""; next.payload.utilityEiaId = utility?.eiaId || null; next.payload.utilityName = utility?.utility ?? "" })} hint={zipLookup.needsUtilityChoice ? "A utility selection is required because this ZIP maps to more than one subregion." : "Choose the utility named on the source document."} />}
           {zipLookup?.found && p.subregion && p.utilityName && <p>Verified utility: <strong>{p.utilityName}</strong> · eGRID subregion <strong>{egridSubregionLabel(p.subregion)}</strong>. Source: {zipLookup.source}</p>}
