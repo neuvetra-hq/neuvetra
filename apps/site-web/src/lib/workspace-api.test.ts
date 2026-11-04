@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { createRequire } from "node:module"
-import { ANNUAL_WARNINGS, calculateSyntheticBill, correctSyntheticBill, createSyntheticWorkspace, decideDraftInventoryReport, decideSyntheticInventory, decodeAnnualInventory, decodeAnnualRegister, decodeEvidencePackMetadata, decodeEvidencePackReceipt, decodeSyntheticBill, decodeWorkspace, downloadDraftInventoryReport, downloadEvidencePack, DRAFT_REPORT_LIMITATIONS, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replaySyntheticBillCalculation, revisitDraftInventoryReport, revisitDraftInventoryReportReview, revisitSyntheticInventory, revisitSyntheticWorkspace, uploadSyntheticBill, type AnnualInventory, type DraftInventoryReportMetadata, type SyntheticInventory } from "./workspace-api"
+import { ANNUAL_WARNINGS, calculateSyntheticBill, correctSyntheticBill, createSyntheticWorkspace, decideDraftInventoryReport, decideSyntheticInventory, decodeAnnualInventory, decodeAnnualRegister, decodeEvidencePackMetadata, decodeEvidencePackReceipt, decodeSyntheticBill, decodeWorkspace, downloadDraftInventoryReport, downloadEvidencePack, DRAFT_REPORT_LIMITATIONS, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replayEvidencePack, replaySyntheticBillCalculation, revisitDraftInventoryReport, revisitDraftInventoryReportReview, revisitSyntheticInventory, revisitSyntheticWorkspace, uploadSyntheticBill, type AnnualInventory, type DraftInventoryReportMetadata, type SyntheticInventory } from "./workspace-api"
 
 const fixture = {
   id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
@@ -116,6 +116,23 @@ describe("M59 evidence-pack browser boundary",()=>{
     expect((await downloadEvidencePack(exactPack,"member",(async()=>response(bytes)) as typeof fetch)).size).toBe(bytes.byteLength)
     const changed=bytes.slice();changed[0]^=1
     await expect(downloadEvidencePack(exactPack,"member",(async()=>response(changed)) as typeof fetch)).rejects.toThrow("not recognized")
+  })
+  test("replays a downloaded ZIP that Windows labels application/x-zip-compressed and leaves the bytes to the server (CSV-4)",async()=>{
+    const bytes=new Uint8Array([0x50,0x4b,0x03,0x04,9,8,7,6])
+    const exactPack={...pack,archiveByteLength:bytes.byteLength}
+    const receipt={status:"verified_match",profile:pack.profile,archiveSha256:pack.archiveSha256,manifestSha256:pack.manifestSha256,lineageRootSha256:pack.lineageRootSha256,entryCount:17,inventoryId:pack.inventoryId,reconstructed:{expected:12,reported:10,estimated:1,excluded:1,missing:0,reportedMwh:"126.788000",reportedKgCo2e:"24728.7681363744",estimatedMwh:"12.493000",estimatedKgCo2e:"2436.6383279784",includedMwh:"139.281000",includedKgCo2e:"27165.4064643528",includedDisplayKgCo2e:"27165.4065"},overallInventoryCompleteness:"incomplete",releaseEligible:false}
+    for(const reported of ["application/zip","application/x-zip-compressed","application/x-zip","application/octet-stream",""]){
+      let sent:File|null=null
+      const fetcher=(async(_url:string|URL|Request,init?:RequestInit)=>{sent=(init?.body as FormData).get("file") as File;return Response.json(receipt)}) as typeof fetch
+      expect(await replayEvidencePack(exactPack,new File([bytes],`neuvetra-m59-${pack.inventoryId}.zip`,{type:reported}),"member",fetcher)).toEqual(receipt as never)
+      expect(sent!.type).toBe("application/zip")
+      expect(new Uint8Array(await sent!.arrayBuffer())).toEqual(bytes)
+    }
+    let called=false
+    const never=(async()=>{called=true;return Response.json(receipt)}) as typeof fetch
+    for(const file of [new File([bytes],"neuvetra-m59.pdf",{type:""}),new File([bytes],"neuvetra-m59.zip",{type:"text/plain"}),new File([bytes.slice(1)],"neuvetra-m59.zip",{type:"application/x-zip-compressed"})])
+      await expect(replayEvidencePack(exactPack,file,"member",never)).rejects.toThrow("Choose the exact downloaded M59 ZIP file.")
+    expect(called).toBe(false)
   })
 })
 
