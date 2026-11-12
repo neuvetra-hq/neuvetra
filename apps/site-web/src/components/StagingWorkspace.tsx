@@ -114,14 +114,13 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
     focusedAfterLoad.current = true
     if (!document.activeElement || document.activeElement === document.body) focusPageHeading(mainRef.current)
   }, [status])
-  // Keep the address canonical (an unknown hash becomes the view shown), and leave no workspace address or title behind on sign-out.
+  // Keep the address canonical (an unknown hash becomes the view shown), and leave no workspace title behind on close.
+  // WO-05a: the address itself stays when the workspace closes, so signing in again returns to the same view. Only a
+  // deliberate sign-out clears it (PrivateStaging.signOut); a session end, a Supabase SIGNED_OUT or a lost access doesn't.
   useEffect(() => {
     const canonical = viewHash(current.current.panel, current.current.openRecordId)
     if (window.location.hash !== canonical) window.history.replaceState(null, "", canonical)
-    return () => {
-      window.history.replaceState(null, "", window.location.pathname + window.location.search)
-      document.title = "Neuvetra — Greenhouse-gas reporting (private beta)"
-    }
+    return () => { document.title = "Neuvetra — Greenhouse-gas reporting (private beta)" }
   }, [])
   // A record address that no longer matches a saved record is cleared with the address when progress loads.
   const heldRecord = panel === "collection" && openRecordId !== null && status ? status.collection.records.find(row => row.id === openRecordId && row.state === "held_period") ?? null : null

@@ -21,7 +21,7 @@ export interface CompanyWorkspace {
 }
 
 export type SyntheticWorkspaceActor = "owner" | "admin" | "member" | "outsider" | "signed_out"
-export interface HostedWorkspaceActor { accessToken: string; userId: string; role: "owner" | "admin" | "member"; signal?: AbortSignal; onUnauthorized?: () => void }
+export interface HostedWorkspaceActor { accessToken: string; userId: string; role: "owner" | "admin" | "member"; signal?: AbortSignal; onUnauthorized?: (status?: number) => void }
 export type WorkspaceActor = SyntheticWorkspaceActor | HostedWorkspaceActor
 export function assertWorkspaceActorActive(actor: WorkspaceActor): void { if (typeof actor === "object") actor.signal?.throwIfAborted() }
 export const INVENTORY_WARNINGS = ["annual_coverage_incomplete_1_of_12_months", "market_based_scope2_not_included", "factor_and_method_not_released", "synthetic_local_only_no_assurance"] as const
@@ -196,7 +196,8 @@ function workspaceFetch(actor: WorkspaceActor): typeof fetch {
     // WO-09: limited to 35 s and reported when slow.
     const response = await withRequestTimeout("default", actor.signal, signal => fetch(input, { ...init, signal }))
     actor.signal?.throwIfAborted()
-    if (response.status === 401 || response.status === 403) actor.onUnauthorized?.()
+    // WO-05a: the status tells a session end (401) from no access (403).
+    if (response.status === 401 || response.status === 403) actor.onUnauthorized?.(response.status)
     return response
   }) as typeof fetch
 }
