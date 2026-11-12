@@ -86,7 +86,10 @@ html:has(.nv-app) { scroll-padding-top: var(--nv-sticky-offset); }
 
 /* ---------- Jump targets and notices land below the measured chrome ---------- */
 .nv-app #spend-import, .nv-app [data-spend-review-heading], .nv-app #scope3-todo, .nv-app .s3-todo__group, .nv-app #collection-record-editor { scroll-margin-top: var(--nv-sticky-offset); }
-.nv-reconnecting-wrap { top: calc(var(--nv-topbar-h) + var(--nv-contextbar-h) + 8px); }
+/* The "retrying" notice (WO-05a) is the context bar's last row: in the sticky stack's normal flow, so it pushes the page
+   down instead of covering the heading, its height is measured with the bar, and the Menu sheet (z-index 40) covers it. */
+.nv-contextbar .nv-reconnecting-wrap { position: static; inset: auto; z-index: auto; display: flex; justify-content: center; padding: 0 16px 8px; }
+.nv-contextbar .nv-reconnecting-wrap > .nv-notice { width: 100%; box-shadow: none; }
 
 /* Printing a view other than the report: no context bar or sheet (journey.css already drops the top bar and navigation). */
 @media print { .nv-contextbar, .nv-sheet { display: none !important; } }

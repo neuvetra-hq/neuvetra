@@ -51,6 +51,11 @@ describe("shell markup and CSS", async () => {
     expect(css).toContain("@media (max-width: 1080px) { .nv-app .nv-layout > .nv-sidenav { display: none; } }")
     expect(bar).toContain("--nv-topbar-measured")
   })
+  test("the retrying notice is the context bar's last row (in the sticky flow, under the sheet), not a fixed overlay", () => {
+    expect(workspace).toContain("notice={notice} />")
+    expect(bar).toContain("{notice}")
+    expect(css).toContain(".nv-contextbar .nv-reconnecting-wrap { position: static; inset: auto; z-index: auto;")
+  })
   test("WO-08 CSS is its own unlayered file, imported after the earlier order files", () => {
     expect(css).not.toContain("@layer")
     expect(entry.indexOf(`import "./styles/wo08.css"`)).toBeGreaterThan(entry.indexOf(`import "./spend-import.css"`))

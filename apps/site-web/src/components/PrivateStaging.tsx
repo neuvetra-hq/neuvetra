@@ -182,11 +182,12 @@ export function PrivateStaging() {
   if (active) return <div className="nv-app">
     {live}
     <a className="nv-skip" href="#workspace-main">Skip to content</a>
-    {/* Risk 2: a transient failure keeps the workspace and its unsaved input; this notice is visual (the live region speaks). */}
-    {reconnecting && <div className="nv-reconnecting-wrap"><div className="nv-notice nv-notice--warn"><Icon name="alert" /><p>{ACCESS_TEXT.retrying} Your work on this page stays here.</p></div></div>}
     <StagingWorkspace key={`${active.session.user.id}:${active.epoch}`} headingRef={headingRef} staging={{ actor: active.actor, workspaceId: active.access.access.workspaceId, evidenceId: active.access.access.evidenceId }}
       // WO-08: the workspace draws the top bar (and the Menu sheet below 1080 px); both Sign out controls call this same deliberate sign-out.
-      account={{ email: active.session.user.email ?? null, signingOut: busy, onSignOut: () => void signOut() }} />
+      account={{ email: active.session.user.email ?? null, signingOut: busy, onSignOut: () => void signOut() }}
+      // Risk 2: a transient failure keeps the workspace and its unsaved input; this notice is visual (the live region speaks).
+      // WO-08: the workspace shows it as the last row of the sticky context bar, so it covers neither the heading nor the Menu sheet.
+      notice={reconnecting ? <div className="nv-reconnecting-wrap"><div className="nv-notice nv-notice--warn"><Icon name="alert" /><p>{ACCESS_TEXT.retrying} Your work on this page stays here.</p></div></div> : null} />
   </div>
   if (problem === "session_ended") return <div className="nv-access">{tone === "error" ? <p className="nv-sr" role="status" aria-live="polite" /> : live}<div className="nv-access__card">
     <Icon name="info" size={32} className="nv-access__icon" />

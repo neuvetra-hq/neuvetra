@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type RefObject } from "react"
+import { useEffect, useId, useRef, useState, type ReactNode, type RefObject } from "react"
 import type { JourneyStatus } from "@/lib/journey-status"
 import { CONTEXT_TEXT, contextValues } from "@/lib/context-values"
 
@@ -28,7 +28,7 @@ function useChromeHeights(bar: RefObject<HTMLElement | null>) {
  * WO-08: which company, period, setup version and role every view shows. Below 720 px only the company and period (and
  * "View only" for a member) stay on the bar; the rest is under "Details ▸", which also gives the period wording by scope.
  */
-export function ContextBar({ status, failed, canManage, inert }: { status: JourneyStatus | null; failed: boolean; canManage: boolean; inert?: boolean }) {
+export function ContextBar({ status, failed, canManage, inert, notice = null }: { status: JourneyStatus | null; failed: boolean; canManage: boolean; inert?: boolean; notice?: ReactNode }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const toggle = useRef<HTMLButtonElement>(null)
@@ -53,6 +53,8 @@ export function ContextBar({ status, failed, canManage, inert }: { status: Journ
         {CONTEXT_TEXT.details}<span className="nv-contextbar__chevron" aria-hidden="true">{open ? "▾" : "▸"}</span>
       </button>}
     </div>
+    {/* The "retrying" notice is the bar's last row: its height counts in the sticky offset, and the sheet covers it. */}
+    {notice}
     {values && open && <div className="nv-contextbar__details" id={id}>
       <dl>
         <div><dt>Company</dt><dd>{values.company}</dd></div>

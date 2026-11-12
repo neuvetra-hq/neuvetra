@@ -223,7 +223,7 @@ for(const [name,fail] of TRANSIENT){
   for(let i=0;i<4;i++){await h.flush();await wait(4)}
   await h.flush()
   expect(h.workspace()!.props.key).toBe(before.props.key);expect(h.workspace()!.props.staging.actor).toBe(actor);expect(actor.signal.aborted).toBe(false)
-  expect(h.message()).toBe(ACCESS_TEXT.retrying);expect(h.nodes().some(n=>n.props.className==="nv-reconnecting-wrap")).toBe(true)
+  expect(h.message()).toBe(ACCESS_TEXT.retrying);expect(h.workspace()!.props.notice?.props?.className==="nv-reconnecting-wrap").toBe(true)
   expect(h.scheduled.filter(s=>!s.cancelled).map(s=>s.ms)).toEqual([2000])
   // The scheduled retry fails again: the next wait is longer.
   h.scheduled.at(-1)!.run();for(let i=0;i<4;i++){await h.flush();await wait(4)}
@@ -231,7 +231,7 @@ for(const [name,fail] of TRANSIENT){
   // Neuvetra answers again: the notice goes, the same workspace stays, and no retry is left pending.
   const timers=h.scheduled.length;h.setVerification(async()=>Response.json(access()));h.scheduled.at(-1)!.run();await h.flush()
   expect(h.workspace()!.props.key).toBe(before.props.key);expect(h.workspace()!.props.staging.actor).toBe(actor);expect(actor.signal.aborted).toBe(false)
-  expect(h.nodes().some(n=>n.props.className==="nv-reconnecting-wrap")).toBe(false);expect(h.message()).toBe(ACCESS_TEXT.reconnected)
+  expect(h.workspace()!.props.notice?.props?.className==="nv-reconnecting-wrap").toBe(false);expect(h.message()).toBe(ACCESS_TEXT.reconnected)
   expect(h.scheduled.length).toBe(timers);expect(h.location.hash).toBe("#/results");h.cleanup()
  })
 }

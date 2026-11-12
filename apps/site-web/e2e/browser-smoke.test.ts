@@ -205,7 +205,12 @@ suite("site-web browser smoke (E2E-01)", () => {
     const { page } = opened
     await page.goto("/#/activity")
     await activityListLoaded(page)
-    await page.getByText("You have view access.").waitFor()
+    // WO-08: the view-access notice became the context bar's "View only"; its sentence is under Details.
+    const context = page.getByRole("region", { name: "Reporting context" })
+    await context.getByText("View only", { exact: true }).waitFor()
+    await context.getByRole("button", { name: "Details" }).click()
+    await context.getByText("View only. You have view access. An owner or admin of your company can make changes.").waitFor()
+    await page.keyboard.press("Escape")
     await page.getByRole("button", { name: /^Counted \(/ }).waitFor()
     const enabled = await page.evaluate(() => [...document.querySelectorAll<HTMLElement>("main button, main input, main select, main textarea")]
       .filter(element => element.getClientRects().length > 0 && !(element as HTMLButtonElement).disabled && element.getAttribute("aria-disabled") !== "true")

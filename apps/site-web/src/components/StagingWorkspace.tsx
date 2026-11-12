@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type RefObject } from "react"
+import { useCallback, useEffect, useRef, useState, type ReactNode, type RefObject } from "react"
 import { CompanySetup } from "./CompanySetup"
 import { CollectionWorkspace } from "./CollectionWorkspace"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
@@ -47,7 +47,7 @@ function focusPageHeading(main: HTMLElement | null) {
 /** WO-08: the signed-in person and PrivateStaging's deliberate sign-out, shown in the top bar and in the Menu sheet. */
 export interface WorkspaceAccount { email: string | null; signingOut: boolean; onSignOut: () => void }
 
-export function StagingWorkspace({ headingRef, staging, account }: { headingRef: RefObject<HTMLHeadingElement | null>; staging: { actor: HostedWorkspaceActor; workspaceId: string | null; evidenceId: string | null }; account: WorkspaceAccount }) {
+export function StagingWorkspace({ headingRef, staging, account, notice = null }: { headingRef: RefObject<HTMLHeadingElement | null>; staging: { actor: HostedWorkspaceActor; workspaceId: string | null; evidenceId: string | null }; account: WorkspaceAccount; notice?: ReactNode }) {
   const [panel, setPanel] = useState<WorkspaceView>(() => parseViewHash(window.location.hash).panel)
   const [collectionDirty, setCollectionDirty] = useState(false)
   const [setupDirty, setSetupDirty] = useState(false)
@@ -230,7 +230,7 @@ export function StagingWorkspace({ headingRef, staging, account }: { headingRef:
         onClick={() => { if (!askOpen) setMenuOpen(true) }}><Icon name="menu" size={18} />{MENU_TEXT.open}</button>
     </div>
   </header>
-  <ContextBar status={status} failed={Boolean(statusError) && !status} canManage={canManage} inert={askOpen || menuOpen} />
+  <ContextBar status={status} failed={Boolean(statusError) && !status} canManage={canManage} inert={askOpen || menuOpen} notice={notice} />
   <div className="nv-layout" inert={askOpen || menuOpen || undefined}>
     <JourneyNav current={panel} onNavigate={view => navigate(view)} status={status} onAsk={openAsk} />
     <main id="workspace-main" className="nv-main" tabIndex={-1} ref={mainRef}><div className="nv-page">
