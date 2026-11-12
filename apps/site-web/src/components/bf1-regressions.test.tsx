@@ -10,6 +10,7 @@ import * as journey from "@/lib/journey-status"
 import * as resultsApi from "@/lib/results-api"
 import * as plain from "@/lib/plain-language"
 import * as view from "@/lib/results-view"
+import * as viewRoute from "@/lib/view-route"
 import { harness, loadComponent } from "./component-harness"
 
 // ── Collection: an ID with a trailing space can be saved; a confirmed upload is reported as received ──
@@ -91,15 +92,15 @@ test("a coverage date hidden by switching back to 'At period start' is not sent 
 })
 
 // ── Workspace navigation: the skip link keeps the current view ──
-const names = ["Scope1Inventory", "StationaryEquipment", "StationaryGenerator", "FugitiveWorkpapers", "CompanyWorkspaceDemo", "AnnualElectricityWorksheet", "AnnualElectricityEvidence", "SourceElectricityWorksheet", "ElectricityWorksheet",
-  "CorporateCoverageRegister", "StationaryNaturalGas", "MobileDiesel", "ControlledFleet", "Scope1BetaSetup", "CompanySetup", "CollectionWorkspace", "JourneyNav", "JourneyHome", "ResultsReport", "AskNeuvetra", "EarlierViews", "PanelGuide", "Icon"]
+// WO-07: the retired milestone panels are no longer imported by the workspace.
+const names = ["CompanySetup", "CollectionWorkspace", "JourneyNav", "JourneyHome", "ResultsReport", "AskNeuvetra", "EarlierViews", "PanelGuide", "Icon"]
 const stubs = Object.fromEntries(names.map(name => [name, function Stub() { return name }]))
 
 test("following the 'Skip to content' link (#workspace-main) on Results keeps the Results view", async () => {
   const listeners = new Map<string, () => void>()
   const location = { hash: "#/results", pathname: "/staging", search: "" }
   const make = await loadComponent("./StagingWorkspace.tsx", "StagingWorkspace", {
-    ...stubs,
+    ...stubs, ...viewRoute,
     loadJourneyStatus: () => new Promise(() => {}),
     window: { location, history: { pushState(_s: unknown, _t: string, url: string) { location.hash = url }, replaceState(_s: unknown, _t: string, url: string) { location.hash = url.startsWith("#") ? url : "" } }, confirm: () => true, scrollTo() {}, setTimeout: () => 1, clearTimeout() {},
       addEventListener(name: string, fn: () => void) { listeners.set(name, fn) }, removeEventListener(name: string) { listeners.delete(name) } },

@@ -1,14 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- The injected hook harness runs the actual workspace component without a browser DOM. */
 import { expect, test } from "bun:test"
 import { computeJourneyStatus } from "@/lib/journey-status"
+import { parseViewHash, viewHash } from "@/lib/view-route"
 
 const source = await Bun.file(new URL("./StagingWorkspace.tsx", import.meta.url)).text()
 const script = new Bun.Transpiler({ loader: "tsx", tsconfig: { compilerOptions: { jsx: "react", jsxFactory: "h" } } })
   .transformSync(source.replace(/^import .*\n/gm, "").replace("export function StagingWorkspace", "function StagingWorkspace")) + "\nreturn StagingWorkspace"
-const componentNames = [
+// WO-07: the 14 retired milestone panels are no longer imported; a test below checks the source never names them again.
+const retiredPanels = [
   "Scope1Inventory", "StationaryEquipment", "StationaryGenerator", "FugitiveWorkpapers", "CompanyWorkspaceDemo",
   "AnnualElectricityWorksheet", "AnnualElectricityEvidence", "SourceElectricityWorksheet", "ElectricityWorksheet",
   "CorporateCoverageRegister", "StationaryNaturalGas", "MobileDiesel", "ControlledFleet", "Scope1BetaSetup",
+] as const
+const componentNames = [
   "CompanySetup", "CollectionWorkspace", "JourneyNav", "JourneyHome", "ResultsReport", "AskNeuvetra",
   "EarlierViews", "PanelGuide", "Icon",
 ] as const
@@ -51,8 +55,8 @@ function harness(initialHash: string) {
   const window = { location, history, confirm: () => true, scrollTo() {}, setTimeout: () => 1, clearTimeout() {}, addEventListener(name: string, fn: () => void) { listeners.set(name, fn) }, removeEventListener(name: string) { listeners.delete(name) } }
   const body = {}, document = { title: "", body, activeElement: body }
   const h = (type: unknown, props: Record<string, any> | null, ...children: any[]): Node => ({ type, props: props ?? {}, children })
-  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "loadJourneyStatus", ...componentNames, script)
-  const Workspace = factory(useCallback, useEffect, useRef, useState, window, document, { Fragment: "fragment" }, h,
+  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "loadJourneyStatus", ...componentNames, script)
+  const Workspace = factory(useCallback, useEffect, useRef, useState, window, document, { Fragment: "fragment" }, h, parseViewHash, viewHash,
     (_workspaceId: string, actor: { signal: AbortSignal }) => new Promise((resolve, reject) => loads.push({ resolve, reject, signal: actor.signal })),
     ...componentNames.map(name => components[name])) as (props: unknown) => Node
   const actor = { userId: "11111111-1111-4111-8111-111111111111", role: "owner" }
@@ -70,7 +74,8 @@ function harness(initialHash: string) {
   function child(name: string) { return flatten(tree).find(node => node.type === components[name])! }
   function text() { return flatten(tree).flatMap(node => node.children.flat(Infinity).filter(item => typeof item === "string")).join(" ") }
   render()
-  return { settle, child, text, loads, location, listeners }
+  const nodes = () => flatten(tree)
+  return { settle, child, text, nodes, loads, location, listeners, render }
 }
 
 test("a failed progress refresh hides prior status from Overview, navigation and Ask", async () => {
@@ -113,4 +118,46 @@ test("a linked record outside the reporting period keeps its address and uses th
   expect(app.location.hash).toBe(`#/activity/${recordId}`)
   expect(app.child("CollectionWorkspace").props.openRecordId).toBe(recordId)
   expect(app.text()).toContain("Outside the reporting period.")
+})
+
+// ── WO-07: the earlier views are a static list; no retired panel is mounted ──
+
+test("the workspace source no longer imports or mounts any of the 14 retired panels", () => {
+  for (const name of retiredPanels) expect(source).not.toMatch(new RegExp(`\\b${name}\\b`))
+  expect(source).not.toMatch(/\(M\d/)
+})
+
+for (const hash of ["#/earlier", "#/earlier/gas", "#/earlier/annual", "#/earlier/example", "#/earlier/legacy-setup", "#/earlier/setup", "#/earlier/unknown"]) {
+  test(`${hash} shows the static list under the canonical #/earlier address`, async () => {
+    const app = harness(hash)
+    await app.settle()
+    expect(app.location.hash).toBe("#/earlier")
+    expect(app.child("EarlierViews")).toBeDefined()
+    for (const name of ["CompanySetup", "CollectionWorkspace", "JourneyHome", "ResultsReport"]) expect(app.child(name)).toBeUndefined()
+    expect(app.child("JourneyNav").props.current).toBe("archive")
+  })
+}
+
+test("Back and Forward between #/earlier and #/overview switch views; a popped #/earlier/<x> is canonicalised", async () => {
+  const app = harness("#/overview")
+  await app.settle()
+  app.child("JourneyHome").props.onNavigate("archive")
+  await app.settle()
+  expect(app.location.hash).toBe("#/earlier")
+  expect(app.child("EarlierViews")).toBeDefined()
+  app.location.hash = "#/overview"; app.listeners.get("popstate")!(); await app.settle()
+  expect(app.child("JourneyHome")).toBeDefined()
+  expect(app.child("EarlierViews")).toBeUndefined()
+  app.location.hash = "#/earlier/fleet"; app.listeners.get("popstate")!(); await app.settle()
+  expect(app.child("EarlierViews")).toBeDefined()
+  expect(app.location.hash).toBe("#/earlier")
+})
+
+test("the static list's 'Use instead' links go to the current journey views", async () => {
+  const app = harness("#/earlier")
+  await app.settle()
+  app.child("EarlierViews").props.onNavigate("collection")
+  await app.settle()
+  expect(app.location.hash).toBe("#/activity")
+  expect(app.child("CollectionWorkspace")).toBeDefined()
 })

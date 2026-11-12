@@ -1,11 +1,18 @@
 import { Icon } from "./Icon"
 import type { JourneyStatus } from "@/lib/journey-status"
+import type { WorkspaceView } from "@/lib/view-route"
 
-export type JourneyView = "home" | "setup" | "collection" | "results" | "archive"
+export type JourneyView = WorkspaceView
+
+/**
+ * Board decision D2 (O-2, 11 Nov 2026): the retired earlier views are not in the sidebar; `#/earlier` stays reachable by
+ * URL only. Set to true to list them under "More" again.
+ */
+export const SHOW_RETIRED_VIEWS_IN_NAV = false
 
 function plural(count: number, word: string) { return `${count} ${word}${count === 1 ? "" : "s"}` }
 
-/** The app's primary navigation: the three-step journey, the overview and the earlier views. */
+/** The app's primary navigation: the overview, the three-step journey and Ask Neuvetra. */
 export function JourneyNav({ current, onNavigate, status, onAsk }: { current: JourneyView; onNavigate: (view: JourneyView) => void; status: JourneyStatus | null; onAsk: () => void }) {
   const setupMeta = !status ? "" : !status.setup.saved ? "Not started" : status.setup.missing.length ? `${plural(status.setup.missing.length, "open answer")}` : `Saved · version ${status.setup.revision}`
   const collectionMeta = !status ? "" : !status.collection.active ? "No records yet" : status.collection.attention ? `${plural(status.collection.active, "record")} · ${status.collection.attention} input needed` : status.collection.held ? `${plural(status.collection.active, "record")} · ${status.collection.held} held` : status.gaps.length ? `${plural(status.collection.active, "record")} · ${plural(status.gaps.length, "possible gap")}` : plural(status.collection.active, "record")
@@ -24,11 +31,11 @@ export function JourneyNav({ current, onNavigate, status, onAsk }: { current: Jo
       <span className="nv-navitem__meta">{item.meta}</span>
     </button>)}
     <p className="nv-sidenav__label">More</p>
-    <button type="button" className="nv-navitem" aria-current={current === "archive" ? "page" : undefined} onClick={() => onNavigate("archive")}>
+    {SHOW_RETIRED_VIEWS_IN_NAV && <button type="button" className="nv-navitem" aria-current={current === "archive" ? "page" : undefined} onClick={() => onNavigate("archive")}>
       <span className="nv-navitem__icon" aria-hidden="true"><Icon name="archive" size={16} /></span>
-      <span className="nv-navitem__title">Earlier workspace views</span>
-      <span className="nv-navitem__meta">Registers and worksheets</span>
-    </button>
+      <span className="nv-navitem__title">Earlier workspace views (retired)</span>
+      <span className="nv-navitem__meta">For reference only</span>
+    </button>}
     <button type="button" className="nv-navitem" onClick={onAsk}>
       <span className="nv-navitem__icon" aria-hidden="true"><Icon name="help" size={16} /></span>
       <span className="nv-navitem__title">Ask Neuvetra</span>
