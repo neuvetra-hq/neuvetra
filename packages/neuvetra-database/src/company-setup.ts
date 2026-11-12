@@ -3,6 +3,7 @@ import { m71CanonicalJson } from './m71-validation'
 
 import type { CompanySetup, CompanySetupVersion, CompanySetupView, CompanySetupSaveResult } from './company-setup-contract'
 export type * from './company-setup-contract'
+export { duplicateCompanySetupIds } from './company-setup-contract'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 type Row = { id: string; company_id: string; revision: number; previous_version_id: string | null; correction_reason: string | null; payload: CompanySetup; payload_sha256: string; created_by: string; created_at: string }

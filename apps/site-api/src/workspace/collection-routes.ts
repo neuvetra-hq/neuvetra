@@ -154,10 +154,20 @@ function validateGridLoss(value: unknown, id: string) {
   return { id, electricityRecordId: (row.electricityRecordId as string).toLowerCase(), reference: row.reference, notes: row.notes }
 }
 
-function mappedError(error: unknown): Response {
+/** BF-08 (BL-07): said to a member who can read the company but not change it. */
+const READ_ONLY_TEXT = "You can view this company’s records but not change them."
+/** BF-08 (BL-05): a first save whose ID already belongs to another company. The ID is not said to exist, only that it cannot be used. */
+const RECORD_ID_UNAVAILABLE_TEXT = "This record ID can’t be used. Save again to use a new one."
+
+/**
+ * `readable`: this request already read the company as the actor (RLS admits only a member), so a 42501 on a write means the
+ * actor may view the company but not change it: 403 read_only. Without a readable company (or on a read) 42501 stays 404, the
+ * same answer as for a company that does not exist, so a 403 is never said to someone outside the company.
+ */
+function mappedError(error: unknown, readable = false): Response {
   if (error instanceof RequestProblem) return fail(error.status, error.publicMessage, error.publicCode)
   const code = (error as { code?: string }).code
-  if (code === "42501") return fail(404, "Collection resource not found.")
+  if (code === "42501") return readable ? fail(403, READ_ONLY_TEXT, "read_only") : fail(404, "Collection resource not found.")
   if (["23505", "40001", "23P01"].includes(code ?? "")) return fail(409, "Collection record changed. Refresh and try again.", "revision_conflict")
   if (code === "54000") return fail(422, "Collection history capacity reached.", "history_limit")
   // Round 3 (owner decision 7, EN-3): 0030 refuses a Scope 3 save that adds a line past the 3,000-line cap.
@@ -185,9 +195,12 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
     try { actor = await deps.validateUser(token) } catch { return fail(503, "Authentication is unavailable.") }
     if (!actor) return fail(401, "Authentication required.")
 
+    // BF-08: set once the actor's read of this company succeeded (the database admits only a member), see mappedError.
+    let readable = false
     try {
       const context = await deps.database.findCollectionContext(actor.id, companyId)
       if (!context) return fail(404, "Collection resource not found.")
+      readable = true
       if (!collection) {
         if (request.method !== "GET") return fail(405, "Method not allowed.")
         const schema = await (deps.schemaVersion?.() ?? 0)
@@ -233,7 +246,15 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
           // A replay of an already-saved first version is not a new record.
           if (!existing.some(record => record.id.toLowerCase() === resourceId) && existing.filter(isActiveScope12Record).length >= MAX_ACTIVE_SCOPE12_RECORDS) throw new RequestProblem(422, RECORD_LIMIT_SAVE_TEXT, "record_limit_reached")
         }
-        const saved = await deps.database.saveCollectionActivity(actor.id, companyId, resourceId, input)
+        let saved: Awaited<ReturnType<typeof deps.database.saveCollectionActivity>>
+        try { saved = await deps.database.saveCollectionActivity(actor.id, companyId, resourceId, input) }
+        catch (error) {
+          // BF-08 (BL-05): a unique violation on a FIRST save is the record ID, held by another company, unless this company has just
+          // saved it itself (two saves racing), which is a true revision conflict.
+          if (validated.expectedRevision === 0 && (error as { code?: string }).code === "23505" && !(await deps.database.findCollectionActivities(actor.id, companyId)).some(record => record.id.toLowerCase() === resourceId))
+            throw new RequestProblem(409, RECORD_ID_UNAVAILABLE_TEXT, "record_id_unavailable")
+          throw error
+        }
         return respond(saved.replayed ? 200 : 201, saved)
       }
 
@@ -243,7 +264,15 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
           return respond(200, { profile: COLLECTION_PROFILE, lineages: await deps.database.findGridLossLineage(actor.id, companyId), calculations: false })
         }
         if (operation || versionId || request.method !== "POST") return fail(405, "Method not allowed.")
-        const saved = await deps.database.createGridLossLineage(actor.id, companyId, validateGridLoss(await jsonBody(request), resourceId))
+        const lineage = validateGridLoss(await jsonBody(request), resourceId)
+        let saved: Awaited<ReturnType<typeof deps.database.createGridLossLineage>>
+        try { saved = await deps.database.createGridLossLineage(actor.id, companyId, lineage) }
+        catch (error) {
+          // BF-08 (BL-05): the lineage ID is the table's only unique key, and it is global; see the activity save above.
+          if ((error as { code?: string }).code === "23505" && !(await deps.database.findGridLossLineage(actor.id, companyId)).some(item => item.id.toLowerCase() === resourceId))
+            throw new RequestProblem(409, RECORD_ID_UNAVAILABLE_TEXT, "record_id_unavailable")
+          throw error
+        }
         return respond(201, { lineage: saved })
       }
 
@@ -261,7 +290,13 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
         const duplicate = evidence.find(item => item.sha256 === digest && item.byteLength === bytes.byteLength)
         const objectKey = duplicate?.objectKey ?? `${companyId}/original/${id}`
         const upload = { uploadId: id, evidenceId: id, objectKey, originalName: name, mediaType, byteLength: bytes.byteLength, sha256: digest }
-        const intent = await deps.database.reserveCollectionEvidenceUpload(actor.id, companyId, upload)
+        let intent: Awaited<ReturnType<typeof deps.database.reserveCollectionEvidenceUpload>>
+        try { intent = await deps.database.reserveCollectionEvidenceUpload(actor.id, companyId, upload) }
+        catch (error) {
+          // BF-08 (BL-05): reserving an upload ID that another company holds (the intent table's primary key is global).
+          if ((error as { code?: string }).code === "23505" && !(await deps.database.findCollectionEvidence(actor.id, companyId)).some(item => item.id === id)) throw new RequestProblem(409, RECORD_ID_UNAVAILABLE_TEXT, "record_id_unavailable")
+          throw error
+        }
         if (intent.uploadId !== id || intent.evidenceId !== id || intent.objectKey !== objectKey || intent.bucket !== COLLECTION_EVIDENCE_BUCKET) throw new Error("Evidence upload intent could not be verified.")
         if (!duplicate) await deps.evidenceStorage.put(token, intent.bucket, intent.objectKey, bytes, mediaType)
         let receipt: CollectionEvidenceReceipt
@@ -286,6 +321,6 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
       const bytes = await deps.evidenceStorage.get(token, locator.bucket, locator.objectKey)
       if (bytes.byteLength !== locator.byteLength || await sha256(bytes) !== locator.sha256) return fail(503, "Evidence integrity could not be verified.")
       return new Response(bytes.buffer, { status: 200, headers: { "cache-control": "no-store", "x-content-type-options": "nosniff", "content-type": locator.mediaType, "content-length": String(bytes.byteLength), "x-content-sha256": locator.sha256, "content-disposition": `attachment; filename="evidence-${resourceId}"` } })
-    } catch (error) { return mappedError(error) }
+    } catch (error) { return mappedError(error, readable && request.method === "POST") }
   }
 }
