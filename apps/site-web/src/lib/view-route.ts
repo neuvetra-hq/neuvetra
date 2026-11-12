@@ -95,10 +95,11 @@ export function parseViewHash(hash: string): ViewRoute {
  * another origin, an unknown view, or text that merely falls back to the Overview.
  */
 export function acceptedViewHash(raw: unknown): string | null {
-  if (typeof raw !== "string" || raw.length > 64 || !/^#\/[a-z]+(?:\/[A-Za-z0-9-]+)?$/.test(raw)) return null
+  // WO-06: the Activity list's filters (#/activity?status=&type=&page=) are kept too, in their canonical form.
+  if (typeof raw !== "string" || raw.length > 64 || !/^#\/(?:[a-z]+(?:\/[A-Za-z0-9-]+)?|activity\?[a-z0-9_=&]{0,52})$/.test(raw)) return null
   const route = parseViewHash(raw)
   if (route.panel === "home" && !raw.startsWith("#/overview")) return null
-  return viewHash(route.panel, route.recordId)
+  return canonicalViewHash(raw)
 }
 
 /**

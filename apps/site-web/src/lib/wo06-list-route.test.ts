@@ -1,7 +1,7 @@
 // WO-06: the Activity list's filters live in its address (#/activity?status=&type=&page=). These tests pin the parsing
 // and printing, and that every earlier address (and every hostile one) still parses exactly as view-route.test.ts says.
 import { expect, test } from "bun:test"
-import { activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery, parseViewHash, viewHash } from "./view-route"
+import { acceptedViewHash, activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery, parseViewHash, viewHash } from "./view-route"
 
 const id = "29500000-0000-4000-8000-000000000001"
 
@@ -45,4 +45,13 @@ test("canonicalViewHash keeps valid list filters and is viewHash for everything 
     ["#/earlier/gas", "#/earlier"], ["#/nope", "#/overview"], ["#/overview?x=1", "#/overview"], ["#/results", "#/results"]]
   for (const [hash, canonical] of cases) expect([hash, canonicalViewHash(hash)]).toEqual([hash, canonical])
   for (const hash of ["#/overview", "#/setup", "#/activity", "#/results", "#/earlier", `#/activity/${id}`]) { const route = parseViewHash(hash); expect(canonicalViewHash(hash)).toBe(viewHash(route.panel, route.recordId)) }
+})
+
+// WO-06 with WO-05a: a filtered list is a view to return to after the session ends; nothing else about the rules changes.
+test("acceptedViewHash keeps the Activity list's filters, canonically, and still refuses everything it refused", () => {
+  expect(acceptedViewHash("#/activity?page=2&type=waste")).toBe("#/activity?type=waste&page=2")
+  expect(acceptedViewHash("#/activity?status=bogus")).toBe("#/activity")
+  expect(acceptedViewHash("#/activity")).toBe("#/activity")
+  for (const tampered of ["#/overview?x=1", "#/results?status=ready", "#/activity?next=https://evil.example", "#/activity?status=<x>", `#/activity/${id}?page=2`, `#/activity?type=${"a".repeat(60)}`, "#/activity?Status=ready"])
+    expect([tampered, acceptedViewHash(tampered)]).toEqual([tampered, null])
 })
