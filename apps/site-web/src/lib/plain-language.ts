@@ -47,9 +47,13 @@ export function groupDigits(value: string): string {
   const grouped = whole!.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
   return `${negative ? "−" : ""}${grouped}${fraction !== undefined ? `.${fraction}` : ""}`
 }
-/** Engine kg CO2e (exact display string) shown as tonnes with two decimals, for headlines only.
+/** Engine kg CO2e shown as tonnes with two decimals, for headlines only.
  * Tonnes to 2 decimals from the engine's kg string, in exact decimal arithmetic with the engine's rounding rule
- * (half-even), so a headline can never differ from the kg figure by a floating-point or half-up step. */
+ * (half-even), so a headline can never differ from the kg figure by a floating-point or half-up step.
+ * BF-07: rounding happens ONCE. A live screen passes the engine's `unrounded` string, never its 4-dp `display` (which is
+ * already rounded: 5014.99996 displays as 5015.0000 and would round again to 5.02 instead of 5.01). Only a frozen report
+ * version, which stores display strings alone, passes a display string; there the tonnes follow the version's own printed
+ * kg and t figures. */
 export function kgToTonnes(kg: string | null | undefined): string {
   if (!kg || !plain(kg)) return "—"
   const negative = kg.startsWith("-")

@@ -85,7 +85,7 @@ const sumDecimals = (values: readonly string[]): string => {
 export function scope3ConflictInHeadline(categories: ReadonlyArray<Pick<Category, "category" | "status" | "subtotal">>): { tonnes: string; categories: number[] } | null {
   const rows = categories.filter(row => SCOPE3_CONFLICT_STATUSES.has(row.status) && row.subtotal !== null)
   if (!rows.length) return null
-  return { tonnes: scope3Tonnes(sumDecimals(rows.map(row => row.subtotal!.display))), categories: rows.map(row => row.category) }
+  return { tonnes: scope3Tonnes(sumDecimals(rows.map(row => row.subtotal!.unrounded))), categories: rows.map(row => row.category) }
 }
 
 // --- PR-6, PR-12: the 0029 forms (freight, business travel, waste) stop a record the engine would hold, naming the field ---
