@@ -55,7 +55,7 @@ async function fixture() {
   })
   cleanup = app.close
   const request = (pathname: string, token?: string, options: RequestInit = {}) => app.fetch(new Request(`${ORIGIN}${pathname}`, { ...options, headers: { origin: ORIGIN, ...(token ? { authorization: `Bearer ${token}` } : {}), ...options.headers } }))
-  return { app, db, workspace, invited, logs, warnings, request, validations: () => validations, unhealthy: () => { healthy = false }, evidence: (id: string) => { evidenceId = id } }
+  return { app, db, workspace, invited, users, logs, warnings, request, validations: () => validations, unhealthy: () => { healthy = false }, evidence: (id: string) => { evidenceId = id } }
 }
 
 describe("M63 private staging boundary", () => {
@@ -424,8 +424,9 @@ describe("API-01: rate limits after authentication", () => {
     const f = await fixture()
     for (let i = 0; i < 300; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.30"))).status).toBe(200)
     for (let i = 0; i < 500; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.30"))).status).toBe(429)
-    // Refusals after the user's own limit are not given back, so validation calls stay bounded per address (120).
-    expect(f.validations()).toBe(300 + 120)
+    // BF-04: refusals after the user's own limit no longer spend the address budget; validation calls stay bounded per
+    // user instead (one more for the token that found the user over their limit, then none until the window resets).
+    expect(f.validations()).toBe(300 + 1)
     // Another user, on another address, is unaffected.
     expect((await f.request("/workspace-api/session", "test-admin-session", from("203.0.113.31"))).status).toBe(200)
   })
@@ -452,6 +453,107 @@ describe("API-01: rate limits after authentication", () => {
     // x-real-ip takes precedence over x-forwarded-for.
     expect((await f.request("/workspace-api/session", "junk-other", { headers: { "x-real-ip": "198.51.100.51", "x-forwarded-for": "198.51.100.50" } })).status).toBe(401)
   })
+})
+
+// BF-04 (BL-04, regression from PR #36): a validated user over their own per-user limit used to keep spending the
+// per-address budget, so colleagues behind the same office address got 429 without doing anything.
+describe("BF-04: a validated user never spends their address's shared budget", () => {
+  const from = (address: string) => ({ headers: { "x-real-ip": address } })
+
+  test("S14: user A sends 430 requests from 203.0.113.7 (300 get 200, 130 get 429); user B from the same address then gets 200", async () => {
+    const f = await fixture()
+    const workspaceRoute = `/workspace-api/workspace/${f.workspace.id}`
+    const statuses: Record<number, number> = {}
+    for (let i = 0; i < 430; i++) {
+      const status = (await f.request(workspaceRoute, "test-owner-session", from("203.0.113.7"))).status
+      statuses[status] = (statuses[status] ?? 0) + 1
+    }
+    expect(statuses).toEqual({ 200: 300, 429: 130 })
+    const colleague = await f.request(workspaceRoute, "test-admin-session", from("203.0.113.7"))
+    expect(colleague.status).toBe(200)
+    expect((await f.request(workspaceRoute, "test-admin-session", from("198.51.100.9"))).status).toBe(200)
+  })
+
+  test("121 invalid tokens from one address get 429 on the 121st; another address is unaffected", async () => {
+    const f = await fixture()
+    for (let i = 0; i < 120; i++) expect((await f.request("/workspace-api/session", `junk-${i}`, from("198.51.100.80"))).status).toBe(401)
+    const over = await f.request("/workspace-api/session", "junk-120", from("198.51.100.80"))
+    expect([over.status, (await over.json()).code]).toEqual([429, "rate_limited"])
+    expect(f.validations()).toBe(120)
+    expect((await f.request("/workspace-api/session", "junk-other", from("198.51.100.81"))).status).toBe(401)
+    expect((await f.request("/workspace-api/session", "test-owner-session", from("198.51.100.81"))).status).toBe(200)
+  })
+
+  test("a user over their own limit triggers one more validation per token per window, then is refused before validation", async () => {
+    const f = await fixture()
+    for (let i = 0; i < 300; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.8"))).status).toBe(200)
+    for (let i = 0; i < 500; i++) {
+      const refused = await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.8"))
+      expect(refused.status).toBe(429)
+      expect(Number(refused.headers.get("retry-after"))).toBeGreaterThan(0)
+    }
+    // 300 admitted + 1 that found the user over their limit; the other 499 never reached validation.
+    expect(f.validations()).toBe(301)
+    // The over-limit user spent one address count (the first refusal of that token); the other 499 spent none, so the
+    // address still has 119 for unverified requests.
+    for (let i = 0; i < 119; i++) expect((await f.request("/workspace-api/session", `junk-${i}`, from("203.0.113.8"))).status).toBe(401)
+    expect((await f.request("/workspace-api/session", "junk-over", from("203.0.113.8"))).status).toBe(429)
+  })
+
+  test("the over-limit refusal lasts only until the user's own window resets", async () => {
+    const f = await fixture()
+    const start = Date.now()
+    try {
+      setSystemTime(new Date(start))
+      for (let i = 0; i < 300; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.9"))).status).toBe(200)
+      expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.9"))).status).toBe(429)
+      setSystemTime(new Date(start + 61_000))
+      expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.9"))).status).toBe(200)
+    } finally { setSystemTime() }
+  })
+
+  test("validated accounts without staging access keep spending their address's budget, as on main (QA probe 1)", async () => {
+    const f = await fixture()
+    // 150 self-registered accounts without staging access, round-robin from one address: more users than the old
+    // 100-user per-user limiter could hold, so a per-user bound alone never refused them.
+    const accounts = Array.from({ length: 150 }, (_, i) => { const token = `no-access-${i}`; f.users[token] = `90000000-0000-4000-8000-${String(i).padStart(12, "0")}`; return token })
+    const statuses: Record<number, number> = {}
+    for (let round = 0; round < 3; round++) for (const token of accounts) {
+      const status = (await f.request("/workspace-api/session", token, from("198.51.100.90"))).status
+      statuses[status] = (statuses[status] ?? 0) + 1
+    }
+    expect(statuses).toEqual({ 403: 120, 429: 330 })
+    expect(f.validations()).toBe(120)
+    // An invited user elsewhere is unaffected.
+    expect((await f.request("/workspace-api/session", "test-owner-session", from("198.51.100.91"))).status).toBe(200)
+  }, 120_000)
+
+  test("one invited account cycling fresh tokens once over its limit stays bounded at 120 validations per address (QA probe 2)", async () => {
+    const f = await fixture()
+    for (let i = 0; i < 300; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("198.51.100.92"))).status).toBe(200)
+    // 1,500 distinct valid tokens for the same account (more than the 1,000-entry remembered-token map), cycled twice.
+    const tokens = Array.from({ length: 1500 }, (_, i) => { const token = `owner-token-${i}`; f.users[token] = OWNER; return token })
+    for (let round = 0; round < 2; round++) for (const token of tokens) expect((await f.request("/workspace-api/session", token, from("198.51.100.92"))).status).toBe(429)
+    expect(f.validations()).toBe(300 + 120)
+    // Its own original token is refused without another validation or any address count.
+    expect((await f.request("/workspace-api/session", "test-owner-session", from("198.51.100.92"))).status).toBe(429)
+    expect(f.validations()).toBe(300 + 120)
+  }, 180_000)
+
+  test("more than 100 other users do not reset a user's own limit (per-user limiter holds 10,000 users)", async () => {
+    const f = await fixture()
+    for (let i = 0; i < 300; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.50"))).status).toBe(200)
+    // 150 other invited users (staging access, no company: admitted, then 403) each make one request.
+    for (let i = 0; i < 150; i++) {
+      const token = `invited-${i}`, id = `91000000-0000-4000-8000-${String(i).padStart(12, "0")}`
+      f.users[token] = id
+      f.invited.add(id)
+      expect((await f.request("/workspace-api/session", token, from(`203.0.114.${i}`))).status).toBe(403)
+    }
+    // A fresh token for the owner (not yet remembered) still finds the owner over their limit.
+    f.users["owner-fresh"] = OWNER
+    expect((await f.request("/workspace-api/session", "owner-fresh", from("203.0.113.51"))).status).toBe(429)
+  }, 120_000)
 })
 
 // Round 3 (EN-7, lane B): the longer listener allowance is granted by the server after authentication and the route match,

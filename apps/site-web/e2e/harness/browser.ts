@@ -25,8 +25,16 @@ export function chromePath(): string {
   return found
 }
 
-export function launchBrowser(): Promise<Browser> {
-  return chromium.launch({ executablePath: chromePath(), headless: true, args: ["--no-sandbox", "--hide-scrollbars", "--disable-gpu"] })
+/** Launches Chrome. With E2E_CHROME_VERSION set (CI pins one), any other version is refused rather than used. */
+export async function launchBrowser(): Promise<Browser> {
+  const browser = await chromium.launch({ executablePath: chromePath(), headless: true, args: ["--no-sandbox", "--hide-scrollbars", "--disable-gpu"] })
+  const expected = process.env.E2E_CHROME_VERSION
+  if (expected && browser.version() !== expected) {
+    const actual = browser.version()
+    await browser.close()
+    throw new Error(`Chrome ${actual} is not the pinned ${expected} (E2E_CHROME_VERSION).`)
+  }
+  return browser
 }
 
 /** The session object supabase-js keeps in localStorage and returns from the token endpoint. */
