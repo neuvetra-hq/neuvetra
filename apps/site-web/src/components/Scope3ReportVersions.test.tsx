@@ -89,6 +89,27 @@ describe("Scope 3 report versions on the Results screen (I-10)", () => {
     expect(after.nodes().some(node => node.type === "button" && node.children.flat(Infinity).some((x: any) => typeof x === "string" && x.startsWith("Approve")))).toBe(false)
   })
 
+  test("BF-05: Approve appears only on the newest revision; a superseded revision says so and an earlier approval stays shown", async () => {
+    const c = await component("Scope3FrozenReportView")
+    const hasApprove = (app: any) => app.nodes().some((node: any) => node.type === "button" && node.children.flat(Infinity).some((x: any) => typeof x === "string" && x.startsWith("Approve")))
+    const render = (props: Record<string, unknown>) => { const app = harness(c.make, () => ({ actorId: colleague, canManage: true, busy: false, onApprove: () => {}, onClose: () => {}, ...props }), c.globals); return app }
+    const older = render({ report: report1, newestRevision: 2 }); await older.settle()
+    expect(hasApprove(older)).toBe(false)
+    expect(older.text()).toContain("Superseded by revision 2, so it can no longer be approved. Review and approve the newest version.")
+    expect(older.nodes().some((node: any) => node.props.type === "checkbox")).toBe(false)
+    const newest = render({ report: { ...report1, version: { ...report1.version, id: second.id, revision: 2 } }, newestRevision: 2 }); await newest.settle()
+    expect(hasApprove(newest)).toBe(true)
+    expect(newest.text()).not.toContain("Superseded")
+    // An approval recorded before the newer revision existed stays recorded, and is labelled as superseded.
+    const approvedOlder = render({ report: { ...report1, version: selfApproved }, newestRevision: 2 }); await approvedOlder.settle()
+    expect(hasApprove(approvedOlder)).toBe(false)
+    expect(approvedOlder.text()).toContain("Approved by user 93400000 on 2026-10-30 11:00 UTC (self-approved: the preparer approved their own version).")
+    expect(approvedOlder.text()).toContain("Superseded by revision 2; this approval was recorded before the newer revision existed and stays on record.")
+    // A viewer who cannot manage never sees Approve on any revision.
+    const viewer = render({ report: { ...report1, version: { ...report1.version, id: second.id, revision: 2 } }, newestRevision: 2, canManage: false }); await viewer.settle()
+    expect(hasApprove(viewer)).toBe(false)
+  })
+
   test("the panel prepares the first version, opens it, and approves it with the displayed hash; a later version needs a reason", async () => {
     const calls: any[] = []
     let versions: Scope3ReportVersionSummary[] = []
