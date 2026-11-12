@@ -83,6 +83,9 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
   const [openRecordId, setOpenRecordId] = useState<string | null>(() => parseViewHash(window.location.hash).recordId)
   // WO-12b QA round 2: the company setup section the address opens (#/setup/03), kept in the address as it changes.
   const [setupSection, setSetupSection] = useState(() => parseSetupSection(window.location.hash))
+  // QA round 3: the section company setup shows now (it reports each change), so an address change that is declined or
+  // that names another section on the setup screen leaves the address on the section still shown.
+  const shownSetupSection = useRef(setupSection)
   const [missingRecordNotice, setMissingRecordNotice] = useState(false)
   const [listRoute, setListRoute] = useState<ListRoute>(() => ({ query: parseActivityListQuery(window.location.hash), returnTo: openedFromState(window.history.state), from: listHashFromState(window.history.state), version: 0 }))
   const lastListHash = useRef(activityListHash(listRoute.query))
@@ -117,7 +120,7 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
     if (target === panel && recordId === openRecordId) return false
     if (!leaveAllowed(panel)) return false
     show(target, recordId)
-    setSetupSection(1)
+    setSetupSection(1); shownSetupSection.current = 1
     window.history.pushState(null, "", viewHash(target, recordId))
     return true
   }
@@ -160,15 +163,16 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
       const canonical = canonicalViewHash(window.location.hash)
       // WO-06: the Activity list under other filters (an edited address) is a different list.
       const sameList = next.panel !== "collection" || next.recordId !== null || canonical === lastListHash.current
-      if (next.panel === now.panel && next.recordId === now.openRecordId && sameList) { if (window.location.hash !== canonical) window.history.replaceState(window.history.state, "", canonical); return }
+      const shownHash = now.panel === "setup" ? setupSectionHash(shownSetupSection.current) : canonical
+      if (next.panel === now.panel && next.recordId === now.openRecordId && sameList) { if (window.location.hash !== shownHash) window.history.replaceState(window.history.state, "", shownHash); return }
       if (!leaveAllowed(now.panel)) {
         if (now.panel === "collection" && now.openRecordId) window.history.pushState(recordListHash.current ? { nvListHash: recordListHash.current } : null, "", viewHash(now.panel, now.openRecordId))
-        else window.history.pushState(null, "", now.panel === "collection" ? lastListHash.current : viewHash(now.panel, now.openRecordId))
+        else window.history.pushState(null, "", now.panel === "collection" ? lastListHash.current : now.panel === "setup" ? setupSectionHash(shownSetupSection.current) : viewHash(now.panel, now.openRecordId))
         return
       }
       // An address that isn't a known view shows the overview under its own address.
       if (window.location.hash !== canonical) window.history.replaceState(window.history.state, "", canonical)
-      setSetupSection(parseSetupSection(canonical))
+      setSetupSection(parseSetupSection(canonical)); shownSetupSection.current = parseSetupSection(canonical)
       show(next.panel, next.recordId, { query: parseActivityListQuery(canonical), returnTo: openedFromState(window.history.state), from: next.recordId ? listHashFromState(window.history.state) : null })
     }
     window.addEventListener("popstate", onPop)
@@ -185,6 +189,7 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
   const onCollectionDirty = useCallback((dirty: boolean) => { setCollectionDirty(dirty); if (!dirty) { setStatus(null); setStatusError(null); setStatusVersion(value => value + 1) } }, [])
   /** WO-12b QA round 2: the section shown is kept in the address (replaced, not pushed), so a reload reopens it. */
   const onSetupStep = useCallback((step: number) => {
+    shownSetupSection.current = step + 1
     if (current.current.panel !== "setup") return
     const hash = setupSectionHash(step + 1)
     if (window.location.hash !== hash) window.history.replaceState(window.history.state, "", hash)

@@ -183,5 +183,10 @@ function supersessionOf(id: string, activity: Pick<CollectionActivity, "payload"
   const key = mappingKeys?.get(scope3SpendMappingKeyInput(line))
   const byKey = named !== null && key !== undefined && key !== "" && named.mappingKeys.includes(key)
   const match = byName && byKey ? "both" : byKey ? "key" : "name"
-  return { id, name, match, fields: match === "name" ? ["supplier"] : ["glAccount", "supplier", "description"] }
+  // The categories it replaces (planScope3Supersession): supplier figures 1 and 2; partner figures also their own spend category.
+  const partnerCategory = replacer?.kind === "partner_reported" ? (replacer.currentVersion.activity.payload as { category?: number }).category : undefined
+  const categories = [1, 2, ...(partnerCategory !== undefined && [4, 5, 9].includes(partnerCategory) ? [partnerCategory] : [])]
+  // The fields whose correction alone stops the replacement carry the note: by both, only Supplier (GL account and
+  // Description alone leave the name match); the category always.
+  return { id, name, match, fields: match === "key" ? ["glAccount", "supplier", "description", "category"] : ["supplier", "category"], categories }
 }

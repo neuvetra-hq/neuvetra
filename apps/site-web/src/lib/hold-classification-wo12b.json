@@ -603,10 +603,6 @@
   "level": "field",
   "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
  },
- "natural_gas": {
-  "level": "refusal",
-  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
- },
  "natural_gas_use_unknown": {
   "level": "field",
   "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."

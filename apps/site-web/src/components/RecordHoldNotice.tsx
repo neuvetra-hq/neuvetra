@@ -26,7 +26,7 @@ export function RecordHoldNotice({ hold, canManage = true }: { hold: RecordHold 
       <p><strong>{RECORD_HOLD_TEXT.title}</strong></p>
       <p>{hold.cause}</p>
       <p>{hold.text}{hold.instead ? ` ${hold.instead}` : ""}</p>
-      <p>{hold.level === "record" && hold.question ? RECORD_HOLD_TEXT.labels : RECORD_HOLD_TEXT.labelsElsewhere} {RECORD_HOLD_TEXT.save}</p>
+      <p>{hold.level === "record" && hold.question && hold.code !== "superseded_by_supplier_record" ? RECORD_HOLD_TEXT.labels : RECORD_HOLD_TEXT.labelsElsewhere} {RECORD_HOLD_TEXT.save}</p>
       {hold.setupStep && !canManage && <p>{SETUP_HOLD_TEXT.stepText(hold.setupStep)}</p>}
     </>}</div>
     {hold && <div className="wo12b-hold__actions">

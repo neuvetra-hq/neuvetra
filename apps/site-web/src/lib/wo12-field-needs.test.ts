@@ -571,14 +571,34 @@ describe("WO-12b: record holds (one answer holds the record whatever else is fil
     expect([freedBy("name"), freedBy("key"), freedBy("both")]).toEqual([["supplier"], ["glAccount", "supplier"], ["supplier"]])
     const at = (world: World) => { const draft = replacedLine(); return recordHold(draft, factsFor(draft, world))! }
     const [byName, byKey, byBoth] = ["name", "key", "both"].map(match => at(REPLACED_WORLDS.find(world => world.name.endsWith(`by ${match}`))!))
-    expect([byName!.fields, byKey!.fields, byBoth!.fields]).toEqual([["supplier"], ["glAccount", "supplier", "description"], ["glAccount", "supplier", "description"]])
-    expect(byName!.instead).toContain("If this line isn’t one of Supplier-specific purchases · SRC-1’s purchases, correct its Supplier: the replacement stops")
-    expect(byKey!.instead).toContain("correct its GL account, Supplier or Description (the replacement matches those three together)")
-    for (const hold of [byName!, byKey!, byBoth!]) expect(hold.instead).toContain("Otherwise each purchase is counted once, so nothing else on this form makes this line count")
+    expect([byName!.fields, byKey!.fields, byBoth!.fields]).toEqual([["supplier", "category"], ["glAccount", "supplier", "description", "category"], ["supplier", "category"]])
+    expect(byName!.instead).toContain("If this line isn’t one of Supplier-specific purchases · SRC-1’s purchases, correct its Supplier; if it isn’t a category 1 or 2 purchase, correct its Category. Any of these stops the replacement")
+    expect(byKey!.instead).toContain("correct its GL account, Supplier or Description (the replacement matches those three together); if it isn’t a category 1 or 2 purchase, correct its Category.")
+    // QA round 3: complete, not absolute: what frees the line is listed; nothing says "nothing else".
+    for (const hold of [byName!, byKey!, byBoth!]) {
+      expect(hold.instead).toContain("Otherwise each purchase is counted once: to count this line instead, open Supplier-specific purchases · SRC-1 and change “Spend lines this record replaces” there, or withdraw Supplier-specific purchases · SRC-1.")
+      expect(hold.instead).not.toContain("nothing else")
+    }
     const label = (world: World, field: string) => { const draft = replacedLine(); return fieldLabel(draft, field, factsFor(draft, world)) }
-    const keyWorld = REPLACED_WORLDS.find(world => world.name.endsWith("by key"))!
-    expect(["supplier", "glAccount", "description", "naicsCode", "quantity"].map(field => label(keyWorld, field))).toEqual([
-      { need: "optional", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "optional", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "required", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "optional" }, { need: "optional" }])
+    const keyWorld = REPLACED_WORLDS.find(world => world.name.endsWith("by key"))!, bothWorld = REPLACED_WORLDS.find(world => world.name.endsWith("by both"))!
+    expect(["supplier", "glAccount", "description", "category", "naicsCode", "quantity"].map(field => label(keyWorld, field))).toEqual([
+      { need: "optional", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "optional", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "required", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "required", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "optional" }, { need: "optional" }])
+    // By both, GL account or Description alone leaves the name match, so they carry no note (their own labels stay).
+    expect(["supplier", "glAccount", "description", "category"].map(field => label(bothWorld, field))).toEqual([
+      { need: "optional", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "optional" }, { need: "required" }, { need: "required", needNote: RECORD_HOLD_TEXT.matchNote }])
+  })
+
+  test("QA round 3: changing a replaced line's Category to one the record doesn't replace makes it count, in every match kind and company; 1 or 2 doesn't", () => {
+    const moved = (category: number) => () => { const a = replacedLine(); a.payload.category = category; if (category === 4) { a.payload.naicsCode = "484121"; a.payload.activityOverlap = "none_confirmed" } return a }
+    const rows = REPLACED_WORLDS.flatMap(world => [moved(4), moved(2)].map((base, i) => {
+      const draft = base(), p = plan(draft, world)
+      expect([world.name, saveRefusal(draft)]).toEqual([world.name, null])
+      return { world, category: i === 0 ? 4 : 2, plan: p, hold: recordHold(draft, factsFor(draft, world)) }
+    }))
+    const results = runEngine(rows.filter(row => row.plan.action === "calculate").map(row => row.plan.call!.request))
+    let next = 0
+    const outcome = rows.map(row => `${row.world.name} → category ${row.category}: ${row.plan.action === "calculate" ? `engine ${results[next++]!.status}` : row.plan.reasons.join(",")}${row.hold ? ` [notice ${row.hold.code}]` : ""}`)
+    expect(outcome).toEqual(REPLACED_WORLDS.flatMap(world => [`${world.name} → category 4: engine complete`, `${world.name} → category 2: superseded_by_supplier_record [notice superseded_by_supplier_record]`]))
   })
 
   test("while it holds: every other result field is Optional, the answer that holds it says so, and the save still needs what it needs", () => {

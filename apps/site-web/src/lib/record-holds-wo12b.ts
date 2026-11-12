@@ -62,7 +62,9 @@ export interface RecordHold {
  * mapping key, made of its GL account, supplier and description ("key"), or both. `fields` are this form's fields the match
  * is made on; they keep their own labels.
  */
-export interface RecordSupersession { id: string; name: string; match: "name" | "key" | "both"; fields: readonly string[] }
+export interface RecordSupersession { id: string; name: string; match: "name" | "key" | "both"; fields: readonly string[]
+  /** QA round 3: the spend categories the record replaces (1 and 2; a partner's own spend category 4, 5 or 9 too). */
+  categories: readonly number[] }
 
 /** What company setup says about the record's site and scope, as the adapters decide it (`recordBoundaryHold`). */
 export interface RecordBoundaryHold { code: CompanyHoldCode | SiteHoldCode; site: string; approach: string; entityControl: string | null
@@ -152,7 +154,7 @@ export function recordHold(activity: Pick<CollectionActivity, "kind" | "payload"
   }
   const by = facts.supersededBy
   if (by) return { ...base, code: "superseded_by_supplier_record", level: "record", fields: by.fields, question: by.match === "key" ? "GL account" : "Supplier", cause: SETUP_HOLD_TEXT.supersededCause(by.name),
-    text: reasonText("superseded_by_supplier_record"), instead: RECORD_HOLD_INSTEAD_TEXT.superseded(by.name, by.match), link: { href: `#/activity/${by.id}`, label: `Open ${by.name}` } }
+    text: reasonText("superseded_by_supplier_record"), instead: RECORD_HOLD_INSTEAD_TEXT.superseded(by.name, by.match, by.categories), link: { href: `#/activity/${by.id}`, label: `Open ${by.name}` } }
   const p = activity.payload as unknown as Record<string, unknown>
   const hold = (code: RecordHoldCode, fields: string[], question: string, answer: string, instead: string | null = null, upstream: string[] = []): RecordHold =>
     ({ ...base, code, level: "record", fields, upstream, question, cause: RECORD_HOLD_TEXT.cause(question, answer), text: reasonText(code), instead })

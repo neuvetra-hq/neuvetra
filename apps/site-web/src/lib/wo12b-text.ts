@@ -14,8 +14,8 @@ export const RECORD_HOLD_TEXT = {
   goTo: (question: string) => `Go to “${question}”`,
   /** Read after the label of the answer that holds the record (inside its <label>). */
   fieldNote: "(this answer holds the record: see the notice at the top of the form)",
-  /** WO-12b QA round 2: read after the label of a field a replacing record matches this spend line on. */
-  matchNote: "(the record that replaces this line matches it on this: see the notice at the top of the form)",
+  /** WO-12b QA rounds 2 and 3: read after the label of a field whose correction alone stops a replacing record replacing this line. */
+  matchNote: "(correcting this stops the replacement if the line isn’t that record’s: see the notice at the top of the form)",
 } as const
 
 /**
@@ -30,9 +30,12 @@ export const RECORD_HOLD_INSTEAD_TEXT = {
    * WO-12b QA round 2: a replaced spend line. The supersession matches the line by its supplier name, by its mapping key
    * (GL account, supplier and description together), or both; correcting a field it matches on stops the replacement.
    */
-  superseded: (name: string, match: "name" | "key" | "both") => `${match === "name" ? `If this line isn’t one of ${name}’s purchases, correct its Supplier: the replacement stops, and the labels below then apply as shown.`
-    : match === "key" ? `If this line isn’t one of ${name}’s purchases, correct its GL account, Supplier or Description (the replacement matches those three together): the replacement stops, and the labels below then apply as shown.`
-    : `If this line isn’t one of ${name}’s purchases, correct its Supplier (the replacement matches the supplier name, and also the GL account, Supplier and Description together): the replacement stops, and the labels below then apply as shown.`} Otherwise each purchase is counted once, so nothing else on this form makes this line count; to count the line instead, open ${name} and change “Spend lines this record replaces” there.`,
+  superseded: (name: string, match: "name" | "key" | "both", categories: readonly number[]) => {
+    const cats = categories.length > 1 ? `${categories.slice(0, -1).join(", ")} or ${categories[categories.length - 1]}` : String(categories[0] ?? "")
+    const clause = match === "name" ? "correct its Supplier" : match === "key" ? "correct its GL account, Supplier or Description (the replacement matches those three together)"
+      : "correct its Supplier (the replacement matches the supplier name, and also the GL account, Supplier and Description together)"
+    return `If this line isn’t one of ${name}’s purchases, ${clause}; if it isn’t a category ${cats} purchase, correct its Category. Any of these stops the replacement, and the labels below then apply as shown. Otherwise each purchase is counted once: to count this line instead, open ${name} and change “Spend lines this record replaces” there, or withdraw ${name}.`
+  },
 } as const
 
 /** Answers as the notice quotes them. */

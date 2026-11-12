@@ -677,3 +677,19 @@ test("an address #/setup/0N opens company setup at section N (load, Back or a li
   await odd.settle()
   expect([odd.child("CompanySetup").props.initialStep, odd.location.hash]).toEqual([0, "#/setup"])
 })
+
+test("QA round 3: on setup, a declined leave or an address naming another section leaves the address on the section still shown", async () => {
+  const app = harness("#/setup")
+  await app.settle()
+  app.child("CompanySetup").props.onStepChange(3); await app.settle()
+  expect(app.location.hash).toBe("#/setup/04")
+  app.child("CompanySetup").props.onDirtyChange(true); await app.settle()
+  app.answer(false)
+  await app.pop("#/activity")
+  expect([app.child("CompanySetup").props.initialStep, app.location.hash, app.confirms.at(-1)]).toEqual([0, "#/setup/04", "Discard unsaved company setup changes? Setup is saved from its last section, 07 Review."])
+  // An edited address naming another section, on the setup screen: the section shown stays, and so does its address.
+  await app.pop("#/setup/02")
+  expect(app.location.hash).toBe("#/setup/04")
+  await app.pop("#/setup")
+  expect(app.location.hash).toBe("#/setup/04")
+})

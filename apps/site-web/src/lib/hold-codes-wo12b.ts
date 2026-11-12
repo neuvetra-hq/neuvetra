@@ -60,7 +60,8 @@ export function pythonCodes(source: string): string[] {
 export function pythonRefusalCodes(source: string): string[] {
   const codes: string[] = []
   for (const m of source.matchAll(new RegExp(`Refused\\('${C}'\\)`, "g"))) codes.push(m[1]!)
-  for (const helper of REFUSAL_HELPERS) for (const m of source.matchAll(new RegExp(`\\b${helper}\\([^\\n]*?'${C}'\\)`, "g"))) codes.push(m[1]!)
+  // QA round 3: the code is the helper call's last argument (an inline tuple of choices before it is not a code).
+  for (const helper of REFUSAL_HELPERS) for (const args of calls(source, helper)) codes.push(...[...lastArgument(args).matchAll(/^\s*'([a-z][a-z0-9_]*)'\s*$/g)].map(m => m[1]!))
   return codes
 }
 /** The helpers that raise `Refused(code)` with their caller's code; any other `raise Refused(<variable>)` fails the test. */

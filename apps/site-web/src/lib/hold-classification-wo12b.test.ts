@@ -42,7 +42,10 @@ describe("WO-12b: every hold code is classified (field-level, record-level notic
     for (const [file, language] of HOLD_CODE_SOURCES) if (language === "py") variable.push(...variableRefusals(await Bun.file(ROOT + file).text()).map(fn => `${file.split("/").at(-1)}:${fn}`))
     expect(variable.sort()).toEqual(["scope1_engine.py:quantity", "scope2_engine.py:quantity", "scope3_engine.py:_choice", "scope3_engine.py:integer", "scope3_engine.py:quantity"])
     expect(variable.every(entry => (REFUSAL_HELPERS as readonly string[]).includes(entry.split(":")[1]!))).toBe(true)
-    expect(Object.values(table).filter(entry => entry.level === "refusal").length).toBe(84)
+    expect(Object.values(table).filter(entry => entry.level === "refusal").length).toBe(83)
+    // QA round 3: a helper call with an inline tuple of choices gives its code (its last argument), never a choice.
+    expect(pythonRefusalCodes("    carrier = _choice(inp.get('carrier'), ('electricity', 'natural_gas'), 'invalid_carrier')\n    n = integer(inp['n'], 1, 9, 'invalid_count')").sort()).toEqual(["invalid_carrier", "invalid_count"])
+    expect(found.has("natural_gas")).toBe(false)
   })
   test("every code in the code base is classified, with a level and a line of reasoning; nothing classified is gone", async () => {
     const found = await codesInCodeBase()

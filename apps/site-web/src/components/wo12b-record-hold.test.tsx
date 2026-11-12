@@ -112,7 +112,7 @@ describe("WO-12b 1: the record-hold notice", () => {
     expect(owner.text()).toContain("Company setup’s consolidation approach is equity share, which holds every Scope 1 and 2 record, whatever is filled in here.")
     // There is no answer on the form to change, so the labels sentence says "that changes", not "that answer changes".
     expect([owner.text().includes(RECORD_HOLD_TEXT.labelsElsewhere), owner.text().includes(RECORD_HOLD_TEXT.labels)]).toEqual([true, false])
-    const replaced = recordHold({ kind: "purchase_spend", payload: {} as any }, { supersededBy: { id: "r1", name: "Supplier-specific purchases · ACME-1", match: "name", fields: ["supplier"] } })!
+    const replaced = recordHold({ kind: "purchase_spend", payload: {} as any }, { supersededBy: { id: "r1", name: "Supplier-specific purchases · ACME-1", match: "name", fields: ["supplier", "category"], categories: [1, 2] } })!
     expect(links(harness(make, () => ({ hold: replaced })))).toEqual([["#/activity/r1", "Open Supplier-specific purchases · ACME-1"]])
   })
 
