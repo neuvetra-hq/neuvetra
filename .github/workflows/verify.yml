@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: verify-${{ github.ref }}
+  group: verify-${{ github.event_name == 'push' && github.sha || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -352,24 +352,33 @@ jobs:
 
   migration-guard:
     name: Hosted migration deploy guard
-    # Releases are PR + green CI + one QA review, and Railway deploys main automatically. Migrations are never applied at
-    # boot: the staging image refuses to start unless the live database is at a schema it serves, i.e. a version from
-    # STAGING_SCHEMA_BRIDGE_VERSION up to STAGING_SCHEMA_VERSION (STAGING_SERVED_SCHEMA_VERSIONS in
-    # packages/neuvetra-database/src/hosted.ts). So a PR that changes migrations may only merge while the image it ships
-    # still serves the schema that is live today. Pure diff-plus-source check: no labels, no API calls, no extra token scopes.
-    if: github.event_name == 'pull_request'
+    # Releases are PR + green CI + one QA review, and Railway deploys main automatically (with "Wait for CI"). Migrations are
+    # never applied at boot: the staging image refuses to start unless the live database is at a schema it serves, i.e. a version
+    # from STAGING_SCHEMA_BRIDGE_VERSION up to STAGING_SCHEMA_VERSION (STAGING_SERVED_SCHEMA_VERSIONS in
+    # packages/neuvetra-database/src/hosted.ts). So a change to migrations may only land while the image it ships still serves
+    # the schema that is live today. Pure diff-plus-source check: no labels, no API calls, no extra token scopes.
+    # It runs on pull requests AND on pushes to main (never skipped on a push, so Railway's "Wait for CI" sees a real result).
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
       # THE LIVE HOSTED STAGING SCHEMA. Bump this number in the same PR as, or right after, the hosted migration is
       # actually applied by hand through tools/staging (never before). Until it is bumped, no merged build may raise
       # STAGING_SCHEMA_BRIDGE_VERSION above it, because the deploy of that build would fail /ready and block every later deploy.
+      # Must be a positive integer; the guard fails closed otherwise.
       LIVE_STAGING_SCHEMA: '30'
+      EVENT_NAME: ${{ github.event_name }}
+      PUSH_BEFORE_SHA: ${{ github.event.before }}
     steps:
       - uses: actions/checkout@v4
         with:
-          # The pull_request checkout is a merge commit: HEAD^1 is the base branch tip, so `git diff HEAD^1 HEAD` is exactly this PR's change.
-          fetch-depth: 2
+          # pull_request: the checkout is a merge commit, HEAD^1 is the base branch tip, so `git diff HEAD^1 HEAD` is exactly this PR's change.
+          # push: full history, so github.event.before (the previous tip of main) can be found for `git diff before HEAD`.
+          fetch-depth: ${{ github.event_name == 'pull_request' && 2 || 0 }}
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.12
       - name: Keep the image able to start against the live schema
         shell: bash
         run: |
@@ -379,46 +388,122 @@ jobs:
           live="$LIVE_STAGING_SCHEMA"
           errors=()
 
-          if [ "$(git rev-list --parents -n1 HEAD | wc -w)" -ne 3 ]; then
-            echo "::error title=Migration guard::Expected the pull request merge commit (two parents); cannot find the base to diff against."
+          # Fail closed on a malformed live schema (a value such as `thirty` used to make every numeric test error inside `if` and pass).
+          if ! [[ "$live" =~ ^[1-9][0-9]*$ ]]; then
+            echo "::error title=Migration guard::LIVE_STAGING_SCHEMA must be a positive integer (digits only, no leading zero), but it is '${live}'. Fix the env value of the migration-guard job in .github/workflows/verify.yml."
             exit 1
           fi
-          base="$(git rev-parse HEAD^1)"
 
-          # Read `export const NAME = <integer>` from hosted.ts at a revision ("WORKTREE" = this checkout). Fails closed.
-          read_const() {
-            local rev="$1" name="$2" value
-            if [ "$rev" = WORKTREE ]; then value="$(cat "$hosted")"; else value="$(git show "$rev:$hosted")"; fi
-            value="$(printf '%s\n' "$value" | sed -nE "s/^export const ${name} = ([0-9]+)([^0-9].*)?$/\1/p" | head -n1)"
-            if [ -z "$value" ]; then
-              echo "::error file=$hosted,title=Migration guard::Could not read an integer for ${name} at ${rev}. If hosted.ts changed how it defines it, update this guard (.github/workflows/verify.yml, job migration-guard)." >&2
+          # Read the real constants. hosted.ts cannot be imported here (it needs pg and the workspace install) and its text is
+          # never evaluated: each of the three `export const` statements must match one exact form, and the served set is computed
+          # here from the captured integers. Any other form fails closed; whoever changes hosted.ts must update this guard with it.
+          evaluator="$RUNNER_TEMP/read-hosted-constants.mjs"
+          cat > "$evaluator" <<'JS'
+          const fail = (message) => { console.error(message); process.exit(1) }
+          const source = await Bun.file(process.argv[2]).text()
+          const statement = (name) => {
+            const found = source.match(new RegExp(`^export const ${name}\\b.*$`, "gm")) ?? []
+            if (found.length !== 1) fail(`expected exactly one single-line 'export const ${name}' statement, found ${found.length}`)
+            return found[0].trimEnd()
+          }
+          const integer = (name) => {
+            const m = statement(name).match(new RegExp(`^export const ${name}(?:: number)? = ([1-9][0-9]{0,5})$`))
+            if (!m) fail(`${name} must be a plain positive integer literal (export const ${name} = 30). The guard only understands that exact form; update the guard in .github/workflows/verify.yml together with hosted.ts.`)
+            return Number(m[1])
+          }
+          const schema = integer("STAGING_SCHEMA_VERSION")
+          const bridge = integer("STAGING_SCHEMA_BRIDGE_VERSION")
+          const servedLine = statement("STAGING_SERVED_SCHEMA_VERSIONS")
+          const derivedForm = "export const STAGING_SERVED_SCHEMA_VERSIONS: readonly number[] = Array.from({ length: STAGING_SCHEMA_VERSION - STAGING_SCHEMA_BRIDGE_VERSION + 1 }, (_, i) => STAGING_SCHEMA_BRIDGE_VERSION + i)"
+          let served
+          if (servedLine === derivedForm) {
+            served = Array.from({ length: schema - bridge + 1 }, (_, i) => bridge + i)
+          } else {
+            const m = servedLine.match(/^export const STAGING_SERVED_SCHEMA_VERSIONS(?:: readonly number\[\])? = \[ ?([0-9]+(?:, ?[0-9]+)*) ?\]$/)
+            if (!m) fail("STAGING_SERVED_SCHEMA_VERSIONS is in neither form the guard understands (the Array.from(...) derivation from the bridge and schema, or a plain list of integers). Update the guard in .github/workflows/verify.yml together with hosted.ts.")
+            served = m[1].split(",").map((n) => Number(n.trim()))
+          }
+          if (schema < bridge) fail(`schema ${schema} is below bridge ${bridge}`)
+          if (served.length === 0 || !served.every((n) => Number.isSafeInteger(n) && n > 0)) fail("the served set is not a non-empty list of positive integers")
+          console.log(JSON.stringify({ schema, bridge, served }))
+          JS
+
+          # Read hosted.ts at a revision ("WORKTREE" = this checkout) into "schema bridge served" (served comma separated). Fails closed.
+          read_consts() {
+            local rev="$1" copy json
+            copy="$RUNNER_TEMP/hosted-$(printf '%s' "$rev" | tr -c 'A-Za-z0-9' _).ts"
+            if [ "$rev" = WORKTREE ]; then cp "$hosted" "$copy"; else git show "$rev:$hosted" > "$copy"; fi
+            if ! json="$(bun "$evaluator" "$copy" 2>"$RUNNER_TEMP/eval.err")"; then
+              echo "::error file=$hosted,title=Migration guard::Could not read the staging schema constants at ${rev}: $(tr '\n' ' ' < "$RUNNER_TEMP/eval.err"). If hosted.ts changed how it defines them, update this guard (.github/workflows/verify.yml, job migration-guard)." >&2
               exit 1
             fi
-            printf '%s' "$value"
+            bun -e 'const v = JSON.parse(process.argv[1]); console.log(`${v.schema} ${v.bridge} ${v.served.join(",")}`)' "$json"
           }
-          schema="$(read_const WORKTREE STAGING_SCHEMA_VERSION)"
-          bridge="$(read_const WORKTREE STAGING_SCHEMA_BRIDGE_VERSION)"
-          base_schema="$(read_const "$base" STAGING_SCHEMA_VERSION)"
-          base_bridge="$(read_const "$base" STAGING_SCHEMA_BRIDGE_VERSION)"
 
-          # Name-status without rename detection: a rename shows as a delete plus an add.
-          changes="$(git diff --name-status --no-renames "$base" HEAD -- "$migrations")"
-          constants_changed=false
-          if [ "$schema" != "$base_schema" ] || [ "$bridge" != "$base_bridge" ]; then constants_changed=true; fi
+          # Choose what to diff against.
+          full_check=false
+          if [ "$EVENT_NAME" = pull_request ]; then
+            if [ "$(git rev-list --parents -n1 HEAD | wc -w)" -ne 3 ]; then
+              echo "::error title=Migration guard::Expected the pull request merge commit (two parents); cannot find the base to diff against."
+              exit 1
+            fi
+            base="$(git rev-parse HEAD^1)"
+          elif [ "$EVENT_NAME" = push ]; then
+            if [[ "$PUSH_BEFORE_SHA" =~ ^0+$ ]]; then
+              # All-zero before SHA: the ref was just created, so there is no previous tip to diff. Fall back to a full check
+              # (constants against the live schema, plus the migrations folder being exactly 0001..schema). The immutability of
+              # applied files cannot be diffed here; it stays covered by the receipt hash check in the image and its unit tests.
+              full_check=true
+              base=""
+            elif [[ ! "$PUSH_BEFORE_SHA" =~ ^[0-9a-f]{40}$ ]] || ! git cat-file -e "${PUSH_BEFORE_SHA}^{commit}" 2>/dev/null; then
+              # Before SHA that is malformed or not in the repository (for example the old tip was force-pushed away): what changed
+              # cannot be established, so fail closed rather than guess. A maintainer must look at the push and re-run it.
+              echo "::error title=Migration guard::The previous tip of main (${PUSH_BEFORE_SHA}) is not available, so this push cannot be diffed. Failing closed; check the push by hand and re-run the job."
+              exit 1
+            else
+              base="$PUSH_BEFORE_SHA"
+            fi
+          else
+            echo "::error title=Migration guard::Unsupported event '${EVENT_NAME}'."
+            exit 1
+          fi
 
+          # (assign first: `exit` inside a command substitution only fails the assignment, which `set -e` then honours)
+          here="$(read_consts WORKTREE)"
+          read -r schema bridge served <<< "$here"
+          if [ "$full_check" = true ]; then
+            base_schema="n/a"; base_bridge="n/a"
+            changes=""
+            constants_changed=false
+          else
+            there="$(read_consts "$base")"
+            read -r base_schema base_bridge _ <<< "$there"
+            # Name-status without rename detection: a rename shows as a delete plus an add.
+            changes="$(git diff --name-status --no-renames "$base" HEAD -- "$migrations")"
+            constants_changed=false
+            if [ "$schema" != "$base_schema" ] || [ "$bridge" != "$base_bridge" ]; then constants_changed=true; fi
+          fi
+
+          echo "Event: $EVENT_NAME  (diff base: ${base:-none, full check})"
           echo "Live staging schema (LIVE_STAGING_SCHEMA): $live"
-          echo "hosted.ts on this PR:  STAGING_SCHEMA_VERSION=$schema  STAGING_SCHEMA_BRIDGE_VERSION=$bridge  (image serves $bridge..$schema)"
+          echo "hosted.ts here:        STAGING_SCHEMA_VERSION=$schema  STAGING_SCHEMA_BRIDGE_VERSION=$bridge  STAGING_SERVED_SCHEMA_VERSIONS=[$served]"
           echo "hosted.ts on the base: STAGING_SCHEMA_VERSION=$base_schema  STAGING_SCHEMA_BRIDGE_VERSION=$base_bridge"
 
-          # Rule 1, every PR: the image this PR would deploy must serve the live schema.
+          # Rule 1, every run: the image this change would deploy must serve the live schema.
           if [ "$bridge" -gt "$live" ]; then
-            errors+=("STAGING_SCHEMA_BRIDGE_VERSION is $bridge but the live staging schema is $live. The image would serve only $bridge..$schema and would fail /ready against the live database; Railway would keep the old deploy and block every later deploy. Keep the bridge at or below $live in this PR, merge, apply the hosted migration by hand, then raise the bridge and LIVE_STAGING_SCHEMA in a follow-up PR.")
+            errors+=("STAGING_SCHEMA_BRIDGE_VERSION is $bridge but the live staging schema is $live. The image would serve only $bridge..$schema and would fail /ready against the live database; Railway would keep the old deploy and block every later deploy. Keep the bridge at or below $live in this change, merge, apply the hosted migration by hand, then raise the bridge and LIVE_STAGING_SCHEMA in a follow-up PR.")
           fi
           if [ "$schema" -lt "$live" ]; then
             errors+=("STAGING_SCHEMA_VERSION is $schema, below the live staging schema $live. The image would refuse to start against the live database.")
           fi
+          # Rule 3, every run: the served set (what the readiness check actually uses) must contain the live schema.
+          if ! printf ',%s,' "$served" | grep -q ",${live},"; then
+            errors+=("STAGING_SERVED_SCHEMA_VERSIONS is [$served], which does not include the live staging schema $live. The image would fail /ready against the live database and block every later deploy.")
+          fi
 
           # Rule 2: migrations already applied to the live database are immutable (the image checks receipts against file hashes).
+          applied_touched=false
+          new_migrations=false
           if [ -n "$changes" ]; then
             while IFS=$'\t' read -r status file; do
               name="$(basename "$file")"
@@ -426,23 +511,40 @@ jobs:
               if [ -z "$number" ]; then
                 errors+=("$status $file: not a NNNN_name.sql migration file. Nothing else belongs in the migrations folder.")
               elif [ "$((10#$number))" -le "$live" ]; then
+                applied_touched=true
                 errors+=("$status $file: migration $number is at or below the live schema $live, so it is already applied. Applied migrations are immutable (changing, deleting or inserting one breaks the receipt hash check and the deploy cannot start). Fix forward with a new migration numbered above $live.")
+              else
+                new_migrations=true
               fi
             done <<< "$changes"
+          fi
+
+          # Full check only (no base to diff): the folder must be exactly 0001..schema, each file named NNNN_name.sql.
+          if [ "$full_check" = true ]; then
+            numbers="$(ls "$migrations" | sed -nE 's/^([0-9]{4})_.*\.sql$/\1/p' | sed 's/^0*//' | sort -n | tr '\n' ' ')"
+            expected="$(seq 1 "$schema" | tr '\n' ' ')"
+            if [ "$(ls "$migrations" | wc -l)" -ne "$schema" ] || [ "$numbers" != "$expected" ]; then
+              errors+=("Full check (no previous tip to diff): the migrations folder must hold exactly the files 0001..$(printf '%04d' "$schema") named NNNN_name.sql.")
+            fi
           fi
 
           {
             echo "### Hosted migration guard"
             echo "| | |"
             echo "|---|---|"
+            echo "| Event | $EVENT_NAME$([ "$full_check" = true ] && echo ' (full check, no previous tip)') |"
             echo "| Live staging schema | $live |"
-            echo "| Image would serve | $bridge..$schema |"
-            if [ -z "$changes" ] && [ "$constants_changed" = false ]; then
-              echo "| Result | no migration change |"
-            elif [ "${#errors[@]}" -eq 0 ]; then
-              echo "| Result | migration change is safe to deploy first (bridge $bridge <= live $live); apply it by hand after the deploy |"
-            else
+            echo "| Image would serve | $bridge..$schema (served set: $served) |"
+            if [ "${#errors[@]}" -gt 0 ]; then
               echo "| Result | FAILED |"
+            elif [ "$new_migrations" = true ]; then
+              echo "| Result | migration change is safe to deploy first (bridge $bridge <= live $live); apply the new migration by hand after the deploy |"
+            elif [ -n "$changes" ] || [ "$constants_changed" = true ]; then
+              echo "| Result | only schema constants changed; the image still serves live schema $live; nothing to apply |"
+            elif [ "$full_check" = true ]; then
+              echo "| Result | full check passed |"
+            else
+              echo "| Result | no migration change |"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -450,8 +552,12 @@ jobs:
             for e in "${errors[@]}"; do echo "::error title=Migration guard::$e"; done
             exit 1
           fi
-          if [ -z "$changes" ] && [ "$constants_changed" = false ]; then
-            echo "Migration guard: no migration change."
+          if [ "$new_migrations" = true ]; then
+            echo "Migration guard: migration change is deployable against live schema $live (bridge $bridge <= $live <= schema $schema). Deploy this first, then apply the new hosted migration by hand."
+          elif [ -n "$changes" ] || [ "$constants_changed" = true ]; then
+            echo "Migration guard: only schema constants changed; the image still serves live schema $live. Nothing to apply."
+          elif [ "$full_check" = true ]; then
+            echo "Migration guard: full check passed (no previous tip to diff)."
           else
-            echo "Migration guard: migration change is deployable against live schema $live (bridge $bridge <= $live <= schema $schema). Deploy this PR first, then apply the hosted migration by hand."
+            echo "Migration guard: no migration change."
           fi
