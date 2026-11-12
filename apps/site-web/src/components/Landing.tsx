@@ -120,7 +120,8 @@ export function Landing(props: LandingProps) {
           <form onSubmit={signIn}>
             <label className="nv-field"><span>Email</span><input ref={emailRef} type="email" autoComplete="username" required aria-invalid={outcome.invalid || undefined} value={props.email} onChange={event => { setOutcome(current => ({ ...current, invalid: false })); props.onEmail(event.target.value) }} /></label>
             <label className="nv-field"><span>Password</span><input type="password" autoComplete="current-password" required value={props.password} onChange={event => props.onPassword(event.target.value)} /></label>
-            {kind && <div className={`nv-notice ${kind === "error" ? "nv-notice--error" : "nv-notice--ok"}`} style={{ margin: 0 }} role={kind === "error" ? "alert" : undefined}><Icon name={kind === "error" ? "alert" : "check"} /><p>{props.message}</p></div>}
+            {/* key: each kind is a new element, so an error inserts a fresh role="alert" node (not a role change on the "Signing in…" notice). */}
+            {kind && <div key={kind} className={`nv-notice ${kind === "error" ? "nv-notice--error" : "nv-notice--ok"}`} style={{ margin: 0 }} role={kind === "error" ? "alert" : undefined}><Icon name={kind === "error" ? "alert" : "check"} /><p>{props.message}</p></div>}
             {/* While busy the buttons stay focusable (aria-disabled), so focus is not dropped and "Signing in…" is read. */}
             <button type="submit" className="nv-btn nv-btn--primary nv-btn--block" disabled={!props.ready} aria-disabled={props.busy || undefined}>{!props.ready ? (kind === "error" ? "Sign-in unavailable" : "Loading…") : props.busy ? "Signing in…" : "Sign in"}</button>
             <div className="nv-or">or</div>
@@ -143,7 +144,7 @@ export function Landing(props: LandingProps) {
       <section id="coverage" className="nv-section" aria-labelledby="coverage-title">
         <div className="nv-section__head"><p className="nv-eyebrow">Coverage in the beta</p><h2 id="coverage-title">What the beta covers today</h2></div>
         <div className="nv-coverage">
-          <div><p className="nv-h3">Scope 1 — direct</p><ul><li>Natural gas</li><li>Generator diesel and fuel oil</li><li>Company vehicles (gasoline and diesel)</li><li>Refrigerants and fire suppression</li><li>Process and other direct emissions: recorded as open gaps, not calculated</li></ul></div>
+          <div><p className="nv-h3">Scope 1 — direct</p><ul><li>Natural gas</li><li>Generator diesel and No. 2 fuel oil</li><li>Company vehicles (gasoline and diesel)</li><li>Refrigerants and fire suppression</li><li>Process and other direct emissions: recorded as open gaps, not calculated</li></ul></div>
           <div><p className="nv-h3">Scope 2 — purchased electricity</p><ul><li>Location-based, by eGRID subregion</li><li>Market-based, with certificates, PPAs, green tariffs and supplier rates</li><li>Green-e residual mix for uncovered use</li><li>Location-based and market-based results are shown separately, never added together</li><li>Purchased steam, heat and cooling: not supported yet</li></ul></div>
           <div><p className="nv-h3">Scope 3 — value chain</p><ul><li>Screen all 15 categories with reasons.</li><li>Calculation for supported categories is in beta; your workspace shows whether it is switched on.</li><li>Where it is on, categories without records or a supported method stay listed as open — never as zero.</li><li>Reported separately from Scope 1 and Scope 2.</li></ul></div>
           <div><p className="nv-h3">Not available yet</p><ul><li>Reviewer or assurance-provider access</li><li>One frozen version of the full Scope 1, 2 and 3 report</li><li>Rules outside California and the U.S.</li></ul></div>

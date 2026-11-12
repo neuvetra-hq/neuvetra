@@ -63,7 +63,7 @@ describe("truthful landing (WO-02)", () => {
       "Neuvetra guides your team from company setup to a draft Scope 1 and Scope 2 inventory, and helps you screen all 15 Scope 3 categories.",
       "EPA Emission Factors Hub (2025 edition)", "eGRID2023 and Green-e residual mix for electricity", "Unknown is never counted as zero", "Drafts — not externally assured",
       "Work at your own pace. Company setup is saved when you finish its review step; each activity record is saved on its own. The overview shows what’s open and what to do next.",
-      "What the beta covers today", "recorded as open gaps, not calculated", "shown separately, never added together", "Purchased steam, heat and cooling: not supported yet",
+      "What the beta covers today", "recorded as open gaps, not calculated", "shown separately, never added together", "Purchased steam, heat and cooling: not supported yet", "Generator diesel and No. 2 fuel oil",
       "Screen all 15 categories with reasons.", "Calculation for supported categories is in beta; your workspace shows whether it is switched on.",
       "Where it is on, categories without records or a supported method stay listed as open — never as zero.",
       "Not available yet", "Reviewer or assurance-provider access", "One frozen version of the full Scope 1, 2 and 3 report", "Rules outside California and the U.S.",

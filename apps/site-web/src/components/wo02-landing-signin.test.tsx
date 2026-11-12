@@ -36,6 +36,8 @@ test("a wrong password: one alert above the actions, focus on Email, aria-invali
   expect(calls).toEqual(["signIn", "focus:email"])
   expect(email().props["aria-invalid"]).toBe(true)
   expect(alerts(app)).toHaveLength(1)
+  // Keyed by kind: the error notice is a different element from the "Signing in…" notice, so React inserts a new alert node.
+  expect(alerts(app)[0].props.key).toBe("error")
   // The alert sits before the Sign in button inside the form.
   const formChildren = form().children.flat(Infinity).filter((child: any) => child && typeof child === "object")
   const alertAt = formChildren.findIndex((child: any) => child.props.role === "alert"), submitAt = formChildren.findIndex((child: any) => child.props.type === "submit")
@@ -75,4 +77,5 @@ test("while busy the Sign in button stays focusable, reads Signing in… and doe
   expect(prevented).toBe(true)
   expect(calls).toEqual([])
   expect(alerts(app)).toHaveLength(0)
+  expect(app.nodes().find(node => node.props.className?.startsWith?.("nv-notice"))!.props.key).toBe("info")
 })
