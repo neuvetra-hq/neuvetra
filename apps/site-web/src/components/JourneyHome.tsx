@@ -6,7 +6,7 @@ import { ACTIVITY_KINDS, BOUNDARY_LABELS, kindIcon, periodLabel, RECORD_STATE_LA
 import { COPY_TEXT_R2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
 // Round 3 lane C (PR-3): imported spend lines are one item that opens the spend import's grouped review.
 import { requestSpendImportFocus } from "@/lib/spend-import-target"
-import { TODO_SPEND_TEXT_R3C } from "@/lib/scope3-text-r3c"
+import { READINESS_GROUP_TEXT, READINESS_GROUPS, READINESS_TEXT, OVERVIEW_SCOPE3_TEXT, type Readiness, type ReadinessTarget } from "@/lib/readiness"
 
 function plural(count: number, one: string, many = `${one}s`) { return `${count} ${count === 1 ? one : many}` }
 
@@ -14,37 +14,35 @@ function plural(count: number, one: string, many = `${one}s`) { return `${count}
 // Codex-owned and can retire later.
 const homeLead = (scope3: boolean) => `Three steps take you from company details to a draft Scope 1 and Scope 2 report${scope3 ? ", with Scope 3 reported separately" : ""}. Company setup is saved when you press Save setup in 07 Review; each activity record is saved on its own.`
 
-export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRetry, onFix }: {
-  status: JourneyStatus | null; error: string | null; headingRef: RefObject<HTMLHeadingElement | null>
-  onNavigate: (view: JourneyView) => void; onAsk: () => void; onRetry: () => void; onFix: (recordId: string) => void
+export function JourneyHome({ status, readiness, error, headingRef, onNavigate, onAsk, onRetry, onRetryScope3, onFix }: {
+  status: JourneyStatus | null; readiness: Readiness; error: string | null; headingRef: RefObject<HTMLHeadingElement | null>
+  onNavigate: (view: JourneyView) => void; onAsk: () => void; onRetry: () => void; onRetryScope3: () => void; onFix: (recordId: string) => void
 }) {
-  if (!status) return <section aria-busy={!error}>
+  if (!status || readiness.state !== "ready") return <section aria-busy={!error}>
     <p className="nv-eyebrow">Overview</p>
     <h1 ref={headingRef} tabIndex={-1}>Your reporting workspace</h1>
-    {error ? <div className="nv-notice nv-notice--error" role="alert"><Icon name="alert" /><div><p><strong>Your progress couldn’t be loaded.</strong> {error}</p><div className="nv-actions" style={{ marginTop: 10 }}><button type="button" className="nv-btn nv-btn--sm" onClick={onRetry}>Try again</button></div></div></div>
-      : <p className="nv-lead" role="status">Loading your progress…</p>}
+    {error ? <div className="nv-notice nv-notice--error" role="alert"><Icon name="alert" /><div><p><strong>Your progress couldn’t be checked.</strong> {error}</p><div className="nv-actions" style={{ marginTop: 10 }}><button type="button" className="nv-btn nv-btn--sm" onClick={onRetry}>Try again</button></div></div></div>
+      : <p className="nv-lead" role="status">Checking your progress…</p>}
   </section>
-  const { setup, collection, evidence, next, progress, gaps, canManage } = status
+  const { setup, collection, evidence, canManage } = status
+  const { next, items, s1, s2, s3, open } = readiness
   const name = setup.legalName || "Your company"
-  // WO-04a (PROD-B01 interim, O-7): while Scope 3 is on, its open items aren't checked on this page, so no step is "done".
   const scope3 = Boolean(status.scope3)
-  const stepState = (key: "setup" | "collection" | "results") => {
-    if (key === "results") return next.panel === "results" ? "current" : "todo"
-    if (!scope3 && progress[key] === "done") return "done"
-    return next.panel === key ? "current" : "todo"
+  // WO-04b: a step is "done" only by its §8 definition (S3 never); the step the next action opens is "current".
+  const nextView = next.target.type === "view" ? next.target.view : "collection"
+  const stepState = (key: "setup" | "collection" | "results", done: boolean) => done ? "done" : nextView === key ? "current" : "todo"
+  const act = (target: ReadinessTarget) => {
+    if (target.type === "record") onFix(target.recordId)
+    else if (target.type === "spend") { requestSpendImportFocus(target.tab); onNavigate("collection") }
+    else onNavigate(target.view)
   }
-  const allMustFix = collection.records.filter(row => row.state === "input_needed" || row.state === "review_required")
-  const spendFix = allMustFix.filter(row => row.importedSpend), mustFix = allMustFix.filter(row => !row.importedSpend)
-  // Bug hunt C (C-01): step 2's count is every record needing input (imported spend lines too), as the sidebar and the
-  // Activity list count them; the attention list below shows the imported lines as one spend-import item.
-  const openSpendImport = () => { requestSpendImportFocus("code"); onNavigate("collection") }
-  const heldRows = collection.records.filter(row => row.state === "held_period")
   const improve: Array<{ key: string; title: string; detail: string }> = []
   if (collection.partial) improve.push({ key: "partial", title: `${plural(collection.partial, "record is", "records are")} only partly calculated`, detail: "For vehicles, add miles driven or fuel economy to include CH4 and N2O." })
   if (collection.noEvidence) improve.push({ key: "evidence", title: `${plural(collection.noEvidence, "record has", "records have")} no evidence linked`, detail: "Attach the bill or log so a reviewer can trace the figure." })
   if (collection.olderSetup && canManage) improve.push({ key: "older-setup", title: `${plural(collection.olderSetup, "record was", "records were")} saved before your latest company-setup change`, detail: "When you next edit one, choose its site again before saving — the form asks for a current site." })
   if (collection.qualityUnknown) improve.push({ key: "quality", title: `${plural(collection.qualityUnknown, "record has", "records have")} data quality “Unknown”`, detail: "Mark each record as actual or estimated." })
-  const nothingFlagged = !setup.missing.length && !allMustFix.length && !heldRows.length && !gaps.length && !improve.length && evidence.checking === 0
+  const groups = READINESS_GROUPS.map(group => ({ group, rows: items.filter(item => item.group === group) })).filter(entry => entry.rows.length)
+  const resolved = readiness.scope3 === "off" || readiness.scope3 === "ready"
   return <section>
     <p className="nv-eyebrow">Overview</p>
     <h1 ref={headingRef} tabIndex={-1}>{setup.saved ? name : "Welcome to Neuvetra"}</h1>
@@ -54,66 +52,60 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
 
     <div className="nv-card nv-card--accent">
       <p className="nv-eyebrow" style={{ marginBottom: 4 }}>Next step</p>
-      <h2 className="nv-h2">{next.title}</h2>
+      <h2 className="nv-h2" data-readiness-next="">{next.title}</h2>
       <p className="nv-muted" style={{ marginTop: 6 }}>{next.body}</p>
       <div className="nv-actions">
-        <button type="button" className="nv-btn nv-btn--primary" onClick={() => next.spendImport ? openSpendImport() : next.recordId ? onFix(next.recordId) : onNavigate(next.panel)}>{next.action}<Icon name="arrow" size={18} /></button>
-        {next.secondary && <button type="button" className="nv-btn" onClick={() => onNavigate(next.secondary!.panel)}>{next.secondary.action}</button>}
+        <button type="button" className="nv-btn nv-btn--primary" data-readiness-action="next" onClick={() => act(next.target)}>{next.action}<Icon name="arrow" size={18} /></button>
+        {next.secondary && <button type="button" className="nv-btn" onClick={() => act(next.secondary!.target)}>{next.secondary.action}</button>}
         <button type="button" className="nv-btn nv-btn--ghost" onClick={onAsk}><Icon name="help" size={18} />Ask a question</button>
       </div>
     </div>
 
     <h2 className="nv-h2" style={{ marginTop: 28 }}>Your three steps</h2>
     <div className="nv-journey" style={{ marginTop: 12 }}>
-      <button type="button" className="nv-journey__step" data-state={stepState("setup")} onClick={() => onNavigate("setup")}>
-        <span className="nv-journey__num" aria-hidden="true">{stepState("setup") === "done" ? <Icon name="check" size={16} /> : 1}</span>
+      <button type="button" className="nv-journey__step" data-state={stepState("setup", s1.done)} onClick={() => onNavigate("setup")}>
+        <span className="nv-journey__num" aria-hidden="true">{s1.done ? <Icon name="check" size={16} /> : 1}</span>
         <span className="nv-journey__title">Company setup</span>
-        <span className="nv-journey__meta">{!setup.saved ? "Not started — about 10 minutes" : setup.missing.length ? `Saved · ${plural(setup.missing.length, "open answer")}` : scope3 ? `Saved · v${setup.revision} · no open Scope 1 and 2 answers` : `All setup questions answered · v${setup.revision}`}</span>
+        <span className="nv-journey__meta">{s1.text}</span>
       </button>
-      <button type="button" className="nv-journey__step" data-state={stepState("collection")} onClick={() => onNavigate("collection")}>
-        <span className="nv-journey__num" aria-hidden="true">{stepState("collection") === "done" ? <Icon name="check" size={16} /> : 2}</span>
+      <button type="button" className="nv-journey__step" data-state={stepState("collection", s2.done)} onClick={() => onNavigate("collection")}>
+        <span className="nv-journey__num" aria-hidden="true">{s2.done ? <Icon name="check" size={16} /> : 2}</span>
         <span className="nv-journey__title">Activity & evidence</span>
-        <span className="nv-journey__meta">{!collection.active ? "No records yet" : [plural(collection.active, "record"), allMustFix.length ? `${allMustFix.length} input needed` : "", heldRows.length ? `${heldRows.length} held — outside the reporting period` : "", gaps.length ? plural(gaps.length, "possible gap") : "", !allMustFix.length && !heldRows.length && !gaps.length ? "none waiting on input" : ""].filter(Boolean).join(" · ")}</span>
+        <span className="nv-journey__meta">{s2.text}</span>
+        {collection.active > 0 && <span className="nv-journey__meta nv-subtle">{readiness.s2Hint}</span>}
       </button>
-      <button type="button" className="nv-journey__step" data-state={stepState("results")} onClick={() => onNavigate("results")}>
+      <button type="button" className="nv-journey__step" data-state={stepState("results", false)} onClick={() => onNavigate("results")}>
         <span className="nv-journey__num" aria-hidden="true">3</span>
         <span className="nv-journey__title">Results & report</span>
-        <span className="nv-journey__meta">{collection.ready ? `${plural(collection.ready, "record")} can be calculated` : collection.active ? "No record can be calculated yet" : "Available once a record is complete"}</span>
+        <span className="nv-journey__meta">{s3.text}</span>
       </button>
     </div>
 
     <div className="nv-grid-2" style={{ marginTop: 18 }}>
-      <div className="nv-card nv-card--flat" style={{ margin: 0 }}>
+      <div className="nv-card nv-card--flat" style={{ margin: 0 }} id="overview-open-items">
         <h2 className="nv-h3">What needs attention</h2>
-        {nothingFlagged ? <p className="nv-muted">{!collection.active ? "No records yet — start with the next step above." : scope3 ? "Nothing waiting on you for Scope 1 and 2. Scope 3 to-do: see Results." : "Nothing is waiting on you. Figures are drafts from beta methods and are not externally assured."}</p> : <>
-          {(setup.missing.length > 0 || allMustFix.length > 0) && <p className="nv-attn-label nv-attn-label--warn">Input needed</p>}
+        {/* WO-04b: one list across all scopes, in the next-step order; its length is the "N open" of the navigation. */}
+        <p className="nv-subtle" data-readiness-summary="">{items.length ? READINESS_TEXT.openSummary(open.total, open.scope12, open.scope3, open.blocking)
+          : !collection.active ? "No records yet — start with the next step above." : resolved ? OVERVIEW_SCOPE3_TEXT.nothingOpen : "Nothing waiting on you in Scope 1 and 2."}</p>
+        {groups.map(({ group, rows }) => <div key={group}>
+          <p className={`nv-attn-label nv-attn-label--${group === "gap" || group === "method" ? "info" : "warn"}`}>{READINESS_GROUP_TEXT[group]}</p>
           <ul className="nv-list">
-            {setup.missing.slice(0, 6).map(item => <li key={item.id}><span className="nv-list__main"><span className="nv-list__title">{item.title}</span><br /><span className="nv-subtle">Company setup · {item.detail}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${canManage ? "Open" : "View"} company setup: ${item.title}`} onClick={() => onNavigate("setup")}>{canManage ? "Open" : "View"}</button></li>)}
-            {setup.missing.length > 6 && <li><span className="nv-subtle">and {setup.missing.length - 6} more in Company setup</span></li>}
-            {spendFix.length > 0 && <li key="spend-import"><span className="nv-list__main"><span className="nv-list__title">{TODO_SPEND_TEXT_R3C.attentionTitle(spendFix.length)}</span><br /><span className="nv-subtle">{TODO_SPEND_TEXT_R3C.attentionDetail}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${TODO_SPEND_TEXT_R3C.open}: ${TODO_SPEND_TEXT_R3C.attentionTitle(spendFix.length)}`} onClick={openSpendImport}>{canManage ? TODO_SPEND_TEXT_R3C.open : "View"}</button></li>}
-            {mustFix.slice(0, 5).map(row => <li key={row.id}><span className="nv-list__main"><span className="nv-list__title">{row.label} · {row.sourceId}</span><br /><span className="nv-subtle">{row.reasons[0] ?? RECORD_STATE_LABELS[row.state]}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${canManage ? "Fix" : "View"} ${row.label} · ${row.sourceId}`} onClick={() => onFix(row.id)}>{canManage ? "Fix" : "View"}</button></li>)}
-            {mustFix.length > 5 && <li><span className="nv-subtle">and {mustFix.length - 5} more in Activity & evidence</span></li>}
+            {rows.map(item => <li key={item.key} data-readiness-item={item.key}><span className="nv-list__main"><span className="nv-list__title">{item.title}</span>{item.blocking && <> <span className="nv-chip nv-chip--warn">Blocks internal approval</span></>}<br /><span className="nv-subtle">{item.detail}</span></span>
+              <button type="button" className="nv-btn nv-btn--sm" data-readiness-action={item.key} data-readiness-target={item.target.type === "view" ? item.target.view : item.target.type} aria-label={`${item.action}: ${item.title}`} onClick={() => act(item.target)}>{item.action}</button></li>)}
           </ul>
-          {heldRows.length > 0 && <><p className="nv-attn-label nv-attn-label--warn">Outside reporting period</p><ul className="nv-list">
-            {heldRows.slice(0, 5).map(row => <li key={row.id}><span className="nv-list__main"><span className="nv-list__title">{row.label} · {row.sourceId}</span><br /><span className="nv-subtle">{row.reasons[0]}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${canManage ? "Open" : "View"} company setup for ${row.label} · ${row.sourceId}`} onClick={() => onNavigate("setup")}>{canManage ? "Open setup" : "View setup"}</button></li>)}
-            {heldRows.length > 5 && <li><span className="nv-subtle">and {heldRows.length - 5} more</span></li>}
-          </ul></>}
-          {gaps.length > 0 && <><p className="nv-attn-label nv-attn-label--info">Possible gaps</p><ul className="nv-list">
-            {gaps.slice(0, 5).map(gap => <li key={gap.id}><span className="nv-list__main"><span className="nv-list__title">{gap.title}</span><br />{canManage && <span className="nv-subtle">{gap.detail}</span>}{gap.note && <>{canManage && <br />}<span className="nv-subtle">Note: {gap.note}</span></>}</span>{canManage && <button type="button" className="nv-btn nv-btn--sm" aria-label={`Add a record: ${gap.title}`} onClick={() => onNavigate("collection")}>Add</button>}</li>)}
-            {gaps.length > 5 && <li><span className="nv-subtle">and {gaps.length - 5} more</span></li>}
-          </ul></>}
-          {(improve.length > 0 || evidence.checking > 0) && <><p className="nv-attn-label">Can be improved</p><ul className="nv-list">
-            {improve.map(item => <li key={item.key}><span className="nv-list__main"><span className="nv-list__title">{item.title}</span>{canManage && <><br /><span className="nv-subtle">{item.detail}</span></>}</span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${item.key === "partial" ? "See" : canManage ? "Open" : "View"}: ${item.title}`} onClick={() => onNavigate(item.key === "partial" ? "results" : "collection")}>{item.key === "partial" ? "See" : canManage ? "Open" : "View"}</button></li>)}
-            {evidence.checking > 0 && <li><span className="nv-list__main"><span className="nv-list__title">{plural(evidence.checking, "file")} waiting for quarantine review</span><br /><span className="nv-subtle">You can keep working; files can be downloaded once cleared.</span></span></li>}
-          </ul></>}
-        </>}
-        {/* WO-04a: Scope 3's open items are listed on Results until the Overview counts them (WO-04b). */}
+        </div>)}
         <p className="nv-attn-label">Scope 3</p>
         <ul className="nv-list">
-          {scope3
-            ? <li key="scope3-todo"><span className="nv-list__main"><span className="nv-list__title">Scope 3 to-do: see Results</span><br /><span className="nv-subtle">Scope 3 decisions, assessments and records are checked on the Results page.</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label="Open Results: Scope 3 to-do" onClick={() => onNavigate("results")}>Open Results</button></li>
-            : <li key="scope3-off"><span className="nv-list__main"><span className="nv-list__title">Scope 3 isn’t switched on in this workspace</span></span></li>}
+          {readiness.scope3 === "off" && <li key="scope3-off"><span className="nv-list__main"><span className="nv-list__title">{OVERVIEW_SCOPE3_TEXT.off}</span></span></li>}
+          {readiness.scope3 === "checking" && <li key="scope3-checking" role="status"><span className="nv-list__main"><span className="nv-list__title">{OVERVIEW_SCOPE3_TEXT.checking}</span><br /><span className="nv-subtle">{OVERVIEW_SCOPE3_TEXT.checkingDetail}</span></span></li>}
+          {readiness.scope3 === "failed" && <li key="scope3-failed" role="alert"><span className="nv-list__main"><span className="nv-list__title">{OVERVIEW_SCOPE3_TEXT.failed}</span><br /><span className="nv-subtle">{OVERVIEW_SCOPE3_TEXT.failedDetail}</span></span>
+            <span className="nv-actions" style={{ margin: 0 }}><button type="button" className="nv-btn nv-btn--sm" onClick={onRetryScope3}>{OVERVIEW_SCOPE3_TEXT.retry}</button><button type="button" className="nv-btn nv-btn--sm" aria-label="Open Results: Scope 3 to-do" onClick={() => onNavigate("results")}>{OVERVIEW_SCOPE3_TEXT.openResults}</button></span></li>}
+          {readiness.scope3 === "ready" && <li key="scope3-ready"><span className="nv-list__main"><span className="nv-list__title">{open.scope3 ? `${plural(open.scope3, "Scope 3 item")} listed above` : "No Scope 3 items open"}</span><br /><span className="nv-subtle">The same items as the Scope 3 to-do on Results.</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label="Open Results: Scope 3 to-do" onClick={() => onNavigate("results")}>{OVERVIEW_SCOPE3_TEXT.openResults}</button></li>}
         </ul>
+        {(improve.length > 0 || evidence.checking > 0) && <><p className="nv-attn-label">Can be improved</p><p className="nv-subtle" style={{ marginTop: 0 }}>{OVERVIEW_SCOPE3_TEXT.improveNote}</p><ul className="nv-list">
+          {improve.map(item => <li key={item.key}><span className="nv-list__main"><span className="nv-list__title">{item.title}</span>{canManage && <><br /><span className="nv-subtle">{item.detail}</span></>}</span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${item.key === "partial" ? "See" : canManage ? "Open" : "View"}: ${item.title}`} onClick={() => onNavigate(item.key === "partial" ? "results" : "collection")}>{item.key === "partial" ? "See" : canManage ? "Open" : "View"}</button></li>)}
+          {evidence.checking > 0 && <li><span className="nv-list__main"><span className="nv-list__title">{plural(evidence.checking, "file")} waiting for quarantine review</span><br /><span className="nv-subtle">You can keep working; files can be downloaded once cleared.</span></span></li>}
+        </ul></>}
       </div>
       <div className="nv-card nv-card--flat" style={{ margin: 0 }}>
         <h2 className="nv-h3">Your records</h2>

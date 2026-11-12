@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- The injected hook harness runs the actual workspace component without a browser DOM. */
 import { expect, test } from "bun:test"
 import { computeJourneyStatus } from "@/lib/journey-status"
+import { computeReadiness } from "@/lib/readiness"
 import { MENU_SHEET_ID, MENU_TEXT } from "./MenuSheet"
 import { activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery, parseViewHash, viewHash } from "@/lib/view-route"
 
@@ -61,9 +62,9 @@ function harness(initialHash: string, initialState: unknown = null, role = "owne
   const window = { location, history, confirm: (text: string) => { confirms.push(text); return confirmAnswer }, scrollTo() {}, setTimeout: () => 1, clearTimeout() {}, addEventListener(name: string, fn: () => void) { listeners.set(name, fn) }, removeEventListener(name: string) { listeners.delete(name) } }
   const body = {}, document = { title: "", body, activeElement: body }
   const h = (type: unknown, props: Record<string, any> | null, ...children: any[]): Node => ({ type, props: props ?? {}, children })
-  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "activityListHash", "canonicalViewHash", "DEFAULT_ACTIVITY_LIST_QUERY", "parseActivityListQuery", "loadJourneyStatus", "MENU_SHEET_ID", "MENU_TEXT", ...componentNames, script)
+  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "activityListHash", "canonicalViewHash", "DEFAULT_ACTIVITY_LIST_QUERY", "parseActivityListQuery", "loadJourneyStatus", "MENU_SHEET_ID", "MENU_TEXT", "computeReadiness", ...componentNames, script)
   const Workspace = factory(useCallback, useEffect, useRef, useState, window, document, { Fragment: "fragment" }, h, parseViewHash, viewHash, activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery,
-    (_workspaceId: string, actor: { signal: AbortSignal }) => new Promise((resolve, reject) => loads.push({ resolve, reject, signal: actor.signal })), MENU_SHEET_ID, MENU_TEXT,
+    (_workspaceId: string, actor: { signal: AbortSignal }) => new Promise((resolve, reject) => loads.push({ resolve, reject, signal: actor.signal })), MENU_SHEET_ID, MENU_TEXT, computeReadiness,
     ...componentNames.map(name => components[name])) as (props: unknown) => Node
   const actor = { userId: "11111111-1111-4111-8111-111111111111", role }
   let signOuts = 0
@@ -102,7 +103,10 @@ test("a failed progress refresh hides prior status from Overview, navigation and
   await app.settle()
   expect(app.child("JourneyHome").props.status).toBeNull()
   expect(app.child("JourneyHome").props.error).toBe("Progress service unavailable")
-  expect(app.child("JourneyNav").props.status).toBeNull()
+  // WO-04b: the navigation, the Overview and Ask read one readiness, which says "Couldn't check" (never stale counts).
+  expect(app.child("JourneyNav").props.readiness).toEqual({ state: "failed", message: "Progress service unavailable" })
+  expect(app.child("JourneyHome").props.readiness).toEqual({ state: "failed", message: "Progress service unavailable" })
+  expect(app.child("AskNeuvetra").props.readiness).toEqual({ state: "failed", message: "Progress service unavailable" })
   expect(app.child("AskNeuvetra").props.status).toBeNull()
   expect(app.child("AskNeuvetra").props.statusFailed).toBe(true)
 })

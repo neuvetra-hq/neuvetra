@@ -164,7 +164,7 @@ function latest(slot: { current: AbortController | null }, outer?: AbortSignal):
   return controller.signal
 }
 
-export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetryCoverage, canManage, onNavigate, onFix }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; coverage: Coverage; onRetryCoverage: () => void; canManage: boolean; onNavigate: (view: JourneyView) => void; onFix: (recordId: string) => void }) {
+export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetryCoverage, canManage, onNavigate, onFix, onScope3Change }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; coverage: Coverage; onRetryCoverage: () => void; canManage: boolean; onNavigate: (view: JourneyView) => void; onFix: (recordId: string) => void; onScope3Change?: (state: Scope3State) => void }) {
   // One reducer owns results, error and busy: a failed load or reload clears earlier figures (Codex review of PR #7).
   const [{ results, error, busy }, dispatch] = useReducer(resultsReducer, INITIAL_RESULTS_STATE)
   const [showReport, setShowReport] = useState(false)
@@ -203,6 +203,8 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
     }
   }, [workspaceId])
   useEffect(() => { const controller = new AbortController(); queueMicrotask(() => { void loadScope3(controller.signal) }); return () => controller.abort() }, [loadScope3])
+  // WO-04b: the workspace's readiness uses this screen's Scope 3 answer while Results is shown (no second request).
+  useEffect(() => { onScope3Change?.(scope3) }, [scope3, onScope3Change])
   useEffect(() => { if (!showReport) return; document.getElementById("draft-report")?.scrollIntoView({ behavior: "smooth", block: "start" }) }, [showReport])
 
   const composition = useMemo(() => {

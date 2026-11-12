@@ -3,15 +3,15 @@
 // review date, and is still a modal that closes on Escape.
 import { expect, test } from "bun:test"
 import * as help from "@/lib/help-content"
-import { progressAnswer } from "@/lib/journey-status"
+import * as readinessModule from "@/lib/readiness"
 import { harness, loadComponent } from "./component-harness"
 
 async function drawer(status: any, statusFailed = false) {
   const listeners: Record<string, (event: any) => void> = {}
   let closed = 0
-  const api = { ...help, progressAnswer, Icon: () => null, document: { activeElement: null, addEventListener: (name: string, fn: any) => { listeners[name] = fn }, removeEventListener() {} }, window: { setTimeout: () => 0 } }
+  const api = { ...help, ...readinessModule, Icon: () => null, document: { activeElement: null, addEventListener: (name: string, fn: any) => { listeners[name] = fn }, removeEventListener() {} }, window: { setTimeout: () => 0 } }
   const make = await loadComponent("./AskNeuvetra.tsx", "AskNeuvetra", api)
-  const app = harness(make, () => ({ open: true, onClose: () => { closed++ }, panel: "home", status, statusFailed, onNavigate: () => {} }))
+  const app = harness(make, () => ({ open: true, onClose: () => { closed++ }, panel: "home", status, statusFailed, readiness: readinessModule.computeReadiness({ status: status?.setup ? status : null, statusFailed, scope3: { state: "off" } }), onNavigate: () => {} }))
   await app.settle()
   const ask = async (question: string) => { app.nodes().find(node => node.type === "input")!.props.onChange({ target: { value: question } }); await app.settle(); app.nodes().find(node => node.type === "form")!.props.onSubmit({ preventDefault() {} }); await app.settle() }
   return { app, ask, listeners, closed: () => closed }

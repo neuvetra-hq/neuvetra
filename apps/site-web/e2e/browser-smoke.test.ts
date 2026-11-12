@@ -100,6 +100,16 @@ async function focusUntil(page: Page, done: Promise<unknown>, timeoutMs = 25_000
   await result
 }
 
+/** The address a request was made from (which visit fired it). */
+function visitOf(page: Page) { return new URL(page.url()).hash }
+/** WO-04b: waits until the Overview has checked Scope 1, 2 and 3, and returns its open items (keys) and its summary line. */
+async function overviewChecked(page: Page) {
+  await page.locator("[data-readiness-summary]").waitFor({ timeout: 30_000 })
+  await page.locator("li[data-readiness-item^='scope3:']").first().waitFor({ timeout: 60_000 })
+  const items = await page.locator("li[data-readiness-item]").evaluateAll(rows => rows.map(row => row.getAttribute("data-readiness-item")!))
+  return { items, summary: await page.locator("[data-readiness-summary]").innerText() }
+}
+
 /** Waits until the Activity list has loaded its saved records. */
 async function activityListLoaded(page: Page) {
   await headingIs(page, ACTIVITY_LIST_HEADING)
@@ -193,8 +203,8 @@ suite("site-web browser smoke (E2E-01)", () => {
 
   journey("with Scope 3 on, the Overview and navigation show no false ✓", { signedInAs: "owner" }, async ({ page }) => {
     await page.goto("/#/overview")
-    // The Scope 3 row appears only once progress has loaded, so every check below sees the loaded state.
-    await page.getByText("Scope 3 to-do: see Results").waitFor()
+    // WO-04b: wait until Scope 3 has been checked too (its items are in the list), so every check below sees the loaded state.
+    await overviewChecked(page)
     expect(await page.locator(".nv-journey__step[data-state=done]").count()).toBe(0)
     expect(await page.locator(".nv-navitem__icon--done").count()).toBe(0)
     // The check mark icon's path, anywhere in the journey steps or the navigation.
@@ -202,6 +212,79 @@ suite("site-web browser smoke (E2E-01)", () => {
     const text = await page.locator("body").innerText()
     for (const banned of ["(done)", "Draft ready", "Nothing is flagged", "Complete ·"]) expect(text).not.toContain(banned)
   })
+
+  journey("readiness (WO-04b): the Overview, side navigation, Menu sheet, Results and Ask agree, and Scope 3 is requested once per visit", { signedInAs: "owner" }, async ({ page }) => {
+    const scope3Requests: string[] = []
+    page.on("request", request => { if (new URL(request.url()).pathname.endsWith("/results/scope3")) scope3Requests.push(visitOf(page)) })
+    await page.goto("/#/overview")
+    // Scope 1 and 2 first; the Scope 3 part says "Checking…" (never a count of zero) until its one request answers.
+    const early = await page.locator("nav.nv-sidenav .nv-navitem__meta").allInnerTexts()
+    for (const meta of early) expect(meta).not.toMatch(/\b0 (open|block|waiting)|nothing open/)
+    const { items, summary } = await overviewChecked(page)
+    await page.waitForTimeout(1_000)
+    expect(scope3Requests).toEqual(["#/overview"])
+    const steps = await page.locator(".nv-journey__step .nv-journey__meta").allInnerTexts()
+    const side = await page.locator("nav.nv-sidenav .nv-navitem__meta").allInnerTexts()
+    // Sidebar: Overview (next step), S1, S2, S3 — the same words as the Overview's steps.
+    expect(side.slice(1, 4)).toEqual([steps[0]!, steps[1]!, steps[3]!])
+    expect(side[0]).toBe(await page.locator("[data-readiness-next]").innerText())
+    const s3 = /Draft results available · (\d+) open · (\d+|none) blocks? internal approval/.exec(side[3]!)
+    expect(s3).not.toBeNull()
+    expect(Number(s3![1])).toBe(items.length)
+    // The Scope 3 part of the count is the Results to-do's own count, and its blocking count is the approval count.
+    const parts = /(\d+) open items · (\d+) in Scope 1 and 2 · (\d+) in Scope 3 .* · (\d+) blocks? internal approval/.exec(summary)!
+    expect(Number(parts[1])).toBe(items.length)
+    expect(Number(parts[2]) + Number(parts[3])).toBe(items.length)
+    expect(items.filter(key => key.startsWith("scope3:")).length).toBe(Number(parts[3]))
+    expect(parts[4]).toBe(s3![2])
+    // Ask lists the same items in the same order.
+    await page.getByRole("button", { name: "Ask a question" }).click()
+    await page.getByRole("button", { name: "What’s left for me to do?" }).click()
+    const answer = await page.locator(".nv-msg--bot").last().locator("p").allInnerTexts()
+    const titles = await page.locator("li[data-readiness-item] .nv-list__title").allInnerTexts()
+    const numbered = answer.filter(line => /^\d+\. /.test(line))
+    expect(numbered.length).toBe(titles.length)
+    titles.forEach((title, index) => expect(numbered[index]!.startsWith(`${index + 1}. `) && (numbered[index]!.endsWith(` — ${title}.`) || numbered[index]!.endsWith(` — ${title} (blocks internal approval).`))).toBe(true))
+    await page.keyboard.press("Escape")
+    // Results: the to-do chip shows the same Scope 3 numbers, and its own request is the only one on this visit.
+    await page.locator("nav.nv-sidenav").getByRole("button", { name: /Results & report/ }).click()
+    await page.getByText(new RegExp(`^${parts[3]} to do · ${parts[4]} blocks? approval$`)).waitFor({ timeout: 30_000 })
+    await page.waitForTimeout(1_000)
+    expect(scope3Requests).toEqual(["#/overview", "#/results"])
+    await page.waitForFunction(text => document.querySelectorAll("nav.nv-sidenav .nv-navitem__meta")[3]?.textContent === text, side[3]!)
+    // The Menu sheet (below 1080 px) holds the same lines.
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.getByRole("button", { name: "Menu" }).click()
+    expect((await page.locator(".nv-sheetnav .nv-navitem__meta").allInnerTexts()).slice(1, 4)).toEqual(side.slice(1, 4))
+  }, 90_000)
+
+  journey("readiness (WO-04b): each next-step action opens its route, by keyboard at 390 and 1360 px, with focus on the page heading", { signedInAs: "admin", width: 390, height: 844 }, async ({ page }) => {
+    for (const [width, height] of [[390, 844], [1360, 900]] as const) {
+      await page.setViewportSize({ width, height })
+      await page.goto("/#/overview")
+      const { items } = await overviewChecked(page)
+      // The next step's action, and the first item of each kind of target (a record, the spend import, setup, Activity and
+      // Results). Each visit costs about a dozen requests, so not every item is opened (the server allows 300 a minute).
+      expect(items.length).toBeGreaterThan(0)
+      const targets = await page.locator("[data-readiness-target]").evaluateAll(buttons => buttons.map(button => [button.getAttribute("data-readiness-target")!, button.getAttribute("data-readiness-action")!] as const))
+      const actions = ["next", ...new Map(targets.toReversed()).values()]
+      expect(new Set(targets.map(([target]) => target))).toEqual(new Set(["record", "spend", "setup", "results", "collection"]))
+      for (const action of actions) {
+        if (action !== actions[0]) { await page.goto("/#/overview"); await overviewChecked(page) }
+        const button = page.locator(`[data-readiness-action="${action}"]`)
+        await button.focus()
+        await page.keyboard.press("Enter")
+        await page.waitForFunction(() => !/^#\/overview/.test(window.location.hash))
+        const spend = action.startsWith("scope3:spend:")
+        if (spend) await page.waitForFunction(() => document.activeElement?.closest("#spend-import") !== null, undefined, { timeout: 20_000 })
+        else await page.waitForFunction(() => document.activeElement?.tagName === "H1" && document.activeElement.getClientRects().length > 0, undefined, { timeout: 20_000 })
+        const hash = await page.evaluate(() => window.location.hash)
+        expect(hash).toMatch(/^#\/(setup|activity|results)/)
+        // The spend import's grouped review takes focus by design (bug hunt C-06); every other action lands on the h1.
+        if (!spend) expect(await page.evaluate(() => (document.activeElement as HTMLElement).innerText.length > 0)).toBe(true)
+      }
+    }
+  }, 180_000)
 
   test("record view (WO-06): a click and the keyboard open a record at its own address, and Back returns to the list", async () => {
     for (const [mode, width, height] of [["click", 1360, 900], ["keyboard", 390, 844]] as const) {
