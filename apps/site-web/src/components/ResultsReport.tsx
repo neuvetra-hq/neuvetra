@@ -164,7 +164,7 @@ function latest(slot: { current: AbortController | null }, outer?: AbortSignal):
   return controller.signal
 }
 
-export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetryCoverage, canManage, onNavigate, onFix, onScope3Change }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; coverage: Coverage; onRetryCoverage: () => void; canManage: boolean; onNavigate: (view: JourneyView) => void; onFix: (recordId: string) => void; onScope3Change?: (state: Scope3State) => void }) {
+export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetryCoverage, canManage, onNavigate, onFix, onScope3Change, scope3Reload = 0 }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; coverage: Coverage; onRetryCoverage: () => void; canManage: boolean; onNavigate: (view: JourneyView) => void; onFix: (recordId: string) => void; onScope3Change?: (state: Scope3State) => void; scope3Reload?: number }) {
   // One reducer owns results, error and busy: a failed load or reload clears earlier figures (Codex review of PR #7).
   const [{ results, error, busy }, dispatch] = useReducer(resultsReducer, INITIAL_RESULTS_STATE)
   const [showReport, setShowReport] = useState(false)
@@ -203,6 +203,9 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
     }
   }, [workspaceId])
   useEffect(() => { const controller = new AbortController(); queueMicrotask(() => { void loadScope3(controller.signal) }); return () => controller.abort() }, [loadScope3])
+  // WO-04c: the workspace's Try again (Ask's, while Results is shown) reloads this screen's Scope 3 answer: one request.
+  const reloadSeen = useRef(scope3Reload)
+  useEffect(() => { if (scope3Reload === reloadSeen.current) return; reloadSeen.current = scope3Reload; queueMicrotask(() => { void loadScope3() }) }, [scope3Reload, loadScope3])
   // WO-04b: the workspace's readiness uses this screen's Scope 3 answer while Results is shown (no second request).
   useEffect(() => { onScope3Change?.(scope3) }, [scope3, onScope3Change])
   useEffect(() => { if (!showReport) return; document.getElementById("draft-report")?.scrollIntoView({ behavior: "smooth", block: "start" }) }, [showReport])
@@ -250,7 +253,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
     </section>
   }
   const attentionRows = results.records.filter(needsWork)
-  const scope3Attention = scope3.data ? (() => { const todos = scope3Todos(scope3.data); return { total: todos.length, blocking: todos.filter(item => item.blocking).length } })() : null
+  const scope3Attention = scope3.data ? (() => { const todos = scope3Todos(scope3.data); return { total: todos.length, blocking: todos.filter(item => item.blocking).length, confirm: todos.filter(item => item.toConfirm).length } })() : null
   // BF2: the banner names the two kinds separately, so it agrees with the header (which counts partly calculated records
   // as calculated): records not counted yet, and records only partly calculated.
   // BF-01 (count mode): a counted possible duplicate needs attention but is neither uncounted nor partly calculated.
@@ -315,7 +318,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
       </div>
       {attentionRows.length > 0 && filter === "all" && <div className="nv-notice nv-notice--warn"><Icon name="alert" /><p>{[notCountedRows ? `${plural(notCountedRows, "record isn’t", "records aren’t")} counted yet` : "", partlyRows ? `${plural(partlyRows, "record is", "records are")} only partly calculated` : "", duplicateRows ? `${plural(duplicateRows, "record is", "records are")} counted but may repeat another record` : ""].filter(Boolean).join(" and ")}.{canManage ? ` Fix ${attentionRows.length === 1 ? "it" : "them"} to complete your totals.` : ""}</p></div>}
       {/* Round 2 lane D (UX-2): Scope 3 items are listed in their own to-do list; this names them so "Needs attention" isn't silent about them. */}
-      {scope3Attention && scope3Attention.total > 0 && <div className="nv-notice nv-notice--info"><Icon name="info" /><p>{SCOPE3_ATTENTION_LINK_TEXT.line(scope3Attention.total, scope3Attention.blocking)} <button type="button" className="nv-link" onClick={() => document.getElementById("scope3-todo")?.scrollIntoView({ block: "start" })}>{SCOPE3_ATTENTION_LINK_TEXT.go}</button></p></div>}
+      {scope3Attention && scope3Attention.total > 0 && <div className="nv-notice nv-notice--info"><Icon name="info" /><p>{SCOPE3_ATTENTION_LINK_TEXT.line(scope3Attention.total, scope3Attention.blocking, scope3Attention.confirm)} <button type="button" className="nv-link" onClick={() => document.getElementById("scope3-todo")?.scrollIntoView({ block: "start" })}>{SCOPE3_ATTENTION_LINK_TEXT.go}</button></p></div>}
       {visible.length === 0 ? <p className="nv-muted">No record needs attention.</p> : visible.map(row => {
         const status = rowStatus(row), reasons = rowReasons(row), kg = rowKg(row)
         return <div className="nv-record-card" key={row.recordId}>

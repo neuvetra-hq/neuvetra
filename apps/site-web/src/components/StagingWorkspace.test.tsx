@@ -62,7 +62,10 @@ function harness(initialHash: string, initialState: unknown = null, role = "owne
   }
   let confirmAnswer = true
   const confirms: string[] = []
-  const window = { location, history, confirm: (text: string) => { confirms.push(text); return confirmAnswer }, scrollTo() {}, setTimeout: () => 1, clearTimeout() {}, addEventListener(name: string, fn: () => void) { listeners.set(name, fn) }, removeEventListener(name: string) { listeners.delete(name) } }
+  // WO-04c: timers are kept (never run on their own) so a test can run the ones of one delay, as time passing would.
+  const timers = new Map<number, { fn: () => void; ms: number }>()
+  let timerId = 0
+  const window = { location, history, confirm: (text: string) => { confirms.push(text); return confirmAnswer }, scrollTo() {}, setTimeout: (fn: () => void, ms = 0) => { timers.set(++timerId, { fn, ms }); return timerId }, clearTimeout(id: number) { timers.delete(id) }, addEventListener(name: string, fn: () => void) { listeners.set(name, fn) }, removeEventListener(name: string) { listeners.delete(name) } }
   const body = {}, document = { title: "", body, activeElement: body }
   const h = (type: unknown, props: Record<string, any> | null, ...children: any[]): Node => ({ type, props: props ?? {}, children })
   const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "activityListHash", "canonicalViewHash", "DEFAULT_ACTIVITY_LIST_QUERY", "parseActivityListQuery", "loadJourneyStatus", "MENU_SHEET_ID", "MENU_TEXT", "computeReadiness", "subscribeWrites", "loadScope3ReadinessLazy", "scope3ItemsLazy", ...componentNames, script)
@@ -93,7 +96,10 @@ function harness(initialHash: string, initialState: unknown = null, role = "owne
   /** A Back or Forward to an entry with this address and state. */
   async function pop(hash: string, state: unknown = null) { location.hash = hash; history.state = state; listeners.get("popstate")!(); await settle() }
   const write = async (path: string) => { for (const listener of [...writeListeners]) listener({ userId: actor.userId, path }); await settle() }
-  return { scope3Loads, write, signOuts: () => signOuts, settle, child, text, nodes, loads, location, listeners, render, history, entries, pop, confirms, answer: (value: boolean) => { confirmAnswer = value } }
+  /** Runs the pending timers of one delay (in the order they were set), then settles. */
+  const elapse = async (ms: number) => { for (const [id, timer] of [...timers]) if (timer.ms === ms) { timers.delete(id); timer.fn() } await settle() }
+  const pendingTimers = (ms: number) => [...timers.values()].filter(timer => timer.ms === ms).length
+  return { scope3Loads, write, elapse, pendingTimers, signOuts: () => signOuts, settle, child, text, nodes, loads, location, listeners, render, history, entries, pop, confirms, answer: (value: boolean) => { confirmAnswer = value } }
 }
 
 test("a failed progress refresh hides prior status from Overview, navigation and Ask", async () => {
@@ -419,6 +425,7 @@ test("a completed write in the workspace drops the visit's Scope 3 answer, shows
   await app.write("/workspace-api/workspace/44444444-4444-4444-8444-444444444444/collection/activities/x")
   expect(app.scope3Loads).toHaveLength(1)
   await app.write(`/workspace-api/workspace/${workspace}/collection/activities/29500000-0000-4000-8000-000000000001`)
+  await app.elapse(400)
   expect(app.scope3Loads).toHaveLength(2)
   expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
   const item = { key: "scope3:category:6:screening_conflict", group: "scope3-decision", scope: "3", title: "Category 6: Screening conflict", detail: "", target: { type: "view", view: "setup" }, action: "Change the screening", blocking: true }
@@ -428,12 +435,95 @@ test("a completed write in the workspace drops the visit's Scope 3 answer, shows
   expect([readiness.scope3, readiness.open.scope3, readiness.open.blocking]).toEqual(["ready", 1, 1])
   // A save on setup does the same; while the new answer is pending, an older one arriving late is ignored.
   await app.write(`/workspace-api/workspace/${workspace}/setup`)
+  await app.elapse(400)
   expect(app.scope3Loads).toHaveLength(3)
   expect(app.scope3Loads[2]!.signal.aborted).toBe(false)
   await app.write(`/workspace-api/workspace/${workspace}/setup`)
+  await app.elapse(400)
   expect(app.scope3Loads).toHaveLength(4)
   expect(app.scope3Loads[2]!.signal.aborted).toBe(true)
   app.scope3Loads[2]!.resolve([])
   await app.settle()
   expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
+})
+
+// WO-04c (QA follow-up 5 of PR #51): writes in a burst (a spend import is a file upload, then the import) cause one recheck,
+// about 400 ms after the last write, while every label says "Checking…" from the first write on.
+test("a burst of writes shows Checking… at once and rechecks Scope 3 once, 400 ms after the last write", async () => {
+  const workspace = "33333333-3333-4333-8333-333333333333"
+  const app = harness("#/activity")
+  await app.settle()
+  app.loads[0]!.resolve(computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true, scope3: true }))
+  await app.settle()
+  app.scope3Loads[0]!.resolve([])
+  await app.settle()
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("ready")
+  await app.write(`/workspace-api/workspace/${workspace}/collection/evidence`)
+  // At the first write: Checking… everywhere, the old request (none running) dropped, nothing requested yet.
+  for (const name of ["JourneyNav", "AskNeuvetra"]) expect(app.child(name).props.readiness.scope3).toBe("checking")
+  expect(app.scope3Loads).toHaveLength(1)
+  await app.write(`/workspace-api/workspace/${workspace}/scope3/spend-imports?evidenceId=x`)
+  // The second write restarts the wait: one timer, still no request.
+  expect(app.pendingTimers(400)).toBe(1)
+  expect(app.scope3Loads).toHaveLength(1)
+  await app.elapse(400)
+  expect(app.scope3Loads).toHaveLength(2)
+  await app.elapse(400)
+  expect(app.scope3Loads).toHaveLength(2)
+})
+
+test("a recheck still waiting when the user opens another view is dropped: the new visit's request is the only one", async () => {
+  const workspace = "33333333-3333-4333-8333-333333333333"
+  const app = harness("#/activity")
+  await app.settle()
+  app.loads[0]!.resolve(computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true, scope3: true }))
+  await app.settle()
+  app.scope3Loads[0]!.resolve([])
+  await app.settle()
+  await app.write(`/workspace-api/workspace/${workspace}/setup`)
+  app.child("JourneyNav").props.onNavigate("home")
+  await app.settle()
+  app.loads.at(-1)!.resolve(computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true, scope3: true }))
+  await app.settle()
+  expect(app.scope3Loads).toHaveLength(2)
+  await app.elapse(400)
+  expect(app.scope3Loads).toHaveLength(2)
+})
+
+// WO-04c (QA follow-up 4): Ask's Try again in the failed state makes exactly one Scope 3 request; on Results, the screen's own.
+test("Try again from Ask makes one Scope 3 request, or on Results asks the screen to reload its Scope 3 answer", async () => {
+  const app = harness("#/activity")
+  await app.settle()
+  app.loads[0]!.resolve(computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true, scope3: true }))
+  await app.settle()
+  app.scope3Loads[0]!.reject(new Error("Scope 3 results are unavailable right now."))
+  await app.settle()
+  expect(app.child("AskNeuvetra").props.readiness.scope3).toBe("failed")
+  app.child("AskNeuvetra").props.onRetryScope3()
+  await app.settle()
+  expect(app.scope3Loads).toHaveLength(2)
+  expect(app.child("AskNeuvetra").props.readiness.scope3).toBe("checking")
+  app.child("JourneyNav").props.onNavigate("results")
+  await app.settle()
+  const before = app.scope3Loads.length
+  expect(app.child("ResultsReport").props.scope3Reload).toBe(0)
+  app.child("AskNeuvetra").props.onRetryScope3()
+  await app.settle()
+  expect(app.child("ResultsReport").props.scope3Reload).toBe(1)
+  expect(app.scope3Loads).toHaveLength(before)
+})
+
+// WO-04c: Scope 3 assessment and report writes now notify too; on Results they cause no second request (the screen reloads its own).
+test("a write while Results is shown sets no recheck and makes no workspace Scope 3 request", async () => {
+  const workspace = "33333333-3333-4333-8333-333333333333"
+  const app = harness("#/results")
+  await app.settle()
+  app.loads[0]!.resolve(computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true, scope3: true }))
+  await app.settle()
+  expect(app.scope3Loads).toHaveLength(0)
+  await app.write(`/workspace-api/workspace/${workspace}/scope3/assessments/6`)
+  await app.write(`/workspace-api/workspace/${workspace}/scope3/reports`)
+  expect(app.pendingTimers(400)).toBe(0)
+  await app.elapse(400)
+  expect(app.scope3Loads).toHaveLength(0)
 })

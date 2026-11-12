@@ -160,7 +160,7 @@ export function Scope3Panel({ state, canManage, onFix, onRetry, reports, onNavig
   if (!state.data) return state.busy ? <div className="nv-card nv-card--flat"><h2 className="nv-h2">Scope 3</h2><p className="nv-muted" role="status">Calculating Scope 3…</p></div> : null
   const results = state.data, coverage = results.coverage
   const total = coverage.knownSourceSubtotal
-  const todos = scope3Todos(results), blocking = todos.filter(item => item.blocking).length
+  const todos = scope3Todos(results), blocking = todos.filter(item => item.blocking).length, confirm = todos.filter(item => item.toConfirm).length
   // UX-23: an empty company (nothing screened, no records) gets one call to action and no empty CSV.
   const empty = results.records.length === 0 && coverage.categories.every(row => row.status === "not_screened")
   const closed = scope3ClosedLines(results.records)
@@ -192,7 +192,7 @@ export function Scope3Panel({ state, canManage, onFix, onRetry, reports, onNavig
   const kinds = [...new Set(results.records.map(row => row.kind))].sort((a, b) => kindLabel(a).localeCompare(kindLabel(b), "en"))
   const setFilter = (change: Partial<Scope3RecordFilter>) => { ui?.setFilter({ ...filter, ...change }); ui?.setLimit(RECORD_PAGE) }
   const todoItem = (item: Scope3TodoItem) => <li key={item.key} className="s3-todo__item">
-    <div className="s3-todo__main"><span className="s3-todo__title">{item.title}</span>{item.blocking ? <span className="nv-chip nv-chip--warn">{SCOPE3_TODO_TEXT.blocks}</span> : null}
+    <div className="s3-todo__main"><span className="s3-todo__title">{item.title}</span>{item.blocking ? <span className="nv-chip nv-chip--warn">{SCOPE3_TODO_TEXT.blocks}</span> : null}{item.toConfirm ? <span className="nv-chip nv-chip--info">{SCOPE3_TODO_TEXT.toConfirm}</span> : null}
       <ul className="s3-todo__reasons">{item.reasons.map(reason => <li key={reason}>{reason}</li>)}</ul></div>
     <div className="s3-todo__actions">{item.actions.map((action, i) => actionButton(action, item.title, `${item.key}-${i}`))}</div>
   </li>
@@ -216,7 +216,7 @@ export function Scope3Panel({ state, canManage, onFix, onRetry, reports, onNavig
       {/* UX-2: every held, pending or conflicting line and every open category step, each with its action. */}
       <section className="s3-todo" id="scope3-todo" aria-labelledby="scope3-todo-title">
         <div className="s3-todo__head"><h3 className="nv-h3" id="scope3-todo-title">{SCOPE3_TODO_TEXT.heading}</h3>
-          <span className={`nv-chip nv-chip--${blocking ? "warn" : todos.length ? "info" : "ready"}`}>{todos.length ? SCOPE3_TODO_TEXT.count(todos.length, blocking) : SCOPE3_TODO_TEXT.count(0, 0)}</span></div>
+          <span className={`nv-chip nv-chip--${blocking ? "warn" : todos.length ? "info" : "ready"}`}>{todos.length ? SCOPE3_TODO_TEXT.count(todos.length, blocking, confirm) : SCOPE3_TODO_TEXT.count(0, 0)}</span></div>
         <p className="nv-muted">{SCOPE3_TODO_TEXT.intro}</p>
         {todos.length === 0 ? <p>{SCOPE3_TODO_TEXT.none}</p> : todoGroups.map(group => <div key={group.category} className="s3-todo__group" id={`scope3-todo-cat-${group.category}`}>
           <h4 className="s3-todo__category">{SCOPE3_TODO_TEXT.category(group.category, categoryOf.get(group.category)?.title ?? "")}</h4>
@@ -231,7 +231,7 @@ export function Scope3Panel({ state, canManage, onFix, onRetry, reports, onNavig
         return <tr key={row.category}><td data-label="Category">{row.category}. {row.title}{row.proposedMandatory ? " *" : ""}</td>
           <td data-label="Status"><span className={`nv-chip nv-chip--${TONE[row.status] ?? "muted"}`}>{statusText(row.status)}</span>
             {/* UX-2: reasons per record, each naming its record, folded behind the count. */}
-            {lines.length ? <details className="s3-issues"><summary>{SCOPE3_ACTION_TEXT.todo(lines.length)}</summary><ul>{lines.map(item => <li key={item.key}><strong>{item.title}:</strong> {item.reasons.join(" ")}</li>)}</ul></details>
+            {lines.length ? <details className="s3-issues"><summary>{SCOPE3_ACTION_TEXT.todo(lines.length, lines.filter(item => item.toConfirm).length)}</summary><ul>{lines.map(item => <li key={item.key}><strong>{item.title}:</strong> {item.reasons.join(" ")}</li>)}</ul></details>
               : row.reasons.length ? <span className="nv-subtle" style={{ display: "block" }}>{row.reasons.map(reasonText).join(" ")}</span> : null}
             {SCOPE3_CONFLICT_STATUSES.has(row.status) ? <span className="nv-subtle" style={{ display: "block" }}>{SCOPE3_CONFLICT_TEXT_R3D.detail(row.screening.decision)}</span> : null}
             {scope3VisibleReviewFlags(row, coverage.categories).map(flag => <span key={flag} className="nv-subtle" style={{ display: "block" }}>{SCOPE3_REVIEW_FLAG_TEXT[flag] ?? flag}</span>)}

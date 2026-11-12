@@ -148,6 +148,12 @@ export interface Scope3TodoItem {
   lines?: number
   /** True when the item is one of decision 7's open issues (approval needs it resolved or acknowledged). */
   blocking: boolean
+  /**
+   * WO-04c: a counted possible duplicate with nothing else open (CEO ruling of 12 November 2026). It is listed "to confirm
+   * (counted)", not "to do": both records are in the total, and if they are different records nothing needs doing. The
+   * Overview lists exactly these items apart from its open items, so the two screens agree.
+   */
+  toConfirm?: boolean
   title: string
   /** The record the item is about (its source ID is in the title), or null for a category step. */
   recordId: string | null
@@ -199,7 +205,8 @@ export function scope3Todos(results: Scope3ResultsResponse): Scope3TodoItem[] {
     }
     const source = row.derivedFrom ? results.records.find(line => line.recordId === row.derivedFrom!.recordId && line.derivedFrom === null) : undefined
     const merged = source ? bySource.get(source.recordId) : undefined
-    if (merged) { if (!countedDuplicate) merged.reasons.push(SCOPE3_TODO_TEXT.alsoHolds([kindLabel(row.kind)])); continue }
+    // WO-04c: a held line joining a counted possible duplicate's item makes it a real to-do again.
+    if (merged) { if (!countedDuplicate) { merged.reasons.push(SCOPE3_TODO_TEXT.alsoHolds([kindLabel(row.kind)])); if (scope3LineNeedsAttention(state, category)) merged.toConfirm = false } continue }
     const reasons = [...(conflict ? [SCOPE3_TODO_TEXT.conflictLine(row.category)] : []), ...codes.map(reasonText),
       ...(state === "methodPending" ? [SCOPE3_TODO_TEXT.pendingLine] : state === "optionalPending" ? [SCOPE3_TODO_TEXT.optionalPendingLine] : []),
       // A derived line held for its source names that record; a pending one (no factor yet) has nothing to fix there.
@@ -212,7 +219,8 @@ export function scope3Todos(results: Scope3ResultsResponse): Scope3TodoItem[] {
         : !row.derivedFrom && (codes.includes("possible_duplicate_record") || countedDuplicate) ? [fix(SCOPE3_ACTION_TEXT.withdraw, [SCOPE3_WITHDRAW_CONTROL])]
         : [fix(row.derivedFrom ? SCOPE3_ACTION_TEXT.fixSource(row.sourceId) : SCOPE3_ACTION_TEXT.fix)]
     const item: Scope3TodoItem = { key: `line:${row.recordId}:${row.kind}`, category: row.category, kind: "line", blocking: (conflict || state === "inputNeeded") && issueOf(row.category),
-      title: SCOPE3_TODO_TEXT.lineTitle(kindLabel(row.kind), row.sourceId), recordId: row.recordId, reasons: [...new Set(reasons)], actions }
+      title: SCOPE3_TODO_TEXT.lineTitle(kindLabel(row.kind), row.sourceId), recordId: row.recordId, reasons: [...new Set(reasons)], actions,
+      ...(countedDuplicate && !scope3LineNeedsAttention(state, category) ? { toConfirm: true } : {}) }
     items.push(item)
     if (!row.derivedFrom) bySource.set(row.recordId, item)
   }

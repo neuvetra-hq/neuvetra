@@ -23,8 +23,10 @@ import type { Scope3ResultsResponse } from "./scope3-results-api"
 
 /** Where an item's action goes: a view, one record (its own address) or the spend import's grouped review at a tab. */
 export type ReadinessTarget = { type: "view"; view: Exclude<JourneyPanel, "home"> } | { type: "record"; recordId: string } | { type: "spend"; tab: SpendImportTab }
-  /** Checks Scope 3 again (the Overview's Try again), when its check failed. */
+  /** Checks Scope 3 again (the Overview's and Ask's Try again), when its check failed. */
   | { type: "retryScope3" }
+  /** WO-04c: one Scope 3 category's assessment, opened inline in the Results to-do. */
+  | { type: "assessment"; category: number }
 /**
  * "duplicate" (CEO ruling, 12 November 2026) is not an open group: a possible duplicate is counted and warned about, and when
  * the two records are really different there is nothing to do yet. It is listed to confirm, never counted in "N open" and
@@ -106,7 +108,12 @@ export const READINESS_TEXT = {
   s3NothingToCalculate: "Nothing to calculate yet",
   review: { title: "Review your draft results", action: "View results" },
   reviewBody: (scope3On: boolean) => `Nothing is waiting on you${scope3On ? " in Scope 1, 2 or 3" : ""}. Review the draft figures, then print or download the draft report. Figures are drafts from beta methods and have not been reviewed by an independent assurance provider.`,
-  openSummary: (total: number, scope12: number, scope3: number | null, blocking: number | null, scope3Duplicates = 0) => `${plural(total, "open item")}${scope3 === null ? "" : ` · ${scope12} in Scope 1 and 2 · ${scope3} in Scope 3 (${scope3Duplicates ? `Results’ Scope 3 to-do shows ${scope3 + scope3Duplicates}: these and ${plural(scope3Duplicates, "possible duplicate")} listed below to confirm` : `Results lists the same ${scope3} in its Scope 3 to-do`})`}${blocking ? ` · ${blocking} block${blocking === 1 ? "s" : ""} internal approval` : ""}`,
+  openSummary: (total: number, scope12: number, scope3: number | null, blocking: number | null, scope3Duplicates = 0) => `${plural(total, "open item")}${scope3 === null ? "" : ` · ${scope12} in Scope 1 and 2 · ${scope3} in Scope 3 (${scope3Duplicates ? resultsScope3Note(scope3, scope3Duplicates) : `Results lists the same ${scope3} in its Scope 3 to-do`})`}${blocking ? ` · ${blocking} block${blocking === 1 ? "s" : ""} internal approval` : ""}`,
+  /**
+   * WO-04c (QA follow-up 1 of PR #51): how Results' Scope 3 to-do counts the Scope 3 possible duplicates listed here. Shown
+   * whenever there is one, also when nothing is open, because Results lists them "to confirm (counted)".
+   */
+  resultsScope3Note: (scope3: number, duplicates: number) => resultsScope3Note(scope3, duplicates),
   /** While Scope 3 is checking or failed: the count covers Scope 1 and 2 so far (QA follow-up 1). */
   openSummaryPartial: (scope12: number, failed: boolean) => `${scope12 ? `${plural(scope12, "open item")} in Scope 1 and 2 so far` : "Nothing open in Scope 1 and 2"} · Scope 3 ${failed ? "couldn’t be checked, so its items aren’t counted" : "is still being checked"}`,
   duplicatesSummary: (count: number) => `${plural(count, "possible duplicate")} to confirm (both records are counted; not counted as open)`,
@@ -128,6 +135,43 @@ export const OVERVIEW_SCOPE3_TEXT = {
 } as const
 
 function plural(count: number, one: string, many = `${one}s`) { return `${count} ${count === 1 ? one : many}` }
+function resultsScope3Note(scope3: number, duplicates: number) {
+  return `Results’ Scope 3 to-do shows ${scope3 ? `the same ${scope3} to do and ` : ""}${duplicates} to confirm (counted): the possible duplicate${duplicates === 1 ? "" : "s"} listed below`
+}
+/** WO-04c: one side of a possible-duplicate pair (its site and period, in words, when known). */
+export interface DuplicateSide { id: string; label: string; sourceId: string; site?: string | null; period?: string | null }
+/**
+ * WO-04c (QA follow-up 2 of PR #51): a pair's title names both records so they can be told apart: "Natural gas · GAS-A and
+ * Natural gas · gas-a" when the names differ; otherwise each side adds what differs (site, period), or failing that its
+ * period and record ID.
+ */
+export function duplicatePairTitle(a: DuplicateSide, b: DuplicateSide | null): string {
+  const name = (side: DuplicateSide) => `${side.label} · ${side.sourceId}`
+  if (!b) return `${name(a)} and an earlier record`
+  if (name(a) !== name(b)) return `${name(a)} and ${name(b)}`
+  const differs = (key: "site" | "period") => Boolean(a[key] && b[key] && a[key] !== b[key])
+  const extra = (side: DuplicateSide) => {
+    const parts = [differs("site") ? side.site : null, differs("period") ? side.period : null].filter(Boolean) as string[]
+    return (parts.length ? parts : [side.period ?? null, `record ${side.id}`].filter(Boolean) as string[]).join(", ")
+  }
+  return `${name(a)} (${extra(a)}) and ${name(b)} (${extra(b)})`
+}
+/**
+ * WO-04c: the Overview's "What needs attention" line. Its parts are joined with " · " (QA follow-up 3); with Scope 3
+ * possible duplicates and nothing open it still says how Results counts them (follow-up 1).
+ */
+export function overviewSummary(readiness: Extract<Readiness, { state: "ready" }>, hasRecords: boolean): string {
+  const { items, duplicates, open } = readiness
+  const resolved = readiness.scope3 === "off" || readiness.scope3 === "ready"
+  const parts = [!resolved ? READINESS_TEXT.openSummaryPartial(open.scope12, readiness.scope3 === "failed")
+    : items.length ? READINESS_TEXT.openSummary(open.total, open.scope12, open.scope3, open.blocking, open.scope3Duplicates)
+      : !hasRecords ? "No records yet — start with the next step above"
+        : duplicates.length ? "Nothing is waiting on you" : OVERVIEW_SCOPE3_TEXT.nothingOpen]
+  if (duplicates.length) parts.push(READINESS_TEXT.duplicatesSummary(duplicates.length))
+  if (resolved && !items.length && open.scope3Duplicates) parts.push(resultsScope3Note(0, open.scope3Duplicates))
+  const text = parts.join(" · ")
+  return text.endsWith(".") ? text : `${text}.`
+}
 const view = (name: Exclude<JourneyPanel, "home">): ReadinessTarget => ({ type: "view", view: name })
 
 /** Scope 1 and 2 items from the journey status: records needing input or review, held records, setup answers and gaps. */
@@ -138,7 +182,7 @@ export function scope12Items(status: JourneyStatus): ReadinessItem[] {
   const items: ReadinessItem[] = []
   for (const row of records) {
     if (row.state === "input_needed" || row.state === "review_required") items.push({ key: `record:${row.id}`, group: "input", scope: "1-2", title: `${row.label} · ${row.sourceId}`, detail: row.reasons[0] ?? "More information is needed.", target: { type: "record", recordId: row.id }, action: manage ? "Fix" : "View", blocking: false })
-    else if (row.possibleDuplicate) items.push({ key: `duplicate:${row.id}`, group: "duplicate", scope: "1-2", title: `${row.label} · ${row.sourceId} and ${row.possibleDuplicateOther ? `${row.possibleDuplicateOther.label} · ${row.possibleDuplicateOther.sourceId}` : "an earlier record"}`, detail: `${row.possibleDuplicate} Both records are counted. If they are the same record, withdraw or correct one of them; if they are different records, nothing needs doing.`, target: { type: "record", recordId: row.id }, action: manage ? DUPLICATE_ACTION : "View", blocking: false })
+    else if (row.possibleDuplicate) items.push({ key: `duplicate:${row.id}`, group: "duplicate", scope: "1-2", title: duplicatePairTitle({ id: row.id, label: row.label, sourceId: row.sourceId, site: row.site, period: row.period ?? null }, row.possibleDuplicateOther ?? null), detail: `${row.possibleDuplicate} Both records are counted. If they are the same record, withdraw or correct one of them; if they are different records, nothing needs doing.`, target: { type: "record", recordId: row.id }, action: manage ? DUPLICATE_ACTION : "View", blocking: false })
   }
   for (const row of records) if (row.state === "held_period") items.push({ key: `held:${row.id}`, group: "held", scope: "1-2", title: `${row.label} · ${row.sourceId}`, detail: row.reasons[0] ?? "Outside the reporting period, so it isn’t counted.", target: view("setup"), action: manage ? "Open setup" : "View setup", blocking: false })
   for (const item of status.setup.missing) items.push({ key: `setup:${item.id}`, group: "setup", scope: "1-2", title: item.title, detail: `Company setup · ${item.detail}`, target: view("setup"), action: manage ? "Open" : "View", blocking: false })
@@ -227,7 +271,7 @@ function nextStep(status: JourneyStatus, items: ReadinessItem[], duplicates: Rea
 }
 
 /** The view an item's or the next step's action opens (the spend import and a record open on Activity). */
-export const targetView = (target: ReadinessTarget): JourneyPanel => target.type === "view" ? target.view : target.type === "retryScope3" ? "home" : "collection"
+export const targetView = (target: ReadinessTarget): JourneyPanel => target.type === "view" ? target.view : target.type === "retryScope3" ? "home" : target.type === "assessment" ? "results" : "collection"
 
 /** Answers the user's progress question from the same readiness as the Overview: the same items, in the same order. */
 export function progressAnswer(readiness: Readiness, improve: string[] = []): string[] {
@@ -239,11 +283,14 @@ export function progressAnswer(readiness: Readiness, improve: string[] = []): st
     readiness.items.forEach((item, index) => lines.push(`${index + 1}. ${READINESS_GROUP_TEXT[item.group]} — ${item.title}${item.blocking ? " (blocks internal approval)" : ""}.`))
   }
   if (readiness.duplicates.length) {
-    lines.push(`${READINESS_GROUP_TEXT.duplicate} — ${READINESS_TEXT.duplicatesSummary(readiness.duplicates.length)}:`)
+    // WO-04c: with nothing open, the line also says how Results' Scope 3 to-do counts them, as the Overview does.
+    const note = !readiness.items.length && readiness.open.scope3Duplicates ? ` · ${resultsScope3Note(0, readiness.open.scope3Duplicates)}` : ""
+    lines.push(`${READINESS_GROUP_TEXT.duplicate} — ${READINESS_TEXT.duplicatesSummary(readiness.duplicates.length)}${note}:`)
     readiness.duplicates.forEach(item => lines.push(`• ${item.title}.`))
   }
   if (readiness.scope3 === "checking") lines.push("Scope 3 is still being checked, so its open items aren’t listed yet. Ask again in a moment, or open Results & report.")
-  if (readiness.scope3 === "failed") lines.push("Scope 3 couldn’t be checked just now, so its open items aren’t listed. Open Results & report to see them, or try again from the Overview.")
+  // WO-04c (QA follow-up 4): Ask's own Try again below checks Scope 3 again.
+  if (readiness.scope3 === "failed") lines.push(`Scope 3 couldn’t be checked just now, so its open items aren’t listed. Use Try again below, or open Results & report to see them.`)
   if (improve.length) lines.push(`Can be improved (not counted as open): ${improve.join("; ")}.`)
   if (!readiness.items.length && !readiness.duplicates.length && (readiness.scope3 === "off" || readiness.scope3 === "ready")) lines.push("Nothing is waiting on you. Open Results & report to review the draft — it stays a draft until an independent reviewer checks it.")
   return lines

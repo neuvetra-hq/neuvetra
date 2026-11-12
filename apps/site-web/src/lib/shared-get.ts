@@ -36,6 +36,13 @@ export function subscribeWrites(listener: (write: CompletedWrite) => void): () =
   writeListeners.add(listener)
   return () => { writeListeners.delete(listener) }
 }
+/**
+ * WO-04c: tells the listeners about one completed write. `sharedFetch` calls it for its own writes; the Scope 3 assessment
+ * and report clients (their own fetch) call it too, so no view that depends on saved data can go stale.
+ */
+export function notifyWrite(write: CompletedWrite): void {
+  for (const listener of [...writeListeners]) { try { listener(write) } catch { /* a listener never breaks a write */ } }
+}
 
 /** fetch for one signed-in user: GETs shared and retried once on 429; writes clear the shared GETs. */
 /** WO-09: each request (a write, or the one shared GET) is limited by its kind's timeout and reported when slow. */
@@ -47,7 +54,7 @@ export async function sharedFetch(actor: { userId: string; signal?: AbortSignal 
     try {
       const response = await withRequestTimeout(kind, init.signal, signal => withRetry(path, { ...init, signal }, false))
       // WO-04b: a completed write tells the workspace, so readiness that depends on saved data (Scope 3) is checked again.
-      if (response.ok) for (const listener of [...writeListeners]) { try { listener({ userId: actor.userId, path }) } catch { /* a listener never breaks a write */ } }
+      if (response.ok) notifyWrite({ userId: actor.userId, path })
       return response
     } finally { clearSharedGets(actor.userId) }
   }

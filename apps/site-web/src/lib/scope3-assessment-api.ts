@@ -1,4 +1,5 @@
 import type { HostedWorkspaceActor } from "./workspace-api"
+import { notifyWrite } from "./shared-get"
 import { validateScope3AssessmentRecord, type Scope3Assessment, type Scope3AssessmentRecord, type Scope3AssessmentSaveInput } from "../../../../packages/neuvetra-database/src/scope3-assessment-contract"
 import { scope3SelectiveDownstreamExclusion, type Scope3SetupDecision } from "../../../../packages/neuvetra-database/src/scope3-coverage"
 import { provisionalFirstScope3Report } from "../../../../packages/neuvetra-database/src/scope3-deadline"
@@ -57,6 +58,8 @@ async function request(actor: HostedWorkspaceActor, path: string, body?: unknown
   actor.signal?.throwIfAborted()
   if (response.status === 401 || response.status === 403) actor.onUnauthorized?.(response.status)
   const value: unknown = await response.json().catch(() => null)
+  // WO-04c: a saved assessment can close a Scope 3 to-do item, so the workspace checks Scope 3 again.
+  if (response.ok && body !== undefined) notifyWrite({ userId: actor.userId, path })
   if (!response.ok) throw new Scope3AssessmentApiError(object(value) && typeof value.error === "string" ? value.error : "Scope 3 assessments are unavailable right now.", response.status, object(value) && typeof value.code === "string" ? value.code : null)
   return value
 }

@@ -268,20 +268,23 @@ suite("site-web browser smoke (E2E-01)", () => {
       expect(items.length).toBeGreaterThan(0)
       const targets = await page.locator("[data-readiness-target]").evaluateAll(buttons => buttons.map(button => [button.getAttribute("data-readiness-target")!, button.getAttribute("data-readiness-action")!] as const))
       const actions: string[] = ["next", ...new Map([...targets].reverse()).values()]
-      expect(new Set(targets.map(([target]) => target))).toEqual(new Set(["record", "spend", "setup", "results", "collection"]))
+      // WO-04c: "Add the assessment" opens its category on Results ("assessment"), so no item opens Results at the top.
+      expect(new Set(targets.map(([target]) => target))).toEqual(new Set(["record", "spend", "setup", "assessment", "collection"]))
       for (const action of actions) {
         if (action !== actions[0]) { await page.goto("/#/overview"); await overviewChecked(page) }
         const button = page.locator(`[data-readiness-action="${action}"]`)
         await button.focus()
         await page.keyboard.press("Enter")
         await page.waitForFunction(() => !/^#\/overview/.test(window.location.hash))
-        const spend = action.startsWith("scope3:spend:")
+        const spend = action.startsWith("scope3:spend:"), assessment = action.endsWith(":assessment_missing") || action.endsWith(":assessment_excluded")
         if (spend) await page.waitForFunction(() => document.activeElement?.closest("#spend-import") !== null, undefined, { timeout: 20_000 })
+        // WO-04c: the category's group in the Results to-do takes focus, with its assessment open.
+        else if (assessment) await page.waitForFunction(() => /^scope3-todo-cat-\d+$/.test(document.activeElement?.id ?? "") && document.activeElement!.querySelector(".s3-todo__assessment") !== null, undefined, { timeout: 20_000 })
         else await page.waitForFunction(() => document.activeElement?.tagName === "H1" && document.activeElement.getClientRects().length > 0, undefined, { timeout: 20_000 })
         const hash = await page.evaluate(() => window.location.hash)
         expect(hash).toMatch(/^#\/(setup|activity|results)/)
         // The spend import's grouped review takes focus by design (bug hunt C-06); every other action lands on the h1.
-        if (!spend) expect(await page.evaluate(() => (document.activeElement as HTMLElement).innerText.length > 0)).toBe(true)
+        if (!spend && !assessment) expect(await page.evaluate(() => (document.activeElement as HTMLElement).innerText.length > 0)).toBe(true)
       }
     }
   }, 180_000)
@@ -553,4 +556,89 @@ suite("site-web browser smoke (E2E-01)", () => {
     await page.waitForTimeout(400)
     expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0)
   }, 60_000)
+
+  journey("readiness follow-ups (WO-04c): Scope 3 possible duplicates read the same on the Overview and Results, Ask's Try again retries once, and a spend import rechecks once", { signedInAs: "admin" }, async ({ page }) => {
+    // Runs last: it adds a business-travel record that repeats T-1 for overlapping dates (counted, so listed to confirm)
+    // and a two-line spend import to company 1.
+    const { records } = await stack.api<{ records: Array<{ id: string; currentVersion: { activity: Record<string, unknown> } }> }>("admin", `/workspace/${COMPANIES.first}/collection/activities`)
+    const travel = records.find(record => record.id === RECORDS.travel)!
+    await stack.api("admin", `/workspace/${COMPANIES.first}/collection/activities/e2e00000-0000-4000-8000-00000000a0d1`, { body: { idempotencyKey: "e2e00000-0000-4000-8000-0000000004c1", expectedRevision: 0, expectedVersionId: null, correctionReason: null,
+      activity: { ...travel.currentVersion.activity, period: { start: "2025-03-01", endExclusive: "2025-07-01" } } } })
+    const scope3Requests: number[] = []
+    let failNext = false
+    await page.route("**/results/scope3", async route => {
+      if (failNext) { failNext = false; await route.fulfill({ status: 500, contentType: "application/json", body: JSON.stringify({ error: "Scope 3 results are unavailable right now." }) }) }
+      else await route.continue()
+    })
+    page.on("request", request => { if (new URL(request.url()).pathname.endsWith("/results/scope3")) scope3Requests.push(Date.now()) })
+
+    // 1. With a Scope 3 possible duplicate, the Overview's count names Results' "to do" and "to confirm (counted)" numbers.
+    await page.goto("/#/overview")
+    const { summary } = await overviewChecked(page)
+    const note = /(\d+) in Scope 3 \(Results’ Scope 3 to-do shows the same (\d+) to do and 1 to confirm \(counted\): the possible duplicate listed below\)/.exec(summary)
+    expect(note).not.toBeNull()
+    expect(note![1]).toBe(note![2])
+    const pair = await page.locator("li[data-readiness-duplicate^='scope3:'] .nv-list__title").innerText()
+    const [left, right] = pair.replace(/^Category \d+[^:]*: /, "").split(" and ")
+    expect(left).not.toBe(right)
+    await page.locator("nav.nv-sidenav").getByRole("button", { name: /Results & report/ }).click()
+    await page.locator("#scope3-todo .nv-chip").getByText(new RegExp(`^${note![1]} to do · 1 to confirm \\(counted\\)( · \\d+ blocks? approval)?$`)).waitFor({ timeout: 30_000 })
+    // The to-do shows its first 8 items until "Show all" is pressed.
+    const showAll = page.locator("#scope3-todo").getByRole("button", { name: /^Show all/ })
+    if (await showAll.count()) await showAll.click()
+    expect(await page.locator("#scope3-todo .s3-todo__item .nv-chip", { hasText: "To confirm (counted)" }).count()).toBe(1)
+
+    // 4. Scope 3 fails on the Overview; Ask's Try again checks it again with exactly one request.
+    failNext = true
+    await page.goto("/#/overview")
+    await page.locator("li[role=alert]", { hasText: "Couldn’t check Scope 3" }).waitFor({ timeout: 30_000 })
+    await page.waitForTimeout(500)
+    const beforeRetry = scope3Requests.length
+    await page.getByRole("button", { name: "Ask a question" }).click()
+    await page.getByRole("button", { name: "What’s left for me to do?" }).click()
+    await page.locator(".nv-msg--bot").last().getByText("Use Try again below", { exact: false }).waitFor()
+    await page.locator(".nv-msg--bot").last().getByRole("button", { name: "Try again →" }).click()
+    await page.locator("li[data-readiness-item^='scope3:']").first().waitFor({ timeout: 60_000 })
+    await page.waitForTimeout(1_000)
+    expect(scope3Requests.length - beforeRetry).toBe(1)
+    expect(await page.locator("li[role=alert]", { hasText: "Couldn’t check Scope 3" }).count()).toBe(0)
+
+    // 5. A spend import is two writes (the file, then the import): "Checking…" at the first, one recheck after the last.
+    await page.goto("/#/activity")
+    await activityListLoaded(page)
+    await page.getByLabel("Spend file").waitFor({ timeout: 30_000 })
+    await page.waitForTimeout(1_500)
+    await page.evaluate(() => {
+      const w = window as unknown as { checkingAt?: number }
+      const look = () => { if (w.checkingAt === undefined && [...document.querySelectorAll("nav.nv-sidenav .nv-navitem__meta")].some(item => item.textContent?.includes("Checking…"))) w.checkingAt = Date.now() }
+      new MutationObserver(look).observe(document.body, { subtree: true, childList: true, characterData: true })
+    })
+    const writes: Array<{ path: string; answeredAt: number }> = []
+    page.on("response", response => { const request = response.request(); if (request.method() !== "GET" && /\/workspace-api\/workspace\//.test(request.url())) writes.push({ path: new URL(request.url()).pathname, answeredAt: Date.now() }) })
+    const beforeImport = scope3Requests.length
+    await page.getByLabel("Spend file").setInputFiles({ name: "wo-04c.csv", mimeType: "text/csv", buffer: Buffer.from("line_id,date,vendor,gl_account,gl_description,description,amount,currency,dollar_year,category,naics_code,margin_choice,capital_full_cost\nW4C-1,2025-03-14,Acme Consulting LLC,6110,Professional services,Workshop,1200.00,USD,2025,1,541611,with_margins,\nW4C-2,2025-04-02,Byte Systems Inc,6120,IT services,Support,800.00,USD,2025,1,541512,with_margins,\n") })
+    await page.getByRole("button", { name: "Import spend lines" }).click()
+    await page.locator("#spend-import-result").waitFor({ timeout: 30_000 })
+    await page.waitForFunction(() => ![...document.querySelectorAll("nav.nv-sidenav .nv-navitem__meta")].some(item => item.textContent?.includes("Checking…")), undefined, { timeout: 60_000 })
+    await page.waitForTimeout(1_000)
+    expect(writes.map(write => write.path.replace(/^.*\/workspace\/[^/]+/, ""))).toEqual(["/collection/evidence", "/scope3/spend-imports"])
+    const after = scope3Requests.slice(beforeImport)
+    expect(after.length).toBe(1)
+    const checkingAt = await page.evaluate(() => (window as unknown as { checkingAt?: number }).checkingAt)
+    expect(checkingAt).toBeDefined()
+    // "Checking…" came with the first write, well before the debounced request; the request waited for the last write.
+    expect(checkingAt! - writes[0]!.answeredAt).toBeLessThan(300)
+    expect(after[0]!).toBeGreaterThan(checkingAt!)
+    expect(after[0]! - writes[1]!.answeredAt).toBeGreaterThanOrEqual(300)
+
+    // 6. At 390 px, no action button in "What needs attention" wraps to more than two lines.
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto("/#/overview")
+    await overviewChecked(page)
+    const lines = await page.locator("#overview-open-items .nv-btn").evaluateAll(buttons => buttons.map(button => {
+      const range = document.createRange(); range.selectNodeContents(button)
+      return [button.textContent, new Set([...range.getClientRects()].map(rect => Math.round(rect.top))).size] as const
+    }))
+    expect(lines.filter(([, count]) => count > 2)).toEqual([])
+  }, 150_000)
 })

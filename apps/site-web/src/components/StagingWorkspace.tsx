@@ -17,6 +17,9 @@ import { subscribeWrites } from "@/lib/shared-get"
 import type { Scope3State } from "@/lib/scope3-results-api"
 import { activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery, parseViewHash, viewHash, type ActivityListQuery, type WorkspaceView } from "@/lib/view-route"
 
+/** WO-04c: how long writes must be quiet before Scope 3 is checked again (QA asked for 300–500 ms). */
+const SCOPE3_RECHECK_DELAY_MS = 400
+
 // WO-07: the earlier milestone panels are retired. `#/earlier` (and any `#/earlier/<x>`) shows a static list; none of them is mounted.
 
 /**
@@ -66,6 +69,9 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
   const [scope3Retry, setScope3Retry] = useState(0)
   const scope3Fired = useRef<string | null>(null)
   const scope3Request = useRef<AbortController | null>(null)
+  // WO-04c: the debounced recheck after writes (one timer), and Results' own Scope 3 reload (Ask's Try again on Results).
+  const recheckTimer = useRef<number | null>(null)
+  const [resultsScope3Reload, setResultsScope3Reload] = useState(0)
   // WO-08: the Menu sheet (below 1080 px). It and the Ask drawer never stack: each opens only with the other closed.
   const [menuOpen, setMenuOpen] = useState(false)
   const menuButton = useRef<HTMLButtonElement>(null)
@@ -93,7 +99,9 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
     setPanel(target); setOpenRecordId(recordId)
     setListRoute(route => ({ ...list, version: route.version + 1 })); lastListHash.current = activityListHash(list.query); recordListHash.current = list.from
     setMissingRecordNotice(false)
-    // WO-04b: a new visit: its Scope 3 part is checked again (an older request still running is dropped).
+    // WO-04b: a new visit: its Scope 3 part is checked again (an older request still running is dropped). WO-04c: a
+    // recheck still waiting after a write is dropped too, as the visit makes its own request.
+    cancelRecheck()
     scope3Request.current?.abort(); scope3Request.current = null
     setScope3Part({ state: "checking" }); setVisit(value => value + 1)
     refreshStatus()
@@ -211,16 +219,24 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
       if (!controller.signal.aborted) setScope3Part({ state: "failed", message: cause instanceof Error ? cause.message : null })
     })
   }, [scope3On, panel, visit, scope3Retry, staging.workspaceId, staging.actor, canManage])
-  useEffect(() => () => scope3Request.current?.abort(), [])
+  useEffect(() => () => { scope3Request.current?.abort(); cancelRecheck() }, [])
+  function cancelRecheck() { if (recheckTimer.current !== null) { window.clearTimeout(recheckTimer.current); recheckTimer.current = null } }
   // B1 (QA of PR #51): a completed save or withdrawal in this workspace can open or close Scope 3 items (a record in a
   // screened-out category, a category's only record withdrawn, a setup screening change), so the Scope 3 part is checked
   // again: the old request is dropped, the part says "Checking…" and one new request is made. On Results, the screen
   // reloads its own Scope 3 answer, which it reports here.
+  // WO-04c (QA follow-up 5): the labels say "Checking…" at the first write, but the request waits until writes have been
+  // quiet for SCOPE3_RECHECK_DELAY_MS, so a spend import (file upload, then import) or a burst of saves costs one recheck.
   useEffect(() => subscribeWrites(write => {
     if (write.userId !== staging.actor.userId || !staging.workspaceId || !write.path.includes(`/workspace/${staging.workspaceId}/`)) return
     if (current.current.panel === "results") return
     scope3Request.current?.abort(); scope3Request.current = null
-    setScope3Part({ state: "checking" }); setScope3Retry(value => value + 1)
+    setScope3Part({ state: "checking" })
+    cancelRecheck()
+    recheckTimer.current = window.setTimeout(() => {
+      recheckTimer.current = null
+      if (current.current.panel !== "results") setScope3Retry(value => value + 1)
+    }, SCOPE3_RECHECK_DELAY_MS)
   }), [staging.actor.userId, staging.workspaceId])
   /** Results' own Scope 3 request (busy, answered, failed or not switched on) is the Scope 3 part while Results is shown. */
   const onResultsScope3 = useCallback((state: Scope3State) => {
@@ -235,7 +251,12 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
       if (current.current.panel === "results") setScope3Part({ state: "ready", items })
     }, () => setScope3Part({ state: "failed", message: null }))
   }, [canManage])
-  function retryScope3() { scope3Request.current?.abort(); scope3Request.current = null; setScope3Part({ state: "checking" }); setScope3Retry(value => value + 1) }
+  /** Try again (the Overview's, or Ask's on any view): one new Scope 3 request; on Results, the screen's own reload. */
+  function retryScope3() {
+    cancelRecheck()
+    if (current.current.panel === "results") { setResultsScope3Reload(value => value + 1); return }
+    scope3Request.current?.abort(); scope3Request.current = null; setScope3Part({ state: "checking" }); setScope3Retry(value => value + 1)
+  }
   const readiness = computeReadiness({ status, statusFailed: Boolean(statusError) && !status, statusError, scope3: scope3Part })
   // The first screen after sign-in renders before progress loads. Once it has loaded, put focus on the page heading if
   // nothing else has it, so keyboard and screen-reader users start at the top of the view.
@@ -294,7 +315,7 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
     <JourneyNav current={panel} onNavigate={view => navigate(view)} readiness={readiness} onAsk={openAsk} />
     <main id="workspace-main" className="nv-main" tabIndex={-1} ref={mainRef}><div className="nv-page">
     {panel === "home" && <JourneyHome status={status} readiness={readiness} onRetryScope3={retryScope3} error={statusError} headingRef={headingRef} onNavigate={view => navigate(view)} onAsk={() => setAskOpen(true)} onRetry={refreshStatus} onFix={openRecord} />}
-    {panel === "results" && <ResultsReport key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} coverage={coverage} onRetryCoverage={refreshStatus} canManage={canManage} onNavigate={view => navigate(view)} onFix={openRecord} onScope3Change={onResultsScope3} />}
+    {panel === "results" && <ResultsReport key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} coverage={coverage} onRetryCoverage={refreshStatus} canManage={canManage} onNavigate={view => navigate(view)} onFix={openRecord} onScope3Change={onResultsScope3} scope3Reload={resultsScope3Reload} />}
     {panel === "archive" && <EarlierViews headingRef={headingRef} onNavigate={view => navigate(view)} />}
     {panel === "collection" && missingRecordNotice && <div className="nv-notice nv-notice--warn" role="status" style={{ marginTop: 0 }}><Icon name="alert" /><p>That record wasn’t found. It may have been withdrawn or belong to another company, so the activity page is shown instead.</p></div>}
     {heldRecord && <div className="nv-notice nv-notice--warn" role="status" style={{ marginTop: 0 }}><Icon name="alert" /><div><p><strong>Outside the reporting period.</strong> {heldRecord.reasons[0]}</p>{canManage && <p><button type="button" className="nv-link" onClick={() => navigate("setup")}>Open company setup</button></p>}</div></div>}
@@ -312,6 +333,6 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
   <MenuSheet open={menuOpen && !askOpen} onClose={closeMenu} trigger={menuButton} email={account.email} signingOut={account.signingOut} onSignOut={account.onSignOut}>
     <JourneyNav variant="sheet" current={panel} onNavigate={navigateFromMenu} readiness={readiness} onAsk={openAsk} />
   </MenuSheet>
-  <AskNeuvetra open={askOpen} onClose={closeAsk} panel={helpPanel} status={status} readiness={readiness} statusFailed={Boolean(statusError) && !status} onNavigate={view => navigate(view)} />
+  <AskNeuvetra open={askOpen} onClose={closeAsk} panel={helpPanel} status={status} readiness={readiness} onRetryScope3={retryScope3} statusFailed={Boolean(statusError) && !status} onNavigate={view => navigate(view)} />
   </>
 }

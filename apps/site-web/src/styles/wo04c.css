@@ -1,0 +1,11 @@
+/*
+ * WO-04c (QA of PR #51, follow-up 7): the Overview's open-item actions wrapped to 3–4 lines ("Open the spend import",
+ * "Screen in company setup") because the button shrank beside the item's text, at 390 px and in the two-column card at
+ * 1360 px. Each row now wraps instead: the text keeps a reasonable width and the button keeps its own width, moving under
+ * the text when both don't fit, so a label takes one line (two at most, only if it is wider than the card).
+ * Unlayered on purpose (see the dev brief): journey.css's `.nv-list > li` rule is unlayered too.
+ */
+#overview-open-items .nv-list > li { flex-wrap: wrap; row-gap: 8px; }
+#overview-open-items .nv-list > li > .nv-list__main { flex: 1 1 14rem; }
+#overview-open-items .nv-list > li > .nv-btn,
+#overview-open-items .nv-list > li > .nv-actions { flex: 0 1 auto; max-width: 100%; }

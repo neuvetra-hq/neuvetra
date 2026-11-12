@@ -7,6 +7,7 @@ import { scope3AssessmentPrefill, SCOPE3_DEFAULT_RECORD_FILTER, type Scope3Recor
 import { SCOPE3_INLINE_ASSESSMENT_TEXT, SCOPE3_PREFILL_TEXT } from "@/lib/scope3-results-text"
 import type { Scope3ResultsResponse, Scope3State } from "@/lib/scope3-results-api"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
+import { takeScope3AssessmentFocus } from "@/lib/scope3-assessment-target"
 
 /**
  * The Scope 3 Results panel with its view state (round 2, lane D; Claude, 31 October 2026; round-1 product review UX-2,
@@ -20,6 +21,19 @@ export function Scope3ResultsPanel(props: { state: Scope3State; canManage: boole
   const [assessment, setAssessment] = useState<number | null>(null)
   const [todosOpen, setTodosOpen] = useState(false)
   const results = props.state.data, reports = props.reports
+  // WO-04c: the Overview's "Add the assessment" asked for one category: once the results are shown, open the to-do list and
+  // that category's assessment, and bring it into view with focus (as the to-do's own button does).
+  useEffect(() => {
+    if (!results || !reports) return
+    const category = takeScope3AssessmentFocus()
+    if (category === null || !results.coverage.categories.some(row => row.category === category)) return
+    queueMicrotask(() => { setTodosOpen(true); setAssessment(category) })
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+      const target = document.getElementById(`scope3-todo-cat-${category}`)
+      if (!target) return
+      target.scrollIntoView({ block: "start" }); target.tabIndex = -1; target.focus({ preventScroll: true })
+    }))
+  }, [results, reports])
   const ui: Scope3PanelUi = {
     filter, setFilter, limit, setLimit, assessment, setAssessment, todosOpen, setTodosOpen,
     renderAssessment: reports && results ? category => <Scope3InlineAssessment key={category} companyId={reports.companyId} actor={reports.actor} category={category} results={results} onSaved={props.onRetry} /> : undefined,
