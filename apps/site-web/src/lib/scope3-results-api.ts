@@ -1,4 +1,5 @@
 import type { HostedWorkspaceActor } from "./workspace-api"
+import { serverErrorText, withRequestTimeout } from "./request-timeout"
 import type { Scope3ResultsDocument, Scope3ResultsLine, Scope3ResultsMethod } from "../../../../packages/neuvetra-database/src/scope3-trace"
 // I-06 (DESIGN A17): the CSV, its statements and the status words live in the shared, browser-safe package modules, so the
 // API (frozen report versions) and this screen write the same bytes; they are re-exported here for the screen and tests.
@@ -34,13 +35,17 @@ export class Scope3ResultsApiError extends Error { constructor(message: string, 
 export async function loadScope3Results(companyId: string, actor: HostedWorkspaceActor): Promise<Scope3ResultsResponse> {
   if (!UUID.test(companyId)) throw new Error("Invalid company reference.")
   if (!actor.accessToken || /[\r\n]/.test(actor.accessToken)) throw new Error("Sign in again to continue.")
-  const response = await fetch(`/workspace-api/workspace/${companyId}/results/scope3`, { headers: { authorization: `Bearer ${actor.accessToken}` }, cache: "no-store", signal: actor.signal })
-  if (response.status === 401 || response.status === 403) actor.onUnauthorized?.()
+  // WO-09: Scope 3 results may take up to 95 s; the limit covers reading the answer too.
+  const { response, value } = await withRequestTimeout("scope3Results", actor.signal, async signal => {
+    const response = await fetch(`/workspace-api/workspace/${companyId}/results/scope3`, { headers: { authorization: `Bearer ${actor.accessToken}` }, cache: "no-store", signal })
+    if (response.status === 401 || response.status === 403) actor.onUnauthorized?.()
+    const value: unknown = response.ok ? await response.json() : await response.json().catch(() => null)
+    return { response, value }
+  })
   if (!response.ok) {
-    const body: unknown = await response.json().catch(() => null)
-    throw new Scope3ResultsApiError(record(body) && typeof body.error === "string" ? body.error : "Scope 3 results are unavailable right now.", response.status, record(body) && typeof body.code === "string" ? body.code : null)
+    const body = value, code = record(body) && typeof body.code === "string" ? body.code : null
+    throw new Scope3ResultsApiError(serverErrorText(response.status, code, record(body) && typeof body.error === "string" ? body.error : "Scope 3 results are unavailable right now."), response.status, code)
   }
-  const value: unknown = await response.json()
   const { decodeScope3Results } = await import("./scope3-results-decode")
   actor.signal?.throwIfAborted()
   return decodeScope3Results(value, companyId)

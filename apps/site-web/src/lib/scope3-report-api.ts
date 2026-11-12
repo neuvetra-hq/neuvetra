@@ -1,4 +1,5 @@
 import type { HostedWorkspaceActor } from "./workspace-api"
+import { serverErrorText, withRequestTimeout, type RequestKind } from "./request-timeout"
 import { SCOPE3_REPORT_PROFILE_V1, validateScope3ReportDocument, validateScope3ReportVersionSummary, type Scope3ReportDocument, type Scope3ReportVersionSummary, type Scope3StoredReportDocument } from "../../../../packages/neuvetra-database/src/scope3-report-document"
 // Round 2 (owner decisions 7 and 11): the readiness and approval lines and the exported CSV (stored bytes + approval lines) for the screen and print.
 export { scope3ReportApprovalLines, scope3ReportExportCsv, scope3ReportReadinessLines, type Scope3ReportOpenIssue, type Scope3StoredReportDocument, SCOPE3_REPORT_PROFILE_V1, SCOPE3_REPORT_PROFILE_V2, SCOPE3_REPORT_PROFILE_V3 } from "../../../../packages/neuvetra-database/src/scope3-report-document"
@@ -75,17 +76,25 @@ const scope3EngineOf = (document: Scope3StoredReportDocument): string | null => 
   return engines.length === 1 ? engines[0]! : engines.length === 0 ? null : "mixed"
 }
 
-async function request(actor: HostedWorkspaceActor, path: string, body?: unknown): Promise<unknown> {
+async function request(actor: HostedWorkspaceActor, path: string, body?: unknown, kind: RequestKind = "default"): Promise<unknown> {
   if (!actor.accessToken || /[\r\n]/.test(actor.accessToken)) throw new Error("Sign in again to continue.")
   actor.signal?.throwIfAborted()
-  const response = await fetch(path, {
-    method: body === undefined ? "GET" : "POST", cache: "no-store", signal: actor.signal, body: body === undefined ? undefined : JSON.stringify(body),
-    headers: { authorization: `Bearer ${actor.accessToken}`, ...(body === undefined ? {} : { "content-type": "application/json" }) },
+  // WO-09: limited by its kind's timeout (125 s to prepare a version), reading the answer included.
+  const { response, value } = await withRequestTimeout(kind, actor.signal, async signal => {
+    const response = await fetch(path, {
+      method: body === undefined ? "GET" : "POST", cache: "no-store", signal, body: body === undefined ? undefined : JSON.stringify(body),
+      headers: { authorization: `Bearer ${actor.accessToken}`, ...(body === undefined ? {} : { "content-type": "application/json" }) },
+    })
+    actor.signal?.throwIfAborted()
+    if (response.status === 401 || response.status === 403) actor.onUnauthorized?.()
+    const value: unknown = await response.json().catch(() => null)
+    return { response, value }
   })
   actor.signal?.throwIfAborted()
-  if (response.status === 401 || response.status === 403) actor.onUnauthorized?.()
-  const value: unknown = await response.json().catch(() => null)
-  if (!response.ok) throw new Scope3ReportApiError(object(value) && typeof value.error === "string" ? value.error : "Scope 3 report versions are unavailable right now.", response.status, object(value) && typeof value.code === "string" ? value.code : null)
+  if (!response.ok) {
+    const code = object(value) && typeof value.code === "string" ? value.code : null
+    throw new Scope3ReportApiError(serverErrorText(response.status, code, object(value) && typeof value.error === "string" ? value.error : "Scope 3 report versions are unavailable right now."), response.status, code)
+  }
   return value
 }
 const path = (companyId: string, versionId?: string, approval = false) => {
@@ -105,7 +114,7 @@ export async function loadScope3ReportVersion(companyId: string, versionId: stri
 }
 /** Prepares the next version; the server freezes its own live results. The stored version must be this actor's, as asked. */
 export async function prepareScope3Report(companyId: string, input: { idempotencyKey: string; expectedRevision: number; reason: string | null }, actor: HostedWorkspaceActor): Promise<{ version: Scope3ReportVersionSummary; replayed: boolean }> {
-  const out = saved(await request(actor, path(companyId), input), companyId)
+  const out = saved(await request(actor, path(companyId), input, "reportPrepare"), companyId)
   if (out.version.revision !== input.expectedRevision + 1 || out.version.reason !== input.reason || out.version.createdBy !== actor.userId || out.version.approval !== null) fail()
   return out
 }
