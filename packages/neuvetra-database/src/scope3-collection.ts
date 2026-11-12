@@ -676,6 +676,12 @@ const comparableName = (name: string) => name.trim().toLowerCase().replace(/\s+/
  * calls it once and passes the map to `planScope3Calculation`, which excludes those lines with the reason
  * `superseded_by_supplier_record` and the note `superseded_by:<recordId>`.
  *
+ * BF-02 (S3C-01): this map is provisional. It is built before anything is calculated, so it cannot know whether the
+ * replacing record is counted. After the engine batch (and again if the run's budget makes lines unavailable), the
+ * results route keeps a line excluded only when its replacing record was calculated in full (a complete engine total);
+ * otherwise it holds the line as `input_needed` with `replacing_record_not_counted` and the note
+ * `replacing_record:<recordId>`, so the purchase is never silently missing from every total.
+ *
  * `sha256` hashes a mapping-key text to lowercase hex (node:crypto on the server); it is passed in so this module stays
  * browser-safe.
  *

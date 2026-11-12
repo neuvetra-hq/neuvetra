@@ -298,7 +298,7 @@ export async function buildScope3Results(input: {
   const pending: Array<{ row: Scope3ResultRow; coverage: Scope3CoverageRecord; request: Scope3Request; annotation: Scope3Annotation }> = []
   // Round 3, lane A (owner decision 4): each superseded spend line, planned again without the supersession for its would-be
   // spend-based figure (a memo outside every total; never a result of the run, never aggregated).
-  const superseded: Array<{ row: Scope3ResultRow; by: string; memo: Scope3SupersededSpendMemo; request: Scope3Request | null }> = []
+  const superseded: Array<{ row: Scope3ResultRow; coverage: Scope3CoverageRecord; by: string; memo: Scope3SupersededSpendMemo; request: Scope3Request | null }> = []
   // Round 2: a withdrawn record counts once as withdrawn in its category (never as a line; its derived lines are not planned).
   for (const record of withdrawnRecords) {
     const plan = planScope3Calculation(record.currentVersion as unknown as Scope3CollectionVersion, context, evidence, planOptions)
@@ -339,15 +339,17 @@ export async function buildScope3Results(input: {
     const disclosed = plan.notes.filter(note => SCOPE3_PLAN_NOTE_DISCLOSURES.includes(note))
     // Round 2 (ACC-11): whether the line has supporting evidence (a derived line has its source record's files).
     const base = { recordId: record.id, category: row.category, quality: activity.quality, kind: plan.kind, ...(disclosed.length ? { notes: disclosed } : {}), evidenceLinked: scope3LineEvidenceLinked(row) }
-    if (plan.status === "excluded" && plan.reasons.includes("superseded_by_supplier_record")) {
-      const by = plan.notes.find(note => note.startsWith("superseded_by:"))!.slice("superseded_by:".length)
-      const memoPlan = planScope3Calculation(version as unknown as Scope3CollectionVersion, context, evidence, { ...planOptions, supersession: new Map() })
-      const calculable = memoPlan.action === "calculate" && memoPlan.call !== null
-      superseded.push({ row, by, request: calculable ? memoPlan.call!.request as Scope3Request : null, memo: { supersededBy: by, status: "not_calculated", wouldBe: null, methodVersionId: null,
-        inputSha256: null, resultSha256: null, reasons: calculable ? [] : [...memoPlan.reasons], replacing: { co2e: null, spendLines: 0, wouldBeTotalUnrounded: null }, reviewFlags: [] } })
-    }
-    if (plan.status === "withdrawn" || plan.status === "excluded") coverageRecords.push({ ...base, result: { outcome: "held", status: plan.status, reasons: plan.reasons } })
-    else if (periodCheck === "outside" || periodCheck === "partial") {
+    if (plan.status === "withdrawn" || plan.status === "excluded") {
+      const entry: Scope3CoverageRecord = { ...base, result: { outcome: "held", status: plan.status, reasons: plan.reasons } }
+      coverageRecords.push(entry)
+      if (plan.status === "excluded" && plan.reasons.includes("superseded_by_supplier_record")) {
+        const by = plan.notes.find(note => note.startsWith("superseded_by:"))!.slice("superseded_by:".length)
+        const memoPlan = planScope3Calculation(version as unknown as Scope3CollectionVersion, context, evidence, { ...planOptions, supersession: new Map() })
+        const calculable = memoPlan.action === "calculate" && memoPlan.call !== null
+        superseded.push({ row, coverage: entry, by, request: calculable ? memoPlan.call!.request as Scope3Request : null, memo: { supersededBy: by, status: "not_calculated", wouldBe: null, methodVersionId: null,
+          inputSha256: null, resultSha256: null, reasons: calculable ? [] : [...memoPlan.reasons], replacing: { co2e: null, spendLines: 0, wouldBeTotalUnrounded: null }, reviewFlags: [] } })
+      }
+    } else if (periodCheck === "outside" || periodCheck === "partial") {
       row.outcome = "outside_period"
       coverageRecords.push({ ...base, result: { outcome: "outside_period", reasons: [periodCheck === "partial" ? "partly_outside_reporting_period" : "outside_reporting_period"] } })
     } else if (plan.action === "hold" || !plan.call) coverageRecords.push({ ...base, result: scope3HeldOutcome(plan) })
@@ -398,6 +400,21 @@ export async function buildScope3Results(input: {
     })
     if (left() === 0) warnings.push(SCOPE3_BUDGET_WARNING)
   }
+  // BF-02 (S3C-01): a spend line stays excluded only while the record replacing it is calculated in full. Otherwise (the
+  // replacing record is held, needs review or is unavailable) the line is held and named, so the purchase is never
+  // silently missing from every total; it carries no memo (only an excluded superseded line has one).
+  const replacingRowOf = (by: string) => rows.find(row => row.recordId === by && row.derivedFrom === null && row.outcome === "calculated" && row.result?.status === "complete" && row.result.total)
+  const holdUncountedReplacements = () => {
+    for (const line of [...superseded]) {
+      if (replacingRowOf(line.by)) continue
+      const plan = { action: "hold" as const, status: "input_needed" as const, reasons: ["replacing_record_not_counted"],
+        notes: [...line.row.plan.notes.filter(note => !note.startsWith("superseded_by:")), `replacing_record:${line.by}`] }
+      line.row.plan = plan
+      line.coverage.result = scope3HeldOutcome(plan)
+      superseded.splice(superseded.indexOf(line), 1)
+    }
+  }
+  holdUncountedReplacements()
   // The boundary asks the engine to aggregate and verify every result itself; a refusal means no Scope 3 figure is shown.
   // I-06: the aggregate gets what is left of the budget; past it, every calculated line becomes unavailable (no partial figure).
   const verifier: Scope3AggregateEngine = { aggregate: (results, notes) => { const remaining = left(); if (remaining === 0) return Promise.reject(new Error("Scope 3 results budget spent.")); return engine.aggregate(results, notes, remaining === undefined ? undefined : { timeoutMs: remaining }) } }
@@ -409,6 +426,7 @@ export async function buildScope3Results(input: {
     if (left() !== 0 || results.length === 0) throw error
     for (const line of pending) if (line.row.outcome === "calculated") unavailable(line)
     results.length = 0; annotations.length = 0
+    holdUncountedReplacements()
     warnings.push("The Scope 3 engine could not calculate at least one record. Try again shortly.", SCOPE3_BUDGET_WARNING)
     coverage = await scope3Coverage(coverageRecords, screening, results, verifier, pins, annotations, input.assessments ?? null, descriptions)
   }
@@ -430,7 +448,7 @@ export async function buildScope3Results(input: {
   // Round 3, lane A (owner decision 4): each replacing record's figure against the would-be figures of every spend line it
   // replaces; the memo goes on each superseded line (after the coverage, so a line made unavailable is never compared).
   for (const line of superseded) {
-    const replacingRow = rows.find(row => row.recordId === line.by && row.derivedFrom === null && row.outcome === "calculated" && row.result?.status === "complete" && row.result.total)
+    const replacingRow = replacingRowOf(line.by)
     const group = superseded.filter(other => other.by === line.by)
     const { wouldBeTotalUnrounded, reviewFlags } = scope3SupersedingComparison(replacingRow?.result?.total?.unrounded ?? null, group.map(other => other.memo.wouldBe?.unrounded ?? null))
     const total = replacingRow?.result?.total

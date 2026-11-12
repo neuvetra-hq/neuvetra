@@ -85,7 +85,7 @@ describe("B1: a spend line's invoice date is saved with the line, in the reporti
     const activity = { kind: "purchase_spend", locationId: SITE, setupVersionId: SETUP, sourceId: "AP-2025-0331", state: "active", withdrawalReason: null, quality: "actual", estimateBasis: null, reference: "", notes: "", evidenceIds: [],
       quantity: { originalValue: "125000.5", originalUnit: "USD", normalizedValue: "125000.5", normalizedUnit: "USD" }, period: { start: "2025-01-01", endExclusive: "2025-07-01" }, payload: { ...(manual.payload as object), lineDate: "2025-03-31" } } as unknown as CollectionActivity
     const screen = await workspace({ records: [savedRecord("b1000000-0000-4000-8000-0000000000c1", activity)] })
-    screen.app.button("Review or correct")!.props.onClick(); await screen.app.settle()
+    screen.app.nodes().find(node => node.props.className === "collection-row-link")!.props.onClick({ preventDefault() {} }); await screen.app.settle()
     const { form, type } = await spendForm(screen)
     expect([form.byLabel("What does this line cover?")!.props.value, form.byLabel("Invoice or posting date")!.props.value]).toEqual(["date", "2025-03-31"])
     await type("Invoice or posting date", "2025-09-30")

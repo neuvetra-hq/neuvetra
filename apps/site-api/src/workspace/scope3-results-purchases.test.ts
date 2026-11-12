@@ -10,6 +10,8 @@ import { createScope3Engine } from "../calculation/scope3-authority"
 import { SCOPE3_SETUP_CATEGORY_TOKENS } from "../../../../packages/neuvetra-database/src/scope3-coverage"
 import { scope3SpendMappingKeyInput } from "../../../../packages/neuvetra-database/src/scope3-collection"
 import { buildScope3Results, REVIEWED_SCOPE3_ENGINE_SHA256, scope3AnnotationOf, type Scope3ResultsEngine } from "./scope3-results-routes"
+import { reasonText, reasonTextKnown } from "../../../../packages/neuvetra-database/src/plain-language-labels"
+import { decodeScope3Results } from "../../../site-web/src/lib/scope3-results-decode"
 
 const python = process.env.NEUVETRA_PYTHON ?? "python3"
 const engine: Scope3ResultsEngine = createScope3Engine({ python, expectedEngineSha256: REVIEWED_SCOPE3_ENGINE_SHA256 })
@@ -258,5 +260,84 @@ describe("I-03: every adapter hold through the route", () => {
     }
     // Category 3 is screened out with a held line: review required.
     expect(result.coverage.categories[2]!.status).toBe("screening_conflict") // round 2 (owner decision 5)
+  }, TIMEOUT)
+})
+
+// BF-02 (S3C-01, the auditor's repro /tmp/hunt-s3/tests/api-zz-hunt-s3b-supersession.test.ts): a spend line is excluded
+// as superseded only while the supplier or partner record replacing it is calculated in full. Otherwise the line is held
+// with `replacing_record_not_counted`, so the purchase is never silently missing from every total.
+describe("BF-02: a spend line whose replacing record isn't counted is held, never silently dropped", () => {
+  const acme = () => spend("100000", { supplierName: "Acme Metals", naicsCode: "331110" })  // 73,961.8448 kg if counted
+  const replaces = { supersedesSpend: { supplierName: "Acme Metals", mappingKeys: [] } }
+  // A carrier's own figure (category 4): partner figures replace category 1 and 2 spend lines that name them (I-05, B5a).
+  const PARTNER = { category: 4, counterpartyName: "Acme Metals", scope2Basis: "location", allocationBasis: "exclusive", allocationNumerator: null, allocationDenominator: null, leaseType: null,
+    noOperationalControlBasis: null, gwpBasis: "AR5", verification: "unverified", periodMatches: true, supersedesSpend: null }
+  const expectHeld = (result: Awaited<ReturnType<typeof build>>, line: CollectionActivityRecord, by: CollectionActivityRecord) => {
+    const row = result.records.find(item => item.recordId === line.id)!
+    expect([row.outcome, row.plan.action, row.plan.status, row.plan.reasons, row.plan.notes, row.result, row.supersededSpendMemo])
+      .toEqual(["held", "hold", "input_needed", ["replacing_record_not_counted"], ["spend_tax_treatment_excludes_sales_tax", `replacing_record:${by.id}`], null, undefined])
+    const cat1 = result.coverage.categories[0]!
+    expect(cat1.status).not.toBe("calculated")
+    expect(cat1.counts.excluded).toBe(0)
+    expect(cat1.counts.inputNeeded).toBeGreaterThanOrEqual(1)
+    expect(cat1.reasons).toContain("replacing_record_not_counted")
+    expect(result.readiness.ready).toBe(false)
+    // The web's strict decoder accepts the held line (no memo on a line that isn't excluded), and the reason has reviewed words.
+    expect(decodeScope3Results(JSON.parse(JSON.stringify(result)), company).records.find(item => item.recordId === line.id)!.plan.reasons).toEqual(["replacing_record_not_counted"])
+    expect(reasonTextKnown("replacing_record_not_counted")).toBe(true)
+    expect(reasonText("replacing_record_not_counted")).toStartWith("The supplier or partner record that replaces this spend line isn’t counted yet")
+  }
+
+  test("the auditor's repro: a supplier share over 100% (review_required) no longer makes the $100,000 line vanish; removing it gives 73,961.8448 kg", async () => {
+    const line = acme()
+    const figure = allocated("145000", "kg CO2e", { supplierName: "Acme Metals", allocationNumerator: "200", allocationDenominator: "100", ...replaces })
+    const result = await build([line, figure])
+    const fig = result.records.find(item => item.recordId === figure.id)!
+    expect([fig.outcome, fig.result?.status, fig.result?.findings]).toEqual(["held", "review_required", ["allocation_share_exceeds_one"]])
+    expectHeld(result, line, figure)
+    expect(result.coverage.categories[0]!.subtotal).toBeNull()
+    // Without the supplier record the line counts: 100,000 x 0.787 x round12(118.026 / 125.587) = 73,961.8448 kg.
+    const alone = await build([line])
+    expect(alone.coverage.categories[0]!).toMatchObject({ status: "calculated", subtotal: { display: "73961.8448" } })
+  }, TIMEOUT)
+
+  test("the same hold for every replacing record that isn't counted: factor-unit mismatch, zero denominator, partner period mismatch, boundary other", async () => {
+    const cases: Array<[string, () => CollectionActivityRecord]> = [
+      ["factor unit mismatch (adapter hold)", () => supplier("120", "metric_ton", { supplierName: "Acme Metals", factorUnit: "kg CO2e per kg", ...replaces })],
+      ["zero denominator", () => allocated("145000", "kg CO2e", { supplierName: "Acme Metals", allocationNumerator: "1", allocationDenominator: "0", ...replaces })],
+      ["partner period mismatch", () => record({ kind: "partner_reported", quantity: q("9000", "kg CO2e"), payload: { ...PARTNER, periodMatches: false, ...replaces } })],
+      ["supplier boundary other", () => supplier("120", "metric_ton", { supplierName: "Acme Metals", boundary: "other", ...replaces })],
+    ]
+    for (const [name, make] of cases) {
+      const line = acme(), by = make()
+      const result = await build([line, by])
+      const replacing = result.records.find(item => item.recordId === by.id)!
+      expect([name, replacing.outcome === "calculated" && replacing.result?.status === "complete"]).toEqual([name, false])
+      expectHeld(result, line, by)
+    }
+  }, TIMEOUT)
+
+  test("a complete replacing figure still supersedes: the line stays excluded with its memo", async () => {
+    const line = acme()
+    const figure = supplier("120", "metric_ton", { supplierName: "Acme Metals", ...replaces })
+    const result = await build([line, figure])
+    const row = result.records.find(item => item.recordId === line.id)!
+    expect([row.plan.status, row.plan.reasons, row.plan.notes]).toEqual(["excluded", ["superseded_by_supplier_record"], ["spend_tax_treatment_excludes_sales_tax", `superseded_by:${figure.id}`]])
+    expect(row.supersededSpendMemo).toMatchObject({ supersededBy: figure.id, status: "calculated", wouldBe: { display: "73961.8448" }, replacing: { co2e: { display: "222.0150" }, spendLines: 1 } })
+    expect(result.coverage.categories[0]!).toMatchObject({ status: "calculated", counts: { excluded: 1, calculated: 1 }, subtotal: { display: "222.0150" } })
+  }, TIMEOUT)
+
+  test("budget fallback: when the replacing figure becomes unavailable after the batch, its spend line is held too", async () => {
+    let now = 0
+    const slow: Scope3ResultsEngine = {
+      calculateMany: async (requests, options) => { const items = await engine.calculateMany(requests, options); return items },
+      aggregate: (results, notes) => { now = 30_000; return engine.aggregate(results, notes).then(value => { throw Object.assign(new Error("late"), { value }) }) },
+      describe: () => engine.describe(),
+    }
+    const line = acme()
+    const figure = supplier("120", "metric_ton", { supplierName: "Acme Metals", ...replaces })
+    const result = await buildScope3Results({ companyId: company, context, records: [line, figure], evidence, setup: setupView(screened), engine: slow, now: () => new Date("2026-10-30T00:00:00Z"), deadline: 25_000, clock: () => now })
+    expect(result.records.find(item => item.recordId === figure.id)!.outcome).toBe("unavailable")
+    expectHeld(result, line, figure)
   }, TIMEOUT)
 })

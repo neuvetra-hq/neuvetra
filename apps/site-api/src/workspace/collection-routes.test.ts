@@ -51,12 +51,13 @@ function harness() {
   let failPut = false
   let failRegister = false
   let hasAccess = true
+  let others: any[] = []
   let zipLookup: any = { zip: "94105", subregions: ["CAMX"], utilities: [{ subregion: "CAMX", utility: "Pacific Gas and Electric Co", eiaId: "14328", state: "CA", predominantUtility: true }], needsUtilityChoice: false, found: true, source: "EPA Power Profiler zip.csv (eGRID2023)" }
   const current = { id: VERSION, recordId: RECORD, companyId: COMPANY, revision: 1, previousVersionId: null, correctionReason: null, activity: activity().activity, payloadSha256: "a".repeat(64), createdBy: ACTOR, createdAt: "2026-09-28T00:00:00.000Z" } as any
   const record = { id: RECORD, companyId: COMPANY, kind: "fugitive", currentVersion: current, history: [{ ...current, activity: undefined }] } as any
   const database: CollectionRouteDatabase = {
     async findCollectionContext(...args) { calls.push({ name: "findContext", args }); return hasAccess ? { companyId: COMPANY, setupVersionId: SETUP, setupRevision: 1, locations: [{ id: LOCATION, name: "Office", inclusion: "included", control: "operational_control" }] } : null },
-    async findCollectionActivities(...args) { calls.push({ name: "findActivities", args }); return [record] },
+    async findCollectionActivities(...args) { calls.push({ name: "findActivities", args }); return [record, ...others] },
     async findCollectionActivityVersion(...args) { calls.push({ name: "findVersion", args }); return current },
     async saveCollectionActivity(...args) { calls.push({ name: "save", args }); return { record, version: current, replayed: false } },
     async findCollectionEvidence(...args) { calls.push({ name: "findEvidence", args }); return evidence },
@@ -73,7 +74,7 @@ function harness() {
   }
   const route = createCollectionRoutes({ database, evidenceStorage: storage, origin: ORIGIN, lookupZip: async zip => { calls.push({ name: "lookupZip", args: [zip] }); return zipLookup }, validateUser: async token => token === "valid" ? { id: ACTOR, email: "fixture@example.test", phone: null, fullName: null } : null })
   const request = (path: string, init: RequestInit = {}) => route(new Request(`https://api.example.test${path}`, { ...init, headers: { origin: ORIGIN, authorization: "Bearer valid", ...(init.headers ?? {}) } }))
-  return { calls, request, setEvidence(value: any[]) { evidence = value }, setDownloadable(value: any) { downloadable = value }, setStored(value: Uint8Array<ArrayBuffer>) { stored = value }, setAccess(value: boolean) { hasAccess = value }, setZipLookup(value: any) { zipLookup = value }, failNextPut() { failPut = true }, failNextRegistration() { failRegister = true } }
+  return { calls, request, setOthers(value: any[]) { others = value }, setEvidence(value: any[]) { evidence = value }, setDownloadable(value: any) { downloadable = value }, setStored(value: Uint8Array<ArrayBuffer>) { stored = value }, setAccess(value: boolean) { hasAccess = value }, setZipLookup(value: any) { zipLookup = value }, failNextPut() { failPut = true }, failNextRegistration() { failRegister = true } }
 }
 
 describe("collection routes", () => {
@@ -98,6 +99,35 @@ describe("collection routes", () => {
     expect(sent.activity.payload.maintainsRefrigerantStock).toBeNull()
     expect(sent.activity.payload.retrofitInPeriod).toBeNull()
     expect(sent.activity.quantity.originalValue).toBe("12.5")
+  })
+
+  // BF-03 (BL-02): a new active Scope 1/2 record is refused once 400 are active; corrections and withdrawals are not.
+  test("refuses a new active Scope 1 or 2 record when 400 are already active, but allows corrections and withdrawals", async () => {
+    const h = harness()
+    const gas = (i: number, state = "active") => ({ id: `44444444-0000-4000-8000-${String(i).padStart(12, "0")}`, companyId: COMPANY, kind: "natural_gas", currentVersion: { activity: { state } }, history: [] })
+    const post = (id: string, body: unknown) => h.request(`/workspace/${COMPANY}/collection/activities/${id}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
+    const fresh = () => ({ ...activity(), idempotencyKey: crypto.randomUUID() })
+    // 1 fugitive record from the harness + 398 gas records + 1 withdrawn = 399 active: the 400th is allowed.
+    h.setOthers([...Array.from({ length: 398 }, (_, i) => gas(i)), gas(900, "withdrawn")])
+    expect((await post("00000000-0000-4000-8000-0000000000a1", fresh())).status).toBe(201)
+    // 1 + 399 = 400 active: the next new record is refused with the named code and nothing is saved.
+    h.setOthers([...Array.from({ length: 399 }, (_, i) => gas(i)), gas(900, "withdrawn")])
+    const savesBefore = h.calls.filter(call => call.name === "save").length
+    const refused = await post("00000000-0000-4000-8000-0000000000a2", fresh())
+    expect(refused.status).toBe(422)
+    expect(await refused.json()).toEqual({ code: "record_limit_reached", error: "This company already has 400 active Scope 1 and 2 records, the most one draft can calculate. Withdraw records you no longer need, then save again." })
+    expect(h.calls.filter(call => call.name === "save").length).toBe(savesBefore)
+    // A correction (revision 1) and a withdrawal are allowed at the cap.
+    const correction = { ...fresh(), expectedRevision: 1, expectedVersionId: VERSION, correctionReason: "Fix" }
+    expect((await post(RECORD, correction)).status).toBe(201)
+    const withdrawal = { ...correction, idempotencyKey: crypto.randomUUID(), correctionReason: "Entered twice", activity: { ...activity().activity, state: "withdrawn", withdrawalReason: "Duplicate" } }
+    expect((await post(RECORD, withdrawal)).status).toBe(201)
+    // A replay of an already-saved first version is not a new record, even at the cap.
+    h.setOthers([...Array.from({ length: 399 }, (_, i) => gas(i)), { ...gas(901), id: "00000000-0000-4000-8000-0000000000a3" }])
+    expect((await post("00000000-0000-4000-8000-0000000000a3", fresh())).status).toBe(201)
+    // Scope 3 records never count toward, and are never refused by, the Scope 1/2 cap.
+    h.setOthers(Array.from({ length: 450 }, (_, i) => ({ ...gas(i), kind: "purchase_spend" })).concat(Array.from({ length: 398 }, (_, i) => gas(1000 + i)) as never))
+    expect((await post("00000000-0000-4000-8000-0000000000a4", fresh())).status).toBe(201)
   })
 
   test("rejects unreal dates before any persistence call", async () => {
