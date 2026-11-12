@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode, type RefObject } from "react"
+import { Fragment, useEffect, useId, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode, type RefObject } from "react"
 import { deriveCollectionQuantity, savedAgainstCurrentSetup, validateCollectionActivity, withCurrentSetupVersion, type CollectionActivity, type CollectionActivityKind, type CollectionInstrument, type CollectionPayload } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { instrumentEvidenceClaims, planCollectionCalculation, type InstrumentEvidenceClaims } from "../../../../packages/neuvetra-database/src/collection-engine-input"
 import { isScope3CollectionKind, isScope3CompletionKind, planScope3Calculation, scope3IsHotelMode, SCOPE3_LEGACY_KINDS, SCOPE3_AIR_BY_DISTANCE, SCOPE3_AIR_HAULS, SCOPE3_CABIN_CLASSES, SCOPE3_COLLECTION_UNITS, SCOPE3_COMMUTING_MODES, SCOPE3_HOTEL_MODE, SCOPE3_TRANSPORT_FACILITIES, SCOPE3_TRANSPORT_UNITS, SCOPE3_TRANSPORT_VEHICLES, SCOPE3_TRAVEL_MODES, SCOPE3_WASTE_MATERIALS, type BusinessTravelCollectionPayload, type Scope3CollectionKind, type Scope3CollectionVersion, type Scope3PlanOptions } from "../../../../packages/neuvetra-database/src/scope3-collection"
@@ -11,7 +11,7 @@ import { SCOPE3_FORM_KINDS, SCOPE3_FORM_SOURCE_LABELS, scope3BlankPayload, scope
 import { scope3DataQualityProblem, scope3PayloadLines, scope3PayloadProblem, scope3ReadinessOptions, scope3SetupFacts, scope3SpendLineChoices, scope3TokenOptions, type Scope3SetupFacts } from "@/lib/scope3-forms"
 // Round 2 lane E (ENG-13): the record forms, the data-quality editor and the spend import load on first use.
 import { DataQualityEditor, Scope3RecordForm, SpendImport } from "./scope3/lazy-forms"
-import { COPY_TEXT_R2E, egridSubregionLabel, formatTimeR2E, LOCATION_CONTROL_TEXT_R2E, LOCATION_INCLUSION_TEXT_R2E, SAVE_TEXT_R2E, SAVED_LIST_TEXT_R2E, SCOPE3_TRANSPORT_ANSWER_TEXT_R2E, SCOPE3_TRANSPORT_VEHICLE_TEXT_R2E, SCOPE3_WASTE_MATERIAL_TEXT_R2E, SCOPE3_WASTE_TREATMENT_TEXT_R2E, unitsHintR2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
+import { COPY_TEXT_R2E, egridSubregionLabel, formatTimeR2E, LOCATION_CONTROL_TEXT_R2E, LOCATION_INCLUSION_TEXT_R2E, SAVED_LIST_TEXT_R2E, SCOPE3_TRANSPORT_ANSWER_TEXT_R2E, SCOPE3_TRANSPORT_VEHICLE_TEXT_R2E, SCOPE3_WASTE_MATERIAL_TEXT_R2E, SCOPE3_WASTE_TREATMENT_TEXT_R2E, unitsHintR2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
 import { focusRecordEditor, hasRecordFieldFocus } from "@/lib/scope3-fix-target"
 // WO-06: a record opens at #/activity/<id> (the record view); the list keeps its filters in #/activity?status=&type=&page=.
 import type { ActivityListQuery } from "@/lib/view-route"
@@ -21,7 +21,8 @@ import { SPEND_IMPORT_ANCHOR } from "@/lib/spend-import-target"
 // Round 2c integration: the amount label of the 0029 Scope 3 forms at schema 30 and the estimate-basis message (new texts).
 import { SAVE_TEXT_R2C, scope3AmountLabelR2C } from "@/lib/scope3-text-r2c"
 import { scope3GroupedAmount, scope3PreSaveProblems, scope3SavedRecordWhen, scope3WasteTreatmentsFor } from "@/lib/scope3-display-r3d"
-import { SCOPE3_PRESAVE_TEXT_R3D } from "@/lib/scope3-text-r3d"
+// WO-10: the Activity form's field anatomy, error summary and save-outcome words.
+import { ACTIVITY_FORM_TEXT_WO10 } from "@/lib/activity-form-text-wo10"
 
 const kinds: readonly [CollectionActivityKind, string][] = [
   ["natural_gas", "Natural gas"], ["distillate_no2", "Diesel or fuel-oil generator"],
@@ -404,13 +405,38 @@ function initial(kind: CollectionActivityKind, completion = false): CollectionDr
   return { kind, locationId: "", setupVersionId: "", sourceId: "", state: "active", withdrawalReason: null, quantity: { originalValue: "", originalUnit: unit, normalizedValue: null, normalizedUnit: null }, quality: "unknown", estimateBasis: null, period: { start: "2025-01-01", endExclusive: "2026-01-01" }, reference: "", notes: "", evidenceIds: [], payload } as CollectionDraft
 }
 
-// Round 3 lane D (PR-12): a field named by a problem that keeps Save off is marked invalid and described by that list.
-const invalidProps = (invalid: boolean) => invalid ? { "aria-invalid": true, "aria-describedby": "collection-save-problems" } as const : {}
-function Field({ label, value, onChange, hint, type = "text", required = false, invalid = false }: { label: string; value: string; onChange: (value: string) => void; hint?: string; type?: string; required?: boolean; invalid?: boolean }) {
-  return <label className="setup-field"><span>{label}</span><input type={type} required={required} value={value} onChange={event => onChange(event.target.value)} {...invalidProps(invalid)} />{hint && <small>{hint}</small>}</label>
+/**
+ * WO-10 (§7.5 field anatomy): each field's label says "Required" or "Optional" ("Required" marks exactly the fields the
+ * save checks report when empty; the word is hidden from assistive technology, which hears aria-required instead), then
+ * its own error, the control with a unit suffix where the label doesn't name the unit, and its hint. A field with a
+ * problem is aria-invalid and described by its own error (not by a shared list), its unit and its hint. A named field has
+ * the id `collection-field-<name>`, which the error summary's links focus.
+ */
+type FieldNeed = "required" | "optional"
+type FieldAnatomy = { name?: string; need?: FieldNeed; error?: string; hint?: string; unit?: string }
+const fieldElementId = (name: string) => `collection-field-${name}`
+function useFieldIds({ name, need, error, hint, unit }: FieldAnatomy) {
+  const auto = `collection-field-auto${useId().replace(/:/g, "")}`
+  const id = name ? fieldElementId(name) : auto
+  const describedBy = [error ? `${id}-error` : "", unit ? `${id}-unit` : "", hint ? `${id}-hint` : ""].filter(Boolean).join(" ")
+  return { id, control: { id, "aria-required": need === "required" ? true as const : undefined, "aria-invalid": error ? true as const : undefined, "aria-describedby": describedBy || undefined } }
 }
-function Select({ label, value, options, onChange, hint, invalid = false }: { label: string; value: string; options: readonly (readonly [string, string])[]; onChange: (value: string) => void; hint?: string; invalid?: boolean }) {
-  return <label className="setup-field"><span>{label}</span><select value={value} onChange={event => onChange(event.target.value)} {...invalidProps(invalid)}>{options.map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select>{hint && <small>{hint}</small>}</label>
+function FieldShell({ label, id, need = "optional", error, hint, unit, children }: FieldAnatomy & { label: string; id: string; children: ReactNode }) {
+  return <div className="setup-field">
+    <label htmlFor={id} className="setup-field__label"><span className="setup-field__name">{label}</span> {need === "required" ? <span className="setup-field__need setup-field__need--required" aria-hidden="true">{ACTIVITY_FORM_TEXT_WO10.required}</span> : <span className="setup-field__need">{ACTIVITY_FORM_TEXT_WO10.optional}</span>}</label>
+    {error && <p className="setup-field__error" id={`${id}-error`}>{error}</p>}
+    {unit ? <span className="setup-field__control">{children}<span className="setup-field__unit" id={`${id}-unit`}>{unit}</span></span> : children}
+    {hint && <small id={`${id}-hint`}>{hint}</small>}
+  </div>
+}
+function Field({ label, value, onChange, type = "text", multiline = false, ...anatomy }: FieldAnatomy & { label: string; value: string; onChange: (value: string) => void; type?: string; multiline?: boolean }) {
+  const { id, control } = useFieldIds(anatomy)
+  const props = { ...control, value, onChange: (event: { target: { value: string } }) => onChange(event.target.value) }
+  return <FieldShell label={label} id={id} {...anatomy}>{multiline ? <textarea {...props} /> : <input type={type} {...props} />}</FieldShell>
+}
+function Select({ label, value, options, onChange, ...anatomy }: FieldAnatomy & { label: string; value: string; options: readonly (readonly [string, string])[]; onChange: (value: string) => void }) {
+  const { id, control } = useFieldIds(anatomy)
+  return <FieldShell label={label} id={id} {...anatomy}><select {...control} value={value} onChange={event => onChange(event.target.value)}>{options.map(([option, name]) => <option key={option} value={option}>{name}</option>)}</select></FieldShell>
 }
 /**
  * Scope 3 package 2 (beta client run, 26 October 2026): a list of supported choices plus "Something else". An activity
@@ -419,17 +445,61 @@ function Select({ label, value, options, onChange, hint, invalid = false }: { la
  * stores it.
  */
 const OTHER = "__other__"
-function ChoiceOrOther({ label, value, choices, placeholder, otherLabel, describeLabel, onChange, hint, invalid = false }: { label: string; value: string; choices: readonly (readonly [string, string])[]; placeholder: string; otherLabel: string; describeLabel: string; onChange: (value: string) => void; hint?: string; invalid?: boolean }) {
+function ChoiceOrOther({ label, value, choices, placeholder, otherLabel, describeLabel, onChange, ...anatomy }: FieldAnatomy & { label: string; value: string; choices: readonly (readonly [string, string])[]; placeholder: string; otherLabel: string; describeLabel: string; onChange: (value: string) => void }) {
   const known = choices.some(([id]) => id === value)
   const selected = value === "" ? "" : known ? value : OTHER
   return <>
-    <Select label={label} value={selected} options={[["", placeholder] as const, ...choices, [OTHER, otherLabel] as const]} onChange={next => onChange(next === OTHER ? (known || value === "" ? "other" : value) : next)} hint={hint} invalid={invalid} />
-    {selected === OTHER && <Field label={describeLabel} value={value} onChange={next => onChange(next.slice(0, 80) || "other")} hint="Saved and shown as needing input. It isn’t calculated in this beta and is never counted as zero." />}
+    <Select label={label} value={selected} options={[["", placeholder] as const, ...choices, [OTHER, otherLabel] as const]} onChange={next => onChange(next === OTHER ? (known || value === "" ? "other" : value) : next)} {...anatomy} />
+    {selected === OTHER && <Field name={anatomy.name ? `${anatomy.name}-other` : undefined} label={describeLabel} value={value} onChange={next => onChange(next.slice(0, 80) || "other")} hint="Saved and shown as needing input. It isn’t calculated in this beta and is never counted as zero." />}
   </>
 }
 function Tri({ label, value, onChange }: { label: string; value: boolean | null; onChange: (value: boolean | null) => void }) {
-  return <Select label={label} value={value === null ? "unknown" : value ? "yes" : "no"} options={[["unknown", "I don't know yet"], ["yes", "Yes"], ["no", "No"]]} onChange={item => onChange(item === "unknown" ? null : item === "yes")} />
+  return <Select need="optional" label={label} value={value === null ? "unknown" : value ? "yes" : "no"} options={[["unknown", "I don't know yet"], ["yes", "Yes"], ["no", "No"]]} onChange={item => onChange(item === "unknown" ? null : item === "yes")} />
 }
+/** WO-10: a problem that stops a save, with the fields it names (the first is where its summary link goes). */
+type FormProblem = { text: string; fields?: readonly string[] }
+type SaveProblem = FormProblem
+/** WO-10: a real calendar date (YYYY-MM-DD), as the shared contract requires. */
+const realDate = (value: string) => value !== "" && shiftDate(value, 0) === value
+/** WO-10: the shared contract's refusals that name a field of this form, and the fields they name. */
+const CONTRACT_FIELDS: readonly [RegExp, readonly string[]][] = [
+  [/^Only estimated records carry an estimate basis\.$/, ["estimateBasis"]],
+  [/^(A real calendar date is required|Collection periods must fall inside calendar 2025|Scope 3 periods must fall between)/, ["periodStart", "periodEnd"]],
+  [/^Stated HHV allows/, ["statedHhv"]],
+  [/^Source identifier must match/, ["source"]],
+  [/^Withdrawal requires a reason/, ["withdrawalReason"]],
+]
+/** WO-10: the pre-save problems of the Scope 3 forms on this screen, by the field label they name. */
+const PRESAVE_FIELDS: Readonly<Record<string, string>> = { "Vehicle": "transportVehicle", "How do you know the haul length?": "haulBasis", "Treatment": "treatment" }
+/**
+ * WO-10: move focus to an element by id once it has rendered: a form field is centred (clear of the sticky bars at every
+ * width), anything else is brought to the top, below the sticky bars (its scroll margin). Returns whether it was found.
+ */
+function focusElementById(id: string): boolean {
+  if (typeof document === "undefined") return false
+  const element = document.getElementById(id) as HTMLElement | null
+  if (!element) return false
+  const box = element.closest?.(".setup-field") as HTMLElement | null
+  if (box) box.scrollIntoView?.({ block: "center" })
+  else element.scrollIntoView?.({ block: "start" })
+  element.focus({ preventScroll: true })
+  return true
+}
+/**
+ * WO-10 (QA-182): the browser's own scroll on Tab doesn't keep clear of the sticky bars (at 390 px a field could land under
+ * the top bars, or with its bottom below the screen). Whatever takes focus on the Activity screen is brought just clear of
+ * them, using the scroll margins wo10.css gives it.
+ */
+function keepClearOfStickyBars(event: { target: EventTarget | null }) {
+  const target = event.target as HTMLElement | null
+  if (!target?.getBoundingClientRect || typeof window === "undefined") return
+  // A form control is kept clear with its label and error (its field), anything else on its own.
+  const element = (target.closest?.(".setup-field") as HTMLElement | null) ?? target
+  const box = element.getBoundingClientRect(), style = window.getComputedStyle(element)
+  const top = parseFloat(style.scrollMarginTop) || 0, bottom = parseFloat(style.scrollMarginBottom) || 0
+  if (box.top < top || box.bottom > window.innerHeight - bottom) element.scrollIntoView({ block: "nearest" })
+}
+const focusIsLost = () => typeof document !== "undefined" && (!document.activeElement || document.activeElement === document.body)
 const answer = (value: boolean | null) => value === null ? "Unknown" : value ? "Yes" : "No"
 /** Air by distance or a declared air haul: the modes whose cabin class the v2 business travel payload records. */
 const isAirMode = (mode: string) => mode === SCOPE3_AIR_BY_DISTANCE || (SCOPE3_AIR_HAULS as readonly string[]).includes(mode)
@@ -553,9 +623,15 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   const missingRef = useRef(onRecordMissing)
   useEffect(() => { missingRef.current = onRecordMissing })
   const [dirty, setDirty] = useState(false)
-  // Round 2 lane E (UX-4): a failed save is said next to the Save button (and focused), not only at the top of the page.
-  const [saveProblem, setSaveProblem] = useState<string | null>(null)
-  const saveAlert = useRef<HTMLParagraphElement | null>(null)
+  // Round 2 lane E (UX-4): a failed save is said next to the Save button, not only at the top of the page. WO-10: it is the
+  // first entry of the error summary (linked to its field when the refusal names one), and the summary takes focus.
+  const [saveProblem, setSaveProblem] = useState<SaveProblem | null>(null)
+  // WO-10: Save stays on; pressing it with problems left marks them (the summary says "Not saved") and focuses the summary.
+  const [attempted, setAttempted] = useState(false)
+  // WO-10: where focus goes once the screen has rendered the result of an action (never left on the page body), and
+  // whether the first load failed (its Try again stays in place, focusable, while it runs).
+  const focusNext = useRef<string | null>(null)
+  const [loadFailed, setLoadFailed] = useState(false)
   const pending = useRef<CollectionActivitySaveInput | null>(null)
   const pendingUpload = useRef<{ fingerprint: string; id: string } | null>(null)
   const actorRef = useRef(actor)
@@ -608,7 +684,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       } else if (openRecordId) missingRef.current?.()
       setMessage(overview.scope3 ? COPY_TEXT_R2E.activityLoadedScope3 : "Activity and evidence are collected as drafts. Calculations use beta methods that are not yet formally released.")
       setLoaded(true)
-    }).catch(cause => { if (!controller.signal.aborted) { setError(true); setMessage(cause instanceof Error ? cause.message : "Collection is unavailable.") } })
+    }).catch(cause => { if (!controller.signal.aborted) { setError(true); setLoadFailed(true); setMessage(cause instanceof Error ? cause.message : "Collection is unavailable.") } })
       .finally(() => { if (!controller.signal.aborted) setBusy(false) })
     return () => controller.abort()
   }, [actor.userId, workspaceId, openRecordId])
@@ -626,6 +702,19 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     focusHeadingNext.current = false
     requestAnimationFrame(() => { window.scrollTo({ top: 0 }); headingRef.current?.focus({ preventScroll: true }) })
   }, [loaded, busy, headingRef])
+  // WO-10: after an action (a refused save, a withdrawal started or undone, a save on the list page), focus goes where the
+  // action asked once the screen has rendered it and is idle. No dependency list: the target may render a render later.
+  useEffect(() => {
+    const target = focusNext.current
+    if (!target || busy) return
+    if (focusElementById(target)) focusNext.current = null
+  })
+  // WO-10 (QA follow-up 4): a list shown in place of a record that wasn't found (after Try again, or a first load) starts
+  // with focus on its heading, never on the page body (the record view and its Try again button have gone).
+  useEffect(() => {
+    if (recordMode || !focusIsLost()) return
+    headingRef.current?.focus({ preventScroll: true })
+  }, [recordMode, headingRef])
   // WO-06: back on the list (Back, or "← All activity"), the row of the record that was open is brought into view and focused.
   useEffect(() => {
     if (recordMode || !loaded || busy || !returnRow.current) return
@@ -655,7 +744,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   function switchKind(kind: CollectionActivityKind) {
     if (selected || kind === draft.kind) return
     if (dirty && !window.confirm("Discard unsaved activity changes?")) return
-    setDraft(freshDraft(kind)); setRecordId(crypto.randomUUID()); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null
+    setDraft(freshDraft(kind)); setRecordId(crypto.randomUUID()); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null; setAttempted(false); setSaveProblem(null)
   }
   /** A new draft; round 2 UX-12: a spend line starts in the setup reporting period (its own form asks for a date or a period). */
   function freshDraft(kind: CollectionActivityKind): CollectionDraft {
@@ -665,11 +754,11 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   }
   function startNewRecord() {
     if (dirty && !window.confirm("Discard unsaved activity changes?")) return
-    setDraft(freshDraft(draft.kind)); setRecordId(crypto.randomUUID()); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null
+    setDraft(freshDraft(draft.kind)); setRecordId(crypto.randomUUID()); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null; setAttempted(false); setSaveProblem(null)
   }
   function openRecord(row: CollectionActivityRecord) {
     if (dirty && !window.confirm("Discard unsaved activity changes?")) return
-    setRecordId(row.id); setDraft(structuredClone(row.currentVersion.activity) as CollectionDraft); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null
+    setRecordId(row.id); setDraft(structuredClone(row.currentVersion.activity) as CollectionDraft); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null; setAttempted(false); setSaveProblem(null)
   }
   /** Round 3 lane C (PR-3): after a spend-import action only the saved records changed: read them alone (one request, not four). */
   async function refreshRecords() {
@@ -692,22 +781,22 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       if (current) { setRecordId(current.id); setDraft(structuredClone(current.currentVersion.activity) as CollectionDraft); if (openRecordId) focusHeadingNext.current = true }
       else if (openRecordId) missingRef.current?.()
       else setDraft(previous => ({ ...previous, setupVersionId: loadedContext.setupVersionId ?? "" }))
-      setDirty(false); setHistorical(null); pending.current = null; setReason(""); setMessage("Latest saved records loaded."); setLoaded(true)
+      setDirty(false); setHistorical(null); pending.current = null; setReason(""); setAttempted(false); setSaveProblem(null); setMessage("Latest saved records loaded."); setLoaded(true)
     } catch (cause) { setError(true); setMessage(cause instanceof Error ? cause.message : "Collection is unavailable.") }
     finally { setBusy(false) }
   }
-  /** UX-4: the save failed; say so next to Save (focused) and at the top. */
-  function failSave(text: string) { setError(true); setMessage(text); setSaveProblem(text); globalThis.setTimeout(() => saveAlert.current?.focus(), 0) }
+  /** UX-4: the save failed; say so next to Save and at the top. WO-10: in the error summary, linked to the field it names, with focus on the summary. */
+  function failSave(text: string, ...fields: string[]) { setError(true); setMessage(text); setSaveProblem({ text, fields }); setAttempted(true); focusNext.current = "collection-save-problems" }
   async function save() {
     if (!workspaceId || !canManage || busy) return
     setSaveProblem(null)
-    if (!draft.locationId || !draft.setupVersionId || !draft.sourceId.trim()) { failSave("Choose a company-setup location and enter the source identifier before saving."); return }
-    if (selected && draft.state === "active" && reason.trim().length < 3) { failSave("Explain this correction before saving a new version."); return }
-    if (draft.state === "withdrawn" && (!selected || !draft.withdrawalReason || draft.withdrawalReason.trim().length < 3)) { failSave("Explain why this saved record is being withdrawn."); return }
-    if (draft.kind === "electricity" && !/^\d{5}$/.test((draft.payload as Extract<CollectionPayload, {zip: string}>).zip)) { failSave("A five-digit ZIP is required for every electricity record."); return }
-    if (draft.kind === "electricity" && !draft.payload.utilityName.trim()) { failSave("Choose the verified utility serving this electricity meter before saving."); return }
+    if (!draft.locationId || !draft.setupVersionId || !draft.sourceId.trim()) { failSave("Choose a company-setup location and enter the source identifier before saving.", ...(!draft.locationId ? ["location"] : []), ...(!draft.sourceId.trim() ? ["source"] : [])); return }
+    if (selected && draft.state === "active" && reason.trim().length < 3) { failSave("Explain this correction before saving a new version.", "reason"); return }
+    if (draft.state === "withdrawn" && (!selected || !draft.withdrawalReason || draft.withdrawalReason.trim().length < 3)) { failSave("Explain why this saved record is being withdrawn.", "withdrawalReason"); return }
+    if (draft.kind === "electricity" && !/^\d{5}$/.test((draft.payload as Extract<CollectionPayload, {zip: string}>).zip)) { failSave("A five-digit ZIP is required for every electricity record.", "zip"); return }
+    if (draft.kind === "electricity" && !draft.payload.utilityName.trim()) { failSave("Choose the verified utility serving this electricity meter before saving.", zipLookup?.found && (zipLookup.needsUtilityChoice || zipLookup.utilities.length > 1) ? "utility" : "zipLookup"); return }
     const rejectedEvidence = new Set(evidence.filter(file => file.quarantineStatus === "rejected").map(file => file.id))
-    if (draft.evidenceIds.some(id => rejectedEvidence.has(id)) || draft.kind === "electricity" && draft.payload.instruments.some(instrument => instrument.evidenceReference !== null && rejectedEvidence.has(instrument.evidenceReference))) { failSave("Remove rejected evidence before saving this version."); return }
+    if (draft.evidenceIds.some(id => rejectedEvidence.has(id)) || draft.kind === "electricity" && draft.payload.instruments.some(instrument => instrument.evidenceReference !== null && rejectedEvidence.has(instrument.evidenceReference))) { failSave("Remove rejected evidence before saving this version.", "evidence"); return }
     const copy = prepareActivityForSave(withCurrentSetupVersion(draft, context), scope3Completion)
     // I-08: a Scope 3 record is checked against the shared contract first, so its refusal is named in the form's words.
     const scope3Problem = isScope3CollectionKind(copy.kind) ? scope3PayloadProblem(copy.kind, copy.payload) ?? scope3DataQualityProblem(copy.payload) : null
@@ -715,7 +804,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     // Beta client run (26 October 2026): check the record against the same contract the server applies, so a record the
     // server would refuse (for example dates outside calendar 2025) says why, and nothing is sent or saved.
     try { validateCollectionActivity(copy) }
-    catch (cause) { failSave(`${cause instanceof Error ? cause.message : "This record can’t be saved."} Nothing was saved.`); return }
+    catch (cause) { const text = cause instanceof Error ? cause.message : "This record can’t be saved."; failSave(`${text} Nothing was saved.`, ...(CONTRACT_FIELDS.find(([pattern]) => pattern.test(text))?.[1] ?? [])); return }
     const correctionReason = selected ? copy.state === "withdrawn" ? `Withdrawn: ${copy.withdrawalReason}` : reason.trim() : null
     const input = pending.current ?? { idempotencyKey: crypto.randomUUID(), expectedRevision: selected?.currentVersion.revision ?? 0, expectedVersionId: selected?.currentVersion.id ?? null, correctionReason, activity: copy }
     pending.current = input; setBusy(true); setError(false); setMessage("Saving and verifying this activity…")
@@ -723,9 +812,16 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       const result = await saveAndVerifyCollectionActivity(workspaceId, recordId, input, actorRef.current)
       const current = result.record
       setRecords(items => replaceSavedCollectionRecord(items, current)); setRecordId(current.id); setDraft(structuredClone(current.currentVersion.activity) as CollectionDraft); setDirty(false); setReason(""); pending.current = null
-      setMessage(result.replayed ? "The earlier save was confirmed. The latest saved version is shown." : current.currentVersion.revision > 1 ? "Saved. Previous versions remain in correction history." : "Saved.")
+      // WO-10: the polite status says "Saved · version N" (or "Withdrawn · version N"), and the summary is cleared.
+      const version = current.currentVersion.revision
+      setMessage(result.replayed ? ACTIVITY_FORM_TEXT_WO10.replayed(version) : current.currentVersion.activity.state === "withdrawn" ? ACTIVITY_FORM_TEXT_WO10.withdrawn(version) : ACTIVITY_FORM_TEXT_WO10.saved(version))
+      setAttempted(false); setSaveProblem(null)
       // WO-06: a saved correction closes the form; the record view's summary shows the new version, with focus on its heading.
-      if (recordMode) { setCorrecting(false); focusHeadingNext.current = true }
+      // WO-10: on the list page (a new record), focus goes to the form's heading, which now names the saved record.
+      // Focus moves now, before the form closes (or Save is re-rendered), so it is never left on the page body in between;
+      // the effects then bring the heading into view.
+      if (recordMode) { headingRef.current?.focus({ preventScroll: true }); setCorrecting(false); focusHeadingNext.current = true }
+      else { if (typeof document !== "undefined") document.getElementById("collection-editor-heading")?.focus({ preventScroll: true }); focusNext.current = "collection-editor-heading" }
     } catch (cause) {
       setError(true)
       if (cause instanceof CollectionApiError && cause.conflict) { pending.current = null; failSave("This record changed elsewhere. Reload before correcting it.") }
@@ -740,7 +836,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
           setContext(next)
           setDraft(current => ({ ...current, setupVersionId: next.setupVersionId ?? "", locationId: "" }))
           pending.current = null
-          failSave("Company setup changed. Select a current location before retrying this save.")
+          failSave("Company setup changed. Select a current location before retrying this save.", "location")
         } else if (latestContext?.setupVersionId && input.activity.setupVersionId !== latestContext.setupVersionId) {
           // The setup was restored with identical content: keep the location and every unsaved edit, move the draft to the
           // current setup version and start a new request on the next save.
@@ -875,35 +971,58 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   const draftFindings = recordReadiness(readinessDraft, context, evidence, draftClaims, draftScope3Options ? { options: draftScope3Options, recordId } : undefined)
   const scope3Problem = scope3Draft ? scope3PayloadProblem(draft.kind as Scope3CollectionKind, readinessDraft.payload) ?? scope3DataQualityProblem(readinessDraft.payload) : null
   const separatorSuggestion = thousandsSeparatorSuggestion(draft.quantity.originalValue)
-  // Round 2 lane E (UX-4): every problem that would stop a save, listed next to Save, which stays off while any is shown.
-  // The same checks as save() and the shared contract (validateCollectionActivity), so nothing the server refuses is sent.
-  const blocking: string[] = []
-  // Round 3 lane D (PR-6, PR-12): the labels of the fields a problem names, marked invalid; freight, travel and waste problems
-  // the engine would only report after save (no vehicle, a declared haul without its basis, a waste pair EPA has no factor for).
-  const invalid = new Set<string>()
-  // A saved record opened by Fix shows its problem (and marks the field) before any edit, too.
-  const presave = canManage && scope3Draft && draft.state === "active" ? scope3PreSaveProblems(draft) : []
-  for (const problem of presave) { invalid.add(problem.field); blocking.push(problem.text) }
-  if (dirty && canManage) {
-    if (!draft.locationId) invalid.add("Company-setup location")
-    if (!draft.sourceId.trim()) invalid.add("source")
-    if (selected && draft.state === "active" && reason.trim().length < 3) invalid.add("Reason for this correction")
-    if (draft.state === "withdrawn" && (!draft.withdrawalReason || draft.withdrawalReason.trim().length < 3)) invalid.add("Reason for withdrawal")
-    if (scope3Draft && draft.quality === "estimated" && !draft.estimateBasis?.trim()) invalid.add("How was this estimate made?")
-    if (!draft.locationId) blocking.push("Choose a company-setup location.")
-    if (!draft.setupVersionId && !context?.setupVersionId) blocking.push("Save company setup first: every record is linked to a saved setup version.")
-    if (!draft.sourceId.trim()) blocking.push("Enter the source identifier.")
-    if (selected && draft.state === "active" && reason.trim().length < 3) blocking.push("Explain this correction (at least 3 characters).")
-    if (draft.state === "withdrawn" && (!draft.withdrawalReason || draft.withdrawalReason.trim().length < 3)) blocking.push("Explain why this record is being withdrawn (at least 3 characters).")
-    if (draft.kind === "electricity" && !/^\d{5}$/.test((draft.payload as Extract<CollectionPayload, { zip: string }>).zip)) blocking.push("Enter the meter’s five-digit ZIP code.")
-    if (draft.kind === "electricity" && !draft.payload.utilityName.trim()) blocking.push("Choose the verified utility serving this meter.")
+  // Round 2 lane E (UX-4): every problem that would stop a save, listed next to Save. The same checks as save() and the
+  // shared contract (validateCollectionActivity), so nothing the server refuses is sent. WO-10: each problem names its
+  // field (marked invalid and described by its own error); Save stays on, and pressing it with problems left focuses the
+  // summary. The checks run once the draft has changed or a save was tried; a saved record opened by Fix shows its Scope 3
+  // problem (and marks the field) before any edit, too.
+  const periodShown = !(completionDraft && draft.kind === "purchase_spend")
+  const utilityChoiceShown = draft.kind === "electricity" && !!zipLookup?.found && (zipLookup.needsUtilityChoice || zipLookup.utilities.length > 1)
+  const presave: FormProblem[] = canManage && scope3Draft && draft.state === "active" ? scope3PreSaveProblems(draft).map(problem => ({ text: problem.text, fields: PRESAVE_FIELDS[problem.field] ? [PRESAVE_FIELDS[problem.field]!] : [] })) : []
+  const saveChecks: FormProblem[] = [...presave]
+  if (canManage) {
+    const add = (text: string, ...fields: string[]) => { saveChecks.push({ text, fields }) }
+    if (!draft.locationId) add("Choose a company-setup location.", "location")
+    if (!draft.setupVersionId && !context?.setupVersionId) add("Save company setup first: every record is linked to a saved setup version.")
+    if (!draft.sourceId.trim()) add("Enter the source identifier.", "source")
+    if (periodShown && !realDate(draft.period.start)) add("Enter the period start as a real date (YYYY-MM-DD).", "periodStart")
+    if (periodShown && !realDate(draft.period.endExclusive)) add("Enter the last day covered as a real date (YYYY-MM-DD).", "periodEnd")
+    if (selected && draft.state === "active" && reason.trim().length < 3) add("Explain this correction (at least 3 characters).", "reason")
+    if (draft.state === "withdrawn" && (!draft.withdrawalReason || draft.withdrawalReason.trim().length < 3)) add("Explain why this record is being withdrawn (at least 3 characters).", "withdrawalReason")
+    if (draft.kind === "electricity" && !/^\d{5}$/.test((draft.payload as Extract<CollectionPayload, { zip: string }>).zip)) add("Enter the meter’s five-digit ZIP code.", "zip")
+    if (draft.kind === "electricity" && !draft.payload.utilityName.trim()) add("Choose the verified utility serving this meter.", utilityChoiceShown ? "utility" : "zipLookup")
+    if (draft.kind === "electricity" && "instruments" in p) p.instruments.forEach((instrument, index) => { if (!Number.isInteger(instrument.vintageYear) || instrument.vintageYear < 1000 || instrument.vintageYear > 9999) add(ACTIVITY_FORM_TEXT_WO10.vintageYear(index + 1), `vintage-${index}`) })
+    // The shared contract refuses a blank fuel or vehicle type, a model year outside 1900–2026 and a vehicle count below one
+    // (as "Invalid collection record."); each is named here, at its field.
+    if (draft.kind === "vehicle" && "fuelEconomy" in p) {
+      if (!p.fuel.trim()) add(ACTIVITY_FORM_TEXT_WO10.vehicleFuel, "vehicleFuel")
+      if (!p.vehicleType.trim()) add(ACTIVITY_FORM_TEXT_WO10.vehicleType, "vehicleType")
+      if (!Number.isInteger(p.modelYear) || p.modelYear < 1900 || p.modelYear > 2026) add(ACTIVITY_FORM_TEXT_WO10.modelYear, "modelYear")
+      if (p.vehicleCount !== null && !(Number.isSafeInteger(p.vehicleCount) && p.vehicleCount > 0)) add(ACTIVITY_FORM_TEXT_WO10.vehicleCount, "vehicleCount")
+    }
     const rejected = new Set(evidence.filter(file => file.quarantineStatus === "rejected").map(file => file.id))
-    if (draft.evidenceIds.some(id => rejected.has(id)) || draft.kind === "electricity" && draft.payload.instruments.some(instrument => instrument.evidenceReference !== null && rejected.has(instrument.evidenceReference))) blocking.push("Remove rejected evidence.")
-    if (scope3Problem) blocking.push(scope3Problem)
+    if (draft.evidenceIds.some(id => rejected.has(id)) || draft.kind === "electricity" && draft.payload.instruments.some(instrument => instrument.evidenceReference !== null && rejected.has(instrument.evidenceReference))) add("Remove rejected evidence.", "evidence")
+    if (scope3Problem) add(scope3Problem)
     // Round 2c integration (walk item 2): an estimated Scope 3 record without its basis is told what to fill in; the shared
-    // contract's message ("Only estimated records carry an estimate basis.") is shipped and stays the server's, and Scope 1.
-    if (scope3Draft && draft.quality === "estimated" && !draft.estimateBasis?.trim()) blocking.push(SAVE_TEXT_R2C.estimateBasisMissing)
-    if (blocking.length === 0) { try { validateCollectionActivity(prepareActivityForSave(withCurrentSetupVersion(draft, context), scope3Completion)) } catch (cause) { blocking.push(cause instanceof Error ? cause.message : "This record can’t be saved.") } }
+    // contract's message ("Only estimated records carry an estimate basis.") is shipped and stays the server's, and Scope 1's.
+    if (draft.quality === "estimated" && !draft.estimateBasis?.trim()) add(scope3Draft ? SAVE_TEXT_R2C.estimateBasisMissing : "Only estimated records carry an estimate basis.", "estimateBasis")
+    if (saveChecks.length === 0) {
+      try { validateCollectionActivity(prepareActivityForSave(withCurrentSetupVersion(draft, context), scope3Completion)) }
+      catch (cause) { const text = cause instanceof Error ? cause.message : "This record can’t be saved."; add(text, ...(CONTRACT_FIELDS.find(([pattern]) => pattern.test(text))?.[1] ?? [])) }
+    }
+  }
+  const problems = dirty || attempted ? saveChecks : presave
+  // The summary: a refused or failed save first, then every problem left.
+  const summary: FormProblem[] = saveProblem ? [saveProblem, ...problems.filter(problem => problem.text !== saveProblem.text)] : problems
+  const fieldError = (name: string) => summary.find(problem => problem.fields?.includes(name))?.text
+  /** WO-10: the anatomy of a named field: Required or Optional, and its own error. */
+  const anatomy = (name: string, need: FieldNeed = "optional") => ({ name, need, error: fieldError(name) })
+  /** WO-10: Save stays on. With problems left it marks them and focuses the summary; with nothing changed it says so. */
+  function attemptSave() {
+    if (!workspaceId || !canManage || busy) return
+    if (saveChecks.length > 0) { setAttempted(true); setSaveProblem(null); focusNext.current = "collection-save-problems"; return }
+    if (!dirty) { setAttempted(true); setSaveProblem({ text: ACTIVITY_FORM_TEXT_WO10.unchanged }); focusNext.current = "collection-save-problems"; return }
+    void save()
   }
   const duplicateRows = records.filter(row => {
     if (row.id === selected?.id || row.kind !== draft.kind) return false
@@ -922,8 +1041,8 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     : "Electricity meter or account ID"
   // Round 2 lane E (UX-12): a Scope 3 record at schema 30 asks "actual or estimated" inside its one data-quality section.
   const qualityFields = (label: string) => <>
-    <Select label={label} value={draft.quality} options={[["unknown", "Unknown"], ["actual", "Actual"], ["estimated", "Estimated"]]} onChange={value => edit(next => { next.quality = value as CollectionActivity["quality"]; next.estimateBasis = value === "estimated" ? "" : null })} />
-    {draft.quality === "estimated" && <Field label="How was this estimate made?" value={draft.estimateBasis ?? ""} onChange={value => edit(next => { next.estimateBasis = value })} invalid={invalid.has("How was this estimate made?")} />}
+    <Select {...anatomy("quality")} label={label} value={draft.quality} options={[["unknown", "Unknown"], ["actual", "Actual"], ["estimated", "Estimated"]]} onChange={value => edit(next => { next.quality = value as CollectionActivity["quality"]; next.estimateBasis = value === "estimated" ? "" : null })} />
+    {draft.quality === "estimated" && <Field {...anatomy("estimateBasis", "required")} label="How was this estimate made?" value={draft.estimateBasis ?? ""} onChange={value => edit(next => { next.estimateBasis = value })} />}
   </>
   const evidenceLabel = (file: CollectionEvidenceMetadata) => file.quarantineStatus === "clean" ? `${file.originalName} · cleared`
     : file.quarantineStatus === "pending" ? `${file.originalName} · quarantine review pending (not cleared)`
@@ -951,6 +1070,13 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     if (recordMode || !loaded) return
     onListQueryChange?.({ status: listFilter.status, type: kindFilter, page: page + 1 })
   }, [recordMode, loaded, listFilter.status, kindFilter, page, onListQueryChange])
+  // WO-10 (WO-06 QA follow-up 5): "Previous" and "Next 25" keep focus (aria-disabled at either end, never disabled), and
+  // when the new page is shorter the focused button is brought back into view.
+  useEffect(() => {
+    if (typeof document === "undefined") return
+    const active = document.activeElement as HTMLElement | null
+    if (active?.closest?.(".collection-list-pages")) active.scrollIntoView?.({ block: "nearest" })
+  }, [page])
   // WO-06: a record's name, as Overview and Results give it: "<Type> · <source id>" (the type without the form's "(Scope 3)").
   const typeName = (kind: string) => { const name: unknown = kindName(kind); return typeof name === "string" ? name.replace(/ \(Scope 3\)$/, "") : "" }
   const stateLabel = (status: "attention" | "ready" | "withdrawn") => ACTIVITY_LIST_TEXT_R3C.statuses.find(([value]) => value === status)?.[1] ?? status
@@ -975,11 +1101,15 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     requestAnimationFrame(() => { document.getElementById("collection-correct-record")?.focus() })
   }
   const history = selected && <><h3>Correction history</h3><ol className="setup-history">{selected.history.map(item => <li key={item.id}><button type="button" disabled={busy} onClick={() => void showVersion(item.id)}>Version {item.revision} · {formatTimeR2E(item.createdAt)}</button><span>{item.correctionReason || "Initial entry"}</span></li>)}</ol>{historical && <HistoricalActivityDetail version={historical} evidence={evidence} />}</>
+  // WO-06 (QA follow-up 4) / WO-10: after a failed first load, Try again stays in place while it runs (aria-disabled, so it
+  // keeps focus); it goes only once the screen has loaded (focus then moves to the record's heading, or to the list's
+  // heading when the record wasn't found).
+  const retryButton = <div className="nv-actions"><button type="button" className="nv-btn nv-btn--sm" id="collection-retry" aria-disabled={busy || undefined} onClick={() => { if (!busy) void refresh() }}>{ACTIVITY_LIST_TEXT_R3C.retry}</button></div>
   const status = <p role={error && !saveProblem ? "alert" : "status"} className={error ? "worksheet-error" : "worksheet-status"}>{message}</p>
   const viewOnly = !canManage && <p>Owner or admin access is needed to save activity or upload evidence.</p>
   const footnote = <p className="worksheet-footnote">This collection is a draft input set. A saved record, linked grid-loss source or uploaded file does not establish complete Scope 1, 2 or 3 coverage, a final market-based result, or external assurance.</p>
   const editorCard = <>
-    <div className="worksheet-card worksheet-form" id="collection-record-editor" tabIndex={-1}><h2>{selected ? `Correct saved ${kindName(selected.kind)}` : "New activity record"}</h2>
+    <div className="worksheet-card worksheet-form" id="collection-record-editor" tabIndex={-1}><h2 id="collection-editor-heading" tabIndex={-1}>{selected ? `Correct saved ${kindName(selected.kind)}` : "New activity record"}</h2>
       {selected && !recordMode && <button type="button" disabled={busy || !canManage} onClick={startNewRecord}>Start a new record</button>}
       {/* WO-06: correcting a saved record shows its type as fixed text, not the type chooser. */}
       {recordMode && selected ? <p className="collection-fixed-type">{`Type: ${typeName(selected.kind)} (fixed)`}</p> : <>
@@ -989,19 +1119,19 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       {selected && !recordMode && <p>Activity type is fixed while correcting this record. Use “Start a new record” to collect another activity.</p>}
       <fieldset className="setup-inputs" disabled={busy || !canManage}>
         <div className="setup-grid">
-          <Select label="Company-setup location" value={draft.locationId} options={[["", context?.setupVersionId ? "Choose a saved location" : "Save company setup locations first"], ...(context?.locations ?? []).map(location => [location.id, `${location.name || "Unnamed location"} · ${LOCATION_INCLUSION_TEXT_R2E[location.inclusion] ?? location.inclusion} · ${LOCATION_CONTROL_TEXT_R2E[location.control] ?? location.control}`] as const)]} invalid={invalid.has("Company-setup location")} onChange={value => edit(next => { next.locationId = value; next.setupVersionId = context?.setupVersionId ?? ""; if (next.kind === "electricity") next.payload.site = context?.locations.find(location => location.id === value)?.name ?? "" })} hint={context?.setupRevision ? `Linked to company setup version ${context.setupRevision}. Excluded and unknown locations remain visible.` : "A saved company setup version is required."} />
-          <Field label={sourceLabel} value={draft.sourceId} invalid={invalid.has("source")} onChange={value => edit(next => { next.sourceId = value; if (next.kind === "vehicle") next.payload.vehicleGroupId = value; if (next.kind === "electricity") next.payload.meterOrAccountNumber = value })} hint="Use the same stable identifier on every record from this source." />
+          <Select {...anatomy("location", "required")} label="Company-setup location" value={draft.locationId} options={[["", context?.setupVersionId ? "Choose a saved location" : "Save company setup locations first"], ...(context?.locations ?? []).map(location => [location.id, `${location.name || "Unnamed location"} · ${LOCATION_INCLUSION_TEXT_R2E[location.inclusion] ?? location.inclusion} · ${LOCATION_CONTROL_TEXT_R2E[location.control] ?? location.control}`] as const)]} onChange={value => edit(next => { next.locationId = value; next.setupVersionId = context?.setupVersionId ?? ""; if (next.kind === "electricity") next.payload.site = context?.locations.find(location => location.id === value)?.name ?? "" })} hint={context?.setupRevision ? `Linked to company setup version ${context.setupRevision}. Excluded and unknown locations remain visible.` : "A saved company setup version is required."} />
+          <Field {...anatomy("source", "required")} label={sourceLabel} value={draft.sourceId} onChange={value => edit(next => { next.sourceId = value; if (next.kind === "vehicle") next.payload.vehicleGroupId = value; if (next.kind === "electricity") next.payload.meterOrAccountNumber = value })} hint="Use the same stable identifier on every record from this source." />
           {/* Round 2 UX-12: a spend line asks for its date or period once, in its own form (SpendLineForm). */}
           {!(completionDraft && draft.kind === "purchase_spend") && <>
-          <Field label="Period start" type="date" value={draft.period.start} onChange={value => edit(next => { next.period.start = value })} />
-          <Field label="Last day covered" type="date" value={inclusivePeriodEnd(draft.period.endExclusive)} onChange={value => edit(next => { next.period.endExclusive = exclusivePeriodEnd(value) })} hint="Enter the inclusive last day shown on the source. Neuvetra stores the following day as the calculation boundary." />
+          <Field {...anatomy("periodStart", "required")} label="Period start" type="date" value={draft.period.start} onChange={value => edit(next => { next.period.start = value })} />
+          <Field {...anatomy("periodEnd", "required")} label="Last day covered" type="date" value={inclusivePeriodEnd(draft.period.endExclusive)} onChange={value => edit(next => { next.period.endExclusive = exclusivePeriodEnd(value) })} hint="Enter the inclusive last day shown on the source. Neuvetra stores the following day as the calculation boundary." />
           </>}
-          {(draft.kind === "natural_gas" || draft.kind === "electricity" || (scope3Draft && !completionDraft)) && <Field label={scope3Draft ? scope3Completion ? scope3AmountLabelR2C(draft.kind, draft.quantity.originalUnit, "mode" in p ? p.mode : "") : "Amount (distance, or mass of waste)" : "Original quantity from source"} value={draft.quantity.originalValue} onChange={value => edit(next => { next.quantity.originalValue = value })} hint="Keep the source text. Unknown or more than 3 decimals is saved but not calculated." />}
-          {scope3Draft && !completionDraft && <ChoiceOrOther label="Unit" value={draft.quantity.originalUnit} choices={scope3UnitChoices(draft, scope3Completion).map(unit => [unit, unitLabel(unit)] as const)} placeholder="Choose a unit" otherLabel="Another unit (saved, not calculated)" describeLabel="Unit as written on the source" onChange={value => edit(next => { next.quantity.originalUnit = value })} hint="The units this method takes are listed. Another unit is kept but not calculated." />}
-          {draft.kind !== "fugitive" && !scope3Draft && <Field label="Original unit as printed" value={draft.quantity.originalUnit} onChange={value => edit(next => { next.quantity.originalUnit = value; if (next.kind === "natural_gas" && !VOLUMETRIC_GAS_UNITS.has(value)) next.payload.heatContent = null })} hint={unitsHintR2E(supportedUnits[draft.kind])} />}
+          {(draft.kind === "natural_gas" || draft.kind === "electricity" || (scope3Draft && !completionDraft)) && <Field {...anatomy("quantity")} unit={draft.quantity.originalUnit ? unitLabel(draft.quantity.originalUnit) : undefined} label={scope3Draft ? scope3Completion ? scope3AmountLabelR2C(draft.kind, draft.quantity.originalUnit, "mode" in p ? p.mode : "") : "Amount (distance, or mass of waste)" : "Original quantity from source"} value={draft.quantity.originalValue} onChange={value => edit(next => { next.quantity.originalValue = value })} hint="Keep the source text. Unknown or more than 3 decimals is saved but not calculated." />}
+          {scope3Draft && !completionDraft && <ChoiceOrOther {...anatomy("unit")} label="Unit" value={draft.quantity.originalUnit} choices={scope3UnitChoices(draft, scope3Completion).map(unit => [unit, unitLabel(unit)] as const)} placeholder="Choose a unit" otherLabel="Another unit (saved, not calculated)" describeLabel="Unit as written on the source" onChange={value => edit(next => { next.quantity.originalUnit = value })} hint="The units this method takes are listed. Another unit is kept but not calculated." />}
+          {draft.kind !== "fugitive" && !scope3Draft && <Field {...anatomy("unit")} label="Original unit as printed" value={draft.quantity.originalUnit} onChange={value => edit(next => { next.quantity.originalUnit = value; if (next.kind === "natural_gas" && !VOLUMETRIC_GAS_UNITS.has(value)) next.payload.heatContent = null })} hint={unitsHintR2E(supportedUnits[draft.kind])} />}
           {!(scope3Draft && scope3Completion) && qualityFields("Data quality")}
-          <Field label="Source reference" value={draft.reference} onChange={value => edit(next => { next.reference = value })} hint="Bill number, log, contractor record or other locator." />
-          <label className="setup-field"><span>Notes and unresolved questions</span><textarea value={draft.notes} onChange={event => edit(next => { next.notes = event.target.value })} /></label>
+          <Field {...anatomy("reference")} label="Source reference" value={draft.reference} onChange={value => edit(next => { next.reference = value })} hint="Bill number, log, contractor record or other locator." />
+          <Field {...anatomy("notes")} multiline label="Notes and unresolved questions" value={draft.notes} onChange={value => edit(next => { next.notes = value })} />
         </div>
         {separatorSuggestion && <div className="collection-suggestion"><p>The quantity includes thousands separators. It remains uncalculated unless you explicitly accept the plain-decimal form.</p><button type="button" onClick={() => edit(next => { next.quantity.originalValue = separatorSuggestion; if (next.kind === "vehicle") next.payload.gallons = separatorSuggestion; if (next.kind === "distillate_no2" && next.payload.consumption.basis === "measured") next.payload.consumption.gallons = separatorSuggestion; if (next.kind === "distillate_no2" && next.payload.consumption.basis !== "measured") next.payload.consumption.purchasedGallons = separatorSuggestion })}>Use {separatorSuggestion}</button></div>}
         {duplicateRows.length > 0 && <div className="collection-duplicate-warning" role="alert"><strong>Probable duplicate</strong><p>{duplicateRows.length} active record{duplicateRows.length === 1 ? "" : "s"} use this activity type and source ID during an overlapping period. Review the saved record before adding another.</p></div>}
@@ -1009,51 +1139,51 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
         {scope3Problem && <p className="worksheet-error" role="note">Before saving: {scope3Problem}</p>}
         {completionDraft && <Scope3RecordForm activity={draft} onEdit={edit} disabled={busy || !canManage} env={{ consolidationApproach: setupFacts === undefined ? undefined : setupFacts.consolidationApproach, zipLookup, onZipLookup: zip => void runScope3ZipLookup(zip), spendLines, context, reportingPeriod: setupFacts?.reportingPeriod ?? null }} />}
         {draft.kind === "natural_gas" && "heatContent" in p && VOLUMETRIC_GAS_UNITS.has(draft.quantity.originalUnit) && <div className="setup-subcard"><h3>Natural gas</h3><p>Use the heat content printed on the bill. Do not assume a conversion.</p><div className="setup-grid">
-          <Field label="Bill heat content" value={p.heatContent?.value ?? ""} onChange={value => edit(next => { (next.payload as typeof p).heatContent = value ? { value, unit: p.heatContent?.unit ?? "MMBtu per ccf" } : null })} hint="Natural gas is about 1.026 therms per ccf (0.1026 MMBtu per ccf, 1.026 MMBtu per mcf); bills at high elevation show less. A value far outside that is held: check the unit." />
-          <Select label="Heat-content unit" value={p.heatContent?.unit ?? "MMBtu per ccf"} options={[["MMBtu per scf", "MMBtu per scf"], ["MMBtu per ccf", "MMBtu per ccf"], ["MMBtu per mcf", "MMBtu per mcf"], ["therm per ccf", "therm per ccf"]]} onChange={value => edit(next => { (next.payload as typeof p).heatContent = { value: p.heatContent?.value ?? "", unit: value as NonNullable<typeof p.heatContent>["unit"] } })} />
+          <Field {...anatomy("heatContent")} unit={p.heatContent?.unit ?? "MMBtu per ccf"} label="Bill heat content" value={p.heatContent?.value ?? ""} onChange={value => edit(next => { (next.payload as typeof p).heatContent = value ? { value, unit: p.heatContent?.unit ?? "MMBtu per ccf" } : null })} hint="Natural gas is about 1.026 therms per ccf (0.1026 MMBtu per ccf, 1.026 MMBtu per mcf); bills at high elevation show less. A value far outside that is held: check the unit." />
+          <Select {...anatomy("heatContentUnit")} label="Heat-content unit" value={p.heatContent?.unit ?? "MMBtu per ccf"} options={[["MMBtu per scf", "MMBtu per scf"], ["MMBtu per ccf", "MMBtu per ccf"], ["MMBtu per mcf", "MMBtu per mcf"], ["therm per ccf", "therm per ccf"]]} onChange={value => edit(next => { (next.payload as typeof p).heatContent = { value: p.heatContent?.value ?? "", unit: value as NonNullable<typeof p.heatContent>["unit"] } })} />
         </div></div>}
         {draft.kind === "distillate_no2" && "consumption" in p && <div className="setup-subcard"><h3>Generator fuel</h3><div className="setup-grid">
-          <Select label="How was fuel use determined?" value={p.consumption.basis} options={[["measured", "Measured gallons used"], ["purchases_with_tank_levels", "Purchases with opening and closing tank levels"], ["purchases_only", "Purchases only — input needed"]]} onChange={value => edit(next => { (next.payload as typeof p).consumption = value === "measured" ? { basis: "measured", gallons: "" } : value === "purchases_with_tank_levels" ? { basis: "purchases_with_tank_levels", purchasedGallons: "", openingGallons: "", closingGallons: "" } : { basis: "purchases_only", purchasedGallons: "" }; next.quantity.originalValue = ""; next.quantity.normalizedValue = null; next.quantity.normalizedUnit = null })} />
-          {p.consumption.basis === "measured" ? <Field label="Gallons used" value={p.consumption.gallons} onChange={value => edit(next => { (next.payload as typeof p & {consumption:{gallons:string}}).consumption.gallons = value; next.quantity.originalValue = value })} /> : <>
-            <Field label="Purchased gallons" value={p.consumption.purchasedGallons} onChange={value => edit(next => { (next.payload as typeof p & {consumption:{purchasedGallons:string}}).consumption.purchasedGallons = value; next.quantity.originalValue = value })} />
-            {p.consumption.basis === "purchases_with_tank_levels" && <><Field label="Opening tank level (gallons)" value={p.consumption.openingGallons} onChange={value => edit(next => { (next.payload as typeof p & {consumption:{openingGallons:string}}).consumption.openingGallons = value })} /><Field label="Closing tank level (gallons)" value={p.consumption.closingGallons} onChange={value => edit(next => { (next.payload as typeof p & {consumption:{closingGallons:string}}).consumption.closingGallons = value })} /></>}
+          <Select {...anatomy("fuelBasis")} label="How was fuel use determined?" value={p.consumption.basis} options={[["measured", "Measured gallons used"], ["purchases_with_tank_levels", "Purchases with opening and closing tank levels"], ["purchases_only", "Purchases only — input needed"]]} onChange={value => edit(next => { (next.payload as typeof p).consumption = value === "measured" ? { basis: "measured", gallons: "" } : value === "purchases_with_tank_levels" ? { basis: "purchases_with_tank_levels", purchasedGallons: "", openingGallons: "", closingGallons: "" } : { basis: "purchases_only", purchasedGallons: "" }; next.quantity.originalValue = ""; next.quantity.normalizedValue = null; next.quantity.normalizedUnit = null })} />
+          {p.consumption.basis === "measured" ? <Field {...anatomy("gallons")} unit="US gallons" label="Gallons used" value={p.consumption.gallons} onChange={value => edit(next => { (next.payload as typeof p & {consumption:{gallons:string}}).consumption.gallons = value; next.quantity.originalValue = value })} /> : <>
+            <Field {...anatomy("purchasedGallons")} unit="US gallons" label="Purchased gallons" value={p.consumption.purchasedGallons} onChange={value => edit(next => { (next.payload as typeof p & {consumption:{purchasedGallons:string}}).consumption.purchasedGallons = value; next.quantity.originalValue = value })} />
+            {p.consumption.basis === "purchases_with_tank_levels" && <><Field {...anatomy("openingGallons")} label="Opening tank level (gallons)" value={p.consumption.openingGallons} onChange={value => edit(next => { (next.payload as typeof p & {consumption:{openingGallons:string}}).consumption.openingGallons = value })} /><Field {...anatomy("closingGallons")} label="Closing tank level (gallons)" value={p.consumption.closingGallons} onChange={value => edit(next => { (next.payload as typeof p & {consumption:{closingGallons:string}}).consumption.closingGallons = value })} /></>}
           </>}
-          <Field label="Stated heating value (MMBtu per gallon, optional)" value={p.statedHhvMmbtuPerGallon ?? ""} onChange={value => edit(next => { (next.payload as typeof p).statedHhvMmbtuPerGallon = value || null })} hint="No. 2 fuel oil is about 0.138 MMBtu per gallon; leave blank to use that default. A value more than 15% from it is held: check the unit." />
+          <Field {...anatomy("statedHhv")} label="Stated heating value (MMBtu per gallon, optional)" value={p.statedHhvMmbtuPerGallon ?? ""} onChange={value => edit(next => { (next.payload as typeof p).statedHhvMmbtuPerGallon = value || null })} hint="No. 2 fuel oil is about 0.138 MMBtu per gallon; leave blank to use that default. A value more than 15% from it is held: check the unit." />
         </div></div>}
         {draft.kind === "vehicle" && "fuelEconomy" in p && <div className="setup-subcard"><h3>Vehicle or linked group</h3><div className="setup-grid">
-          <Select label="Fuel" value={vehicleFuels.includes(p.fuel as typeof vehicleFuels[number]) ? p.fuel : ""} options={[["", "Choose fuel"] as const, ...vehicleFuels.map(value => [value, value] as const)]} onChange={value => edit(next => { if (next.kind !== "vehicle") return; next.payload.fuel = value; next.payload.vehicleType = "" })} />
-          <Select label="Vehicle type" value={vehicleTypes.includes(p.vehicleType as typeof vehicleTypes[number]) && vehicleTypesByFuel[p.fuel as keyof typeof vehicleTypesByFuel]?.includes(p.vehicleType as never) ? p.vehicleType : ""} options={[["", p.fuel ? "Choose vehicle type" : "Choose fuel first"] as const, ...(vehicleTypesByFuel[p.fuel as keyof typeof vehicleTypesByFuel] ?? []).map(value => [value, value.replace(/_/g, " ")] as const)]} onChange={value => edit(next => { if (next.kind === "vehicle") next.payload.vehicleType = value })} />
-          <Field label="Model year" type="number" value={String(p.modelYear)} onChange={value => edit(next => { (next.payload as typeof p).modelYear = Number(value) })} />
-          <Field label="Fuel used (US gallons)" value={p.gallons} onChange={value => edit(next => { (next.payload as typeof p).gallons = value; next.quantity.originalValue = value })} />
-          <Field label="Vehicle count (optional)" type="number" value={p.vehicleCount === null ? "" : String(p.vehicleCount)} onChange={value => edit(next => { (next.payload as typeof p).vehicleCount = value ? Number(value) : null })} />
-          <Field label="Miles driven" value={p.miles?.value ?? ""} onChange={value => edit(next => { (next.payload as typeof p).miles = value ? { value, basis: p.miles?.basis ?? "" } : null; if (value) (next.payload as typeof p).fuelEconomy = null })} />
-          <Select label="Miles source / basis" value={p.miles?.basis ?? ""} options={[["", "Choose a miles source"], ["odometer", "Odometer"], ["trip_log", "Trip log"]]} onChange={value => edit(next => { (next.payload as typeof p).miles = value ? { value: p.miles?.value ?? "", basis: value } : null })} />
-          <Field label="Fuel economy (mpg), if miles unavailable" value={p.fuelEconomy?.mpg ?? ""} onChange={value => edit(next => { (next.payload as typeof p).fuelEconomy = value ? { mpg: value, source: p.fuelEconomy?.source ?? "" } : null; if (value) (next.payload as typeof p).miles = null })} />
-          <Select label="MPG source" value={p.fuelEconomy?.source ?? ""} options={[["", "Choose an MPG source"], ["vehicle_record", "Vehicle record"], ["fleet_record", "Fleet record"], ["fueleconomy_gov", "fueleconomy.gov"]]} onChange={value => edit(next => { (next.payload as typeof p).fuelEconomy = value ? { mpg: p.fuelEconomy?.mpg ?? "", source: value } : null })} />
+          <Select {...anatomy("vehicleFuel", "required")} label="Fuel" value={vehicleFuels.includes(p.fuel as typeof vehicleFuels[number]) ? p.fuel : ""} options={[["", "Choose fuel"] as const, ...vehicleFuels.map(value => [value, value] as const)]} onChange={value => edit(next => { if (next.kind !== "vehicle") return; next.payload.fuel = value; next.payload.vehicleType = "" })} />
+          <Select {...anatomy("vehicleType", "required")} label="Vehicle type" value={vehicleTypes.includes(p.vehicleType as typeof vehicleTypes[number]) && vehicleTypesByFuel[p.fuel as keyof typeof vehicleTypesByFuel]?.includes(p.vehicleType as never) ? p.vehicleType : ""} options={[["", p.fuel ? "Choose vehicle type" : "Choose fuel first"] as const, ...(vehicleTypesByFuel[p.fuel as keyof typeof vehicleTypesByFuel] ?? []).map(value => [value, value.replace(/_/g, " ")] as const)]} onChange={value => edit(next => { if (next.kind === "vehicle") next.payload.vehicleType = value })} />
+          <Field {...anatomy("modelYear", "required")} label="Model year" type="number" value={String(p.modelYear)} onChange={value => edit(next => { (next.payload as typeof p).modelYear = Number(value) })} />
+          <Field {...anatomy("vehicleGallons")} label="Fuel used (US gallons)" value={p.gallons} onChange={value => edit(next => { (next.payload as typeof p).gallons = value; next.quantity.originalValue = value })} />
+          <Field {...anatomy("vehicleCount")} label="Vehicle count (optional)" type="number" value={p.vehicleCount === null ? "" : String(p.vehicleCount)} onChange={value => edit(next => { (next.payload as typeof p).vehicleCount = value ? Number(value) : null })} />
+          <Field {...anatomy("miles")} unit="miles" label="Miles driven" value={p.miles?.value ?? ""} onChange={value => edit(next => { (next.payload as typeof p).miles = value ? { value, basis: p.miles?.basis ?? "" } : null; if (value) (next.payload as typeof p).fuelEconomy = null })} />
+          <Select {...anatomy("milesBasis")} label="Miles source / basis" value={p.miles?.basis ?? ""} options={[["", "Choose a miles source"], ["odometer", "Odometer"], ["trip_log", "Trip log"]]} onChange={value => edit(next => { (next.payload as typeof p).miles = value ? { value: p.miles?.value ?? "", basis: value } : null })} />
+          <Field {...anatomy("mpg")} label="Fuel economy (mpg), if miles unavailable" value={p.fuelEconomy?.mpg ?? ""} onChange={value => edit(next => { (next.payload as typeof p).fuelEconomy = value ? { mpg: value, source: p.fuelEconomy?.source ?? "" } : null; if (value) (next.payload as typeof p).miles = null })} />
+          <Select {...anatomy("mpgSource")} label="MPG source" value={p.fuelEconomy?.source ?? ""} options={[["", "Choose an MPG source"], ["vehicle_record", "Vehicle record"], ["fleet_record", "Fleet record"], ["fueleconomy_gov", "fueleconomy.gov"]]} onChange={value => edit(next => { (next.payload as typeof p).fuelEconomy = value ? { mpg: p.fuelEconomy?.mpg ?? "", source: value } : null })} />
         </div>{legacy && <p className="collection-legacy-hold">Held pending correction: saved fuel “{legacy.fuel || "blank"}” and vehicle type “{legacy.vehicleType || "blank"}” are preserved. Choose the matching FIELDS v6 tokens before saving a correction.</p>}</div>}
         {draft.kind === "fugitive" && "terms" in p && <div className="setup-subcard"><h3>One refrigerant per equipment or group</h3><p>The saved quantity is the derived net refrigerant release: (PN − CN) + PS + (CD − RD). The five entered terms remain unchanged.</p><div className="setup-grid">
-          <Select label="Refrigerant or fire-suppression gas" value={p.gas} options={gases.map(gas => [gas, gas])} onChange={value => edit(next => { (next.payload as typeof p).gas = value as typeof p.gas })} />
-          <Select label="Unit for all five terms" value={p.unit} options={[["kg", "kg"], ["lb", "lb"]]} onChange={value => edit(next => { (next.payload as typeof p).unit = value as typeof p.unit; next.quantity.originalUnit = value })} />
-          {(["PN", "CN", "PS", "CD", "RD"] as const).map(term => <Field key={term} label={`${term} (${p.unit})`} value={p.terms[term]} onChange={value => edit(next => { (next.payload as typeof p).terms[term] = value })} hint="Enter 0 only when this event did not happen; do not use 0 for unknown." />)}
+          <Select {...anatomy("gas")} label="Refrigerant or fire-suppression gas" value={p.gas} options={gases.map(gas => [gas, gas])} onChange={value => edit(next => { (next.payload as typeof p).gas = value as typeof p.gas })} />
+          <Select {...anatomy("termsUnit")} label="Unit for all five terms" value={p.unit} options={[["kg", "kg"], ["lb", "lb"]]} onChange={value => edit(next => { (next.payload as typeof p).unit = value as typeof p.unit; next.quantity.originalUnit = value })} />
+          {(["PN", "CN", "PS", "CD", "RD"] as const).map(term => <Field key={term} {...anatomy(`term-${term}`)} label={`${term} (${p.unit})`} value={p.terms[term]} onChange={value => edit(next => { (next.payload as typeof p).terms[term] = value })} hint="Enter 0 only when this event did not happen; do not use 0 for unknown." />)}
           <Tri label="Is the equipment inside your reporting boundary?" value={p.insideBoundary} onChange={value => edit(next => { (next.payload as typeof p).insideBoundary = value })} />
           <Tri label="Do you maintain and track a stock of refrigerant?" value={p.maintainsRefrigerantStock} onChange={value => edit(next => { (next.payload as typeof p).maintainsRefrigerantStock = value })} />
           <Tri label="Was any equipment converted to a different refrigerant during the year?" value={p.retrofitInPeriod} onChange={value => edit(next => { (next.payload as typeof p).retrofitInPeriod = value })} />
-          <Select label="Contractor records complete?" value={p.contractorRecordsComplete ? "yes" : "no"} options={[["no", "No / unresolved"], ["yes", "Yes"]]} onChange={value => edit(next => { (next.payload as typeof p).contractorRecordsComplete = value === "yes" })} />
-          <Select label="Event chronology complete?" value={p.eventChronologyComplete ? "yes" : "no"} options={[["no", "No / unresolved"], ["yes", "Yes"]]} onChange={value => edit(next => { (next.payload as typeof p).eventChronologyComplete = value === "yes" })} />
+          <Select {...anatomy("contractorRecords")} label="Contractor records complete?" value={p.contractorRecordsComplete ? "yes" : "no"} options={[["no", "No / unresolved"], ["yes", "Yes"]]} onChange={value => edit(next => { (next.payload as typeof p).contractorRecordsComplete = value === "yes" })} />
+          <Select {...anatomy("eventChronology")} label="Event chronology complete?" value={p.eventChronologyComplete ? "yes" : "no"} options={[["no", "No / unresolved"], ["yes", "Yes"]]} onChange={value => edit(next => { (next.payload as typeof p).eventChronologyComplete = value === "yes" })} />
         </div><p>A yes to stock or retrofit needs method review; an unknown answer needs input. Only an explicit outside-boundary answer excludes.</p></div>}
         {draft.kind === "transport" && "loadBasis" in p && <div className="setup-subcard"><h3>Freight transport (Scope 3)</h3><p>Distance-based, tank-to-wheel. Use vehicle-miles when the goods had a vehicle to themselves, and ton-miles when they shared it with other loads.</p><div className="setup-grid">
-          <Select label="Which way did the goods travel?" value={String(p.category)} options={[["4", "Category 4: to us (goods we bought, carrier we paid)"], ["9", "Category 9: to customers (goods we sold, carrier we didn’t pay)"]]} onChange={value => edit(next => { if (next.kind === "transport") next.payload.category = value === "9" ? 9 : 4 })} />
-          <ChoiceOrOther label="Vehicle" value={p.vehicle} invalid={invalid.has("Vehicle")} choices={Object.keys(SCOPE3_TRANSPORT_VEHICLES).map(vehicle => [vehicle, VEHICLE_LABELS[vehicle] ?? titleCase(vehicle)] as const)} placeholder="Choose a vehicle" otherLabel="Something else (saved, not calculated yet)" describeLabel="What vehicle?" onChange={value => edit(next => { if (next.kind === "transport") next.payload.vehicle = value })} />
-          <Select label="Did the goods have the vehicle to themselves?" value={p.loadBasis ?? ""} options={[["", "Not known yet"], ["dedicated_vehicle", "Yes: dedicated vehicle (vehicle-miles)"], ["shared_vehicle", "No: shared with other loads (ton-miles)"]]} onChange={value => edit(next => { if (next.kind !== "transport") return; next.payload.loadBasis = value === "dedicated_vehicle" || value === "shared_vehicle" ? value : null; if (next.payload.loadBasis && !SCOPE3_TRANSPORT_UNITS[next.payload.loadBasis].includes(next.quantity.originalUnit as never)) next.quantity.originalUnit = SCOPE3_TRANSPORT_UNITS[next.payload.loadBasis][0] })} />
-          <Select label="Did the goods pass through third-party warehouses or distribution centres?" value={p.thirdPartyFacilities} options={[["none", "No, none"], ["present_not_included", "Yes, but their emissions aren’t included"], ["unknown", "Not known"]]} onChange={value => edit(next => { if (next.kind === "transport") next.payload.thirdPartyFacilities = value as typeof SCOPE3_TRANSPORT_FACILITIES[number] })} hint="Only “No, none” meets the category’s minimum boundary; the other answers are disclosed as partial." />
+          <Select {...anatomy("transportCategory")} label="Which way did the goods travel?" value={String(p.category)} options={[["4", "Category 4: to us (goods we bought, carrier we paid)"], ["9", "Category 9: to customers (goods we sold, carrier we didn’t pay)"]]} onChange={value => edit(next => { if (next.kind === "transport") next.payload.category = value === "9" ? 9 : 4 })} />
+          <ChoiceOrOther {...anatomy("transportVehicle", "required")} label="Vehicle" value={p.vehicle} choices={Object.keys(SCOPE3_TRANSPORT_VEHICLES).map(vehicle => [vehicle, VEHICLE_LABELS[vehicle] ?? titleCase(vehicle)] as const)} placeholder="Choose a vehicle" otherLabel="Something else (saved, not calculated yet)" describeLabel="What vehicle?" onChange={value => edit(next => { if (next.kind === "transport") next.payload.vehicle = value })} />
+          <Select {...anatomy("loadBasis")} label="Did the goods have the vehicle to themselves?" value={p.loadBasis ?? ""} options={[["", "Not known yet"], ["dedicated_vehicle", "Yes: dedicated vehicle (vehicle-miles)"], ["shared_vehicle", "No: shared with other loads (ton-miles)"]]} onChange={value => edit(next => { if (next.kind !== "transport") return; next.payload.loadBasis = value === "dedicated_vehicle" || value === "shared_vehicle" ? value : null; if (next.payload.loadBasis && !SCOPE3_TRANSPORT_UNITS[next.payload.loadBasis].includes(next.quantity.originalUnit as never)) next.quantity.originalUnit = SCOPE3_TRANSPORT_UNITS[next.payload.loadBasis][0] })} />
+          <Select {...anatomy("thirdPartyFacilities")} label="Did the goods pass through third-party warehouses or distribution centres?" value={p.thirdPartyFacilities} options={[["none", "No, none"], ["present_not_included", "Yes, but their emissions aren’t included"], ["unknown", "Not known"]]} onChange={value => edit(next => { if (next.kind === "transport") next.payload.thirdPartyFacilities = value as typeof SCOPE3_TRANSPORT_FACILITIES[number] })} hint="Only “No, none” meets the category’s minimum boundary; the other answers are disclosed as partial." />
         </div></div>}
         {draft.kind === "waste" && "treatment" in p && <div className="setup-subcard"><h3>Waste (Scope 3)</h3><p>One material sent to one treatment per record, by mass. EPA factors include transport to the facility and exclude avoided emissions.</p><div className="setup-grid">
-          <Select label="Whose waste is it?" value={String(p.category)} options={[["5", "Category 5: waste from our operations"], ["12", "Category 12: end of life of products we sold"]]} onChange={value => edit(next => { if (next.kind === "waste") next.payload.category = value === "12" ? 12 : 5 })} />
-          <ChoiceOrOther label="Material" value={p.material} choices={SCOPE3_WASTE_MATERIALS.map(material => [material, SCOPE3_WASTE_MATERIAL_TEXT_R2E[material] ?? titleCase(material)] as const)} placeholder="Choose a material" otherLabel="Something else (saved, not calculated yet)" describeLabel="What material?" onChange={value => edit(next => { if (next.kind === "waste") next.payload.material = value })} />
-          <ChoiceOrOther label="Treatment" value={p.treatment} invalid={invalid.has("Treatment")} choices={scope3WasteTreatmentsFor(p.material).map(treatment => [treatment, SCOPE3_WASTE_TREATMENT_TEXT_R2E[treatment] ?? titleCase(treatment)] as const)} placeholder="Choose a treatment" otherLabel="Something else (saved, not calculated yet)" describeLabel="What treatment?" onChange={value => edit(next => { if (next.kind === "waste") next.payload.treatment = value })} hint="Only the treatments EPA publishes a factor for with this material are listed." />
+          <Select {...anatomy("wasteCategory")} label="Whose waste is it?" value={String(p.category)} options={[["5", "Category 5: waste from our operations"], ["12", "Category 12: end of life of products we sold"]]} onChange={value => edit(next => { if (next.kind === "waste") next.payload.category = value === "12" ? 12 : 5 })} />
+          <ChoiceOrOther {...anatomy("material")} label="Material" value={p.material} choices={SCOPE3_WASTE_MATERIALS.map(material => [material, SCOPE3_WASTE_MATERIAL_TEXT_R2E[material] ?? titleCase(material)] as const)} placeholder="Choose a material" otherLabel="Something else (saved, not calculated yet)" describeLabel="What material?" onChange={value => edit(next => { if (next.kind === "waste") next.payload.material = value })} />
+          <ChoiceOrOther {...anatomy("treatment")} label="Treatment" value={p.treatment} choices={scope3WasteTreatmentsFor(p.material).map(treatment => [treatment, SCOPE3_WASTE_TREATMENT_TEXT_R2E[treatment] ?? titleCase(treatment)] as const)} placeholder="Choose a treatment" otherLabel="Something else (saved, not calculated yet)" describeLabel="What treatment?" onChange={value => edit(next => { if (next.kind === "waste") next.payload.treatment = value })} hint="Only the treatments EPA publishes a factor for with this material are listed." />
         </div></div>}
         {draft.kind === "business_travel" && "passengerSegments" in p && <div className="setup-subcard"><h3>Business travel (Scope 3)</h3><p>{scope3Completion ? "By distance, tank-to-wheel. Air excludes radiative forcing; its cabin class is recorded and disclosed but the factor is an average for all classes. Hotel stays are recorded in room-nights, an optional activity: U.S. stays are estimated from EPA’s energy per available room-night for the highest hotel class (2005 data), because the class isn’t recorded." : "By distance, tank-to-wheel. Air excludes radiative forcing and doesn’t distinguish cabin class. Hotel stays aren’t calculated in this beta: record them under “Something else” so they stay visible as needing input."}</p><div className="setup-grid">
-          <ChoiceOrOther label="Mode" value={p.mode} choices={[[SCOPE3_AIR_BY_DISTANCE, MODE_LABELS.air!] as const, ...Object.keys(SCOPE3_TRAVEL_MODES).map(mode => [mode, MODE_LABELS[mode] ?? titleCase(mode)] as const), ...(scope3Completion ? [[SCOPE3_HOTEL_MODE, "Hotel stay (room-nights)"] as const] : [])]} placeholder="Choose a mode" otherLabel={scope3Completion ? "Something else (saved, not calculated yet)" : "Something else, such as a hotel stay (saved, not calculated yet)"} describeLabel="What was it?" onChange={value => edit(next => {
+          <ChoiceOrOther {...anatomy("travelMode")} label="Mode" value={p.mode} choices={[[SCOPE3_AIR_BY_DISTANCE, MODE_LABELS.air!] as const, ...Object.keys(SCOPE3_TRAVEL_MODES).map(mode => [mode, MODE_LABELS[mode] ?? titleCase(mode)] as const), ...(scope3Completion ? [[SCOPE3_HOTEL_MODE, "Hotel stay (room-nights)"] as const] : [])]} placeholder="Choose a mode" otherLabel={scope3Completion ? "Something else (saved, not calculated yet)" : "Something else, such as a hotel stay (saved, not calculated yet)"} describeLabel="What was it?" onChange={value => edit(next => {
             if (next.kind !== "business_travel") return
             next.payload.mode = value; if (value !== SCOPE3_AIR_BY_DISTANCE) next.payload.passengerSegments = null; if (!(SCOPE3_AIR_HAULS as readonly string[]).includes(value)) next.payload.haulBasis = null
             const units = scope3Completion && scope3IsHotelMode(value) ? ["room-night"] : travelUnits(value); if (units.length && !units.includes(next.quantity.originalUnit)) next.quantity.originalUnit = units[0]!
@@ -1062,49 +1192,53 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
             if ("cabinClass" in next.payload && !isAirMode(value)) next.payload.cabinClass = null
             if ("hotelCountry" in next.payload && !scope3IsHotelMode(value)) next.payload.hotelCountry = null
           })} />
-          {scope3Completion && isAirMode(p.mode) && <Select label="Cabin class" value={p.cabinClass ?? ""} options={[["", "Not recorded"] as const, ...scope3TokenOptions("cabinClass", SCOPE3_CABIN_CLASSES)]} onChange={value => edit(next => { if (next.kind !== "business_travel") return; withTravelV2(next.payload); next.payload.cabinClass = (value || null) as typeof next.payload.cabinClass })} hint="Recorded and disclosed; the air factor is the average for all classes." />}
-          {scope3Completion && scope3IsHotelMode(p.mode) && <Field label="Hotel country (two-letter code)" value={p.hotelCountry ?? ""} onChange={value => edit(next => { if (next.kind !== "business_travel") return; withTravelV2(next.payload); next.payload.hotelCountry = value.trim().toUpperCase() || null })} hint="ISO 3166, for example US or GB. Blank: the reporting location’s country is used if it is the U.S. Only U.S. stays are calculated (EPA per room-night values, highest hotel class, because the class isn’t recorded); others are listed, not counted." />}
-          {p.mode === SCOPE3_AIR_BY_DISTANCE && <Field label="One-way flights (passenger segments) at this distance" type="number" value={p.passengerSegments === null ? "" : String(p.passengerSegments)} onChange={value => edit(next => { if (next.kind === "business_travel") next.payload.passengerSegments = /^[1-9][0-9]{0,7}$/.test(value) && Number(value) <= 10_000_000 ? Number(value) : null })} hint="The amount above is the distance of one flight; the engine works out short, medium or long haul from it." />}
-          {(SCOPE3_AIR_HAULS as readonly string[]).includes(p.mode) && <Field label="How do you know the haul length?" invalid={invalid.has("How do you know the haul length?")} value={p.haulBasis ?? ""} onChange={value => edit(next => { if (next.kind === "business_travel") next.payload.haulBasis = value || null })} hint="For example, the travel agency’s booking export. The amount above is passenger-miles or km." />}
+          {scope3Completion && isAirMode(p.mode) && <Select {...anatomy("cabinClass")} label="Cabin class" value={p.cabinClass ?? ""} options={[["", "Not recorded"] as const, ...scope3TokenOptions("cabinClass", SCOPE3_CABIN_CLASSES)]} onChange={value => edit(next => { if (next.kind !== "business_travel") return; withTravelV2(next.payload); next.payload.cabinClass = (value || null) as typeof next.payload.cabinClass })} hint="Recorded and disclosed; the air factor is the average for all classes." />}
+          {scope3Completion && scope3IsHotelMode(p.mode) && <Field {...anatomy("hotelCountry")} label="Hotel country (two-letter code)" value={p.hotelCountry ?? ""} onChange={value => edit(next => { if (next.kind !== "business_travel") return; withTravelV2(next.payload); next.payload.hotelCountry = value.trim().toUpperCase() || null })} hint="ISO 3166, for example US or GB. Blank: the reporting location’s country is used if it is the U.S. Only U.S. stays are calculated (EPA per room-night values, highest hotel class, because the class isn’t recorded); others are listed, not counted." />}
+          {p.mode === SCOPE3_AIR_BY_DISTANCE && <Field {...anatomy("passengerSegments")} label="One-way flights (passenger segments) at this distance" type="number" value={p.passengerSegments === null ? "" : String(p.passengerSegments)} onChange={value => edit(next => { if (next.kind === "business_travel") next.payload.passengerSegments = /^[1-9][0-9]{0,7}$/.test(value) && Number(value) <= 10_000_000 ? Number(value) : null })} hint="The amount above is the distance of one flight; the engine works out short, medium or long haul from it." />}
+          {(SCOPE3_AIR_HAULS as readonly string[]).includes(p.mode) && <Field {...anatomy("haulBasis", "required")} label="How do you know the haul length?" value={p.haulBasis ?? ""} onChange={value => edit(next => { if (next.kind === "business_travel") next.payload.haulBasis = value || null })} hint="For example, the travel agency’s booking export. The amount above is passenger-miles or km." />}
         </div></div>}
         {draft.kind === "employee_commuting" && "mode" in p && !("passengerSegments" in p) && <div className="setup-subcard"><h3>Employee commuting (Scope 3)</h3><p>{scope3Completion ? COPY_TEXT_R2E.commutingByDistance : "By distance, tank-to-wheel. Survey extrapolation and teleworking aren’t calculated in this beta; if the distance is scaled from a sample, mark it Estimated and say how."}</p><div className="setup-grid">
-          <ChoiceOrOther label="Mode" value={p.mode} choices={SCOPE3_COMMUTING_MODES.map(mode => [mode, MODE_LABELS[mode] ?? titleCase(mode)] as const)} placeholder="Choose a mode" otherLabel={scope3Completion ? COPY_TEXT_R2E.commutingOther : "Something else, such as teleworking (saved, not calculated yet)"} describeLabel="What was it?" onChange={value => edit(next => { if (next.kind !== "employee_commuting") return; next.payload.mode = value; const units = travelUnits(value); if (units.length && !units.includes(next.quantity.originalUnit)) next.quantity.originalUnit = units[0]! })} />
+          <ChoiceOrOther {...anatomy("commutingMode")} label="Mode" value={p.mode} choices={SCOPE3_COMMUTING_MODES.map(mode => [mode, MODE_LABELS[mode] ?? titleCase(mode)] as const)} placeholder="Choose a mode" otherLabel={scope3Completion ? COPY_TEXT_R2E.commutingOther : "Something else, such as teleworking (saved, not calculated yet)"} describeLabel="What was it?" onChange={value => edit(next => { if (next.kind !== "employee_commuting") return; next.payload.mode = value; const units = travelUnits(value); if (units.length && !units.includes(next.quantity.originalUnit)) next.quantity.originalUnit = units[0]! })} />
         </div></div>}
         {/* Round 3 lane D (PR-6): the kind's key choice (mode, material, vehicle, the record form) comes before the data-quality block. */}
         {scope3Draft && scope3Completion && <DataQualityEditor activity={draft} onEdit={edit} lead={qualityFields("Is the amount actual or estimated?")} />}
         {draft.kind === "electricity" && "instruments" in p && <div className="setup-subcard"><h3>Electricity, site and grid region</h3><div className="setup-grid">
-          <Field label="ZIP code" value={p.zip} onChange={value => { edit(next => { (next.payload as typeof p).zip = value; (next.payload as typeof p).subregion = ""; (next.payload as typeof p).utilityEiaId = null; (next.payload as typeof p).utilityName = "" }); setZipLookup(null) }} hint="Required. Run the pinned lookup; unresolved values stay visible but cannot be saved as validated." />
-        </div><button type="button" disabled={busy || !/^\d{5}$/.test(p.zip)} onClick={() => void runZipLookup()}>Look up ZIP and utility</button>
-          {zipLookup?.found && (zipLookup.needsUtilityChoice || zipLookup.utilities.length > 1) && <Select label="Verified utility and eGRID subregion" value={p.utilityName ? `${p.subregion}|${p.utilityEiaId ?? ""}|${p.utilityName}` : ""} options={[["", "Choose the utility serving this meter"] as const, ...zipLookup.utilities.map(utility => [`${utility.subregion}|${utility.eiaId}|${utility.utility}`, `${utility.utility} · ${utility.subregion}${utility.predominantUtility ? " · predominant" : ""}`] as const)]} onChange={value => edit(next => { if (next.kind !== "electricity") return; const utility = zipLookup.utilities.find(item => `${item.subregion}|${item.eiaId}|${item.utility}` === value); next.payload.subregion = utility?.subregion ?? ""; next.payload.utilityEiaId = utility?.eiaId || null; next.payload.utilityName = utility?.utility ?? "" })} hint={zipLookup.needsUtilityChoice ? "A utility selection is required because this ZIP maps to more than one subregion." : "Choose the utility named on the source document."} />}
+          <Field {...anatomy("zip", "required")} label="ZIP code" value={p.zip} onChange={value => { edit(next => { (next.payload as typeof p).zip = value; (next.payload as typeof p).subregion = ""; (next.payload as typeof p).utilityEiaId = null; (next.payload as typeof p).utilityName = "" }); setZipLookup(null) }} hint="Required. Run the pinned lookup; unresolved values stay visible but cannot be saved as validated." />
+        </div><button type="button" id={fieldElementId("zipLookup")} disabled={busy || !/^\d{5}$/.test(p.zip)} onClick={() => void runZipLookup()}>Look up ZIP and utility</button>
+          {zipLookup?.found && (zipLookup.needsUtilityChoice || zipLookup.utilities.length > 1) && <Select {...anatomy("utility", "required")} label="Verified utility and eGRID subregion" value={p.utilityName ? `${p.subregion}|${p.utilityEiaId ?? ""}|${p.utilityName}` : ""} options={[["", "Choose the utility serving this meter"] as const, ...zipLookup.utilities.map(utility => [`${utility.subregion}|${utility.eiaId}|${utility.utility}`, `${utility.utility} · ${utility.subregion}${utility.predominantUtility ? " · predominant" : ""}`] as const)]} onChange={value => edit(next => { if (next.kind !== "electricity") return; const utility = zipLookup.utilities.find(item => `${item.subregion}|${item.eiaId}|${item.utility}` === value); next.payload.subregion = utility?.subregion ?? ""; next.payload.utilityEiaId = utility?.eiaId || null; next.payload.utilityName = utility?.utility ?? "" })} hint={zipLookup.needsUtilityChoice ? "A utility selection is required because this ZIP maps to more than one subregion." : "Choose the utility named on the source document."} />}
           {zipLookup?.found && p.subregion && p.utilityName && <p>Verified utility: <strong>{p.utilityName}</strong> · eGRID subregion <strong>{egridSubregionLabel(p.subregion)}</strong>. Source: {zipLookup.source}</p>}
           {zipLookup && !zipLookup.found && <p className="worksheet-error">No verified eGRID match was found for ZIP {zipLookup.zip}.</p>}
           <p>Location-based and market-based results have separate statuses. Uncovered consumption uses the reviewed Green-e residual mix. “Provisional” appears only if a subregion has no residual-mix rate.</p>
           <h4>Certificates and other contractual instruments</h4>
           {p.instruments.map((item, index) => <div className="setup-subcard" key={`${index}-${item.type}`}><h4>Instrument {index + 1}</h4><div className="setup-grid">
-            <Select label="Instrument type" value={item.type} options={instrumentTypes} onChange={value => edit(next => { (next.payload as typeof p).instruments[index]!.type = value as CollectionInstrument["type"] })} />
-            <Field label="Covered MWh" value={item.mwh} onChange={value => edit(next => { (next.payload as typeof p).instruments[index]!.mwh = value })} />
-            <Select label="Quality criteria confirmed?" value={item.qualityCriteriaMet ? "yes" : "no"} options={[["no", "No — market input needed"], ["yes", "Yes"]]} onChange={value => edit(next => { (next.payload as typeof p).instruments[index]!.qualityCriteriaMet = value === "yes" })} />
-            <Field label="Vintage year" type="number" value={String(item.vintageYear)} onChange={value => edit(next => { (next.payload as typeof p).instruments[index]!.vintageYear = Number(value) })} />
-            <Select label="Generation technology" value={item.generationTechnology} options={technologies.map(value => [value, value.replace(/_/g, " ")])} onChange={value => edit(next => { (next.payload as typeof p).instruments[index]!.generationTechnology = value as CollectionInstrument["generationTechnology"] })} />
-            <Select label="Supporting evidence" value={item.evidenceReference ?? ""} options={[["", "Choose an uploaded document"] as const, ...evidence.filter(file => file.quarantineStatus !== "rejected" || file.id === item.evidenceReference).map(file => [file.id, evidenceLabel(file)] as const)]} onChange={value => edit(next => { (next.payload as typeof p).instruments[index]!.evidenceReference = value || null; if (value && !next.evidenceIds.includes(value)) next.evidenceIds.push(value) })} />
-            <Field label="CO2 rate (lb/MWh)" value={item.rateLbPerMwh?.co2 ?? ""} onChange={value => edit(next => { const ch4 = item.rateLbPerMwh?.ch4 ?? null; const n2o = item.rateLbPerMwh?.n2o ?? null; (next.payload as typeof p).instruments[index]!.rateLbPerMwh = value || ch4 || n2o ? { co2: value, ch4, n2o } : null })} hint="Required for emitting technologies for every instrument type. Leave the rate blank for wind, solar PV, hydro or nuclear to use the zero rule." />
-            <Field label="CH4 rate (lb/MWh, if supplied)" value={item.rateLbPerMwh?.ch4 ?? ""} onChange={value => edit(next => { const current = (next.payload as typeof p).instruments[index]!; current.rateLbPerMwh = { co2: current.rateLbPerMwh?.co2 ?? "", ch4: value || null, n2o: current.rateLbPerMwh?.n2o ?? null } })} />
-            <Field label="N2O rate (lb/MWh, if supplied)" value={item.rateLbPerMwh?.n2o ?? ""} onChange={value => edit(next => { const current = (next.payload as typeof p).instruments[index]!; current.rateLbPerMwh = { co2: current.rateLbPerMwh?.co2 ?? "", ch4: current.rateLbPerMwh?.ch4 ?? null, n2o: value || null } })} />
+            <Select {...anatomy(`instrumentType-${index}`)} label="Instrument type" value={item.type} options={instrumentTypes} onChange={value => edit(next => { (next.payload as typeof p).instruments[index]!.type = value as CollectionInstrument["type"] })} />
+            <Field {...anatomy(`mwh-${index}`)} label="Covered MWh" value={item.mwh} onChange={value => edit(next => { (next.payload as typeof p).instruments[index]!.mwh = value })} />
+            <Select {...anatomy(`quality-${index}`)} label="Quality criteria confirmed?" value={item.qualityCriteriaMet ? "yes" : "no"} options={[["no", "No — market input needed"], ["yes", "Yes"]]} onChange={value => edit(next => { (next.payload as typeof p).instruments[index]!.qualityCriteriaMet = value === "yes" })} />
+            <Field {...anatomy(`vintage-${index}`, "required")} label="Vintage year" type="number" value={String(item.vintageYear)} onChange={value => edit(next => { (next.payload as typeof p).instruments[index]!.vintageYear = Number(value) })} />
+            <Select {...anatomy(`technology-${index}`)} label="Generation technology" value={item.generationTechnology} options={technologies.map(value => [value, value.replace(/_/g, " ")])} onChange={value => edit(next => { (next.payload as typeof p).instruments[index]!.generationTechnology = value as CollectionInstrument["generationTechnology"] })} />
+            <Select {...anatomy(`evidence-${index}`)} label="Supporting evidence" value={item.evidenceReference ?? ""} options={[["", "Choose an uploaded document"] as const, ...evidence.filter(file => file.quarantineStatus !== "rejected" || file.id === item.evidenceReference).map(file => [file.id, evidenceLabel(file)] as const)]} onChange={value => edit(next => { (next.payload as typeof p).instruments[index]!.evidenceReference = value || null; if (value && !next.evidenceIds.includes(value)) next.evidenceIds.push(value) })} />
+            <Field {...anatomy(`co2-${index}`)} label="CO2 rate (lb/MWh)" value={item.rateLbPerMwh?.co2 ?? ""} onChange={value => edit(next => { const ch4 = item.rateLbPerMwh?.ch4 ?? null; const n2o = item.rateLbPerMwh?.n2o ?? null; (next.payload as typeof p).instruments[index]!.rateLbPerMwh = value || ch4 || n2o ? { co2: value, ch4, n2o } : null })} hint="Required for emitting technologies for every instrument type. Leave the rate blank for wind, solar PV, hydro or nuclear to use the zero rule." />
+            <Field {...anatomy(`ch4-${index}`)} label="CH4 rate (lb/MWh, if supplied)" value={item.rateLbPerMwh?.ch4 ?? ""} onChange={value => edit(next => { const current = (next.payload as typeof p).instruments[index]!; current.rateLbPerMwh = { co2: current.rateLbPerMwh?.co2 ?? "", ch4: value || null, n2o: current.rateLbPerMwh?.n2o ?? null } })} />
+            <Field {...anatomy(`n2o-${index}`)} label="N2O rate (lb/MWh, if supplied)" value={item.rateLbPerMwh?.n2o ?? ""} onChange={value => edit(next => { const current = (next.payload as typeof p).instruments[index]!; current.rateLbPerMwh = { co2: current.rateLbPerMwh?.co2 ?? "", ch4: current.rateLbPerMwh?.ch4 ?? null, n2o: value || null } })} />
           </div><button type="button" onClick={() => edit(next => { (next.payload as typeof p).instruments.splice(index, 1) })}>Remove instrument</button></div>)}
           <button type="button" onClick={() => edit(next => { (next.payload as typeof p).instruments.push({ type: "energy_attribute_certificate", mwh: "", qualityCriteriaMet: false, vintageYear: 2025, evidenceReference: null, generationTechnology: "unknown", rateLbPerMwh: null }) })}>+ Add instrument</button>
           <p>A stated rate always takes precedence, including for wind, solar PV, hydro and nuclear. If a stated rate gives CO2 only, CH4 and N2O come from eGRID and the result is flagged as an estimate. Leave the rate blank for those four technologies, or state all three gases as 0, to claim zero for all gases.</p>
           <p>Biomass, biogas and landfill gas are collected but remain input needed in this beta. No instrument is silently counted at zero.</p>
         </div>}
-        <div className="setup-subcard"><h3>Evidence linked to this version</h3>{evidence.some(file => file.quarantineStatus !== "rejected" || draft.evidenceIds.includes(file.id)) ? evidence.filter(file => file.quarantineStatus !== "rejected" || draft.evidenceIds.includes(file.id)).map(file => <label className="collection-evidence-choice" key={file.id}><input type="checkbox" checked={draft.evidenceIds.includes(file.id)} disabled={file.quarantineStatus === "rejected" && !draft.evidenceIds.includes(file.id)} onChange={event => edit(next => { next.evidenceIds = event.target.checked ? [...next.evidenceIds, file.id] : next.evidenceIds.filter(id => id !== file.id); if (!event.target.checked && next.kind === "electricity") next.payload.instruments.forEach(instrument => { if (instrument.evidenceReference === file.id) instrument.evidenceReference = null }) })} /> {evidenceLabel(file)}</label>) : <p>No linkable evidence uploaded yet.</p>}</div>
+        <div className="setup-subcard"><h3 id={fieldElementId("evidence")} tabIndex={-1}>Evidence linked to this version</h3>{evidence.some(file => file.quarantineStatus !== "rejected" || draft.evidenceIds.includes(file.id)) ? evidence.filter(file => file.quarantineStatus !== "rejected" || draft.evidenceIds.includes(file.id)).map(file => <label className="collection-evidence-choice" key={file.id}><input type="checkbox" checked={draft.evidenceIds.includes(file.id)} disabled={file.quarantineStatus === "rejected" && !draft.evidenceIds.includes(file.id)} onChange={event => edit(next => { next.evidenceIds = event.target.checked ? [...next.evidenceIds, file.id] : next.evidenceIds.filter(id => id !== file.id); if (!event.target.checked && next.kind === "electricity") next.payload.instruments.forEach(instrument => { if (instrument.evidenceReference === file.id) instrument.evidenceReference = null }) })} /> {evidenceLabel(file)}</label>) : <p>No linkable evidence uploaded yet.</p>}</div>
         {/* Bug hunt C (C-08): rewriting the reason retires a failed request too (as editing any field does), so a retry saves the reason shown. */}
-        {selected && draft.state === "active" && <Field label="Reason for this correction" value={reason} invalid={invalid.has("Reason for this correction")} onChange={value => { setReason(value); pending.current = null }} hint="Required for a new version. Earlier versions remain available." />}
-        {selected && draft.state === "active" && <button type="button" className="collection-withdraw" onClick={() => edit(next => { next.state = "withdrawn"; next.withdrawalReason = "" })}>Withdraw this record</button>}
-        {selected && draft.state === "withdrawn" && <><Field label="Reason for withdrawal" invalid={invalid.has("Reason for withdrawal")} value={draft.withdrawalReason ?? ""} onChange={value => edit(next => { next.withdrawalReason = value })} hint="Required. The withdrawn version remains in history and is excluded from calculation." /><button type="button" onClick={() => edit(next => { next.state = "active"; next.withdrawalReason = null })}>Restore as active record</button></>}
-        <button type="button" className="collection-save" disabled={busy || !canManage || !dirty || blocking.length > 0} aria-describedby={blocking.length > 0 ? "collection-save-problems" : saveProblem ? "collection-save-error" : !dirty && canManage ? "collection-save-unchanged" : undefined} onClick={() => void save()}>{selected ? draft.state === "withdrawn" ? "Save withdrawal" : "Save correction" : "Save activity"}</button>
-        {!dirty && canManage && !saveProblem && blocking.length === 0 && <small className="nv-subtle collection-save-unchanged" id="collection-save-unchanged">{SCOPE3_PRESAVE_TEXT_R3D.unchanged}</small>}
-        {blocking.length > 0 && <div className="collection-save-problems" id="collection-save-problems"><p>{SAVE_TEXT_R2E.blocked}</p><ul>{blocking.map(text => <li key={text}>{text}</li>)}</ul></div>}
-        {saveProblem && <p ref={saveAlert} id="collection-save-error" tabIndex={-1} role="alert" className="worksheet-error collection-save-error"><strong>{SAVE_TEXT_R2E.notSaved}</strong> {saveProblem}</p>}
+        {selected && draft.state === "active" && <Field {...anatomy("reason", "required")} label="Reason for this correction" value={reason} onChange={value => { setReason(value); pending.current = null }} hint="Required for a new version. Earlier versions remain available." />}
+        {/* WO-10: the button that started or undid a withdrawal is replaced, so focus moves to what replaced it, never to the page body. */}
+        {selected && draft.state === "active" && <button type="button" className="collection-withdraw" id="collection-withdraw-record" onClick={() => { edit(next => { next.state = "withdrawn"; next.withdrawalReason = "" }); focusNext.current = fieldElementId("withdrawalReason") }}>Withdraw this record</button>}
+        {selected && draft.state === "withdrawn" && <><Field {...anatomy("withdrawalReason", "required")} label="Reason for withdrawal" value={draft.withdrawalReason ?? ""} onChange={value => edit(next => { next.withdrawalReason = value })} hint="Required. The withdrawn version remains in history and is excluded from calculation." /><button type="button" onClick={() => { edit(next => { next.state = "active"; next.withdrawalReason = null }); focusNext.current = "collection-withdraw-record" }}>Restore as active record</button></>}
       </fieldset>
+      {/* WO-10: Save and the error summary sit outside the fieldset, which is disabled while busy: Save keeps focus during a
+          save (aria-disabled, not disabled), and the summary's links reach every field. */}
+      <button type="button" className="collection-save" disabled={!canManage} aria-disabled={busy || undefined} aria-describedby={summary.length > 0 ? "collection-save-problems" : undefined} onClick={attemptSave}>{selected ? draft.state === "withdrawn" ? "Save withdrawal" : "Save correction" : "Save activity"}</button>
+      {summary.length > 0 && <div className="collection-save-problems" id="collection-save-problems" tabIndex={-1} aria-labelledby="collection-save-problems-title">
+        <p id="collection-save-problems-title">{attempted ? ACTIVITY_FORM_TEXT_WO10.summaryAfter(summary.length) : ACTIVITY_FORM_TEXT_WO10.summaryBefore(summary.length)}</p>
+        <ul>{summary.map(problem => <li key={problem.text}>{problem.fields?.length ? <a className="nv-link" href={`#${fieldElementId(problem.fields[0]!)}`} onClick={event => { event.preventDefault(); focusElementById(fieldElementId(problem.fields![0]!)) }}>{problem.text}</a> : problem.text}</li>)}</ul>
+      </div>}
       {recordMode && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--sm" disabled={busy} onClick={cancelCorrection}>Cancel correction</button></div>}
       {!recordMode && history}
     </div>
@@ -1119,12 +1253,12 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   if (recordMode) {
     const activity = selected ? selected.currentVersion.activity as CollectionDraft : null
     const linked = activity ? evidence.filter(file => activity.evidenceIds.includes(file.id)) : []
-    return <section className="worksheet collection-workspace collection-record-view" aria-busy={busy}>
+    return <section className="worksheet collection-workspace collection-record-view" aria-busy={busy} onFocus={keepClearOfStickyBars}>
       <p className="collection-back"><a className="nv-link" id="collection-back-link" href={allActivityHref} onClick={event => { if (!plainClick(event) || !onAllActivity) return; event.preventDefault(); onAllActivity() }}><span aria-hidden="true">← </span>All activity</a></p>
       <h1 ref={headingRef} tabIndex={-1} id="collection-record-heading">{selected && activity ? `${typeName(selected.kind)} · ${activity.sourceId}` : loaded ? "That record wasn’t found" : error ? "This record couldn’t be loaded" : "Loading record…"}</h1>
       {selected && openedItem && <p className="collection-record-meta"><span className={`collection-state-chip collection-state-chip--${openedItem.status}`}>{stateLabel(openedItem.status)}</span><span>version {selected.currentVersion.revision}</span></p>}
       {status}
-      {!loaded && error && workspaceId && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--sm" disabled={busy} onClick={() => void refresh()}>{ACTIVITY_LIST_TEXT_R3C.retry}</button></div>}
+      {!loaded && loadFailed && workspaceId && retryButton}
       {viewOnly}
       {selected && activity && openedItem && <div className="worksheet-card collection-record-summary"><h2>Summary</h2>
         <dl className="collection-record-facts">
@@ -1145,12 +1279,12 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       {footnote}
     </section>
   }
-  return <section className="worksheet collection-workspace" aria-busy={busy}>
+  return <section className="worksheet collection-workspace" aria-busy={busy} onFocus={keepClearOfStickyBars}>
     {/* Round 3 lane C (PR-3): until the screen has loaded, neither the Scope 1 and 2 nor the Scope 3 wording is guessed. */}
     <h1 ref={headingRef} tabIndex={-1}>{!loaded ? ACTIVITY_LIST_TEXT_R3C.neutralHeading : scope3 ? "Collect Scope 1, 2 and 3 activity" : "Collect Scope 1 and 2 activity"}</h1>
     {loaded && <p>{scope3 ? COPY_TEXT_R2E.activityIntroScope3 : "Save source details and private evidence for each activity. Missing answers remain unresolved. Calculations and reports come only from beta methods that are not yet formally released."}</p>}
     {status}
-    {!loaded && error && workspaceId && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--sm" disabled={busy} onClick={() => void refresh()}>{ACTIVITY_LIST_TEXT_R3C.retry}</button></div>}
+    {!loaded && loadFailed && workspaceId && retryButton}
     {viewOnly}
     {intro}
     {loaded && <nav className="nv-actions collection-jump" aria-label={ACTIVITY_LIST_TEXT_R3C.jumpLabel}>
@@ -1181,8 +1315,8 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
           {row.kind === "electricity" && scope3 && <p className="nv-subtle">Grid losses for this meter (Scope 3 category 3C) are calculated automatically when company setup includes category 3.</p>}
         </div>
       })}</div>
-      {loaded && pages > 1 && <div className="nv-actions collection-list-pages"><button type="button" className="nv-btn nv-btn--sm" disabled={page === 0} onClick={() => setListPage(page - 1)}>{ACTIVITY_LIST_TEXT_R3C.previous}</button><span className="nv-subtle">{ACTIVITY_LIST_TEXT_R3C.pageOf(page + 1, pages)}</span><button type="button" className="nv-btn nv-btn--sm" disabled={page >= pages - 1} onClick={() => setListPage(page + 1)}>{ACTIVITY_LIST_TEXT_R3C.next}</button></div>}
-      <button type="button" disabled={busy} onClick={() => void refresh()}>Reload saved records</button>
+      {loaded && pages > 1 && <div className="nv-actions collection-list-pages"><button type="button" className="nv-btn nv-btn--sm" aria-disabled={page === 0 || undefined} onClick={() => { if (page > 0) setListPage(page - 1) }}>{ACTIVITY_LIST_TEXT_R3C.previous}</button><span className="nv-subtle">{ACTIVITY_LIST_TEXT_R3C.pageOf(page + 1, pages)}</span><button type="button" className="nv-btn nv-btn--sm" aria-disabled={page >= pages - 1 || undefined} onClick={() => { if (page < pages - 1) setListPage(page + 1) }}>{ACTIVITY_LIST_TEXT_R3C.next}</button></div>}
+      <button type="button" aria-disabled={busy || undefined} onClick={() => { if (!busy) void refresh() }}>Reload saved records</button>
     </div>
 
     {editorCard}

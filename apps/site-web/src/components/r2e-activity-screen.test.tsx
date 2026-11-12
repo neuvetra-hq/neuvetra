@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Round 2 lane E (UX-4, UX-7, UX-8, UX-12; Claude, 31 October 2026): the Activity screen, run through the component harness.
-// - Save is off while a problem that blocks it is shown, and the problems are listed next to Save (not only at the top).
-// - A refused save is said next to Save, as an alert, with the reason.
+// - The problems that stop a save are listed next to Save (not only at the top); WO-10: Save stays on and each problem is tied to its field.
+// - A refused save is said next to Save, in the error summary, with the reason.
 // - The location picker, the saved list and the unit hint use words, never tokens; the saved list tells Scope 3 records apart.
 // - With Scope 3 on, the screen no longer says calculations come only from released methods.
 import { expect, test } from "bun:test"
 import { deriveCollectionQuantity, savedAgainstCurrentSetup, validateCollectionSaveInput, withCurrentSetupVersion } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { planCollectionCalculation } from "../../../../packages/neuvetra-database/src/collection-engine-input"
-import { COPY_TEXT_R2E, SAVE_TEXT_R2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
+import { COPY_TEXT_R2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
+import { ACTIVITY_FORM_TEXT_WO10 } from "@/lib/activity-form-text-wo10"
 import { reasonText } from "@/lib/plain-language"
 import { CollectionApiError } from "@/lib/collection-api"
 import { harness, loadComponent } from "./component-harness"
@@ -35,32 +36,42 @@ async function workspace(scope3 = true, saveError: CollectionApiError | null = n
 }
 const saveButton = (app: Awaited<ReturnType<typeof workspace>>["app"]) => app.button("Save activity")!
 const problems = (app: Awaited<ReturnType<typeof workspace>>["app"]) => app.nodes().find(node => node.props.id === "collection-save-problems")
-const alertNext = (app: Awaited<ReturnType<typeof workspace>>["app"]) => app.nodes().find(node => node.props.id === "collection-save-error")
 
-test("UX-4: Save stays off while blocking problems are listed next to it, and turns on once they are fixed", async () => {
-  const { app } = await workspace()
+// WO-10: Save stays on so the person can find the problems. The summary lists them before a save is tried, says "Not
+// saved" once one was, links each problem to its field and takes focus; each field carries its own error.
+test("UX-4 / WO-10: the problems are listed next to Save, each tied to its field; pressing Save sends nothing until they are fixed", async () => {
+  const { app, sent } = await workspace()
   app.byLabel("Gas account or meter ID")!.props.onChange("GAS-1"); await app.settle()
-  // A location is still missing: Save is off and the list beside it says so.
-  expect(saveButton(app).props.disabled).toBe(true)
+  // A location is still missing: Save stays on, the list beside it says so, and the location field carries the error.
+  expect(saveButton(app).props.disabled).toBe(false)
   expect(saveButton(app).props["aria-describedby"]).toBe("collection-save-problems")
   const listed = problems(app)!
-  expect(JSON.stringify(listed.children)).toContain(SAVE_TEXT_R2E.blocked)
+  expect(JSON.stringify(listed.children)).toContain(ACTIVITY_FORM_TEXT_WO10.summaryBefore(1))
   expect(JSON.stringify(listed.children)).toContain("Choose a company-setup location.")
+  expect(app.byLabel("Company-setup location")!.props).toMatchObject({ name: "location", need: "required", error: "Choose a company-setup location." })
+  await saveButton(app).props.onClick(); await app.settle()
+  expect(sent).toHaveLength(0)
+  expect(JSON.stringify(problems(app)!.children)).toContain(ACTIVITY_FORM_TEXT_WO10.summaryAfter(1))
   app.byLabel("Company-setup location")!.props.onChange(SITE); await app.settle()
   app.byLabel("Original quantity from source")!.props.onChange("100"); await app.settle()
   app.byLabel("Original unit as printed")!.props.onChange("therm"); await app.settle()
-  // Dates outside calendar 2025: the shared contract's refusal is listed before anything is sent, and Save stays off.
+  // Dates outside calendar 2025: the shared contract's refusal is listed before anything is sent, at both date fields.
   app.byLabel("Period start")!.props.onChange("2024-12-01"); await app.settle()
   app.byLabel("Last day covered")!.props.onChange("2024-12-31"); await app.settle()
-  expect(saveButton(app).props.disabled).toBe(true)
   expect(JSON.stringify(problems(app)!.children)).toContain("Collection periods must fall inside calendar 2025.")
+  expect(app.byLabel("Period start")!.props.error).toBe("Collection periods must fall inside calendar 2025.")
+  expect(app.byLabel("Last day covered")!.props.error).toBe("Collection periods must fall inside calendar 2025.")
+  await saveButton(app).props.onClick(); await app.settle()
+  expect(sent).toHaveLength(0)
   app.byLabel("Period start")!.props.onChange("2025-01-01"); await app.settle()
   app.byLabel("Last day covered")!.props.onChange("2025-01-31"); await app.settle()
   expect(problems(app)).toBeUndefined()
-  expect(saveButton(app).props.disabled).toBe(false)
+  expect(app.byLabel("Period start")!.props.error).toBeUndefined()
+  await saveButton(app).props.onClick(); await app.settle()
+  expect(sent).toHaveLength(1)
 })
 
-test("UX-4: a refused save is said next to Save as an alert (the top line is then a status, so it is announced once)", async () => {
+test("UX-4 / WO-10: a refused save is the first entry of the error summary (one alert at most), and editing clears it", async () => {
   const { app, sent } = await workspace(true, new CollectionApiError("The server refused the record.", 400))
   app.byLabel("Company-setup location")!.props.onChange(SITE); await app.settle()
   app.byLabel("Gas account or meter ID")!.props.onChange("GAS-1"); await app.settle()
@@ -68,15 +79,16 @@ test("UX-4: a refused save is said next to Save as an alert (the top line is the
   app.byLabel("Original unit as printed")!.props.onChange("therm"); await app.settle()
   await saveButton(app).props.onClick(); await app.settle()
   expect(sent).toHaveLength(1)
-  const alert = alertNext(app)!
-  expect(alert.props.role).toBe("alert")
-  expect(alert.props.tabIndex).toBe(-1)
-  expect(JSON.stringify(alert.children)).toContain("The server refused the record. Retry keeps the same save request.")
-  expect(JSON.stringify(alert.children)).toContain(SAVE_TEXT_R2E.notSaved)
-  expect(app.nodes().filter(node => node.props.role === "alert" && JSON.stringify(node.children).includes("The server refused the record."))).toHaveLength(1)
-  // Editing again clears the message beside Save.
+  const summary = problems(app)!
+  expect(summary.props.tabIndex).toBe(-1)
+  expect(summary.props["aria-labelledby"]).toBe("collection-save-problems-title")
+  expect(JSON.stringify(summary.children)).toContain("The server refused the record. Retry keeps the same save request.")
+  expect(JSON.stringify(summary.children)).toContain(ACTIVITY_FORM_TEXT_WO10.summaryAfter(1))
+  // The summary takes focus (it is not an alert as well); the top line is then a status, so the refusal is announced once.
+  expect(app.nodes().filter(node => node.props.role === "alert" && JSON.stringify(node.children).includes("The server refused the record."))).toHaveLength(0)
+  // Editing again clears the refusal from the summary.
   app.byLabel("Original quantity from source")!.props.onChange("101"); await app.settle()
-  expect(alertNext(app)).toBeUndefined()
+  expect(problems(app)).toBeUndefined()
 })
 
 test("UX-7, UX-12: location words, unit words, the saved list's category and description, and the units hint without engine tokens", async () => {

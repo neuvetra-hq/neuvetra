@@ -148,14 +148,14 @@ describe("SpendImport (I-09)", () => {
     p.says("$75.00")
     expect(p.node("Setup location")!.props.value).toBe(loc)
     expect(p.calls).toEqual([])
-    expect(p.app.button("Import spend lines")!.props.disabled).toBe(false)
+    expect(p.app.button("Import spend lines")!.props["aria-disabled"]).toBeUndefined()
   })
 
   test("a refused file shows every problem and cannot be imported", async () => {
     const p = await panel()
     await p.choose(`${HEADER}\nA,,V,,,d,10,USD,,9,,,\n`)
     p.says("Row 1: category 9 is transport the company did not pay for")
-    expect(p.app.button("Import spend lines")!.props.disabled).toBe(true)
+    expect(p.app.button("Import spend lines")!.props["aria-disabled"]).toBe(true)
   })
 
   test("preview with a line table, import of the same bytes as uploaded evidence at the chosen location, reconciliation and holds by reason", async () => {
@@ -282,7 +282,7 @@ describe("SpendImport (I-09)", () => {
     p.node("Spend file")!.props.onChange({ target: { files: [{ name: "broken.csv", type: "text/csv", arrayBuffer: async () => { throw new Error("The file was moved.") } }] } }); await new Promise(r => setTimeout(r, 5)); await p.app.settle()
     p.says("This file could not be read, so nothing was imported.")
     expect(p.node("Lines in the file")).toBeUndefined()
-    expect(p.app.button("Import spend lines")!.props.disabled).toBe(true)
+    expect(p.app.button("Import spend lines")!.props["aria-disabled"]).toBe(true)
   })
 
   test("round 3 (decision 8): a confident suggestion on the row with the account's category; a non-purchase group is offered for withdrawal", async () => {
@@ -403,6 +403,34 @@ describe("WO-06: unsaved spend-import input is reported to the leave guard", () 
     q.node(`Reason for withdrawing ${imported.fileName}`)!.props.onChange({ target: { value: "Wrong file." } }); await q.app.settle()
     expect(reported.at(-1)).toBe(true)
     q.app.button("Cancel withdrawal")!.props.onClick(); await q.app.settle()
+    expect(reported.at(-1)).toBe(false)
+  })
+
+  // WO-10 (WO-06 QA follow-ups 1 and 2): an imported file is cleared, so withdrawing that import can't bring its preview back
+  // as unsaved input; and an import being sent is not unsaved input (it completes even if the person leaves).
+  test("WO-10: an import being sent is not unsaved; once imported the file is cleared, and withdrawing that import stays quiet", async () => {
+    const reported: boolean[] = []
+    let release: () => void = () => {}
+    const gate = new Promise<void>(resolve => { release = resolve })
+    const p = await panel(view([]), undefined, undefined, false, 0, { uploadCollectionEvidence: async () => { await gate; return { receipt: { evidenceId } } } }, { onDirtyChange: (dirty: boolean) => reported.push(dirty) })
+    await p.choose(`${HEADER}\nL1,2025-03-01,Paper,6100,,Staples,75,USD,2025,,,,\n`)
+    expect(reported.at(-1)).toBe(true)
+    p.app.button("Import spend lines")!.props.onClick(); await new Promise(r => setTimeout(r, 5)); await p.app.settle()
+    // Sending: the in-app guard has nothing to ask about, and the button stays focusable (aria-disabled).
+    expect(reported.at(-1)).toBe(false)
+    expect(p.app.button("Import spend lines")!.props["aria-disabled"]).toBe(true)
+    expect(p.app.button("Import spend lines")!.props.disabled).toBe(false)
+    release(); await new Promise(r => setTimeout(r, 5)); await p.app.settle()
+    expect(p.calls.some(c => c[0] === "import")).toBe(true)
+    // Imported: no preview of the file is left, the result is shown, and nothing is unsaved.
+    expect(p.node("Lines in the file")).toBeUndefined()
+    expect(p.node("Import result")).toBeDefined()
+    expect(reported.at(-1)).toBe(false)
+    p.app.button("Withdraw this import")!.props.onClick(); await p.app.settle()
+    p.node(`Reason for withdrawing ${imported.fileName}`)!.props.onChange({ target: { value: "Wrong file." } }); await p.app.settle()
+    expect(reported.at(-1)).toBe(true)
+    p.app.button("Confirm withdrawal")!.props.onClick(); await new Promise(r => setTimeout(r, 5)); await p.app.settle()
+    expect(p.node("Lines in the file")).toBeUndefined()
     expect(reported.at(-1)).toBe(false)
   })
 

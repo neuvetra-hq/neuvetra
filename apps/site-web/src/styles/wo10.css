@@ -1,0 +1,27 @@
+/* WO-10: Activity form field anatomy, inline errors and the error summary. Unlayered on purpose (see the developer brief):
+   a layered rule would lose to the unlayered journey.css and staging.css rules. */
+
+/* A field: label (with Required or Optional), its own error, the control (with a unit suffix), the hint. */
+.nv-app .setup-field { align-content: start; }
+.nv-app .setup-field__label { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; font-weight: 500; }
+.nv-app .setup-field .setup-field__need { font-weight: 400; font-size: .8rem; letter-spacing: .02em; color: var(--muted); }
+.nv-app .setup-field .setup-field__need--required { color: var(--text); }
+.nv-app .setup-field__error { margin: 0; color: #f4ab95; font-weight: 600; }
+.nv-app .setup-field__error::before { content: "! "; }
+.nv-app .setup-field__control { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.nv-app .setup-field__control > :is(input, select, textarea) { flex: 1 1 auto; min-width: 0; }
+.nv-app .setup-field .setup-field__unit { flex: none; font-weight: 400; color: var(--muted); }
+
+/* A field brought into view (a summary link, Tab, a refused save) lands clear of the sticky bars at the top and bottom. */
+.nv-app .collection-workspace :is(.setup-field, input, select, textarea, a, button, [tabindex]) {
+  scroll-margin-top: calc(var(--nv-sticky-offset) + 8px);
+  scroll-margin-bottom: calc(var(--nv-bottom-chrome) + 16px);
+}
+
+/* The error summary: takes focus on a refused save; each entry links to its field. */
+.nv-app .collection-save-problems:focus { outline: var(--nv-focus-width) solid #f4ab95; outline-offset: 2px; }
+.nv-app .collection-save-problems .nv-link { color: #ffd2c4; text-decoration: underline; }
+.nv-app .collection-save { margin-top: 18px; }
+
+/* Buttons that stay focusable while they can't act (Save while saving, Try again while loading, the last page's Next). */
+.nv-app .worksheet button[aria-disabled="true"], .nv-app .collection-workspace .nv-btn[aria-disabled="true"] { cursor: not-allowed; color: var(--muted); border-style: dashed; }
