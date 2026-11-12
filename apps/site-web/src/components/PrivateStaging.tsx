@@ -5,8 +5,10 @@ import { Landing } from "./Landing"
 import { signInNoticeTone } from "@/lib/sign-in-notice"
 import { Icon } from "./Icon"
 import { decodeStagingAccess, decodeStagingConfig } from "@/lib/staging-session"
-import { acceptedViewHash, forgetReturnView, markDeliberateSignOut, parseViewHash, peekReturnView, recentlySignedOut, rememberReturnView, takeReturnView, viewHash } from "@/lib/view-route"
+import { acceptedViewHash, forgetReturnView, markDeliberateSignOut, parseViewHash, peekReturnView, recentlySignedOut, rememberReturnView, SIGNED_OUT_MARK_KEY, takeReturnView, viewHash } from "@/lib/view-route"
 
+// WO-05b: unsaved activity and setup input kept in this tab (sessionStorage), admitted per user, company and role.
+import { admitDrafts, announceDraftClear, clearAllDrafts, draftStorage, DRAFT_TEXT, listenForDraftClear } from "@/lib/draft-store"
 import { ACCESS_TEXT, AccessCheckError, accessCheckFailure, createStagingAuthorization, type AccessProblem, type ActiveStagingSession } from "@/lib/staging-authorization"
 
 // WO-05a: the session check has its own short limit (it is not a user action, so it doesn't raise the "Taking longer" notice).
@@ -40,9 +42,15 @@ export function PrivateStaging() {
   // The user whose session was already in this browser when the page loaded (a refresh), unless it came from a sign-in
   // link's code in this URL. Only that user's record address in the URL is trusted on a freshly loaded page.
   const loadUser = useRef<string | null>(null)
+  // WO-05b (WO-05a QA follow-up 1): ...and only when that load-time session itself passes the server check. A failed check
+  // (session ended, no access) or a sign-in started on this page before the first workspace opens withdraws the trust.
+  const loadTrusted = useRef(true)
   const signInFromUrl = useRef(typeof window !== "undefined" && /[?&]code=/.test(window.location.search))
   // Whose session ended here: the sign-in link carries their view only if they are the one signing in again.
   const endedUser = useRef<{ userId: string; email: string | null } | null>(null)
+  // WO-05b: the role of the workspace that was open, so the session-ended screen speaks of kept changes only to an owner or admin.
+  const lastRole = useRef<string | null>(null)
+  const [endedCanStore, setEndedCanStore] = useState(false)
 
   useEffect(() => {
     let alive = true
@@ -79,7 +87,7 @@ export function PrivateStaging() {
           if (otherUser) clearViewHash()
           // A record address in the URL of a freshly loaded page is trusted only for the session that was already here at
           // load (a refresh), or when the same user's stored return view confirms it.
-          const trusted = !otherUser && (opened.current !== null || (loadUser.current === userId && !signInFromUrl.current))
+          const trusted = !otherUser && (opened.current !== null || (loadUser.current === userId && loadTrusted.current && !signInFromUrl.current))
           const shown = acceptedViewHash(window.location.hash)
           let target = shown
           if (shown && !trusted && parseViewHash(shown).recordId && returnView !== shown) target = returnView ?? viewHash(parseViewHash(shown).panel, null)
@@ -87,14 +95,31 @@ export function PrivateStaging() {
           if (target && target !== window.location.hash) window.history.replaceState(null, "", target)
           opened.current = { userId, epoch: value.epoch }
           endedUser.current = null
+          // WO-05b: before this workspace renders, the tab keeps only this user's drafts for this company, and none at all
+          // for a member (QA-142). Any other user's draft is removed here, whatever happened on this page before.
+          admitDrafts(draftStorage(), { userId, companyId: value.access.access.workspaceId, role: value.actor.role })
+          lastRole.current = value.actor.role
         }
         setActive(value)
       },
-      onSignedIn: setSignedIn, onMessage: setMessage, onProblem: setProblem, onReconnecting: setReconnecting,
+      onSignedIn: setSignedIn, onMessage: setMessage, onReconnecting: setReconnecting,
+      onProblem: value => {
+        // The load-time session failed its check: a later sign-in on this page is not the load-time session (WO-05b).
+        if (opened.current === null && (value === "session_ended" || value === "no_access")) loadTrusted.current = false
+        setProblem(value)
+      },
       onSessionEnded: ({ userId, email: endedEmail, cause }) => {
         // QA B1 / CEO ruling: the view is kept only in the stored return view (bound to this user) and leaves the URL.
         // A SIGNED_OUT caused by a deliberate sign-out in another tab doesn't write it back.
-        if (!(cause === "signed_out" && recentlySignedOut(viewStorage()))) rememberReturnView(viewStorage(), userId, window.location.hash)
+        const deliberateElsewhere = cause === "signed_out" && recentlySignedOut(viewStorage())
+        // WO-05b (WO-05a QA follow-up 1): on a page where no workspace has opened yet, the load-time session failed its
+        // check, so a record address in the URL was never verified for anyone: only its view is kept, not the record.
+        const shown = window.location.hash, route = parseViewHash(shown)
+        const kept = opened.current === null && route.recordId ? viewHash(route.panel, null) : shown
+        if (!deliberateElsewhere) rememberReturnView(viewStorage(), userId, kept)
+        // WO-05b (QA-141): another tab's deliberate sign-out clears this tab's drafts too (the broadcast may come later).
+        else clearAllDrafts(draftStorage())
+        setEndedCanStore(!deliberateElsewhere && (lastRole.current === "owner" || lastRole.current === "admin"))
         clearViewHash()
         endedUser.current = { userId, email: endedEmail }
         // The next person at a shared computer doesn't see the previous email.
@@ -120,12 +145,17 @@ export function PrivateStaging() {
         if (alive && authEvents === initialAuthEvents) await lifecycle.authorize(result.data.session)
       } catch { if (alive) setMessage("Neuvetra is unavailable right now. Please try again later.") }
     }
+    // WO-05b (QA-141): a deliberate sign-out in another tab removes every draft here, by BroadcastChannel or by the
+    // sign-out mark it leaves in localStorage (whichever arrives first), and no draft is written until a workspace opens.
+    const stopDraftClear = listenForDraftClear(() => clearAllDrafts(draftStorage()))
+    const onStorage = (event: StorageEvent) => { if (event.key === SIGNED_OUT_MARK_KEY && event.newValue) clearAllDrafts(draftStorage()) }
+    window.addEventListener("storage", onStorage)
     const onFocus = () => { void lifecycle.refresh() }
     const interval = window.setInterval(onFocus, 60_000)
     window.addEventListener("focus", onFocus)
     window.addEventListener("online", onFocus)
     void initialize()
-    return () => { alive = false; lifecycle.dispose(); configuration.abort(); unsubscribe(); authClient?.auth.stopAutoRefresh(); window.clearInterval(interval); window.removeEventListener("focus", onFocus); window.removeEventListener("online", onFocus) }
+    return () => { alive = false; lifecycle.dispose(); configuration.abort(); unsubscribe(); authClient?.auth.stopAutoRefresh(); window.clearInterval(interval); window.removeEventListener("focus", onFocus); window.removeEventListener("online", onFocus); window.removeEventListener("storage", onStorage); stopDraftClear() }
   }, [])
 
   // Each access state puts focus on its own heading when it appears (WO-05a).
@@ -136,6 +166,7 @@ export function PrivateStaging() {
     event.preventDefault()
     if (!client || busy) return
     authorization.current?.allowSignIn(); setBusy(true); setMessage("Signing in…")
+    if (opened.current === null) loadTrusted.current = false
     try {
       const { error } = await client.auth.signInWithPassword({ email: email.trim(), password })
       if (error) setMessage("Sign-in failed. Check your invited account details.")
@@ -143,10 +174,12 @@ export function PrivateStaging() {
     finally { setPassword(""); setBusy(false) }
   }
   async function signOut() {
-    // A deliberate sign-out is the only thing that forgets the view address.
+    // A deliberate sign-out is the only thing that forgets the view address. WO-05b: it also removes every unsaved draft in
+    // this tab, stops further draft writes (before the workspace closes), and tells the other tabs to do the same.
+    clearAllDrafts(draftStorage()); markDeliberateSignOut(viewStorage()); announceDraftClear()
     authorization.current?.signOut(); setBusy(true)
-    clearViewHash(); forgetReturnView(viewStorage()); markDeliberateSignOut(viewStorage())
-    opened.current = null; loadUser.current = null; endedUser.current = null
+    clearViewHash(); forgetReturnView(viewStorage())
+    opened.current = null; loadUser.current = null; endedUser.current = null; lastRole.current = null
     try {
       if (!client) throw new Error("Authentication unavailable")
       const { error } = await client.auth.signOut({ scope: "local" })
@@ -159,6 +192,7 @@ export function PrivateStaging() {
   async function sendSignInLink() {
     if (!client || busy || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { setMessage("Enter your invited email address first."); return }
     authorization.current?.allowSignIn(); setBusy(true)
+    if (opened.current === null) loadTrusted.current = false
     try {
       // The link opens the view the session ended on (QA-146), but only for the person whose session ended: anyone else's
       // link goes to the bare origin (QA B1). The view comes from the user-bound stored return view, already validated.
@@ -192,7 +226,7 @@ export function PrivateStaging() {
   if (problem === "session_ended") return <div className="nv-access">{tone === "error" ? <p className="nv-sr" role="status" aria-live="polite" /> : live}<div className="nv-access__card">
     <Icon name="info" size={32} className="nv-access__icon" />
     <h1 className="nv-h2" tabIndex={-1} ref={accessHeadingRef}>Your session ended</h1>
-    <p className="nv-muted">Sign in again to continue.</p>
+    <p className="nv-muted">Sign in again to continue.{endedCanStore && ` ${DRAFT_TEXT.sessionEnded}`}</p>
     <form className="nv-access__form" onSubmit={event => { if (busy) { event.preventDefault(); return } void signIn(event) }}>
       <label className="nv-field"><span>Email</span><input type="email" autoComplete="username" required value={email} onChange={event => setEmail(event.target.value)} /></label>
       <label className="nv-field"><span>Password</span><input type="password" autoComplete="current-password" required value={password} onChange={event => setPassword(event.target.value)} /></label>

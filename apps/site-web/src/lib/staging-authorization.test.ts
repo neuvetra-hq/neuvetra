@@ -4,6 +4,14 @@ import { ACCESS_TEXT, AccessCheckError, accessCheckFailure, createStagingAuthori
 import { acceptedViewHash, forgetReturnView, markDeliberateSignOut, parseViewHash, peekReturnView, recentlySignedOut, rememberReturnView, takeReturnView, viewHash } from "./view-route"
 import { signInNoticeTone } from "./sign-in-notice"
 import { decodeStagingAccess, decodeStagingConfig, STAGING_PROFILE } from "./staging-session"
+import * as drafts from "./draft-store"
+import { SIGNED_OUT_MARK_KEY } from "./view-route"
+
+/** WO-05b: an in-memory sessionStorage for the tab under test (key/length as the draft store reads them). */
+const announced={count:0}
+function memoryStorage(entries: Map<string, string> = new Map()) {
+ return { entries, get length() { return entries.size }, key: (i: number) => [...entries.keys()][i] ?? null, getItem: (k: string) => entries.get(k) ?? null, setItem: (k: string, v: string) => { entries.set(k, v) }, removeItem: (k: string) => { entries.delete(k) } }
+}
 
 // Execute the actual PrivateStaging component, effects, subscription and JSX with injected
 // hook/provider boundaries. This is not a browser DOM or native focus demonstration.
@@ -15,7 +23,7 @@ const session=(id=owner,token="original-token")=>({user:{id,email:emailOf(id)},a
 const access=(id=owner,role="owner",workspaceId=company,evidenceId:string|null=null)=>({profile:STAGING_PROFILE,user:{id},access:{role,workspaceId,evidenceId}})
 const deferred=()=>{let resolve!:(r:Response)=>void;const promise=new Promise<Response>(r=>{resolve=r});return {promise,resolve}}
 type Node={type:unknown;props:Record<string,any>;children:any[]}
-function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;search?:string}={}){
+function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;search?:string;tab?:ReturnType<typeof memoryStorage>;onDraftClear?:(listener:()=>void)=>void}={}){
  // The lifecycle clock: each read moves 10 s on (no throttling) unless a test fixes it.
  const clock={fixed:null as number|null,t:1_000_000}
  const scheduled:Array<{run:()=>void;ms:number;cancelled:boolean}>=[]
@@ -39,7 +47,8 @@ function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;
   // Retries are scheduled on a fake clock the test advances; jitter is fixed at its midpoint (×1.0).
   createStagingAuthorization:(deps:any)=>createStagingAuthorization({...deps,random:()=>0.5,now:()=>clock.fixed??(clock.t+=10_000),schedule:(run:()=>void,ms:number)=>{const item={run,ms,cancelled:false};scheduled.push(item);return ()=>{item.cancelled=true}}}),
   // The session check's 15 s limit runs in 5 ms here.
-  setTimeout:(fn:()=>void,ms:number)=>globalThis.setTimeout(fn,ms===15_000?5:ms),clearTimeout:(id:any)=>globalThis.clearTimeout(id),ACCESS_TEXT,AccessCheckError,accessCheckFailure,acceptedViewHash,forgetReturnView,rememberReturnView,takeReturnView,markDeliberateSignOut,parseViewHash,peekReturnView,recentlySignedOut,viewHash,
+  setTimeout:(fn:()=>void,ms:number)=>globalThis.setTimeout(fn,ms===15_000?5:ms),clearTimeout:(id:any)=>globalThis.clearTimeout(id),ACCESS_TEXT,AccessCheckError,accessCheckFailure,acceptedViewHash,forgetReturnView,rememberReturnView,takeReturnView,markDeliberateSignOut,parseViewHash,peekReturnView,recentlySignedOut,viewHash,SIGNED_OUT_MARK_KEY,
+  ...drafts,draftStorage:()=>options.tab??null,listenForDraftClear:(listener:()=>void)=>{options.onDraftClear?.(listener);return ()=>{}},announceDraftClear:()=>{announced.count++},
   fetch:async(path:string,init:RequestInit)=>{
   if(path.endsWith("/config"))return Response.json({profile:STAGING_PROFILE,supabaseUrl:"https://abcdefghijklmnopqrst.supabase.co",anonKey:"sb_publishable_abcdefghijklmnopqrst"})
   const token=new Headers(init.headers).get("authorization")!;requests.push({token,signal:init.signal as AbortSignal});return verification(token)
@@ -294,7 +303,13 @@ test("a deliberate sign-out clears the address and the stored view",async()=>{
 })
 
 test("the email link from the session-ended state returns the same person to the validated view; a tampered address is dropped",async()=>{
- for(const [hash,redirect] of [[`#/activity/${record}`,`https://synthetic.invalid/#/activity/${record}`],["#/results","https://synthetic.invalid/#/results"],["#javascript:alert(1)","https://synthetic.invalid/"],["#//evil.example/x","https://synthetic.invalid/"]] as const){
+ // WO-05b: a session that ends while its workspace is open carries the record it was on.
+ const during=harness({hash:`#/activity/${record}`});await during.flush();during.workspace()!.props.staging.actor.onUnauthorized(401);await during.flush()
+ during.nodes().find(n=>n.type==="input"&&n.props.type==="email")!.props.onChange({target:{value:"owner@synthetic.invalid"}});during.render()
+ during.button("Email me a sign-in link")!.props.onClick();await during.flush()
+ expect(during.otp.at(-1).options.emailRedirectTo).toBe(`https://synthetic.invalid/#/activity/${record}`);during.cleanup()
+ // At load (the load-time session failed its check), a record address was never verified for anyone: only its view is kept.
+ for(const [hash,redirect] of [[`#/activity/${record}`,"https://synthetic.invalid/#/activity"],["#/results","https://synthetic.invalid/#/results"],["#javascript:alert(1)","https://synthetic.invalid/"],["#//evil.example/x","https://synthetic.invalid/"]] as const){
   const h=harness({hash});h.setVerification(status(401));await h.flush();await h.flush()
   h.nodes().find(n=>n.type==="input"&&n.props.type==="email")!.props.onChange({target:{value:" Owner@Synthetic.invalid "}});h.render()
   h.button("Email me a sign-in link")!.props.onClick();await h.flush()
@@ -439,4 +454,74 @@ test("WO-08: the open workspace gets the signed-in email and this component's de
  expect(h.nodes().some(n=>n.type==="header")).toBe(false)
  account.onSignOut();await h.flush()
  expect(h.workspace()).toBeUndefined();expect(h.location.hash).toBe("");expect(h.message()).toBe("Signed out on this browser.");h.cleanup()
+})
+
+// --- WO-05b: drafts are admitted per user, company and role before the workspace renders; a deliberate sign-out clears them ---
+
+const draftScope=(userId:string,item=record)=>({userId,companyId:company,view:"activity" as const,item})
+const keptDraft={fields:{recordId:record,activity:{},reason:""},binding:{expectedRevision:1,expectedVersionId:"44444444-4444-4444-8444-444444444444"},idempotencyKey:null,request:null}
+function tabWithDraftOf(userId:string){const tab=memoryStorage();drafts.admitDrafts(tab,{userId,companyId:company,role:"owner"});drafts.writeDraft(tab,draftScope(userId),keptDraft);drafts.writeDraft(tab,draftScope(userId,"new"),keptDraft);return tab}
+
+test("QA-142: another user signing in on the same tab finds none of the last user's drafts, already gone when the workspace first renders",async()=>{
+ const tab=tabWithDraftOf(owner);expect(tab.entries.size).toBe(2)
+ const h=harness({hash:`#/activity/${record}`,tab});await h.flush()
+ h.workspace()!.props.staging.actor.onUnauthorized(401);await h.flush()
+ expect(tab.entries.size).toBe(2)
+ h.setVerification(async()=>Response.json(access(other,"admin")));h.emit(session(other,"b-token"))
+ // The first render with a workspace: the drafts were removed in the same step that opened it.
+ for(let i=0;i<20&&!h.workspace();i++){await Promise.resolve();h.render()}
+ expect(h.workspace()).toBeDefined();expect(tab.entries.size).toBe(0);h.cleanup()
+ // A member of the company (here the same person, whose role changed) is offered and keeps nothing either.
+ const member=tabWithDraftOf(owner)
+ const m=harness({tab:member});m.setVerification(async()=>Response.json(access(owner,"member")));await m.flush()
+ expect(m.workspace()).toBeDefined();expect(member.entries.size).toBe(0);m.cleanup()
+ // The same owner coming back keeps their own.
+ const own=tabWithDraftOf(owner)
+ const o=harness({tab:own});await o.flush();expect(o.workspace()).toBeDefined();expect(own.entries.size).toBe(2);o.cleanup()
+})
+
+test("QA-141: a deliberate sign-out removes every draft here and tells the other tabs; the other tab clears on either signal",async()=>{
+ const tab=tabWithDraftOf(owner)
+ const h=harness({tab});await h.flush()
+ const before=announced.count
+ h.clickSignOut();await h.flush()
+ expect(tab.entries.size).toBe(0);expect(announced.count).toBe(before+1)
+ // Nothing is written after it, even by a form that saves its input as the workspace closes.
+ expect(drafts.writeDraft(tab,draftScope(owner),keptDraft)).toBe(false);h.cleanup()
+ // The other tab: the BroadcastChannel message, or the sign-out mark arriving through localStorage.
+ let broadcast:()=>void=()=>{}
+ const second=tabWithDraftOf(owner)
+ const t2=harness({tab:second,onDraftClear:listener=>{broadcast=listener}});await t2.flush()
+ broadcast();expect(second.entries.size).toBe(0);t2.cleanup()
+ const third=tabWithDraftOf(owner)
+ const t3=harness({tab:third});await t3.flush()
+ ;(t3.listeners.get("storage") as unknown as (event:{key:string;newValue:string|null})=>void)({key:"nv:return-view:v1",newValue:"x"});expect(third.entries.size).toBe(2)
+ ;(t3.listeners.get("storage") as unknown as (event:{key:string;newValue:string|null})=>void)({key:SIGNED_OUT_MARK_KEY,newValue:String(Date.now())});expect(third.entries.size).toBe(0);t3.cleanup()
+ // A SIGNED_OUT that follows another tab's deliberate sign-out clears this tab's drafts too.
+ const fourth=tabWithDraftOf(owner),storage=new Map<string,string>()
+ const t4=harness({tab:fourth,storage});await t4.flush()
+ markDeliberateSignOut({getItem:k=>storage.get(k)??null,setItem:(k,v)=>{storage.set(k,v)},removeItem:k=>{storage.delete(k)}})
+ t4.emit(null,"SIGNED_OUT");await t4.flush();expect(fourth.entries.size).toBe(0);t4.cleanup()
+})
+
+test("the session-ended screen says unsaved changes stay in this tab, to an owner or admin only",async()=>{
+ const sentence="Sign in again to continue. Unsaved changes are kept on this browser tab until you sign out."
+ const h=harness();await h.flush();h.workspace()!.props.staging.actor.onUnauthorized(401);await h.flush()
+ expect(h.nodes().some(n=>n.type==="p"&&h.text(n)===sentence)).toBe(true);h.cleanup()
+ const m=harness();m.setVerification(async()=>Response.json(access(owner,"member")));await m.flush();m.workspace()!.props.staging.actor.onUnauthorized(401);await m.flush()
+ expect(m.nodes().some(n=>n.type==="p"&&h.text(n)==="Sign in again to continue.")).toBe(true);m.cleanup()
+})
+
+test("WO-05a QA follow-up 1: a stale session at load that fails its check never vouches for a record address, for its own later sign-in either",async()=>{
+ // The storage names B at load and the URL holds a record address; B's session is refused, then B signs in.
+ const h=harness({hash:`#/activity/${record}`,initial:session(other,"stale")});h.setVerification(status(401));await h.flush();await h.flush()
+ expect(h.text(h.heading()!)).toBe("Your session ended")
+ h.setVerification(async()=>Response.json(access(other)));h.emit(session(other,"b-new"));await h.flush()
+ expect(h.workspace()).toBeDefined();expect(h.location.hash).toBe("#/activity");h.cleanup()
+ // A refused load-time session (no access) on a freshly loaded page withdraws the load-time trust too (403 at load, then a new session).
+ const g=harness({hash:`#/activity/${record}`});g.setVerification(status(403));await g.flush();await g.flush()
+ g.setVerification(async()=>Response.json(access()));g.emit(session(owner,"again"));await g.flush()
+ expect(g.workspace()).toBeDefined();expect(g.location.hash).toBe("#/activity");g.cleanup()
+ // The load-time session that passes keeps the record address (a refresh).
+ const ok=harness({hash:`#/activity/${record}`});await ok.flush();expect(ok.location.hash).toBe(`#/activity/${record}`);ok.cleanup()
 })

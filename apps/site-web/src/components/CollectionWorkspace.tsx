@@ -23,6 +23,8 @@ import { SAVE_TEXT_R2C, scope3AmountLabelR2C } from "@/lib/scope3-text-r2c"
 import { scope3GroupedAmount, scope3PreSaveProblems, scope3SavedRecordWhen, scope3WasteTreatmentsFor } from "@/lib/scope3-display-r3d"
 // WO-10: the Activity form's field anatomy, error summary and save-outcome words.
 import { ACTIVITY_FORM_TEXT_WO10 } from "@/lib/activity-form-text-wo10"
+// WO-05b: unsaved Activity input survives a session end or a refresh in this tab, and is offered back (never restored by itself).
+import { activityDraftFields, DRAFT_DEBOUNCE_MS, DRAFT_TEXT, draftKey, draftStorage, draftTime, keepDraft, readDraft, removeDraft, removeDraftSoon, writeDraft, type ActivityDraftFields, type DraftBinding, type DraftScope, type StoredDraft } from "@/lib/draft-store"
 
 const kinds: readonly [CollectionActivityKind, string][] = [
   ["natural_gas", "Natural gas"], ["distillate_no2", "Diesel or fuel-oil generator"],
@@ -486,6 +488,41 @@ function focusElementById(id: string): boolean {
   return true
 }
 /**
+ * WO-05b: what the Activity draft of this screen holds now, kept current every render: its scope (null when this person
+ * can't store drafts), the form, the reason, the record and the saved version the input is based on.
+ */
+interface ActivityDraftState { scope: DraftScope | null; unsaved: boolean; draft: CollectionDraft; reason: string; recordId: string; binding: DraftBinding }
+const checkActivityDraft = activityDraftFields<CollectionDraft>(new Set(allKinds.map(([kind]) => kind)))
+/** A stored request (sent with the stored key) is reused only if it has exactly a save request's shape. */
+function storedRequest(found: StoredDraft<ActivityDraftFields<CollectionDraft>>): CollectionActivitySaveInput | null {
+  const request = found.request
+  if (!found.idempotencyKey || !request) return null
+  const { expectedRevision, expectedVersionId, correctionReason, activity } = request
+  if (Object.keys(request).length !== 4 || expectedRevision !== found.binding.expectedRevision || expectedVersionId !== found.binding.expectedVersionId) return null
+  if (correctionReason !== null && typeof correctionReason !== "string") return null
+  if (!checkActivityDraft({ recordId: found.fields.recordId, activity, reason: "" })) return null
+  return { idempotencyKey: found.idempotencyKey, expectedRevision: found.binding.expectedRevision, expectedVersionId: found.binding.expectedVersionId, correctionReason, activity: activity as CollectionActivity }
+}
+/** Writes the draft now (owners and admins only, not while an earlier draft is still offered, and only with unsaved input). */
+function persistActivityDraft(state: ActivityDraftState, sent: CollectionActivitySaveInput | null, offered: boolean) {
+  if (!state.scope || offered || !state.unsaved) return
+  const request = sent ? { expectedRevision: sent.expectedRevision, expectedVersionId: sent.expectedVersionId, correctionReason: sent.correctionReason, activity: sent.activity } : null
+  writeDraft(draftStorage(), state.scope, { fields: { recordId: state.recordId, activity: state.draft, reason: state.reason }, binding: state.binding, idempotencyKey: sent?.idempotencyKey ?? null, request })
+}
+/**
+ * The draft to offer when the screen has loaded: the open record's (if it still exists), or the new-record form's on the
+ * list. A record that no longer exists takes its draft with it.
+ */
+function activityDraftOffer(actor: Pick<HostedWorkspaceActor, "userId" | "role">, companyId: string, openRecordId: string | null, requestedId: string | null): StoredDraft<ActivityDraftFields<CollectionDraft>> | null {
+  if (actor.role !== "owner" && actor.role !== "admin") return null
+  const scope = (item: string): DraftScope => ({ userId: actor.userId, companyId, view: "activity", item })
+  if (openRecordId && !requestedId) { removeDraft(draftStorage(), scope(openRecordId)); return null }
+  const item = requestedId ?? "new"
+  const found = readDraft(draftStorage(), scope(item), checkActivityDraft)
+  if (found && requestedId && found.fields.recordId !== requestedId) { removeDraft(draftStorage(), scope(item)); return null }
+  return found
+}
+/**
  * WO-10 (QA-182): the browser's own scroll on Tab doesn't keep clear of the sticky bars (at 390 px a field could land under
  * the top bars, or with its bottom below the screen). Whatever takes focus on the Activity screen is brought just clear of
  * them, using the scroll margins wo10.css gives it.
@@ -658,6 +695,39 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   }, [busy, selected])
   const legacy = legacyVehicleValues(selected?.currentVersion.activity ?? null)
   const canManage = actor.role === "owner" || actor.role === "admin"
+  // WO-05b: the draft kept for this screen (the open record, or "new" for the list page's form) and the offer to restore one.
+  const draftItem = recordMode ? openRecordId : selected ? selected.id : "new"
+  const draftScope: DraftScope | null = canManage && workspaceId && draftItem ? { userId: actor.userId, companyId: workspaceId, view: "activity", item: draftItem } : null
+  const draftScopeKey = draftScope ? draftKey(draftScope) : null
+  const [offer, setOffer] = useState<StoredDraft<ActivityDraftFields<CollectionDraft>> | null>(null)
+  // A restored draft saves against the version it was based on, so newer server data gives the conflict state (QA-144).
+  const [restoredBinding, setRestoredBinding] = useState<DraftBinding | null>(null)
+  const binding: DraftBinding = restoredBinding ?? (selected ? { expectedRevision: selected.currentVersion.revision, expectedVersionId: selected.currentVersion.id } : { expectedRevision: 0, expectedVersionId: null })
+  const draftState = useRef<ActivityDraftState>({ scope: null, unsaved: false, draft, reason, recordId, binding })
+  const offered = useRef(false)
+  const draftActed = useRef(0)
+  useEffect(() => { draftState.current = { scope: draftScope, unsaved: dirty || reason.trim() !== "", draft, reason, recordId, binding }; offered.current = offer !== null })
+  // Typing is kept a second after it stops; a save attempt, a session end and the page being hidden keep it at once.
+  useEffect(() => {
+    if (!draftScopeKey || offer || !(dirty || reason.trim() !== "")) return
+    const timer = setTimeout(() => persistActivityDraft(draftState.current, pending.current, offered.current), DRAFT_DEBOUNCE_MS)
+    return () => clearTimeout(timer)
+  }, [draftScopeKey, offer, dirty, draft, reason])
+  useEffect(() => {
+    const scope = draftState.current.scope
+    if (!draftScopeKey || !scope) return
+    keepDraft(scope)
+    const flush = () => persistActivityDraft(draftState.current, pending.current, offered.current)
+    const listens = typeof window.addEventListener === "function"
+    if (listens) window.addEventListener("pagehide", flush)
+    return () => {
+      if (listens) window.removeEventListener("pagehide", flush)
+      // The workspace closed (the session ended): keep what was typed. Otherwise the person left this form (after the
+      // leave guard, or with nothing unsaved): its draft goes, unless it is still only offered.
+      if (actorRef.current.signal?.aborted) flush()
+      else if (!offered.current) removeDraftSoon(draftStorage(), scope)
+    }
+  }, [draftScopeKey])
 
   useEffect(() => {
     if (!workspaceId) { queueMicrotask(() => { setError(true); setMessage("Choose an admitted synthetic company to continue.") }); return }
@@ -682,6 +752,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
         if (hasRecordFieldFocus(requested.id) && (role === "owner" || role === "admin")) { setCorrecting(true); fixTarget.current = requested.id }
         else focusHeadingNext.current = true
       } else if (openRecordId) missingRef.current?.()
+      setOffer(activityDraftOffer(actorRef.current, workspaceId, openRecordId, requested?.id ?? null))
       setMessage(overview.scope3 ? COPY_TEXT_R2E.activityLoadedScope3 : "Activity and evidence are collected as drafts. Calculations use beta methods that are not yet formally released.")
       setLoaded(true)
     }).catch(cause => { if (!controller.signal.aborted) { setError(true); setLoadFailed(true); setMessage(cause instanceof Error ? cause.message : "Collection is unavailable.") } })
@@ -700,7 +771,9 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   useEffect(() => {
     if (!focusHeadingNext.current || !loaded || busy) return
     focusHeadingNext.current = false
-    requestAnimationFrame(() => { window.scrollTo({ top: 0 }); headingRef.current?.focus({ preventScroll: true }) })
+    // WO-05b: a Restore or Discard pressed meanwhile has put focus where it belongs; the heading doesn't take it back.
+    const acted = draftActed.current
+    requestAnimationFrame(() => { if (draftActed.current !== acted) return; window.scrollTo({ top: 0 }); headingRef.current?.focus({ preventScroll: true }) })
   }, [loaded, busy, headingRef])
   // WO-10: after an action (a refused save, a withdrawal started or undone, a save on the list page), focus goes where the
   // action asked once the screen has rendered it and is idle. No dependency list: the target may render a render later.
@@ -744,6 +817,8 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   function switchKind(kind: CollectionActivityKind) {
     if (selected || kind === draft.kind) return
     if (dirty && !window.confirm("Discard unsaved activity changes?")) return
+    if (draftScope) removeDraft(draftStorage(), draftScope)
+    setRestoredBinding(null)
     setDraft(freshDraft(kind)); setRecordId(crypto.randomUUID()); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null; setAttempted(false); setSaveProblem(null)
   }
   /** A new draft; round 2 UX-12: a spend line starts in the setup reporting period (its own form asks for a date or a period). */
@@ -754,10 +829,14 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   }
   function startNewRecord() {
     if (dirty && !window.confirm("Discard unsaved activity changes?")) return
+    if (draftScope) removeDraft(draftStorage(), draftScope)
+    setRestoredBinding(null)
     setDraft(freshDraft(draft.kind)); setRecordId(crypto.randomUUID()); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null; setAttempted(false); setSaveProblem(null)
   }
   function openRecord(row: CollectionActivityRecord) {
     if (dirty && !window.confirm("Discard unsaved activity changes?")) return
+    if (draftScope) removeDraft(draftStorage(), draftScope)
+    setRestoredBinding(null)
     setRecordId(row.id); setDraft(structuredClone(row.currentVersion.activity) as CollectionDraft); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null; setAttempted(false); setSaveProblem(null)
   }
   /** Round 3 lane C (PR-3): after a spend-import action only the saved records changed: read them alone (one request, not four). */
@@ -769,6 +848,11 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   async function refresh() {
     if (!workspaceId || busy) return
     if (dirty && !window.confirm("Discard unsaved activity changes and reload saved records?")) return
+    // WO-05b: reloading discards the form's input (after the prompt), so its kept draft goes too; after a failed first
+    // load (Try again), nothing was shown yet and a kept draft is offered once the screen loads.
+    const firstLoad = !loaded
+    if (!firstLoad && draftScope) removeDraft(draftStorage(), draftScope)
+    setRestoredBinding(null)
     setBusy(true); setError(false)
     try {
       const [items, files, grid, overview] = await Promise.all([listCollectionActivities(workspaceId, actorRef.current), listCollectionEvidence(workspaceId, actorRef.current), listGridLossLineages(workspaceId, actorRef.current), loadCollectionOverview(workspaceId, actorRef.current)])
@@ -781,6 +865,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       if (current) { setRecordId(current.id); setDraft(structuredClone(current.currentVersion.activity) as CollectionDraft); if (openRecordId) focusHeadingNext.current = true }
       else if (openRecordId) missingRef.current?.()
       else setDraft(previous => ({ ...previous, setupVersionId: loadedContext.setupVersionId ?? "" }))
+      if (firstLoad) setOffer(activityDraftOffer(actorRef.current, workspaceId, openRecordId, openRecordId && current ? current.id : null))
       setDirty(false); setHistorical(null); pending.current = null; setReason(""); setAttempted(false); setSaveProblem(null); setMessage("Latest saved records loaded."); setLoaded(true)
     } catch (cause) { setError(true); setMessage(cause instanceof Error ? cause.message : "Collection is unavailable.") }
     finally { setBusy(false) }
@@ -806,12 +891,18 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     try { validateCollectionActivity(copy) }
     catch (cause) { const text = cause instanceof Error ? cause.message : "This record can’t be saved."; failSave(`${text} Nothing was saved.`, ...(CONTRACT_FIELDS.find(([pattern]) => pattern.test(text))?.[1] ?? [])); return }
     const correctionReason = selected ? copy.state === "withdrawn" ? `Withdrawn: ${copy.withdrawalReason}` : reason.trim() : null
-    const input = pending.current ?? { idempotencyKey: crypto.randomUUID(), expectedRevision: selected?.currentVersion.revision ?? 0, expectedVersionId: selected?.currentVersion.id ?? null, correctionReason, activity: copy }
+    // WO-05b: a restored draft keeps the version it was based on (a newer one gives the conflict state, never an overwrite).
+    const input = pending.current ?? { idempotencyKey: crypto.randomUUID(), expectedRevision: binding.expectedRevision, expectedVersionId: binding.expectedVersionId, correctionReason, activity: copy }
     pending.current = input; setBusy(true); setError(false); setMessage("Saving and verifying this activity…")
+    // The attempt is kept with its key at once, so a retry after a session end reuses this exact request.
+    const savingScope = draftScope
+    persistActivityDraft({ ...draftState.current, scope: savingScope, unsaved: true }, input, offer !== null)
     try {
       const result = await saveAndVerifyCollectionActivity(workspaceId, recordId, input, actorRef.current)
       const current = result.record
       setRecords(items => replaceSavedCollectionRecord(items, current)); setRecordId(current.id); setDraft(structuredClone(current.currentVersion.activity) as CollectionDraft); setDirty(false); setReason(""); pending.current = null
+      if (savingScope) removeDraft(draftStorage(), savingScope)
+      setRestoredBinding(null)
       // WO-10: the polite status says "Saved · version N" (or "Withdrawn · version N"), and the summary is cleared.
       const version = current.currentVersion.revision
       setMessage(result.replayed ? ACTIVITY_FORM_TEXT_WO10.replayed(version) : current.currentVersion.activity.state === "withdrawn" ? ACTIVITY_FORM_TEXT_WO10.withdrawn(version) : ACTIVITY_FORM_TEXT_WO10.saved(version))
@@ -847,6 +938,8 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
           failSave("Company setup was saved again with the same content. Your edits and location are kept; save again to save against the current setup.")
         } else failSave(`${cause.message} Retry keeps the same save request.`)
       } else failSave(`${cause instanceof Error ? cause.message : "Activity could not be saved."} Retry keeps the same save request.`)
+      // WO-05b: the input is still unsaved; keep it with whatever request the next save will reuse (none after a conflict).
+      persistActivityDraft({ ...draftState.current, scope: savingScope, unsaved: true }, pending.current, false)
     } finally { setBusy(false) }
   }
   async function runZipLookup() {
@@ -956,7 +1049,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   }
 
   const p = draft.payload
-  const kindButton = (kind: CollectionActivityKind, label: string) => <button type="button" key={kind} aria-pressed={draft.kind === kind} disabled={busy || Boolean(selected)} onClick={() => switchKind(kind)}>{label}</button>
+  const kindButton = (kind: CollectionActivityKind, label: string) => <button type="button" key={kind} aria-pressed={draft.kind === kind} disabled={busy || Boolean(selected) || offer !== null} onClick={() => switchKind(kind)}>{label}</button>
   // A-01: claims across the company, with the draft in place of the record it edits.
   const savedClaims = context ? instrumentEvidenceClaims(records.map(row => row.currentVersion.activity), context, evidence) : undefined
   const draftClaims = context ? instrumentEvidenceClaims([...records.filter(row => row.id !== selected?.id).map(row => row.currentVersion.activity), draft], context, evidence) : undefined
@@ -1093,9 +1186,39 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     const id = selected.id
     requestAnimationFrame(() => { focusRecordEditor(id) })
   }
+  /** WO-05b: the kept draft comes back into the form, unsaved, with the version it was based on; focus goes to the form's heading. */
+  function restoreDraft() {
+    const found = offer
+    if (!found || !canManage || busy) return
+    draftActed.current++
+    setOffer(null)
+    setDraft(structuredClone(found.fields.activity)); setReason(found.fields.reason); setRecordId(found.fields.recordId); setDirty(true)
+    setRestoredBinding(found.binding)
+    pending.current = storedRequest(found)
+    setHistorical(null); setZipLookup(null); setAttempted(false); setSaveProblem(null); setError(false)
+    setMessage(DRAFT_TEXT.restored)
+    if (recordMode) setCorrecting(true)
+    focusNext.current = "collection-editor-heading"
+  }
+  function discardDraft() {
+    if (!offer) return
+    draftActed.current++
+    setOffer(null)
+    if (draftScope) removeDraft(draftStorage(), draftScope)
+    setError(false); setMessage(DRAFT_TEXT.discarded)
+    if (recordMode) headingRef.current?.focus({ preventScroll: true })
+    else focusNext.current = "collection-editor-heading"
+  }
+  // WO-05b: "Restore unsaved changes from <time>? [Restore] [Discard]", once the screen has loaded. Nothing restores by itself.
+  const draftOffer = offer && loaded && canManage && <div className="nv-notice nv-draft-offer" role="group" aria-labelledby="collection-draft-offer">
+    <p id="collection-draft-offer">{DRAFT_TEXT.offer(draftTime(offer.savedAt))}</p>
+    <div className="nv-actions"><button type="button" className="nv-btn nv-btn--primary nv-btn--sm" aria-disabled={busy || undefined} onClick={restoreDraft}>{DRAFT_TEXT.restore}</button><button type="button" className="nv-btn nv-btn--sm" onClick={discardDraft}>{DRAFT_TEXT.discard}</button></div>
+  </div>
   function cancelCorrection() {
     if (!selected) return
     if ((dirty || reason.trim() !== "") && !window.confirm("Discard unsaved activity changes?")) return
+    if (draftScope) removeDraft(draftStorage(), draftScope)
+    setRestoredBinding(null)
     setDraft(structuredClone(selected.currentVersion.activity) as CollectionDraft); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null; setSaveProblem(null)
     setCorrecting(false)
     requestAnimationFrame(() => { document.getElementById("collection-correct-record")?.focus() })
@@ -1117,7 +1240,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       {scope3FormGroups(availableScope3Kinds.filter(kind => FORM_KINDS.has(kind))).map(group => <div key={group.title} className="worksheet-nav" role="group" aria-label={group.title}><span className="nv-subtle">{group.title}</span>{group.kinds.map(kind => kindButton(kind, kindName(kind)))}</div>)}
       </>}
       {selected && !recordMode && <p>Activity type is fixed while correcting this record. Use “Start a new record” to collect another activity.</p>}
-      <fieldset className="setup-inputs" disabled={busy || !canManage}>
+      <fieldset className="setup-inputs" disabled={busy || !canManage || offer !== null}>
         <div className="setup-grid">
           <Select {...anatomy("location", "required")} label="Company-setup location" value={draft.locationId} options={[["", context?.setupVersionId ? "Choose a saved location" : "Save company setup locations first"], ...(context?.locations ?? []).map(location => [location.id, `${location.name || "Unnamed location"} · ${LOCATION_INCLUSION_TEXT_R2E[location.inclusion] ?? location.inclusion} · ${LOCATION_CONTROL_TEXT_R2E[location.control] ?? location.control}`] as const)]} onChange={value => edit(next => { next.locationId = value; next.setupVersionId = context?.setupVersionId ?? ""; if (next.kind === "electricity") next.payload.site = context?.locations.find(location => location.id === value)?.name ?? "" })} hint={context?.setupRevision ? `Linked to company setup version ${context.setupRevision}. Excluded and unknown locations remain visible.` : "A saved company setup version is required."} />
           <Field {...anatomy("source", "required")} label={sourceLabel} value={draft.sourceId} onChange={value => edit(next => { next.sourceId = value; if (next.kind === "vehicle") next.payload.vehicleGroupId = value; if (next.kind === "electricity") next.payload.meterOrAccountNumber = value })} hint="Use the same stable identifier on every record from this source." />
@@ -1234,7 +1357,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       </fieldset>
       {/* WO-10: Save and the error summary sit outside the fieldset, which is disabled while busy: Save keeps focus during a
           save (aria-disabled, not disabled), and the summary's links reach every field. */}
-      <button type="button" className="collection-save" disabled={!canManage} aria-disabled={busy || undefined} aria-describedby={summary.length > 0 ? "collection-save-problems" : undefined} onClick={attemptSave}>{selected ? draft.state === "withdrawn" ? "Save withdrawal" : "Save correction" : "Save activity"}</button>
+      <button type="button" className="collection-save" disabled={!canManage || offer !== null} aria-disabled={busy || undefined} aria-describedby={summary.length > 0 ? "collection-save-problems" : undefined} onClick={attemptSave}>{selected ? draft.state === "withdrawn" ? "Save withdrawal" : "Save correction" : "Save activity"}</button>
       {summary.length > 0 && <div className="collection-save-problems" id="collection-save-problems" tabIndex={-1} aria-labelledby="collection-save-problems-title">
         <p id="collection-save-problems-title">{attempted ? ACTIVITY_FORM_TEXT_WO10.summaryAfter(summary.length) : ACTIVITY_FORM_TEXT_WO10.summaryBefore(summary.length)}</p>
         <ul>{summary.map(problem => <li key={problem.text}>{problem.fields?.length ? <a className="nv-link" href={`#${fieldElementId(problem.fields[0]!)}`} onClick={event => { event.preventDefault(); focusElementById(fieldElementId(problem.fields![0]!)) }}>{problem.text}</a> : problem.text}</li>)}</ul>
@@ -1260,6 +1383,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       {status}
       {!loaded && loadFailed && workspaceId && retryButton}
       {viewOnly}
+      {selected && draftOffer}
       {selected && activity && openedItem && <div className="worksheet-card collection-record-summary"><h2>Summary</h2>
         <dl className="collection-record-facts">
           <dt>Period</dt><dd>{scope3SavedRecordWhen(activity, inclusivePeriodEnd(activity.period.endExclusive))}</dd>
@@ -1271,7 +1395,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
         </dl>
         <h3>Readiness</h3>
         {openedItem.readiness.length ? <ReadinessPanel findings={openedItem.readiness} /> : <p>No findings.</p>}
-        {canManage && !correcting && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--primary" id="collection-correct-record" disabled={busy} onClick={correctRecord}>Correct this record</button></div>}
+        {canManage && !correcting && !offer && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--primary" id="collection-correct-record" disabled={busy} onClick={correctRecord}>Correct this record</button></div>}
       </div>}
       {selected && correcting && editorCard}
       {selected && <div className="worksheet-card collection-record-history">{history}</div>}
@@ -1286,6 +1410,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     {status}
     {!loaded && loadFailed && workspaceId && retryButton}
     {viewOnly}
+    {draftOffer}
     {intro}
     {loaded && <nav className="nv-actions collection-jump" aria-label={ACTIVITY_LIST_TEXT_R3C.jumpLabel}>
       {spendImportShown && <a className="nv-btn nv-btn--sm" href={`#${SPEND_IMPORT_ANCHOR}`} onClick={event => { event.preventDefault(); const target = document.getElementById(SPEND_IMPORT_ANCHOR); target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true }) }}>{ACTIVITY_LIST_TEXT_R3C.jumpSpend}</a>}
