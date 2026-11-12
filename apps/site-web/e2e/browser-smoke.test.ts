@@ -14,6 +14,7 @@ import { afterAll, beforeAll, describe, expect, test } from "bun:test"
 import type { Browser, Page } from "playwright-core"
 import { addressesSeen, closeJourney, focusReport, horizontalOverflow, launchBrowser, openJourney, pageHeading, type Journey, type JourneyOptions } from "./harness/browser"
 import { COMPANIES, RECORDS } from "./harness/seed"
+import { fixtureAssessment } from "../../../packages/neuvetra-database/src/scope3-payload-fixtures"
 import { startStack, type Stack } from "./harness/stack"
 
 const DATABASE_URL = process.env.E2E_DATABASE_URL
@@ -26,38 +27,28 @@ const ACTIVITY_LIST_HEADING = "Collect Scope 1, 2 and 3 activity"
 const DISCARD_ACTIVITY = "confirm: Discard unsaved activity changes?"
 
 /**
- * Controls a view-only member may use on Activity: navigation, list filters and search, reloading, review tabs; and the
- * WO-08 shell's: ≡ Menu, the sheet's Close menu, the context bar's Details toggle (its name ends in the ▸/▾ chevron), the
- * sheet's navigation items and Ask (a step's text starts with its aria-hidden number, and each item's title is followed by
- * its status line), and Sign out.
+ * WO-12 (QA-220): the only controls a view-only member may use, on every route: navigation, filters and search,
+ * disclosures, downloads, reloading, Ask and Sign out. Nothing else is shown to a member, enabled or disabled: no form
+ * field, no write button (the WO-12 tolerance list is gone; the check is by real state).
+ * - Activity: the list's filters, search and reload; a record's earlier versions; downloading a cleared original;
+ *   "Ask about a field". The spend import's tabs, its "Find lines" search, "Show lines"/"Hide lines" and "Open" a line.
+ * - Results: the record filters, downloads (CSV, ZIP, print), "Show all", disclosures (a record's details, "View the
+ *   assessment"), "View" (opens a record read-only) and the report versions' "Open".
+ * - The WO-08 shell: ≡ Menu, the sheet's Close menu, the context bar's Details toggle (its name ends in the ▸/▾ chevron), the
+ *   sheet's navigation items and Ask (a step's text starts with its aria-hidden number, and each item's title is followed
+ *   by its status line), and Sign out.
  */
 const MEMBER_READING_CONTROLS = [
   /^button Results & report$/, /^button Reload saved records$/, /^button Ask about a field$/,
   /^select (Status|Activity type)$/, /^input Find a source, vendor or description$/, /^input Find lines$/,
-  /^button (Needs a code|Other holds|Possible duplicates|Counted) \(\d+\)$/,
+  /^button (Needs a code|Other holds|Possible duplicates|Counted) \(\d+\)$/, /^button (Show lines|Hide lines|Open|Open the line)$/,
+  /^button Version \d+ · /, /^button Download original$/,
+  // Links and disclosures (WO-12 QA): a record's row (its address), the jump to the spend import, "← All activity", the
+  // spend template download, and any <summary> (it only opens details).
+  /^a [^·]+ · .+, (Needs input|No input needed|Withdrawn)$/, /^a (Spend import and mapping|New record|Download the template|(← )?All activity|Neuvetra workspace home)$/, /^summary /,
   /^button Menu$/, /^button Close menu$/, /^button Details[▸▾]$/,
   /^button (Overview|1Step 1: Company setup|2Step 2: Activity & evidence|3Step 3: Results & report|Ask Neuvetra)/,
   /^button Sign out$/,
-]
-/**
- * WO-12 (P1, open on main eeb944b): write controls a member is still shown enabled; the server refuses their writes.
- * Exactly these, by accessible name: the new-record form (its 22 type buttons and the natural-gas form's fields and
- * evidence link), the file pickers, the spend import's setup location and the spend mapping's "Map". When WO-12 lands,
- * delete this list so the check becomes "no write control at all". If WO-10 (PR #46) renames a field, update its entry.
- */
-const WO12_OPEN_MEMBER_CONTROLS = [
-  new RegExp(`^button (${["Natural gas", "Diesel or fuel-oil generator", "Road vehicle or vehicle group", "Refrigerants and fire suppression", "Purchased electricity",
-    "Purchases by spend", "Supplier-specific purchases", "Energy bought and resold", "Freight transport", "Waste", "End of life of sold products", "Business travel",
-    "Employee commuting", "Employee commuting \\(survey averages\\)", "Teleworking", "Energy use of leased, processing or franchise sites", "Partner-reported emissions",
-    "Buildings by floor area", "Fuels sold", "Energy-using products sold", "Products containing greenhouse gases", "Investments"].join("|")})( \\(Scope 3\\))?$`),
-  /^select (Company-setup location|Data quality)$/,
-  /^input\[text\] (Gas account or meter ID|Original quantity from source|Original unit as printed|Source reference)$/,
-  /^input\[date\] (Period start|Last day covered)$/,
-  /^textarea Notes and unresolved questions$/,
-  /^input\[checkbox\] ledger-2025\.csv · /,
-  /^input\[file\] (Spend file|Upload PDF, image, CSV or XLSX)/,
-  /^select Setup location$/,
-  /^button Map$/,
 ]
 
 let stack: Stack
@@ -145,24 +136,25 @@ async function dialogsReach(journey: Journey, count: number) {
 }
 
 /**
- * Every enabled control under `roots`, by accessible name: aria-label, else the label's name (its first span, in both the
- * current field markup and WO-10's, where "Required"/"Optional" and hints follow it), else text.
+ * Every enabled control under `roots`, by accessible name: aria-label, else the label's field name (`.setup-field__name`,
+ * without the "Required" / "Needed for results" / "Optional" label and hints after it; else its first span), else text.
+ * `withDisabled` also lists disabled controls (a member must not be shown those either).
  */
-async function enabledControls(page: Page, roots: string) {
-  return page.evaluate(selector => [...document.querySelectorAll<HTMLElement>(selector)]
-    .flatMap(root => [...root.querySelectorAll<HTMLElement>("button, input, select, textarea")])
-    .filter(element => element.getClientRects().length > 0 && !(element as HTMLButtonElement).disabled && element.getAttribute("aria-disabled") !== "true")
+async function enabledControls(page: Page, roots: string, withDisabled = false) {
+  return page.evaluate(([selector, all]) => [...document.querySelectorAll<HTMLElement>(selector)]
+    .flatMap(root => [...root.querySelectorAll<HTMLElement>("button, input, select, textarea, a[href], summary")])
+    .filter(element => element.getClientRects().length > 0 && (all || !(element as HTMLButtonElement).disabled && element.getAttribute("aria-disabled") !== "true"))
     .map(element => {
       const label = (element as HTMLInputElement).labels?.[0] ?? null
-      const name = element.getAttribute("aria-label") ?? label?.querySelector("span")?.textContent ?? label?.textContent ?? element.textContent ?? ""
+      const name = element.getAttribute("aria-label") ?? label?.querySelector(".setup-field__name")?.textContent ?? label?.querySelector("span")?.textContent ?? label?.textContent ?? element.textContent ?? ""
       const type = element.tagName === "INPUT" && element.getAttribute("type") ? `[${element.getAttribute("type")}]` : ""
       return `${element.tagName.toLowerCase()}${type} ${name.replace(/\s+/g, " ").trim()}`
-    }), roots)
+    }), [roots, withDisabled] as const)
 }
 
-/** The controls a view-only member may not be offered: on neither the reading list nor the known WO-12 list. */
+/** The controls a view-only member may not be offered (WO-12): anything not on the reading list. */
 function notAllowed(controls: string[]) {
-  return controls.filter(control => !MEMBER_READING_CONTROLS.some(rule => rule.test(control)) && !WO12_OPEN_MEMBER_CONTROLS.some(rule => rule.test(control)))
+  return controls.filter(control => !MEMBER_READING_CONTROLS.some(rule => rule.test(control)))
 }
 
 type ActivityRecord = { id: string; currentVersion: { id: string; revision: number }; history: Array<{ id: string; revision: number }> }
@@ -381,6 +373,9 @@ suite("site-web browser smoke (E2E-01)", () => {
     const { page } = opened
     await page.goto("/#/activity")
     await activityListLoaded(page)
+    // WO-12: no new-record form, and no write control at all, enabled or disabled (by real state, no tolerance list).
+    expect(await page.locator("#collection-record-editor").count()).toBe(0)
+    await page.locator("#spend-import").getByText("View only: an owner or admin of your company imports spend files").waitFor({ timeout: 30_000 })
     // WO-08: the view-access notice became the context bar's "View only"; its sentence is under Details.
     const context = page.getByRole("region", { name: "Reporting context" })
     await context.getByText("View only", { exact: true }).waitFor()
@@ -388,18 +383,27 @@ suite("site-web browser smoke (E2E-01)", () => {
     await context.getByText("View only. You have view access. An owner or admin of your company can make changes.").waitFor()
     await page.keyboard.press("Escape")
     await page.getByRole("button", { name: /^Counted \(/ }).waitFor()
-    expect(notAllowed(await enabledControls(page, "main"))).toEqual([])
+    expect(notAllowed(await enabledControls(page, "main", true))).toEqual([])
+    // Each spend review tab, with a group's lines shown: still nothing but reading controls.
+    for (const tab of ["Needs a code", "Other holds", "Possible duplicates", "Counted"]) {
+      await page.locator("#spend-import").getByRole("button", { name: new RegExp(`^${tab} \\(`) }).click()
+      const show = page.locator("#spend-import").getByRole("button", { name: "Show lines" }).first()
+      if (await show.count()) await show.click()
+      expect(notAllowed(await enabledControls(page, "main", true))).toEqual([])
+    }
     // The record view (WO-06) offers a member no "Correct this record".
     await page.evaluate(id => { window.location.hash = `#/activity/${id}` }, RECORDS.gasReady)
     await headingIs(page, "GAS-1", true)
     expect(await page.getByRole("button", { name: "Correct this record" }).count()).toBe(0)
+    expect(notAllowed(await enabledControls(page, "main", true))).toEqual([])
     // WO-08: the shell's controls are a member's too, outside the main region. At 1360 px the top bar has Sign out and
     // the context bar Details; below 1080 px the top bar has ≡ Menu, and the sheet holds the navigation, Ask and Sign out.
     const shellWide = await enabledControls(page, "header.nv-topbar, [role=region][aria-label='Reporting context']")
-    expect(shellWide).toEqual(["button Sign out", "button Details▸"])
+    expect(shellWide.filter(control => control !== "a Neuvetra workspace home")).toEqual(["button Sign out", "button Details▸"])
     await page.setViewportSize({ width: 390, height: 844 })
     const shellNarrow = await enabledControls(page, "header.nv-topbar, [role=region][aria-label='Reporting context']")
-    expect(shellNarrow).toEqual(["button Menu", "button Details▸"])
+    expect(shellNarrow.filter(control => control !== "a Neuvetra workspace home")).toEqual(["button Menu", "button Details▸"])
+    expect(notAllowed([...shellWide, ...shellNarrow])).toEqual([])
     await page.getByRole("button", { name: "Menu", exact: true }).click()
     const sheet = page.getByRole("dialog", { name: "Menu" })
     await sheet.waitFor()
@@ -410,6 +414,55 @@ suite("site-web browser smoke (E2E-01)", () => {
     await sheet.waitFor({ state: "detached" })
     expect(opened.writes).toEqual([])
   })
+
+  // WO-12 (QA-220): the member on Results and company setup. Results' controls are reading ones; a Scope 3 assessment
+  // opens as text ("View the assessment"), never a form; nothing a member is shown there is a field or a write button.
+  journey("a view-only member sees Results and Scope 3 assessments read-only, at 1360 and 390 px", { signedInAs: "member" }, async opened => {
+    const { page } = opened
+    // Results' reading controls: its filters and search, downloads and print, "Show all"/"Show fewer", "Go to the Scope 3
+    // to-do list", "View …" (a record, the draft report, an assessment, company setup or the spend import: navigation or a
+    // disclosure), "Close the assessment" and "Recalculate" (it reads the results again).
+    const RESULTS_READING = [/^button (Download|Print)/, /^button (Show all|Show fewer)/, /^button Go to the Scope 3 to-do list$/, /^button View /, /^button Close the assessment: /,
+      /^select (Status|Category|Activity)$/, /^input\[search\] Search source ID or reference$/, /^button (All|Needs attention) \(\d+\)$/, /^button Recalculate$/]
+    const results = (controls: string[]) => notAllowed(controls).filter(control => !RESULTS_READING.some(rule => rule.test(control)))
+    for (const [width, height] of [[1360, 900], [390, 844]] as const) {
+      await page.setViewportSize({ width, height })
+      await page.goto("/#/results")
+      await page.getByRole("heading", { name: "Scope 3 · value chain" }).waitFor({ timeout: 30_000 })
+      await page.getByText("Scope 3 to-do").first().waitFor()
+      await page.waitForLoadState("networkidle")
+      const showAll = page.locator("#scope3-todo").getByRole("button", { name: /^Show all/ })
+      if (await showAll.count()) await showAll.click()
+      // The to-do never says "Add" or "Edit" the assessment to a member.
+      expect(await page.locator("#scope3-results").getByRole("button", { name: /^(Add|Edit) the assessment/ }).count()).toBe(0)
+      const view = page.locator("#scope3-results").getByRole("button", { name: /^View the assessment: / }).first()
+      await view.waitFor({ timeout: 30_000 })
+      await view.click()
+      const assessment = page.locator("#scope3-results .scope3-assessment").first()
+      await assessment.waitFor({ timeout: 30_000 })
+      expect(await assessment.locator("input, select, textarea, button").count()).toBe(0)
+      await assessment.getByText("View only: an owner or admin of your company can change it.").waitFor()
+      expect(results(await enabledControls(page, "main", true))).toEqual([])
+    }
+    // Company setup's category screening: a member is offered no "Add an assessment" or "Review or correct the assessment";
+    // a saved assessment (saved here by the owner, category 6) is shown open, as text.
+    const assessments = await stack.api<{ setupVersionId: string; reportingYear: number }>("owner", `/workspace/${COMPANIES.first}/scope3/assessments`)
+    await stack.api("owner", `/workspace/${COMPANIES.first}/scope3/assessments/6`, { method: "PUT", body: { idempotencyKey: "e2e00000-0000-4000-8000-000000000a12", expectedRevision: 0, correctionReason: null,
+      assessment: fixtureAssessment(assessments.setupVersionId, { category: 6, reportingYear: assessments.reportingYear, reasonCode: null, activitiesIncluded: "E2E: flights and hotel stays booked through the agency.",
+        justification: "E2E: travel is a visible share of value chain emissions.", plannedMethodTypes: ["activity_average_data"] }) } })
+    await page.setViewportSize({ width: 1360, height: 900 })
+    await page.goto("/#/setup")
+    await page.locator("main h1").first().waitFor()
+    await page.getByRole("button", { name: /06 Source activities/ }).click()
+    await page.getByText("Scope 3 · 1.", { exact: false }).first().waitFor({ timeout: 30_000 })
+    await page.waitForLoadState("networkidle")
+    expect(await page.locator("main").getByRole("button", { name: /assessment/i }).count()).toBe(0)
+    const saved = page.locator('[aria-label="Assessment for category 6"]')
+    await saved.getByText("E2E: travel is a visible share of value chain emissions.").waitFor({ timeout: 30_000 })
+    expect(await saved.locator("input, select, textarea, button, summary").count()).toBe(0)
+    expect(await page.locator(".scope3-assessment").count()).toBe(1)
+    expect(opened.writes).toEqual([])
+  }, 120_000)
 
   // E2E-02 (QA F1): B is the company-1 admin, so A's record exists for B too and no "record not found" fallback can hide
   // a leak. The address is checked where it can leak: on the "Your session ended" screen and after B signs in.

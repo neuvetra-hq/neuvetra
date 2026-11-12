@@ -314,7 +314,7 @@ describe("record forms: each payload is the contract's, saved unchanged, its hol
   test("asset energy: the sub-metered fixture; the lease hint follows setup's consolidation approach; refrigerant released; area allocation", async () => {
     const f = await form("asset_energy", { consolidationApproach: "operational_control" })
     expect(forms.scope3PayloadProblem("asset_energy", f.payload)).toBe("Choose the category this asset belongs in.")
-    await f.set("Category", "8"); await f.set("Asset", "Leased warehouse, Fresno"); await f.set("Landlord, tenant, processor or franchisee (optional)", "Synthetic Landlord LP")
+    await f.set("Category", "8"); await f.set("Asset", "Leased warehouse, Fresno"); await f.set("Landlord, tenant, processor or franchisee", "Synthetic Landlord LP")
     await f.amount("Electricity used", "48000", "kWh")
     f.app.nodes().find(node => node.props.location)!.props.onChange({ zip: "93721", subregion: "CAMX", utilityEiaId: null }); f.app.render()
     await f.set("Lease", "operating")
@@ -437,7 +437,7 @@ describe("record forms: each payload is the contract's, saved unchanged, its hol
 
   test("end of life of sold products: the packaging fixture with a live split total; an unknown split is kept (held)", async () => {
     const f = await form("end_of_life_split")
-    await f.set("What it covers", "packaging"); await f.set("Product (optional)", "Synthetic shipping box"); await f.set("Material", "corrugated_containers")
+    await f.set("What it covers", "packaging"); await f.set("Product", "Synthetic shipping box"); await f.set("Material", "corrugated_containers")
     await f.amount("Mass sold", "85.5", "short_ton")
     await f.set("Treatment split", "known")
     // Round 3 lane D (PR-12): the message names the first share left blank, by its field.
@@ -512,7 +512,9 @@ describe("the record form dispatcher, the shared fields and the data-quality edi
     const make = await loadComponent("./scope3/Scope3Fields.tsx", "GridLocationFields", inject)
     const changes: any[] = [], lookups: string[] = []
     let location = { zip: "9410", subregion: "CAMX", utilityEiaId: "14328" }, lookup: any = null
-    const app = harness(make, () => ({ location, lookup, onChange: (next: any) => changes.push(next), onLookup: (zip: string) => lookups.push(zip) }))
+    const app = harness(make, () => ({ kind: "energy_resold", location, lookup, onChange: (next: any) => changes.push(next), onLookup: (zip: string) => lookups.push(zip) }))
+    // WO-12: each field carries its label, from the kind's rules.
+    expect([app.byLabel("Site ZIP code")!.props.need, app.byLabel("eGRID subregion")!.props.need, app.byLabel("Utility EIA ID")!.props.need]).toEqual(["required", "results", "optional"])
     expect(app.button("Look up ZIP")!.props.disabled).toBe(true)
     app.byLabel("Site ZIP code")!.props.onChange("94105")
     expect(changes.at(-1)).toEqual({ zip: "94105", subregion: "", utilityEiaId: null })
@@ -534,7 +536,7 @@ describe("the record form dispatcher, the shared fields and the data-quality edi
     const lines = [{ recordId: "1", category: 1, supplierName: "Acme", description: "Bolts", glAccount: "5000", amount: "10", currency: "USD", mappingKeyInput: "k1", mappingKey: "a".repeat(64) },
       { recordId: "2", category: 1, supplierName: "Acme", description: "Bolts", glAccount: "5000", amount: "20", currency: "USD", mappingKeyInput: "k1", mappingKey: "a".repeat(64) },
       { recordId: "3", category: 2, supplierName: "Bolt Co", description: "Press", glAccount: "1500", amount: "900", currency: "USD", mappingKeyInput: "k2", mappingKey: "b".repeat(64) }]
-    const app = harness(make, () => ({ value, lines, onChange: (next: any) => changes.push(next) }))
+    const app = harness(make, () => ({ kind: "purchase_supplier", value, lines, onChange: (next: any) => changes.push(next) }))
     app.byLabel("This record replaces spend lines already recorded for the same purchases")!.props.onChange(true)
     expect(changes.at(-1)).toEqual({ supplierName: "", mappingKeys: [] })
     value = { supplierName: "", mappingKeys: [] }; app.render()

@@ -18,6 +18,9 @@ import { SPEND_TEXT_R3C } from "@/lib/scope3-text-r3c"
 import { sourceCategoryLabel } from "@/lib/plain-language"
 // WO-05b: unsaved setup input survives a session end or a refresh in this tab, and is offered back (never restored by itself).
 import { DRAFT_DEBOUNCE_MS, DRAFT_TEXT, draftKey, draftStorage, draftTime, keepDraft, readDraft, removeDraft, removeDraftSoon, setupDraftFields, writeDraft, type DraftBinding, type DraftScope, type SetupDraftFields, type StoredDraft } from "@/lib/draft-store"
+// BF-08 web follow-ups: a repeated setup ID is named by its kind; a 422 or 403 is definite (no "Retry exact save").
+import { duplicateCompanySetupIds } from "../../../../packages/neuvetra-database/src/company-setup-contract"
+import { SAVE_OUTCOME_TEXT_WO12 } from "@/lib/wo12-text"
 
 const sections = ["Company", "Reporting period", "Entities & boundary", "Locations", "Changes & shared operations", "Source activities", "Review"] as const
 const changes = ["Acquisitions or disposals", "Site openings or closures", "Changes in ownership or control", "Joint ventures or shared operations", "Franchises, outsourcing or leased assets"] as const
@@ -216,6 +219,10 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
     } catch (cause) {
       setError(true)
       if (cause instanceof CompanySetupApiError && cause.conflict) { pending.current = null; setRetryAvailable(false); setMessage("This setup changed elsewhere. Refresh the latest version before correcting it.") }
+      // BF-08: a repeated ID is named by its kind (duplicate_setup_id), and a refusal (422) or a permission answer (403) is
+      // definite: the request is retired and no "Retry exact save" is offered.
+      else if (cause instanceof CompanySetupApiError && cause.status === 422 && cause.code === "duplicate_setup_id") { pending.current = null; setRetryAvailable(false); setMessage(SAVE_OUTCOME_TEXT_WO12.duplicateSetupId[duplicateCompanySetupIds(input.setup) ?? "unknown"]) }
+      else if (cause instanceof CompanySetupApiError && (cause.status === 422 || cause.status === 403)) { pending.current = null; setRetryAvailable(false); setMessage(cause.status === 422 ? SAVE_OUTCOME_TEXT_WO12.refused(cause.message, cause.code) : SAVE_OUTCOME_TEXT_WO12.readOnly(cause.message)) }
       else { setRetryAvailable(true); setMessage(`${cause instanceof Error ? cause.message : "The setup could not be saved."} Retry keeps the same save request.`) }
       // WO-05b: the input is still unsaved; keep it with whatever request the next save will reuse (none after a conflict).
       persistSetupDraft({ ...draftState.current, scope: savingScope, unsaved: true }, pending.current, false)
@@ -375,8 +382,10 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
         </div>
           {year !== null && setupVersionId !== null && <>
             <p className="nv-subtle">{savedAssessment ? `Assessment for ${year}: revision ${savedAssessment.revision}${savedAssessment.reasonCode ? ` · ${SCOPE3_ASSESSMENT_REASON_TEXT[savedAssessment.reasonCode] ?? savedAssessment.reasonCode}` : ""}${savedAssessment.magnitudeKind === "estimated" ? ` · about ${savedAssessment.magnitudeTCo2e} t CO2e` : savedAssessment.magnitudeKind === "not_quantifiable" ? " · magnitude not quantifiable" : ""}.` : `No assessment saved for ${year} yet.`}</p>
-            <button type="button" aria-expanded={assessing === category} onClick={() => setAssessing(assessing === category ? null : category)}>{assessing === category ? "Close assessment" : savedAssessment ? "Review or correct the assessment" : "Add an assessment"}</button>
-            {assessing === category && <Scope3ScreeningEditor key={`${category}:${setupVersionId}`} category={category} title={title} decision={scope3Decision(row?.state)} saved={savedAssessment} reportingYear={year} setupVersionId={setupVersionId}
+            {/* WO-12: a member is never offered "Add" or "Review or correct" (the setup form around it is disabled for a member):
+                a saved assessment is shown as text, open, and an unsaved one is only named in the line above. */}
+            {assessments.view!.canManage && <button type="button" aria-expanded={assessing === category} onClick={() => setAssessing(assessing === category ? null : category)}>{assessing === category ? "Close assessment" : savedAssessment ? "Review or correct the assessment" : "Add an assessment"}</button>}
+            {(assessing === category || !assessments.view!.canManage && savedAssessment) && <Scope3ScreeningEditor key={`${category}:${setupVersionId}`} category={category} title={title} decision={scope3Decision(row?.state)} saved={savedAssessment} reportingYear={year} setupVersionId={setupVersionId}
               evidence={assessments.view!.evidence} canManage={assessments.view!.canManage} extraWarnings={downstream ? [downstream] : []} onSave={saveAssessment}
               blocked={dirty ? "Save or discard the setup changes first: an assessment is saved against the saved setup version and its decision." : null}
               prefill={(() => { const start = row ? scope3AssessmentPrefill({ screening: { decision: scope3Decision(row.state), description: row.details.trim() || null, reason: row.reason.trim() || null } }) : null; return start ? { ...start, note: SCOPE3_PREFILL_TEXT.setupNote } : null })()} />}

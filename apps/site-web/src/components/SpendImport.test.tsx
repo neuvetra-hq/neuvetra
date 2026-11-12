@@ -63,6 +63,62 @@ async function panel(initial: any = view([]), onOpenRecord?: (id: string) => voi
   return { app, calls, node, choose, says, component, tab, changed: () => changed }
 }
 
+describe("WO-12: a view-only member", () => {
+  const member = { userId: user, role: "member", accessToken: "t" }
+  const pair = () => view([line(1, {}), line(2, { naicsCode: "711310", mappingSource: "file", possibleDuplicateOf: { importId: imp, row: 1 }, plan: { action: "hold", status: "input_needed", reasons: ["possible_duplicate_spend_line"] } }),
+    line(3, { currency: "EUR", naicsCode: "711310", mappingSource: "file", plan: { action: "hold", status: "input_needed", reasons: ["currency_not_supported"] } })], { canManage: false })
+  test("sees the imports and every queue, with no upload, mapping, conversion, duplicate or withdrawal control (not even disabled)", async () => {
+    const p = await panel(pair(), () => {}, undefined, false, 0, {}, { actor: member })
+    p.says("View only: an owner or admin of your company imports spend files and maps or withdraws their lines.")
+    for (const tab of ["Needs a code (1)", "Other holds (1)", "Possible duplicates (1)", "Counted (0)"]) {
+      p.app.button(tab)!.props.onClick(); await p.app.settle()
+      // A group's lines can be shown (a disclosure), and each line opened (navigation).
+      if (p.app.button("Show lines")) { p.app.button("Show lines")!.props.onClick(); await p.app.settle() }
+      const offered = p.app.nodes().filter(n => n.type === "button" || ["input", "select", "textarea"].includes(n.type as string))
+        .map(n => `${n.type} ${n.props["aria-label"] ?? n.children.flat(Infinity).filter((c: unknown) => typeof c === "string").join("")}`)
+      expect(offered.filter(name => !/^button (Needs a code|Other holds|Possible duplicates|Counted) \(\d\)$/.test(name) && !/^button (Hide lines|Show lines|Open|Open the line)$/.test(name) && name !== "input Find lines")).toEqual([])
+    }
+    // Each group row on its own (the panel keeps it as a node): read-only, its lines shown by a disclosure, each one opened.
+    p.app.button("Needs a code (1)")!.props.onClick(); await p.app.settle()
+    expect(p.component("SpendGroupRow").map(row => row.props.readOnly)).toEqual([true])
+    // Read-only must not hide data: the held currencies and their totals are listed as text.
+    p.app.button("Other holds (1)")!.props.onClick(); await p.app.settle()
+    p.says("Only US dollars are calculated. These lines are held until an owner or admin converts them:")
+    p.says("EUR: 1 held line")
+    p.app.button("Needs a code (1)")!.props.onClick(); await p.app.settle()
+    const row = await groupRow(p, "Events")
+    const suggestion = () => row.app.nodes().filter(n => typeof n.props.className === "string" && n.props.className.includes("spend-import__suggest-line")).length
+    const offered = () => row.app.nodes().filter(n => n.type === "button" || ["input", "select", "textarea"].includes(n.type as string)).map(n => n.children.flat(Infinity).filter((c: unknown) => typeof c === "string").join("") || n.props["aria-label"])
+    expect(offered()).toEqual(["Show lines"])
+    const before = suggestion()
+    expect(before).toBe(1)
+    row.app.button("Show lines")!.props.onClick(); await row.app.settle()
+    expect(offered()).toEqual(["Hide lines", "Open"])
+    // The group's suggestion stays shown with its lines (an owner's opens a mapping form in its place).
+    expect(suggestion()).toBe(before)
+    expect(row.component("SpendMappingForm")).toEqual([])
+  })
+  test("QA round 2: a group with no confident suggestion tells a member who maps it, not to open a Map control they lack", async () => {
+    const unknown = (canManage: boolean) => view([line(1, { vendor: "Qzx Holdings", description: "Sundry", glAccount: "9999" })], { canManage })
+    for (const [role, wording, absent] of [["member", "No confident suggestion: an owner or admin maps this group to a NAICS title.", /open Map/i], ["owner", "No confident suggestion: open Map to search the NAICS titles.", /an owner or admin maps/]] as const) {
+      const p = await panel(unknown(role === "owner"), () => {}, undefined, false, 0, {}, { actor: { ...member, role } })
+      const row = await groupRow(p, "Qzx Holdings")
+      const text = row.app.text().replace(/\s+/g, " ")
+      expect(text).toContain(wording)
+      expect(text).not.toMatch(absent)
+    }
+  })
+  test("the role decides before the server's view does (no upload while it loads); an owner keeps every control", async () => {
+    const early = await panel(view([line(1, {})]), undefined, undefined, false, 0, {}, { actor: member })
+    expect(early.app.button("Import spend lines")).toBeUndefined()
+    expect(early.app.button("Withdraw this import")).toBeUndefined()
+    const owner = await panel(view([line(1, {})]), undefined, undefined, false, 0, {}, { actor: { ...member, role: "owner" } })
+    expect(owner.app.button("Import spend lines")).toBeDefined()
+    expect(owner.app.button("Withdraw this import")).toBeDefined()
+    expect(owner.component("SpendGroupRow").map(row => row.props.readOnly)).toEqual([false])
+  })
+})
+
 describe("whole-import withdrawal", () => {
   test("partial group withdrawal reports saved progress and removes confirmed withdrawn rows even if refresh fails", async () => {
     const p = await panel(view([line(1, { vendor: "ADP" }), line(2, { vendor: "ADP" })]), undefined, undefined, true)
@@ -98,8 +154,10 @@ describe("whole-import withdrawal", () => {
   })
 
   test("permission and a helpful refusal keep the import intact; cancel never writes", async () => {
+    // WO-12: view-only access shows no withdrawal (or upload) control at all, rather than a disabled one.
     const readonly = await panel(view([line(1, {})], { canManage: false }))
-    expect(readonly.app.button("Withdraw this import")!.props.disabled).toBe(true)
+    expect(readonly.app.button("Withdraw this import")).toBeUndefined()
+    expect(readonly.app.button("Import spend lines")).toBeUndefined()
     const p = await panel(view([line(1, {})]), undefined, new api.Scope3SpendImportApiError("Reload before withdrawing this import.", 409, "changed"))
     p.app.button("Withdraw this import")!.props.onClick(); await p.app.settle()
     p.app.button("Cancel withdrawal")!.props.onClick(); await p.app.settle()
@@ -419,7 +477,7 @@ describe("WO-06: unsaved spend-import input is reported to the leave guard", () 
     // Sending: the in-app guard has nothing to ask about, and the button stays focusable (aria-disabled).
     expect(reported.at(-1)).toBe(false)
     expect(p.app.button("Import spend lines")!.props["aria-disabled"]).toBe(true)
-    expect(p.app.button("Import spend lines")!.props.disabled).toBe(false)
+    expect(p.app.button("Import spend lines")!.props.disabled).not.toBe(true)
     release(); await new Promise(r => setTimeout(r, 5)); await p.app.settle()
     expect(p.calls.some(c => c[0] === "import")).toBe(true)
     // Imported: no preview of the file is left, the result is shown, and nothing is unsaved.

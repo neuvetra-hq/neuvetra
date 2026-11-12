@@ -5,7 +5,8 @@ import type { HostedWorkspaceActor } from "./workspace-api"
 export type { CompanySetup, CompanySetupSaveInput, CompanySetupSaveResult, CompanySetupVersion, CompanySetupView }
 
 export class CompanySetupApiError extends Error {
-  constructor(message: string, readonly status: number) { super(message) }
+  /** BF-08: `code` is the server's error code when it sends one (for example "duplicate_setup_id"). */
+  constructor(message: string, readonly status: number, readonly code: string | null = null) { super(message) }
   get conflict() { return this.status === 409 }
 }
 
@@ -74,7 +75,7 @@ async function request<T>(actor: HostedWorkspaceActor, path: string, input?: Com
   if (response.status === 401 || response.status === 403) actor.onUnauthorized?.(response.status)
   const value: unknown = await response.json().catch(() => null)
   actor.signal?.throwIfAborted()
-  if (!response.ok) throw new CompanySetupApiError(value && typeof value === "object" && "error" in value && typeof value.error === "string" ? value.error : "Company setup is unavailable.", response.status)
+  if (!response.ok) throw new CompanySetupApiError(value && typeof value === "object" && "error" in value && typeof value.error === "string" ? value.error : "Company setup is unavailable.", response.status, value && typeof value === "object" && "code" in value && typeof value.code === "string" ? value.code : null)
   if (!value || typeof value !== "object") throw new Error("The company setup response was not recognized.")
   return value as T
 }

@@ -72,11 +72,14 @@ test("control: an uncertain failure keeps the same request, so a retry cannot sa
   expect(submitted[1]).toEqual(submitted[0])
 })
 
-test("control: a definite refusal with the setup unchanged keeps today's behaviour (same request, its reason shown)", async () => {
+test("BF-08: a definite refusal with the setup unchanged shows its reason and offers no retry of the same request; the next save is a new one", async () => {
   const { app, submitted, save, reads } = await editor([atA], () => new CollectionApiError("collection evidence unavailable", 422))
   await save()
-  expect(app.text()).toContain("collection evidence unavailable Retry keeps the same save request.")
+  expect(app.text()).toContain("collection evidence unavailable Nothing was saved. Check the answers on this form, then save again.")
+  expect(app.text()).not.toContain("Retry keeps the same save request.")
   await save()
-  expect(submitted[1]).toEqual(submitted[0])
+  // The refused request is retired: the same record, sent again as a new request (a new idempotency key).
+  expect(submitted[1].idempotencyKey).not.toBe(submitted[0].idempotencyKey)
+  expect(submitted[1].activity).toEqual(submitted[0].activity)
   expect(reads()).toBe(3)
 })

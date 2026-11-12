@@ -17,6 +17,7 @@ import * as scope3TextR3d from "@/lib/scope3-text-r3d"
 import { scope3ClosedLines, scope3LineState } from "../../../../packages/neuvetra-database/src/scope3-trace"
 import { scope3SpendConversionNote } from "../../../../packages/neuvetra-database/src/scope3-spend-currency"
 import { validateScope3ReportDocument } from "../../../../packages/neuvetra-database/src/scope3-report-document"
+import * as wo12Text from "@/lib/wo12-text"
 
 const fixture: Scope3ResultsResponse = await Bun.file(new URL("../lib/scope3-results.fixture.json", import.meta.url)).json()
 const downstreamFixture: unknown = await Bun.file(new URL("../lib/scope3-results-downstream.fixture.json", import.meta.url)).json()
@@ -32,7 +33,7 @@ const cardOf = (nodes: Node[], row: { kind: string; sourceId: string; category: 
 function load() {
   let csv = "", filename = ""
   const env: Record<string, unknown> = {
-    ...plainLanguage, ...resultsApi, ...scope3ResultsApi, ...scope3Checklist, ...scope3ResultsText, ...scope3DisplayR3d, ...scope3TextR3d, ...scope3FixTarget, scope3ClosedLines, scope3LineState, scope3SpendConversionNote,
+    ...wo12Text, ...plainLanguage, ...resultsApi, ...scope3ResultsApi, ...scope3Checklist, ...scope3ResultsText, ...scope3DisplayR3d, ...scope3TextR3d, ...scope3FixTarget, scope3ClosedLines, scope3LineState, scope3SpendConversionNote,
     h: (type: any, props: any, ...children: any[]) => typeof type === "function" ? type({ ...props, children }) : { type, props: props ?? {}, children },
     React: { Fragment: "fragment" }, Icon: () => null, Scope3ReportVersions: () => null,
     Blob: class { constructor(parts: string[]) { csv = parts.join("") } },
@@ -591,4 +592,18 @@ test("bug hunt D: the printed CARB line names CARB's proposed five, as the scree
   expect(frozen).toContain(`CARB’s proposed five categories (a proposal, not adopted): ${fixture.coverage.proposedMandatory.line}`)
   expect(frozen).not.toContain("totals above")
   expect(frozen).toContain("Scope 3 is never added to the Scope 1 and 2 totals.")
+})
+
+describe("WO-12: a view-only member's Scope 3 section offers views, never changes", () => {
+  test("the to-do and category actions read View the assessment, View company setup and View the spend import; an owner keeps Add, Screen and Map", () => {
+    const { Scope3Panel } = load()
+    const ui = { filter: scope3Checklist.SCOPE3_DEFAULT_RECORD_FILTER, setFilter() {}, limit: 25, setLimit() {}, assessment: null, setAssessment() {}, todosOpen: true, setTodosOpen() {}, renderAssessment: () => null }
+    const labels = (canManage: boolean) => flatten(Scope3Panel({ state: { data: fixture, message: null, unavailable: false, busy: false }, canManage, onFix() {}, onRetry() {}, onNavigate() {}, ui }))
+      .filter(node => node.type === "button").map(node => text(node))
+    const member = labels(false), owner = labels(true)
+    expect(member.filter(label => /^(Add|Edit) the assessment|^Screen in company setup|^Change the screening|^Map \d|^Document in the assessment/.test(label))).toEqual([])
+    expect(member).toContain("View the assessment")
+    expect(owner.some(label => /^(Add|Edit) the assessment|^Document in the assessment/.test(label))).toBe(true)
+    expect(member.filter(label => label === "View the assessment").length).toBe(owner.filter(label => /^(Add|Edit) the assessment|^Document in the assessment/.test(label)).length)
+  })
 })
