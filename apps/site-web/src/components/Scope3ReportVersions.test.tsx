@@ -13,6 +13,7 @@ import { SCOPE3_CSV_LABELS } from "@/lib/scope3-csv-labels"
 import * as checklist from "@/lib/scope3-checklist"
 import * as resultsText from "@/lib/scope3-results-text"
 import * as changeLog from "@/lib/scope3-change-log"
+import { scope3CsvEscape } from "../../../../packages/neuvetra-database/src/scope3-report-csv"
 import { harness, loadComponent } from "./component-harness"
 
 const fixture: resultsApi.Scope3ResultsResponse = await Bun.file(new URL("../lib/scope3-results.fixture.json", import.meta.url)).json()
@@ -37,7 +38,7 @@ async function component(name: string, inject: Record<string, unknown> = {}) {
     window: { setTimeout: () => 0, print: () => { printed++ }, addEventListener: () => {} },
     Icon: () => null, Scope3ReportSection: ({ results }: any) => ({ type: "section", props: { "data-frozen-results": results }, children: [] }),
   }
-  const make = await loadComponent("./scope3/Scope3ReportVersions.tsx", name, { ...plain, ...reportApi, ...resultsApi, ...checklist, ...resultsText, ...changeLog, ...globals, ...inject })
+  const make = await loadComponent("./scope3/Scope3ReportVersions.tsx", name, { ...plain, ...reportApi, ...resultsApi, ...checklist, ...resultsText, ...changeLog, scope3CsvEscape, ...globals, ...inject })
   return { make, globals, blob: () => blob, downloaded: () => downloaded, printed: () => printed, body }
 }
 
@@ -54,7 +55,7 @@ describe("Scope 3 report versions on the Results screen (I-10)", () => {
     // shows them as a chip after the control-exception chip.
     const acknowledged = selfApproved.approval!.acknowledgedOpenIssues!.length
     expect(acknowledged).toBeGreaterThan(1)
-    expect(rows[1]!.slice(0, 4)).toEqual(["1", "by you · 2026-10-30 10:00 UTC", "First version", `Approved by you · 2026-10-30 11:00 UTCSelf-approved · control exceptionApproved with ${acknowledged} open issues acknowledged`])
+    expect(rows[1]!.slice(0, 4)).toEqual(["1", "by you · 2026-10-30 10:00 UTC", "First version", `Approved by you · 2026-10-30 11:00 UTCSelf-approved · control exceptionApproved with ${acknowledged} open issues acknowledgedSuperseded by revision 2`])
     app.nodes().find(node => node.props["aria-label"] === "Open revision 1")!.props.onClick()
     expect(opened).toEqual([selfApproved.id])
   })
@@ -87,6 +88,77 @@ describe("Scope 3 report versions on the Results screen (I-10)", () => {
     await after.settle()
     expect(after.text()).toContain("(self-approved: the preparer approved their own version)")
     expect(after.nodes().some(node => node.type === "button" && node.children.flat(Infinity).some((x: any) => typeof x === "string" && x.startsWith("Approve")))).toBe(false)
+  })
+
+  test("BF-05: Approve appears only on the newest revision; a superseded revision says so and an earlier approval stays shown", async () => {
+    const c = await component("Scope3FrozenReportView")
+    const hasApprove = (app: any) => app.nodes().some((node: any) => node.type === "button" && node.children.flat(Infinity).some((x: any) => typeof x === "string" && x.startsWith("Approve")))
+    const render = (props: Record<string, unknown>) => { const app = harness(c.make, () => ({ actorId: colleague, canManage: true, busy: false, onApprove: () => {}, onClose: () => {}, ...props }), c.globals); return app }
+    const older = render({ report: report1, newestRevision: 2 }); await older.settle()
+    expect(hasApprove(older)).toBe(false)
+    expect(older.text()).toContain("Revision 2 has since replaced this one. It can no longer be approved. Review and approve the newest version.")
+    expect(older.nodes().some((node: any) => node.props.type === "checkbox")).toBe(false)
+    const newest = render({ report: { ...report1, version: { ...report1.version, id: second.id, revision: 2 } }, newestRevision: 2 }); await newest.settle()
+    expect(hasApprove(newest)).toBe(true)
+    expect(newest.text()).not.toContain("Superseded")
+    // An approval recorded before the newer revision existed stays recorded, and is labelled as superseded.
+    const approvedOlder = render({ report: { ...report1, version: selfApproved }, newestRevision: 2 }); await approvedOlder.settle()
+    expect(hasApprove(approvedOlder)).toBe(false)
+    expect(approvedOlder.text()).toContain("Approved by user 93400000 on 2026-10-30 11:00 UTC (self-approved: the preparer approved their own version).")
+    expect(approvedOlder.text()).toContain("Revision 2 has since replaced this one. This approval remains on record.")
+    // The printed article carries the line too (the printed page is the article only).
+    const article = JSON.stringify(approvedOlder.nodes().find((node: any) => node.type === "article"))
+    expect(article).toContain("Superseded.")
+    expect(article).toContain("Revision 2 has since replaced this one.")
+    // A view-only member is not told to approve (F5).
+    const readOnly = render({ report: report1, newestRevision: 2, canManage: false }); await readOnly.settle()
+    expect(readOnly.text()).toContain("Revision 2 has since replaced this one. It can no longer be approved.")
+    expect(readOnly.text()).not.toContain("Review and approve the newest version.")
+    // A viewer who cannot manage never sees Approve on any revision.
+    const viewer = render({ report: { ...report1, version: { ...report1.version, id: second.id, revision: 2 } }, newestRevision: 2, canManage: false }); await viewer.settle()
+    expect(hasApprove(viewer)).toBe(false)
+  })
+
+  test("BF-05 F3: the downloaded CSV of a superseded revision ends with a superseded line; the stored bytes and hashes do not change", async () => {
+    const c = await component("Scope3FrozenReportView")
+    const download = async (props: Record<string, unknown>) => {
+      const app = harness(c.make, () => ({ actorId: colleague, canManage: true, busy: false, onApprove: () => {}, onClose: () => {}, ...props }), c.globals)
+      await app.settle()
+      app.nodes().find((node: any) => node.type === "button" && node.children.flat(Infinity).some((x: any) => typeof x === "string" && x.includes("Download this version")))!.props.onClick()
+      return c.blob()
+    }
+    const approved = { ...report1, version: selfApproved }
+    const plain = await download({ report: approved, newestRevision: 1 })
+    expect(plain).toBe(reportApi.scope3ReportExportCsv(csvText, selfApproved)) // not superseded: exactly as before
+    const superseded = await download({ report: approved, newestRevision: 2 })
+    expect(superseded).toBe(`${plain}# Superseded: Revision 2 has since replaced this one.\n`)
+    expect(superseded.startsWith(csvText)).toBe(true)
+    expect(sha256(csvText)).toBe(selfApproved.csvSha256)
+    expect(sha256(approved.csvText)).toBe(selfApproved.csvSha256)
+    expect(sha256(approved.reportText ?? reportText)).toBe(selfApproved.reportSha256)
+    expect((await download({ report: report1, newestRevision: 2 })).endsWith("# Superseded: Revision 2 has since replaced this one.\n")).toBe(true)
+  })
+
+  test("BF-05 F6: after a version_superseded refusal the list is read again, so the open version stops offering Approve", async () => {
+    let loads = 0
+    let versions: Scope3ReportVersionSummary[] = [version()]
+    const view = () => { loads++; return { companyId: company, canManage: true, actorId: me, setupVersionId: "93400000-0000-4000-8000-0000000000c1", reportingYear: 2025, versions } }
+    const opened = await reportApi.decodeScope3ReportVersion({ profile: reportApi.SCOPE3_REPORTS_PROFILE, version: version(), reportText, csvText }, company, version().id)
+    const c = await component("Scope3ReportVersions", {
+      loadScope3Reports: async () => view(),
+      loadScope3ReportVersion: async () => opened,
+      approveScope3Report: async () => { versions = [version(), second]; throw Object.assign(new Error("A newer version of this report exists. Review and approve the newest version."), { status: 409, code: "version_superseded" }) },
+    })
+    const app = harness(c.make, () => ({ companyId: company, actor: { accessToken: "t", userId: me } }), { ...c.globals, crypto: { randomUUID: () => "93400000-0000-4000-8000-0000000000k1" } })
+    await app.settle()
+    app.nodes().find(node => Array.isArray(node.props.versions))!.props.onOpen(version().id); await app.settle()
+    const frozen = () => app.nodes().find(node => typeof node.props.onApprove === "function")!
+    expect(frozen().props.newestRevision).toBe(1)
+    const before = loads
+    frozen().props.onApprove({ acknowledgeOpenIssues: true, confirmSelfApproval: true }); await app.settle()
+    expect(loads).toBe(before + 1)
+    expect(frozen().props.newestRevision).toBe(2)
+    expect(app.text()).toContain("A newer version of this report exists.")
   })
 
   test("the panel prepares the first version, opens it, and approves it with the displayed hash; a later version needs a reason", async () => {

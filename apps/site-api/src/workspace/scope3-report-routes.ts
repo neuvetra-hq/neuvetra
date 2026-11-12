@@ -169,8 +169,22 @@ export function createScope3ReportRoutes(deps: {
         // Round 2 (owner decision 7): the version's own readiness and preparer decide what the approval must state; 0030
         // checks the same again under its lock (23514) and stores the acknowledgement and the confirmation.
         // The summary only (never the texts): this year's versions; a version of another year is checked by 0030 alone.
-        const stored = reportingYear === null ? undefined : (await deps.database.findScope3ReportVersions(actor.id, companyId, reportingYear)).find(item => item.id === versionId)
-        if (stored && !stored.approval) {
+        let yearVersions = reportingYear === null ? [] : await deps.database.findScope3ReportVersions(actor.id, companyId, reportingYear)
+        let stored = yearVersions.find(item => item.id === versionId)
+        if (!stored) {
+          // BF-05 F1: a version of another reporting year (the period was changed since) is judged against its own year's
+          // versions; a version that cannot be found at all is refused here, never passed on to be approved.
+          const detail = await deps.database.findScope3ReportVersion(actor.id, companyId, versionId!)
+          if (!detail) return respond(404, NOT_FOUND)
+          yearVersions = await deps.database.findScope3ReportVersions(actor.id, companyId, detail.version.reportingYear)
+          stored = yearVersions.find(item => item.id === versionId)
+          if (!stored) return respond(404, NOT_FOUND)
+        }
+        if (!stored.approval) {
+          // BF-05 (BL-03): approval signs off the current figures, so a revision that a later one replaces cannot be approved
+          // (checked first: the hash, open-issue and self-approval answers are about a version nobody should approve). An approval
+          // recorded before the newer revision existed is not touched, and its repeat is still a replay (it has an approval).
+          if (yearVersions.some(item => item.revision > stored.revision)) return respond(409, { code: "version_superseded", error: "A newer version of this report exists. Review and approve the newest version." })
           if (stored.reportSha256 !== body.reportSha256) return respond(409, { code: "report_hash_changed", error: "The report you reviewed is not this stored version. Reload the version, review it again and approve what you see." })
           if (stored.openIssues.length > 0 && !body.acknowledgeOpenIssues) return respond(409, { code: "open_issues_not_acknowledged", openIssues: stored.openIssues, error: "This version has open issues. Review them and approve with open issues acknowledged, or prepare a new version once they are resolved." })
           if (stored.createdBy === actor.id && !body.confirmSelfApproval) return respond(409, { code: "self_approval_not_confirmed", error: "You prepared this version. Confirm the self-approval explicitly; it is recorded and printed as a control exception." })
