@@ -169,9 +169,18 @@ export function createScope3ReportRoutes(deps: {
         // Round 2 (owner decision 7): the version's own readiness and preparer decide what the approval must state; 0030
         // checks the same again under its lock (23514) and stores the acknowledgement and the confirmation.
         // The summary only (never the texts): this year's versions; a version of another year is checked by 0030 alone.
-        const yearVersions = reportingYear === null ? [] : await deps.database.findScope3ReportVersions(actor.id, companyId, reportingYear)
-        const stored = yearVersions.find(item => item.id === versionId)
-        if (stored && !stored.approval) {
+        let yearVersions = reportingYear === null ? [] : await deps.database.findScope3ReportVersions(actor.id, companyId, reportingYear)
+        let stored = yearVersions.find(item => item.id === versionId)
+        if (!stored) {
+          // BF-05 F1: a version of another reporting year (the period was changed since) is judged against its own year's
+          // versions; a version that cannot be found at all is refused here, never passed on to be approved.
+          const detail = await deps.database.findScope3ReportVersion(actor.id, companyId, versionId!)
+          if (!detail) return respond(404, NOT_FOUND)
+          yearVersions = await deps.database.findScope3ReportVersions(actor.id, companyId, detail.version.reportingYear)
+          stored = yearVersions.find(item => item.id === versionId)
+          if (!stored) return respond(404, NOT_FOUND)
+        }
+        if (!stored.approval) {
           // BF-05 (BL-03): approval signs off the current figures, so a revision that a later one replaces cannot be approved
           // (checked first: the hash, open-issue and self-approval answers are about a version nobody should approve). An approval
           // recorded before the newer revision existed is not touched, and its repeat is still a replay (it has an approval).
