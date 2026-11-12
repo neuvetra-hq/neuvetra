@@ -424,8 +424,9 @@ describe("API-01: rate limits after authentication", () => {
     const f = await fixture()
     for (let i = 0; i < 300; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.30"))).status).toBe(200)
     for (let i = 0; i < 500; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.30"))).status).toBe(429)
-    // Refusals after the user's own limit are not given back, so validation calls stay bounded per address (120).
-    expect(f.validations()).toBe(300 + 120)
+    // BF-04: refusals after the user's own limit no longer spend the address budget; validation calls stay bounded per
+    // user instead (one more for the token that found the user over their limit, then none until the window resets).
+    expect(f.validations()).toBe(300 + 1)
     // Another user, on another address, is unaffected.
     expect((await f.request("/workspace-api/session", "test-admin-session", from("203.0.113.31"))).status).toBe(200)
   })
@@ -451,6 +452,72 @@ describe("API-01: rate limits after authentication", () => {
     expect((await f.request("/workspace-api/session", "junk-over", { headers: { "x-forwarded-for": "10.9.9.9, 198.51.100.50" } })).status).toBe(429)
     // x-real-ip takes precedence over x-forwarded-for.
     expect((await f.request("/workspace-api/session", "junk-other", { headers: { "x-real-ip": "198.51.100.51", "x-forwarded-for": "198.51.100.50" } })).status).toBe(401)
+  })
+})
+
+// BF-04 (BL-04, regression from PR #36): a validated user over their own per-user limit used to keep spending the
+// per-address budget, so colleagues behind the same office address got 429 without doing anything.
+describe("BF-04: a validated user never spends their address's shared budget", () => {
+  const from = (address: string) => ({ headers: { "x-real-ip": address } })
+
+  test("S14: user A sends 430 requests from 203.0.113.7 (300 get 200, 130 get 429); user B from the same address then gets 200", async () => {
+    const f = await fixture()
+    const workspaceRoute = `/workspace-api/workspace/${f.workspace.id}`
+    const statuses: Record<number, number> = {}
+    for (let i = 0; i < 430; i++) {
+      const status = (await f.request(workspaceRoute, "test-owner-session", from("203.0.113.7"))).status
+      statuses[status] = (statuses[status] ?? 0) + 1
+    }
+    expect(statuses).toEqual({ 200: 300, 429: 130 })
+    const colleague = await f.request(workspaceRoute, "test-admin-session", from("203.0.113.7"))
+    expect(colleague.status).toBe(200)
+    expect((await f.request(workspaceRoute, "test-admin-session", from("198.51.100.9"))).status).toBe(200)
+  })
+
+  test("121 invalid tokens from one address get 429 on the 121st; another address is unaffected", async () => {
+    const f = await fixture()
+    for (let i = 0; i < 120; i++) expect((await f.request("/workspace-api/session", `junk-${i}`, from("198.51.100.80"))).status).toBe(401)
+    const over = await f.request("/workspace-api/session", "junk-120", from("198.51.100.80"))
+    expect([over.status, (await over.json()).code]).toEqual([429, "rate_limited"])
+    expect(f.validations()).toBe(120)
+    expect((await f.request("/workspace-api/session", "junk-other", from("198.51.100.81"))).status).toBe(401)
+    expect((await f.request("/workspace-api/session", "test-owner-session", from("198.51.100.81"))).status).toBe(200)
+  })
+
+  test("a user over their own limit triggers one more validation per token per window, then is refused before validation", async () => {
+    const f = await fixture()
+    for (let i = 0; i < 300; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.8"))).status).toBe(200)
+    for (let i = 0; i < 500; i++) {
+      const refused = await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.8"))
+      expect(refused.status).toBe(429)
+      expect(Number(refused.headers.get("retry-after"))).toBeGreaterThan(0)
+    }
+    // 300 admitted + 1 that found the user over their limit; the other 499 never reached validation.
+    expect(f.validations()).toBe(301)
+    // The address still has its full 120 for unverified requests: the over-limit user spent none of it.
+    for (let i = 0; i < 120; i++) expect((await f.request("/workspace-api/session", `junk-${i}`, from("203.0.113.8"))).status).toBe(401)
+    expect((await f.request("/workspace-api/session", "junk-over", from("203.0.113.8"))).status).toBe(429)
+  })
+
+  test("the over-limit refusal lasts only until the user's own window resets", async () => {
+    const f = await fixture()
+    const start = Date.now()
+    try {
+      setSystemTime(new Date(start))
+      for (let i = 0; i < 300; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.9"))).status).toBe(200)
+      expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.9"))).status).toBe(429)
+      setSystemTime(new Date(start + 61_000))
+      expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.9"))).status).toBe(200)
+    } finally { setSystemTime() }
+  })
+
+  test("a validated user without staging access is bounded per user, not per address, and does not refuse colleagues", async () => {
+    const f = await fixture()
+    f.invited.delete(SPARE)
+    for (let i = 0; i < 300; i++) expect((await f.request("/workspace-api/session", "test-spare-session", from("203.0.113.12"))).status).toBe(403)
+    for (let i = 0; i < 50; i++) expect((await f.request("/workspace-api/session", "test-spare-session", from("203.0.113.12"))).status).toBe(429)
+    expect(f.validations()).toBe(301)
+    expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.12"))).status).toBe(200)
   })
 })
 
