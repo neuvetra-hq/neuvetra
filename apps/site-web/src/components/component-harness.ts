@@ -10,7 +10,7 @@ type Node = { type: unknown; props: Record<string, any>; children: any[] }
  * the collection overview reports no Scope 3 and Scope 3 results are "not switched on".
  */
 async function scope3Defaults(injected: Record<string, unknown>): Promise<Record<string, unknown>> {
-  const [collection, coverage, m71, language, results, panel, contract, adapter, assessmentApi, editor, texts, formDefaults, forms, recordForm, dataQuality, textsR2e, checklist, resultsText, naics, textsR2c, textsR3c, spendTarget, displayR3d, textsR3d, textsWo10] = await Promise.all([
+  const [collection, coverage, m71, language, results, panel, contract, adapter, assessmentApi, editor, texts, formDefaults, forms, recordForm, dataQuality, textsR2e, checklist, resultsText, naics, textsR2c, textsR3c, spendTarget, displayR3d, textsR3d, textsWo10, readiness] = await Promise.all([
     import("../../../../packages/neuvetra-database/src/scope3-collection"), import("../../../../packages/neuvetra-database/src/scope3-coverage"),
     import("../../../../packages/neuvetra-database/src/m71-contract"), import("@/lib/plain-language"), import("@/lib/scope3-results-api"), import("./Scope3Results"),
     import("../../../../packages/neuvetra-database/src/collection-contract"), import("../../../../packages/neuvetra-database/src/collection-engine-input"),
@@ -27,12 +27,16 @@ async function scope3Defaults(injected: Record<string, unknown>): Promise<Record
     // Round 3 lane D: the display rules and texts of decision 5 and the round-2 product findings (forms, Results, frozen view).
     import("@/lib/scope3-display-r3d"), import("@/lib/scope3-text-r3d"),
     // WO-10: the Activity form's field anatomy and error-summary texts.
-    import("@/lib/activity-form-text-wo10")])
+    import("@/lib/activity-form-text-wo10"),
+    // WO-04b: the one readiness the Overview, the navigation and Ask read.
+    import("@/lib/readiness")])
   // WO-05b: the draft store (no sessionStorage under bun test, so nothing is kept unless a test injects storage).
   const drafts = await import("@/lib/draft-store")
+  // WO-04b: completed writes recheck Scope 3 readiness (the real subscription; nothing writes in these tests unless they do).
+  const { subscribeWrites } = await import("@/lib/shared-get")
   const loadContext = injected.loadCollectionContext as ((...args: unknown[]) => Promise<unknown>) | undefined
   return {
-    ...drafts, ...textsR2e, ...textsR2c, ...textsWo10, ...textsR3c, ...spendTarget, ...displayR3d, ...textsR3d, ...collection, CARB_PROPOSED_MANDATORY_CATEGORIES: coverage.CARB_PROPOSED_MANDATORY_CATEGORIES, SCOPE3_ENGINE_CATEGORIES: coverage.SCOPE3_ENGINE_CATEGORIES, SCOPE3_SETUP_CATEGORY_TOKENS: coverage.SCOPE3_SETUP_CATEGORY_TOKENS,
+    ...drafts, ...readiness, subscribeWrites, ...textsR2e, ...textsR2c, ...textsWo10, ...textsR3c, ...spendTarget, ...displayR3d, ...textsR3d, ...collection, CARB_PROPOSED_MANDATORY_CATEGORIES: coverage.CARB_PROPOSED_MANDATORY_CATEGORIES, SCOPE3_ENGINE_CATEGORIES: coverage.SCOPE3_ENGINE_CATEGORIES, SCOPE3_SETUP_CATEGORY_TOKENS: coverage.SCOPE3_SETUP_CATEGORY_TOKENS,
     validateCollectionActivity: contract.validateCollectionActivity, instrumentEvidenceClaims: adapter.instrumentEvidenceClaims, M71_CATEGORIES: m71.M71_CATEGORIES, SCOPE3_ACTIVITY_KINDS: language.SCOPE3_ACTIVITY_KINDS, unitLabel: language.unitLabel, sourceCategoryLabel: language.sourceCategoryLabel,
     Scope3ResultsApiError: results.Scope3ResultsApiError, loadScope3Results: async () => { throw new results.Scope3ResultsApiError("Scope 3 results are not available yet.", 503, "scope3_unavailable") },
     INITIAL_SCOPE3_STATE: results.INITIAL_SCOPE3_STATE, Scope3Panel: panel.Scope3Panel, Scope3ReportSection: panel.Scope3ReportSection,

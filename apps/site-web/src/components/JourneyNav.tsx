@@ -1,6 +1,5 @@
 import { Icon } from "./Icon"
-import type { JourneyStatus } from "@/lib/journey-status"
-import { ACTIVITY_KINDS } from "@/lib/plain-language"
+import { READINESS_TEXT, type Readiness } from "@/lib/readiness"
 import type { WorkspaceView } from "@/lib/view-route"
 
 export type JourneyView = WorkspaceView
@@ -11,37 +10,21 @@ export type JourneyView = WorkspaceView
  */
 export const SHOW_RETIRED_VIEWS_IN_NAV = false
 
-function plural(count: number, word: string) { return `${count} ${word}${count === 1 ? "" : "s"}` }
-
-/**
- * WO-04a (CEO decision O-6): the interim "N open" count is Scope 1 and 2 items only — setup answers that affect totals,
- * records needing input, held records and possible gaps. Scope 3 open items are named separately on the Overview
- * ("Scope 3 to-do: see Results") until the full readiness definitions (WO-04b) replace this.
- */
-function openScope12(status: JourneyStatus): number {
-  const scope12 = (kind: string) => ACTIVITY_KINDS.some(item => item.kind === kind)
-  const records = status.collection.records.filter(row => scope12(row.kind))
-  return status.setup.missing.filter(item => item.scopes.length > 0).length
-    + records.filter(row => row.state === "input_needed" || row.state === "review_required").length
-    + records.filter(row => row.state === "held_period").length
-    + status.gaps.length
-}
-
 /**
  * The app's primary navigation: the overview, the three-step journey and Ask Neuvetra. WO-08: the side navigation at
- * 1080 px and wider ("side"), and the same items inside the Menu sheet below that ("sheet").
+ * 1080 px and wider ("side"), and the same items inside the Menu sheet below that ("sheet"). WO-04b: every status line
+ * comes from the one readiness (lib/readiness.ts) the Overview and Ask read, so they agree; while it is checking or
+ * couldn't check, each line says so and no step shows a ✓.
  */
-export function JourneyNav({ current, onNavigate, status, onAsk, variant = "side" }: { current: JourneyView; onNavigate: (view: JourneyView) => void; status: JourneyStatus | null; onAsk: () => void; variant?: "side" | "sheet" }) {
-  const setupMeta = !status ? "" : !status.setup.saved ? "Not started" : status.setup.missing.length ? `${plural(status.setup.missing.length, "open answer")}` : `Saved · version ${status.setup.revision}`
-  const collectionMeta = !status ? "" : !status.collection.active ? "No records yet" : status.collection.attention ? `${plural(status.collection.active, "record")} · ${status.collection.attention} input needed` : status.collection.held ? `${plural(status.collection.active, "record")} · ${status.collection.held} held` : status.gaps.length ? `${plural(status.collection.active, "record")} · ${plural(status.gaps.length, "possible gap")}` : plural(status.collection.active, "record")
-  const resultsMeta = !status ? "" : status.collection.ready ? `Draft results available · ${openScope12(status)} open` : status.collection.active ? "Nothing to calculate yet" : "Add records first"
-  // WO-04a (PROD-B01 interim, O-7): while Scope 3 is on, its open items aren't checked here, so no step shows a ✓ or "(done)".
-  const scope3 = Boolean(status?.scope3)
+export function JourneyNav({ current, onNavigate, readiness, onAsk, variant = "side" }: { current: JourneyView; onNavigate: (view: JourneyView) => void; readiness: Readiness; onAsk: () => void; variant?: "side" | "sheet" }) {
+  const ready = readiness.state === "ready" ? readiness : null
+  const pending = readiness.state === "checking" ? READINESS_TEXT.checking : readiness.state === "failed" ? READINESS_TEXT.failed : ""
   const items: Array<{ view: JourneyView; step: string | null; title: string; meta: string; done: boolean }> = [
-    { view: "home", step: null, title: "Overview", meta: status ? status.next.title : "", done: false },
-    { view: "setup", step: "1", title: "Company setup", meta: setupMeta, done: !scope3 && status?.progress.setup === "done" },
-    { view: "collection", step: "2", title: "Activity & evidence", meta: collectionMeta, done: !scope3 && status?.progress.collection === "done" },
-    { view: "results", step: "3", title: "Results & report", meta: resultsMeta, done: false },
+    { view: "home", step: null, title: "Overview", meta: ready ? ready.next.title : pending, done: false },
+    { view: "setup", step: "1", title: "Company setup", meta: ready ? ready.s1.text : pending, done: Boolean(ready?.s1.done) },
+    { view: "collection", step: "2", title: "Activity & evidence", meta: ready ? ready.s2.text : pending, done: Boolean(ready?.s2.done) },
+    // S3 is never a ✓.
+    { view: "results", step: "3", title: "Results & report", meta: ready ? ready.s3.text : pending, done: false },
   ]
   return <nav className={variant === "sheet" ? "nv-sheetnav" : "nv-sidenav"} aria-label="Workspace">
     <p className="nv-sidenav__label">Your inventory</p>

@@ -3,8 +3,11 @@ import type { CompanySetupView } from "../../../../packages/neuvetra-database/sr
 import { validateCollectionActivity, type CollectionActivity, type CollectionActivityRecord, type CollectionContext } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { SCOPE3_PAYLOAD_FIXTURES } from "../../../../packages/neuvetra-database/src/scope3-payload-fixtures"
 import { recordReadiness } from "../components/CollectionWorkspace"
-import { computeJourneyStatus, progressAnswer, recordState } from "./journey-status"
+import { computeJourneyStatus, recordState, type JourneyStatus } from "./journey-status"
 import { scope3ReadinessOptions, scope3SetupFacts, scope3SpendLineChoices } from "./scope3-forms"
+import { computeReadiness, progressAnswer as answerFrom } from "./readiness"
+/** WO-04b: Ask answers from the same readiness as the Overview (Scope 1 and 2 here; Scope 3 has its own tests). */
+const progressAnswer = (status: JourneyStatus | null, failed = false) => answerFrom(computeReadiness({ status, statusFailed: failed, scope3: { state: "off" } }))
 
 const company = "93810000-0000-4000-8000-000000000001", setupId = "93810000-0000-4000-8000-000000000002", site = "93810000-0000-4000-8000-000000000003"
 const period = { start: "2025-01-01", endExclusive: "2026-01-01" }

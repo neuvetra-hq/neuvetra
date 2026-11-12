@@ -4,8 +4,11 @@ import { describe, expect, test } from "bun:test"
 import { HELP_ENTRIES, isProgressQuestion, matchQuestion } from "./help-content"
 import { groupDigits, kgToTonnes, periodLabel, reasonText, RECORD_STATE_LABELS, RECORD_STATE_TONE } from "./plain-language"
 import { decodeResults, DRAFT_LABEL, resultsCsv, RESULTS_PROFILE } from "./results-api"
-import { computeJourneyStatus, coverageGaps, coverageIssues, coverageLines, periodFit, progressAnswer, recordState, setupMissing, type JourneyRecord } from "./journey-status"
+import { computeJourneyStatus, coverageGaps, coverageIssues, coverageLines, periodFit, recordState, setupMissing, type JourneyRecord, type JourneyStatus } from "./journey-status"
 import { rowReasons, rowStatus } from "./results-view"
+import { computeReadiness, progressAnswer as answerFrom } from "./readiness"
+/** WO-04b: Ask answers from the same readiness as the Overview (Scope 1 and 2 here; Scope 3 has its own tests). */
+const progressAnswer = (status: JourneyStatus | null, failed = false) => answerFrom(computeReadiness({ status, statusFailed: failed, scope3: { state: "off" } }))
 
 const company = "29200000-0000-4000-8000-000000000001"
 const record = "29500000-0000-4000-8000-000000000001"
@@ -213,8 +216,8 @@ describe("journey progress", () => {
     expect(status.collection.attention).toBe(0); expect(status.collection.held).toBe(1)
     expect(status.next.panel).toBe("setup")
     expect(status.next.title).toBe("Your reporting period doesn’t match 1 record")
-    expect(progressAnswer(status).join(" ")).toContain("Outside the reporting period (not counted)")
-    expect(progressAnswer(null, true)[0]).toMatch(/couldn’t be loaded/)
+    expect(progressAnswer(status).join(" ")).toContain("Held — outside the reporting period — Natural gas · G")
+    expect(progressAnswer(null, true)[0]).toMatch(/couldn’t be checked/)
   })
   test("record states follow the reviewed readiness findings", () => {
     expect(recordState([])).toBe("ready")
