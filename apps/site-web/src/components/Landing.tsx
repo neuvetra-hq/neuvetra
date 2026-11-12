@@ -111,7 +111,7 @@ export function Landing(props: LandingProps) {
           <p>Sign in with the email address your invitation was sent to. Your workspace opens on an overview of your progress and next step.</p>
           <ul className="nv-list" style={{ marginTop: 20 }}>
             <li><span className="nv-list__main"><span className="nv-list__title">No public registration</span><br /><span className="nv-subtle">Not invited yet? Ask your Neuvetra contact.</span></span></li>
-            <li><span className="nv-list__main"><span className="nv-list__title">Shared computer?</span><br /><span className="nv-subtle">Sign out when you finish — it clears the session on this browser.</span></span></li>
+            <li><span className="nv-list__main"><span className="nv-list__title">Shared computer?</span><br /><span className="nv-subtle">Sign out when you finish — it clears this browser’s session and any unsaved changes kept in this tab.</span></span></li>
           </ul>
         </div>
         <div className="nv-signin">

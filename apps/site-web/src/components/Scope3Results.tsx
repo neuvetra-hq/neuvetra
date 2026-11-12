@@ -47,11 +47,11 @@ const printDqLabel = (row: Category) => { const dq = scope3CategoryDq(row); retu
 const dqTitle = (row: Category) => { const dq = scope3CategoryDq(row); return dq.capped ? SCOPE3_DQ_TEXT_R3D.cappedBecause(dq.reasons) : undefined }
 const biogenic = (row: Category) => row.profile?.biogenicCo2 ? `${groupDigits(row.profile.biogenicCo2.display)} kg CO2` : "—"
 // Round 2 lane D (UX-9): the screen shows one unit, t CO2e (t CO2 for biogenic) with 2 fixed decimals; kg stays in print, CSV and details.
-const screenTonnes = (row: Category) => row.subtotal ? scope3Tonnes(row.subtotal.display) : "—"
+const screenTonnes = (row: Category) => row.subtotal ? scope3Tonnes(row.subtotal.unrounded) : "—"
 const screenMethodMix = (row: Category) => { const types = row.profile ? Object.entries(row.profile.methodTypes) : []
   // One method type: its name (the figure is the category's); several: each with its t.
-  return types.length === 0 ? "—" : types.length === 1 ? SCOPE3_METHOD_TYPE_TEXT[types[0]![0] as keyof typeof SCOPE3_METHOD_TYPE_TEXT] ?? types[0]![0] : types.map(([type, kg]) => `${SCOPE3_METHOD_TYPE_TEXT[type as keyof typeof SCOPE3_METHOD_TYPE_TEXT] ?? type} ${scope3Tonnes(kg!.display)} t`).join("; ") }
-const screenBiogenic = (row: Category) => row.profile?.biogenicCo2 ? `${scope3Tonnes(row.profile.biogenicCo2.display)} ${SCOPE3_UNIT_TEXT.biogenicUnit}` : "—"
+  return types.length === 0 ? "—" : types.length === 1 ? SCOPE3_METHOD_TYPE_TEXT[types[0]![0] as keyof typeof SCOPE3_METHOD_TYPE_TEXT] ?? types[0]![0] : types.map(([type, kg]) => `${SCOPE3_METHOD_TYPE_TEXT[type as keyof typeof SCOPE3_METHOD_TYPE_TEXT] ?? type} ${scope3Tonnes(kg!.unrounded)} t`).join("; ") }
+const screenBiogenic = (row: Category) => row.profile?.biogenicCo2 ? `${scope3Tonnes(row.profile.biogenicCo2.unrounded)} ${SCOPE3_UNIT_TEXT.biogenicUnit}` : "—"
 // Round 2 polish (lane D): an included category quotes setup's description of it (decision 6), as a screened-out one quotes its reason.
 const screeningWhy = (row: Category) => row.screening.reason ?? (row.screening as { description?: string | null }).description ?? null
 const screeningText = (row: Category) => row.screening.decision === "not_screened" ? "Not screened"
@@ -63,7 +63,7 @@ const memoText = (code: string) => scope3MemoText(code)
 const memoItems = (row: Category) => row.profile ? Object.entries(row.profile.memoItems).map(([code, kg]) => `category ${row.category}: ${memoText(code)} ${groupDigits(kg.display)} kg CO2e`) : []
 function MemoItems({ results, screen = false }: { results: Scope3ResultsResponse; screen?: boolean }) {
   // Round 2 lane D (UX-9): on screen in t CO2e; print keeps kg.
-  const items = screen ? results.coverage.categories.flatMap(row => row.profile ? Object.entries(row.profile.memoItems).map(([code, kg]) => `category ${row.category}: ${memoText(code)} ${scope3Tonnes(kg.display)} ${SCOPE3_UNIT_TEXT.unit}`) : []) : results.coverage.categories.flatMap(memoItems)
+  const items = screen ? results.coverage.categories.flatMap(row => row.profile ? Object.entries(row.profile.memoItems).map(([code, kg]) => `category ${row.category}: ${memoText(code)} ${scope3Tonnes(kg.unrounded)} ${SCOPE3_UNIT_TEXT.unit}`) : []) : results.coverage.categories.flatMap(memoItems)
   return items.length ? <p className="nv-report__small"><strong>{SCOPE3_MEMO_HEADING}:</strong> {items.join("; ")}.</p> : null
 }
 const originText = (row: Scope3Row) => { const origin = row.effectiveDataQuality?.activityDataOrigin; return origin ? `${SCOPE3_ORIGIN_TEXT[origin.origin] ?? origin.origin} (${SCOPE3_SET_BY_TEXT[origin.setBy] ?? origin.setBy})` : "—" }
@@ -131,7 +131,7 @@ function ExclusionRegister({ results, prefix }: { results: Scope3ResultsResponse
 function TotalStatement({ results, screen = false }: { results: Scope3ResultsResponse; screen?: boolean }) {
   const total = scope3TotalStatement(results.coverage.categories), kg = results.coverage.knownSourceSubtotal
   // Round 2 lane D (UX-9): the screen states t CO2e to 2 decimals (exact kg on hover); print keeps exact t and kg.
-  if (screen) return <p className="s3-total"><strong>Scope 3 total ({total.label}):</strong> {kg ? <span title={SCOPE3_UNIT_TEXT.hoverKg(groupDigits(kg.display))}>{scope3Tonnes(kg.display)} {SCOPE3_UNIT_TEXT.unit}</span> : "nothing calculated"}. {total.lines.join(" ")}</p>
+  if (screen) return <p className="s3-total"><strong>Scope 3 total ({total.label}):</strong> {kg ? <span title={SCOPE3_UNIT_TEXT.hoverKg(groupDigits(kg.display))}>{scope3Tonnes(kg.unrounded)} {SCOPE3_UNIT_TEXT.unit}</span> : "nothing calculated"}. {total.lines.join(" ")}</p>
   return <p className="nv-report__small"><strong>Scope 3 total ({total.label}):</strong> {kg ? `${groupDigits(scope3KgToTonnesExact(kg.display))} t CO2e (${groupDigits(kg.display)} kg CO2e)` : "nothing calculated"}. {total.lines.join(" ")}</p>
 }
 
@@ -206,7 +206,7 @@ export function Scope3Panel({ state, canManage, onFix, onRetry, reports, onNavig
       {onNavigate && <div className="nv-actions" style={{ marginTop: 10 }}><button type="button" className="nv-btn nv-btn--sm nv-btn--primary" onClick={() => onNavigate("setup")}>{SCOPE3_EMPTY_TEXT.screen}</button>{canManage && <button type="button" className="nv-btn nv-btn--sm" onClick={() => onNavigate("collection")}>{SCOPE3_EMPTY_TEXT.addRecord}</button>}</div>}</div></div> : <>
       <div className="nv-grid-3" style={{ marginTop: 12 }}>
         <div className="nv-stat"><span className="nv-stat__label">Scope 3 · known sources</span>
-          <span className="nv-stat__value" title={total ? SCOPE3_UNIT_TEXT.hoverKg(groupDigits(total.display)) : undefined}>{total ? kgToTonnes(total.display) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
+          <span className="nv-stat__value" title={total ? SCOPE3_UNIT_TEXT.hoverKg(groupDigits(total.display)) : undefined}>{total ? kgToTonnes(total.unrounded) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
           <div className="nv-stat__foot">{total ? "Only the categories calculated below" : "Nothing calculated yet"}</div>
           {/* Round 3 lane D (PR-10): the headline says what it includes from categories screened out (decision 5 keeps them counted). */}
           {conflictInTotal && <div className="nv-stat__foot s3-headline-conflict" role="note">{SCOPE3_CONFLICT_TEXT_R3D.headline(conflictInTotal.tonnes, conflictInTotal.categories)}</div>}</div>
@@ -280,7 +280,7 @@ export function Scope3Panel({ state, canManage, onFix, onRetry, reports, onNavig
             {partial && <div className="nv-record-card__meta">{partial}</div>}
             <details><summary>{SCOPE3_TRACE_TEXT.heading}</summary><CalculationDetails row={row} records={results.records} /></details>
           </div><div className="nv-record-card__side"><span className={`nv-chip nv-chip--${status.tone}`}>{status.label}</span>
-            {row.result?.total && <span className="nv-num" style={{ fontWeight: 600 }} title={SCOPE3_UNIT_TEXT.hoverKg(groupDigits(row.result.total.display))}>{scope3Tonnes(row.result.total.display)} {SCOPE3_UNIT_TEXT.unit}</span>}
+            {row.result?.total && <span className="nv-num" style={{ fontWeight: 600 }} title={SCOPE3_UNIT_TEXT.hoverKg(groupDigits(row.result.total.display))}>{scope3Tonnes(row.result.total.unrounded)} {SCOPE3_UNIT_TEXT.unit}</span>}
             {fix && <button type="button" className="nv-btn nv-btn--sm" aria-label={`${row.derivedFrom ? SCOPE3_ACTION_TEXT.fixSource(row.sourceId) : canManage ? SCOPE3_ACTION_TEXT.fixAria(row.sourceId) : `${SCOPE3_ACTION_TEXT.view} ${row.sourceId}`}`} onClick={() => act(fix)}>{row.derivedFrom ? "Fix the source record" : canManage ? SCOPE3_ACTION_TEXT.fix : SCOPE3_ACTION_TEXT.view}</button>}
             {resolve && <button type="button" className="nv-btn nv-btn--sm" aria-label={SCOPE3_CONFLICT_TEXT_R3D.resolveAria(row.sourceId)} onClick={() => act({ type: "todo", category: row.category, label: SCOPE3_CONFLICT_TEXT_R3D.resolve })}>{SCOPE3_CONFLICT_TEXT_R3D.resolve}</button>}
           </div></div> })}

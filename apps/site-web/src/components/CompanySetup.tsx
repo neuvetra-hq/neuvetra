@@ -16,6 +16,8 @@ import { scope3SetupNextStep, SETUP_NEXT_TEXT_R2C } from "@/lib/scope3-text-r2c"
 import { SPEND_TEXT_R3C } from "@/lib/scope3-text-r3c"
 
 import { sourceCategoryLabel } from "@/lib/plain-language"
+// WO-05b: unsaved setup input survives a session end or a refresh in this tab, and is offered back (never restored by itself).
+import { DRAFT_DEBOUNCE_MS, DRAFT_TEXT, draftKey, draftStorage, draftTime, keepDraft, readDraft, removeDraft, removeDraftSoon, setupDraftFields, writeDraft, type DraftBinding, type DraftScope, type SetupDraftFields, type StoredDraft } from "@/lib/draft-store"
 
 const sections = ["Company", "Reporting period", "Entities & boundary", "Locations", "Changes & shared operations", "Source activities", "Review"] as const
 const changes = ["Acquisitions or disposals", "Site openings or closures", "Changes in ownership or control", "Joint ventures or shared operations", "Franchises, outsourcing or leased assets"] as const
@@ -31,6 +33,28 @@ function blank(): Setup {
     changes: changes.map((category, index) => ({ id: `change-${index + 1}`, category, state: "unknown" as const, effectiveDate: null, details: "" })),
     changeNotes: "", review: { acknowledged: false, notes: "" },
   }
+}
+
+/** WO-05b: what this screen's setup draft holds now, kept current every render (scope null: this person can't store drafts). */
+interface SetupDraftState { scope: DraftScope | null; unsaved: boolean; draft: Setup | null; reason: string; step: number; binding: DraftBinding }
+const checkSetupDraft = setupDraftFields<Setup>(sections.length)
+function persistSetupDraft(state: SetupDraftState, sent: CompanySetupSaveInput | null, offered: boolean) {
+  if (!state.scope || offered || !state.unsaved || !state.draft) return
+  const request = sent ? { expectedRevision: sent.expectedRevision, expectedVersionId: sent.expectedVersionId, correctionReason: sent.correctionReason, setup: sent.setup } : null
+  writeDraft(draftStorage(), state.scope, { fields: { setup: state.draft, reason: state.reason, step: state.step }, binding: state.binding, idempotencyKey: sent?.idempotencyKey ?? null, request })
+}
+/** A stored request (sent with the stored key) is reused only if it has exactly a save request's shape. */
+function storedSetupRequest(found: StoredDraft<SetupDraftFields<Setup>>): CompanySetupSaveInput | null {
+  const request = found.request
+  if (!found.idempotencyKey || !request || Object.keys(request).length !== 4) return null
+  if (request.expectedRevision !== found.binding.expectedRevision || request.expectedVersionId !== found.binding.expectedVersionId) return null
+  if (request.correctionReason !== null && typeof request.correctionReason !== "string") return null
+  if (!checkSetupDraft({ setup: request.setup, reason: "", step: 0 })) return null
+  return { idempotencyKey: found.idempotencyKey, expectedRevision: found.binding.expectedRevision, expectedVersionId: found.binding.expectedVersionId, correctionReason: request.correctionReason, setup: request.setup as Setup }
+}
+function setupDraftOffer(actor: Pick<HostedWorkspaceActor, "userId" | "role">, companyId: string, canManage: boolean): StoredDraft<SetupDraftFields<Setup>> | null {
+  if (!canManage || (actor.role !== "owner" && actor.role !== "admin")) return null
+  return readDraft(draftStorage(), { userId: actor.userId, companyId, view: "setup" }, checkSetupDraft)
 }
 
 function exclusive(date: string) { if (!date) return null; const value = new Date(`${date}T00:00:00Z`); value.setUTCDate(value.getUTCDate() + 1); return value.toISOString().slice(0, 10) }
@@ -74,6 +98,37 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
   useEffect(() => { actorRef.current = actor }, [actor])
   // Lets the workspace navigation warn before unsaved setup changes are discarded (same pattern as collection).
   useEffect(() => { onDirtyChange?.(dirty) }, [dirty, onDirtyChange])
+  // WO-05b: the setup draft kept for this company (owners and admins only) and the offer to restore one.
+  const canStore = Boolean(view?.canManage) && (actor.role === "owner" || actor.role === "admin")
+  const draftScope: DraftScope | null = canStore && workspaceId ? { userId: actor.userId, companyId: workspaceId, view: "setup" } : null
+  const draftScopeKey = draftScope ? draftKey(draftScope) : null
+  const [offer, setOffer] = useState<StoredDraft<SetupDraftFields<Setup>> | null>(null)
+  // A restored draft saves against the version it was based on, so newer server data gives the conflict state (QA-144).
+  const [restoredBinding, setRestoredBinding] = useState<DraftBinding | null>(null)
+  const binding: DraftBinding = restoredBinding ?? { expectedRevision: view?.currentVersion?.revision ?? 0, expectedVersionId: view?.currentVersion?.id ?? null }
+  const draftState = useRef<SetupDraftState>({ scope: null, unsaved: false, draft, reason, step, binding })
+  const offered = useRef(false)
+  useEffect(() => { draftState.current = { scope: draftScope, unsaved: dirty, draft, reason, step, binding }; offered.current = offer !== null })
+  useEffect(() => {
+    if (!draftScopeKey || offer || !dirty) return
+    const timer = setTimeout(() => persistSetupDraft(draftState.current, pending.current, offered.current), DRAFT_DEBOUNCE_MS)
+    return () => clearTimeout(timer)
+  }, [draftScopeKey, offer, dirty, draft, reason, step])
+  useEffect(() => {
+    const scope = draftState.current.scope
+    if (!draftScopeKey || !scope) return
+    keepDraft(scope)
+    const flush = () => persistSetupDraft(draftState.current, pending.current, offered.current)
+    const listens = typeof window.addEventListener === "function"
+    if (listens) window.addEventListener("pagehide", flush)
+    return () => {
+      if (listens) window.removeEventListener("pagehide", flush)
+      // The workspace closed (the session ended): keep what was typed. Otherwise the person left setup (after the leave
+      // guard, or with nothing unsaved): its draft goes, unless it is still only offered.
+      if (actorRef.current.signal?.aborted) flush()
+      else if (!offered.current) removeDraftSoon(draftStorage(), scope)
+    }
+  }, [draftScopeKey])
 
   useEffect(() => {
     if (!workspaceId) { queueMicrotask(() => { setError(true); setMessage("Choose an admitted synthetic company to continue.") }); return }
@@ -83,6 +138,7 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
     void loadCompanySetup(workspaceId, requestActor).then(result => {
       if (controller.signal.aborted) return
       setView(result); setDraft(result.currentVersion ? structuredClone(result.currentVersion.setup) : blank()); setDirty(false)
+      setOffer(setupDraftOffer(actorRef.current, workspaceId, result.canManage))
       setMessage(result.currentVersion ? "Your saved setup is ready to review or correct." : "Start a draft. Unknown answers remain visible for review.")
     }).catch(cause => {
       if (controller.signal.aborted) return
@@ -124,8 +180,14 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
   async function refresh() {
     if (!workspaceId || busy) return
     setBusy(true); setError(false)
+    // WO-05b: reloading the saved setup discards the input on screen, so its kept draft goes too; after a failed first load
+    // (Try again), nothing was shown yet and a kept draft is offered once setup loads.
+    const firstLoad = !view
+    if (!firstLoad && draftScope) removeDraft(draftStorage(), draftScope)
+    setRestoredBinding(null)
     try {
       const result = await loadCompanySetup(workspaceId, actorRef.current)
+      if (firstLoad) setOffer(setupDraftOffer(actorRef.current, workspaceId, result.canManage))
       setView(result); setDraft(result.currentVersion ? structuredClone(result.currentVersion.setup) : blank()); setDirty(false); setHistorical(null); pending.current = null; setRetryAvailable(false); setReason(""); setJustSaved(false)
       setMessage("Latest saved setup loaded.")
     } catch (cause) { setError(true); setMessage(cause instanceof Error ? cause.message : "Company setup is unavailable.") }
@@ -135,20 +197,28 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
     if (!workspaceId || !view?.canManage || !draft || busy) return
     if (!draft.company.legalName.trim() || !draft.company.countryCode || !/^[A-Z]{2}$/.test(draft.company.countryCode)) { setError(true); setMessage("Enter a legal name and two-letter country code before saving."); return }
     if (view.currentVersion && reason.trim().length < 3) { setError(true); setMessage("Explain this correction before saving."); return }
-    const input = pending.current ?? { idempotencyKey: crypto.randomUUID(), expectedRevision: view.currentVersion?.revision ?? 0, expectedVersionId: view.currentVersion?.id ?? null, correctionReason: view.currentVersion ? reason.trim() : null, setup: structuredClone(draft) }
+    // WO-05b: a restored draft keeps the version it was based on (a newer one gives the conflict state, never an overwrite).
+    const input = pending.current ?? { idempotencyKey: crypto.randomUUID(), expectedRevision: binding.expectedRevision, expectedVersionId: binding.expectedVersionId, correctionReason: view.currentVersion ? reason.trim() : null, setup: structuredClone(draft) }
     pending.current = input
+    // The attempt is kept with its key at once, so a retry after a session end reuses this exact request.
+    const savingScope = draftScope
+    persistSetupDraft({ ...draftState.current, scope: savingScope, unsaved: true }, input, offer !== null)
     setBusy(true); setError(false); setRetryAvailable(false); setMessage("Saving and verifying this setup…")
     try {
       const result = await saveCompanySetup(workspaceId, input, actorRef.current)
       const current = result.foundation.currentVersion
       if (!current) throw new Error("The saved setup could not be read back.")
       setView(result.foundation); setDraft(structuredClone(current.setup)); setDirty(false); setHistorical(result.savedVersion); pending.current = null; setRetryAvailable(false); setReason("")
+      if (savingScope) removeDraft(draftStorage(), savingScope)
+      setRestoredBinding(null)
       setMessage(result.replayed && current.id !== result.savedVersion.id ? "The earlier save was confirmed. A newer correction is now shown." : result.savedVersion.revision > 1 ? "Saved. The previous version remains in correction history." : "Saved.")
       setJustSaved(true)
     } catch (cause) {
       setError(true)
       if (cause instanceof CompanySetupApiError && cause.conflict) { pending.current = null; setRetryAvailable(false); setMessage("This setup changed elsewhere. Refresh the latest version before correcting it.") }
       else { setRetryAvailable(true); setMessage(`${cause instanceof Error ? cause.message : "The setup could not be saved."} Retry keeps the same save request.`) }
+      // WO-05b: the input is still unsaved; keep it with whatever request the next save will reuse (none after a conflict).
+      persistSetupDraft({ ...draftState.current, scope: savingScope, unsaved: true }, pending.current, false)
     } finally { setBusy(false) }
   }
   async function showVersion(versionId: string) {
@@ -159,11 +229,35 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
     finally { setBusy(false) }
   }
 
+  /** WO-05b: the kept draft comes back into the form, unsaved, with the version it was based on; focus goes to the form's heading. */
+  function restoreDraft() {
+    const found = offer
+    if (!found || busy) return
+    setOffer(null)
+    setDraft(structuredClone(found.fields.setup)); setReason(found.fields.reason); setStep(found.fields.step); setDirty(true); setHistorical(null)
+    setRestoredBinding(found.binding)
+    pending.current = storedSetupRequest(found); setRetryAvailable(pending.current !== null); setJustSaved(false)
+    setError(false); setMessage(DRAFT_TEXT.restored)
+    requestAnimationFrame(() => document.getElementById("setup-form-heading")?.focus())
+  }
+  function discardDraft() {
+    if (!offer) return
+    setOffer(null)
+    if (draftScope) removeDraft(draftStorage(), draftScope)
+    setError(false); setMessage(DRAFT_TEXT.discarded)
+    requestAnimationFrame(() => document.getElementById("setup-form-heading")?.focus())
+  }
+
   if (!draft || !view) return <section className="worksheet company-setup" aria-busy={busy}><p className="worksheet-eyebrow">Company setup · Synthetic staging</p><h1 ref={headingRef} tabIndex={-1}>Your company, in context</h1><p role={error ? "alert" : "status"}>{message}</p>{error && <button type="button" onClick={() => void refresh()}>Try again</button>}</section>
   const update = edit
   return <section className="worksheet company-setup" aria-busy={busy}>
     <p className="worksheet-eyebrow">Company setup · Synthetic staging</p>
     <h1 ref={headingRef} tabIndex={-1}>Your company, in context</h1>
+    {/* WO-05b: "Restore unsaved changes from <time>? [Restore] [Discard]". Nothing restores by itself; the form waits. */}
+    {offer && <div className="nv-notice nv-draft-offer" role="group" aria-labelledby="setup-draft-offer">
+      <p id="setup-draft-offer">{DRAFT_TEXT.offer(draftTime(offer.savedAt))}</p>
+      <div className="nv-actions"><button type="button" className="nv-btn nv-btn--primary nv-btn--sm" aria-disabled={busy || undefined} onClick={restoreDraft}>{DRAFT_TEXT.restore}</button><button type="button" className="nv-btn nv-btn--sm" onClick={discardDraft}>{DRAFT_TEXT.discard}</button></div>
+    </div>}
     <p>Start with the business. Gather activity records and evidence in the collection step. This is a proposed boundary for review, not an approved inventory.</p>
     {intro}
     <nav className="worksheet-nav setup-steps" aria-label="Setup sections">{sections.map((title, index) => <button type="button" key={title} disabled={busy} aria-pressed={step === index} onClick={() => { setStep(index); setHistorical(null) }}>{String(index + 1).padStart(2, "0")} {title}</button>)}</nav>
@@ -180,7 +274,7 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
       </div></div>
     })()}
     {!view.canManage && <p className="scope1-beta-readonly">You can review this setup. An owner or admin must save corrections.</p>}
-    <div className="worksheet-card worksheet-form"><h2>{String(step + 1).padStart(2, "0")} / {sections[step]}</h2><fieldset className="setup-inputs" disabled={busy || !view.canManage}>
+    <div className="worksheet-card worksheet-form"><h2 id="setup-form-heading" tabIndex={-1}>{String(step + 1).padStart(2, "0")} / {sections[step]}</h2><fieldset className="setup-inputs" disabled={busy || !view.canManage || offer !== null}>
     {step === 0 && <div className="setup-grid">
       <Field label="Legal name" value={draft.company.legalName} onChange={value => update(next => { next.company.legalName = value })} />
       <Field label="Trading name (optional)" value={draft.company.tradingName} onChange={value => update(next => { next.company.tradingName = value })} />

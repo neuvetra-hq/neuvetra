@@ -1,4 +1,4 @@
-import type { CompanySetupSaveResult, CompanySetupVersion, CompanySetupView } from "@neuvetra/database"
+import { duplicateCompanySetupIds, type CompanySetupSaveResult, type CompanySetupVersion, type CompanySetupView } from "@neuvetra/database"
 import { extractBearerToken, type AuthenticatedUser } from "../lib/auth"
 
 export interface CompanySetupRouteDatabase {
@@ -45,6 +45,9 @@ export function createCompanySetupRoutes(deps: {
       if (new TextEncoder().encode(body).byteLength > 250_000) return respond(413, { error: "Request too large." })
       let input: unknown
       try { input = JSON.parse(body) } catch { return respond(422, { error: "Invalid company setup JSON." }) }
+      // BF-08 (BL-06): a repeated entity, relationship, location or change ID, or a repeated screening ID or (scope, category), is invalid input,
+      // refused before any SQL, so a unique violation below means only a head or idempotency conflict.
+      if (duplicateCompanySetupIds((input as { setup?: unknown } | null)?.setup)) return respond(422, { error: "Invalid or unsupported company setup.", code: "duplicate_setup_id" })
       const result = await deps.database.saveCompanySetup(actor.id, companyId, input)
       return respond(result.replayed ? 200 : 201, result)
     } catch (error) {

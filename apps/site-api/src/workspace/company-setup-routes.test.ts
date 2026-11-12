@@ -59,6 +59,30 @@ describe("general company setup route", () => {
   })
 })
 
+// BF-08 (BL-06): a repeated ID or screening pair is invalid input (422), refused before any SQL; a unique violation is still a 409.
+test("BF-08: a setup that repeats an entity, location or screening key is 422 duplicate_setup_id and never reaches the database", async () => {
+  let writes = 0
+  const app = route(database({ saveCompanySetup: async () => { writes++; return saved } }))
+  const entity = { id: "81000000-0000-4000-8000-000000000001" }, location = { id: "81000000-0000-4000-8000-000000000002" }
+  const row = (id: string, scope: number, category: string) => ({ id, scope, category })
+  const post = (setup: unknown) => app(request(undefined, { method: "POST", body: JSON.stringify({ ...body, setup }) }))
+  const repeated = [
+    { entities: [entity, entity] }, { entities: [entity, { id: entity.id.toUpperCase() }] }, { locations: [location, location] }, { relationships: [entity, entity] },
+    { screening: [row("a", 1, "x"), row("a", 2, "y")] }, { screening: [row("a", 1, "x"), row("b", 1, "x")] }, { changes: [{ id: "c" }, { id: "c" }] },
+  ]
+  for (const setup of repeated) {
+    const response = await post(setup)
+    expect([JSON.stringify(setup), response.status, await response.json()]).toEqual([JSON.stringify(setup), 422, { error: "Invalid or unsupported company setup.", code: "duplicate_setup_id" }])
+  }
+  expect(writes).toBe(0)
+  // The same category in two scopes, and distinct IDs, are fine.
+  expect((await post({ entities: [entity, { id: "81000000-0000-4000-8000-000000000003" }], screening: [row("a", 1, "x"), row("b", 2, "x")], changes: [{ id: "c" }, { id: "d" }] })).status).toBe(201)
+  expect(writes).toBe(1)
+  // A unique violation from the database is a conflict again, never mistaken for invalid input.
+  const conflict = await route(database({ saveCompanySetup: async () => { throw Object.assign(new Error("private"), { code: "23505" }) } }))(request(undefined, { method: "POST", body: JSON.stringify(body) }))
+  expect([conflict.status, await conflict.json()]).toEqual([409, { error: "Company setup changed. Refresh current setup." }])
+})
+
 test("BF1: an uppercase company or version ID reaches the same setup as its lowercase form", async () => {
   const company = "80000000-0000-4000-8000-0000000abc01", versionId = "80000000-0000-4000-8000-0000000abc02"
   const seen: string[] = []

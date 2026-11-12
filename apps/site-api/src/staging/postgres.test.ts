@@ -437,3 +437,115 @@ integration("BF-01: a repeated electricity record is counted with a possible-dup
     expect(restored.body.warnings).toEqual(single.body.warnings)
   } finally { await app.close?.(); await database.close(); await operator.close() }
 }, 120_000)
+
+// BF-08 (auditor BL-07, BL-06, BL-05; repros S6, S5, S4/S4b) on native PostgreSQL through the staged server.
+// - A member of a company can read it, so a refused write is 403 read_only; someone outside it (or a company that does not exist)
+//   still gets the same 404 as ever, so a non-member cannot tell an existing company from a missing one.
+// - A company setup that repeats an entity ID, a location ID or a screening (scope, category) pair is invalid input (422), not a
+//   concurrency conflict (409).
+// - A first save whose record ID or evidence upload ID already belongs to another company is 409 record_id_unavailable, not "changed".
+integration("BF-08: a member's refused writes are 403, duplicate setup IDs are 422, and another company's record or upload ID is record_id_unavailable", async () => {
+  const REF = "abcdefghijklmnopqrst", ORIGIN = "http://127.0.0.1:3015"
+  const operator = createPostgresConnection(target!, { tls: false })
+  const runtimeUrl = new URL(target!); runtimeUrl.username = "neuvetra_runtime"
+  const database = new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string) => HostedWorkspaceDatabase)(createPostgresConnection(runtimeUrl.toString(), { tls: false }), REF)
+  const config = readStagingConfig({ NODE_ENV: "test", NEUVETRA_STAGING_ENABLED: "enabled", NEUVETRA_STAGING_PROFILE: STAGING_PROFILE, NEUVETRA_STAGING_PROJECT_REF: REF, NEUVETRA_STAGING_ORIGIN: ORIGIN, SUPABASE_URL: `https://${REF}.supabase.co`, SUPABASE_ANON_KEY: "sb_publishable_synthetic_fixture_not_a_real_key", DATABASE_URL: `postgres://neuvetra_runtime:fixture@db.${REF}.supabase.co:5432/postgres` })
+  const users: Record<string, string> = {}
+  const stored = new Map<string, Uint8Array<ArrayBuffer>>()
+  const collectionEvidenceStorage = { put: async (_t: string, _b: string, key: string, bytes: Uint8Array<ArrayBuffer>) => { stored.set(key, bytes) }, get: async (_t: string, _b: string, key: string) => stored.get(key)! }
+  const app = await createStagingServer(config, { database, collectionEvidenceStorage, validateUser: async token => users[token] ? { id: users[token]!, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, serveAsset: async () => null, log: () => {} })
+  const call = async (method: string, route: string, actor: string, body?: unknown, extra: Record<string, string> = {}) => {
+    const response = await app.fetch(new Request(`${ORIGIN}/workspace-api${route}`, { method, body: body === undefined ? undefined : typeof body === "string" || body instanceof Uint8Array ? body as BodyInit : JSON.stringify(body),
+      headers: { origin: ORIGIN, authorization: `Bearer ${actor}`, ...(body === undefined || body instanceof Uint8Array ? {} : { "content-type": "application/json" }), ...extra } }))
+    const text = await response.text()
+    let json: any = null; try { json = JSON.parse(text) } catch { json = text }
+    return { status: response.status, body: json }
+  }
+  const company = async (name: string, members: Array<{ name: string; role: "admin" | "member" }> = []) => {
+    const owner = crypto.randomUUID(), id = crypto.randomUUID()
+    users[`${name}-owner`] = owner
+    await operator.query("insert into auth.users(id) values($1)", [owner])
+    const memberRows = []
+    for (const member of members) { const userId = crypto.randomUUID(); users[`${name}-${member.name}`] = userId; await operator.query("insert into auth.users(id) values($1)", [userId]); memberRows.push({ userId, role: member.role }) }
+    await provisionStagingRoster(operator, { expectedProjectRef: REF, workspaceId: id, ownerUserId: owner, members: memberRows })
+    return { id, owner: `${name}-owner`, root: `/workspace/${id}` }
+  }
+  const includedSetup = () => {
+    const base = createSyntheticCompanySetup()
+    const oldId = base.locations[0]!.id, newId = crypto.randomUUID()
+    const loc = { ...base.locations[0]!, id: newId, inclusion: "included" as const, control: "reporting_company" as const, startMode: "period_start" as const, endMode: "period_end" as const }
+    return { ...base, boundary: { ...base.boundary, approach: "operational_control" as const }, entities: base.entities.map(e => ({ ...e, inclusion: "included" as const, control: "operational_control" as const })), locations: [loc],
+      screening: base.screening.map(s => ({ ...s, locationId: s.locationId === oldId ? newId : s.locationId, ...(s.scope === 1 ? { state: "no" as const, reason: "None here" } : {}) })) }
+  }
+  const saveSetup = (c: { root: string; owner: string }, setup: unknown, expectedRevision: number, expectedVersionId: string | null) =>
+    call("POST", `${c.root}/setup`, c.owner, { idempotencyKey: crypto.randomUUID(), expectedRevision, expectedVersionId, correctionReason: expectedRevision ? "Change" : null, setup })
+  const electricity = (setupVersionId: string, locationId: string) => ({ locationId, setupVersionId, state: "active", withdrawalReason: null, quality: "actual", estimateBasis: null, period: { start: "2025-01-01", endExclusive: "2026-01-01" }, reference: "Synthetic BF-08", notes: "", evidenceIds: [], kind: "electricity", sourceId: "M-1",
+    quantity: { originalValue: "1000", originalUnit: "kWh", normalizedValue: "1000", normalizedUnit: "kWh" },
+    payload: { meterOrAccountNumber: "M-1", utilityName: "City & County of San Francisco", site: "Office", zip: "94105", subregion: "CAMX", utilityEiaId: "16612", instruments: [] } })
+  const saveRecord = (c: { root: string; owner: string }, actor: string, recordId: string, activity: unknown) => call("POST", `${c.root}/collection/activities/${recordId}`, actor, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity })
+  const pdf = (text: string) => new TextEncoder().encode(`%PDF-1.4 ${text}`) as Uint8Array<ArrayBuffer>
+  const upload = (c: { root: string }, actor: string, bytes: Uint8Array<ArrayBuffer>, id?: string) => call("POST", `${c.root}/collection/evidence`, actor, bytes, { "content-type": "application/pdf", "x-neuvetra-original-name": "bill.pdf", ...(id ? { "x-neuvetra-upload-id": id } : {}) })
+  try {
+    const a = await company("a", [{ name: "member", role: "member" }]), b = await company("b")
+    const setupA = includedSetup(), savedA = await saveSetup(a, setupA, 0, null)
+    expect([savedA.status, savedA.body]).toEqual([201, savedA.body])
+    const setupB = includedSetup(), savedB = await saveSetup(b, setupB, 0, null)
+    expect(savedB.status).toBe(201)
+    const versionA = savedA.body.savedVersion.id as string, versionB = savedB.body.savedVersion.id as string
+
+    // BL-07 (S6): a member can read company A, so its refused writes are 403 read_only; company B's owner (not a member of A) and a
+    // company that does not exist get the same 404 body as before, so the 403 does not reveal that a company exists to anyone outside it.
+    const readOnly = { error: "You can view this company’s records but not change them.", code: "read_only" }
+    expect((await call("GET", `${a.root}/results`, "a-member")).status).toBe(200)
+    const memberRecord = await saveRecord(a, "a-member", crypto.randomUUID(), electricity(versionA, setupA.locations[0]!.id))
+    const memberUpload = await upload(a, "a-member", pdf("member"))
+    const lineage = { electricityRecordId: crypto.randomUUID(), reference: "", notes: "" }
+    const memberLineage = await call("POST", `${a.root}/collection/grid-losses/${crypto.randomUUID()}`, "a-member", lineage)
+    expect([memberRecord, memberUpload, memberLineage].map(r => [r.status, r.body])).toEqual([[403, readOnly], [403, readOnly], [403, readOnly]])
+    const missing = { root: `/workspace/${crypto.randomUUID()}` }
+    const notFound = { error: "Collection resource not found." }
+    for (const root of [a, missing]) {
+      const outsider = await Promise.all([
+        saveRecord(root as never, "b-owner", crypto.randomUUID(), electricity(versionB, setupB.locations[0]!.id)),
+        upload(root, "b-owner", pdf("outsider")),
+        call("POST", `${root.root}/collection/grid-losses/${crypto.randomUUID()}`, "b-owner", lineage),
+      ])
+      expect(outsider.map(r => [r.status, r.body])).toEqual([[404, notFound], [404, notFound], [404, notFound]])
+    }
+    // The member could not change anything.
+    expect((await call("GET", `${a.root}/collection/activities`, "a-owner")).body.records).toEqual([])
+
+    // BL-06 (S5): a repeated ID or screening pair is invalid input, never "changed elsewhere".
+    const c = await company("c")
+    const s = includedSetup()
+    const duplicates = [
+      ["entity ID", { ...s, entities: [s.entities[0]!, s.entities[0]!] }],
+      ["location ID", { ...s, locations: [s.locations[0]!, s.locations[0]!] }],
+      ["screening category", { ...s, screening: [...s.screening, { ...s.screening[0]!, id: "other" }] }],
+      ["screening row ID", { ...s, screening: [...s.screening, { ...s.screening[0]!, scope: 3 as const, category: 15 }, { ...s.screening[0]!, scope: 3 as const, category: 14 }].map((row, index) => index >= s.screening.length ? { ...row, id: "same-id" } : row) }],
+    ] as const
+    for (const [label, setup] of duplicates) {
+      const response = await saveSetup(c, setup, 0, null)
+      expect([label, response.status, response.body.code, response.body.error]).toEqual([label, 422, "duplicate_setup_id", "Invalid or unsupported company setup."])
+    }
+    expect((await saveSetup(c, s, 0, null)).status).toBe(201)
+
+    // BL-05 (S4, S4b): B's first save with A's record ID or evidence upload ID is a definite refusal, not "record changed".
+    const recordId = crypto.randomUUID()
+    expect((await saveRecord(a, "a-owner", recordId, electricity(versionA, setupA.locations[0]!.id))).status).toBe(201)
+    const unavailable = { error: "This record ID can’t be used. Save again to use a new one.", code: "record_id_unavailable" }
+    const collided = await saveRecord(b, "b-owner", recordId, electricity(versionB, setupB.locations[0]!.id))
+    expect([collided.status, collided.body]).toEqual([409, unavailable])
+    expect((await saveRecord(b, "b-owner", crypto.randomUUID(), electricity(versionB, setupB.locations[0]!.id))).status).toBe(201)
+    const uploadId = crypto.randomUUID()
+    expect((await upload(a, "a-owner", pdf("a"), uploadId)).status).toBe(201)
+    const collidedUpload = await upload(b, "b-owner", pdf("b"), uploadId)
+    expect([collidedUpload.status, collidedUpload.body]).toEqual([409, unavailable])
+    expect((await upload(b, "b-owner", pdf("b"), crypto.randomUUID())).status).toBe(201)
+    // The same company saving the same first record twice at once is still a true concurrency conflict.
+    const sameId = crypto.randomUUID()
+    const race = await Promise.all([saveRecord(b, "b-owner", sameId, electricity(versionB, setupB.locations[0]!.id)), saveRecord(b, "b-owner", sameId, electricity(versionB, setupB.locations[0]!.id))])
+    expect(race.map(r => r.status).sort()).toEqual([201, 409])
+    expect(race.find(r => r.status === 409)!.body.code).toBe("revision_conflict")
+  } finally { await app.close?.(); await database.close(); await operator.close() }
+}, 120_000)

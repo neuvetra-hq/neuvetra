@@ -1,0 +1,4 @@
+/* WO-05b: the offer to restore unsaved changes kept in this tab ("Restore unsaved changes from <time>? [Restore] [Discard]"). */
+.nv-app .nv-draft-offer { flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+.nv-app .nv-draft-offer > p { margin: 0; flex: 1 1 16rem; min-width: 0; overflow-wrap: anywhere; }
+.nv-app .nv-draft-offer > .nv-actions { flex: none; }

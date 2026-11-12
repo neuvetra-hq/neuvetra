@@ -53,21 +53,23 @@ function harness(options: { schema?: number } = {}) {
   let failRegister = false
   let hasAccess = true
   let others: any[] = []
+  let lineages: any[] = []
+  const failures: Record<string, unknown> = {} // BF-08: an error the named database method throws
   let zipLookup: any = { zip: "94105", subregions: ["CAMX"], utilities: [{ subregion: "CAMX", utility: "Pacific Gas and Electric Co", eiaId: "14328", state: "CA", predominantUtility: true }], needsUtilityChoice: false, found: true, source: "EPA Power Profiler zip.csv (eGRID2023)" }
   const current = { id: VERSION, recordId: RECORD, companyId: COMPANY, revision: 1, previousVersionId: null, correctionReason: null, activity: activity().activity, payloadSha256: "a".repeat(64), createdBy: ACTOR, createdAt: "2026-09-28T00:00:00.000Z" } as any
   const record = { id: RECORD, companyId: COMPANY, kind: "fugitive", currentVersion: current, history: [{ ...current, activity: undefined }] } as any
   const database: CollectionRouteDatabase = {
-    async findCollectionContext(...args) { calls.push({ name: "findContext", args }); return hasAccess ? { companyId: COMPANY, setupVersionId: SETUP, setupRevision: 1, locations: [{ id: LOCATION, name: "Office", inclusion: "included", control: "operational_control" }] } : null },
+    async findCollectionContext(...args) { calls.push({ name: "findContext", args }); if (failures.context) throw failures.context; return hasAccess ? { companyId: COMPANY, setupVersionId: SETUP, setupRevision: 1, locations: [{ id: LOCATION, name: "Office", inclusion: "included", control: "operational_control" }] } : null },
     async findCollectionActivities(...args) { calls.push({ name: "findActivities", args }); return [record, ...others] },
     async findCollectionActivityVersion(...args) { calls.push({ name: "findVersion", args }); return current },
-    async saveCollectionActivity(...args) { calls.push({ name: "save", args }); if (saveError) throw saveError; return { record, version: current, replayed: false } },
+    async saveCollectionActivity(...args) { calls.push({ name: "save", args }); if (saveError) throw saveError; if (failures.save) throw failures.save; return { record, version: current, replayed: false } },
     async findCollectionEvidence(...args) { calls.push({ name: "findEvidence", args }); return evidence },
-    async reserveCollectionEvidenceUpload(...args) { calls.push({ name: "reserveEvidence", args }); const input = args[2] as any; return { uploadId: input.uploadId, evidenceId: input.evidenceId, objectKey: input.objectKey, bucket: COLLECTION_EVIDENCE_BUCKET } },
+    async reserveCollectionEvidenceUpload(...args) { calls.push({ name: "reserveEvidence", args }); if (failures.reserve) throw failures.reserve; const input = args[2] as any; return { uploadId: input.uploadId, evidenceId: input.evidenceId, objectKey: input.objectKey, bucket: COLLECTION_EVIDENCE_BUCKET } },
     async registerCollectionEvidence(...args) { calls.push({ name: "registerEvidence", args }); if (failRegister) throw new Error("sensitive-registration-marker"); return { uploadId: (args[2] as any).uploadId, evidenceId: evidence[0]?.id ?? (args[2] as any).evidenceId, reused: evidence.length > 0, quarantineStatus: "pending", orphanRecoveryRequired: false } },
     async markCollectionEvidenceRegistrationFailed(...args) { calls.push({ name: "markRegistrationFailed", args }); return { recoveryId: "00000000-0000-4000-8000-000000000008" } },
     async findDownloadableCollectionEvidence(...args) { calls.push({ name: "downloadable", args }); return downloadable },
-    async findGridLossLineage(...args) { calls.push({ name: "findLineage", args }); return [] },
-    async createGridLossLineage(...args) { calls.push({ name: "createLineage", args }); return { ...(args[2] as any), companyId: COMPANY, createdBy: ACTOR, createdAt: "2026-09-28T00:00:00.000Z" } },
+    async findGridLossLineage(...args) { calls.push({ name: "findLineage", args }); return lineages },
+    async createGridLossLineage(...args) { calls.push({ name: "createLineage", args }); if (failures.lineage) throw failures.lineage; return { ...(args[2] as any), companyId: COMPANY, createdBy: ACTOR, createdAt: "2026-09-28T00:00:00.000Z" } },
   }
   const storage: CollectionEvidenceStorage = {
     async put(...args) { calls.push({ name: "put", args }); if (failPut) throw new Error("sensitive-storage-marker"); stored = args[3] },
@@ -75,7 +77,7 @@ function harness(options: { schema?: number } = {}) {
   }
   const route = createCollectionRoutes({ database, evidenceStorage: storage, origin: ORIGIN, ...(options.schema === undefined ? {} : { schemaVersion: async () => options.schema! }), lookupZip: async zip => { calls.push({ name: "lookupZip", args: [zip] }); return zipLookup }, validateUser: async token => token === "valid" ? { id: ACTOR, email: "fixture@example.test", phone: null, fullName: null } : null })
   const request = (path: string, init: RequestInit = {}) => route(new Request(`https://api.example.test${path}`, { ...init, headers: { origin: ORIGIN, authorization: "Bearer valid", ...(init.headers ?? {}) } }))
-  return { calls, request, setOthers(value: any[]) { others = value }, setEvidence(value: any[]) { evidence = value }, setDownloadable(value: any) { downloadable = value }, setStored(value: Uint8Array<ArrayBuffer>) { stored = value }, setAccess(value: boolean) { hasAccess = value }, setZipLookup(value: any) { zipLookup = value }, failNextPut() { failPut = true }, failNextRegistration() { failRegister = true }, failSavesWith(code: string) { saveError = { code } } }
+  return { calls, request, failures, setLineages(value: any[]) { lineages = value }, setOthers(value: any[]) { others = value }, setEvidence(value: any[]) { evidence = value }, setDownloadable(value: any) { downloadable = value }, setStored(value: Uint8Array<ArrayBuffer>) { stored = value }, setAccess(value: boolean) { hasAccess = value }, setZipLookup(value: any) { zipLookup = value }, failNextPut() { failPut = true }, failNextRegistration() { failRegister = true }, failSavesWith(code: string) { saveError = { code } } }
 }
 
 describe("collection routes", () => {
@@ -355,5 +357,81 @@ describe("BF1 collection route fixes", () => {
     h.setEvidence([{ id: EVIDENCE, quarantineStatus: "pending" }])
     expect((await h.request(`/workspace/${COMPANY}/collection/evidence/${EVIDENCE}/download`)).status).toBe(423)
     expect(h.calls.some(call => call.name === "get")).toBe(false)
+  })
+})
+
+// BF-08 (BL-07, BL-05): which status a refused write gets depends on whether the actor could read the company in this request.
+describe("BF-08 truthful write errors", () => {
+  const sqlError = (code: string) => Object.assign(new Error("private-database-marker"), { code })
+  const post = (h: ReturnType<typeof harness>, path: string, body: unknown) => h.request(`/workspace/${COMPANY}/collection/${path}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
+  const upload = (h: ReturnType<typeof harness>) => h.request(`/workspace/${COMPANY}/collection/evidence`, { method: "POST", headers: { "content-type": "application/pdf", "x-neuvetra-original-name": "bill.pdf", "x-neuvetra-upload-id": EVIDENCE }, body: EVIDENCE_BYTES })
+  const readOnly = { error: "You can view this company’s records but not change them.", code: "read_only" }
+  const unavailable = { error: "This record ID can’t be used. Save again to use a new one.", code: "record_id_unavailable" }
+
+  test("a member whose read of the company succeeded gets 403 read_only on every write; nothing is leaked", async () => {
+    const h = harness()
+    h.failures.save = sqlError("42501"); h.failures.reserve = sqlError("42501"); h.failures.lineage = sqlError("42501")
+    const responses = [
+      await post(h, `activities/${RECORD}`, activity()),
+      await upload(h),
+      await post(h, `grid-losses/${LINEAGE}`, { electricityRecordId: RECORD, reference: "", notes: "" }),
+    ]
+    expect(await Promise.all(responses.map(async r => [r.status, await r.json()]))).toEqual([[403, readOnly], [403, readOnly], [403, readOnly]])
+  })
+
+  test("someone who cannot read the company, or whose read itself is refused, still gets the plain 404", async () => {
+    const h = harness()
+    h.failures.save = sqlError("42501")
+    h.setAccess(false)
+    const absent = await post(h, `activities/${RECORD}`, activity())
+    expect([absent.status, await absent.json()]).toEqual([404, { error: "Collection resource not found." }])
+    expect(h.calls.some(call => call.name === "save")).toBe(false)
+    const refusedRead = harness()
+    refusedRead.failures.context = sqlError("42501")
+    const response = await post(refusedRead, `activities/${RECORD}`, activity())
+    expect([response.status, await response.json()]).toEqual([404, { error: "Collection resource not found." }])
+  })
+
+  test("a 42501 on a read stays 404 even for a member", async () => {
+    const h = harness()
+    h.failures.context = sqlError("42501")
+    const response = await h.request(`/workspace/${COMPANY}/collection/activities`)
+    expect(response.status).toBe(404)
+  })
+
+  test("a unique violation on a first save of an ID this company does not have is record_id_unavailable; a correction or a racing own save is still a conflict", async () => {
+    const h = harness()
+    h.failures.save = sqlError("23505")
+    h.setOthers([]) // the harness' own record has another ID than the one saved here
+    const other = "00000000-0000-4000-8000-0000000000b1"
+    const first = await post(h, `activities/${other}`, activity())
+    expect([first.status, await first.json()]).toEqual([409, unavailable])
+    const correction = await post(h, `activities/${other}`, { ...activity(), expectedRevision: 1, expectedVersionId: VERSION, correctionReason: "Fix" })
+    expect([correction.status, (await correction.json() as any).code]).toEqual([409, "revision_conflict"])
+    // This company already has the record (two first saves racing): a true revision conflict.
+    const racing = await post(h, `activities/${RECORD}`, activity())
+    expect([racing.status, (await racing.json() as any).code]).toEqual([409, "revision_conflict"])
+    // An idempotency or head conflict (40001) is unchanged.
+    h.failures.save = sqlError("40001")
+    expect((await (await post(h, `activities/${other}`, activity())).json() as any).code).toBe("revision_conflict")
+  })
+
+  test("an upload or lineage ID that another company holds is record_id_unavailable", async () => {
+    const h = harness()
+    h.failures.reserve = sqlError("23505"); h.failures.lineage = sqlError("23505")
+    const up = await upload(h)
+    expect([up.status, await up.json()]).toEqual([409, unavailable])
+    const lineage = await post(h, `grid-losses/${LINEAGE}`, { electricityRecordId: RECORD, reference: "", notes: "" })
+    expect([lineage.status, await lineage.json()]).toEqual([409, unavailable])
+    // F1: this company already links that electricity record (a second source from a stale list): its own conflict, not an ID problem.
+    h.setLineages([{ id: "00000000-0000-4000-8000-0000000000c1", electricityRecordId: RECORD }])
+    const second = await post(h, `grid-losses/${LINEAGE}`, { electricityRecordId: RECORD, reference: "", notes: "" })
+    expect([second.status, (await second.json() as any).code]).toEqual([409, "revision_conflict"])
+    h.setLineages([{ id: "00000000-0000-4000-8000-0000000000c2", electricityRecordId: "00000000-0000-4000-8000-0000000000c3" }])
+    expect((await (await post(h, `grid-losses/${LINEAGE}`, { electricityRecordId: RECORD, reference: "", notes: "" })).json() as any).code).toBe("record_id_unavailable")
+    h.setLineages([])
+    h.setEvidence([{ id: EVIDENCE }]) // this company already holds the upload: a racing own upload keeps the conflict answer
+    const own = await upload(h)
+    expect([own.status, (await own.json() as any).code]).toEqual([409, "revision_conflict"])
   })
 })
