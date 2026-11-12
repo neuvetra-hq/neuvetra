@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- The injected hook harness runs the actual workspace component without a browser DOM. */
 import { expect, test } from "bun:test"
 import { computeJourneyStatus } from "@/lib/journey-status"
-import { parseViewHash, viewHash } from "@/lib/view-route"
+import { activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery, parseViewHash, viewHash } from "@/lib/view-route"
 
 const source = await Bun.file(new URL("./StagingWorkspace.tsx", import.meta.url)).text()
 const script = new Bun.Transpiler({ loader: "tsx", tsconfig: { compilerOptions: { jsx: "react", jsxFactory: "h" } } })
@@ -21,7 +21,7 @@ type Node = { type: unknown; props: Record<string, any>; children: any[] }
 const status = () => computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true })
 const recordId = "29500000-0000-4000-8000-000000000001"
 
-function harness(initialHash: string) {
+function harness(initialHash: string, initialState: unknown = null) {
   const slots: any[] = [], pending: Array<() => void> = [], loads: Array<{ resolve: (value: ReturnType<typeof status>) => void; reject: (error: Error) => void; signal: AbortSignal }> = []
   const listeners = new Map<string, () => void>()
   let cursor = 0, changed = false, tree: Node
@@ -48,15 +48,20 @@ function harness(initialHash: string) {
     })
   }
   const location = { hash: initialHash, pathname: "/staging", search: "" }
+  // WO-06: history entries keep their state (the record view remembers the list it came from, and the list the row it opened).
+  const entries: Array<{ hash: string; state: unknown }> = []
   const history = {
-    pushState(_state: unknown, _title: string, url: string) { location.hash = url },
-    replaceState(_state: unknown, _title: string, url: string) { location.hash = url.startsWith("#") ? url : "" },
+    state: initialState,
+    pushState(state: unknown, _title: string, url: string) { location.hash = url; history.state = state; entries.push({ hash: url, state }) },
+    replaceState(state: unknown, _title: string, url: string) { location.hash = url.startsWith("#") ? url : ""; history.state = state; if (entries.length) entries[entries.length - 1] = { hash: location.hash, state } },
   }
-  const window = { location, history, confirm: () => true, scrollTo() {}, setTimeout: () => 1, clearTimeout() {}, addEventListener(name: string, fn: () => void) { listeners.set(name, fn) }, removeEventListener(name: string) { listeners.delete(name) } }
+  let confirmAnswer = true
+  const confirms: string[] = []
+  const window = { location, history, confirm: (text: string) => { confirms.push(text); return confirmAnswer }, scrollTo() {}, setTimeout: () => 1, clearTimeout() {}, addEventListener(name: string, fn: () => void) { listeners.set(name, fn) }, removeEventListener(name: string) { listeners.delete(name) } }
   const body = {}, document = { title: "", body, activeElement: body }
   const h = (type: unknown, props: Record<string, any> | null, ...children: any[]): Node => ({ type, props: props ?? {}, children })
-  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "loadJourneyStatus", ...componentNames, script)
-  const Workspace = factory(useCallback, useEffect, useRef, useState, window, document, { Fragment: "fragment" }, h, parseViewHash, viewHash,
+  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "activityListHash", "canonicalViewHash", "DEFAULT_ACTIVITY_LIST_QUERY", "parseActivityListQuery", "loadJourneyStatus", ...componentNames, script)
+  const Workspace = factory(useCallback, useEffect, useRef, useState, window, document, { Fragment: "fragment" }, h, parseViewHash, viewHash, activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery,
     (_workspaceId: string, actor: { signal: AbortSignal }) => new Promise((resolve, reject) => loads.push({ resolve, reject, signal: actor.signal })),
     ...componentNames.map(name => components[name])) as (props: unknown) => Node
   const actor = { userId: "11111111-1111-4111-8111-111111111111", role: "owner" }
@@ -75,7 +80,9 @@ function harness(initialHash: string) {
   function text() { return flatten(tree).flatMap(node => node.children.flat(Infinity).filter(item => typeof item === "string")).join(" ") }
   render()
   const nodes = () => flatten(tree)
-  return { settle, child, text, nodes, loads, location, listeners, render }
+  /** A Back or Forward to an entry with this address and state. */
+  async function pop(hash: string, state: unknown = null) { location.hash = hash; history.state = state; listeners.get("popstate")!(); await settle() }
+  return { settle, child, text, nodes, loads, location, listeners, render, history, entries, pop, confirms, answer: (value: boolean) => { confirmAnswer = value } }
 }
 
 test("a failed progress refresh hides prior status from Overview, navigation and Ask", async () => {
@@ -160,4 +167,126 @@ test("the static list's 'Use instead' links go to the current journey views", as
   await app.settle()
   expect(app.location.hash).toBe("#/activity")
   expect(app.child("CollectionWorkspace")).toBeDefined()
+})
+
+// ── WO-06: a record opens at its own address; the list keeps its filters in its address ──
+
+const otherId = "29500000-0000-4000-8000-000000000002"
+
+test("opening a row pushes #/activity/<id>; the list entry keeps its filters and remembers the row", async () => {
+  const app = harness("#/activity?status=attention&page=2")
+  await app.settle()
+  expect(app.location.hash).toBe("#/activity?status=attention&page=2")
+  expect(app.child("CollectionWorkspace").props.listQuery).toEqual({ status: "attention", type: "", page: 2 })
+  app.child("CollectionWorkspace").props.onOpenRecord(recordId); await app.settle()
+  expect(app.location.hash).toBe(`#/activity/${recordId}`)
+  expect(app.history.state).toEqual({ nvListHash: "#/activity?status=attention&page=2" })
+  expect(app.child("CollectionWorkspace").props.openRecordId).toBe(recordId)
+  expect(app.child("CollectionWorkspace").props.allActivityHref).toBe("#/activity?status=attention&page=2")
+  // Back: the list with its filters, and the row that was opened is brought into view.
+  await app.pop("#/activity?status=attention&page=2", { nvOpenedRecord: recordId })
+  expect(app.child("CollectionWorkspace").props.openRecordId).toBeNull()
+  expect(app.child("CollectionWorkspace").props.listQuery).toEqual({ status: "attention", type: "", page: 2 })
+  expect(app.child("CollectionWorkspace").props.listReturnRecordId).toBe(recordId)
+  // Forward, then a refresh (the record entry's state survives it): the record view, whose "All activity" keeps the filters.
+  await app.pop(`#/activity/${recordId}`, { nvListHash: "#/activity?status=attention&page=2" })
+  expect(app.child("CollectionWorkspace").props.openRecordId).toBe(recordId)
+  const refreshed = harness(`#/activity/${recordId}`, { nvListHash: "#/activity?status=attention&page=2" })
+  await refreshed.settle()
+  expect(refreshed.child("CollectionWorkspace").props.openRecordId).toBe(recordId)
+  expect(refreshed.child("CollectionWorkspace").props.allActivityHref).toBe("#/activity?status=attention&page=2")
+})
+
+test("All activity pushes the list address the record came from, with the record's row to bring into view", async () => {
+  const app = harness("#/activity?type=waste")
+  await app.settle()
+  app.child("CollectionWorkspace").props.onOpenRecord(recordId); await app.settle()
+  app.child("CollectionWorkspace").props.onAllActivity(); await app.settle()
+  expect(app.location.hash).toBe("#/activity?type=waste")
+  expect(app.history.state).toEqual({ nvOpenedRecord: recordId })
+  expect(app.child("CollectionWorkspace").props.openRecordId).toBeNull()
+  expect(app.child("CollectionWorkspace").props.listQuery).toEqual({ status: "all", type: "waste", page: 1 })
+  expect(app.child("CollectionWorkspace").props.listReturnRecordId).toBe(recordId)
+})
+
+test("a record opened from Overview (Fix) has a plain All activity link; a tampered remembered address is ignored", async () => {
+  const app = harness("#/overview")
+  await app.settle()
+  app.child("JourneyHome").props.onFix(recordId); await app.settle()
+  expect(app.location.hash).toBe(`#/activity/${recordId}`)
+  expect(app.child("CollectionWorkspace").props.openRecordId).toBe(recordId)
+  expect(app.child("CollectionWorkspace").props.allActivityHref).toBe("#/activity")
+  for (const nvListHash of ["javascript:alert(1)", "#/results", `#/activity/${otherId}`, "#/activity?page=2&status=ready", "https://evil.example/#/activity"]) {
+    await app.pop(`#/activity/${otherId}`, { nvListHash }); await app.pop(`#/activity/${recordId}`, { nvListHash })
+    expect([nvListHash, app.child("CollectionWorkspace").props.allActivityHref]).toEqual([nvListHash, "#/activity"])
+  }
+  await app.pop("#/activity", { nvOpenedRecord: "not-a-record" })
+  expect(app.child("CollectionWorkspace").props.listReturnRecordId).toBeNull()
+})
+
+test("a declined Back keeps the record's All activity address", async () => {
+  const app = harness("#/activity?type=waste")
+  await app.settle()
+  app.child("CollectionWorkspace").props.onOpenRecord(recordId); await app.settle()
+  app.child("CollectionWorkspace").props.onDirtyChange(true); await app.settle()
+  app.answer(false)
+  await app.pop("#/activity?type=waste", { nvOpenedRecord: recordId })
+  expect(app.location.hash).toBe(`#/activity/${recordId}`)
+  expect(app.history.state).toEqual({ nvListHash: "#/activity?type=waste" })
+  expect(app.child("CollectionWorkspace").props.allActivityHref).toBe("#/activity?type=waste")
+})
+
+test("filter changes replace the list address (no new history entry); search never reaches it", async () => {
+  const app = harness("#/activity")
+  await app.settle()
+  const before = app.entries.length
+  app.child("CollectionWorkspace").props.onListQueryChange({ status: "withdrawn", type: "", page: 1 })
+  expect(app.location.hash).toBe("#/activity?status=withdrawn")
+  app.child("CollectionWorkspace").props.onListQueryChange({ status: "all", type: "", page: 1 })
+  expect(app.location.hash).toBe("#/activity")
+  expect(app.entries.length).toBe(before)
+})
+
+test("an edited list address with other filters shows that list", async () => {
+  const app = harness("#/activity?status=ready")
+  await app.settle()
+  const first = app.child("CollectionWorkspace").props
+  await app.pop("#/activity?status=withdrawn&page=3")
+  expect(app.child("CollectionWorkspace").props.listQuery).toEqual({ status: "withdrawn", type: "", page: 3 })
+  expect(app.child("CollectionWorkspace").props).not.toBe(first)
+  await app.pop("#/activity?page=x")
+  expect(app.location.hash).toBe("#/activity")
+})
+
+test("the unsaved-change guard still prompts when a row is opened, on All activity and on Back; declining stays put", async () => {
+  const app = harness("#/activity?status=ready")
+  await app.settle()
+  app.child("CollectionWorkspace").props.onDirtyChange(true); await app.settle()
+  app.answer(false)
+  app.child("CollectionWorkspace").props.onOpenRecord(recordId); await app.settle()
+  expect(app.confirms).toEqual(["Discard unsaved activity changes?"])
+  expect(app.location.hash).toBe("#/activity?status=ready")
+  expect(app.child("CollectionWorkspace").props.openRecordId).toBeNull()
+  app.answer(true)
+  app.child("CollectionWorkspace").props.onOpenRecord(recordId); await app.settle()
+  expect(app.location.hash).toBe(`#/activity/${recordId}`)
+  // Correcting the record, then All activity or Back: asked again; declining keeps the record and its address.
+  app.child("CollectionWorkspace").props.onDirtyChange(true); await app.settle()
+  app.answer(false)
+  app.child("CollectionWorkspace").props.onAllActivity(); await app.settle()
+  expect(app.confirms).toHaveLength(3)
+  expect(app.child("CollectionWorkspace").props.openRecordId).toBe(recordId)
+  await app.pop("#/activity?status=ready", { nvOpenedRecord: recordId })
+  expect(app.confirms).toHaveLength(4)
+  expect(app.location.hash).toBe(`#/activity/${recordId}`)
+  expect(app.child("CollectionWorkspace").props.openRecordId).toBe(recordId)
+})
+
+test("a record the record view can't find shows the not-found text under the list address", async () => {
+  const app = harness(`#/activity/${recordId}`)
+  await app.settle()
+  app.child("CollectionWorkspace").props.onRecordMissing(); await app.settle()
+  expect(app.location.hash).toBe("#/activity")
+  expect(app.child("CollectionWorkspace").props.openRecordId).toBeNull()
+  expect(app.text()).toContain("That record wasn’t found")
 })

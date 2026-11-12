@@ -10,6 +10,8 @@
 let pending: { recordId: string; fields: readonly string[] } | null = null
 
 export function requestRecordFieldFocus(recordId: string, fields: readonly string[]): void { pending = { recordId, fields: [...fields] } }
+/** WO-06: whether a Fix asked for fields of this record (without using the request up). */
+export function hasRecordFieldFocus(recordId: string): boolean { return pending !== null && pending.recordId === recordId && pending.fields.length > 0 }
 /** The fields requested for this record (once), or none. */
 export function takeRecordFieldFocus(recordId: string): readonly string[] {
   const request = pending

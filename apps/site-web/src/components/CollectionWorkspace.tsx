@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState, type ReactNode, type RefObject } from "react"
+import { Fragment, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode, type RefObject } from "react"
 import { deriveCollectionQuantity, savedAgainstCurrentSetup, validateCollectionActivity, withCurrentSetupVersion, type CollectionActivity, type CollectionActivityKind, type CollectionInstrument, type CollectionPayload } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { instrumentEvidenceClaims, planCollectionCalculation, type InstrumentEvidenceClaims } from "../../../../packages/neuvetra-database/src/collection-engine-input"
 import { isScope3CollectionKind, isScope3CompletionKind, planScope3Calculation, scope3IsHotelMode, SCOPE3_LEGACY_KINDS, SCOPE3_AIR_BY_DISTANCE, SCOPE3_AIR_HAULS, SCOPE3_CABIN_CLASSES, SCOPE3_COLLECTION_UNITS, SCOPE3_COMMUTING_MODES, SCOPE3_HOTEL_MODE, SCOPE3_TRANSPORT_FACILITIES, SCOPE3_TRANSPORT_UNITS, SCOPE3_TRANSPORT_VEHICLES, SCOPE3_TRAVEL_MODES, SCOPE3_WASTE_MATERIALS, type BusinessTravelCollectionPayload, type Scope3CollectionKind, type Scope3CollectionVersion, type Scope3PlanOptions } from "../../../../packages/neuvetra-database/src/scope3-collection"
@@ -12,7 +12,9 @@ import { scope3DataQualityProblem, scope3PayloadLines, scope3PayloadProblem, sco
 // Round 2 lane E (ENG-13): the record forms, the data-quality editor and the spend import load on first use.
 import { DataQualityEditor, Scope3RecordForm, SpendImport } from "./scope3/lazy-forms"
 import { COPY_TEXT_R2E, egridSubregionLabel, formatTimeR2E, LOCATION_CONTROL_TEXT_R2E, LOCATION_INCLUSION_TEXT_R2E, SAVE_TEXT_R2E, SAVED_LIST_TEXT_R2E, SCOPE3_TRANSPORT_ANSWER_TEXT_R2E, SCOPE3_TRANSPORT_VEHICLE_TEXT_R2E, SCOPE3_WASTE_MATERIAL_TEXT_R2E, SCOPE3_WASTE_TREATMENT_TEXT_R2E, unitsHintR2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
-import { focusRecordEditor } from "@/lib/scope3-fix-target"
+import { focusRecordEditor, hasRecordFieldFocus } from "@/lib/scope3-fix-target"
+// WO-06: a record opens at #/activity/<id> (the record view); the list keeps its filters in #/activity?status=&type=&page=.
+import type { ActivityListQuery } from "@/lib/view-route"
 // Round 3 lane C (PR-3): the saved-records list is filtered and paged, links to the spend import, and a failed load says so.
 import { ACTIVITY_LIST_TEXT_R3C } from "@/lib/scope3-text-r3c"
 import { SPEND_IMPORT_ANCHOR } from "@/lib/spend-import-target"
@@ -503,7 +505,22 @@ function savedSummary(activity: CollectionActivity): string {
   return [category, text(payload.supplierName), text(payload.description) ?? text(payload.product) ?? text(payload.investeeName), text(payload.glAccount) ? `GL ${text(payload.glAccount)}` : null].filter(Boolean).join(" · ")
 }
 
-export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyChange, openRecordId = null, intro }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; onDirtyChange: (dirty: boolean) => void; openRecordId?: string | null; intro?: ReactNode }) {
+/** WO-06: a plain click (or Enter) on a link the app handles itself; a modified or middle click keeps the browser's behaviour. */
+function plainClick(event: Pick<ReactMouseEvent, "button" | "metaKey" | "ctrlKey" | "shiftKey" | "altKey">): boolean {
+  return (event.button ?? 0) === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey
+}
+
+/**
+ * The Activity screen. With `openRecordId` it is the record view (WO-06): "← All activity", the record's heading, state and
+ * version, a summary, "Correct this record" (which reveals the correction form) and the history. Without it, the list of
+ * saved records (filtered and paged; each row a link to its record view) and the new-record form.
+ */
+export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyChange, openRecordId = null, intro, listQuery, listReturnRecordId = null, onOpenRecord, onListQueryChange, onRecordMissing, allActivityHref = "#/activity", onAllActivity }: {
+  actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; onDirtyChange: (dirty: boolean) => void; openRecordId?: string | null; intro?: ReactNode
+  listQuery?: ActivityListQuery; listReturnRecordId?: string | null; onOpenRecord?: (recordId: string) => void; onListQueryChange?: (query: ActivityListQuery) => void; onRecordMissing?: () => void
+  allActivityHref?: string; onAllActivity?: () => void
+}) {
+  const recordMode = openRecordId !== null
   const [records, setRecords] = useState<CollectionActivityRecord[]>([])
   const [evidence, setEvidence] = useState<CollectionEvidenceMetadata[]>([])
   const [lineages, setLineages] = useState<GridLossLineage[]>([])
@@ -527,8 +544,14 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   // Round 3 lane C (PR-3): whether the saved records have loaded once (until then the list never says "none saved"),
   // and the list's filter and page.
   const [loaded, setLoaded] = useState(false)
-  const [listFilter, setListFilter] = useState<{ status: "all" | "attention" | "ready" | "withdrawn"; kind: string; search: string }>({ status: "all", kind: "", search: "" })
-  const [listPage, setListPage] = useState(0)
+  const [listFilter, setListFilter] = useState<{ status: "all" | "attention" | "ready" | "withdrawn"; kind: string; search: string }>(() => ({ status: listQuery?.status ?? "all", kind: listQuery?.type ?? "", search: "" }))
+  const [listPage, setListPage] = useState(() => Math.max(0, (listQuery?.page ?? 1) - 1))
+  // WO-06: the record view shows the correction form only after "Correct this record" (or a Fix that names a field).
+  const [correcting, setCorrecting] = useState(false)
+  const focusHeadingNext = useRef(false)
+  const returnRow = useRef(listReturnRecordId)
+  const missingRef = useRef(onRecordMissing)
+  useEffect(() => { missingRef.current = onRecordMissing })
   const [dirty, setDirty] = useState(false)
   // Round 2 lane E (UX-4): a failed save is said next to the Save button (and focused), not only at the top of the page.
   const [saveProblem, setSaveProblem] = useState<string | null>(null)
@@ -537,14 +560,17 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   const pendingUpload = useRef<{ fingerprint: string; id: string } | null>(null)
   const actorRef = useRef(actor)
   useEffect(() => { actorRef.current = actor }, [actor])
-  useEffect(() => { onDirtyChange(dirty) }, [dirty, onDirtyChange])
+  // WO-06: the leave guard also covers unsaved spend-import input (QA B1) and a correction reason typed on its own.
+  const [spendDirty, setSpendDirty] = useState(false)
+  const unsaved = dirty || spendDirty || reason.trim() !== ""
+  useEffect(() => { onDirtyChange(unsaved) }, [unsaved, onDirtyChange])
   useEffect(() => () => onDirtyChange(false), [onDirtyChange])
   useEffect(() => {
-    if (!dirty) return
+    if (!unsaved) return
     const warn = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = "" }
     window.addEventListener("beforeunload", warn)
     return () => window.removeEventListener("beforeunload", warn)
-  }, [dirty])
+  }, [unsaved])
   const selected = records.find(item => item.id === recordId) ?? null
   // Round 2 lane D (UX-3): "Fix" from Results lands on the editor (and the field its hold names) only after it has rendered.
   const fixTarget = useRef<string | null>(null)
@@ -570,16 +596,48 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       // I-08: the reporting period and consolidation approach the results route plans Scope 3 with (lease and date holds).
       if (overview.scope3Completion === true) void loadCompanySetup(workspaceId, requestActor).then(view => { if (!controller.signal.aborted) setSetupFacts(scope3SetupFacts(view)) }).catch(() => { if (!controller.signal.aborted) setSetupFacts(undefined) })
       setDraft(current => current.setupVersionId ? current : { ...current, setupVersionId: loadedContext.setupVersionId ?? "" })
-      // Opened from the overview or results ("Fix"): show that saved record in the correction form, exactly as "Review or correct" does.
+      // WO-06: the record view loads its record into the correction form (shown on "Correct this record"). Focus goes to the
+      // record's heading, except that a Results "Fix" naming a field opens the form on that field (round 2 lane D, UX-3:
+      // the scroll and focus wait until the editor shows this record and the screen is idle, effect below).
       const requested = openRecordId ? items.find(item => item.id === openRecordId) : undefined
-      // Round 2 lane D (UX-3): the scroll and focus wait until the editor shows this record and the screen is idle (effect below).
-      if (requested) { setRecordId(requested.id); setDraft(structuredClone(requested.currentVersion.activity) as CollectionDraft); fixTarget.current = requested.id }
+      if (requested) {
+        setRecordId(requested.id); setDraft(structuredClone(requested.currentVersion.activity) as CollectionDraft)
+        const role = actorRef.current.role
+        if (hasRecordFieldFocus(requested.id) && (role === "owner" || role === "admin")) { setCorrecting(true); fixTarget.current = requested.id }
+        else focusHeadingNext.current = true
+      } else if (openRecordId) missingRef.current?.()
       setMessage(overview.scope3 ? COPY_TEXT_R2E.activityLoadedScope3 : "Activity and evidence are collected as drafts. Calculations use beta methods that are not yet formally released.")
       setLoaded(true)
     }).catch(cause => { if (!controller.signal.aborted) { setError(true); setMessage(cause instanceof Error ? cause.message : "Collection is unavailable.") } })
       .finally(() => { if (!controller.signal.aborted) setBusy(false) })
     return () => controller.abort()
   }, [actor.userId, workspaceId, openRecordId])
+  // WO-06: while the record loads, focus is on "← All activity" (not the page body) unless something else already has it;
+  // it moves to the heading once the record has loaded (effect below).
+  useEffect(() => {
+    if (!recordMode) return
+    const active = document.activeElement
+    if (active && active !== document.body) return
+    document.getElementById("collection-back-link")?.focus({ preventScroll: true })
+  }, [recordMode])
+  // WO-06: the record view's heading takes focus once the record has loaded (and again after a saved correction).
+  useEffect(() => {
+    if (!focusHeadingNext.current || !loaded || busy) return
+    focusHeadingNext.current = false
+    requestAnimationFrame(() => { window.scrollTo({ top: 0 }); headingRef.current?.focus({ preventScroll: true }) })
+  }, [loaded, busy, headingRef])
+  // WO-06: back on the list (Back, or "← All activity"), the row of the record that was open is brought into view and focused.
+  useEffect(() => {
+    if (recordMode || !loaded || busy || !returnRow.current) return
+    const id = returnRow.current
+    returnRow.current = null
+    requestAnimationFrame(() => {
+      const link = document.getElementById(`collection-row-${id}`)
+      if (!link) return
+      link.scrollIntoView({ block: "center" })
+      link.focus({ preventScroll: true })
+    })
+  }, [recordMode, loaded, busy])
   // I-08: the saved spend lines' mapping keys (SHA-256, as the results route hashes them), for the "replaces spend lines" picker and supersession.
   useEffect(() => {
     let current = true
@@ -628,8 +686,11 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       const loadedContext = overview.context
       setRecords(items); setEvidence(files); setLineages(grid); setContext(loadedContext); setScope3(overview.scope3); setAvailableScope3Kinds(overview.scope3Kinds ?? (overview.scope3 ? SCOPE3_LEGACY_KINDS : []))
       setScope3Completion(overview.scope3Completion === true)
-      const current = items.find(item => item.id === recordId)
-      if (current) setDraft(structuredClone(current.currentVersion.activity) as CollectionDraft)
+      // WO-06 (QA B2): on the record view, Try again after a failed first load selects the record in the address; only a
+      // successful response without it reports it missing.
+      const current = items.find(item => item.id === (openRecordId ?? recordId))
+      if (current) { setRecordId(current.id); setDraft(structuredClone(current.currentVersion.activity) as CollectionDraft); if (openRecordId) focusHeadingNext.current = true }
+      else if (openRecordId) missingRef.current?.()
       else setDraft(previous => ({ ...previous, setupVersionId: loadedContext.setupVersionId ?? "" }))
       setDirty(false); setHistorical(null); pending.current = null; setReason(""); setMessage("Latest saved records loaded."); setLoaded(true)
     } catch (cause) { setError(true); setMessage(cause instanceof Error ? cause.message : "Collection is unavailable.") }
@@ -663,6 +724,8 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       const current = result.record
       setRecords(items => replaceSavedCollectionRecord(items, current)); setRecordId(current.id); setDraft(structuredClone(current.currentVersion.activity) as CollectionDraft); setDirty(false); setReason(""); pending.current = null
       setMessage(result.replayed ? "The earlier save was confirmed. The latest saved version is shown." : current.currentVersion.revision > 1 ? "Saved. Previous versions remain in correction history." : "Saved.")
+      // WO-06: a saved correction closes the form; the record view's summary shows the new version, with focus on its heading.
+      if (recordMode) { setCorrecting(false); focusHeadingNext.current = true }
     } catch (cause) {
       setError(true)
       if (cause instanceof CollectionApiError && cause.conflict) { pending.current = null; failSave("This record changed elsewhere. Reload before correcting it.") }
@@ -873,57 +936,57 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     const status: "attention" | "ready" | "withdrawn" = activity.state === "withdrawn" ? "withdrawn" : readiness.some(finding => finding.status === "input_needed" || finding.status === "review_required") ? "attention" : "ready"
     return { row, activity, readiness, status }
   })
+  const presentKinds = [...new Set(records.map(row => row.kind))].sort((a, b) => kindName(a).localeCompare(kindName(b)))
+  // WO-06: a type from the address that no saved record has is ignored once the records have loaded.
+  const kindFilter = loaded && listFilter.kind && !presentKinds.includes(listFilter.kind as CollectionActivityKind) ? "" : listFilter.kind
   const query = listFilter.search.trim().toLowerCase()
-  const filtered = listed.filter(item => (listFilter.status === "all" || item.status === listFilter.status) && (!listFilter.kind || item.row.kind === listFilter.kind)
+  const filtered = listed.filter(item => (listFilter.status === "all" || item.status === listFilter.status) && (!kindFilter || item.row.kind === kindFilter)
     && (!query || ACTIVITY_LIST_TEXT_R3C.searchText(item.activity, kindName(item.row.kind)).includes(query)))
   const pages = Math.max(1, Math.ceil(filtered.length / ACTIVITY_LIST_TEXT_R3C.pageSize)), page = Math.min(listPage, pages - 1)
   const pageRows = filtered.slice(page * ACTIVITY_LIST_TEXT_R3C.pageSize, (page + 1) * ACTIVITY_LIST_TEXT_R3C.pageSize)
-  const presentKinds = [...new Set(records.map(row => row.kind))].sort((a, b) => kindName(a).localeCompare(kindName(b)))
   const spendImportShown = scope3Completion && !!workspaceId && availableScope3Kinds.includes("purchase_spend")
   const setFilter = (change: Partial<typeof listFilter>) => { setListFilter(current => ({ ...current, ...change })); setListPage(0) }
-  return <section className="worksheet collection-workspace" aria-busy={busy}>
-    <p className="worksheet-eyebrow">Activity collection · Synthetic staging</p>
-    {/* Round 3 lane C (PR-3): until the screen has loaded, neither the Scope 1 and 2 nor the Scope 3 wording is guessed. */}
-    <h1 ref={headingRef} tabIndex={-1}>{!loaded ? ACTIVITY_LIST_TEXT_R3C.neutralHeading : scope3 ? "Collect Scope 1, 2 and 3 activity" : "Collect Scope 1 and 2 activity"}</h1>
-    {loaded && <p>{scope3 ? COPY_TEXT_R2E.activityIntroScope3 : "Save source details and private evidence for each activity. Missing answers remain unresolved. Calculations and reports come only from beta methods that are not yet formally released."}</p>}
-    <p role={error && !saveProblem ? "alert" : "status"} className={error ? "worksheet-error" : "worksheet-status"}>{message}</p>
-    {!loaded && error && workspaceId && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--sm" disabled={busy} onClick={() => void refresh()}>{ACTIVITY_LIST_TEXT_R3C.retry}</button></div>}
-    {!canManage && <p>Owner or admin access is needed to save activity or upload evidence.</p>}
-    {intro}
-    {loaded && <nav className="nv-actions collection-jump" aria-label={ACTIVITY_LIST_TEXT_R3C.jumpLabel}>
-      {spendImportShown && <a className="nv-btn nv-btn--sm" href={`#${SPEND_IMPORT_ANCHOR}`} onClick={event => { event.preventDefault(); const target = document.getElementById(SPEND_IMPORT_ANCHOR); target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true }) }}>{ACTIVITY_LIST_TEXT_R3C.jumpSpend}</a>}
-      <a className="nv-btn nv-btn--sm" href="#collection-record-editor" onClick={event => { event.preventDefault(); const target = document.getElementById("collection-record-editor"); target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true }) }}>{ACTIVITY_LIST_TEXT_R3C.jumpNew}</a>
-    </nav>}
-
-    <div className="worksheet-card" id="saved-activities"><h2>Saved activities</h2>
-      {loaded && records.length > 0 && <div className="collection-list-filters" role="group" aria-label={ACTIVITY_LIST_TEXT_R3C.filterLabel}>
-        <label className="setup-field"><span>{ACTIVITY_LIST_TEXT_R3C.statusLabel}</span><select aria-label={ACTIVITY_LIST_TEXT_R3C.statusLabel} value={listFilter.status} onChange={event => setFilter({ status: event.target.value as typeof listFilter.status })}>{ACTIVITY_LIST_TEXT_R3C.statuses.map(([value, label]) => <option key={value} value={value}>{`${label} (${value === "all" ? listed.length : listed.filter(item => item.status === value).length})`}</option>)}</select></label>
-        <label className="setup-field"><span>{ACTIVITY_LIST_TEXT_R3C.kindLabel}</span><select aria-label={ACTIVITY_LIST_TEXT_R3C.kindLabel} value={listFilter.kind} onChange={event => setFilter({ kind: event.target.value })}><option value="">{ACTIVITY_LIST_TEXT_R3C.allKinds}</option>{presentKinds.map(kind => <option key={kind} value={kind}>{kindName(kind)}</option>)}</select></label>
-        <label className="setup-field"><span>{ACTIVITY_LIST_TEXT_R3C.searchLabel}</span><input aria-label={ACTIVITY_LIST_TEXT_R3C.searchLabel} value={listFilter.search} onChange={event => setFilter({ search: event.target.value })} /></label>
-        <p className="nv-subtle" role="status">{ACTIVITY_LIST_TEXT_R3C.showing(filtered.length ? page * ACTIVITY_LIST_TEXT_R3C.pageSize + 1 : 0, page * ACTIVITY_LIST_TEXT_R3C.pageSize + pageRows.length, filtered.length, records.length)}</p>
-      </div>}
-      <div className="collection-record-list">{!loaded ? <p>{error ? ACTIVITY_LIST_TEXT_R3C.notLoaded : "Loading collection records…"}</p> : records.length === 0 ? <p>No activity records saved yet.</p> : filtered.length === 0 ? <p>{ACTIVITY_LIST_TEXT_R3C.noMatch}</p> : pageRows.map(({ row, activity, readiness }) => {
-        return <div key={row.id} className="setup-subcard">
-          <strong>{kindName(row.kind)}</strong> · version {row.currentVersion.revision} {activity.state === "withdrawn" && <span className="collection-status-badge">Withdrawn</span>}
-          {/* Round 3 lane D (PR-8): a dated spend line shows its invoice date; a Scope 3 amount has grouped digits. */}
-          <p>{scope3SavedRecordWhen(activity, inclusivePeriodEnd(activity.period.endExclusive))} · {activity.kind === "fugitive" ? "Derived net release" : "Quantity"}: {(isScope3CollectionKind(activity.kind) ? scope3GroupedAmount(activity.quantity.originalValue) : activity.quantity.originalValue) || "unknown"} {isScope3CollectionKind(activity.kind) ? unitLabel(activity.quantity.originalUnit) : activity.quantity.originalUnit}</p>
-          {savedSummary(activity) && <p className="nv-subtle">{savedSummary(activity)}</p>}
-          <p>Source {activity.sourceId} · {context?.locations.find(location => location.id === activity.locationId)?.name ?? "Saved location"}</p>
-          <ReadinessPanel findings={readiness} />
-          <button type="button" disabled={busy} onClick={() => openRecord(row)}>Review or correct</button>
-          {row.kind === "electricity" && activity.state === "active" && !scope3 && <button type="button" disabled={busy || !canManage || lineages.some(item => item.electricityRecordId === row.id)} onClick={() => void addGridLoss(row)}>{lineages.some(item => item.electricityRecordId === row.id) ? "Grid-loss source linked" : "Link grid-loss source"}</button>}
-          {row.kind === "electricity" && scope3 && <p className="nv-subtle">Grid losses for this meter (Scope 3 category 3C) are calculated automatically when company setup includes category 3.</p>}
-        </div>
-      })}</div>
-      {loaded && pages > 1 && <div className="nv-actions collection-list-pages"><button type="button" className="nv-btn nv-btn--sm" disabled={page === 0} onClick={() => setListPage(page - 1)}>{ACTIVITY_LIST_TEXT_R3C.previous}</button><span className="nv-subtle">{ACTIVITY_LIST_TEXT_R3C.pageOf(page + 1, pages)}</span><button type="button" className="nv-btn nv-btn--sm" disabled={page >= pages - 1} onClick={() => setListPage(page + 1)}>{ACTIVITY_LIST_TEXT_R3C.next}</button></div>}
-      <button type="button" disabled={busy} onClick={() => void refresh()}>Reload saved records</button>
-    </div>
-
+  // WO-06: the list's status, type and page (never the search text) are kept in the address as they change.
+  useEffect(() => {
+    if (recordMode || !loaded) return
+    onListQueryChange?.({ status: listFilter.status, type: kindFilter, page: page + 1 })
+  }, [recordMode, loaded, listFilter.status, kindFilter, page, onListQueryChange])
+  // WO-06: a record's name, as Overview and Results give it: "<Type> · <source id>" (the type without the form's "(Scope 3)").
+  const typeName = (kind: string) => { const name: unknown = kindName(kind); return typeof name === "string" ? name.replace(/ \(Scope 3\)$/, "") : "" }
+  const stateLabel = (status: "attention" | "ready" | "withdrawn") => ACTIVITY_LIST_TEXT_R3C.statuses.find(([value]) => value === status)?.[1] ?? status
+  const openRow = (event: ReactMouseEvent<HTMLAnchorElement>, row: CollectionActivityRecord) => {
+    if (!plainClick(event)) return
+    event.preventDefault()
+    if (onOpenRecord) onOpenRecord(row.id)
+    else openRecord(row)
+  }
+  const openedItem = recordMode && selected ? listed.find(item => item.row.id === selected.id) ?? null : null
+  function correctRecord() {
+    if (!selected || !canManage) return
+    setCorrecting(true)
+    const id = selected.id
+    requestAnimationFrame(() => { focusRecordEditor(id) })
+  }
+  function cancelCorrection() {
+    if (!selected) return
+    if ((dirty || reason.trim() !== "") && !window.confirm("Discard unsaved activity changes?")) return
+    setDraft(structuredClone(selected.currentVersion.activity) as CollectionDraft); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null; setSaveProblem(null)
+    setCorrecting(false)
+    requestAnimationFrame(() => { document.getElementById("collection-correct-record")?.focus() })
+  }
+  const history = selected && <><h3>Correction history</h3><ol className="setup-history">{selected.history.map(item => <li key={item.id}><button type="button" disabled={busy} onClick={() => void showVersion(item.id)}>Version {item.revision} · {formatTimeR2E(item.createdAt)}</button><span>{item.correctionReason || "Initial entry"}</span></li>)}</ol>{historical && <HistoricalActivityDetail version={historical} evidence={evidence} />}</>
+  const status = <p role={error && !saveProblem ? "alert" : "status"} className={error ? "worksheet-error" : "worksheet-status"}>{message}</p>
+  const viewOnly = !canManage && <p>Owner or admin access is needed to save activity or upload evidence.</p>
+  const footnote = <p className="worksheet-footnote">This collection is a draft input set. A saved record, linked grid-loss source or uploaded file does not establish complete Scope 1, 2 or 3 coverage, a final market-based result, or external assurance.</p>
+  const editorCard = <>
     <div className="worksheet-card worksheet-form" id="collection-record-editor" tabIndex={-1}><h2>{selected ? `Correct saved ${kindName(selected.kind)}` : "New activity record"}</h2>
-      {selected && <button type="button" disabled={busy || !canManage} onClick={startNewRecord}>Start a new record</button>}
+      {selected && !recordMode && <button type="button" disabled={busy || !canManage} onClick={startNewRecord}>Start a new record</button>}
+      {/* WO-06: correcting a saved record shows its type as fixed text, not the type chooser. */}
+      {recordMode && selected ? <p className="collection-fixed-type">{`Type: ${typeName(selected.kind)} (fixed)`}</p> : <>
       <div className="worksheet-nav" aria-label="Activity types">{kinds.map(([kind, label]) => kindButton(kind, label))}</div>
       {scope3FormGroups(availableScope3Kinds.filter(kind => FORM_KINDS.has(kind))).map(group => <div key={group.title} className="worksheet-nav" role="group" aria-label={group.title}><span className="nv-subtle">{group.title}</span>{group.kinds.map(kind => kindButton(kind, kindName(kind)))}</div>)}
-      {selected && <p>Activity type is fixed while correcting this record. Use “Start a new record” to collect another activity.</p>}
+      </>}
+      {selected && !recordMode && <p>Activity type is fixed while correcting this record. Use “Start a new record” to collect another activity.</p>}
       <fieldset className="setup-inputs" disabled={busy || !canManage}>
         <div className="setup-grid">
           <Select label="Company-setup location" value={draft.locationId} options={[["", context?.setupVersionId ? "Choose a saved location" : "Save company setup locations first"], ...(context?.locations ?? []).map(location => [location.id, `${location.name || "Unnamed location"} · ${LOCATION_INCLUSION_TEXT_R2E[location.inclusion] ?? location.inclusion} · ${LOCATION_CONTROL_TEXT_R2E[location.control] ?? location.control}`] as const)]} invalid={invalid.has("Company-setup location")} onChange={value => edit(next => { next.locationId = value; next.setupVersionId = context?.setupVersionId ?? ""; if (next.kind === "electricity") next.payload.site = context?.locations.find(location => location.id === value)?.name ?? "" })} hint={context?.setupRevision ? `Linked to company setup version ${context.setupRevision}. Excluded and unknown locations remain visible.` : "A saved company setup version is required."} />
@@ -1042,16 +1105,93 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
         {blocking.length > 0 && <div className="collection-save-problems" id="collection-save-problems"><p>{SAVE_TEXT_R2E.blocked}</p><ul>{blocking.map(text => <li key={text}>{text}</li>)}</ul></div>}
         {saveProblem && <p ref={saveAlert} id="collection-save-error" tabIndex={-1} role="alert" className="worksheet-error collection-save-error"><strong>{SAVE_TEXT_R2E.notSaved}</strong> {saveProblem}</p>}
       </fieldset>
-      {selected && <><h3>Correction history</h3><ol className="setup-history">{selected.history.map(item => <li key={item.id}><button type="button" disabled={busy} onClick={() => void showVersion(item.id)}>Version {item.revision} · {formatTimeR2E(item.createdAt)}</button><span>{item.correctionReason || "Initial entry"}</span></li>)}</ol>{historical && <HistoricalActivityDetail version={historical} evidence={evidence} />}</>}
+      {recordMode && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--sm" disabled={busy} onClick={cancelCorrection}>Cancel correction</button></div>}
+      {!recordMode && history}
     </div>
-
-    {/* I-09: spend CSV import (0030; schema 30 only) and its unmatched, duplicate and supersession queues. */}
-    {scope3Completion && workspaceId && availableScope3Kinds.includes("purchase_spend") && <div className="worksheet-card"><SpendImport companyId={workspaceId} actor={actor} onChanged={() => void refreshRecords()}
-      onOpenRecord={id => { const row = records.find(item => item.id === id); if (!row) return; openRecord(row); requestAnimationFrame(() => document.getElementById("collection-record-editor")?.scrollIntoView({ block: "start" })) }} /></div>}
+  </>
+  const evidenceCard = <>
     <div className="worksheet-card"><h2>Private evidence</h2><p>Originals are hashed, company-scoped and quarantined on upload. A pending or rejected file cannot be downloaded as cleared evidence.</p>
       {canManage && <label className="setup-field"><span>Upload PDF, image, CSV or XLSX (up to 10 MiB)</span><input type="file" accept="application/pdf,image/jpeg,image/png,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.pdf,.jpg,.jpeg,.png,.csv,.xlsx" disabled={busy} onChange={event => { const file = event.target.files?.[0]; if (file) void upload(file); event.target.value = "" }} /></label>}
       <ul>{evidence.map(file => <li key={file.id}>{file.originalName} · {file.byteLength.toLocaleString()} bytes · {file.quarantineStatus} · SHA-256 {file.sha256.slice(0, 12)}… {file.quarantineStatus === "clean" && <button type="button" disabled={busy} onClick={() => void download(file)}>Download original</button>}</li>)}</ul>
     </div>
-    <p className="worksheet-footnote">This collection is a draft input set. A saved record, linked grid-loss source or uploaded file does not establish complete Scope 1, 2 or 3 coverage, a final market-based result, or external assurance.</p>
+  </>
+  // WO-06: the record view.
+  if (recordMode) {
+    const activity = selected ? selected.currentVersion.activity as CollectionDraft : null
+    const linked = activity ? evidence.filter(file => activity.evidenceIds.includes(file.id)) : []
+    return <section className="worksheet collection-workspace collection-record-view" aria-busy={busy}>
+      <p className="collection-back"><a className="nv-link" id="collection-back-link" href={allActivityHref} onClick={event => { if (!plainClick(event) || !onAllActivity) return; event.preventDefault(); onAllActivity() }}><span aria-hidden="true">← </span>All activity</a></p>
+      <h1 ref={headingRef} tabIndex={-1} id="collection-record-heading">{selected && activity ? `${typeName(selected.kind)} · ${activity.sourceId}` : loaded ? "That record wasn’t found" : error ? "This record couldn’t be loaded" : "Loading record…"}</h1>
+      {selected && openedItem && <p className="collection-record-meta"><span className={`collection-state-chip collection-state-chip--${openedItem.status}`}>{stateLabel(openedItem.status)}</span><span>version {selected.currentVersion.revision}</span></p>}
+      {status}
+      {!loaded && error && workspaceId && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--sm" disabled={busy} onClick={() => void refresh()}>{ACTIVITY_LIST_TEXT_R3C.retry}</button></div>}
+      {viewOnly}
+      {selected && activity && openedItem && <div className="worksheet-card collection-record-summary"><h2>Summary</h2>
+        <dl className="collection-record-facts">
+          <dt>Period</dt><dd>{scope3SavedRecordWhen(activity, inclusivePeriodEnd(activity.period.endExclusive))}</dd>
+          <dt>{activity.kind === "fugitive" ? "Derived net release" : "Quantity"}</dt><dd>{(isScope3CollectionKind(activity.kind) ? scope3GroupedAmount(activity.quantity.originalValue) : activity.quantity.originalValue) || "unknown"} {isScope3CollectionKind(activity.kind) ? unitLabel(activity.quantity.originalUnit) : activity.quantity.originalUnit}</dd>
+          <dt>Site</dt><dd>{context?.locations.find(location => location.id === activity.locationId)?.name ?? "Saved location"}</dd>
+          {savedSummary(activity) && <><dt>Details</dt><dd>{savedSummary(activity)}</dd></>}
+          <dt>Evidence</dt><dd>{linked.length ? <ul>{linked.map(file => <li key={file.id}>{evidenceLabel(file)}</li>)}</ul> : "No evidence linked"}</dd>
+          {activity.state === "withdrawn" && activity.withdrawalReason && <><dt>Withdrawn because</dt><dd>{activity.withdrawalReason}</dd></>}
+        </dl>
+        <h3>Readiness</h3>
+        {openedItem.readiness.length ? <ReadinessPanel findings={openedItem.readiness} /> : <p>No findings.</p>}
+        {canManage && !correcting && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--primary" id="collection-correct-record" disabled={busy} onClick={correctRecord}>Correct this record</button></div>}
+      </div>}
+      {selected && correcting && editorCard}
+      {selected && <div className="worksheet-card collection-record-history">{history}</div>}
+      {selected && correcting && evidenceCard}
+      {footnote}
+    </section>
+  }
+  return <section className="worksheet collection-workspace" aria-busy={busy}>
+    {/* Round 3 lane C (PR-3): until the screen has loaded, neither the Scope 1 and 2 nor the Scope 3 wording is guessed. */}
+    <h1 ref={headingRef} tabIndex={-1}>{!loaded ? ACTIVITY_LIST_TEXT_R3C.neutralHeading : scope3 ? "Collect Scope 1, 2 and 3 activity" : "Collect Scope 1 and 2 activity"}</h1>
+    {loaded && <p>{scope3 ? COPY_TEXT_R2E.activityIntroScope3 : "Save source details and private evidence for each activity. Missing answers remain unresolved. Calculations and reports come only from beta methods that are not yet formally released."}</p>}
+    {status}
+    {!loaded && error && workspaceId && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--sm" disabled={busy} onClick={() => void refresh()}>{ACTIVITY_LIST_TEXT_R3C.retry}</button></div>}
+    {viewOnly}
+    {intro}
+    {loaded && <nav className="nv-actions collection-jump" aria-label={ACTIVITY_LIST_TEXT_R3C.jumpLabel}>
+      {spendImportShown && <a className="nv-btn nv-btn--sm" href={`#${SPEND_IMPORT_ANCHOR}`} onClick={event => { event.preventDefault(); const target = document.getElementById(SPEND_IMPORT_ANCHOR); target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true }) }}>{ACTIVITY_LIST_TEXT_R3C.jumpSpend}</a>}
+      <a className="nv-btn nv-btn--sm" href="#collection-record-editor" onClick={event => { event.preventDefault(); const target = document.getElementById("collection-record-editor"); target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true }) }}>{ACTIVITY_LIST_TEXT_R3C.jumpNew}</a>
+    </nav>}
+
+    <div className="worksheet-card" id="saved-activities"><h2>Saved activities</h2>
+      {loaded && records.length > 0 && <div className="collection-list-filters" role="group" aria-label={ACTIVITY_LIST_TEXT_R3C.filterLabel}>
+        <label className="setup-field"><span>{ACTIVITY_LIST_TEXT_R3C.statusLabel}</span><select aria-label={ACTIVITY_LIST_TEXT_R3C.statusLabel} value={listFilter.status} onChange={event => setFilter({ status: event.target.value as typeof listFilter.status })}>{ACTIVITY_LIST_TEXT_R3C.statuses.map(([value, label]) => <option key={value} value={value}>{`${label} (${value === "all" ? listed.length : listed.filter(item => item.status === value).length})`}</option>)}</select></label>
+        <label className="setup-field"><span>{ACTIVITY_LIST_TEXT_R3C.kindLabel}</span><select aria-label={ACTIVITY_LIST_TEXT_R3C.kindLabel} value={kindFilter} onChange={event => setFilter({ kind: event.target.value })}><option value="">{ACTIVITY_LIST_TEXT_R3C.allKinds}</option>{presentKinds.map(kind => <option key={kind} value={kind}>{kindName(kind)}</option>)}</select></label>
+        <label className="setup-field"><span>{ACTIVITY_LIST_TEXT_R3C.searchLabel}</span><input aria-label={ACTIVITY_LIST_TEXT_R3C.searchLabel} value={listFilter.search} onChange={event => setFilter({ search: event.target.value })} /></label>
+        <p className="nv-subtle" role="status">{ACTIVITY_LIST_TEXT_R3C.showing(filtered.length ? page * ACTIVITY_LIST_TEXT_R3C.pageSize + 1 : 0, page * ACTIVITY_LIST_TEXT_R3C.pageSize + pageRows.length, filtered.length, records.length)}</p>
+      </div>}
+      <div className="collection-record-list">{!loaded ? <p>{error ? ACTIVITY_LIST_TEXT_R3C.notLoaded : "Loading collection records…"}</p> : records.length === 0 ? <p>No activity records saved yet.</p> : filtered.length === 0 ? <p>{ACTIVITY_LIST_TEXT_R3C.noMatch}</p> : pageRows.map(({ row, activity, readiness, status }) => {
+        // WO-06: the row is a link to its record view (#/activity/<id>), named "<Type> · <source id>, <state>".
+        return <div key={row.id} className="setup-subcard collection-row">
+          <a id={`collection-row-${row.id}`} className="collection-row-link" href={`#/activity/${row.id}`} aria-label={`${typeName(row.kind)} · ${activity.sourceId}, ${stateLabel(status)}`} onClick={event => openRow(event, row)}>
+            <span className="collection-row-link__title"><strong>{typeName(row.kind)}</strong> · {activity.sourceId}</span><span className="collection-row-link__chevron" aria-hidden="true">›</span>
+          </a>
+          <p className="nv-subtle">{stateLabel(status)} · version {row.currentVersion.revision} {activity.state === "withdrawn" && <span className="collection-status-badge">Withdrawn</span>}</p>
+          {/* Round 3 lane D (PR-8): a dated spend line shows its invoice date; a Scope 3 amount has grouped digits. */}
+          <p>{scope3SavedRecordWhen(activity, inclusivePeriodEnd(activity.period.endExclusive))} · {activity.kind === "fugitive" ? "Derived net release" : "Quantity"}: {(isScope3CollectionKind(activity.kind) ? scope3GroupedAmount(activity.quantity.originalValue) : activity.quantity.originalValue) || "unknown"} {isScope3CollectionKind(activity.kind) ? unitLabel(activity.quantity.originalUnit) : activity.quantity.originalUnit}</p>
+          {savedSummary(activity) && <p className="nv-subtle">{savedSummary(activity)}</p>}
+          <p>Source {activity.sourceId} · {context?.locations.find(location => location.id === activity.locationId)?.name ?? "Saved location"}</p>
+          <ReadinessPanel findings={readiness} />
+          {row.kind === "electricity" && activity.state === "active" && !scope3 && <button type="button" disabled={busy || !canManage || lineages.some(item => item.electricityRecordId === row.id)} onClick={() => void addGridLoss(row)}>{lineages.some(item => item.electricityRecordId === row.id) ? "Grid-loss source linked" : "Link grid-loss source"}</button>}
+          {row.kind === "electricity" && scope3 && <p className="nv-subtle">Grid losses for this meter (Scope 3 category 3C) are calculated automatically when company setup includes category 3.</p>}
+        </div>
+      })}</div>
+      {loaded && pages > 1 && <div className="nv-actions collection-list-pages"><button type="button" className="nv-btn nv-btn--sm" disabled={page === 0} onClick={() => setListPage(page - 1)}>{ACTIVITY_LIST_TEXT_R3C.previous}</button><span className="nv-subtle">{ACTIVITY_LIST_TEXT_R3C.pageOf(page + 1, pages)}</span><button type="button" className="nv-btn nv-btn--sm" disabled={page >= pages - 1} onClick={() => setListPage(page + 1)}>{ACTIVITY_LIST_TEXT_R3C.next}</button></div>}
+      <button type="button" disabled={busy} onClick={() => void refresh()}>Reload saved records</button>
+    </div>
+
+    {editorCard}
+
+    {/* I-09: spend CSV import (0030; schema 30 only) and its unmatched, duplicate and supersession queues. WO-06: a record it
+        names opens at its record view (#/activity/<id>). */}
+    {scope3Completion && workspaceId && availableScope3Kinds.includes("purchase_spend") && <div className="worksheet-card"><SpendImport companyId={workspaceId} actor={actor} onChanged={() => void refreshRecords()} onDirtyChange={setSpendDirty}
+      onOpenRecord={id => { if (onOpenRecord) { onOpenRecord(id); return } const row = records.find(item => item.id === id); if (!row) return; openRecord(row); requestAnimationFrame(() => document.getElementById("collection-record-editor")?.scrollIntoView({ block: "start" })) }} /></div>}
+    {evidenceCard}
+    {footnote}
   </section>
 }

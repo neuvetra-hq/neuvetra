@@ -28,7 +28,7 @@ const view = (lines: any[], extra: Record<string, unknown> = {}) => api.decodeSc
     fileTotals: { USD: String(lines.length * 75) }, reconciliation: { reconciled: true, nonNumericRows: { file: 0, imported: 0 }, currencies: [{ currency: "USD", fileTotal: String(lines.length * 75), importedTotal: String(lines.length * 75), lines: lines.length, matches: true }] } }] : [],
   mappings: [], lines, superseded: [], superseders: [], ...extra }, company)
 
-async function panel(initial: any = view([]), onOpenRecord?: (id: string) => void, withdrawalError?: Error, correctionFailure = false, loadFailures = 0, globals: Record<string, unknown> = {}) {
+async function panel(initial: any = view([]), onOpenRecord?: (id: string) => void, withdrawalError?: Error, correctionFailure = false, loadFailures = 0, globals: Record<string, unknown> = {}, extraProps: Record<string, unknown> = {}) {
   const calls: any[] = []
   let current = initial
   let changed = 0, saves = 0
@@ -52,7 +52,7 @@ async function panel(initial: any = view([]), onOpenRecord?: (id: string) => voi
     convertScope3SpendCurrency: async (...args: any[]) => { calls.push(["convert", args[1]]); return { converted: [{ recordId: rec(1), sourceId: "L1", versionId: rec(51), revision: 2, from: "75", usd: "81.17" }], skipped: [{ recordId: rec(2), sourceId: "L2", reason: "negative_amount_not_supported" }] } },
   })
   const actor = { userId: user, accessToken: "t" }
-  const app = harness(make, () => ({ companyId: company, actor, onOpenRecord, onChanged: () => { changed++ } }), { crypto: { randomUUID: () => "93920000-0000-4000-8000-0000000000aa" }, File, ...globals })
+  const app = harness(make, () => ({ companyId: company, actor, onOpenRecord, onChanged: () => { changed++ }, ...extraProps }), { crypto: { randomUUID: () => "93920000-0000-4000-8000-0000000000aa" }, File, ...globals })
   await app.settle()
   const node = (label: string) => app.nodes().find(n => n.props["aria-label"] === label)
   const choose = async (text: string) => { node("Spend file")!.props.onChange({ target: { files: [new File([text], "ledger.csv", { type: "text/csv" })] } }); await new Promise(r => setTimeout(r, 5)); await app.settle() }
@@ -381,5 +381,68 @@ describe("Open the spend import lands on the review heading", () => {
     await p.app.settle()
     expect(rendered()).toBe(true)
     expect(log).toEqual(["heading scrolled", "heading focused"])
+  })
+})
+
+// WO-06 (QA B1): "Open" now leaves for the record view, which remounts this panel, so its unsaved input is reported to
+// the Activity screen's leave guard: an open mapping form with changes, a chosen file not yet imported, typed exchange
+// rates for currencies still held, and a withdrawal reason.
+describe("WO-06: unsaved spend-import input is reported to the leave guard", () => {
+  test("a chosen file not yet imported, a withdrawal reason and typed rates count; importing or clearing them does not", async () => {
+    const reported: boolean[] = []
+    const p = await panel(view([]), undefined, undefined, false, 0, {}, { onDirtyChange: (dirty: boolean) => reported.push(dirty) })
+    expect(reported.at(-1)).toBe(false)
+    await p.choose(`${HEADER}\nL1,2025-03-01,Paper,6100,,Staples,75,USD,2025,,,,\n`)
+    expect(reported.at(-1)).toBe(true)
+    p.app.button("Import spend lines")!.props.onClick(); await new Promise(r => setTimeout(r, 5)); await p.app.settle()
+    expect(p.calls.some(c => c[0] === "import")).toBe(true)
+    expect(reported.at(-1)).toBe(false)
+    const q = await panel(view([line(1, {})]), undefined, undefined, false, 0, {}, { onDirtyChange: (dirty: boolean) => reported.push(dirty) })
+    q.app.button("Withdraw this import")!.props.onClick(); await q.app.settle()
+    expect(reported.at(-1)).toBe(false)
+    q.node(`Reason for withdrawing ${imported.fileName}`)!.props.onChange({ target: { value: "Wrong file." } }); await q.app.settle()
+    expect(reported.at(-1)).toBe(true)
+    q.app.button("Cancel withdrawal")!.props.onClick(); await q.app.settle()
+    expect(reported.at(-1)).toBe(false)
+  })
+
+  test("typed exchange rates count while their currency is still held", async () => {
+    const reported: boolean[] = []
+    const eur = { action: "hold", status: "input_needed", reasons: ["currency_not_supported", "naics_code_required"] }
+    const p = await panel(view([line(1, { currency: "EUR", plan: eur })]), undefined, undefined, false, 0, {}, { onDirtyChange: (dirty: boolean) => reported.push(dirty) })
+    await p.tab("Other holds (1)")
+    const rate = p.app.nodes().find(n => n.type === "input" && /rate/i.test(String(n.props["aria-label"] ?? "")))!
+    rate.props.onChange({ target: { value: "1.08" } }); await p.app.settle()
+    expect(reported.at(-1)).toBe(true)
+  })
+
+  test("a mapping form reports a change (Margins) under its key, and clears it when closed", async () => {
+    const p = await panel(view([line(1, {}), line(2, {})]))
+    const rows = p.component("SpendGroupRow")
+    const row = await groupRow(p, rows[0]!.props.group.vendor)
+    const formDirty: Array<[string, boolean]> = []
+    expect(rows[0]!.props.onFormDirty).toBeInstanceOf(Function)
+    row.app.button("Map")!.props.onClick(); await row.app.settle()
+    const form = row.component("SpendMappingForm")[0]!
+    expect(form.props.dirtyKey).toBe(`group:${rows[0]!.props.group.keyInput}`)
+    const make = await loadComponent("./scope3/SpendImport.tsx", "SpendMappingForm", { ...parser, ...api, ...review, reasonText, scope3NaicsChoices: naics.scope3NaicsChoices, scope3NaicsGuard: forms.scope3NaicsGuard, SCOPE3_NAICS_GUARD_TEXT: forms.SCOPE3_NAICS_GUARD_TEXT, scope3NaicsTitle: naics.scope3NaicsTitle })
+    const onDirty = (key: string, dirty: boolean) => { formDirty.push([key, dirty]) }
+    const mapping = harness(make, () => ({ ...form.props, onDirty }))
+    await mapping.settle()
+    expect(formDirty.at(-1)).toEqual([form.props.dirtyKey, false])
+    mapping.nodes().find(n => n.props["aria-label"] === "Margins")!.props.onChange({ target: { value: "without_margins" } }); await mapping.settle()
+    expect(formDirty.at(-1)).toEqual([form.props.dirtyKey, true])
+    mapping.nodes().find(n => n.props["aria-label"] === "Margins")!.props.onChange({ target: { value: "with_margins" } }); await mapping.settle()
+    expect(formDirty.at(-1)).toEqual([form.props.dirtyKey, false])
+  })
+
+  test("the panel's guard state follows its forms' registry", async () => {
+    const reported: boolean[] = []
+    const p = await panel(view([line(1, {})]), undefined, undefined, false, 0, {}, { onDirtyChange: (dirty: boolean) => reported.push(dirty) })
+    const register = p.component("SpendGroupRow")[0]!.props.onFormDirty as (key: string, dirty: boolean) => void
+    register("group:x", true); await p.app.settle()
+    expect(reported.at(-1)).toBe(true)
+    register("group:x", false); await p.app.settle()
+    expect(reported.at(-1)).toBe(false)
   })
 })
