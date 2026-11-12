@@ -51,6 +51,10 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
   const [loadError, setLoadError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [file, setFile] = useState<{ name: string; bytes: Uint8Array<ArrayBuffer>; type: string } | null>(null)
+  // WO-10 (WO-06 QA follow-ups 1 and 2): the file input is reset once its file is imported, and an import being sent is
+  // not unsaved input (see `unsaved` below).
+  const [fileInputKey, setFileInputKey] = useState(0)
+  const [importing, setImporting] = useState(false)
   const preview = useMemo<Scope3SpendParse | null>(() => file ? parseScope3SpendCsv(file.bytes, { period: view?.reportingPeriod ?? null }) : null, [file, view?.reportingPeriod])
   const [previewAll, setPreviewAll] = useState(false)
   const [locationId, setLocationId] = useState("")
@@ -74,6 +78,14 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
   }), [])
   // Bug hunt C (C-06): set when the guided path asked for the review; the effect below focuses it once it has rendered.
   const focusReview = useRef(false)
+  // WO-10: after an import, focus moves from the (now disabled) Import button to its result, not to the page body.
+  const focusResult = useRef(false)
+  useEffect(() => {
+    if (!focusResult.current || busy || typeof document === "undefined") return
+    focusResult.current = false
+    const target = document.getElementById("spend-import-result")
+    target?.scrollIntoView({ block: "nearest" }); target?.focus({ preventScroll: true })
+  })
 
   useEffect(() => {
     let live = true
@@ -115,17 +127,20 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
   }
   const runImport = async () => {
     if (!file || !preview?.ok || !locationId || busy) return
-    setBusy(true); setMessage(null); setProblems([])
+    setBusy(true); setImporting(true); setMessage(null); setProblems([])
     try {
       const upload = await uploadCollectionEvidence(companyId, new File([file.bytes], file.name, { type: "text/csv" }), crypto.randomUUID(), actor)
       const imported = await importScope3SpendFile(companyId, file.bytes, upload.receipt.evidenceId, locationId, actor)
       setResult(imported)
       setMessage(imported.replayed ? "This exact file was imported before: nothing new was saved." : `Imported ${imported.saved} spend lines.`)
+      // WO-10 (follow-up 1): the imported file is done with. Clearing it means a later withdrawal of this import (which clears
+      // the result) can't bring its preview back as unsaved input; the result, and focus, go to the import result.
+      setFile(null); setPreviewAll(false); setFileInputKey(n => n + 1); focusResult.current = true
       setTab("code"); setSelected([]); setReload(n => n + 1); onChanged?.()
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "The import failed; nothing was saved.")
       if (error instanceof Scope3SpendImportApiError) setProblems(error.problems.map(p => `${p.line ? `Line ${p.line}: ` : ""}${p.message}`))
-    } finally { setBusy(false) }
+    } finally { setBusy(false); setImporting(false) }
   }
   /** One correction per line (confirm distinct, or withdraw with a reason), each against the record's current version. */
   const withdrawImport = async () => {
@@ -221,8 +236,18 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
   const lineTarget = (line: Scope3SpendLineView, mapping: Scope3SpendMappingView | null): MappingTarget => ({ scope: "line", glAccount: line.glAccount, vendor: line.vendor, description: line.description, mapping, lines: 1 })
   const previewLines = preview?.lines ?? []
   const ratesTyped = foreign.some(({ currency }) => Object.values(rates[currency] ?? {}).some(value => value.trim() !== ""))
-  const unsaved = dirtyForms.size > 0 || (file !== null && result === null) || (withdrawal?.reason.trim() ?? "") !== "" || ratesTyped
+  // WO-10 (follow-up 2): while an import is being sent, its file is not unsaved input: leaving the Activity screen doesn't
+  // stop the requests (they carry no abort signal), so the import completes and is listed under "Imported files" on return.
+  // The in-app guard therefore doesn't ask to "discard" it. Closing or reloading the tab could stop the second request,
+  // so that still gets the browser's own leave warning, below.
+  const unsaved = dirtyForms.size > 0 || (file !== null && result === null && !importing) || (withdrawal?.reason.trim() ?? "") !== "" || ratesTyped
   useEffect(() => { onDirtyChange?.(unsaved) }, [unsaved, onDirtyChange])
+  useEffect(() => {
+    if (!importing || typeof window === "undefined") return
+    const warn = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = "" }
+    window.addEventListener("beforeunload", warn)
+    return () => window.removeEventListener("beforeunload", warn)
+  }, [importing])
   useEffect(() => () => onDirtyChange?.(false), [onDirtyChange])
 
   return (
@@ -240,9 +265,10 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
       <div className="spend-import__step" aria-label="Upload">
         <h4 className="spend-import__step-title"><span className="spend-import__num">1</span> Choose a file and check it</h4>
         <div className="spend-import__upload">
-          <label className="nv-field"><span>Spend file (CSV)</span><input aria-label="Spend file" type="file" accept=".csv,text/csv" onChange={event => void choose(event.target.files?.[0])} /></label>
+          <label className="nv-field"><span>Spend file (CSV)</span><input key={fileInputKey} aria-label="Spend file" type="file" accept=".csv,text/csv" onChange={event => void choose(event.target.files?.[0])} /></label>
           {view && <label className="nv-field"><span>Setup location</span><select aria-label="Setup location" value={locationId} onChange={event => setLocationId(event.target.value)}>{view.locations.map(location => <option key={location.id} value={location.id}>{location.name}</option>)}</select></label>}
-          <button type="button" className="nv-btn nv-btn--primary" disabled={!preview?.ok || !locationId || busy || !canManage} onClick={() => void runImport()}>Import spend lines</button>
+          {/* WO-10: focusable while it can't act (aria-disabled), so pressing it never leaves focus on the page body; runImport checks the same. */}
+          <button type="button" className="nv-btn nv-btn--primary" disabled={!canManage} aria-disabled={!preview?.ok || !locationId || busy || undefined} onClick={() => void runImport()}>Import spend lines</button>
         </div>
         {preview && !preview.ok && <div className="nv-notice nv-notice--error" role="alert"><div><p>This file can’t be imported until these are fixed (nothing was saved):</p><ul>{preview.errors.map((p, i) => <li key={i}>{p.line ? `Line ${p.line}: ` : ""}{p.message}</li>)}</ul></div></div>}
         {problems.length > 0 && <div className="nv-notice nv-notice--error" role="alert"><ul>{problems.map((p, i) => <li key={i}>{p}</li>)}</ul></div>}
@@ -264,7 +290,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
           </table></div>
           {previewLines.length > 12 && <button type="button" className="nv-btn nv-btn--ghost nv-btn--sm" onClick={() => setPreviewAll(!previewAll)}>{previewAll ? "Show the first 12 lines" : `Show all ${previewLines.length} lines`}</button>}
         </div>}
-        {result && <div aria-label="Import result" className="spend-import__result">
+        {result && <div aria-label="Import result" className="spend-import__result" id="spend-import-result" tabIndex={-1}>
           <p>{result.replayed ? "Replayed" : "Saved"}: {result.import.fileName}, {result.import.rowCount} lines; {result.calculable} go to the calculation.</p>
           <div className="nv-table-wrap spend-import__table-wrap"><table className="nv-table spend-import__table" aria-label="Reconciliation"><thead><tr><th scope="col">Currency</th><th scope="col" className="nv-right">{SPEND_BASIS_TEXT_R2C.fileTotalNet}</th><th scope="col" className="nv-right">{SPEND_BASIS_TEXT_R2C.importedTotalNet}</th><th scope="col" className="nv-right">Lines</th><th scope="col">Reconciled</th></tr></thead>
             <tbody>{result.import.reconciliation.currencies.map(row => <tr key={row.currency}><td data-label="Currency">{row.currency}</td><td data-label={SPEND_BASIS_TEXT_R2C.fileTotalNet} className="nv-right nv-num">{row.fileTotal === null ? "—" : spendMoney(row.fileTotal, row.currency)}</td><td data-label={SPEND_BASIS_TEXT_R2C.importedTotalNet} className="nv-right nv-num">{row.importedTotal === null ? "—" : spendMoney(row.importedTotal, row.currency)}</td><td data-label="Lines" className="nv-right nv-num">{row.lines}</td><td data-label="Reconciled"><span className={`nv-chip ${row.matches ? "nv-chip--ready" : "nv-chip--danger"}`}>{row.matches ? "Yes" : "No"}</span></td></tr>)}</tbody></table></div>

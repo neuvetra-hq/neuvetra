@@ -112,9 +112,13 @@ test("a save without a reason is refused in correction mode", async () => {
   app.button("Correct this record")!.props.onClick(); await app.settle()
   app.byLabel("Notes")?.props.onChange("Changed.")
   app.byLabel("Reference")?.props.onChange("REF-1"); await app.settle()
+  // WO-10: Save stays on; pressing it sends nothing, and the summary and the reason field say what is missing.
   const save = app.button("Save correction")!
-  if (!save.props.disabled) { save.props.onClick(); await app.settle(); expect(app.text()).toContain("Explain this correction before saving a new version.") }
-  else expect(save.props.disabled).toBe(true)
+  expect(save.props.disabled).toBe(false)
+  save.props.onClick(); await app.settle()
+  expect(app.text()).toContain("Explain this correction (at least 3 characters).")
+  expect(app.text()).toMatch(/Not saved\. Fix (this|these \d+ things):/)
+  expect(app.byLabel("Reason for this correction")!.props).toMatchObject({ name: "reason", need: "required", error: "Explain this correction (at least 3 characters)." })
 })
 
 test("view access: the record view has no Correct this record", async () => {
