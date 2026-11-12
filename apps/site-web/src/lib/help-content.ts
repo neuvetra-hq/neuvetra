@@ -2,17 +2,29 @@
 // closest written answer; when nothing matches well, the assistant says so instead of guessing.
 export type HelpPanel = "home" | "setup" | "collection" | "results"
 export interface HelpLink { label: string; panel: HelpPanel }
-export interface HelpEntry { id: string; question: string; keywords: string[]; answer: string[]; link?: HelpLink; source?: string; panels?: HelpPanel[] }
+/** Which workspaces an answer is true for: every one, only where Scope 3 calculation is switched on, or only where it is off. */
+export type HelpAppliesTo = "all" | "scope3-on" | "scope3-off"
+/** What the workspace says about Scope 3: on, off, or not known (status not loaded or failed to load, which gets neutral wording). */
+export type Scope3Mode = "on" | "off" | "unknown"
+export interface HelpEntry {
+  id: string; question: string; keywords: string[]; answer: string[]; link?: HelpLink; source?: string; panels?: HelpPanel[]
+  appliesTo: HelpAppliesTo
+  /** The day this answer was last read against the product; shown in the Ask drawer with every answer. */
+  reviewedOn: string
+  /** Set on the "scope3-on" and "scope3-off" variants of a topic: the neutral ("all") entry they replace when the mode is known. */
+  variantOf?: string
+}
+type HelpDraft = Omit<HelpEntry, "appliesTo" | "reviewedOn"> & Partial<Pick<HelpEntry, "appliesTo" | "reviewedOn">>
 
-export const HELP_REVIEWED_ON = "1 Nov 2026"
+export const HELP_REVIEWED_ON = "11 Nov 2026"
 
-export const HELP_ENTRIES: HelpEntry[] = [
+const DRAFTS: HelpDraft[] = [
   { id: "what-is-neuvetra", question: "What does Neuvetra do?", keywords: ["neuvetra", "what", "do", "product", "how", "work", "about", "use"], panels: ["home"],
     answer: ["Neuvetra helps a company prepare a traceable greenhouse-gas inventory. You describe the company and its sites, add activity data such as fuel and electricity use with the supporting documents, and Neuvetra calculates draft emissions with beta methods that are not yet formally released.", "Each calculated figure in the draft report links back to its record, any evidence attached to it and the emission factor it came from, so an assurance provider can follow it."] },
   { id: "steps", question: "What do I need to do, step by step?", keywords: ["steps", "start", "begin", "next", "order", "process", "journey", "first", "todo"], panels: ["home"],
     answer: ["1. Company setup: legal name, reporting year, boundary approach and your sites.", "2. Activity & evidence: one record per bill, meter, vehicle group, generator or cooling system, with the document attached.", "3. Results & report: review the draft figures, fix anything flagged, then print or download the draft report."], link: { label: "Go to the overview", panel: "home" } },
   { id: "scopes", question: "What are Scope 1, Scope 2 and Scope 3?", keywords: ["scope", "scopes", "1", "2", "3", "direct", "indirect", "difference"],
-    answer: ["Scope 1 is direct emissions from sources the company owns or controls — burning natural gas or diesel, running company vehicles, and refrigerant leaks.", "Scope 2 is indirect emissions from the electricity (or steam, heat and cooling) the company buys.", "Scope 3 is everything else in the value chain, such as purchased goods and business travel. In this beta Neuvetra calculates Scope 1 and purchased-electricity Scope 2; Scope 3 is not calculated yet."], source: "GHG Protocol Corporate Standard" },
+    answer: ["Scope 1 is direct emissions from sources the company owns or controls — burning natural gas or diesel, running company vehicles, and refrigerant leaks.", "Scope 2 is indirect emissions from the electricity (or steam, heat and cooling) the company buys.", "Scope 3 is everything else in the value chain, such as purchased goods and business travel. In this beta Neuvetra calculates Scope 1 and purchased-electricity Scope 2. Scope 3 calculation for supported categories is in beta; your workspace shows whether it is switched on."], source: "GHG Protocol Corporate Standard" },
   { id: "sb253", question: "What is California SB 253 and does it apply to us?", keywords: ["sb", "253", "sb253", "california", "law", "carb", "deadline", "assurance", "limited", "third-party", "2026", "2027", "scope3", "required", "apply", "revenue", "billion", "regulation", "due", "when"],
     answer: ["SB 253 (the Climate Corporate Data Accountability Act) is a California law that requires certain large companies doing business in California to report their greenhouse-gas emissions.", "Whether it applies to your company, and which deadlines and assurance requirements you face, depend on the law and on regulations from the California Air Resources Board (CARB), which can change. Neuvetra doesn’t decide whether the law applies to you — check CARB’s current guidance or ask your advisor.", "Some companies it doesn’t apply to prepare the same inventory because customers ask their suppliers for emissions data."], source: "California SB 253. No dates are given here — check CARB’s current guidance" },
   { id: "location-market", question: "What is the difference between location-based and market-based Scope 2?", keywords: ["location", "market", "based", "scope", "2", "difference", "dual", "residual", "mix", "rec", "certificate"], panels: ["collection", "results"],
@@ -70,10 +82,41 @@ export const HELP_ENTRIES: HelpEntry[] = [
   { id: "add-record", question: "How do I add a bill or other activity record?", keywords: ["add", "enter", "new", "bill", "record", "activity", "create", "input", "submit", "type", "gas", "electricity", "fuel"], panels: ["collection", "home"],
     answer: ["Open Activity & evidence. First upload the bill under Private evidence at the bottom of the page. Then, under New activity record, choose the activity type, pick the site, and enter the account or meter ID, the dates, and the amount and unit from the bill (a plain number, no commas).", "Tick the uploaded bill under “Evidence linked to this version” and choose Save activity. Anything missing is listed under “Input needed” — you can save and finish it later."], link: { label: "Open Activity & evidence", panel: "collection" } },
   { id: "import", question: "Can I import a spreadsheet of all my bills?", keywords: ["import", "bulk", "spreadsheet", "excel", "csv", "many", "all", "batch", "upload", "multiple"], panels: ["collection"],
-    answer: ["Not yet. In this beta each bill, meter, vehicle group or piece of equipment is entered as its own record, so every figure keeps its own evidence and history.", "You can upload a spreadsheet (CSV or XLSX) as evidence and link it to the records it supports."] },
-  { id: "scope3", question: "Do you calculate Scope 3?", keywords: ["scope", "3", "scope3", "value", "chain", "supplier", "travel", "commuting", "purchased", "goods", "grid", "loss"],
-    answer: ["Not yet. You can link an electricity record to its grid-loss source for later Scope 3 category 3 work, but no Scope 3 amount is calculated in this beta."] },
+    answer: ["For Scope 1 and 2, each bill, meter, vehicle group or piece of equipment is entered as its own record, so every figure keeps its own evidence and history. Whether your workspace can import Scope 3 spend from a CSV depends on whether Scope 3 is switched on; the Activity & evidence page shows it where it is.", "You can also upload a spreadsheet (CSV or XLSX) as evidence and link it to the records it supports."] },
+  { id: "import-scope3-on", variantOf: "import", appliesTo: "scope3-on", question: "Can I import a spreadsheet of all my bills?", keywords: ["import", "bulk", "spreadsheet", "excel", "csv", "many", "all", "batch", "upload", "multiple"], panels: ["collection"],
+    answer: ["For Scope 1 and 2, each bill, meter, vehicle group or piece of equipment is entered as its own record, so every figure keeps its own evidence and history.", "For Scope 3, purchase spend can be imported from a CSV file on the Activity & evidence page, where your workspace offers spend import. Lines that don’t match a category, repeated lines and lines that replace earlier ones are listed for your review; they are not counted silently. If the import panel doesn’t appear for you, enter the spend lines one at a time.", "You can also upload a spreadsheet (CSV or XLSX) as evidence and link it to the records it supports."], link: { label: "Open Activity & evidence", panel: "collection" } },
+  { id: "import-scope3-off", variantOf: "import", appliesTo: "scope3-off", question: "Can I import a spreadsheet of all my bills?", keywords: ["import", "bulk", "spreadsheet", "excel", "csv", "many", "all", "batch", "upload", "multiple"], panels: ["collection"],
+    answer: ["Not as a bulk import. Each bill, meter, vehicle group or piece of equipment is entered as its own record, so every figure keeps its own evidence and history. Scope 3 isn’t switched on in this workspace, so there is no Scope 3 spend import either.", "You can upload a spreadsheet (CSV or XLSX) as evidence and link it to the records it supports."] },
+  { id: "spend-import", appliesTo: "scope3-on", question: "How does the Scope 3 spend import work?", keywords: ["spend", "purchased", "purchase", "invoice", "invoices", "ledger", "supplier", "mapping", "unmatched", "duplicate", "duplicates", "replace", "supersede", "import"], panels: ["collection"],
+    answer: ["On the Activity & evidence page, choose a CSV file of purchase spend lines and pick the site it belongs to. Neuvetra shows a preview of what it can read and what it can’t before anything is saved.", "Each saved line keeps its source file. Lines that match no category, lines that repeat one already saved, and lines that replace an earlier one are queued for your review. A line without a supported method stays listed as open, never as zero.", "The file must be saved as CSV UTF-8. Importing the same file again saves nothing new."], link: { label: "Open Activity & evidence", panel: "collection" } },
+  { id: "scope3", question: "Do you calculate Scope 3?", keywords: ["scope", "3", "scope3", "value", "chain", "supplier", "travel", "commuting", "purchased", "goods", "grid", "loss", "calculate", "calculated"],
+    answer: ["That depends on your workspace. Where Scope 3 is switched on, Neuvetra calculates draft Scope 3 figures for supported categories with beta methods; where it isn’t, you can still screen the 15 categories in Company setup and nothing is calculated for Scope 3.", "Your Results page shows which applies to you. Scope 3 is always reported separately from Scope 1 and 2."] },
+  { id: "scope3-on", variantOf: "scope3", appliesTo: "scope3-on", question: "Do you calculate Scope 3?", keywords: ["scope", "3", "scope3", "value", "chain", "supplier", "travel", "commuting", "purchased", "goods", "grid", "loss", "calculate", "calculated"],
+    answer: ["Yes, in beta. Neuvetra calculates draft Scope 3 figures for supported categories with beta methods. Each of the 15 categories keeps its own state; categories without records or a supported method stay listed as open — never as zero. Scope 3 is reported separately from Scope 1 and 2."], link: { label: "Open results", panel: "results" } },
+  { id: "scope3-off", variantOf: "scope3", appliesTo: "scope3-off", question: "Do you calculate Scope 3?", keywords: ["scope", "3", "scope3", "value", "chain", "supplier", "travel", "commuting", "purchased", "goods", "grid", "loss", "calculate", "calculated"],
+    answer: ["Scope 3 isn’t switched on in this workspace. You can still screen all 15 categories in Company setup (06); nothing is calculated for Scope 3 here."], link: { label: "Open company setup", panel: "setup" } },
+  { id: "scope3-screening", question: "How do I screen the 15 Scope 3 categories?", keywords: ["screen", "screening", "categories", "category", "15", "scope3", "include", "included", "excluded", "relevant", "decide", "decision"], panels: ["setup"],
+    answer: ["In Company setup, section 06, each of the 15 Scope 3 categories gets a decision: included in the inventory, excluded with a written reason, not applicable with a reason, or not screened yet. A category you leave as “not screened yet” stays open; it is not treated as excluded.", "The decisions are saved with the rest of company setup when you finish its review step."], link: { label: "Open company setup", panel: "setup" } },
+  { id: "category-assessments", question: "What is a Scope 3 category assessment?", keywords: ["assessment", "assessments", "assess", "category", "categories", "scope3", "exclusion", "register", "document", "relevance", "approve"], panels: ["setup", "results"],
+    answer: ["An assessment records, for one Scope 3 category and reporting year, why it is included or left out. A Scope 3 report can be approved only once each category you included has an assessment; a category you excluded can be documented with one too.", "Where assessments aren’t available in your workspace, Company setup says so and your screening decisions are saved as before."], link: { label: "Open company setup", panel: "setup" } },
+  { id: "report-versions", appliesTo: "scope3-on", question: "What are Scope 3 report versions, and what does approval mean?", keywords: ["version", "versions", "frozen", "freeze", "prepare", "approve", "approval", "approved", "internal", "revision", "scope3", "report", "sha", "hash"], panels: ["results"],
+    answer: ["On the Results page you can prepare a Scope 3 report version. A version is frozen when it is prepared: later record changes never alter it, and the next version is prepared from the live results, with a reason. Each version shows who prepared it, when, and its report fingerprint.", "Approving a version is your company’s own internal approval: it records who in your company signed it off and binds the approval to that exact version. It is not external assurance, and the report stays a draft."], link: { label: "Open results", panel: "results" } },
+  { id: "internal-approval", question: "Does approving a report mean it is externally assured?", keywords: ["approval", "approve", "approved", "internal", "assured", "assurance", "external", "externally", "verified", "signoff", "sign-off", "auditor"], panels: ["results"],
+    answer: ["No. Approval in Neuvetra is internal approval by your company. It is not external assurance, and no independent assurance provider has checked the report.", "What Neuvetra adds is traceability: each calculated figure shows its record, its evidence, its factor and its method version, so an assurance provider can follow it."] },
 ]
+
+/** Every written answer. Entries that differ by Scope 3 state share a topic; use `entriesFor` to get the ones that apply. */
+export const HELP_ENTRIES: HelpEntry[] = DRAFTS.map(draft => ({ appliesTo: "all", reviewedOn: HELP_REVIEWED_ON, ...draft }))
+
+/** The Scope 3 mode of a workspace from the loaded status: unknown when the status is not loaded or failed to load. */
+export const scope3Mode = (status: { scope3?: true } | null | undefined, statusFailed = false): Scope3Mode => !status || statusFailed ? "unknown" : status.scope3 ? "on" : "off"
+
+/** The entries true for the mode: the neutral ("all") version of a topic is used only when its Scope 3 variants don't apply. */
+export function entriesFor(mode: Scope3Mode = "unknown"): HelpEntry[] {
+  const wanted: HelpAppliesTo | null = mode === "on" ? "scope3-on" : mode === "off" ? "scope3-off" : null
+  const replaced = new Set(wanted ? HELP_ENTRIES.filter(entry => entry.appliesTo === wanted && entry.variantOf).map(entry => entry.variantOf!) : [])
+  return HELP_ENTRIES.filter(entry => entry.appliesTo === "all" ? !replaced.has(entry.id) : entry.appliesTo === wanted)
+}
 
 const STOP = new Set(["a", "an", "the", "is", "are", "do", "does", "i", "we", "my", "our", "to", "of", "for", "in", "on", "and", "or", "it", "this", "that", "what", "how", "why", "can", "you", "me", "be", "with", "if", "should", "about", "which", "your"])
 export function tokens(text: string): string[] {
@@ -84,11 +127,11 @@ export interface HelpMatch { entry: HelpEntry; score: number }
 /** Common words that appear in many questions; they help rank but never decide a match on their own. */
 const GENERIC = new Set(["report", "reports", "file", "files", "bill", "bills", "data", "record", "records", "company", "add", "get", "need", "use", "help", "neuvetra", "work", "do", "does", "make", "enter", "new", "all", "type", "input", "submit", "ready", "when", "save", "many", "scope", "2", "1", "3"])
 /** Score every entry by keyword and question-word overlap. Returns the best match, or null when nothing is clearly close. */
-export function matchQuestion(query: string, panel?: HelpPanel): HelpMatch | null {
+export function matchQuestion(query: string, panel?: HelpPanel, mode: Scope3Mode = "unknown"): HelpMatch | null {
   const words = tokens(query)
   if (!words.length) return null
   let best: HelpMatch | null = null
-  for (const entry of HELP_ENTRIES) {
+  for (const entry of entriesFor(mode)) {
     const keywords = new Set(entry.keywords.map(word => word.toLowerCase()))
     const questionWords = new Set(tokens(entry.question))
     let score = 0, distinctive = 0
@@ -106,9 +149,10 @@ export function matchQuestion(query: string, panel?: HelpPanel): HelpMatch | nul
   return best && best.score >= 1.2 ? best : null
 }
 
-export function suggestedQuestions(panel: HelpPanel): HelpEntry[] {
-  const preferred = HELP_ENTRIES.filter(entry => entry.panels?.includes(panel))
-  const general = HELP_ENTRIES.filter(entry => !entry.panels)
+export function suggestedQuestions(panel: HelpPanel, mode: Scope3Mode = "unknown"): HelpEntry[] {
+  const entries = entriesFor(mode)
+  const preferred = entries.filter(entry => entry.panels?.includes(panel))
+  const general = entries.filter(entry => !entry.panels)
   return [...preferred, ...general].slice(0, 4)
 }
 
