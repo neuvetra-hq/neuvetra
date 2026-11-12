@@ -38,7 +38,7 @@ export async function loadScope3Results(companyId: string, actor: HostedWorkspac
   // WO-09: Scope 3 results may take up to 95 s; the limit covers reading the answer too.
   const { response, value } = await withRequestTimeout("scope3Results", actor.signal, async signal => {
     const response = await fetch(`/workspace-api/workspace/${companyId}/results/scope3`, { headers: { authorization: `Bearer ${actor.accessToken}` }, cache: "no-store", signal })
-    if (response.status === 401 || response.status === 403) actor.onUnauthorized?.()
+    if (response.status === 401 || response.status === 403) actor.onUnauthorized?.(response.status)
     const value: unknown = response.ok ? await response.json() : await response.json().catch(() => null)
     return { response, value }
   })

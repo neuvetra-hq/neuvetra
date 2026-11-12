@@ -55,7 +55,7 @@ async function request(actor: HostedWorkspaceActor, path: string, body?: unknown
     headers: { authorization: `Bearer ${actor.accessToken}`, ...(body === undefined ? {} : { "content-type": "application/json" }) },
   })
   actor.signal?.throwIfAborted()
-  if (response.status === 401 || response.status === 403) actor.onUnauthorized?.()
+  if (response.status === 401 || response.status === 403) actor.onUnauthorized?.(response.status)
   const value: unknown = await response.json().catch(() => null)
   if (!response.ok) throw new Scope3AssessmentApiError(object(value) && typeof value.error === "string" ? value.error : "Scope 3 assessments are unavailable right now.", response.status, object(value) && typeof value.code === "string" ? value.code : null)
   return value
