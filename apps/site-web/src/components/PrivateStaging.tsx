@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react"
 import { createClient, type SupabaseClient } from "@supabase/supabase-js"
 import { StagingWorkspace } from "./StagingWorkspace"
 import { Landing } from "./Landing"
+import { signInNoticeTone } from "@/lib/sign-in-notice"
 import { Icon } from "./Icon"
 import { decodeStagingAccess, decodeStagingConfig } from "@/lib/staging-session"
 
@@ -109,5 +110,6 @@ export function PrivateStaging() {
     <p className="nv-muted">{accessProblem ? message : "Checking your invitation and company access."}</p>
     <button type="button" className="nv-btn" disabled={busy} onClick={() => void signOut()}>Sign out</button>
   </div></div>
-  return <div>{live}<Landing ready={Boolean(client)} busy={busy} message={message} email={email} password={password} onEmail={setEmail} onPassword={setPassword} onSignIn={event => void signIn(event)} onSendLink={() => void sendSignInLink()} /></div>
+  // On the landing page an error is announced once, by the sign-in card's role="alert" (WO-02), so the polite region stays empty for it.
+  return <div>{signInNoticeTone(message) === "error" ? <p className="nv-sr" role="status" aria-live="polite" /> : live}<Landing ready={Boolean(client)} busy={busy} message={message} email={email} password={password} onEmail={setEmail} onPassword={setPassword} onSignIn={event => void signIn(event)} onSendLink={() => void sendSignInLink()} /></div>
 }

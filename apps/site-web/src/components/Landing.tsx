@@ -1,5 +1,6 @@
-import { useEffect, useRef, type FormEvent } from "react"
+import { useEffect, useRef, useState, type FormEvent } from "react"
 import { Icon, type IconName } from "./Icon"
+import { SIGN_IN_INPUT_ERROR, signInNoticeTone } from "@/lib/sign-in-notice"
 
 export interface LandingProps {
   ready: boolean
@@ -27,18 +28,15 @@ const FEATURES: Array<{ icon: IconName; title: string; body: string }> = [
   { icon: "records", title: "Corrections with a history", body: "Every change is a new version with a reason, so the audit trail stays intact from first entry to final draft." },
   { icon: "help", title: "Help where you need it", body: "Ask Neuvetra answers common questions in plain language from written, reviewed guidance — and says so when it doesn’t have an answer." },
 ]
+const TRUST = ["EPA Emission Factors Hub (2025 edition)", "eGRID2023 and Green-e residual mix for electricity", "Unknown is never counted as zero", "Drafts — not externally assured"]
 const FAQ = [
   { q: "Who is Neuvetra for?", a: "Finance, operations and sustainability teams preparing a Scope 1 and Scope 2 inventory — whether for California’s SB 253, a customer’s supplier request, or their own targets." },
   { q: "Does Neuvetra make us compliant with SB 253?", a: "No. Neuvetra helps you prepare a traceable draft inventory. Whether SB 253 applies to your company, and which deadlines and assurance requirements you face, depend on the law and on regulations from the California Air Resources Board (CARB), which can change. Check CARB’s current guidance or ask your advisor." },
-  { q: "Which methods and factors do you use?", a: "Scope 1 uses the EPA GHG Emission Factors Hub (2025). Scope 2 uses EPA eGRID2023 for location-based results and the Green-e 2025 residual mix for market-based results. Gases are combined with IPCC AR5 100-year global warming potentials." },
+  { q: "Which methods and factors do you use?", a: "Scope 1 uses the EPA GHG Emission Factors Hub (2025). Scope 2 uses EPA eGRID2023 for location-based results and the Green-e 2025 residual mix for market-based results. For Scope 1 and Scope 2 only, gases are combined with IPCC AR5 100-year global warming potentials." },
   { q: "Is the output an official filing?", a: "No. During the private beta every report is a draft prepared with beta methods and is not externally assured. It is structured so an independent assurance provider can follow each calculated figure." },
   { q: "How is our data protected?", a: "Records and files are scoped to your company, and the app is designed so that other companies’ accounts can’t see them. In this beta, a Neuvetra operator checks each uploaded file before it can be downloaded. During the private beta, use synthetic or test data only." },
 ]
 
-function tone(message: string): "error" | "info" | null {
-  if (!message || /^(Checking private staging|Sign in with your invited|Private staging access verified)/.test(message)) return null
-  return /fail|unavailable|could not|inactive|changed|Enter your/i.test(message) ? "error" : "info"
-}
 
 export function Landing(props: LandingProps) {
   const emailRef = useRef<HTMLInputElement>(null)
@@ -51,7 +49,26 @@ export function Landing(props: LandingProps) {
     return () => window.removeEventListener("popstate", clearViewHash)
   }, [])
   const goToSignIn = () => { document.getElementById("sign-in")?.scrollIntoView({ behavior: "smooth", block: "start" }); window.setTimeout(() => emailRef.current?.focus({ preventScroll: true }), 350) }
-  const kind = tone(props.message)
+  const kind = signInNoticeTone(props.message)
+  // "awaiting" is set when the person submits or asks for a link, so only the outcome of their own action moves focus to
+  // Email (never a page-load error). It is settled while rendering the new message, and the effect only moves focus.
+  const [outcome, setOutcome] = useState({ message: props.message, awaiting: false, invalid: false, focusRequest: 0 })
+  if (outcome.message !== props.message) {
+    const settled = outcome.awaiting && kind === "error"
+    setOutcome({ message: props.message, awaiting: outcome.awaiting && props.message === "Signing in…",
+      invalid: settled ? SIGN_IN_INPUT_ERROR.test(props.message) : outcome.invalid, focusRequest: outcome.focusRequest + (settled ? 1 : 0) })
+  }
+  useEffect(() => { if (outcome.focusRequest) emailRef.current?.focus() }, [outcome.focusRequest])
+  const signIn = (event: FormEvent) => {
+    if (props.busy) { event.preventDefault(); return }
+    setOutcome(current => ({ ...current, awaiting: true }))
+    props.onSignIn(event)
+  }
+  const sendLink = () => {
+    if (props.busy) return
+    setOutcome(current => ({ ...current, awaiting: true }))
+    props.onSendLink()
+  }
   return <div className="nv-landing">
     <a className="nv-skip" href="#sign-in">Skip to sign in</a>
     <header className="nv-landing__nav">
@@ -64,21 +81,20 @@ export function Landing(props: LandingProps) {
     <main>
       <section className="nv-section nv-hero" aria-labelledby="hero-title">
         <div>
-          <p className="nv-eyebrow">Scope 1 & 2 reporting · California SB 253</p>
+          <p className="nv-eyebrow">Private beta · Corporate greenhouse-gas inventories</p>
           <h1 id="hero-title">Greenhouse-gas reporting a reviewer can <em>trace</em>.</h1>
-          <p className="nv-hero__lead">Neuvetra guides your team from company setup to a draft Scope 1 and Scope 2 inventory. Each calculated figure links to its activity record, the evidence attached to it, the emission factor and the method version — and anything missing stays visibly missing.</p>
+          <p className="nv-hero__lead">Neuvetra guides your team from company setup to a draft Scope 1 and Scope 2 inventory, and helps you screen all 15 Scope 3 categories. Each calculated figure links to its activity record, the evidence attached to it, the emission factor and the method version — and anything missing stays visibly missing.</p>
           <div className="nv-hero__cta">
             <button type="button" className="nv-btn nv-btn--primary" onClick={goToSignIn}>Sign in to your workspace <Icon name="arrow" size={18} /></button>
             <a className="nv-btn nv-btn--ghost" href="#how">See how it works</a>
           </div>
-          <div className="nv-hero__trust"><span><Icon name="check" size={16} />EPA 2025 emission factors</span><span><Icon name="check" size={16} />eGRID2023 and Green-e for electricity</span><span><Icon name="check" size={16} />Unknown is never zero</span></div>
+          <ul className="nv-hero__trust" aria-label="About the beta" style={{ margin: 0, padding: 0, listStyle: "none" }}>{TRUST.map(item => <li key={item}><span><Icon name="info" size={16} />{item}</span></li>)}</ul>
         </div>
         <div className="nv-preview" role="img" aria-label="Illustration of a Neuvetra workspace for a synthetic company: company setup complete, six activity records with one needing input, and a draft report.">
           <span className="nv-preview__tag">Illustration · synthetic company</span>
           <p className="nv-subtle" style={{ margin: "0 0 4px" }}>Bayline Supply Co. · 2025 draft</p>
           <p className="nv-h3" style={{ margin: "0 0 14px" }}>Your reporting progress</p>
-          <div className="nv-progress" aria-hidden="true"><span style={{ width: "78%" }} /></div>
-          <div style={{ marginTop: 14 }}>
+          <div>
             <div className="nv-preview__row"><span><Icon name="building" size={18} /> Company setup</span><span className="nv-chip nv-chip--ready">3 sites</span></div>
             <div className="nv-preview__row"><span><Icon name="records" size={18} /> Activity & evidence</span><span className="nv-chip nv-chip--warn">1 input needed</span></div>
             <div className="nv-preview__row"><span><Icon name="bolt" size={18} /> Scope 2 electricity</span><span className="nv-chip nv-chip--info">Location + market</span></div>
@@ -87,8 +103,36 @@ export function Landing(props: LandingProps) {
         </div>
       </section>
 
+      {/* Sign-in follows the hero so that on a phone the card is the next thing after the call to action (WO-02). */}
+      <section id="sign-in" className="nv-section nv-signin-wrap" aria-labelledby="signin-title">
+        <div className="nv-section__head">
+          <p className="nv-eyebrow">Private beta</p>
+          <h2>Invited to Neuvetra?</h2>
+          <p>Sign in with the email address your invitation was sent to. Your workspace opens on an overview of your progress and next step.</p>
+          <ul className="nv-list" style={{ marginTop: 20 }}>
+            <li><span className="nv-list__main"><span className="nv-list__title">No public registration</span><br /><span className="nv-subtle">Not invited yet? Ask your Neuvetra contact.</span></span></li>
+            <li><span className="nv-list__main"><span className="nv-list__title">Shared computer?</span><br /><span className="nv-subtle">Sign out when you finish — it clears the session on this browser.</span></span></li>
+          </ul>
+        </div>
+        <div className="nv-signin">
+          <h2 id="signin-title">Sign in</h2>
+          <p className="nv-muted" style={{ margin: 0 }}>Use your invited account.</p>
+          <form onSubmit={signIn}>
+            <label className="nv-field"><span>Email</span><input ref={emailRef} type="email" autoComplete="username" required aria-invalid={outcome.invalid || undefined} value={props.email} onChange={event => { setOutcome(current => ({ ...current, invalid: false })); props.onEmail(event.target.value) }} /></label>
+            <label className="nv-field"><span>Password</span><input type="password" autoComplete="current-password" required value={props.password} onChange={event => props.onPassword(event.target.value)} /></label>
+            {/* key: each kind is a new element, so an error inserts a fresh role="alert" node (not a role change on the "Signing in…" notice). */}
+            {kind && <div key={kind} className={`nv-notice ${kind === "error" ? "nv-notice--error" : "nv-notice--ok"}`} style={{ margin: 0 }} role={kind === "error" ? "alert" : undefined}><Icon name={kind === "error" ? "alert" : "check"} /><p>{props.message}</p></div>}
+            {/* While busy the buttons stay focusable (aria-disabled), so focus is not dropped and "Signing in…" is read. */}
+            <button type="submit" className="nv-btn nv-btn--primary nv-btn--block" disabled={!props.ready} aria-disabled={props.busy || undefined}>{!props.ready ? (kind === "error" ? "Sign-in unavailable" : "Loading…") : props.busy ? "Signing in…" : "Sign in"}</button>
+            <div className="nv-or">or</div>
+            <button type="button" className="nv-btn nv-btn--block" disabled={!props.ready} aria-disabled={props.busy || undefined} onClick={sendLink}>Email me a sign-in link</button>
+          </form>
+          <p className="nv-subtle" style={{ margin: "14px 0 0" }}>Access is by invitation. There is no public registration.</p>
+        </div>
+      </section>
+
       <section id="how" className="nv-section" aria-labelledby="how-title">
-        <div className="nv-section__head"><p className="nv-eyebrow">How it works</p><h2 id="how-title">Four steps from records to a draft report</h2><p>Work at your own pace. Everything saves as a draft, and the overview always shows what’s done and what’s next.</p></div>
+        <div className="nv-section__head"><p className="nv-eyebrow">How it works</p><h2 id="how-title">Four steps from records to a draft report</h2><p>Work at your own pace. Company setup is saved when you finish its review step; each activity record is saved on its own. The overview shows what’s open and what to do next.</p></div>
         <ol className="nv-steps4">{STEPS.map(step => <li key={step.title}><h3>{step.title}</h3><p>{step.body}</p></li>)}</ol>
       </section>
 
@@ -98,13 +142,14 @@ export function Landing(props: LandingProps) {
       </section>
 
       <section id="coverage" className="nv-section" aria-labelledby="coverage-title">
-        <div className="nv-section__head"><p className="nv-eyebrow">Coverage in the beta</p><h2 id="coverage-title">What you can report today</h2></div>
+        <div className="nv-section__head"><p className="nv-eyebrow">Coverage in the beta</p><h2 id="coverage-title">What the beta covers today</h2></div>
         <div className="nv-coverage">
-          <div><p className="nv-h3">Scope 1 — direct</p><ul><li>Natural gas</li><li>Generator diesel and fuel oil</li><li>Company vehicles (gasoline and diesel)</li><li>Refrigerants and fire suppression</li></ul></div>
-          <div><p className="nv-h3">Scope 2 — purchased electricity</p><ul><li>Location-based, by eGRID subregion</li><li>Market-based, with certificates, PPAs, green tariffs and supplier rates</li><li>Green-e residual mix for uncovered use</li></ul></div>
-          <div><p className="nv-h3">Coming next</p><ul><li>Scope 3 calculation (screening today)</li><li>Assurance-provider handoff package</li><li>More jurisdictions after California</li></ul></div>
+          <div><p className="nv-h3">Scope 1 — direct</p><ul><li>Natural gas</li><li>Generator diesel and No. 2 fuel oil</li><li>Company vehicles (gasoline and diesel)</li><li>Refrigerants and fire suppression</li><li>Process and other direct emissions: recorded as open gaps, not calculated</li></ul></div>
+          <div><p className="nv-h3">Scope 2 — purchased electricity</p><ul><li>Location-based, by eGRID subregion</li><li>Market-based, with certificates, PPAs, green tariffs and supplier rates</li><li>Green-e residual mix for uncovered use</li><li>Location-based and market-based results are shown separately, never added together</li><li>Purchased steam, heat and cooling: not supported yet</li></ul></div>
+          <div><p className="nv-h3">Scope 3 — value chain</p><ul><li>Screen all 15 categories with reasons.</li><li>Calculation for supported categories is in beta; your workspace shows whether it is switched on.</li><li>Where it is on, categories without records or a supported method stay listed as open — never as zero.</li><li>Reported separately from Scope 1 and Scope 2.</li></ul></div>
+          <div><p className="nv-h3">Not available yet</p><ul><li>Reviewer or assurance-provider access</li><li>One frozen version of the full Scope 1, 2 and 3 report</li><li>Rules outside California and the U.S.</li></ul></div>
         </div>
-        <div className="nv-notice nv-notice--info" style={{ marginTop: 22 }}><Icon name="info" /><p><strong>Private beta.</strong> Access is by invitation, with synthetic or test company data only. Results are drafts prepared with beta methods and are not externally assured.</p></div>
+        <div className="nv-notice nv-notice--info" style={{ marginTop: 22 }}><Icon name="info" /><p><strong>Private beta.</strong> Access is by invitation, with synthetic or test company data only. Results are drafts prepared with beta methods and are not externally assured. Neuvetra doesn’t determine whether a reporting law applies to your company.</p></div>
       </section>
 
       <section id="faq" className="nv-section nv-faq" aria-labelledby="faq-title">
@@ -112,30 +157,6 @@ export function Landing(props: LandingProps) {
         {FAQ.map(item => <details key={item.q}><summary>{item.q}</summary><p>{item.a}</p></details>)}
       </section>
 
-      <section id="sign-in" className="nv-section nv-signin-wrap" aria-labelledby="signin-title">
-        <div className="nv-section__head">
-          <p className="nv-eyebrow">Private beta</p>
-          <h2>Invited to Neuvetra?</h2>
-          <p>Sign in with the email address your invitation was sent to. Your workspace opens on an overview that shows exactly where you left off.</p>
-          <ul className="nv-list" style={{ marginTop: 20 }}>
-            <li><span className="nv-list__main"><span className="nv-list__title">No public registration</span><br /><span className="nv-subtle">Not invited yet? Ask your Neuvetra contact.</span></span></li>
-            <li><span className="nv-list__main"><span className="nv-list__title">Shared computer?</span><br /><span className="nv-subtle">Sign out when you finish — it clears the session on this browser.</span></span></li>
-          </ul>
-        </div>
-        <div className="nv-signin">
-          <h2 id="signin-title">Sign in</h2>
-          <p className="nv-muted" style={{ margin: 0 }}>Use your invited account.</p>
-          <form onSubmit={props.onSignIn}>
-            <label className="nv-field"><span>Email</span><input ref={emailRef} type="email" autoComplete="username" required value={props.email} onChange={event => props.onEmail(event.target.value)} /></label>
-            <label className="nv-field"><span>Password</span><input type="password" autoComplete="current-password" required value={props.password} onChange={event => props.onPassword(event.target.value)} /></label>
-            <button type="submit" className="nv-btn nv-btn--primary nv-btn--block" disabled={!props.ready || props.busy}>{!props.ready ? (kind === "error" ? "Sign-in unavailable" : "Loading…") : props.busy ? "Signing in…" : "Sign in"}</button>
-            <div className="nv-or">or</div>
-            <button type="button" className="nv-btn nv-btn--block" disabled={!props.ready || props.busy} onClick={props.onSendLink}>Email me a sign-in link</button>
-          </form>
-          <div>{kind && <div className={`nv-notice ${kind === "error" ? "nv-notice--error" : "nv-notice--ok"}`}><Icon name={kind === "error" ? "alert" : "check"} /><p>{props.message}</p></div>}</div>
-          <p className="nv-subtle" style={{ margin: "14px 0 0" }}>Access is by invitation. There is no public registration.</p>
-        </div>
-      </section>
     </main>
     <footer className="nv-footer"><div className="nv-section"><span>© 2026 Neuvetra</span><span>Private beta · synthetic data only · drafts are not externally assured</span></div></footer>
   </div>
