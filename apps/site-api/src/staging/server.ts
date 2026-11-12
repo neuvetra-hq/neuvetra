@@ -20,7 +20,7 @@ import { createWorksheetRoutes } from "../workspace/m64-routes"
 import { COLLECTION_EVIDENCE_MAX_BYTES, EXISTING_PROJECT_REF, HostedWorkspaceDatabase, STAGING_COLLECTION_SCHEMA_VERSION, STAGING_SCHEMA_BRIDGE_VERSION, STAGING_SCHEMA_VERSION, STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION, STAGING_SCOPE3_SCHEMA_VERSION, STAGING_SERVED_SCHEMA_VERSIONS, loadStagingDatabaseCa, SCOPE3_CSV_LABELS, type WorkspaceDatabase, type CompanyWorkspaceRecord } from "@neuvetra/database"
 import { createClient } from "@supabase/supabase-js"
 import { extractBearerToken, validateUserFromToken, type AuthenticatedUser } from "../lib/auth"
-import { createRateLimiter } from "../lib/rate-limit"
+import { createRateLimiter, extractProxiedClientAddress } from "../lib/rate-limit"
 import { createWorkspaceRoutes } from "../workspace/routes"
 import { createWorkspaceStore } from "../workspace/service"
 import { createM80BetaRoutes } from "../workspace/m80-beta-routes"
@@ -118,9 +118,16 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   })
   const log = overrides.log ?? ((event: StagingLog) => console.info(JSON.stringify(event)))
   // Spend review can make several authenticated reads per correction. Allow a sustained review session
-  // (300/user/minute), while bounding the instance to 1,200/minute; public config has a separate budget.
+  // (300/user/minute), while bounding the instance to 1,200/minute of staging users' requests.
+  // API-01 (CTO audit risk 3): nothing a caller can send before proving who they are spends a budget other people
+  // depend on. Order per request: `unverified` (per client address, before any token check or SQL) -> token validation
+  // -> `actors` (per user) -> staging access -> `admission` (instance ceiling). `unverified` bounds validation calls per
+  // address; a request is given back to it once its user is admitted, so it only stays spent by invalid tokens, users
+  // without staging access, users over their own limit and requests still in flight. Public config is limited per
+  // address too, so no single address can refuse the app's configuration to everyone else.
   const admission = createRateLimiter({ max: 1200, windowMs: 60_000, maxBuckets: 1 })
-  const configAdmission = createRateLimiter({ max: 1200, windowMs: 60_000, maxBuckets: 1 })
+  const configAdmission = createRateLimiter({ max: 1200, windowMs: 60_000, maxBuckets: 10_000 })
+  const unverified = createRateLimiter({ max: 120, windowMs: 60_000, maxBuckets: 10_000 })
   const actors = createRateLimiter({ max: 300, windowMs: 60_000, maxBuckets: 100 })
   const validateUser = async (token: string) => {
     const user = await auth(token)
@@ -206,10 +213,11 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       if ((origin && origin !== config.origin) || (!isGet && origin !== config.origin)) return json(403, { error: "Forbidden." })
       const publicConfig = url.pathname === "/workspace-api/config" && isGet
       const token = extractBearerToken(request.headers)
-      // A request that cannot authenticate never spends the shared admission budget.
+      // A request that cannot authenticate never spends any budget.
       if (!publicConfig && (!token || token.length > 8192)) return json(401, { error: "Authentication required." })
-      const admitted = (publicConfig ? configAdmission : admission).check("staging")
-      if (!admitted.allowed) return rateLimited(admitted.resetAt)
+      const client = extractProxiedClientAddress(request.headers)
+      const provisional = (publicConfig ? configAdmission : unverified).check(client)
+      if (!provisional.allowed) return rateLimited(provisional.resetAt)
       const requestReadiness = config.projectRef === EXISTING_PROJECT_REF ? await databaseReadiness() : undefined
       if (requestReadiness && !served(requestReadiness.schemaVersion)) return json(503, { error: "Staging database is upgrading." })
       if (publicConfig) return json(200, { profile: STAGING_PROFILE, supabaseUrl: config.supabaseUrl, anonKey: config.supabaseAnonKey })
@@ -220,6 +228,10 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       const allowance = actors.check(user.id)
       if (!allowance.allowed) return rateLimited(allowance.resetAt)
       if (!await database.hasStagingAccess(user.id)) return json(403, { error: "Private staging access required." })
+      // A staging user within their own limit: the request leaves the per-address budget and spends the instance one.
+      unverified.release(client, provisional)
+      const admitted = admission.check("staging")
+      if (!admitted.allowed) return rateLimited(admitted.resetAt)
       if (url.pathname === "/workspace-api/session" && isGet) {
         const access = await database.findStagingMembershipForUser(user.id)
         if (!access) return json(403, { error: "Private staging access required." })

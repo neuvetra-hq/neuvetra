@@ -36,12 +36,21 @@ export interface RateLimiter {
   check(key: string): RateLimitVerdict
 }
 
+export interface ReleasableRateLimiter extends RateLimiter {
+  /**
+   * Gives back one request counted by a `check` that returned `verdict`, if
+   * that window is still current. Used when a request turns out not to belong
+   * to the budget it was provisionally counted against.
+   */
+  release(key: string, verdict: RateLimitVerdict): void
+}
+
 interface Bucket {
   count: number
   resetAt: number
 }
 
-export function createRateLimiter(config: RateLimitConfig): RateLimiter {
+export function createRateLimiter(config: RateLimitConfig): ReleasableRateLimiter {
   const now = config.now ?? (() => Date.now())
   const maxBuckets = config.maxBuckets ?? 10_000
   // Insertion-ordered Map gives us O(1) eviction of the oldest entry.
@@ -77,6 +86,11 @@ export function createRateLimiter(config: RateLimitConfig): RateLimiter {
         remaining: config.max - bucket.count,
       }
     },
+    release(key, verdict) {
+      if (!verdict.allowed) return
+      const bucket = buckets.get(key)
+      if (bucket && bucket.resetAt === verdict.resetAt && bucket.count > 0) bucket.count -= 1
+    },
   }
 }
 
@@ -101,4 +115,26 @@ export function extractClientIp(
     if (trimmed) return trimmed
   }
   return directAddress ?? "unknown"
+}
+
+/**
+ * Client address for per-address limits on the private staging server, which
+ * runs behind Railway's edge proxy (the socket peer is always a Railway-internal
+ * address, so it cannot tell clients apart).
+ *
+ * Railway's edge writes `x-real-ip` itself and replaces any copy the caller
+ * sent. For `x-forwarded-for`, Railway staff have described both stripping and
+ * appending, so its leftmost entry may be caller-controlled: it is never used.
+ * Order: `x-real-ip`, else the rightmost `x-forwarded-for` hop (the one the
+ * edge wrote), else one shared "unknown" key. Where more than one value is
+ * present (a duplicated header is joined with ", "), the last one is taken.
+ * The failure mode of a wrong guess is a coarser bucket (several clients share
+ * one key), never a caller choosing its own key from the leftmost hop.
+ */
+export function extractProxiedClientAddress(headers: Headers): string {
+  for (const name of ["x-real-ip", "x-forwarded-for"]) {
+    const last = headers.get(name)?.split(",").pop()?.trim()
+    if (last) return last.slice(0, 64)
+  }
+  return "unknown"
 }
