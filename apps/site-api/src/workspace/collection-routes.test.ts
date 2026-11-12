@@ -52,6 +52,7 @@ function harness() {
   let failRegister = false
   let hasAccess = true
   let others: any[] = []
+  let lineages: any[] = []
   const failures: Record<string, unknown> = {} // BF-08: an error the named database method throws
   let zipLookup: any = { zip: "94105", subregions: ["CAMX"], utilities: [{ subregion: "CAMX", utility: "Pacific Gas and Electric Co", eiaId: "14328", state: "CA", predominantUtility: true }], needsUtilityChoice: false, found: true, source: "EPA Power Profiler zip.csv (eGRID2023)" }
   const current = { id: VERSION, recordId: RECORD, companyId: COMPANY, revision: 1, previousVersionId: null, correctionReason: null, activity: activity().activity, payloadSha256: "a".repeat(64), createdBy: ACTOR, createdAt: "2026-09-28T00:00:00.000Z" } as any
@@ -66,7 +67,7 @@ function harness() {
     async registerCollectionEvidence(...args) { calls.push({ name: "registerEvidence", args }); if (failRegister) throw new Error("sensitive-registration-marker"); return { uploadId: (args[2] as any).uploadId, evidenceId: evidence[0]?.id ?? (args[2] as any).evidenceId, reused: evidence.length > 0, quarantineStatus: "pending", orphanRecoveryRequired: false } },
     async markCollectionEvidenceRegistrationFailed(...args) { calls.push({ name: "markRegistrationFailed", args }); return { recoveryId: "00000000-0000-4000-8000-000000000008" } },
     async findDownloadableCollectionEvidence(...args) { calls.push({ name: "downloadable", args }); return downloadable },
-    async findGridLossLineage(...args) { calls.push({ name: "findLineage", args }); return [] },
+    async findGridLossLineage(...args) { calls.push({ name: "findLineage", args }); return lineages },
     async createGridLossLineage(...args) { calls.push({ name: "createLineage", args }); if (failures.lineage) throw failures.lineage; return { ...(args[2] as any), companyId: COMPANY, createdBy: ACTOR, createdAt: "2026-09-28T00:00:00.000Z" } },
   }
   const storage: CollectionEvidenceStorage = {
@@ -75,7 +76,7 @@ function harness() {
   }
   const route = createCollectionRoutes({ database, evidenceStorage: storage, origin: ORIGIN, lookupZip: async zip => { calls.push({ name: "lookupZip", args: [zip] }); return zipLookup }, validateUser: async token => token === "valid" ? { id: ACTOR, email: "fixture@example.test", phone: null, fullName: null } : null })
   const request = (path: string, init: RequestInit = {}) => route(new Request(`https://api.example.test${path}`, { ...init, headers: { origin: ORIGIN, authorization: "Bearer valid", ...(init.headers ?? {}) } }))
-  return { calls, request, failures, setOthers(value: any[]) { others = value }, setEvidence(value: any[]) { evidence = value }, setDownloadable(value: any) { downloadable = value }, setStored(value: Uint8Array<ArrayBuffer>) { stored = value }, setAccess(value: boolean) { hasAccess = value }, setZipLookup(value: any) { zipLookup = value }, failNextPut() { failPut = true }, failNextRegistration() { failRegister = true } }
+  return { calls, request, failures, setLineages(value: any[]) { lineages = value }, setOthers(value: any[]) { others = value }, setEvidence(value: any[]) { evidence = value }, setDownloadable(value: any) { downloadable = value }, setStored(value: Uint8Array<ArrayBuffer>) { stored = value }, setAccess(value: boolean) { hasAccess = value }, setZipLookup(value: any) { zipLookup = value }, failNextPut() { failPut = true }, failNextRegistration() { failRegister = true } }
 }
 
 describe("collection routes", () => {
@@ -389,6 +390,13 @@ describe("BF-08 truthful write errors", () => {
     expect([up.status, await up.json()]).toEqual([409, unavailable])
     const lineage = await post(h, `grid-losses/${LINEAGE}`, { electricityRecordId: RECORD, reference: "", notes: "" })
     expect([lineage.status, await lineage.json()]).toEqual([409, unavailable])
+    // F1: this company already links that electricity record (a second source from a stale list): its own conflict, not an ID problem.
+    h.setLineages([{ id: "00000000-0000-4000-8000-0000000000c1", electricityRecordId: RECORD }])
+    const second = await post(h, `grid-losses/${LINEAGE}`, { electricityRecordId: RECORD, reference: "", notes: "" })
+    expect([second.status, (await second.json() as any).code]).toEqual([409, "revision_conflict"])
+    h.setLineages([{ id: "00000000-0000-4000-8000-0000000000c2", electricityRecordId: "00000000-0000-4000-8000-0000000000c3" }])
+    expect((await (await post(h, `grid-losses/${LINEAGE}`, { electricityRecordId: RECORD, reference: "", notes: "" })).json() as any).code).toBe("record_id_unavailable")
+    h.setLineages([])
     h.setEvidence([{ id: EVIDENCE }]) // this company already holds the upload: a racing own upload keeps the conflict answer
     const own = await upload(h)
     expect([own.status, (await own.json() as any).code]).toEqual([409, "revision_conflict"])

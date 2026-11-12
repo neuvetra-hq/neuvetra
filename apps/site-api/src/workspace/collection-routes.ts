@@ -268,9 +268,13 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
         let saved: Awaited<ReturnType<typeof deps.database.createGridLossLineage>>
         try { saved = await deps.database.createGridLossLineage(actor.id, companyId, lineage) }
         catch (error) {
-          // BF-08 (BL-05): the lineage ID is the table's only unique key, and it is global; see the activity save above.
-          if ((error as { code?: string }).code === "23505" && !(await deps.database.findGridLossLineage(actor.id, companyId)).some(item => item.id.toLowerCase() === resourceId))
-            throw new RequestProblem(409, RECORD_ID_UNAVAILABLE_TEXT, "record_id_unavailable")
+          // BF-08 (BL-05): the table has two unique keys, the global lineage ID and (company, electricity record). If this company already
+          // holds a lineage with this ID or for this electricity record, the conflict is its own (a second link to the same record from
+          // a stale list or another tab) and keeps revision_conflict; only an ID held by another company is record_id_unavailable.
+          if ((error as { code?: string }).code === "23505") {
+            const own = await deps.database.findGridLossLineage(actor.id, companyId)
+            if (!own.some(item => item.id.toLowerCase() === resourceId || item.electricityRecordId.toLowerCase() === lineage.electricityRecordId)) throw new RequestProblem(409, RECORD_ID_UNAVAILABLE_TEXT, "record_id_unavailable")
+          }
           throw error
         }
         return respond(201, { lineage: saved })
