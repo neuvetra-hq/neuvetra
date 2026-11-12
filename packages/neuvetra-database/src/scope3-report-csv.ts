@@ -64,7 +64,9 @@ export function scope3LineStatusText(row: Pick<Scope3ResultsLine, 'outcome' | 'r
 }
 /** Every reason code of a line, in the order the screen shows them. */
 export function scope3LineReasonCodes(row: Pick<Scope3ResultsLine, 'outcome' | 'periodCheck' | 'plan' | 'result'>): string[] {
-  return [...new Set([...(row.outcome === 'outside_period' ? [row.periodCheck === 'partial' ? 'partly_outside_reporting_period' : 'outside_reporting_period'] : []), ...row.plan.reasons, ...(row.result?.findings ?? []), ...(row.result?.estimates ?? [])])]
+  // BF-01: a possible duplicate the policy counted (count mode) carries a `possible_duplicate_of:` note and no hold reason; it is named.
+  const countedDuplicate = row.plan.notes.some(note => note.startsWith('possible_duplicate_of:')) && !row.plan.reasons.includes('possible_duplicate_record')
+  return [...new Set([...(row.outcome === 'outside_period' ? [row.periodCheck === 'partial' ? 'partly_outside_reporting_period' : 'outside_reporting_period'] : []), ...row.plan.reasons, ...(countedDuplicate ? ['possible_duplicate_counted'] : []), ...(row.result?.findings ?? []), ...(row.result?.estimates ?? [])])]
 }
 /** A line's effective data quality as `T=fair(default) Ti=… R=…` (empty without a result). */
 export function scope3DataQualityText(row: Pick<Scope3ResultsLine, 'effectiveDataQuality'>): string {

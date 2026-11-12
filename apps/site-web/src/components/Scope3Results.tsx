@@ -88,12 +88,13 @@ async function downloadScope3CsvZip(results: Scope3ResultsResponse) {
  * method, type and origin, data quality (default or set by the company), each factor with its source cell, constants,
  * conversions, the gases, the GWP set and the input and result SHA-256. The screen folds it; print shows it open.
  */
-function CalculationDetails({ row }: { row: Scope3Row }) {
-  const r = row.result, superseded = scope3SupersededBy(row)
+function CalculationDetails({ row, records }: { row: Scope3Row; records: readonly Scope3Row[] }) {
+  const r = row.result, superseded = scope3SupersededBy(row), duplicate = scope3PossibleDuplicateText(row, records)
   return <dl className="worksheet-details">
     <dt>Record</dt><dd>{row.recordId} · version {row.versionId} (revision {row.revision}){row.derivedFrom ? ` · ${SCOPE3_TRACE_TEXT.derivedFrom(kindLabel(row.derivedFrom.kind), row.derivedFrom.recordId)}` : ""}</dd>
     <dt>Source reference</dt><dd>{row.reference || "—"}{row.estimateBasis ? ` · estimate basis: ${row.estimateBasis}` : ""}</dd>
     {superseded && <><dt>Superseded</dt><dd>{SCOPE3_TRACE_TEXT.supersededBy(superseded)}</dd></>}
+    {duplicate && <><dt>Possible duplicate</dt><dd>{duplicate}</dd></>}
     {row.supersededSpendMemo && <><dt>{SCOPE3_SUPERSEDED_MEMO_TEXT_R3A.heading}</dt><dd>{scope3LineMemoText(row)}</dd></>}
     {row.currencyConversion && <><dt>Currency conversion provenance</dt><dd>{scope3SpendConversionNote(row.currencyConversion)}</dd></>}
     {!r ? <><dt>Result</dt><dd>{SCOPE3_TRACE_TEXT.noResult}</dd></> : <>
@@ -277,7 +278,7 @@ export function Scope3Panel({ state, canManage, onFix, onRetry, reports, onNavig
             {/* Round 2 lane E (UX-12): a calculated zero says why on the card (for example a feedstock that is not burned). */}
             {(() => { const zero = scope3KnownZeroLineText(row.result?.total?.display, row.result?.boundary.notes ?? [], reasonText); return zero ? <div className="nv-record-card__reason">{zero}</div> : null })()}
             {partial && <div className="nv-record-card__meta">{partial}</div>}
-            <details><summary>{SCOPE3_TRACE_TEXT.heading}</summary><CalculationDetails row={row} /></details>
+            <details><summary>{SCOPE3_TRACE_TEXT.heading}</summary><CalculationDetails row={row} records={results.records} /></details>
           </div><div className="nv-record-card__side"><span className={`nv-chip nv-chip--${status.tone}`}>{status.label}</span>
             {row.result?.total && <span className="nv-num" style={{ fontWeight: 600 }} title={SCOPE3_UNIT_TEXT.hoverKg(groupDigits(row.result.total.display))}>{scope3Tonnes(row.result.total.display)} {SCOPE3_UNIT_TEXT.unit}</span>}
             {fix && <button type="button" className="nv-btn nv-btn--sm" aria-label={`${row.derivedFrom ? SCOPE3_ACTION_TEXT.fixSource(row.sourceId) : canManage ? SCOPE3_ACTION_TEXT.fixAria(row.sourceId) : `${SCOPE3_ACTION_TEXT.view} ${row.sourceId}`}`} onClick={() => act(fix)}>{row.derivedFrom ? "Fix the source record" : canManage ? SCOPE3_ACTION_TEXT.fix : SCOPE3_ACTION_TEXT.view}</button>}
@@ -292,6 +293,15 @@ export function Scope3Panel({ state, canManage, onFix, onRetry, reports, onNavig
     {/* I-10 (DESIGN 7.4): prepare, open, print, download and approve frozen report versions of these results; round 2: with the readiness gate. */}
     {reports && <Scope3ReportVersions companyId={reports.companyId} actor={reports.actor} results={results} />}
   </div>
+}
+
+/** BF-01: the saved record a possible duplicate line may repeat, in words (the record's lines share its record ID). */
+function scope3PossibleDuplicateText(row: Scope3Row, records: readonly Scope3Row[]): string | null {
+  // The note is `possible_duplicate_of:<keeper record ID>` (collection-duplicates.ts); read here without an import, as the tests render this file alone.
+  const keeperId = row.plan.notes.find(note => note.startsWith("possible_duplicate_of:"))?.slice("possible_duplicate_of:".length) ?? null
+  if (keeperId === null) return null
+  const keeper = records.find(item => item.recordId === keeperId)
+  return `Possible duplicate of record ${keeper ? `${keeper.sourceId} (${keeperId})` : keeperId}.`
 }
 
 /**
@@ -344,6 +354,6 @@ export function Scope3ReportSection({ results, frozen = false, statements }: { r
     <h4>Methodology by category</h4>
     {coverage.categories.map(row => <div key={row.category}><p className="nv-report__small"><strong>{row.category}. {row.title} · {statusText(row.status)}</strong></p><ul>{row.methodology.map((sentence, i) => <li key={i} className="nv-report__small">{sentence.text}</li>)}</ul></div>)}
     <ExclusionRegister results={results} prefix={frozen ? "Frozen version: " : "Draft report: "} />
-    {results.records.length > 0 && <><h4>{SCOPE3_TRACE_TEXT.heading}</h4>{results.records.map(row => <div key={`${row.recordId}-${row.kind}-details`}><p className="nv-report__small"><strong>{kindLabel(row.kind)} · {row.sourceId} · category {row.category}</strong></p><CalculationDetails row={row} /></div>)}</>}
+    {results.records.length > 0 && <><h4>{SCOPE3_TRACE_TEXT.heading}</h4>{results.records.map(row => <div key={`${row.recordId}-${row.kind}-details`}><p className="nv-report__small"><strong>{kindLabel(row.kind)} · {row.sourceId} · category {row.category}</strong></p><CalculationDetails row={row} records={results.records} /></div>)}</>}
   </section>
 }

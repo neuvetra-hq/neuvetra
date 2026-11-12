@@ -1,6 +1,7 @@
 import type { CollectionActivityRecord, CollectionContext, CollectionEvidenceMetadata, CompanySetupView } from "@neuvetra/database"
 import { instrumentEvidenceClaims, planCollectionCalculation, type CollectionCalculationPlan } from "../../../../packages/neuvetra-database/src/collection-engine-input"
 import { isScope3CollectionKind } from "../../../../packages/neuvetra-database/src/scope3-collection-contract"
+import { applyDuplicatePolicy, COLLECTION_DUPLICATE_POLICY, possibleDuplicateCounts, possibleDuplicateRecords, possibleDuplicatesCountedWarning, type CollectionDuplicatePolicy } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { assertEngineMatchesRelease, type ReleasedMethod } from "../../../../packages/neuvetra-database/src/method-reference"
 import { extractBearerToken, type AuthenticatedUser } from "../lib/auth"
 import { EngineRefusal } from "../calculation/method-engine-runner"
@@ -181,6 +182,8 @@ export async function buildCollectionResults(input: {
   /** The release check's inputs. Omitted (tests of the calculation only): every method is shown as unreleased. */
   releases?: ReleaseEvidence | null
   now?: () => Date
+  /** BF-01: hold possible duplicates or count them with a warning (defaults to COLLECTION_DUPLICATE_POLICY; tests cover both). */
+  duplicatePolicy?: CollectionDuplicatePolicy
 }): Promise<CollectionResultsResponse> {
   const { context, evidence, engines } = input
   // Context and setup are read separately: an intervening save must not mix old boundary decisions with a new report header.
@@ -198,11 +201,21 @@ export async function buildCollectionResults(input: {
   const reportingPeriod = input.setup?.currentVersion?.setup.reportingPeriod ?? null
   // A-01: a certificate file counts for one market-based claim only, across the whole company.
   const claims = instrumentEvidenceClaims(records.map(record => record.currentVersion.activity), context, evidence)
+  // BF-01: possible duplicates (same kind and source ID, overlapping dates) among the active records, each mapped to its keeper.
+  const duplicatePolicy = input.duplicatePolicy ?? COLLECTION_DUPLICATE_POLICY
+  const duplicates = possibleDuplicateRecords(records), keeperCounts = possibleDuplicateCounts(duplicates)
+  let duplicatesCounted = 0
   const ordered = [...records].sort((left, right) => left.kind.localeCompare(right.kind) || left.currentVersion.activity.period.start.localeCompare(right.currentVersion.activity.period.start) || left.id.localeCompare(right.id))
   for (const record of ordered) {
     const version = record.currentVersion
     const activity = version.activity
-    const plan = planCollectionCalculation(version, context, evidence, claims)
+    const planned = planCollectionCalculation(version, context, evidence, claims)
+    const periodCheck = checkPeriod(activity.period, reportingPeriod)
+    // BF-01: withdrawn, excluded and outside the period keep their precedence; the duplicate policy applies after them.
+    const duplicateOf = duplicates.get(record.id) ?? null
+    const plan = planned.status === "withdrawn" || planned.status === "excluded" || periodCheck === "outside" || periodCheck === "partial" ? planned
+      : applyDuplicatePolicy(planned, duplicateOf, keeperCounts.get(record.id) ?? 0, duplicatePolicy)
+    if (plan !== planned && duplicateOf !== null && plan.action === "calculate") duplicatesCounted++
     const row: CollectionResultRow = {
       recordId: record.id, versionId: version.id, revision: version.revision, kind: record.kind, scope: record.kind === "electricity" ? 2 : 1,
       sourceId: activity.sourceId, locationId: activity.locationId, locationName: locations.get(activity.locationId)?.name ?? null,
@@ -211,7 +224,7 @@ export async function buildCollectionResults(input: {
       quality: activity.quality, estimateBasis: activity.estimateBasis, evidenceCount: activity.evidenceIds.length,
       evidence: activity.evidenceIds.map(id => { const file = evidence.find(item => item.id === id); return { id, name: file?.originalName ?? null, sha256: file?.sha256 ?? null, status: file?.quarantineStatus ?? "missing" } }),
       plan: { action: plan.action, status: plan.status, reasons: plan.reasons, notes: plan.notes },
-      periodCheck: checkPeriod(activity.period, reportingPeriod),
+      periodCheck,
       outcome: "held", inSubtotal: { scope1: false, scope2LocationBased: false, scope2MarketBased: false }, refusalCode: null, scope1: null, scope2: null,
     }
     const periodHold = row.periodCheck === "outside" || row.periodCheck === "partial"
@@ -232,6 +245,8 @@ export async function buildCollectionResults(input: {
     }
     rows.push(row)
   }
+  // BF-01 (count mode): the totals include records that may repeat others, and the response says so.
+  if (duplicatesCounted) warnings.push(possibleDuplicatesCountedWarning(duplicatesCounted))
   let scope1: Scope1Aggregate | null = null
   let scope2: Scope2Aggregate | null = null
   try { if (scope1Results.length) scope1 = await engines.scope1.aggregate(scope1Results) } catch { warnings.push("The Scope 1 subtotal could not be verified. Per-record results are shown.") }

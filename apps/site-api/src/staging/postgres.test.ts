@@ -2,6 +2,7 @@ import { expect, test } from "bun:test"
 import { createPostgresConnection, HostedWorkspaceDatabase, provisionStagingRoster, revokeStagingAccess, M61_LIMITATION_ACKNOWLEDGMENTS, M64_LIMITATIONS, type WorkspaceConnection } from "@neuvetra/database"
 import { createStagingServer } from "./server"
 import { readStagingConfig, STAGING_PROFILE } from "./config"
+import { createSyntheticCompanySetup } from "../../../../packages/neuvetra-database/src/company-setup-fixture"
 
 // Operator opts into this already-migrated disposable loopback fixture explicitly.
 // Real SQL/roles are exercised; Auth token validation remains an injected test provider.
@@ -183,3 +184,57 @@ integration("M65 queued review captures post-lock time and cannot invalidate an 
   expect(new TextDecoder().decode(download!.bytes)).toContain("No worksheet review was recorded when this report was created.")
  }finally{await review?.catch(()=>{});await database.close();await operator.close()}
 },30000)
+
+// BF-01 part A (auditor S1, BL-01): the same electricity bill saved twice through the collection route is counted once on
+// native PostgreSQL. Hold mode (the default policy): the second record is held as a possible duplicate, the location-based
+// subtotal stays the single-record figure, and withdrawing the duplicate restores the plain single-record response.
+integration("BF-01: a repeated electricity record is held as a possible duplicate, not added to the Scope 2 total", async () => {
+  const REF = "abcdefghijklmnopqrst", ORIGIN = "http://127.0.0.1:3015"
+  const owner = crypto.randomUUID(), company = crypto.randomUUID()
+  const operator = createPostgresConnection(target!, { tls: false })
+  const runtimeUrl = new URL(target!); runtimeUrl.username = "neuvetra_runtime"
+  const database = new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string) => HostedWorkspaceDatabase)(createPostgresConnection(runtimeUrl.toString(), { tls: false }), REF)
+  const config = readStagingConfig({ NODE_ENV: "test", NEUVETRA_STAGING_ENABLED: "enabled", NEUVETRA_STAGING_PROFILE: STAGING_PROFILE, NEUVETRA_STAGING_PROJECT_REF: REF, NEUVETRA_STAGING_ORIGIN: ORIGIN, SUPABASE_URL: `https://${REF}.supabase.co`, SUPABASE_ANON_KEY: "sb_publishable_synthetic_fixture_not_a_real_key", DATABASE_URL: `postgres://neuvetra_runtime:fixture@db.${REF}.supabase.co:5432/postgres` })
+  const app = await createStagingServer(config, { database, validateUser: async token => token === "owner" ? { id: owner, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, serveAsset: async () => null, log: () => {} })
+  const call = async (route: string, body?: unknown) => {
+    const response = await app.fetch(new Request(`${ORIGIN}/workspace-api${route}`, { method: body === undefined ? "GET" : "POST", body: body === undefined ? undefined : JSON.stringify(body),
+      headers: { origin: ORIGIN, authorization: "Bearer owner", ...(body === undefined ? {} : { "content-type": "application/json" }) } }))
+    return { status: response.status, body: await response.json() as any }
+  }
+  try {
+    await operator.query("insert into auth.users(id) values($1)", [owner])
+    await provisionStagingRoster(operator, { expectedProjectRef: REF, workspaceId: company, ownerUserId: owner, members: [] })
+    const root = `/workspace/${company}`
+    const base = createSyntheticCompanySetup()
+    const site = { ...base.locations[0]!, inclusion: "included" as const, control: "reporting_company" as const, startMode: "period_start" as const, endMode: "period_end" as const }
+    const setup = { ...base, boundary: { ...base.boundary, approach: "operational_control" as const }, entities: base.entities.map(entity => ({ ...entity, inclusion: "included" as const, control: "operational_control" as const })),
+      locations: [site], screening: base.screening.map(row => row.scope === 1 ? { ...row, state: "no" as const, reason: "None here" } : row) }
+    const saved = await call(`${root}/setup`, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, setup })
+    expect(saved.status).toBe(201)
+    const meter = { locationId: site.id, setupVersionId: saved.body.savedVersion.id, state: "active", withdrawalReason: null, quality: "actual", estimateBasis: null,
+      period: { start: "2025-01-01", endExclusive: "2026-01-01" }, reference: "Synthetic BF-01", notes: "", evidenceIds: [], kind: "electricity", sourceId: "M-1",
+      quantity: { originalValue: "250000", originalUnit: "kWh", normalizedValue: "250000", normalizedUnit: "kWh" },
+      payload: { meterOrAccountNumber: "M-1", utilityName: "City & County of San Francisco", site: "Office", zip: "94105", subregion: "CAMX", utilityEiaId: "16612", instruments: [] } }
+    const save = (recordId: string, activity: unknown, expectedRevision = 0, expectedVersionId: string | null = null, correctionReason: string | null = null) =>
+      call(`${root}/collection/activities/${recordId}`, { idempotencyKey: crypto.randomUUID(), expectedRevision, expectedVersionId, correctionReason, activity })
+    const first = crypto.randomUUID(), second = crypto.randomUUID()
+    expect((await save(first, meter)).status).toBe(201)
+    const single = await call(`${root}/results`)
+    expect(single.status).toBe(200)
+    expect(single.body.scope2.locationBasedSubtotal.display).toBe("48756.5305")
+    const repeated = await save(second, meter)
+    expect(repeated.status).toBe(201)
+    const after = await call(`${root}/results`)
+    expect(after.body.scope2.locationBasedSubtotal.display).toBe("48756.5305")
+    expect(after.body.scope2.locationBasedIncluded).toHaveLength(1)
+    expect(after.body.counts).toMatchObject({ records: 2, calculated: 1, inputNeeded: 1 })
+    expect(after.body.records.find((row: any) => row.recordId === second).plan).toEqual({ action: "hold", status: "input_needed", reasons: ["possible_duplicate_record"], notes: [`possible_duplicate_of:${first}`] })
+    expect(after.body.records.find((row: any) => row.recordId === first).plan.notes).toEqual(["has_possible_duplicates:1"])
+    // Withdrawing the duplicate restores the single-record result, with no note and no warning.
+    expect((await save(second, { ...meter, state: "withdrawn", withdrawalReason: "Entered twice." }, 1, repeated.body.version.id, "Duplicate bill")).status).toBe(201)
+    const restored = await call(`${root}/results`)
+    expect(restored.body.scope2.locationBasedSubtotal.display).toBe("48756.5305")
+    expect(restored.body.records.find((row: any) => row.recordId === first).plan).toEqual(single.body.records[0].plan)
+    expect(restored.body.warnings).toEqual(single.body.warnings)
+  } finally { await app.close?.(); await database.close(); await operator.close() }
+}, 120_000)

@@ -721,6 +721,14 @@ export const SCOPE3_REASON_TEXT_R2A: Readonly<Record<string, string>> = {
   period_outside_method_envelope: 'Scope 3 methods cover activity from 1 January 2025 to 31 December 2026. Correct the record’s period; it isn’t counted until then.',
   reporting_period_required_outside_2025: 'This record’s period is outside calendar 2025. Set the reporting period in company setup (for example fiscal year 2026); without one, only calendar-year 2025 activity is calculated.',
 }
+/**
+ * BF-01 (possible duplicate records): the reason code a possible duplicate carries when the duplicate policy counts it
+ * (`count_and_warn`): `scope3LineReasonCodes` turns its `possible_duplicate_of:` note into this code, so the frozen CSV says it.
+ * The hold reason `possible_duplicate_record` has one text for every scope (plain-language-labels.ts).
+ */
+export const SCOPE3_REASON_TEXT_BF01: Readonly<Record<string, string>> = {
+  possible_duplicate_counted: 'This record has the same activity type and source ID as another active record for overlapping dates, so it may be the same bill saved twice. It is counted in these totals. If it repeats the other record, withdraw one of them; otherwise correct its source ID or dates.',
+}
 /** Round 2: the category 3 methodology sentences on what is not quantified and on the periods of the Scope 1 and 2 derived lines. */
 export const SCOPE3_METHODOLOGY_TEXT_R2A = {
   coalNotQuantified: 'Coal upstream of purchased electricity is not quantified: no free source prints a value. It is never counted as zero; each line states the share of fossil heat input not mapped and the heat input not mapped attributable to it (a memo outside every total).',

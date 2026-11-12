@@ -1,4 +1,5 @@
-import { instrumentNotes, type ResultRow, type ResultsResponse } from "./results-api"
+import { duplicateReasonCodes, instrumentNotes, type ResultRow, type ResultsResponse } from "./results-api"
+import { possibleDuplicateCounted } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { reasonText } from "./plain-language"
 
 export type Tone = "ready" | "warn" | "danger" | "muted" | "info"
@@ -11,6 +12,8 @@ export function rowStatus(row: ResultRow): RowStatus {
   if (row.outcome === "refused" || row.outcome === "unavailable") return { label: "Not calculated", tone: "danger" }
   if (row.outcome === "held" && row.plan.status !== "withdrawn" && row.plan.status !== "excluded" && (row.periodCheck === "outside" || row.periodCheck === "partial")) return { label: "Outside reporting period", tone: "warn" }
   if (row.outcome === "held") return row.plan.status === "withdrawn" ? { label: "Withdrawn", tone: "muted" } : row.plan.status === "excluded" ? { label: "Excluded", tone: "muted" } : { label: "Input needed", tone: "warn" }
+  // BF-01 (count mode): a possible duplicate the policy counted is in the totals, but may repeat another record.
+  if (countedDuplicate(row) && engineHold(row) === null) return { label: "Counted — possible duplicate", tone: "warn" }
   // Electricity: location-based calculated but market-based not (for example an instrument with an unknown MWh) is only
   // partly calculated, like a Scope 1 source with CO2 only, so it is listed under "Needs attention".
   if (row.scope2 && row.scope2.locationBased.status === "complete" && (row.scope2.marketBased.status === "input_needed" || row.scope2.marketBased.status === "review_required")) return { label: "Partial calculation", tone: "info" }
@@ -28,7 +31,7 @@ export function rowStatus(row: ResultRow): RowStatus {
 /** Plain reasons for a row, deduplicated; codes are kept for the export. */
 export function rowReasons(row: ResultRow): string[] {
   const periodHeld = row.plan.status !== "withdrawn" && row.plan.status !== "excluded"
-  const codes = [...(periodHeld && row.periodCheck === "outside" ? ["outside_reporting_period"] : periodHeld && row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...instrumentNotes(row), ...(row.refusalCode ? [row.refusalCode] : []), ...(row.scope1?.findings ?? []), ...(row.scope1?.estimates ?? []), ...(row.scope2?.findings ?? []), ...(row.scope2?.locationBased.findings ?? []), ...(row.scope2?.marketBased.findings ?? []), ...(row.scope2?.estimates ?? [])]
+  const codes = [...(periodHeld && row.periodCheck === "outside" ? ["outside_reporting_period"] : periodHeld && row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...duplicateReasonCodes(row), ...instrumentNotes(row), ...(row.refusalCode ? [row.refusalCode] : []), ...(row.scope1?.findings ?? []), ...(row.scope1?.estimates ?? []), ...(row.scope2?.findings ?? []), ...(row.scope2?.locationBased.findings ?? []), ...(row.scope2?.marketBased.findings ?? []), ...(row.scope2?.estimates ?? [])]
   if (row.outcome === "unavailable") codes.push("engine_unavailable")
   return [...new Set(codes.map(code => code === "engine_unavailable" ? "The calculation service was unavailable for this record. Try again shortly." : reasonText(code)))]
 }
@@ -44,6 +47,8 @@ export function engineHold(row: ResultRow): "input_needed" | "review_required" |
   const status = row.scope1 ? row.scope1.status : row.scope2 ? row.scope2.locationBased.status : null
   return status === "input_needed" || status === "review_required" || status === "excluded" ? status : null
 }
+/** BF-01 (count mode): a calculated record the duplicate policy counted although it may repeat another record. */
+export const countedDuplicate = (row: ResultRow) => row.outcome === "calculated" && possibleDuplicateCounted({ reasons: row.plan.reasons, notes: row.plan.notes ?? [] })
 /** Not yet counted (B02): held by the adapter, the period check or the engine, and neither withdrawn nor excluded. */
 export const notYetCounted = (row: ResultRow) => row.plan.status !== "withdrawn" && row.plan.status !== "excluded"
   && (row.outcome !== "calculated" || engineHold(row) === "input_needed" || engineHold(row) === "review_required")

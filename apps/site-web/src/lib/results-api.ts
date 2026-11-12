@@ -1,4 +1,5 @@
 import type { HostedWorkspaceActor } from "./workspace-api"
+import { POSSIBLE_DUPLICATE_COUNTED_REASON, possibleDuplicateCounted, possibleDuplicateOf } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 
 export const RESULTS_PROFILE = "neuvetra.collection-results.v2"
 /** Board decision 2026-09-29: draft numbers are for synthetic test companies only. Matches the server label when any method is unreleased. */
@@ -97,6 +98,15 @@ export class NotSyntheticResultsError extends Error { constructor() { super("Dra
 
 /** Rejects anything that is not the draft-results contract, so a malformed response can never show a number. */
 /** A-01/A-03: the adapter's notes on why an instrument's certificate wasn't counted, shown next to the engine's own findings. */
+/** BF-01: the record a possible duplicate repeats, in words ("Possible duplicate of record GAS-1 (<id>)"); null when the row is not one. */
+export function possibleDuplicateText(row: Pick<ResultRow, "plan">, records: ReadonlyArray<Pick<ResultRow, "recordId" | "sourceId">>): string | null {
+  const keeperId = possibleDuplicateOf(row.plan.notes ?? [])
+  if (keeperId === null) return null
+  const keeper = records.find(item => item.recordId === keeperId)
+  return `Possible duplicate of record ${keeper ? `${keeper.sourceId} (${keeperId})` : keeperId}.`
+}
+/** BF-01: the reason codes a row shows, with `possible_duplicate_counted` for a possible duplicate the policy counted (count mode). */
+export const duplicateReasonCodes = (row: Pick<ResultRow, "plan">): string[] => possibleDuplicateCounted({ reasons: row.plan.reasons, notes: row.plan.notes ?? [] }) ? [POSSIBLE_DUPLICATE_COUNTED_REASON] : []
 export const instrumentNotes = (row: Pick<ResultRow, "plan">): string[] => (row.plan.notes ?? []).filter(note => /^instrument_\d+_evidence_(?:pending_scan|shared|not_usable)$/.test(note))
 export function decodeResults(value: unknown, companyId: string): ResultsResponse {
   if (!record(value) || value.profile !== RESULTS_PROFILE || value.companyId !== companyId || typeof value.label !== "string" || !Array.isArray(value.records) || !record(value.counts)) throw new Error("The results response was not recognized.")
@@ -209,7 +219,9 @@ export function resultsCsv(results: ResultsResponse, labels: CsvLabels): string 
     const code = row.outcome === "calculated" ? (s1?.status ?? s2?.locationBased.status ?? "") : row.plan.status === "withdrawn" || row.plan.status === "excluded" ? row.plan.status : row.periodCheck === "outside" || row.periodCheck === "partial" ? `${row.periodCheck === "partial" ? "partly_" : ""}outside_reporting_period` : row.plan.status ?? row.outcome
     const yes = (flag: boolean, applies: boolean) => applies ? (flag ? "Yes" : "No") : ""
     const periodHeld = row.plan.status !== "withdrawn" && row.plan.status !== "excluded"
-    const notes = [...new Set([...(periodHeld && row.periodCheck === "outside" ? ["outside_reporting_period"] : periodHeld && row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...instrumentNotes(row), ...(row.refusalCode ? [row.refusalCode] : []), ...(s1?.findings ?? []), ...(s1?.estimates ?? []), ...(s2?.findings ?? []), ...(s2?.estimates ?? [])].map(labels.reason))].join(" ")
+    // BF-01: a possible duplicate names the record it may repeat (held, or counted in count mode).
+    const duplicate = possibleDuplicateText(row, results.records)
+    const notes = [...new Set([...[...(periodHeld && row.periodCheck === "outside" ? ["outside_reporting_period"] : periodHeld && row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...duplicateReasonCodes(row), ...instrumentNotes(row), ...(row.refusalCode ? [row.refusalCode] : []), ...(s1?.findings ?? []), ...(s1?.estimates ?? []), ...(s2?.findings ?? []), ...(s2?.estimates ?? [])].map(labels.reason), ...(duplicate ? [duplicate] : [])])].join(" ")
     const files = row.evidence.map(evidenceFileText).join("; ")
     const run = s1 ?? s2
     return [String(row.scope), labels.kind(row.kind), row.locationName ?? "", row.sourceId, row.period.start, lastDayCovered(row.period.endExclusive), row.quantity.value, labels.unit?.(row.quantity.unit) ?? row.quantity.unit, labels.quality?.(row.quality) ?? row.quality, labels.status(row), code,

@@ -273,3 +273,24 @@ describe("round 2 polish: Fix waits for a lazily loaded form's field", () => {
     expect(focused).toEqual(["heading"])
   })
 })
+
+// BF-01 (part A): a held possible duplicate is resolved by withdrawing or correcting it; a counted one is named.
+describe("BF-01: possible duplicate Scope 3 records", () => {
+  test("hold mode: the to-do names the reason and offers Withdraw or correct on the record", () => {
+    const data = clone(fixture) as any
+    const line = data.records.find((r: any) => r.sourceId === "W-2")
+    line.plan = { ...line.plan, reasons: ["possible_duplicate_record"], notes: ["possible_duplicate_of:93000000-0000-4000-8000-000000001002"] }
+    const item = scope3Todos(data).find(todo => todo.kind === "line" && todo.recordId === line.recordId)!
+    expect(item.reasons).toContain(reasonText("possible_duplicate_record"))
+    expect(item.actions).toEqual([{ type: "fix", recordId: line.recordId, fields: [SCOPE3_WITHDRAW_CONTROL], label: "Withdraw or correct" }])
+  })
+  test("count mode: a counted line with the note carries the possible_duplicate_counted reason (screen, print and CSV)", async () => {
+    const { scope3LineReasonCodes } = await import("./scope3-results-api")
+    const data = clone(fixture) as any
+    const line = data.records.find((r: any) => r.outcome === "calculated" && r.derivedFrom === null)
+    expect(scope3LineReasonCodes(line)).not.toContain("possible_duplicate_counted")
+    line.plan = { ...line.plan, notes: [...line.plan.notes, "possible_duplicate_of:93000000-0000-4000-8000-000000001002"] }
+    expect(scope3LineReasonCodes(line)).toContain("possible_duplicate_counted")
+    expect(reasonText("possible_duplicate_counted")).toContain("It is counted in these totals")
+  })
+})

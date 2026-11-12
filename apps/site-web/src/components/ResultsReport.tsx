@@ -3,9 +3,9 @@ import { Icon } from "./Icon"
 import type { JourneyView } from "./JourneyNav"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { coverageIssues, coverageLines, noteLabel, type Coverage } from "@/lib/journey-status"
-import { EVIDENCE_STATUS_TEXT, loadResults, methodLabel, NotSyntheticResultsError, releaseState, ResultsApiError, resultsCsv, unclearedEvidence, type EngineGas, type MethodUsed, type ResultRow, type ResultsResponse } from "@/lib/results-api"
+import { EVIDENCE_STATUS_TEXT, loadResults, methodLabel, NotSyntheticResultsError, possibleDuplicateText, releaseState, ResultsApiError, resultsCsv, unclearedEvidence, type EngineGas, type MethodUsed, type ResultRow, type ResultsResponse } from "@/lib/results-api"
 import { ACTIVITY_KINDS, BOUNDARY_LABELS, groupDigits, kgToTonnes, kindIcon, kindLabel, periodLabel, QUALITY_LABELS, reasonText, shortUnit } from "@/lib/plain-language"
-import { engineHold, factorSource, GAS_LABELS, INITIAL_RESULTS_STATE, KIND_COLORS, needsWork, notYetCounted, resultsReducer, rowReasons, rowStatus } from "@/lib/results-view"
+import { countedDuplicate, engineHold, factorSource, GAS_LABELS, INITIAL_RESULTS_STATE, KIND_COLORS, needsWork, notYetCounted, resultsReducer, rowReasons, rowStatus } from "@/lib/results-view"
 import { COPY_TEXT_R2E, formatTimeR2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
 import { INITIAL_SCOPE3_STATE, loadScope3Results, Scope3ResultsApiError, type Scope3ResultsResponse, type Scope3State } from "@/lib/scope3-results-api"
 import { Scope3ReportSection, Scope3ResultsPanel } from "./scope3/lazy-results"
@@ -34,8 +34,8 @@ function Gases({ gases }: { gases: Record<string, EngineGas> | null }) {
   return <>{Object.entries(gases).map(([gas, value]) => <span key={gas} style={{ display: "block" }}>{GAS_LABELS[gas] ?? gas}: {groupDigits(value.mass)} {value.massUnit} → {groupDigits(value.co2e)} kg CO2e</span>)}</>
 }
 
-function RowDetail({ row, methods }: { row: ResultRow; methods: MethodUsed[] }) {
-  const s1 = row.scope1, s2 = row.scope2
+function RowDetail({ row, methods, records }: { row: ResultRow; methods: MethodUsed[]; records: ResultRow[] }) {
+  const s1 = row.scope1, s2 = row.scope2, duplicateOf = possibleDuplicateText(row, records)
   const factors = s1?.factorsUsed ?? s2?.factorsUsed ?? []
   return <details className="nv-detail"><summary>How this was calculated</summary><dl>
     <dt>Method</dt><dd>{s1 ?? s2 ? methodLabel((s1 ?? s2)!, methods) : "Not calculated"}</dd>
@@ -46,6 +46,7 @@ function RowDetail({ row, methods }: { row: ResultRow; methods: MethodUsed[] }) 
     {factors.length > 0 && <><dt>Factors used</dt><dd>{factors.map(factor => <span key={factor.key} style={{ display: "block" }}>{factor.label}: {groupDigits(factor.value)} {factor.unit} <span className="nv-subtle">({factorSource(factor.key)}, cell {factor.cell})</span></span>)}</dd></>}
     <dt>GWP set</dt><dd>{s1?.gwpSetId ?? s2?.gwpSetId ?? "—"} (IPCC AR5, 100-year)</dd>
     <dt>Evidence</dt><dd>{evidenceText(row)}</dd>
+    {duplicateOf && <><dt>Possible duplicate</dt><dd>{duplicateOf}</dd></>}
     <dt>Record</dt><dd>Version {row.revision} · data quality {QUALITY[row.quality] ?? row.quality}{row.estimateBasis ? ` (${row.estimateBasis})` : ""}</dd>
     {(s1?.resultSha256 || s2?.resultSha256) && <><dt>Result fingerprint</dt><dd className="nv-subtle" style={{ fontFamily: "monospace", fontSize: ".8rem" }}>{s1?.resultSha256 ?? s2?.resultSha256}</dd></>}
   </dl></details>
@@ -57,7 +58,9 @@ function completeness(results: ResultsResponse, coverage: Coverage) {
   const held = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && notYetCounted(row)).length
   const note = (complete: boolean, scope: 1 | 2) => {
     const count = held(scope), issues = coverageIssues(coverage, scope)
-    const parts = [count ? `${plural(count, "record")} not yet counted` : "", issues.open ? `${plural(issues.open, "setup answer")} still open` : "", issues.gaps ? plural(issues.gaps, "possible coverage gap") : "", !complete ? "some results only partly calculated" : "", issues.unchecked ? "coverage not checked against company setup" : ""].filter(Boolean)
+    // BF-01 (count mode): a possible duplicate counted in the subtotal is a known gap too.
+    const duplicates = results.records.filter(row => row.scope === scope && countedDuplicate(row)).length
+    const parts = [count ? `${plural(count, "record")} not yet counted` : "", duplicates ? `${plural(duplicates, "possible duplicate")} counted` : "", issues.open ? `${plural(issues.open, "setup answer")} still open` : "", issues.gaps ? plural(issues.gaps, "possible coverage gap") : "", !complete ? "some results only partly calculated" : "", issues.unchecked ? "coverage not checked against company setup" : ""].filter(Boolean)
     return parts.length ? `Incomplete — ${parts.join("; ")}` : "No known gaps — each source type and included site in company setup has at least one record"
   }
   // BF1: no subtotal while a record was calculated means the engine's subtotal couldn't be verified, not that there are no records.
@@ -88,7 +91,7 @@ function Report({ results, coverage, scope3, onScope3Ready }: { results: Results
   const scope1Rows = results.records.filter(row => row.scope === 1)
   const scope2Rows = results.records.filter(row => row.scope === 2)
   // Every record outside its subtotal is listed with its reasons, including the engine's own holds (B02).
-  const incomplete = results.records.filter(row => row.outcome !== "calculated" || engineHold(row) !== null || row.scope1?.status === "partial" || row.scope2?.marketBased.status === "input_needed" || row.scope2?.marketBased.status === "review_required")
+  const incomplete = results.records.filter(row => row.outcome !== "calculated" || engineHold(row) !== null || countedDuplicate(row) || row.scope1?.status === "partial" || row.scope2?.marketBased.status === "input_needed" || row.scope2?.marketBased.status === "review_required")
   const estimated = results.records.filter(row => row.quality === "estimated" || (row.scope1?.estimates.length ?? 0) > 0 || (row.scope2?.estimates.length ?? 0) > 0)
   const unstated = results.records.filter(row => row.outcome === "calculated" && engineHold(row) === null && row.quality === "unknown").length
   const factorRows = new Map<string, { label: string; value: string; unit: string; cell: string }>()
@@ -126,7 +129,7 @@ function Report({ results, coverage, scope3, onScope3Ready }: { results: Results
     {uncounted && <p className="nv-report__small">† Calculated, but not in that subtotal. The engine includes a figure in a subtotal only when that basis is complete for the record.</p>}
     <h3>Not counted, incomplete and possible gaps</h3>
     {incomplete.length || coverage.state !== "ready" || coverage.setupOpen.length || coverage.gaps.length ? <ul>
-      {incomplete.map(row => <li key={row.recordId}><strong>{kindLabel(row.kind)} · {row.sourceId}</strong> — {rowStatus(row).label}: {rowReasons(row).join(" ")}</li>)}
+      {incomplete.map(row => <li key={row.recordId}><strong>{kindLabel(row.kind)} · {row.sourceId}</strong> — {rowStatus(row).label}: {[...rowReasons(row), possibleDuplicateText(row, results.records) ?? ""].filter(Boolean).join(" ")}</li>)}
       {coverage.state !== "ready" && <li><strong>Coverage not checked</strong> — these records could not be compared with company setup when this draft was prepared, so expected sources may be missing.</li>}
       {coverage.state === "ready" && coverage.setupOpen.map(item => <li key={item.id}><strong>Open in company setup</strong> — {item.title}. {item.detail}</li>)}
       {coverage.state === "ready" && coverage.gaps.map(gap => <li key={gap.id}><strong>Possible gap (Scope {gap.scope})</strong> — {gap.title}.{gap.note ? <> {noteLabel(gap)}: “{gap.note}”</> : null}</li>)}
@@ -243,7 +246,8 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
   const scope3Attention = scope3.data ? (() => { const todos = scope3Todos(scope3.data); return { total: todos.length, blocking: todos.filter(item => item.blocking).length } })() : null
   // BF2: the banner names the two kinds separately, so it agrees with the header (which counts partly calculated records
   // as calculated): records not counted yet, and records only partly calculated.
-  const notCountedRows = attentionRows.filter(notYetCounted).length, partlyRows = attentionRows.length - notCountedRows
+  // BF-01 (count mode): a counted possible duplicate needs attention but is neither uncounted nor partly calculated.
+  const notCountedRows = attentionRows.filter(notYetCounted).length, duplicateRows = attentionRows.filter(countedDuplicate).length, partlyRows = attentionRows.length - notCountedRows - duplicateRows
   const heldInScope = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && notYetCounted(row)).length
   const issues1 = coverageIssues(coverage, 1), issues2 = coverageIssues(coverage, 2)
   const held1 = heldInScope(1), held2 = heldInScope(2)
@@ -300,7 +304,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
         <div><h2 className="nv-h2">Records</h2><p className="nv-muted">{counts.calculated} calculated · {counts.inputNeeded} input needed{counts.outsidePeriod ? ` · ${counts.outsidePeriod} outside the reporting period` : ""} · {counts.excluded} excluded · {counts.withdrawn} withdrawn</p></div>
         <div className="nv-segmented" role="group" aria-label="Filter records"><button type="button" aria-pressed={filter === "all"} onClick={() => setFilter("all")}>All ({results.records.length})</button><button type="button" aria-pressed={filter === "attention"} onClick={() => setFilter("attention")}>Needs attention ({attentionRows.length})</button></div>
       </div>
-      {attentionRows.length > 0 && filter === "all" && <div className="nv-notice nv-notice--warn"><Icon name="alert" /><p>{[notCountedRows ? `${plural(notCountedRows, "record isn’t", "records aren’t")} counted yet` : "", partlyRows ? `${plural(partlyRows, "record is", "records are")} only partly calculated` : ""].filter(Boolean).join(" and ")}.{canManage ? ` Fix ${attentionRows.length === 1 ? "it" : "them"} to complete your totals.` : ""}</p></div>}
+      {attentionRows.length > 0 && filter === "all" && <div className="nv-notice nv-notice--warn"><Icon name="alert" /><p>{[notCountedRows ? `${plural(notCountedRows, "record isn’t", "records aren’t")} counted yet` : "", partlyRows ? `${plural(partlyRows, "record is", "records are")} only partly calculated` : "", duplicateRows ? `${plural(duplicateRows, "record is", "records are")} counted but may repeat another record` : ""].filter(Boolean).join(" and ")}.{canManage ? ` Fix ${attentionRows.length === 1 ? "it" : "them"} to complete your totals.` : ""}</p></div>}
       {/* Round 2 lane D (UX-2): Scope 3 items are listed in their own to-do list; this names them so "Needs attention" isn't silent about them. */}
       {scope3Attention && scope3Attention.total > 0 && <div className="nv-notice nv-notice--info"><Icon name="info" /><p>{SCOPE3_ATTENTION_LINK_TEXT.line(scope3Attention.total, scope3Attention.blocking)} <button type="button" className="nv-link" onClick={() => document.getElementById("scope3-todo")?.scrollIntoView({ block: "start" })}>{SCOPE3_ATTENTION_LINK_TEXT.go}</button></p></div>}
       {visible.length === 0 ? <p className="nv-muted">No record needs attention.</p> : visible.map(row => {
@@ -311,7 +315,9 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
             <div className="nv-record-card__title">{kindLabel(row.kind)} · {row.sourceId}</div>
             <div className="nv-record-card__meta">{row.locationName ?? "Unknown site"} · {periodLabel(row.period.start, row.period.endExclusive)} · {row.quantity.value ? `${groupDigits(row.quantity.value)} ${shortUnit(row.quantity.unit)}` : "amount missing"}{row.outcome === "calculated" ? !row.evidence.length ? " · no evidence linked" : unclearedEvidence(row).length ? ` · ${plural(unclearedEvidence(row).length, "evidence file")} not cleared` : "" : ""}</div>
             {reasons.slice(0, 3).map(reason => <div key={reason} className="nv-record-card__reason" style={{ color: status.tone === "warn" || status.tone === "danger" ? undefined : "var(--muted)" }}>{reason}</div>)}
-            {row.outcome === "calculated" && <RowDetail row={row} methods={results.methods} />}
+            {/* BF-01: a possible duplicate names the record it may repeat. */}
+            {(() => { const text = possibleDuplicateText(row, results.records); return text ? <div className="nv-record-card__meta">{text}</div> : null })()}
+            {row.outcome === "calculated" && <RowDetail row={row} methods={results.methods} records={results.records} />}
           </div>
           <div className="nv-record-card__side">
             <span className={`nv-chip nv-chip--${status.tone}`}>{status.label}</span>

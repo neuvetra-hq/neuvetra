@@ -202,6 +202,8 @@ export function scope3Todos(results: Scope3ResultsResponse): Scope3TodoItem[] {
     const fix = (label: string, fields = scope3FixFields(codes)): Scope3TodoAction => ({ type: "fix", recordId: target, fields, label })
     const actions: Scope3TodoAction[] = conflict ? [fix(SCOPE3_ACTION_TEXT.withdraw, [SCOPE3_WITHDRAW_CONTROL]), { type: "setup", label: SCOPE3_ACTION_TEXT.changeScreening }]
       : state === "methodPending" || state === "optionalPending" ? [fix(SCOPE3_ACTION_TEXT.openRecord), { type: "assessment", category: row.category, label: SCOPE3_ACTION_TEXT.documentExclusion }]
+        // BF-01: a possible duplicate is resolved by withdrawing one of the records, or by correcting its source ID or dates.
+        : !row.derivedFrom && codes.includes("possible_duplicate_record") ? [fix(SCOPE3_ACTION_TEXT.withdraw, [SCOPE3_WITHDRAW_CONTROL])]
         : [fix(row.derivedFrom ? SCOPE3_ACTION_TEXT.fixSource(row.sourceId) : SCOPE3_ACTION_TEXT.fix)]
     const item: Scope3TodoItem = { key: `line:${row.recordId}:${row.kind}`, category: row.category, kind: "line", blocking: (conflict || state === "inputNeeded") && issueOf(row.category),
       title: SCOPE3_TODO_TEXT.lineTitle(kindLabel(row.kind), row.sourceId), recordId: row.recordId, reasons: [...new Set(reasons)], actions }
