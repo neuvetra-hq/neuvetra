@@ -12,6 +12,7 @@ const OWNER = "11111111-1111-4111-8111-111111111111"
 const ADMIN = "33333333-3333-4333-8333-333333333333"
 const MEMBER = "44444444-4444-4444-8444-444444444444"
 const OUTSIDER = "22222222-2222-4222-8222-222222222222"
+const SPARE = "55555555-5555-4555-8555-555555555555"
 const ORIGIN = "http://127.0.0.1:3015"
 const environment = {
   NODE_ENV: "test", NEUVETRA_STAGING_ENABLED: "enabled", NEUVETRA_STAGING_PROFILE: STAGING_PROFILE,
@@ -24,10 +25,11 @@ let cleanup: (() => Promise<void>) | undefined
 afterEach(async () => { await cleanup?.(); cleanup = undefined })
 
 async function fixture() {
-  const db = await DevelopmentWorkspaceDatabase.create([OWNER, ADMIN, MEMBER, OUTSIDER])
+  const db = await DevelopmentWorkspaceDatabase.create([OWNER, ADMIN, MEMBER, OUTSIDER, SPARE])
   const workspace = await db.createWorkspaceWithSyntheticMembers(OWNER, input, [{ userId: ADMIN, role: "admin" }, { userId: MEMBER, role: "member" }])
-  const invited = new Set([OWNER, ADMIN, MEMBER, OUTSIDER])
-  const users: Record<string, string> = { "test-owner-session": OWNER, "test-admin-session": ADMIN, "test-member-session": MEMBER, "test-outsider-session": OUTSIDER }
+  const invited = new Set([OWNER, ADMIN, MEMBER, OUTSIDER, SPARE])
+  const users: Record<string, string> = { "test-owner-session": OWNER, "test-admin-session": ADMIN, "test-member-session": MEMBER, "test-outsider-session": OUTSIDER, "test-spare-session": SPARE }
+  let validations = 0
   const logs: StagingLog[] = []
   let healthy = true
   let evidenceId: string | null = null
@@ -46,13 +48,13 @@ async function fixture() {
     async checkReadiness() { if (!healthy) throw new Error("sensitive-driver-value"); return { profile: STAGING_PROFILE, schemaVersion: 30 } },
   }) as StagingDatabase
   const app = await createStagingServer(readStagingConfig(environment), {
-    database, validateUser: async (token) => token === "broken-session" ? Promise.reject(new Error("sensitive-auth-value")) : users[token] ? { id: users[token]!, phone: null, email: "private@example.invalid", fullName: "Private fixture" } : null,
+    database, validateUser: async (token) => (validations++, token === "broken-session") ? Promise.reject(new Error("sensitive-auth-value")) : users[token] ? { id: users[token]!, phone: null, email: "private@example.invalid", fullName: "Private fixture" } : null,
     verifyAssets: async () => {}, serveAsset: async (name) => name === "/" ? new Response("Private staging sign-in") : null,
     log: (event) => logs.push(event),
   })
   cleanup = app.close
   const request = (pathname: string, token?: string, options: RequestInit = {}) => app.fetch(new Request(`${ORIGIN}${pathname}`, { ...options, headers: { origin: ORIGIN, ...(token ? { authorization: `Bearer ${token}` } : {}), ...options.headers } }))
-  return { app, db, workspace, invited, logs, request, unhealthy: () => { healthy = false }, evidence: (id: string) => { evidenceId = id } }
+  return { app, db, workspace, invited, logs, request, validations: () => validations, unhealthy: () => { healthy = false }, evidence: (id: string) => { evidenceId = id } }
 }
 
 describe("M63 private staging boundary", () => {
@@ -349,15 +351,16 @@ describe("BF1 staging boundary fixes", () => {
     expect(await last!.json()).toEqual({ code: "rate_limited", error: "Too many requests in the last minute. Wait about a minute, then try again; nothing you saved was lost." })
   })
 
-  test("the shared limit admits 1,200 requests independently of each user's 300-request allowance", async () => {
+  test("the shared limit admits 1,200 staging-user requests independently of each user's 300-request allowance", async () => {
     const { request } = await fixture()
     for (const token of ["test-owner-session", "test-admin-session", "test-member-session"])
       for (let i = 0; i < 300; i++) expect((await request("/workspace-api/session", token)).status).toBe(200)
-    for (let i = 0; i < 299; i++) expect((await request("/workspace-api/session", "test-outsider-session")).status).toBe(403)
-    // The 1,200th request still reaches authentication. The outsider has one personal request left,
-    // but its next request is refused by the exhausted shared admission budget before the role check.
+    // The outsider has staging access but no company: its requests are admitted (then 403) and count toward the 1,200.
+    for (let i = 0; i < 300; i++) expect((await request("/workspace-api/session", "test-outsider-session")).status).toBe(403)
+    // API-01: an invalid token never spends the instance budget, so it still gets 401 here, not 429.
     expect((await request("/workspace-api/session", "unknown-synthetic-session")).status).toBe(401)
-    const over = await request("/workspace-api/session", "test-outsider-session")
+    // A fifth staging user, well within their own 300, is refused by the exhausted instance budget.
+    const over = await request("/workspace-api/session", "test-spare-session")
     expect([over.status, (await over.json()).code]).toEqual([429, "rate_limited"])
     expect(Number(over.headers.get("retry-after"))).toBeGreaterThan(0)
   })
@@ -374,6 +377,75 @@ describe("BF1 staging boundary fixes", () => {
       `postgres://neuvetra_runtime.${REF}:synthetic-password@us-west-1.pooler.supabase.com:6543/postgres`,
     ]) expect(() => readStagingConfig({ ...environment, DATABASE_URL: url })).toThrow()
     expect(() => readStagingConfig({ ...environment, DATABASE_URL: `postgres://neuvetra_runtime.${REF}:synthetic-password@aws-0-us-west-1.pooler.supabase.com:6543/postgres` })).not.toThrow()
+  })
+})
+
+// API-01 (CTO audit risk 3): junk tokens used to spend the one instance-wide budget before validation, so one script
+// could refuse every user for a minute. Now only validated staging users spend it; everything else is limited per address.
+describe("API-01: rate limits after authentication", () => {
+  const from = (address: string) => ({ headers: { "x-real-ip": address } })
+
+  test("a flood of junk tokens from one address never refuses a valid user elsewhere, and stops reaching validation", async () => {
+    const f = await fixture()
+    const statuses: number[] = []
+    for (let i = 0; i < 1500; i++) statuses.push((await f.request("/workspace-api/session", `junk-${i}`, from("198.51.100.7"))).status)
+    expect(statuses.slice(0, 120).every(status => status === 401)).toBe(true)
+    expect(statuses.slice(120).every(status => status === 429)).toBe(true)
+    // Only the first 120 junk tokens were validated; the rest were refused before any validation call.
+    expect(f.validations()).toBe(120)
+    const refused = await f.request("/workspace-api/session", "junk-final", from("198.51.100.7"))
+    expect([refused.status, (await refused.json()).code]).toEqual([429, "rate_limited"])
+    expect(Number(refused.headers.get("retry-after"))).toBeGreaterThan(0)
+    for (const [token, address] of [["test-owner-session", "203.0.113.10"], ["test-admin-session", "203.0.113.11"], ["test-member-session", "203.0.113.12"]] as const)
+      expect((await f.request("/workspace-api/session", token, from(address))).status).toBe(200)
+  })
+
+  test("junk tokens spread over many addresses (more than the old 1,200 global budget) never lock users out", async () => {
+    const f = await fixture()
+    for (let i = 0; i < 1300; i++) expect((await f.request("/workspace-api/session", `junk-${i}`, from(`198.51.100.${i % 13}`))).status).toBe(401)
+    for (let i = 0; i < 300; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.10"))).status).toBe(200)
+  })
+
+  test("a valid user's requests do not use up their address's budget for unverified requests", async () => {
+    const f = await fixture()
+    // 300 admitted requests from one address, well past the 120 per-address limit, all succeed.
+    for (let i = 0; i < 300; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.20"))).status).toBe(200)
+    // The address still has its full 120 for unverified requests, then is refused.
+    for (let i = 0; i < 120; i++) expect((await f.request("/workspace-api/session", `junk-${i}`, from("203.0.113.20"))).status).toBe(401)
+    expect((await f.request("/workspace-api/session", "junk-over", from("203.0.113.20"))).status).toBe(429)
+  })
+
+  test("one abusive authenticated user is limited without affecting another user", async () => {
+    const f = await fixture()
+    for (let i = 0; i < 300; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.30"))).status).toBe(200)
+    for (let i = 0; i < 500; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.30"))).status).toBe(429)
+    // Refusals after the user's own limit are not given back, so validation calls stay bounded per address (120).
+    expect(f.validations()).toBe(300 + 120)
+    // Another user, on another address, is unaffected.
+    expect((await f.request("/workspace-api/session", "test-admin-session", from("203.0.113.31"))).status).toBe(200)
+  })
+
+  test("a user retrying a few times past their own limit does not refuse a colleague on the same address", async () => {
+    const f = await fixture()
+    for (let i = 0; i < 300; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.32"))).status).toBe(200)
+    for (let i = 0; i < 20; i++) expect((await f.request("/workspace-api/session", "test-owner-session", from("203.0.113.32"))).status).toBe(429)
+    expect((await f.request("/workspace-api/session", "test-admin-session", from("203.0.113.32"))).status).toBe(200)
+  })
+
+  test("public config is limited per address, so one address cannot refuse it to everyone", async () => {
+    const f = await fixture()
+    for (let i = 0; i < 1200; i++) expect((await f.request("/workspace-api/config", undefined, from("198.51.100.9"))).status).toBe(200)
+    expect((await f.request("/workspace-api/config", undefined, from("198.51.100.9"))).status).toBe(429)
+    expect((await f.request("/workspace-api/config", undefined, from("203.0.113.40"))).status).toBe(200)
+  })
+
+  test("the client address comes from the edge-written header, never the caller-controlled leftmost forwarded hop", async () => {
+    const f = await fixture()
+    // Rotating the leftmost x-forwarded-for entry does not give the caller fresh buckets: the rightmost hop is used.
+    for (let i = 0; i < 120; i++) expect((await f.request("/workspace-api/session", `junk-${i}`, { headers: { "x-forwarded-for": `10.0.${i}.1, 198.51.100.50` } })).status).toBe(401)
+    expect((await f.request("/workspace-api/session", "junk-over", { headers: { "x-forwarded-for": "10.9.9.9, 198.51.100.50" } })).status).toBe(429)
+    // x-real-ip takes precedence over x-forwarded-for.
+    expect((await f.request("/workspace-api/session", "junk-other", { headers: { "x-real-ip": "198.51.100.51", "x-forwarded-for": "198.51.100.50" } })).status).toBe(401)
   })
 })
 
