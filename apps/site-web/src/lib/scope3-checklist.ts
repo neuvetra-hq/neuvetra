@@ -26,7 +26,7 @@ export const SCOPE3_CONFLICT_STATUSES: ReadonlySet<string> = new Set(["review_re
 
 // --- Units (UX-9): one unit on screen, t CO2e with 2 fixed decimals ---
 
-/** Engine kg (exact display string) as t CO2e with 2 decimals; a non-zero figure that rounds to 0.00 says so ("< 0.01"). */
+/** Engine kg as t CO2e with 2 decimals (BF-07: pass the engine's `unrounded` string on a live screen, a frozen version's stored display string only there); a non-zero figure that rounds to 0.00 says so ("< 0.01"). */
 export function scope3Tonnes(kg: string | null | undefined): string {
   if (!kg) return "—"
   const t = kgToTonnes(kg)

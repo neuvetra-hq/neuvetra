@@ -30,9 +30,11 @@ async function scope3Defaults(injected: Record<string, unknown>): Promise<Record
     import("@/lib/activity-form-text-wo10"),
     // WO-04b: the one readiness the Overview, the navigation and Ask read.
     import("@/lib/readiness")])
+  // WO-05b: the draft store (no sessionStorage under bun test, so nothing is kept unless a test injects storage).
+  const drafts = await import("@/lib/draft-store")
   const loadContext = injected.loadCollectionContext as ((...args: unknown[]) => Promise<unknown>) | undefined
   return {
-    ...readiness, ...textsR2e, ...textsR2c, ...textsWo10, ...textsR3c, ...spendTarget, ...displayR3d, ...textsR3d, ...collection, CARB_PROPOSED_MANDATORY_CATEGORIES: coverage.CARB_PROPOSED_MANDATORY_CATEGORIES, SCOPE3_ENGINE_CATEGORIES: coverage.SCOPE3_ENGINE_CATEGORIES, SCOPE3_SETUP_CATEGORY_TOKENS: coverage.SCOPE3_SETUP_CATEGORY_TOKENS,
+    ...drafts, ...readiness, ...textsR2e, ...textsR2c, ...textsWo10, ...textsR3c, ...spendTarget, ...displayR3d, ...textsR3d, ...collection, CARB_PROPOSED_MANDATORY_CATEGORIES: coverage.CARB_PROPOSED_MANDATORY_CATEGORIES, SCOPE3_ENGINE_CATEGORIES: coverage.SCOPE3_ENGINE_CATEGORIES, SCOPE3_SETUP_CATEGORY_TOKENS: coverage.SCOPE3_SETUP_CATEGORY_TOKENS,
     validateCollectionActivity: contract.validateCollectionActivity, instrumentEvidenceClaims: adapter.instrumentEvidenceClaims, M71_CATEGORIES: m71.M71_CATEGORIES, SCOPE3_ACTIVITY_KINDS: language.SCOPE3_ACTIVITY_KINDS, unitLabel: language.unitLabel, sourceCategoryLabel: language.sourceCategoryLabel,
     Scope3ResultsApiError: results.Scope3ResultsApiError, loadScope3Results: async () => { throw new results.Scope3ResultsApiError("Scope 3 results are not available yet.", 503, "scope3_unavailable") },
     INITIAL_SCOPE3_STATE: results.INITIAL_SCOPE3_STATE, Scope3Panel: panel.Scope3Panel, Scope3ReportSection: panel.Scope3ReportSection,

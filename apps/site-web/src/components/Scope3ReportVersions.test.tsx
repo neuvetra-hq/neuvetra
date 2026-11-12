@@ -90,6 +90,31 @@ describe("Scope 3 report versions on the Results screen (I-10)", () => {
     expect(after.nodes().some(node => node.type === "button" && node.children.flat(Infinity).some((x: any) => typeof x === "string" && x.startsWith("Approve")))).toBe(false)
   })
 
+  // BF-07 (S3C-02): a frozen version stores display strings only, so its panel is not re-derived from anything else: the 2-dp
+  // tonnes in the table are the half-even 2-dp rounding of the very t CO2e figure the version's own report text prints for
+  // the same category, and the kg beside it is that report's kg. (The report text prints t by scale, the CSV the same; the
+  // screen shows 2 dp, so nothing here asks the screen to equal the CSV's digits.)
+  test("BF-07: the frozen panel's tonnes are the stored report's own t figure rounded to 2 dp, and its kg is the stored kg", async () => {
+    const c = await component("Scope3FrozenReportView")
+    const app = harness(c.make, () => ({ report: report1, actorId: me, canManage: true, busy: false, onApprove: () => {}, onClose: () => {} }), c.globals)
+    await app.settle()
+    const cells = (row: any) => row.children.flat(Infinity).filter((cell: any) => cell?.type === "td").map(text)
+    const table = app.nodes().find(node => node.type === "table")!
+    const rows = table.children.flat(Infinity).filter((node: any) => node?.type === "tbody").flatMap((body: any) => body.children.flat(Infinity)).filter((node: any) => node?.type === "tr").map(cells)
+    const roundTonnes = (t: string) => { const [whole, frac = ""] = t.split("."), scale = 10n ** BigInt(frac.length), units = BigInt(whole! + frac), step = scale / 100n; let centi = units / step; const rest = units % step; if (rest * 2n > step || (rest * 2n === step && centi % 2n === 1n)) centi += 1n; return `${centi / 100n}.${(centi % 100n).toString().padStart(2, "0")}` }
+    const totals = report1.document.assertion.totals
+    expect(rows).toHaveLength(totals.length)
+    let figures = 0
+    totals.forEach((total, index) => {
+      if (total.subtotalKg === null) { expect([rows[index]![2], rows[index]![3]]).toEqual(["—", "—"]); return }
+      figures++
+      expect(csvText).toContain(`${total.subtotalKg} kg CO2e (${total.subtotalTonnes} t CO2e)`)
+      const expected = roundTonnes(total.subtotalTonnes!)
+      expect(rows[index]![2]).toBe(/^0\.00$/.test(expected) && /[1-9]/.test(total.subtotalKg) ? checklist.scope3Tonnes(total.subtotalKg) : plain.groupDigits(expected))
+      expect(rows[index]![3]).toBe(plain.groupDigits(total.subtotalKg))
+    })
+    expect(figures).toBeGreaterThan(0)
+  })
   test("BF-05: Approve appears only on the newest revision; a superseded revision says so and an earlier approval stays shown", async () => {
     const c = await component("Scope3FrozenReportView")
     const hasApprove = (app: any) => app.nodes().some((node: any) => node.type === "button" && node.children.flat(Infinity).some((x: any) => typeof x === "string" && x.startsWith("Approve")))

@@ -109,6 +109,7 @@ const REASONS: Record<string, string> = {
   unsupported_refrigerant: "This refrigerant isn’t supported yet.",
   // A-02: plausibility holds on a stated heat content (adapter)
   heat_content_outside_plausible_range: "The stated heat content is outside the range natural gas can have in this unit. Natural gas is about 1.026 therms per ccf (0.1026 MMBtu per ccf, 1.026 MMBtu per mcf, 0.001026 MMBtu per standard cubic foot); bills at high elevation show less, about 0.75 to 0.9 therms per ccf. Check the unit on the bill: a therm figure entered as MMBtu is ten times too high.",
+  heat_content_outside_scf_range: "The stated heat content doesn’t fit a quantity in standard cubic feet (scf). Standard cubic feet are measured at standard conditions, where natural gas is about 1.026 therms per ccf (0.001026 MMBtu per scf), and this check accepts 0.872 to 1.180 therms per ccf (0.000872 to 0.00118 MMBtu per scf) in whatever unit you write it. Check the unit on the bill: a therm figure entered as MMBtu is ten times too high. If the bill’s quantity is metered (ccf or mcf), enter it in that unit instead; metered bills at high elevation show lower heat content, about 0.75 to 0.9 therms per ccf.",
   stated_hhv_outside_plausible_range: "The stated heating value is more than 15% away from the EPA default for No. 2 distillate (0.138 MMBtu per gallon). Check the supplier’s figure and its unit, or leave it blank to use the default.",
   // Scope 2 engine findings
   utility_not_listed_for_zip_and_subregion: "The utility doesn’t match the ZIP code. Run the ZIP lookup again.",

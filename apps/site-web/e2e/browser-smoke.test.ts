@@ -450,6 +450,87 @@ suite("site-web browser smoke (E2E-01)", () => {
     expect(await page.getByRole("heading", { name: "Your session ended" }).count()).toBe(0)
   })
 
+  // WO-05b (a): a correction typed before the session ends is offered back to the same person, restored, and saved once.
+  journey("unsaved correction input survives a session end: the same user restores it and saves exactly one new version", { signedInAs: "owner" }, async opened => {
+    const { page } = opened
+    const before = await savedRecord(RECORDS.gasReady)
+    await page.goto("/#/activity")
+    await activityListLoaded(page)
+    await openRecordByAddress(page, RECORDS.gasReady)
+    await quantityInput(page).fill("12750")
+    await reasonInput(page).fill("E2E: kept through a session end")
+    // Kept a second after typing stops (owner, this tab only).
+    await page.waitForFunction(() => Object.keys(sessionStorage).some(key => key.startsWith("nv:draft:v1:")))
+    stack.tokens.revokeUser("owner")
+    await focusUntil(page, page.getByRole("heading", { name: "Your session ended" }).waitFor({ timeout: 25_000 }))
+    await page.getByText("Unsaved changes are kept on this browser tab until you sign out.").waitFor()
+    const form = page.locator("form", { has: page.locator("input[type=email]") }).first()
+    await form.locator("input[type=email]").fill("owner@example.test")
+    await form.locator("input[type=password]").fill("synthetic-password")
+    await form.getByRole("button", { name: "Sign in", exact: true }).click()
+    // The same view opens, and nothing is restored until the person chooses to.
+    await page.waitForFunction(id => window.location.hash === `#/activity/${id}`, RECORDS.gasReady)
+    const offer = page.getByRole("group", { name: /^Restore unsaved changes from \d{4}-\d{2}-\d{2} \d{2}:\d{2} UTC\?$/ })
+    await offer.waitFor()
+    expect(await page.locator("#collection-record-editor").count()).toBe(0)
+    // Keyboard, once the screen has settled (focus on its h1): Tab reaches Restore, and focus goes to the form's heading.
+    await page.waitForFunction(() => document.activeElement?.tagName === "H1")
+    await page.keyboard.press("Tab")
+    expect(await page.evaluate(() => document.activeElement?.textContent)).toBe("Restore")
+    await page.keyboard.press("Enter")
+    await page.waitForFunction(() => document.activeElement?.id === "collection-editor-heading")
+    expect(await quantityInput(page).inputValue()).toBe("12750")
+    expect(await reasonInput(page).inputValue()).toBe("E2E: kept through a session end")
+    const saved = page.waitForResponse(response => response.request().method() === "POST" && response.url().endsWith(`/collection/activities/${RECORDS.gasReady}`))
+    await page.getByRole("button", { name: "Save correction" }).click()
+    expect((await saved).status()).toBe(201)
+    await page.getByRole("button", { name: new RegExp(`^Version ${before.currentVersion.revision + 1} ·`) }).waitFor()
+    const after = await savedRecord(RECORDS.gasReady)
+    expect(after.currentVersion.revision).toBe(before.currentVersion.revision + 1)
+    const versions = await stack.operator.query<{ count: string }>("select count(*)::text as count from neuvetra.collection_activity_versions where record_id = $1", [RECORDS.gasReady])
+    expect(Number(versions.rows[0]?.count)).toBe(before.history.length + 1)
+    expect(opened.writes.filter(write => write.endsWith(`/collection/activities/${RECORDS.gasReady}`))).toHaveLength(1)
+    // A saved draft is gone from the tab.
+    expect(await page.evaluate(() => Object.keys(sessionStorage).filter(key => key.startsWith("nv:draft:v1:")))).toEqual([])
+  })
+
+  // WO-05b (b): after A's session ends with a draft, the company-1 admin signs in on the same page: offered nothing, and A's
+  // draft keys are gone before the workspace first renders.
+  journey("after user A's session ends with unsaved input, user B signing in on the same page is offered nothing and A's draft keys are gone first", { signedInAs: "owner" }, async ({ page }) => {
+    await page.goto("/#/activity")
+    await activityListLoaded(page)
+    await openRecordByAddress(page, RECORDS.gasHeld)
+    await reasonInput(page).fill("E2E: A's unsaved reason")
+    await page.waitForFunction(() => Object.keys(sessionStorage).some(key => key.startsWith("nv:draft:v1:")))
+    stack.tokens.revokeUser("owner")
+    await focusUntil(page, page.getByRole("heading", { name: "Your session ended" }).waitFor({ timeout: 25_000 }))
+    expect(await page.evaluate(() => Object.keys(sessionStorage).filter(key => key.startsWith("nv:draft:v1:")).length)).toBeGreaterThan(0)
+    // Record the draft keys present at the moment the workspace's markup first appears.
+    await page.evaluate(() => {
+      const report = (window as unknown as { __draftKeysAtFirstRender?: string[] })
+      const observer = new MutationObserver(() => {
+        if (report.__draftKeysAtFirstRender || !document.querySelector(".nv-app")) return
+        report.__draftKeysAtFirstRender = Object.keys(sessionStorage).filter(key => key.startsWith("nv:draft:v1:"))
+        observer.disconnect()
+      })
+      observer.observe(document.body, { childList: true, subtree: true })
+    })
+    const form = page.locator("form", { has: page.locator("input[type=email]") }).first()
+    await form.locator("input[type=email]").fill("admin@example.test")
+    await form.locator("input[type=password]").fill("synthetic-password")
+    await form.getByRole("button", { name: "Sign in", exact: true }).click()
+    await page.locator("nav").first().waitFor()
+    expect(await page.evaluate(() => (window as unknown as { __draftKeysAtFirstRender?: string[] }).__draftKeysAtFirstRender)).toEqual([])
+    // B opens A's record: no offer, A's reason nowhere.
+    await page.evaluate(id => { window.location.hash = `#/activity/${id}` }, RECORDS.gasHeld)
+    await headingIs(page, "GAS-DEC", true)
+    await page.getByRole("button", { name: "Correct this record" }).waitFor()
+    expect(await page.getByText(/Restore unsaved changes/).count()).toBe(0)
+    expect(await page.locator("body").innerText()).not.toContain("E2E: A's unsaved reason")
+    expect(await page.evaluate(() => Object.keys(sessionStorage).filter(key => key.startsWith("nv:draft:v1:")))).toEqual([])
+    expect(await page.locator(".nv-topbar__user").textContent()).toBe("admin@example.test")
+  })
+
   journey("Results renders with Scope 3 and has no horizontal overflow at 1360 and 320 px", { signedInAs: "owner" }, async ({ page }) => {
     await page.goto("/#/results")
     await page.getByRole("heading", { name: "Scope 3 · value chain" }).waitFor({ timeout: 30_000 })

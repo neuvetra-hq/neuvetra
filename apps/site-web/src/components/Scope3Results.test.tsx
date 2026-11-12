@@ -59,7 +59,7 @@ describe("the Scope 3 section (S3-04, S3-13)", () => {
     expect(printedText).toContain("Scope 3 is never added to the Scope 1 and 2 totals above.")
     const total = fixture.coverage.knownSourceSubtotal!.display
     // Round 2 lane D (UX-9): the screen shows t CO2e (2 decimals); the exact kg is in print, the CSV and on hover.
-    expect(screenText).toContain(`${plainLanguage.kgToTonnes(total)}t CO2e`)
+    expect(screenText).toContain(`${plainLanguage.kgToTonnes(fixture.coverage.knownSourceSubtotal!.unrounded)}t CO2e`)
     expect(screenText).not.toContain(plainLanguage.groupDigits(total))
     expect(printedText).toContain(`Known-source subtotal: ${plainLanguage.groupDigits(total)} kg CO2e`)
     expect(screenText).toContain(fixture.coverage.proposedMandatory.line)
@@ -78,7 +78,7 @@ describe("the Scope 3 section (S3-04, S3-13)", () => {
       expect(printedCategories[index]![3]).toBe(category.profile ? plainLanguage.groupDigits(category.profile.subtotalTonnes.display) : "—")
       expect(printedCategories[index]![4]).toBe(category.subtotal ? plainLanguage.groupDigits(category.subtotal.display) : "—")
       // Round 2 lane D (UX-9): on screen, t CO2e to 2 fixed decimals (half-even from the engine's kg).
-      expect(screenCategories[index]![4]!.startsWith(category.subtotal ? scope3Checklist.scope3Tonnes(category.subtotal.display) : "—")).toBe(true)
+      expect(screenCategories[index]![4]!.startsWith(category.subtotal ? scope3Checklist.scope3Tonnes(category.subtotal.unrounded) : "—")).toBe(true)
     })
 
     // Record cards and printed record rows: the same status and the engine's own figure.
@@ -92,7 +92,7 @@ describe("the Scope 3 section (S3-04, S3-13)", () => {
       expect(printedRecords[index]![5]!.startsWith(chip)).toBe(true)
       expect(printedRecords[index]![6]).toBe(record.result?.total ? plainLanguage.groupDigits(record.result.total.display) : "—")
       // Round 2 lane D (UX-9): the card shows t CO2e; the exact kg is in its calculation details.
-      if (record.result?.total) { expect(text(card)).toContain(`${scope3Checklist.scope3Tonnes(record.result.total.display)} t CO2e`); expect(text(card)).toContain(`${record.result.total.unrounded} kg CO2e before display rounding`) }
+      if (record.result?.total) { expect(text(card)).toContain(`${scope3Checklist.scope3Tonnes(record.result.total.unrounded)} t CO2e`); expect(text(card)).toContain(`${record.result.total.unrounded} kg CO2e before display rounding`) }
     })
 
     // Fix opens the record; a grid-loss line is fixed on its electricity record, so it has no Fix button of its own (I-12u: nor
@@ -101,6 +101,21 @@ describe("the Scope 3 section (S3-04, S3-13)", () => {
     for (const button of cards.flatMap(card => flatten(card)).filter(node => node.type === "button" && text(node) === "Fix")) button.props.onClick()
     expect(fixes.sort()).toEqual(fixture.records.filter(row => !["td_losses", "td_losses_upstream", "electricity_upstream", "fuel_upstream"].includes(row.kind) && row.outcome !== "calculated" && row.plan.status !== "withdrawn" && row.plan.status !== "excluded").map(row => row.recordId).sort())
     expect(printedText).toContain("unreleased beta")
+  })
+
+  // BF-07 (S3C-02): the engine's 4-dp display of 5014.99996 is 5015.0000; rounding that again gives 5.02 t. The screen rounds the
+  // unrounded figure once (5.01 t); the kg beside it (hover, print) stays the engine's display, and the CSV bytes do not change.
+  test("BF-07: headline, category and record tonnes round the unrounded kg once, not the 4-dp display", () => {
+    const { Scope3Panel } = load()
+    const data = structuredClone(fixture)
+    const tie = { unrounded: "5014.99996", display: "5015.0000", unit: "kg CO2e", rounding: "half_even_4dp_once" }
+    data.coverage.knownSourceSubtotal = tie as never
+    const category = data.coverage.categories.find(row => row.subtotal)!
+    category.subtotal = tie as never
+    const screenText = text(Scope3Panel({ state: { data, message: null, unavailable: false, busy: false }, canManage: true, onFix() {}, onRetry() {} }))
+    expect(screenText).toContain("5.01t CO2e")
+    expect(screenText).not.toContain("5.02")
+    expect(plainLanguage.kgToTonnes(tie.display)).toBe("5.02") // the old, double-rounded figure this replaces
   })
 
   test("before schema 29, or while loading, the section says so and shows no figure", () => {

@@ -115,6 +115,30 @@ const synthetic = {
 } as unknown as ResultsResponse
 const reason = plainLanguage.reasonText
 
+// BF-07 (S3C-02): a headline is the unrounded kg moved to tonnes and rounded once (half-even, 2 dp), never the 4-dp kg display
+// rounded again. The kg column and the CSV keep the engine's display. The CSV's 3-dp tonnes and the screen's 2-dp tonnes are both
+// correct roundings, so nothing here asks the screen to equal the CSV.
+describe("BF-07: Scope 1 and 2 headline tonnes are rounded once from the unrounded figure", () => {
+  test("a display that rounds up to a tie does not round the headline up twice", () => {
+    const doubled = structuredClone(synthetic)
+    doubled.scope1!.knownSourceSubtotal = { unrounded: "5014.99996", display: "5015.0000", unit: "kg CO2e", rounding: "half_even_4dp" }
+    doubled.scope2!.locationBasedSubtotal = { unrounded: "1014.99996", display: "1015.0000", unit: "kg CO2e", rounding: "half_even_4dp" }
+    doubled.scope2!.marketBasedIncluded = ["f".repeat(64)]
+    doubled.scope2!.marketBasedSubtotal = { unrounded: "2354.99996", display: "2355.0000", unit: "kg CO2e", rounding: "half_even_4dp" }
+    const view = render(doubled)
+    expect(view.totals).toEqual(["5.01t CO2e", "1.01t CO2e", "2.35t CO2e"])
+    // The printed table: tonnes from the unrounded figure, kg as the engine displays it.
+    expect(view.printed).toContain("5,015.0000")
+    expect(view.printed).toContain("5.01")
+    expect(view.printed).not.toContain("5.02")
+    // The CSV prints the display kg exactly as before.
+    expect(view.csv.split("\n").find(line => line.startsWith("Subtotal,Scope 1,"))).toContain("5015.0000")
+  })
+  test("a figure that needs no second rounding is unchanged", () => {
+    expect(render(synthetic).totals).toEqual(["0.63t CO2e", "1.95t CO2e", "—t CO2e"])
+  })
+})
+
 describe("B02: records the engine held are counted and explained everywhere", () => {
   test("an unresolved coverage gap does not claim saved fuel records are absent in the report or CSV", () => {
     const gap = { id: "legacy-stationary", scope: 1 as const, title: "Setup says you have fuel-burning equipment; natural gas records and generator fuel records are saved. Confirm which fuels or equipment still need records", detail: "Saved records alone do not establish complete fuel coverage.", note: null, noteFrom: "source" as const }

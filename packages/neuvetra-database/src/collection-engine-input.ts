@@ -38,7 +38,11 @@ const VOLUME_UNITS = ['scf', 'ccf', 'mcf']
  * Scope 1 register: natural gas 0.001026 MMBtu per scf, No. 2 distillate 0.138 MMBtu per gallon) is almost always a unit
  * slip (for example 1.037 entered as MMBtu per ccf instead of therms per ccf, a tenfold error), so the record is held for
  * the user to check rather than calculated. Bounds are inclusive, exact decimals.
- * - Standard cubic feet are at standard conditions: within 15% of the default. 40 CFR 72.2 pipeline natural gas (950 to
+ * BF-06 (S12-03, 12 November 2026): the band is chosen by the unit of the bill's QUANTITY, never by the unit the heat content is
+ * written in, so one physical heat content gets one answer whichever unit the user types it in. The stated value is first
+ * converted to MMBtu per scf (MMBtu per scf x 1; MMBtu per ccf / 100; MMBtu per mcf / 1,000; therm per ccf / 1,000, since
+ * 1 therm = 0.1 MMBtu), then compared with the band below; the conversion multiplies the bounds instead, so it stays exact.
+ * - scf quantities are at standard conditions: within 15% of the default. 40 CFR 72.2 pipeline natural gas (950 to
  *   1,100 Btu per scf) and the EIA 2025 U.S. delivered average (1,036 Btu per cubic foot) are inside.
  * - Package 3 r2 (27 October 2026): bills in ccf or mcf measure gas at the meter, and the heat content they print already
  *   includes the utility's elevation and delivery-pressure adjustment. Southwest Gas's California tariff (CPUC, Rule No. 2)
@@ -46,14 +50,24 @@ const VOLUME_UNITS = ['scf', 'ccf', 'mcf']
  *   Tahoe bill reads about 0.81 to 0.84 therms per ccf; delivery above standard pressure raises the figure. So these units
  *   take half to double the default, which still holds every tenfold slip and never such a bill.
  */
-export const PLAUSIBLE_HEAT_CONTENT: Readonly<Record<string, readonly [string, string]>> = {
-  'MMBtu per scf': ['0.0008721', '0.0011799'], 'MMBtu per ccf': ['0.0513', '0.2052'], 'MMBtu per mcf': ['0.513', '2.052'], 'therm per ccf': ['0.513', '2.052'],
+/** Bounds in MMBtu per scf, by the quantity's original unit. */
+export const PLAUSIBLE_HEAT_CONTENT_BY_QUANTITY_UNIT: Readonly<Record<string, readonly [string, string]>> = {
+  scf: ['0.0008721', '0.0011799'], ccf: ['0.000513', '0.002052'], mcf: ['0.000513', '0.002052'],
 }
+/** How many of the stated unit make one MMBtu per scf (the divisor of the conversion above). */
+const HEAT_CONTENT_UNITS_PER_MMBTU_PER_SCF: Readonly<Record<string, bigint>> = { 'MMBtu per scf': 1n, 'MMBtu per ccf': 100n, 'MMBtu per mcf': 1000n, 'therm per ccf': 1000n }
 export const PLAUSIBLE_DISTILLATE_HHV_MMBTU_PER_GALLON = ['0.1173', '0.1587'] as const
 const SCALE = 10
 const scaled = (value: string) => { const [whole, fraction = ''] = value.split('.'); return BigInt(whole!) * 10n ** BigInt(SCALE) + BigInt((fraction + '0'.repeat(SCALE)).slice(0, SCALE)) }
 /** Exact decimal comparison; only called on values that already match FACTOR_TEXT (at most 6 fractional digits). */
 const within = (value: string, [low, high]: readonly [string, string]) => scaled(value) >= scaled(low) && scaled(value) <= scaled(high)
+/** Exact: value / divisor is inside [low, high] when value is inside [low x divisor, high x divisor]. */
+const heatContentPlausible = (heat: { value: string; unit: string }, quantityUnit: string) => {
+  const band = PLAUSIBLE_HEAT_CONTENT_BY_QUANTITY_UNIT[quantityUnit], divisor = HEAT_CONTENT_UNITS_PER_MMBTU_PER_SCF[heat.unit]
+  if (!band || divisor === undefined) return true // an unknown unit is refused by the contract, never judged here
+  const value = scaled(heat.value)
+  return value >= scaled(band[0]) * divisor && value <= scaled(band[1]) * divisor
+}
 
 export type Scope1Kind = 'natural_gas' | 'distillate_no2' | 'vehicle' | 'fugitive'
 export type CollectionEngineCall =
@@ -172,7 +186,7 @@ export function planCollectionCalculation(version: CollectionActivityVersion, co
     if (VOLUME_UNITS.includes(q.originalUnit)) { // the bill's unit, so a quantity still held keeps its heat content checked
       if (heat) {
         need(FACTOR_TEXT.test(heat.value) && Number(heat.value) !== 0, 'heat_content_not_numeric')
-        if (FACTOR_TEXT.test(heat.value) && Number(heat.value) !== 0 && PLAUSIBLE_HEAT_CONTENT[heat.unit]) need(within(heat.value, PLAUSIBLE_HEAT_CONTENT[heat.unit]!), 'heat_content_outside_plausible_range')
+        if (FACTOR_TEXT.test(heat.value) && Number(heat.value) !== 0 && HEAT_CONTENT_UNITS_PER_MMBTU_PER_SCF[heat.unit] !== undefined) need(heatContentPlausible(heat, q.originalUnit), q.originalUnit === 'scf' ? 'heat_content_outside_scf_range' : 'heat_content_outside_plausible_range')
         input.heatContent = { value: heat.value, unit: heat.unit }
       } // without it the engine returns input_needed: heat_content_required_for_volume
     } else if (heat) notes.push('heat_content_not_used_for_energy_unit')
