@@ -574,7 +574,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       const requested = openRecordId ? items.find(item => item.id === openRecordId) : undefined
       // Round 2 lane D (UX-3): the scroll and focus wait until the editor shows this record and the screen is idle (effect below).
       if (requested) { setRecordId(requested.id); setDraft(structuredClone(requested.currentVersion.activity) as CollectionDraft); fixTarget.current = requested.id }
-      setMessage(overview.scope3 ? COPY_TEXT_R2E.activityLoadedScope3 : "Activity and evidence are collected as drafts. No emissions are counted until a reviewed method is released.")
+      setMessage(overview.scope3 ? COPY_TEXT_R2E.activityLoadedScope3 : "Activity and evidence are collected as drafts. Calculations use beta methods that are not yet formally released.")
       setLoaded(true)
     }).catch(cause => { if (!controller.signal.aborted) { setError(true); setMessage(cause instanceof Error ? cause.message : "Collection is unavailable.") } })
       .finally(() => { if (!controller.signal.aborted) setBusy(false) })
@@ -885,7 +885,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     <p className="worksheet-eyebrow">Activity collection · Synthetic staging</p>
     {/* Round 3 lane C (PR-3): until the screen has loaded, neither the Scope 1 and 2 nor the Scope 3 wording is guessed. */}
     <h1 ref={headingRef} tabIndex={-1}>{!loaded ? ACTIVITY_LIST_TEXT_R3C.neutralHeading : scope3 ? "Collect Scope 1, 2 and 3 activity" : "Collect Scope 1 and 2 activity"}</h1>
-    {loaded && <p>{scope3 ? COPY_TEXT_R2E.activityIntroScope3 : "Save source details and private evidence for each activity. Missing answers remain unresolved. Calculations and reports come only from reviewed, released methods."}</p>}
+    {loaded && <p>{scope3 ? COPY_TEXT_R2E.activityIntroScope3 : "Save source details and private evidence for each activity. Missing answers remain unresolved. Calculations and reports come only from beta methods that are not yet formally released."}</p>}
     <p role={error && !saveProblem ? "alert" : "status"} className={error ? "worksheet-error" : "worksheet-status"}>{message}</p>
     {!loaded && error && workspaceId && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--sm" disabled={busy} onClick={() => void refresh()}>{ACTIVITY_LIST_TEXT_R3C.retry}</button></div>}
     {!canManage && <p>Owner or admin access is needed to save activity or upload evidence.</p>}

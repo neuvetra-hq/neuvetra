@@ -97,7 +97,7 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
     const controller = new AbortController()
     void loadScope3Assessments(workspaceId, { ...actorRef.current, signal: controller.signal }).then(result => { if (!controller.signal.aborted) setAssessments({ view: result, note: null }) }).catch(cause => {
       if (controller.signal.aborted) return
-      setAssessments({ view: null, note: cause instanceof Scope3AssessmentApiError && cause.unavailable ? "Category assessments need database schema 30; they become available after the upgrade. The decisions above are saved with setup as before."
+      setAssessments({ view: null, note: cause instanceof Scope3AssessmentApiError && cause.unavailable ? "Category assessments aren’t available in this workspace yet. The decisions above are saved with setup as before."
         : `Category assessments couldn’t be loaded: ${cause instanceof Error ? cause.message : "unavailable"}` })
     })
     return () => controller.abort()

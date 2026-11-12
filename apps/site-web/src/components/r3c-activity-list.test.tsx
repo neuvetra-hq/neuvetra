@@ -49,6 +49,7 @@ test("a failed load shows the error and Try again, never an empty list or the Sc
   expect(text).not.toContain("No activity records saved yet")
   expect(text).not.toContain("Collect Scope 1 and 2 activity")
   expect(text).not.toContain("Calculations and reports come only from reviewed, released methods")
+  expect(text).not.toContain("Calculations and reports come only from beta methods that are not yet formally released")
   expect(text).toContain("Saved records could not be loaded")
   fail = false
   app.button("Try again")!.props.onClick(); await new Promise(r => setTimeout(r, 5)); await app.settle()

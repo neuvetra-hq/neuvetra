@@ -73,7 +73,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
       setTab(asked); setShown(PAGE); focusReview.current = true
     })
       .catch(error => { if (live) {
-        const problem = error instanceof Scope3SpendImportApiError && error.unavailable ? "Spend import needs database schema 30." : "Spend imports could not be loaded."
+        const problem = error instanceof Scope3SpendImportApiError && error.unavailable ? "Spend import isn’t available in this workspace yet." : "Spend imports could not be loaded."
         setLoadError(problem)
       } })
     return () => { live = false }

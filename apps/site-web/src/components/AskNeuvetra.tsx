@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState, type FormEvent } from "react"
 import { Icon } from "./Icon"
 import type { JourneyView } from "./JourneyNav"
-import { HELP_REVIEWED_ON, isProgressQuestion, matchQuestion, suggestedQuestions, type HelpLink, type HelpPanel } from "@/lib/help-content"
+import { HELP_REVIEWED_ON, isProgressQuestion, matchQuestion, scope3Mode, suggestedQuestions, type HelpLink, type HelpPanel } from "@/lib/help-content"
 import { progressAnswer, type JourneyStatus } from "@/lib/journey-status"
 
-interface Message { id: number; from: "user" | "bot"; text: string[]; matched?: string; source?: string; link?: HelpLink; followUps?: string[] }
+interface Message { id: number; from: "user" | "bot"; text: string[]; matched?: string; source?: string; reviewedOn?: string; link?: HelpLink; followUps?: string[] }
 
 export function AskNeuvetra({ open, onClose, panel, status, statusFailed = false, onNavigate }: { open: boolean; onClose: () => void; panel: HelpPanel; status: JourneyStatus | null; statusFailed?: boolean; onNavigate: (view: JourneyView) => void }) {
   const [messages, setMessages] = useState<Message[]>([])
@@ -13,7 +13,9 @@ export function AskNeuvetra({ open, onClose, panel, status, statusFailed = false
   const bodyRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
   const counter = useRef(0)
-  const suggestions = ["What’s left for me to do?", ...suggestedQuestions(panel).map(entry => entry.question)]
+  // Answers follow what this workspace does: Scope 3 on, off, or (status not loaded or failed) neutral wording.
+  const mode = scope3Mode(status, statusFailed)
+  const suggestions = ["What’s left for me to do?", ...suggestedQuestions(panel, mode).map(entry => entry.question)]
 
   useEffect(() => {
     if (!open) return
@@ -41,9 +43,9 @@ export function AskNeuvetra({ open, onClose, panel, status, statusFailed = false
     let reply: Message
     if (isProgressQuestion(question) || /left for me/i.test(question)) reply = { id: ++counter.current, from: "bot", text: progressAnswer(status, statusFailed), source: "Your saved company setup and records", link: status ? { label: status.next.action, panel: status.next.panel as HelpPanel } : undefined }
     else {
-      const match = matchQuestion(question, panel)
+      const match = matchQuestion(question, panel, mode)
       reply = match
-        ? { id: ++counter.current, from: "bot", text: match.entry.answer, matched: match.entry.question, source: match.entry.source ? `Reviewed Neuvetra help · ${match.entry.source}` : "Reviewed Neuvetra help", link: match.entry.link }
+        ? { id: ++counter.current, from: "bot", text: match.entry.answer, matched: match.entry.question, source: match.entry.source ? `Reviewed Neuvetra help · ${match.entry.source}` : "Reviewed Neuvetra help", link: match.entry.link, reviewedOn: match.entry.reviewedOn }
         : { id: ++counter.current, from: "bot", text: ["I don’t have a reviewed answer for that yet, so I won’t guess. Try one of the questions below, or ask your Neuvetra contact — unanswered questions help us decide what to write next."], followUps: suggestions.slice(0, 4) }
     }
     setMessages(items => [...items, user, reply])
@@ -67,6 +69,7 @@ export function AskNeuvetra({ open, onClose, panel, status, statusFailed = false
           {message.text.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
           {message.link && <p><button type="button" className="nv-link" onClick={() => { onNavigate(message.link!.panel); onClose() }}>{message.link.label} →</button></p>}
           {message.source && <p className="nv-msg__source">Source: {message.source}</p>}
+          {message.reviewedOn && <p className="nv-msg__source">Reviewed {message.reviewedOn}</p>}
           {message.followUps && <div className="nv-suggestions" style={{ margin: "10px 0 0" }}>{message.followUps.map(item => <button type="button" key={item} onClick={() => ask(item)}>{item}</button>)}</div>}
         </div>)}
       </div>

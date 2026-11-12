@@ -158,7 +158,7 @@ describe("company setup with Scope 3 assessments (I-04)", () => {
 
   test("below schema 30 the decisions work as before and the screen says why there are no assessments", async () => {
     const { app } = await mount(async () => { throw new api.Scope3AssessmentApiError("This Scope 3 feature needs database schema 30.", 503, "scope3_schema_30_required") })
-    expect(app.text()).toContain("Category assessments need database schema 30")
+    expect(app.text()).toContain("Category assessments aren’t available in this workspace yet")
     expect(app.nodes().some(node => node.type === "button" && /assessment/i.test(node.children.flat(Infinity).join("")))).toBe(false)
   })
 
