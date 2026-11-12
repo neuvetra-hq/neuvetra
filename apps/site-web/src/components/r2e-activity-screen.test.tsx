@@ -95,6 +95,7 @@ test("UX-8: with Scope 3 on the screen describes beta draft figures; without it 
   const on = await workspace(true)
   expect(on.app.text()).toContain(COPY_TEXT_R2E.activityIntroScope3)
   expect(on.app.text()).not.toContain("Calculations and reports come only from reviewed, released methods.")
+  expect(on.app.text()).not.toContain("Calculations and reports come only from beta methods that are not yet formally released.")
   expect(on.app.text()).toContain(COPY_TEXT_R2E.activityLoadedScope3)
   const off = await workspace(false)
   expect(off.app.text()).toContain("Calculations and reports come only from beta methods that are not yet formally released.")

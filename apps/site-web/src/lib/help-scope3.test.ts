@@ -1,6 +1,6 @@
 // WO-03: Ask answers follow what the workspace does with Scope 3 (on, off, or not known), and every entry carries its review date.
 import { describe, expect, test } from "bun:test"
-import { HELP_ENTRIES, HELP_REVIEWED_ON, entriesFor, matchQuestion, scope3Mode, suggestedQuestions } from "./help-content"
+import { HELP_ENTRIES, HELP_PREVIOUSLY_REVIEWED_ON, HELP_REVIEWED_ON, entriesFor, matchQuestion, scope3Mode, suggestedQuestions } from "./help-content"
 
 const text = (mode: "on" | "off" | "unknown", question: string) => matchQuestion(question, undefined, mode)?.entry.answer.join(" ") ?? ""
 const everything = HELP_ENTRIES.flatMap(entry => [entry.question, ...entry.answer, entry.source ?? ""]).join("\n")
@@ -38,10 +38,28 @@ describe("Ask follows the Scope 3 capability", () => {
     expect(matchQuestion("does approving mean it is externally assured", undefined, "on")?.entry.id).toBe("internal-approval")
     expect(matchQuestion("how does the spend import work", undefined, "on")?.entry.id).toBe("spend-import")
     expect(matchQuestion("what does approving a scope 3 report version mean", undefined, "on")?.entry.id).toBe("report-versions")
-    expect(HELP_ENTRIES.find(entry => entry.id === "internal-approval")!.answer.join(" ")).toContain("internal approval by your company")
+    expect(HELP_ENTRIES.find(entry => entry.id === "internal-approval")!.answer.join(" ")).toContain("your company’s own internal approval")
+  })
+  test("with the Results panel open, 'is scope 3 supported' reaches the Scope 3 answer in every mode", () => {
+    for (const [mode, id] of [["on", "scope3-on"], ["off", "scope3-off"], ["unknown", "scope3"]] as const) expect(matchQuestion("is scope 3 supported", "results", mode)?.entry.id).toBe(id)
+  })
+  test("approval and assessment wording is true: nothing says a report can be approved only with assessments, and off workspaces read nothing about approving versions", () => {
+    expect(everything).not.toMatch(/approved only once/i)
+    expect(everything).not.toMatch(/enter the spend lines one at a time/i)
+    expect(everything).not.toMatch(/independent assurance provider has checked/i)
+    expect(text("on", "what is a category assessment")).toContain("acknowledged by the approver")
+    expect(text("off", "what is a category assessment")).not.toMatch(/approv/i)
+    expect(text("off", "does approving mean it is externally assured")).toContain("no report approval step")
+    expect(text("on", "how does the spend import work")).toContain("NAICS")
+    expect(text("on", "what are report versions")).toContain("owners and admins can prepare")
   })
   test("every entry has a review date, and the denylist is clean", () => {
-    for (const entry of HELP_ENTRIES) expect([entry.id, entry.reviewedOn]).toEqual([entry.id, HELP_REVIEWED_ON])
+    const dates = HELP_ENTRIES.map(entry => entry.reviewedOn)
+    for (const entry of HELP_ENTRIES) expect([entry.id, /^\d{1,2} (Nov) 2026$/.test(entry.reviewedOn)]).toEqual([entry.id, true])
+    // Entries nobody re-read on the later date keep the earlier one; the header shows the latest.
+    expect(HELP_ENTRIES.find(entry => entry.id === "how-calculated")!.reviewedOn).toBe(HELP_PREVIOUSLY_REVIEWED_ON)
+    expect(HELP_ENTRIES.find(entry => entry.id === "scope3-on")!.reviewedOn).toBe(HELP_REVIEWED_ON)
+    expect(dates.every(date => Date.parse(date) <= Date.parse(HELP_REVIEWED_ON))).toBe(true)
     for (const banned of [/Scope 3 is not calculated/i, /schema 30/i, /reviewed methods/i, /staging owner/i, /no Scope 3 amount is calculated/i]) expect([banned.source, banned.test(everything)]).toEqual([banned.source, false])
   })
 })
