@@ -25,7 +25,7 @@ You also need Chrome or Chromium, and `python` on the PATH (the Results engines 
 
 ```bash
 # A throwaway PostgreSQL in Docker on the host's loopback (Linux), as CI runs it:
-docker run --rm -d --name neuvetra-e2e --network host -e POSTGRES_USER=e2e_admin -e POSTGRES_HOST_AUTH_METHOD=trust postgres:17 -c listen_addresses=127.0.0.1 -c port=55480
+docker run --rm -d --name neuvetra-e2e --network host -e POSTGRES_USER=e2e_admin -e POSTGRES_DB=postgres -e POSTGRES_HOST_AUTH_METHOD=trust postgres:17 -c listen_addresses=127.0.0.1 -c port=55480
 # Elsewhere, a native throwaway server: initdb -D /some/empty/dir -U e2e_admin --auth=trust; pg_ctl -D /some/empty/dir -o "-p 55480 -c listen_addresses=127.0.0.1" start
 
 cd apps/site-web

@@ -581,7 +581,7 @@ jobs:
     steps:
       - name: Start a dedicated PostgreSQL 17 on the runner's loopback
         run: |
-          docker run --detach --name e2e-postgres --network host -e POSTGRES_USER=e2e_admin -e POSTGRES_HOST_AUTH_METHOD=trust \
+          docker run --detach --name e2e-postgres --network host -e POSTGRES_USER=e2e_admin -e POSTGRES_DB=postgres -e POSTGRES_HOST_AUTH_METHOD=trust \
             postgres:17 -c listen_addresses=127.0.0.1 -c port=55480
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
