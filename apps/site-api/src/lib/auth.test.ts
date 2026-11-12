@@ -1,5 +1,5 @@
 import { describe, expect, mock, test } from "bun:test"
-import { extractBearerToken, validateUserFromToken } from "./auth"
+import { extractBearerToken, isPlausibleUnexpiredJwt, validateUserFromToken } from "./auth"
 import { AuthApiError, AuthRetryableFetchError, type SupabaseClient } from "@supabase/supabase-js"
 
 describe("extractBearerToken()", () => {
@@ -131,5 +131,34 @@ describe("validateUserFromToken() when the auth provider is unavailable (BF1)", 
   test("a token the provider rejects is still signed out, and the default (legacy chat) behaviour is unchanged", async () => {
     expect(await validateUserFromToken("token", client(new AuthApiError("invalid JWT", 403, "bad_jwt")), { throwWhenUnavailable: true })).toBeNull()
     for (const error of outages) expect(await validateUserFromToken("token", client(error))).toBeNull()
+  })
+})
+
+describe("isPlausibleUnexpiredJwt() (API-02 pre-check; no signature verification)", () => {
+  const segment = (value: unknown) => Buffer.from(JSON.stringify(value)).toString("base64url")
+  const header = segment({ alg: "HS256", typ: "JWT" })
+  const now = 1_800_000_000_000
+  const token = (payload: unknown) => `${header}.${segment(payload)}.signature_-part`
+
+  test("passes a three-segment token with JSON header and payload and a future, near-past or absent exp", () => {
+    expect(isPlausibleUnexpiredJwt(token({ exp: now / 1000 + 3600 }), now)).toBe(true)
+    expect(isPlausibleUnexpiredJwt(token({ exp: now / 1000 - 59 }), now)).toBe(true)
+    expect(isPlausibleUnexpiredJwt(token({ sub: "x" }), now)).toBe(true)
+  })
+
+  test("refuses an exp further in the past than the clock skew, or a non-numeric exp", () => {
+    expect(isPlausibleUnexpiredJwt(token({ exp: now / 1000 - 61 }), now)).toBe(false)
+    expect(isPlausibleUnexpiredJwt(token({ exp: now / 1000 - 30 }), now, 10)).toBe(false)
+    for (const exp of ["9999999999", null, true, {}]) expect(isPlausibleUnexpiredJwt(token({ exp }), now)).toBe(false)
+  })
+
+  test("refuses anything that is not structurally a JWT", () => {
+    const bad = [
+      "", "random", "a.b", "a.b.c", "a.b.c.d", `${header}.${segment({})}`, `${header}.${segment({})}.`, `.${segment({})}.sig`,
+      `${header}.${segment({})}.sig=`, `${header}.${segment({})}.si+g`, `${header}.${segment([1, 2])}.sig`, `${header}.${segment("text")}.sig`,
+      `${segment(null)}.${segment({})}.sig`, `${Buffer.from("{not json").toString("base64url")}.${segment({})}.sig`,
+      `${header}.${Buffer.from([0xff, 0xfe, 0x7b, 0x7d]).toString("base64url")}.sig`, `${header}.${segment({}).slice(0, 1)}.sig`,
+    ]
+    for (const value of bad) expect([value, isPlausibleUnexpiredJwt(value, now)]).toEqual([value, false])
   })
 })

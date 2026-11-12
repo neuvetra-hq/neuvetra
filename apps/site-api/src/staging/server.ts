@@ -19,8 +19,9 @@ import { createWorksheetReportRoutes } from "../workspace/m65-routes"
 import { createWorksheetRoutes } from "../workspace/m64-routes"
 import { COLLECTION_EVIDENCE_MAX_BYTES, EXISTING_PROJECT_REF, HostedWorkspaceDatabase, STAGING_COLLECTION_SCHEMA_VERSION, STAGING_SCHEMA_BRIDGE_VERSION, STAGING_SCHEMA_VERSION, STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION, STAGING_SCOPE3_SCHEMA_VERSION, STAGING_SERVED_SCHEMA_VERSIONS, loadStagingDatabaseCa, SCOPE3_CSV_LABELS, type WorkspaceDatabase, type CompanyWorkspaceRecord } from "@neuvetra/database"
 import { createClient } from "@supabase/supabase-js"
-import { extractBearerToken, validateUserFromToken, type AuthenticatedUser } from "../lib/auth"
-import { createRateLimiter, extractProxiedClientAddress } from "../lib/rate-limit"
+import { AsyncLocalStorage } from "node:async_hooks"
+import { extractBearerToken, isPlausibleUnexpiredJwt, validateUserFromToken, type AuthenticatedUser } from "../lib/auth"
+import { CLIENT_ADDRESS_HEADERS, createRateLimiter, proxiedClientAddress } from "../lib/rate-limit"
 import { createWorkspaceRoutes } from "../workspace/routes"
 import { createWorkspaceStore } from "../workspace/service"
 import { createM80BetaRoutes } from "../workspace/m80-beta-routes"
@@ -61,6 +62,18 @@ export interface StagingLog {
   durationMs: number
 }
 
+/**
+ * API-02: emitted at most once a minute when a workspace request had no usable client-address header and fell back to
+ * the shared "unknown" per-address key (every such client then shares one budget). Names headers only, never values.
+ */
+export interface StagingAddressWarning {
+  event: "client_address_unknown"
+  /** Each address header and whether it was absent or present without a usable value. */
+  headers: Record<(typeof CLIENT_ADDRESS_HEADERS)[number], "absent" | "empty">
+  /** Requests that fell back since the previous warning, this one included. */
+  occurrences: number
+}
+
 export interface StagingOverrides {
   database?: StagingDatabase
   validateUser?: (token: string) => Promise<AuthenticatedUser | null>
@@ -71,6 +84,8 @@ export interface StagingOverrides {
   /** Scope 3 package 2: the Scope 3 engine for draft Scope 3 results (tests only). */
   scope3ResultsEngine?: Scope3ResultsEngine
   log?: (event: StagingLog) => void
+  /** API-02: sink for `StagingAddressWarning`; defaults to one JSON line on stderr. */
+  warn?: (event: StagingAddressWarning) => void
 }
 
 function json(status: number, value: unknown) { return Response.json(value, { status }) }
@@ -104,6 +119,9 @@ async function boundedRequest(request: Request, url: URL, maxBytes = MAX_BODY_BY
 export async function createStagingServer(config: StagingConfig, overrides: StagingOverrides = {}) {
   if (config.profile !== STAGING_PROFILE) throw new Error("Private staging profile is invalid.")
   const database: StagingDatabase = overrides.database ?? await HostedWorkspaceDatabase.create({ connectionString: config.databaseUrl, expectedProjectRef: config.projectRef, reuseExistingProject: config.reuseExistingProject, tlsCaPem: await loadStagingDatabaseCa({ caPem: config.databaseCaPem, caFile: config.databaseCaFile }) })
+  // API-02: the cheap structural/`exp` pre-check accompanies the real Supabase validator, whose tokens are JWTs. A test
+  // that injects its own validator also chooses its own token format, so the pre-check is not applied to it.
+  const precheck = overrides.validateUser ? null : isPlausibleUnexpiredJwt
   const auth = overrides.validateUser ?? (() => {
     const boundedFetch = ((input: RequestInfo | URL, init?: RequestInit) => fetch(input, { ...init, signal: AbortSignal.timeout(5_000) })) as typeof fetch
     const client = createClient(config.supabaseUrl, config.supabaseAnonKey, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }, global: { fetch: boundedFetch } })
@@ -117,6 +135,20 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
     fetch: ((input: RequestInfo | URL, init?: RequestInit) => fetch(input, { ...init, signal: AbortSignal.timeout(15_000) })) as typeof fetch,
   })
   const log = overrides.log ?? ((event: StagingLog) => console.info(JSON.stringify(event)))
+  const warn = overrides.warn ?? ((event: StagingAddressWarning) => console.warn(JSON.stringify(event)))
+  // API-02 (QA F2): Railway is assumed to send a per-client address. If a request ever falls back to the shared "unknown"
+  // key, say so, at most once a minute, so the assumption can be checked from the logs without flooding them.
+  let unknownAddressWarnedAt = -Infinity, unknownAddressOccurrences = 0
+  const noteUnknownAddress = (headers: Headers) => {
+    unknownAddressOccurrences += 1
+    const now = Date.now()
+    if (now - unknownAddressWarnedAt < 60_000) return
+    unknownAddressWarnedAt = now
+    const state = (name: (typeof CLIENT_ADDRESS_HEADERS)[number]) => headers.get(name) === null ? "absent" as const : "empty" as const
+    const event: StagingAddressWarning = { event: "client_address_unknown", headers: { "x-real-ip": state("x-real-ip"), "x-forwarded-for": state("x-forwarded-for") }, occurrences: unknownAddressOccurrences }
+    unknownAddressOccurrences = 0
+    try { warn(event) } catch { /* A log failure never changes the response. */ }
+  }
   // Spend review can make several authenticated reads per correction. Allow a sustained review session
   // (300/user/minute), while bounding the instance to 1,200/minute of staging users' requests.
   // API-01 (CTO audit risk 3): nothing a caller can send before proving who they are spends a budget other people
@@ -129,7 +161,14 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const configAdmission = createRateLimiter({ max: 1200, windowMs: 60_000, maxBuckets: 10_000 })
   const unverified = createRateLimiter({ max: 120, windowMs: 60_000, maxBuckets: 10_000 })
   const actors = createRateLimiter({ max: 300, windowMs: 60_000, maxBuckets: 100 })
+  // API-02 (QA F1): the dispatcher has already validated this request's token and checked staging access before any
+  // route runs. It records the result in this per-request async context (set only by server code, never derived from
+  // anything the client sends), so a route validating the same token in the same request reuses it instead of calling
+  // Supabase and the database again. Any other token, or a call outside a dispatched request, is validated in full.
+  const verifiedRequest = new AsyncLocalStorage<{ token: string; user: AuthenticatedUser }>()
   const validateUser = async (token: string) => {
+    const verified = verifiedRequest.getStore()
+    if (verified && verified.token === token) return verified.user
     const user = await auth(token)
     return user && await database.hasStagingAccess(user.id) ? user : null
   }
@@ -200,6 +239,72 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
 
   const routeName = (pathname: string): StagingLog["route"] => pathname === "/health" ? "health" : pathname === "/ready" ? "ready" : pathname === "/workspace-api/config" ? "config" : pathname === "/workspace-api/session" ? "session" : pathname.startsWith("/workspace-api/workspace") ? "workspace" : pathname === "/" || pathname === "/workspace" || pathname.startsWith("/assets/") ? "asset" : "unknown"
 
+  /** A workspace request whose user is validated, has staging access and is within every limit. */
+  async function routeAdmitted(request: Request, url: URL, user: AuthenticatedUser, requestReadiness: Awaited<ReturnType<typeof databaseReadiness>> | undefined, options: StagingFetchOptions): Promise<Response> {
+    const isGet = request.method === "GET"
+    url.pathname = url.pathname.slice("/workspace-api".length)
+    // Round 3 (EN-7): a longer listener allowance only here, after the bearer token named a user with staging access, and
+    // only for the two routes that need it at the line cap (prepare: about 30-40 s; results: one run of up to 25 s, plus
+    // the wait behind a run already in progress for the company). Every other request keeps the listener's 30 s.
+    if (request.method === "POST" && SCOPE3_REPORT_PREPARE_ROUTE.test(url.pathname)) options.extendTimeout?.(SCOPE3_REPORT_PREPARE_TIMEOUT_SECONDS)
+    if (isGet && SCOPE3_RESULTS_ROUTE.test(url.pathname)) options.extendTimeout?.(SCOPE3_RESULTS_TIMEOUT_SECONDS)
+    // Collection and draft-results SQL exist from schema 27 (0027), so both stay
+    // available at 28, 29 and 30. Scope 3 records and Scope 3 results exist only
+    // from 29 (0029): below it they are refused here, and the collection route
+    // refuses a Scope 3 save before any SQL. Scope 3 assessments, spend imports
+    // and report versions exist only from 30 (0030): below it every
+    // /workspace/:id/scope3/... route is refused here before any SQL.
+    if (/^\/workspace\/[0-9a-f-]+\/(?:collection(?:\/|$)|results(?:\/scope3)?$|scope3(?:\/|$))/i.test(url.pathname)) {
+      const receipt = requestReadiness ?? await databaseReadiness()
+      if (receipt.schemaVersion < STAGING_COLLECTION_SCHEMA_VERSION) return json(503, { code: "collection_unavailable", error: "Activity and evidence is not available yet." })
+      if (/\/results\/scope3$/i.test(url.pathname) && receipt.schemaVersion < STAGING_SCOPE3_SCHEMA_VERSION) return json(503, { code: "scope3_unavailable", error: "Scope 3 results are not available yet." })
+      if (/^\/workspace\/[0-9a-f-]+\/scope3(?:\/|$)/i.test(url.pathname) && receipt.schemaVersion < STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION) return json(503, { code: "scope3_schema_30_required", error: "This Scope 3 feature needs database schema 30." })
+    }
+    let forwarded: Request
+    const evidenceUpload = request.method === "POST" && COLLECTION_EVIDENCE_UPLOAD.test(url.pathname)
+    try {
+      // Evidence is the only larger request class. Its route consumes the
+      // stream with its own 10 MiB bound; ordinary workspace requests retain
+      // the 300 kB buffered cap.
+      forwarded = evidenceUpload ? new Request(url, request) : await boundedRequest(request, url, request.method === "POST" && SCOPE3_SPEND_IMPORT.test(url.pathname) ? SCOPE3_SPEND_IMPORT_MAX_BYTES : undefined)
+    } catch { return json(413, { error: "Request too large." }) }
+    const legacyCalifornia = LEGACY_CALIFORNIA_ROUTE.exec(url.pathname)
+    if (legacyCalifornia) {
+      const geography = await database.findCompanyGeography(user.id, legacyCalifornia[1]!)
+      if (geography?.countryCode !== "US" || geography.stateCode !== "CA") return json(404, { error: "Not found." })
+    }
+    if (url.pathname.includes("/corporate-inventories")) return corporateInventoryRoutes(forwarded)
+    if (/^\/workspace\/[0-9a-f-]+\/results$/i.test(url.pathname)) return resultsRoutes(forwarded)
+    if (/^\/workspace\/[0-9a-f-]+\/results\/scope3$/i.test(url.pathname)) return scope3ResultsRoutes(forwarded)
+    if (/^\/workspace\/[0-9a-f-]+\/collection(?:\/|$)/i.test(url.pathname)) return collectionRoutes(forwarded)
+    if (/^\/workspace\/[0-9a-f-]+\/scope3\/assessments(?:\/|$)/i.test(url.pathname)) return scope3AssessmentRoutes(forwarded)
+    if (/^\/workspace\/[0-9a-f-]+\/scope3\/spend-(?:(?:imports|mappings)(?:\/[0-9a-f-]+\/withdrawal)?|currency-conversions)$/i.test(url.pathname)) return scope3SpendImportRoutes(forwarded)
+    if (/^\/workspace\/[0-9a-f-]+\/scope3\/reports(?:\/|$)/i.test(url.pathname)) return scope3ReportRoutes(forwarded)
+    if (/^\/workspace\/[0-9a-f-]+\/setup(?:\/|$)/i.test(url.pathname)) {
+      // Company setup exists at 28, 29 and 30.
+      const receipt = requestReadiness ?? await databaseReadiness()
+      if (!served(receipt.schemaVersion)) return json(503, { error: "Company setup is unavailable." })
+      return companySetupRoutes(forwarded)
+    }
+    if (url.pathname.includes("/scope1-beta-setup")) return scope1BetaRoutes(forwarded)
+    if (url.pathname.includes('/process-screen') || url.pathname.includes('/scope1-inventory')) return scope1Routes(forwarded)
+    if (url.pathname.includes("/stationary-natural-gas")) return stationaryGasRoutes(forwarded)
+    if (url.pathname.includes("/controlled-fleet")) return controlledFleetRoutes(forwarded)
+    if (url.pathname.includes("/stationary-equipment") || url.pathname.includes("/stationary-diesel")) return stationaryEquipmentRoutes(forwarded)
+    if (url.pathname.includes("/fugitive-sources") || url.pathname.includes("/fugitive-population")) return fugitiveRoutes(forwarded)
+    if (url.pathname.includes("/mobile-diesel")) return mobileDieselRoutes(forwarded)
+    if (url.pathname.includes("/annual-electricity-evidence/reports")) return annualEvidenceReportRoutes(forwarded)
+    if (url.pathname.includes("/annual-electricity-evidence")) return annualEvidenceRoutes(forwarded)
+    if (url.pathname.includes("/annual-electricity-worksheet/reports")) return annualReportRoutes(forwarded)
+    if (url.pathname.includes("/annual-electricity-worksheet")) return annualWorksheetRoutes(forwarded)
+    if (url.pathname.includes("/source-electricity-worksheet/sources")) return electricitySourceRoutes(forwarded)
+    if (url.pathname.includes("/source-electricity-worksheet/reports")) return sourceReportRoutes(forwarded)
+    if (url.pathname.includes("/source-electricity-worksheet")) return sourceWorksheetRoutes(forwarded)
+    if (url.pathname.includes("/electricity-worksheet/reports")) return reportRoutes(forwarded)
+    if (url.pathname.includes("/electricity-worksheet")) return worksheetRoutes(forwarded)
+    return routes.handle(forwarded)
+  }
+
   async function dispatch(request: Request, options: StagingFetchOptions): Promise<Response> {
     const url = new URL(request.url)
     const isGet = request.method === "GET"
@@ -213,20 +318,29 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       if ((origin && origin !== config.origin) || (!isGet && origin !== config.origin)) return json(403, { error: "Forbidden." })
       const publicConfig = url.pathname === "/workspace-api/config" && isGet
       const token = extractBearerToken(request.headers)
-      // A request that cannot authenticate never spends any budget.
-      if (!publicConfig && (!token || token.length > 8192)) return json(401, { error: "Authentication required." })
-      const client = extractProxiedClientAddress(request.headers)
+      // A request that cannot authenticate never spends any budget. API-02: neither does a token that cannot be a live
+      // Supabase JWT (wrong shape, or `exp` in the past); it is refused here without a network call or any SQL.
+      if (!publicConfig && (!token || token.length > 8192 || (precheck && !precheck(token)))) return json(401, { error: "Authentication required." })
+      const proxied = proxiedClientAddress(request.headers)
+      if (!proxied) noteUnknownAddress(request.headers)
+      const client = proxied ?? "unknown"
       const provisional = (publicConfig ? configAdmission : unverified).check(client)
       if (!provisional.allowed) return rateLimited(provisional.resetAt)
-      const requestReadiness = config.projectRef === EXISTING_PROJECT_REF ? await databaseReadiness() : undefined
-      if (requestReadiness && !served(requestReadiness.schemaVersion)) return json(503, { error: "Staging database is upgrading." })
-      if (publicConfig) return json(200, { profile: STAGING_PROFILE, supabaseUrl: config.supabaseUrl, anonKey: config.supabaseAnonKey })
+      const existingProject = config.projectRef === EXISTING_PROJECT_REF
+      if (publicConfig) {
+        if (existingProject && !served((await databaseReadiness()).schemaVersion)) return json(503, { error: "Staging database is upgrading." })
+        return json(200, { profile: STAGING_PROFILE, supabaseUrl: config.supabaseUrl, anonKey: config.supabaseAnonKey })
+      }
       if (!token) return json(401, { error: "Authentication required." })
       let user: AuthenticatedUser | null
       try { user = await auth(token) } catch { return json(503, { error: "Authentication is unavailable." }) }
       if (!user) return json(401, { error: "Authentication required." })
       const allowance = actors.check(user.id)
       if (!allowance.allowed) return rateLimited(allowance.resetAt)
+      // API-02 (QA F1): the existing project's per-request readiness SQL runs only for a validated user within their own
+      // limit, and still before this request's first other SQL (staging access), as before.
+      const requestReadiness = existingProject ? await databaseReadiness() : undefined
+      if (requestReadiness && !served(requestReadiness.schemaVersion)) return json(503, { error: "Staging database is upgrading." })
       if (!await database.hasStagingAccess(user.id)) return json(403, { error: "Private staging access required." })
       // A staging user within their own limit: the request leaves the per-address budget and spends the instance one.
       unverified.release(client, provisional)
@@ -237,67 +351,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
         if (!access) return json(403, { error: "Private staging access required." })
         return json(200, { profile: STAGING_PROFILE, user: { id: user.id }, access: { role: access.role, workspaceId: access.companyId, evidenceId: access.evidenceId } })
       }
-      url.pathname = url.pathname.slice("/workspace-api".length)
-      // Round 3 (EN-7): a longer listener allowance only here, after the bearer token named a user with staging access, and
-      // only for the two routes that need it at the line cap (prepare: about 30-40 s; results: one run of up to 25 s, plus
-      // the wait behind a run already in progress for the company). Every other request keeps the listener's 30 s.
-      if (request.method === "POST" && SCOPE3_REPORT_PREPARE_ROUTE.test(url.pathname)) options.extendTimeout?.(SCOPE3_REPORT_PREPARE_TIMEOUT_SECONDS)
-      if (isGet && SCOPE3_RESULTS_ROUTE.test(url.pathname)) options.extendTimeout?.(SCOPE3_RESULTS_TIMEOUT_SECONDS)
-      // Collection and draft-results SQL exist from schema 27 (0027), so both stay
-      // available at 28, 29 and 30. Scope 3 records and Scope 3 results exist only
-      // from 29 (0029): below it they are refused here, and the collection route
-      // refuses a Scope 3 save before any SQL. Scope 3 assessments, spend imports
-      // and report versions exist only from 30 (0030): below it every
-      // /workspace/:id/scope3/... route is refused here before any SQL.
-      if (/^\/workspace\/[0-9a-f-]+\/(?:collection(?:\/|$)|results(?:\/scope3)?$|scope3(?:\/|$))/i.test(url.pathname)) {
-        const receipt = requestReadiness ?? await databaseReadiness()
-        if (receipt.schemaVersion < STAGING_COLLECTION_SCHEMA_VERSION) return json(503, { code: "collection_unavailable", error: "Activity and evidence is not available yet." })
-        if (/\/results\/scope3$/i.test(url.pathname) && receipt.schemaVersion < STAGING_SCOPE3_SCHEMA_VERSION) return json(503, { code: "scope3_unavailable", error: "Scope 3 results are not available yet." })
-        if (/^\/workspace\/[0-9a-f-]+\/scope3(?:\/|$)/i.test(url.pathname) && receipt.schemaVersion < STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION) return json(503, { code: "scope3_schema_30_required", error: "This Scope 3 feature needs database schema 30." })
-      }
-      let forwarded: Request
-      const evidenceUpload = request.method === "POST" && COLLECTION_EVIDENCE_UPLOAD.test(url.pathname)
-      try {
-        // Evidence is the only larger request class. Its route consumes the
-        // stream with its own 10 MiB bound; ordinary workspace requests retain
-        // the 300 kB buffered cap.
-        forwarded = evidenceUpload ? new Request(url, request) : await boundedRequest(request, url, request.method === "POST" && SCOPE3_SPEND_IMPORT.test(url.pathname) ? SCOPE3_SPEND_IMPORT_MAX_BYTES : undefined)
-      } catch { return json(413, { error: "Request too large." }) }
-      const legacyCalifornia = LEGACY_CALIFORNIA_ROUTE.exec(url.pathname)
-      if (legacyCalifornia) {
-        const geography = await database.findCompanyGeography(user.id, legacyCalifornia[1]!)
-        if (geography?.countryCode !== "US" || geography.stateCode !== "CA") return json(404, { error: "Not found." })
-      }
-      if (url.pathname.includes("/corporate-inventories")) return corporateInventoryRoutes(forwarded)
-      if (/^\/workspace\/[0-9a-f-]+\/results$/i.test(url.pathname)) return resultsRoutes(forwarded)
-      if (/^\/workspace\/[0-9a-f-]+\/results\/scope3$/i.test(url.pathname)) return scope3ResultsRoutes(forwarded)
-      if (/^\/workspace\/[0-9a-f-]+\/collection(?:\/|$)/i.test(url.pathname)) return collectionRoutes(forwarded)
-      if (/^\/workspace\/[0-9a-f-]+\/scope3\/assessments(?:\/|$)/i.test(url.pathname)) return scope3AssessmentRoutes(forwarded)
-      if (/^\/workspace\/[0-9a-f-]+\/scope3\/spend-(?:(?:imports|mappings)(?:\/[0-9a-f-]+\/withdrawal)?|currency-conversions)$/i.test(url.pathname)) return scope3SpendImportRoutes(forwarded)
-      if (/^\/workspace\/[0-9a-f-]+\/scope3\/reports(?:\/|$)/i.test(url.pathname)) return scope3ReportRoutes(forwarded)
-      if (/^\/workspace\/[0-9a-f-]+\/setup(?:\/|$)/i.test(url.pathname)) {
-        // Company setup exists at 28, 29 and 30.
-        const receipt = requestReadiness ?? await databaseReadiness()
-        if (!served(receipt.schemaVersion)) return json(503, { error: "Company setup is unavailable." })
-        return companySetupRoutes(forwarded)
-      }
-      if (url.pathname.includes("/scope1-beta-setup")) return scope1BetaRoutes(forwarded)
-      if (url.pathname.includes('/process-screen') || url.pathname.includes('/scope1-inventory')) return scope1Routes(forwarded)
-      if (url.pathname.includes("/stationary-natural-gas")) return stationaryGasRoutes(forwarded)
-      if (url.pathname.includes("/controlled-fleet")) return controlledFleetRoutes(forwarded)
-      if (url.pathname.includes("/stationary-equipment") || url.pathname.includes("/stationary-diesel")) return stationaryEquipmentRoutes(forwarded)
-      if (url.pathname.includes("/fugitive-sources") || url.pathname.includes("/fugitive-population")) return fugitiveRoutes(forwarded)
-      if (url.pathname.includes("/mobile-diesel")) return mobileDieselRoutes(forwarded)
-      if (url.pathname.includes("/annual-electricity-evidence/reports")) return annualEvidenceReportRoutes(forwarded)
-      if (url.pathname.includes("/annual-electricity-evidence")) return annualEvidenceRoutes(forwarded)
-      if (url.pathname.includes("/annual-electricity-worksheet/reports")) return annualReportRoutes(forwarded)
-      if (url.pathname.includes("/annual-electricity-worksheet")) return annualWorksheetRoutes(forwarded)
-      if (url.pathname.includes("/source-electricity-worksheet/sources")) return electricitySourceRoutes(forwarded)
-      if (url.pathname.includes("/source-electricity-worksheet/reports")) return sourceReportRoutes(forwarded)
-      if (url.pathname.includes("/source-electricity-worksheet")) return sourceWorksheetRoutes(forwarded)
-      if (url.pathname.includes("/electricity-worksheet/reports")) return reportRoutes(forwarded)
-      if (url.pathname.includes("/electricity-worksheet")) return worksheetRoutes(forwarded)
-      return routes.handle(forwarded)
+      return verifiedRequest.run({ token, user }, () => routeAdmitted(request, url, user, requestReadiness, options))
     }
     if (isGet) return await serveAsset(url.pathname) ?? json(404, { error: "Not found." })
     return json(404, { error: "Not found." })
