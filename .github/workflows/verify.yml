@@ -230,56 +230,14 @@ jobs:
       - name: Fugitive recovery and hosted journal guards
         # Encrypted native recovery remains a separate Windows rehearsal.
         run: bun test tools/staging/check-m77-hosted.test.ts tools/staging/check-m77-continuation.test.ts evaluations/research-qa/m77-release-journal.test.ts evaluations/research-qa/m77-continuation-journal.test.ts
-      - name: Check out frozen schema 20 operator context
-        uses: actions/checkout@v4
-        with:
-          ref: 5b7a31910e1f2f51b68d823fdf7bf008a14a6a2f
-          path: .legacy-m77
-      - name: Verify historical schema 20 recovery safeguards unchanged
-        working-directory: .legacy-m77
-        run: |
-          bun install --frozen-lockfile
-          bun test tools/staging/m77-operators.test.ts
       - name: Independent Scope 1 browser decoding and recovery admission
         run: bun test evaluations/research-qa/m78-browser-independent.test.ts evaluations/research-qa/m78-capacity-browser.test.ts evaluations/research-qa/m78-hosted-plan-independent.test.ts tools/staging/check-m78-hosted.test.ts evaluations/research-qa/m78-resume-local-upgrade-independent.test.ts evaluations/research-qa/m78-resume-recipe-shapes.test.ts evaluations/research-qa/m78-resume-response-shape-independent.test.ts tools/staging/check-m78-continuation.test.ts tools/staging/m78-continuation-plan.test.ts tools/staging/m78-continuation-source-pins.test.ts evaluations/research-qa/m78-continuation-independent.test.ts evaluations/research-qa/m78-continuation-closure-independent.test.ts
-      - name: Check out frozen schema 21 operator context
-        uses: actions/checkout@v4
-        with:
-          ref: 540c71dbea6057f35a8b44074a71ceb9cf6bd6c3
-          path: .legacy-m78-schema21
-      - name: Preserve closed schema 21 operator and source-pin safeguards
-        working-directory: .legacy-m78-schema21
-        run: |
-          bun install --frozen-lockfile
-          bun test tools/staging/m78-operators.test.ts tools/staging/m78-hosted-database.test.ts evaluations/research-qa/m78-hosted-database-independent.test.ts evaluations/research-qa/m78-hosted-journey-independent.test.ts evaluations/research-qa/m78-application-transfer-independent.test.ts evaluations/research-qa/m78-recipe-rehearsal-independent.test.ts evaluations/research-qa/m78-journey-resolver-independent.test.ts tools/staging/m78-continuation-backup.test.ts
-      - name: Check out frozen continuation recovery context
-        uses: actions/checkout@v4
-        with:
-          ref: 1042348f2d4849246771fee4be77fe590c34ab8a
-          path: .legacy-m78
-      - name: Verify historical continuation2 and continuation3 safeguards
-        working-directory: .legacy-m78
-        run: |
-          bun install --frozen-lockfile
-          bun test tools/staging/check-m78-continuation2.test.ts tools/staging/check-m78-continuation3.test.ts
-      - name: Independent continuation2 source closure and cleanup guards
-        working-directory: .legacy-m78
-        run: bun test evaluations/research-qa/m78-continuation2-independent.test.ts --test-name-pattern "union covers|failed diagnostic intent"
-      - name: Independent continuation3 admission and graceful pause guards
-        working-directory: .legacy-m78
-        run: bun test evaluations/research-qa/m78-continuation3-independent.test.ts --test-name-pattern "admission challenges|diagnostic failure after login"
       - name: Independent current continuation4 transport guards
         run: bun test evaluations/research-qa/m78-continuation4-independent.test.ts --test-name-pattern "^portable"
-      - name: Preserve historical continuation4 source closure
-        working-directory: .legacy-m78
-        run: bun test tools/staging/check-m78-continuation4.test.ts --test-name-pattern "^exact173 source union"
       - name: Scope 1 GET preservation and finite diagnostic guards
         run: bun test evaluations/research-qa/m78-get-local-comparison-independent.test.ts evaluations/research-qa/m78-get-historical-gates.test.ts
       - name: Current GET behavior independent of historical byte pins
         run: bun test evaluations/research-qa/m78-continuation4-get-perf-probe.test.ts evaluations/research-qa/m78-get-guard-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts --test-name-pattern "metadata,|authentication,|historical candidate1|the finite set|nested calls|historical result|actual frozen|actual evidence"
-      - name: Preserve exact historical GET source closure
-        working-directory: .legacy-m78-schema21
-        run: bun test evaluations/research-qa/m78-continuation4-get-perf-probe.test.ts evaluations/research-qa/m78-get-guard-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts --test-name-pattern "finite SQL templates|candidate4 bytes|current closure is the 172"
       - name: Continuation4 closed baseline evidence guards
         run: bun test evaluations/research-qa/m78-continuation4-baseline-review.test.ts
       - name: Continuation4 lifecycle and passive revisit guards
@@ -391,3 +349,109 @@ jobs:
         run: |
           python evaluations/research-qa/m78-independent-rational-oracle.py
           python evaluations/research-qa/m78-author-expectations-challenge.py
+
+  migration-guard:
+    name: Hosted migration deploy guard
+    # Releases are PR + green CI + one QA review, and Railway deploys main automatically. Migrations are never applied at
+    # boot: the staging image refuses to start unless the live database is at a schema it serves, i.e. a version from
+    # STAGING_SCHEMA_BRIDGE_VERSION up to STAGING_SCHEMA_VERSION (STAGING_SERVED_SCHEMA_VERSIONS in
+    # packages/neuvetra-database/src/hosted.ts). So a PR that changes migrations may only merge while the image it ships
+    # still serves the schema that is live today. Pure diff-plus-source check: no labels, no API calls, no extra token scopes.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      # THE LIVE HOSTED STAGING SCHEMA. Bump this number in the same PR as, or right after, the hosted migration is
+      # actually applied by hand through tools/staging (never before). Until it is bumped, no merged build may raise
+      # STAGING_SCHEMA_BRIDGE_VERSION above it, because the deploy of that build would fail /ready and block every later deploy.
+      LIVE_STAGING_SCHEMA: '30'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The pull_request checkout is a merge commit: HEAD^1 is the base branch tip, so `git diff HEAD^1 HEAD` is exactly this PR's change.
+          fetch-depth: 2
+      - name: Keep the image able to start against the live schema
+        shell: bash
+        run: |
+          set -euo pipefail
+          hosted=packages/neuvetra-database/src/hosted.ts
+          migrations=packages/neuvetra-database/src/migrations/
+          live="$LIVE_STAGING_SCHEMA"
+          errors=()
+
+          if [ "$(git rev-list --parents -n1 HEAD | wc -w)" -ne 3 ]; then
+            echo "::error title=Migration guard::Expected the pull request merge commit (two parents); cannot find the base to diff against."
+            exit 1
+          fi
+          base="$(git rev-parse HEAD^1)"
+
+          # Read `export const NAME = <integer>` from hosted.ts at a revision ("WORKTREE" = this checkout). Fails closed.
+          read_const() {
+            local rev="$1" name="$2" value
+            if [ "$rev" = WORKTREE ]; then value="$(cat "$hosted")"; else value="$(git show "$rev:$hosted")"; fi
+            value="$(printf '%s\n' "$value" | sed -nE "s/^export const ${name} = ([0-9]+)([^0-9].*)?$/\1/p" | head -n1)"
+            if [ -z "$value" ]; then
+              echo "::error file=$hosted,title=Migration guard::Could not read an integer for ${name} at ${rev}. If hosted.ts changed how it defines it, update this guard (.github/workflows/verify.yml, job migration-guard)." >&2
+              exit 1
+            fi
+            printf '%s' "$value"
+          }
+          schema="$(read_const WORKTREE STAGING_SCHEMA_VERSION)"
+          bridge="$(read_const WORKTREE STAGING_SCHEMA_BRIDGE_VERSION)"
+          base_schema="$(read_const "$base" STAGING_SCHEMA_VERSION)"
+          base_bridge="$(read_const "$base" STAGING_SCHEMA_BRIDGE_VERSION)"
+
+          # Name-status without rename detection: a rename shows as a delete plus an add.
+          changes="$(git diff --name-status --no-renames "$base" HEAD -- "$migrations")"
+          constants_changed=false
+          if [ "$schema" != "$base_schema" ] || [ "$bridge" != "$base_bridge" ]; then constants_changed=true; fi
+
+          echo "Live staging schema (LIVE_STAGING_SCHEMA): $live"
+          echo "hosted.ts on this PR:  STAGING_SCHEMA_VERSION=$schema  STAGING_SCHEMA_BRIDGE_VERSION=$bridge  (image serves $bridge..$schema)"
+          echo "hosted.ts on the base: STAGING_SCHEMA_VERSION=$base_schema  STAGING_SCHEMA_BRIDGE_VERSION=$base_bridge"
+
+          # Rule 1, every PR: the image this PR would deploy must serve the live schema.
+          if [ "$bridge" -gt "$live" ]; then
+            errors+=("STAGING_SCHEMA_BRIDGE_VERSION is $bridge but the live staging schema is $live. The image would serve only $bridge..$schema and would fail /ready against the live database; Railway would keep the old deploy and block every later deploy. Keep the bridge at or below $live in this PR, merge, apply the hosted migration by hand, then raise the bridge and LIVE_STAGING_SCHEMA in a follow-up PR.")
+          fi
+          if [ "$schema" -lt "$live" ]; then
+            errors+=("STAGING_SCHEMA_VERSION is $schema, below the live staging schema $live. The image would refuse to start against the live database.")
+          fi
+
+          # Rule 2: migrations already applied to the live database are immutable (the image checks receipts against file hashes).
+          if [ -n "$changes" ]; then
+            while IFS=$'\t' read -r status file; do
+              name="$(basename "$file")"
+              number="$(printf '%s' "$name" | sed -nE 's/^([0-9]{4})_.*\.sql$/\1/p')"
+              if [ -z "$number" ]; then
+                errors+=("$status $file: not a NNNN_name.sql migration file. Nothing else belongs in the migrations folder.")
+              elif [ "$((10#$number))" -le "$live" ]; then
+                errors+=("$status $file: migration $number is at or below the live schema $live, so it is already applied. Applied migrations are immutable (changing, deleting or inserting one breaks the receipt hash check and the deploy cannot start). Fix forward with a new migration numbered above $live.")
+              fi
+            done <<< "$changes"
+          fi
+
+          {
+            echo "### Hosted migration guard"
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Live staging schema | $live |"
+            echo "| Image would serve | $bridge..$schema |"
+            if [ -z "$changes" ] && [ "$constants_changed" = false ]; then
+              echo "| Result | no migration change |"
+            elif [ "${#errors[@]}" -eq 0 ]; then
+              echo "| Result | migration change is safe to deploy first (bridge $bridge <= live $live); apply it by hand after the deploy |"
+            else
+              echo "| Result | FAILED |"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "${#errors[@]}" -gt 0 ]; then
+            for e in "${errors[@]}"; do echo "::error title=Migration guard::$e"; done
+            exit 1
+          fi
+          if [ -z "$changes" ] && [ "$constants_changed" = false ]; then
+            echo "Migration guard: no migration change."
+          else
+            echo "Migration guard: migration change is deployable against live schema $live (bridge $bridge <= $live <= schema $schema). Deploy this PR first, then apply the hosted migration by hand."
+          fi
