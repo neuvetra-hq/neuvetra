@@ -7,7 +7,7 @@ import { deriveCollectionQuantity, savedAgainstCurrentSetup, validateCollectionS
 import { planCollectionCalculation } from "../../../../packages/neuvetra-database/src/collection-engine-input"
 import { reasonText } from "@/lib/plain-language"
 import { CollectionApiError, saveCollectionActivity } from "@/lib/collection-api"
-import { configureRequestTimeouts, REQUEST_TIMEOUT_TEXT, SLOW_REQUEST_TEXT, slowRequestCount, subscribeRequestEvents, withRequestTimeout } from "@/lib/request-timeout"
+import { configureRequestTimeouts, REQUEST_TIMEOUT_TEXT, SERVER_BUSY_TEXT, SLOW_REQUEST_TEXT, slowRequestCount, subscribeRequestEvents, withRequestTimeout } from "@/lib/request-timeout"
 import { clearSharedGets } from "@/lib/shared-get"
 import { harness, loadComponent } from "./component-harness"
 
@@ -19,7 +19,7 @@ const W = "29300000-0000-4000-8000-000000000001", A = "29300000-0000-4000-8000-0
 const context = { companyId: W, setupVersionId: A, setupRevision: 1, sameContentSetupVersionIds: [A], locations: [{ id: SITE, name: "Depot", inclusion: "included", control: "reporting_company" }] }
 
 /** A server that stores each new idempotency key as one version and replays a key it has seen. */
-function server(firstAnswerNeverArrives: boolean) {
+function server(firstAnswerNeverArrives: boolean, busy = false) {
   const versions = new Map<string, any>(), keys: string[] = []
   let posts = 0
   globalThis.fetch = (async (input: unknown, init?: RequestInit) => {
@@ -28,6 +28,7 @@ function server(firstAnswerNeverArrives: boolean) {
     const body = JSON.parse(String(init?.body))
     validateCollectionSaveInput(body)
     keys.push(body.idempotencyKey)
+    if (busy) return Response.json({ error: "Read failed" }, { status: 503 })
     const recordId = url.split("/").pop()!
     const replayed = versions.has(body.idempotencyKey)
     if (!replayed) versions.set(body.idempotencyKey, { id: crypto.randomUUID(), recordId, companyId: W, revision: versions.size + 1, activity: body.activity })
@@ -64,8 +65,8 @@ test("acceptance: save, time out, then retry produces exactly one new version â€
   await sleep(35)
   expect(slowRequestCount()).toBe(1)
   await sleep(60); await app.settle()
-  expect(app.text()).toContain(REQUEST_TIMEOUT_TEXT)
-  expect(app.text()).toContain("Retry keeps the same save request.")
+  // The timeout text composes with the editor's own sentence as two clean sentences.
+  expect(app.text()).toContain(`${REQUEST_TIMEOUT_TEXT} Retry keeps the same save request.`)
   expect(slowRequestCount()).toBe(0)
   // The server did record the first attempt; only its answer was lost.
   expect(versions.size).toBe(1)
@@ -74,6 +75,16 @@ test("acceptance: save, time out, then retry produces exactly one new version â€
   expect(keys[1]).toBe(keys[0]!)
   expect(versions.size).toBe(1)
   expect(app.text()).toContain("The earlier save was confirmed.")
+})
+
+test("QA follow-up: a busy 503 on save reads as two sentences and keeps the same request", async () => {
+  const { keys } = server(false, true)
+  const app = await editor()
+  await app.button("Save activity")!.props.onClick(); await app.settle()
+  expect(app.text()).toContain("Neuvetra is busy â€” try again in a moment. Retry keeps the same save request.")
+  expect(app.text()).toContain(`${SERVER_BUSY_TEXT} Retry keeps the same save request.`)
+  await app.button("Save activity")!.props.onClick(); await app.settle()
+  expect(keys).toHaveLength(2); expect(keys[1]).toBe(keys[0]!)
 })
 
 test("control: a save that answers normally is one request and one version", async () => {

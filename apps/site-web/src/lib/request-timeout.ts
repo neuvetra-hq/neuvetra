@@ -11,7 +11,7 @@ export type RequestKind = "default" | "scope3Results" | "reportPrepare" | "uploa
 
 export const SLOW_REQUEST_TEXT = "Taking longer than usual…"
 export const REQUEST_TIMEOUT_TEXT = "Neuvetra didn't answer in time. Nothing was lost — Try again."
-export const SERVER_BUSY_TEXT = "Neuvetra is busy — try again in a moment"
+export const SERVER_BUSY_TEXT = "Neuvetra is busy — try again in a moment."
 
 const DEFAULT_LIMITS: Readonly<Record<RequestKind, number>> = { default: 35_000, scope3Results: 95_000, reportPrepare: 125_000, upload: 125_000 }
 const DEFAULT_SLOW_AFTER_MS = 8_000

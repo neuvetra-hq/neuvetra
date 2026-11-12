@@ -2,7 +2,7 @@
 // shortened here (configureRequestTimeouts); their production values are pinned in the first test.
 import { afterEach, describe, expect, test } from "bun:test"
 import { configureRequestTimeouts, isRequestTimeout, REQUEST_TIMEOUT_TEXT, requestTimeoutMs, RequestTimeoutError, SERVER_BUSY_TEXT, SLOW_REQUEST_TEXT, serverErrorText, slowRequestCount, subscribeRequestEvents, withRequestTimeout, type RequestEvent } from "./request-timeout"
-import { CollectionApiError, listCollectionActivities, saveCollectionActivity, uploadCollectionEvidence } from "./collection-api"
+import { CollectionApiError, downloadCollectionEvidence, listCollectionActivities, saveCollectionActivity, uploadCollectionEvidence } from "./collection-api"
 import { loadScope3Results, Scope3ResultsApiError } from "./scope3-results-api"
 import { loadScope3Reports, prepareScope3Report, Scope3ReportApiError } from "./scope3-report-api"
 import { clearSharedGets } from "./shared-get"
@@ -22,7 +22,7 @@ describe("limits and texts", () => {
     expect([requestTimeoutMs("default"), requestTimeoutMs("scope3Results"), requestTimeoutMs("reportPrepare"), requestTimeoutMs("upload")]).toEqual([35_000, 95_000, 125_000, 125_000])
     expect(SLOW_REQUEST_TEXT).toBe("Taking longer than usual…")
     expect(REQUEST_TIMEOUT_TEXT).toBe("Neuvetra didn't answer in time. Nothing was lost — Try again.")
-    expect(SERVER_BUSY_TEXT).toBe("Neuvetra is busy — try again in a moment")
+    expect(SERVER_BUSY_TEXT).toBe("Neuvetra is busy — try again in a moment.")
     // The slow mark is 8 s: a request still running at 7.9 s isn't slow (checked with a scaled run below).
     configureRequestTimeouts({ default: 1_000 })
     const events: RequestEvent[] = []
@@ -143,6 +143,13 @@ describe("the request paths", () => {
     // A proxy's 503 page (no JSON) reads busy as well.
     globalThis.fetch = (async () => new Response("<html>Service Unavailable</html>", { status: 503 })) as unknown as typeof fetch
     expect((await loadScope3Reports(company, actor).catch(cause => cause)).message).toBe(SERVER_BUSY_TEXT)
+  })
+  test("QA follow-up: evidence download keeps the server's uncoded 503 integrity message; other collection calls still read busy", async () => {
+    globalThis.fetch = (async () => Response.json({ error: "Evidence integrity could not be verified." }, { status: 503 })) as unknown as typeof fetch
+    const download = await downloadCollectionEvidence(company, upload, actor).catch(cause => cause)
+    expect(download).toBeInstanceOf(CollectionApiError); expect(download.status).toBe(503)
+    expect(download.message).toBe("Evidence integrity could not be verified.")
+    expect((await listCollectionActivities(company, actor).catch(cause => cause)).message).toBe(SERVER_BUSY_TEXT)
   })
   test("control: a 503 that means 'not switched on' keeps its code and words, so the screens still tell it apart", async () => {
     globalThis.fetch = (async () => Response.json({ code: "scope3_schema_30_required", error: "This Scope 3 feature needs database schema 30." }, { status: 503 })) as unknown as typeof fetch

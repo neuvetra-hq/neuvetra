@@ -47,7 +47,8 @@ const idPath = (id: string) => {
   return id
 }
 
-async function request(actor: HostedWorkspaceActor, path: string, init?: RequestInit, kind: RequestKind = "default"): Promise<Response> {
+/** `busyText: false` keeps the server's words on every 503 (evidence download: an integrity failure is not "busy"). */
+async function request(actor: HostedWorkspaceActor, path: string, init?: RequestInit, kind: RequestKind = "default", busyText = true): Promise<Response> {
   if (!actor.accessToken || /[\r\n]/.test(actor.accessToken)) throw new Error("Sign in again to continue.")
   actor.signal?.throwIfAborted()
   // Round 3 lane C (PR-3): GETs shared across screens and retried once on 429; writes clear them.
@@ -63,8 +64,8 @@ async function request(actor: HostedWorkspaceActor, path: string, init?: Request
     const value: unknown = await response.json().catch(() => null)
     const error = value && typeof value === "object" && "error" in value && typeof value.error === "string" ? value.error : "Collection is unavailable."
     const code = value && typeof value === "object" && "code" in value && typeof value.code === "string" ? value.code : null
-    // WO-09: a 503 without a specific code reads "Neuvetra is busy — try again in a moment"; status and code are kept.
-    throw new CollectionApiError(serverErrorText(response.status, code, error), response.status, code)
+    // WO-09: a 503 without a specific code reads "Neuvetra is busy — try again in a moment."; status and code are kept.
+    throw new CollectionApiError(busyText ? serverErrorText(response.status, code, error) : error, response.status, code)
   }
   return response
 }
@@ -162,7 +163,8 @@ export async function uploadCollectionEvidence(companyId: string, file: File, up
 }
 
 export async function downloadCollectionEvidence(companyId: string, evidenceId: string, actor: HostedWorkspaceActor) {
-  return request(actor, `${companyPath(companyId)}/evidence/${idPath(evidenceId)}/download`)
+  // WO-09 QA follow-up: the server's uncoded 503 "Evidence integrity could not be verified." must not read as busy.
+  return request(actor, `${companyPath(companyId)}/evidence/${idPath(evidenceId)}/download`, undefined, "default", false)
 }
 
 export async function listGridLossLineages(companyId: string, actor: HostedWorkspaceActor) {
