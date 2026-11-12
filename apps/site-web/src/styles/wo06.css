@@ -9,7 +9,11 @@
 .nv-app .collection-row-link__chevron { flex: none; font-size: 1.6rem; line-height: 1; color: var(--accent); }
 .nv-app .collection-row-link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
 .nv-app .collection-row:hover { border-color: var(--accent); }
-.nv-app .collection-row:has(.collection-row-link:focus-visible) { outline: var(--nv-focus-width) solid var(--nv-color-focus); outline-offset: 3px; }
+/* One focus ring, on the card (the link's hit area); the link's own global ring is dropped where :has() works. */
+@supports selector(:has(*)) {
+  .nv-app .collection-row:has(.collection-row-link:focus-visible) { outline: var(--nv-focus-width) solid var(--nv-color-focus); outline-offset: 3px; }
+  .nv-app .collection-row-link:focus-visible { outline: none; }
+}
 .nv-app .collection-row button { position: relative; z-index: 1; }
 .nv-app .collection-row > p { margin: 6px 0; }
 

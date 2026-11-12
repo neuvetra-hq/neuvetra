@@ -560,14 +560,17 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   const pendingUpload = useRef<{ fingerprint: string; id: string } | null>(null)
   const actorRef = useRef(actor)
   useEffect(() => { actorRef.current = actor }, [actor])
-  useEffect(() => { onDirtyChange(dirty) }, [dirty, onDirtyChange])
+  // WO-06: the leave guard also covers unsaved spend-import input (QA B1) and a correction reason typed on its own.
+  const [spendDirty, setSpendDirty] = useState(false)
+  const unsaved = dirty || spendDirty || reason.trim() !== ""
+  useEffect(() => { onDirtyChange(unsaved) }, [unsaved, onDirtyChange])
   useEffect(() => () => onDirtyChange(false), [onDirtyChange])
   useEffect(() => {
-    if (!dirty) return
+    if (!unsaved) return
     const warn = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = "" }
     window.addEventListener("beforeunload", warn)
     return () => window.removeEventListener("beforeunload", warn)
-  }, [dirty])
+  }, [unsaved])
   const selected = records.find(item => item.id === recordId) ?? null
   // Round 2 lane D (UX-3): "Fix" from Results lands on the editor (and the field its hold names) only after it has rendered.
   const fixTarget = useRef<string | null>(null)
@@ -609,6 +612,14 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       .finally(() => { if (!controller.signal.aborted) setBusy(false) })
     return () => controller.abort()
   }, [actor.userId, workspaceId, openRecordId])
+  // WO-06: while the record loads, focus is on "← All activity" (not the page body) unless something else already has it;
+  // it moves to the heading once the record has loaded (effect below).
+  useEffect(() => {
+    if (!recordMode) return
+    const active = document.activeElement
+    if (active && active !== document.body) return
+    document.getElementById("collection-back-link")?.focus({ preventScroll: true })
+  }, [recordMode])
   // WO-06: the record view's heading takes focus once the record has loaded (and again after a saved correction).
   useEffect(() => {
     if (!focusHeadingNext.current || !loaded || busy) return
@@ -675,8 +686,11 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       const loadedContext = overview.context
       setRecords(items); setEvidence(files); setLineages(grid); setContext(loadedContext); setScope3(overview.scope3); setAvailableScope3Kinds(overview.scope3Kinds ?? (overview.scope3 ? SCOPE3_LEGACY_KINDS : []))
       setScope3Completion(overview.scope3Completion === true)
-      const current = items.find(item => item.id === recordId)
-      if (current) setDraft(structuredClone(current.currentVersion.activity) as CollectionDraft)
+      // WO-06 (QA B2): on the record view, Try again after a failed first load selects the record in the address; only a
+      // successful response without it reports it missing.
+      const current = items.find(item => item.id === (openRecordId ?? recordId))
+      if (current) { setRecordId(current.id); setDraft(structuredClone(current.currentVersion.activity) as CollectionDraft); if (openRecordId) focusHeadingNext.current = true }
+      else if (openRecordId) missingRef.current?.()
       else setDraft(previous => ({ ...previous, setupVersionId: loadedContext.setupVersionId ?? "" }))
       setDirty(false); setHistorical(null); pending.current = null; setReason(""); setMessage("Latest saved records loaded."); setLoaded(true)
     } catch (cause) { setError(true); setMessage(cause instanceof Error ? cause.message : "Collection is unavailable.") }
@@ -955,7 +969,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   }
   function cancelCorrection() {
     if (!selected) return
-    if (dirty && !window.confirm("Discard unsaved activity changes?")) return
+    if ((dirty || reason.trim() !== "") && !window.confirm("Discard unsaved activity changes?")) return
     setDraft(structuredClone(selected.currentVersion.activity) as CollectionDraft); setReason(""); setDirty(false); setHistorical(null); setZipLookup(null); pending.current = null; setSaveProblem(null)
     setCorrecting(false)
     requestAnimationFrame(() => { document.getElementById("collection-correct-record")?.focus() })
@@ -1106,8 +1120,8 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     const activity = selected ? selected.currentVersion.activity as CollectionDraft : null
     const linked = activity ? evidence.filter(file => activity.evidenceIds.includes(file.id)) : []
     return <section className="worksheet collection-workspace collection-record-view" aria-busy={busy}>
-      <p className="collection-back"><a className="nv-link" href={allActivityHref} onClick={event => { if (!plainClick(event) || !onAllActivity) return; event.preventDefault(); onAllActivity() }}><span aria-hidden="true">← </span>All activity</a></p>
-      <h1 ref={headingRef} tabIndex={-1} id="collection-record-heading">{selected && activity ? `${typeName(selected.kind)} · ${activity.sourceId}` : loaded ? "That record wasn’t found" : "Loading record…"}</h1>
+      <p className="collection-back"><a className="nv-link" id="collection-back-link" href={allActivityHref} onClick={event => { if (!plainClick(event) || !onAllActivity) return; event.preventDefault(); onAllActivity() }}><span aria-hidden="true">← </span>All activity</a></p>
+      <h1 ref={headingRef} tabIndex={-1} id="collection-record-heading">{selected && activity ? `${typeName(selected.kind)} · ${activity.sourceId}` : loaded ? "That record wasn’t found" : error ? "This record couldn’t be loaded" : "Loading record…"}</h1>
       {selected && openedItem && <p className="collection-record-meta"><span className={`collection-state-chip collection-state-chip--${openedItem.status}`}>{stateLabel(openedItem.status)}</span><span>version {selected.currentVersion.revision}</span></p>}
       {status}
       {!loaded && error && workspaceId && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--sm" disabled={busy} onClick={() => void refresh()}>{ACTIVITY_LIST_TEXT_R3C.retry}</button></div>}
@@ -1175,7 +1189,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
 
     {/* I-09: spend CSV import (0030; schema 30 only) and its unmatched, duplicate and supersession queues. WO-06: a record it
         names opens at its record view (#/activity/<id>). */}
-    {scope3Completion && workspaceId && availableScope3Kinds.includes("purchase_spend") && <div className="worksheet-card"><SpendImport companyId={workspaceId} actor={actor} onChanged={() => void refreshRecords()}
+    {scope3Completion && workspaceId && availableScope3Kinds.includes("purchase_spend") && <div className="worksheet-card"><SpendImport companyId={workspaceId} actor={actor} onChanged={() => void refreshRecords()} onDirtyChange={setSpendDirty}
       onOpenRecord={id => { if (onOpenRecord) { onOpenRecord(id); return } const row = records.find(item => item.id === id); if (!row) return; openRecord(row); requestAnimationFrame(() => document.getElementById("collection-record-editor")?.scrollIntoView({ block: "start" })) }} /></div>}
     {evidenceCard}
     {footnote}

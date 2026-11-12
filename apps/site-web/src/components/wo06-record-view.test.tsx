@@ -156,3 +156,54 @@ test("a Results Fix that names a field opens the correction form on load (round 
   const plain = await workspace([waste(1)], { openRecordId: idOf(1) })
   expect(plain.nodes().some(node => node.props.id === "collection-record-editor")).toBe(false)
 })
+
+// ── QA round 1 on PR #39 ──
+
+test("B1: unsaved spend-import input counts as unsaved activity for the leave guard", async () => {
+  const reported: boolean[] = []
+  const app = await workspace([waste(1)], { onDirtyChange: (dirty: boolean) => reported.push(dirty) }, {
+    loadCollectionOverview: async () => ({ context, scope3: true, scope3Kinds: ["waste", "purchase_spend"], scope3Completion: true }), loadCompanySetup: async () => null,
+    SpendImport: function SpendImport() { return null },
+  })
+  const spend = app.nodes().find(node => typeof node.type === "function" && (node.type as { name?: string }).name === "SpendImport")!
+  expect(reported.at(-1)).toBe(false)
+  spend.props.onDirtyChange(true); await app.settle()
+  expect(reported.at(-1)).toBe(true)
+  spend.props.onDirtyChange(false); await app.settle()
+  expect(reported.at(-1)).toBe(false)
+})
+
+test("a correction reason typed on its own counts as unsaved, and Cancel correction asks", async () => {
+  const reported: boolean[] = [], asked: string[] = []
+  const app = await workspace([waste(1)], { openRecordId: idOf(1), onDirtyChange: (dirty: boolean) => reported.push(dirty) },
+    { window: { confirm: (text: string) => { asked.push(text); return false }, addEventListener() {}, removeEventListener() {} } })
+  app.button("Correct this record")!.props.onClick(); await app.settle()
+  app.byLabel("Reason for this correction")!.props.onChange("Meter was misread."); await app.settle()
+  expect(reported.at(-1)).toBe(true)
+  app.button("Cancel correction")!.props.onClick(); await app.settle()
+  expect(asked).toEqual(["Discard unsaved activity changes?"])
+  expect(app.byLabel("Reason for this correction")!.props.value).toBe("Meter was misread.")
+})
+
+test("B2: after a failed first load, Try again shows the record (never 'not found'); a successful response without it is missing", async () => {
+  let fail = true, missing = 0
+  const records = [waste(1), waste(2)]
+  const list = async () => { if (fail) throw new CollectionApiError("Neuvetra didn’t answer in time. Nothing was lost; try again.", 0, "timeout"); return records }
+  const app = await workspace(records, { openRecordId: idOf(2), onRecordMissing: () => { missing++ } }, { listCollectionActivities: list })
+  const h1 = () => app.nodes().find(node => node.type === "h1")!.children.flat(Infinity).join("")
+  expect(h1()).toBe("This record couldn’t be loaded")
+  expect(app.text()).toContain("Neuvetra didn’t answer in time.")
+  expect(app.text()).not.toContain("That record wasn’t found")
+  fail = false
+  app.button("Try again")!.props.onClick(); await new Promise(r => setTimeout(r, 5)); await app.settle()
+  expect(h1()).toBe("Waste · HAULER-2")
+  expect(missing).toBe(0)
+  expect(app.button("Correct this record")).toBeDefined()
+
+  fail = true
+  const gone = await workspace(records, { openRecordId: idOf(9), onRecordMissing: () => { missing++ } }, { listCollectionActivities: list })
+  expect(missing).toBe(0)
+  fail = false
+  gone.button("Try again")!.props.onClick(); await new Promise(r => setTimeout(r, 5)); await gone.settle()
+  expect(missing).toBe(1)
+})
