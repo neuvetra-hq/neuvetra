@@ -421,9 +421,9 @@ suite("site-web browser smoke (E2E-01)", () => {
     const { page } = opened
     // Results' reading controls: its filters and search, downloads and print, "Show all"/"Show fewer", "Go to the Scope 3
     // to-do list", "View …" (a record, the draft report, an assessment, company setup or the spend import: navigation or a
-    // disclosure), "Close the assessment" and "Recalculate" (it reads the results again).
+    // disclosure) and "Close the assessment". WO-12b: a member is not offered "Recalculate" (checked below).
     const RESULTS_READING = [/^button (Download|Print)/, /^button (Show all|Show fewer)/, /^button Go to the Scope 3 to-do list$/, /^button View /, /^button Close the assessment: /,
-      /^select (Status|Category|Activity)$/, /^input\[search\] Search source ID or reference$/, /^button (All|Needs attention) \(\d+\)$/, /^button Recalculate$/]
+      /^select (Status|Category|Activity)$/, /^input\[search\] Search source ID or reference$/, /^button (All|Needs attention) \(\d+\)$/]
     const results = (controls: string[]) => notAllowed(controls).filter(control => !RESULTS_READING.some(rule => rule.test(control)))
     for (const [width, height] of [[1360, 900], [390, 844]] as const) {
       await page.setViewportSize({ width, height })
@@ -443,6 +443,7 @@ suite("site-web browser smoke (E2E-01)", () => {
       expect(await assessment.locator("input, select, textarea, button").count()).toBe(0)
       await assessment.getByText("View only: an owner or admin of your company can change it.").waitFor()
       expect(results(await enabledControls(page, "main", true))).toEqual([])
+      expect(await page.locator("main").getByRole("button", { name: /^Recalculat/ }).count()).toBe(0)
     }
     // Company setup's category screening: a member is offered no "Add an assessment" or "Review or correct the assessment";
     // a saved assessment (saved here by the owner, category 6) is shown open, as text.

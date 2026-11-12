@@ -351,7 +351,8 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
         <button type="button" className="nv-btn" disabled={printPending} onClick={printReport} aria-describedby="live-draft-label"><Icon name="print" size={18} />Print or save as PDF</button>
         <button type="button" className="nv-btn" onClick={downloadCsv} aria-describedby="live-draft-label"><Icon name="download" size={18} />Download CSV</button>
         <span className="nv-live-draft" id="live-draft-label">{LIVE_DRAFT_LABEL}</span>
-        <button type="button" className="nv-btn nv-btn--ghost" disabled={busy || scope3.busy} onClick={() => { void load(); void loadScope3() }}>{busy || scope3.busy ? "Recalculating…" : "Recalculate"}</button>
+        {/* WO-12b: a view-only member is not offered "Recalculate" (it runs the calculation again); the page reloads Results on each visit. */}
+        {canManage && <button type="button" className="nv-btn nv-btn--ghost" disabled={busy || scope3.busy} onClick={() => { void load(); void loadScope3() }}>{busy || scope3.busy ? "Recalculating…" : "Recalculate"}</button>}
       </div>
     </div>
     {/* Always rendered so printing from the browser menu prints the report; shown on screen only when opened. */}

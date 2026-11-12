@@ -28,7 +28,7 @@ const noScope3Records = (() => { const r = structuredClone(scope3) as any; r.rec
   return decodeScope3Results(r, company) })()
 const deferred = <T,>() => { let resolve!: (value: T) => void, reject!: (error: unknown) => void; const promise = new Promise<T>((a, b) => { resolve = a; reject = b }); return { promise, resolve, reject } }
 
-async function mount(loadScope3Results: (...args: any[]) => Promise<scope3Api.Scope3ResultsResponse>) {
+async function mount(loadScope3Results: (...args: any[]) => Promise<scope3Api.Scope3ResultsResponse>, canManage = true) {
   let printed = 0
   // Round 2 lane D: the Results screen renders the panel through its stateful wrapper (filters, inline assessment).
   const Scope3Panel = function Scope3ResultsPanel() { return null }
@@ -37,7 +37,7 @@ async function mount(loadScope3Results: (...args: any[]) => Promise<scope3Api.Sc
     loadResults: async () => structuredClone(empty),
     URL: { createObjectURL: () => "blob:x", revokeObjectURL() {} }, document: { createElement: () => ({ click() {} }), getElementById: () => null }, window: { setTimeout: (fn: () => void) => { fn(); return 0 }, print() { printed++ } },
   })
-  const app = harness(make, () => ({ actor: { userId: "u", role: "owner", accessToken: "t" }, workspaceId: company, headingRef: { current: null }, coverage: { state: "ready", setupOpen: [], gaps: [] }, onRetryCoverage() {}, canManage: true, onNavigate() {}, onFix() {} }))
+  const app = harness(make, () => ({ actor: { userId: "u", role: "owner", accessToken: "t" }, workspaceId: company, headingRef: { current: null }, coverage: { state: "ready", setupOpen: [], gaps: [] }, onRetryCoverage() {}, canManage, onNavigate() {}, onFix() {} }))
   const panel = () => app.nodes().find(node => node.type === Scope3Panel)
   return { app, panel, printed: () => printed }
 }
@@ -92,6 +92,15 @@ describe("API-03: an empty Scope 1 and 2 list never hides Scope 3", () => {
     await app.settle()
     expect(app.text()).toContain("No activity records yet")
     expect(panel()).toBeUndefined()
+  })
+})
+
+describe("WO-12b: a view-only member is not offered Recalculate", () => {
+  test("an owner or admin has Recalculate beside the report actions; a member has the report actions without it", async () => {
+    const owner = await mount(async () => at("2026-10-27T00:00:00.000Z")), member = await mount(async () => at("2026-10-27T00:00:00.000Z"), false)
+    await owner.app.settle(); await member.app.settle()
+    expect(owner.app.button("Recalculate")).toBeTruthy()
+    expect([member.app.button("Recalculate"), Boolean(member.app.button("Download CSV")), Boolean(member.app.button("Print or save as PDF"))]).toEqual([undefined, true, true])
   })
 })
 
