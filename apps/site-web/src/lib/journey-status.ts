@@ -9,11 +9,19 @@ import { recordReadiness, type CollectionReadinessFinding } from "@/components/C
 import { kindLabel, periodLabel, sourceCategoryLabel, type RecordState } from "./plain-language"
 import { TODO_SPEND_TEXT_R3C } from "./scope3-text-r3c"
 import { scope3ReadinessOptions, scope3SetupFacts, scope3SpendLineChoices } from "./scope3-forms"
+import { possibleDuplicateOfText, possibleDuplicateRecords } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 
 export type JourneyPanel = "home" | "setup" | "collection" | "results"
 export interface JourneyRecord { id: string; kind: string; label: string; sourceId: string; locationId: string; site: string; state: RecordState; reasons: string[]; evidenceCount: number; quality: string
   /** Round 3 lane C (PR-3): a line of a spend import (its holds are fixed in the spend import's grouped review). */
-  importedSpend?: true }
+  importedSpend?: true
+  /**
+   * WO-04b (BF-01A, count mode): a counted Scope 1 or 2 record that may repeat an earlier record, named in words ("Possible
+   * duplicate of GAS-1 at Office, …"). The same rule and records as the Scope 1 and 2 results route, so Results flags it too.
+   */
+  possibleDuplicate?: string
+  /** WO-04b: the other record of the pair (its kind label and source ID), so the Overview names both records. */
+  possibleDuplicateOther?: { id: string; label: string; sourceId: string } }
 /** A company-setup answer that is still open. `scopes` lists the totals it can leave incomplete (empty: it doesn't affect totals). */
 export interface SetupOpenItem { id: string; title: string; detail: string; scopes: Array<1 | 2> }
 /** A possible coverage gap: missing records, an unsupported source or an unresolved legacy source family. */
@@ -53,6 +61,8 @@ const FAMILY_KINDS: Record<string, { kind: string | null; noun: string; records:
   "Cooling & fire suppression": { kind: "fugitive", noun: "cooling or fire-suppression equipment", records: "refrigerant records" },
   "Processes & other direct releases": { kind: null, noun: "process or other direct emissions", records: "" },
 }
+/** The Scope 1 and 2 kinds (the results route's rule: every other saved kind is Scope 3). */
+const SCOPE12_KINDS: ReadonlySet<string> = new Set(["natural_gas", "vehicle", "distillate_no2", "fugitive", "electricity"])
 const plural = (count: number, one: string, many = `${one}s`) => `${count} ${count === 1 ? one : many}`
 /** Half-open ISO date ranges; mirrors checkPeriod in the results route. */
 export function periodFit(record: { start: string; endExclusive: string }, period: { start: string | null; endExclusive: string | null } | null): "inside" | "partial" | "outside" | "no_period" {
@@ -71,7 +81,7 @@ export function setupMissing(view: CompanySetupView | null): SetupOpenItem[] {
   const missing: SetupOpenItem[] = []
   if (!setup.company.legalName.trim()) missing.push({ id: "legal-name", title: "Add the company’s legal name", detail: "01 Company.", scopes: [] })
   if (!setup.reportingPeriod.start || !setup.reportingPeriod.endExclusive) missing.push({ id: "period", title: "Set the reporting period", detail: "02 Reporting period. Records are checked against it.", scopes: [1, 2] })
-  else if (setup.reportingPeriod.start < BETA_PERIOD.start || setup.reportingPeriod.endExclusive > BETA_PERIOD.endExclusive) missing.push({ id: "beta-period", title: `This beta covers activity in calendar 2025 only — your reporting period is ${periodLabel(setup.reportingPeriod.start, setup.reportingPeriod.endExclusive)}`, detail: "02 Reporting period. Activity outside 2025 can’t be added yet, so this period can’t be completed in the beta. Records outside the period are held, not counted.", scopes: [1, 2] })
+  else if (setup.reportingPeriod.start < BETA_PERIOD.start || setup.reportingPeriod.endExclusive > BETA_PERIOD.endExclusive) missing.push({ id: "beta-period", title: `This beta covers activity in calendar 2025 only — your reporting period is ${periodLabel(setup.reportingPeriod.start, setup.reportingPeriod.endExclusive)}`, detail: "02 Reporting period. Activity outside 2025 can’t be added yet, so the beta can’t cover this whole period. Records outside the period are held, not counted.", scopes: [1, 2] })
   if (setup.boundary.approach === "unknown") missing.push({ id: "boundary", title: "Choose a boundary approach", detail: "03 Entities & boundary. It decides which sites and sources belong in the inventory.", scopes: [1, 2] })
   if (!setup.locations.length) missing.push({ id: "sites", title: "Add at least one site", detail: "04 Locations.", scopes: [1, 2] })
   for (const location of setup.locations) if (location.inclusion === "unknown") missing.push({ id: `site-${location.id}`, title: `Decide whether ${location.name || "an unnamed site"} is included`, detail: "04 Locations. Its records aren’t counted until the site is included.", scopes: [1, 2] })
@@ -146,6 +156,18 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
     const imported = row.kind === "purchase_spend" && typeof (activity.payload as { importId?: unknown }).importId === "string"
     return { id: row.id, kind: row.kind, label: kindLabel(row.kind), sourceId: activity.sourceId, locationId: activity.locationId, site: siteName(activity.locationId), state, reasons, evidenceCount: activity.evidenceIds.length, quality: activity.quality, ...(imported ? { importedSpend: true as const } : {}) }
   })
+  // WO-04b (BF-01A): Scope 1 and 2 possible duplicates, by the results route's own rule over the same records (Scope 3
+  // duplicates come from the Scope 3 results). Withdrawn, excluded and held records keep their precedence, as there.
+  const scope12 = input.records.filter(row => SCOPE12_KINDS.has(row.kind))
+  const duplicates = possibleDuplicateRecords(scope12)
+  for (const row of records) {
+    const otherId = duplicates.get(row.id)
+    if (otherId === undefined || row.state === "withdrawn" || row.state === "excluded" || row.state === "held_period") continue
+    const other = scope12.find(item => item.id === otherId)?.currentVersion.activity
+    const otherRecord = scope12.find(item => item.id === otherId)
+    if (otherRecord) row.possibleDuplicateOther = { id: otherId, label: kindLabel(otherRecord.kind), sourceId: otherRecord.currentVersion.activity.sourceId }
+    row.possibleDuplicate = possibleDuplicateOfText(otherId, other ? { sourceId: other.sourceId, locationName: input.context?.locations.find(location => location.id === other.locationId)?.name ?? null, period: periodLabel(other.period.start, other.period.endExclusive) } : null)
+  }
   const byKind: Record<string, number> = {}
   for (const row of records) if (row.state !== "withdrawn") byKind[row.kind] = (byKind[row.kind] ?? 0) + 1
   const active = records.filter(row => row.state !== "withdrawn")
@@ -180,7 +202,7 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
   else if (openSetup.length) next = { panel: "setup", title: manage ? `Finish company setup: ${plural(openSetup.length, "open answer")}` : `Company setup has ${plural(openSetup.length, "open answer")}`, body: `${openSetup[0]!.title}. ${openSetup[0]!.detail}`, action: manage ? "Open company setup" : "View company setup", secondary: { panel: "results", action: "View draft results" } }
   else next = { panel: "results", title: "Review your draft results", body: gaps.length
     ? `${plural(gaps.length, "possible gap")} ${gaps.length === 1 ? "is" : "are"} listed with the results and in the report. Add the missing records, or note why a source doesn’t apply.`
-    : collection.partial ? "Your records can be calculated. Some are only partly calculated — the results page shows what would complete them." : "Your records are ready to calculate. Review the figures, then print or download the draft report.", action: "View results", secondary: gaps.length && manage ? { panel: "collection", action: "Add records" } : undefined }
+    : collection.partial ? "Your records can be calculated. Some are only partly calculated — the results page shows what each one still needs." : "Your records are ready to calculate. Review the figures, then print or download the draft report.", action: "View results", secondary: gaps.length && manage ? { panel: "collection", action: "Add records" } : undefined }
   return {
     canManage: input.canManage,
     setup: { saved: Boolean(setupVersion), revision: setupVersion?.revision ?? null, legalName: setup?.company.legalName ?? "", period: { start: setup?.reportingPeriod.start ?? null, endExclusive: setup?.reportingPeriod.endExclusive ?? null }, boundary: setup?.boundary.approach ?? "unknown", sites, missing },
@@ -225,23 +247,4 @@ export async function loadJourneyStatus(workspaceId: string, actor: HostedWorksp
   const spendLines = overview.scope3 ? await scope3SpendLineChoices(records) : []
   return computeJourneyStatus({ setup, context: overview.context, records, evidence, canManage: actor.role === "owner" || actor.role === "admin", scope3: overview.scope3,
     scope3MappingKeys: new Map(spendLines.map(line => [line.mappingKeyInput, line.mappingKey])) })
-}
-
-/** Answers the user's progress question from their own saved data, never from a model. */
-export function progressAnswer(status: JourneyStatus | null, failed = false): string[] {
-  if (!status) return [failed ? "Your progress couldn’t be loaded, so I can’t answer from your records right now. Try again from the Overview." : "I can’t see your progress yet — it’s still loading. Try again in a moment."]
-  const lines = [`Next step: ${status.next.title}. ${status.next.body}`]
-  if (status.setup.missing.length) lines.push(`Company setup still needs: ${status.setup.missing.map(item => item.title).join("; ")}.`)
-  const attention = status.collection.records.filter(row => row.state === "input_needed" || row.state === "review_required")
-  if (attention.length) lines.push(`Records with input needed: ${attention.slice(0, 4).map(row => `${row.label} · ${row.sourceId} (${row.reasons[0] ?? "more information needed"})`).join("; ")}${attention.length > 4 ? `; and ${attention.length - 4} more` : ""}.`)
-  const held = status.collection.records.filter(row => row.state === "held_period")
-  if (held.length) lines.push(`Outside the reporting period (not counted): ${held.slice(0, 4).map(row => `${row.label} · ${row.sourceId}`).join("; ")}${held.length > 4 ? `; and ${held.length - 4} more` : ""}. Check the reporting period in Company setup.`)
-  if (status.gaps.length) lines.push(`Possible gaps: ${status.gaps.slice(0, 4).map(gap => gap.title).join("; ")}${status.gaps.length > 4 ? `; and ${status.gaps.length - 4} more` : ""}.`)
-  const improve: string[] = []
-  if (status.collection.partial) improve.push(`${status.collection.partial} record${status.collection.partial === 1 ? " is" : "s are"} only partly calculated`)
-  if (status.collection.noEvidence) improve.push(`${status.collection.noEvidence} record${status.collection.noEvidence === 1 ? " has" : "s have"} no evidence linked`)
-  if (status.collection.qualityUnknown) improve.push(`${status.collection.qualityUnknown} record${status.collection.qualityUnknown === 1 ? " has" : "s have"} data quality “Unknown”`)
-  if (improve.length) lines.push(`Can be improved: ${improve.join("; ")}.`)
-  if (!status.setup.missing.length && !attention.length && !held.length && !status.gaps.length && !improve.length) lines.push("Nothing else is flagged. Open Results & report to review the draft — it is still a draft until an independent reviewer checks it.")
-  return lines
 }

@@ -29,12 +29,28 @@ async function withRetry(path: string, init: RequestInit, retry: boolean): Promi
   return fetch(path, init)
 }
 
+/** WO-04b: completed writes (any non-GET answered 2xx), by user and path. Returns the unsubscribe. */
+export type CompletedWrite = { userId: string; path: string }
+const writeListeners = new Set<(write: CompletedWrite) => void>()
+export function subscribeWrites(listener: (write: CompletedWrite) => void): () => void {
+  writeListeners.add(listener)
+  return () => { writeListeners.delete(listener) }
+}
+
 /** fetch for one signed-in user: GETs shared and retried once on 429; writes clear the shared GETs. */
 /** WO-09: each request (a write, or the one shared GET) is limited by its kind's timeout and reported when slow. */
 export async function sharedFetch(actor: { userId: string; signal?: AbortSignal }, path: string, init: RequestInit, options: { kind?: RequestKind } = {}): Promise<Response> {
   const method = (init.method ?? "GET").toUpperCase()
   const kind = options.kind ?? "default"
-  if (method !== "GET") { clearSharedGets(actor.userId); try { return await withRequestTimeout(kind, init.signal, signal => withRetry(path, { ...init, signal }, false)) } finally { clearSharedGets(actor.userId) } }
+  if (method !== "GET") {
+    clearSharedGets(actor.userId)
+    try {
+      const response = await withRequestTimeout(kind, init.signal, signal => withRetry(path, { ...init, signal }, false))
+      // WO-04b: a completed write tells the workspace, so readiness that depends on saved data (Scope 3) is checked again.
+      if (response.ok) for (const listener of [...writeListeners]) { try { listener({ userId: actor.userId, path }) } catch { /* a listener never breaks a write */ } }
+      return response
+    } finally { clearSharedGets(actor.userId) }
+  }
   const key = `${actor.userId}\u0000${path}`
   const now = Date.now(), hit = shared.get(key)
   if (hit && (now - hit.at < ttlMs || !hit.done)) { const response = await hit.response; actor.signal?.throwIfAborted(); return response.clone() }

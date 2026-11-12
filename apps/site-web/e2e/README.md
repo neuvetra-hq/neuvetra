@@ -39,7 +39,7 @@ Optional environment variables:
 - `E2E_WEB_ROOT`: test another build, for example another branch's `dist-staging`.
 - `NEUVETRA_PYTHON`: the Python the engines run with.
 - `E2E_CHROME_VERSION`: refuse any Chrome whose version is not exactly this one.
-- `E2E_VERBOSE`: print the server's requests per minute. The server allows 300 a minute per user, and the suite peaks at about 140 a minute, almost all as `owner`.
+- `E2E_VERBOSE`: print the server's requests per minute, all users together. The server allows 300 a minute per user. Since WO-04b (each Overview visit also asks for Scope 3 results once), the suite peaks at about 280–310 a minute in total; the readiness keyboard journey runs as `admin` so that `owner` stays well inside its own limit. A journey that opens many views should do the same.
 
 Without `E2E_DATABASE_URL` the suite is skipped locally. When `CI` is set, a missing `E2E_DATABASE_URL` is an error. The CI job also fails when fewer journeys pass than `E2E_EXPECTED_PASS` in `verify.yml`, so raise that number with every journey you add. The harness refuses any URL that is not on loopback or whose database is not named `neuvetra_e2e`.
 
@@ -84,7 +84,8 @@ It covers, through the real server and database:
 - the rate limiters;
 - real asset verification and serving;
 - the Python engines behind Results;
-- how the browser handles 401 (session ended), 503 (transient) and the session check.
+- how the browser handles 401 (session ended), 503 (transient) and the session check;
+- readiness (WO-04b): the Overview, the side navigation, the Menu sheet, Ask and the Results Scope 3 to-do agree, Scope 3 results are requested once per visit, and each kind of next-step action opens its view with focus on the page heading.
 
 It does **not** cover:
 

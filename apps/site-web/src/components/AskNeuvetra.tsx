@@ -2,17 +2,19 @@ import { useEffect, useRef, useState, type FormEvent } from "react"
 import { Icon } from "./Icon"
 import type { JourneyView } from "./JourneyNav"
 import { HELP_REVIEWED_ON, isProgressQuestion, matchQuestion, scope3Mode, suggestedQuestions, type HelpLink, type HelpPanel } from "@/lib/help-content"
-import { progressAnswer, type JourneyStatus } from "@/lib/journey-status"
+import type { JourneyStatus } from "@/lib/journey-status"
+import { improveLines, progressAnswer, targetView, type Readiness } from "@/lib/readiness"
 
 interface Message { id: number; from: "user" | "bot"; text: string[]; matched?: string; source?: string; reviewedOn?: string; link?: HelpLink; followUps?: string[] }
 
-export function AskNeuvetra({ open, onClose, panel, status, statusFailed = false, onNavigate }: { open: boolean; onClose: () => void; panel: HelpPanel; status: JourneyStatus | null; statusFailed?: boolean; onNavigate: (view: JourneyView) => void }) {
+export function AskNeuvetra({ open, onClose, panel, status, readiness, statusFailed = false, onNavigate }: { open: boolean; onClose: () => void; panel: HelpPanel; status: JourneyStatus | null; readiness: Readiness; statusFailed?: boolean; onNavigate: (view: JourneyView) => void }) {
   const [messages, setMessages] = useState<Message[]>([])
   const [query, setQuery] = useState("")
   const inputRef = useRef<HTMLInputElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
   const counter = useRef(0)
+  // WO-04b: the progress answer reads the same readiness as the Overview (same items, same order).
   // Answers follow what this workspace does: Scope 3 on, off, or (status not loaded or failed) neutral wording.
   const mode = scope3Mode(status, statusFailed)
   const suggestions = ["What’s left for me to do?", ...suggestedQuestions(panel, mode).map(entry => entry.question)]
@@ -41,7 +43,7 @@ export function AskNeuvetra({ open, onClose, panel, status, statusFailed = false
     if (!question) return
     const user: Message = { id: ++counter.current, from: "user", text: [question] }
     let reply: Message
-    if (isProgressQuestion(question) || /left for me/i.test(question)) reply = { id: ++counter.current, from: "bot", text: progressAnswer(status, statusFailed), source: "Your saved company setup and records", link: status ? { label: status.next.action, panel: status.next.panel as HelpPanel } : undefined }
+    if (isProgressQuestion(question) || /left for me/i.test(question)) reply = { id: ++counter.current, from: "bot", text: progressAnswer(readiness, status ? improveLines(status) : []), source: "Your saved company setup and records", link: readiness.state === "ready" ? { label: readiness.next.action, panel: targetView(readiness.next.target) as HelpPanel } : undefined }
     else {
       const match = matchQuestion(question, panel, mode)
       reply = match
