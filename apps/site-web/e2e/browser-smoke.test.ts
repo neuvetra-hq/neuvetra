@@ -12,7 +12,7 @@
  */
 import { afterAll, beforeAll, describe, expect, test } from "bun:test"
 import type { Browser, Page } from "playwright-core"
-import { addressesSeen, closeJourney, focusReport, horizontalOverflow, launchBrowser, openJourney, pageHeading, type Journey, type JourneyOptions } from "./harness/browser"
+import { AUTH_STORAGE_KEY, addressesSeen, closeJourney, focusReport, horizontalOverflow, launchBrowser, openJourney, pageHeading, type Journey, type JourneyOptions } from "./harness/browser"
 import { COMPANIES, RECORDS } from "./harness/seed"
 import { startStack, type Stack } from "./harness/stack"
 
@@ -478,7 +478,7 @@ suite("site-web browser smoke (E2E-01)", () => {
     await page.waitForFunction(() => Object.keys(sessionStorage).some(key => key.startsWith("nv:draft:v1:")))
     stack.tokens.revokeUser("owner")
     await focusUntil(page, page.getByRole("heading", { name: "Your session ended" }).waitFor({ timeout: 25_000 }))
-    await page.getByText("Unsaved changes are kept on this browser tab until you sign out.").waitFor()
+    await page.getByText("Unsaved changes are kept on this device, in this browser tab, until the next sign-in here", { exact: false }).waitFor()
     const form = page.locator("form", { has: page.locator("input[type=email]") }).first()
     await form.locator("input[type=email]").fill("owner@example.test")
     await form.locator("input[type=password]").fill("synthetic-password")
@@ -641,4 +641,46 @@ suite("site-web browser smoke (E2E-01)", () => {
     }))
     expect(lines.filter(([, count]) => count > 2)).toEqual([])
   }, 150_000)
+
+  // WO-13 (WO-05b follow-up, before any pilot on a shared machine): after A's session ends with a draft, the session-ended
+  // screen discards it and the stored sign-in on this device, after a confirmation inside the page (no browser dialog).
+  journey("the session-ended screen discards unsaved changes and the stored sign-in on this device after an in-page confirmation, at 390 and 1360 px", { signedInAs: "owner" }, async opened => {
+    const { page } = opened
+    await page.goto("/#/activity")
+    await activityListLoaded(page)
+    await openRecordByAddress(page, RECORDS.gasReady)
+    await reasonInput(page).fill("E2E: A's reason left on a shared computer")
+    await page.waitForFunction(() => Object.keys(sessionStorage).some(key => key.startsWith("nv:draft:v1:")))
+    stack.tokens.revokeUser("owner")
+    await focusUntil(page, page.getByRole("heading", { name: "Your session ended" }).waitFor({ timeout: 25_000 }))
+    await page.getByText("or for up to 24 hours. Signing out or discarding removes them now.", { exact: false }).waitFor()
+    const discard = page.getByRole("button", { name: "Discard unsaved changes on this device" })
+    expect(await page.getByRole("button", { name: "Sign out", exact: true }).isVisible()).toBe(true)
+    for (const width of [390, 1360]) {
+      await page.setViewportSize({ width, height: 844 })
+      // Keyboard: the button opens the confirmation, which takes focus; "Keep them" closes it and returns focus.
+      await discard.focus()
+      await page.keyboard.press("Enter")
+      const confirm = page.getByRole("group", { name: "Discard unsaved changes on this device?" })
+      await confirm.waitFor()
+      await page.waitForFunction(() => document.activeElement?.id === "wo13-discard-title")
+      expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0)
+      await confirm.getByRole("button", { name: "Keep them" }).click()
+      await page.waitForFunction(() => document.activeElement?.textContent === "Discard unsaved changes on this device")
+      expect(await page.evaluate(() => Object.keys(sessionStorage).filter(key => key.startsWith("nv:draft:v1:")).length)).toBeGreaterThan(0)
+    }
+    expect(await page.evaluate(key => window.localStorage.getItem(key), AUTH_STORAGE_KEY)).not.toBeNull()
+    await discard.click()
+    await page.getByRole("group", { name: "Discard unsaved changes on this device?" }).getByRole("button", { name: "Discard changes and sign-in" }).click()
+    await page.getByText("Unsaved changes discarded. Signed out on this browser.").first().waitFor()
+    expect(opened.dialogs).toEqual([])
+    expect(await page.evaluate(() => Object.keys(sessionStorage).filter(key => key.startsWith("nv:draft:v1:")))).toEqual([])
+    expect(await page.evaluate(key => Object.keys(window.localStorage).filter(item => item === key || item.startsWith(`${key}-`)), AUTH_STORAGE_KEY)).toEqual([])
+    expect(await page.getByRole("heading", { name: "Your session ended" }).count()).toBe(0)
+    // A reload finds no one signed in and nothing to offer.
+    await page.reload()
+    await page.locator("input[type=email]").first().waitFor()
+    expect(await page.locator(".nv-app").count()).toBe(0)
+    expect(await page.locator("body").innerText()).not.toContain("E2E: A's reason left on a shared computer")
+  })
 })

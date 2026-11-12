@@ -29,6 +29,8 @@ function harness(initialHash: string, initialState: unknown = null, role = "owne
   // WO-04b: the Scope 3 part's requests and the completed-write listeners (shared-get's subscribeWrites).
   const scope3Loads: Array<{ resolve: (items: unknown[]) => void; reject: (error: Error) => void; signal: AbortSignal }> = []
   const writeListeners = new Set<(write: { userId: string; path: string }) => void>()
+  // WO-13: a write's start and a failed write's end (shared-get's subscribeWriteActivity).
+  const activityListeners = new Set<(write: { userId: string; path: string; phase: "started" | "failed" }) => void>()
   let cursor = 0, changed = false, tree: Node
   const same = (a?: unknown[], b?: unknown[]) => a?.length === b?.length && a?.every((value, index) => Object.is(value, b?.[index]))
   function useState(initial: any) {
@@ -68,10 +70,11 @@ function harness(initialHash: string, initialState: unknown = null, role = "owne
   const window = { location, history, confirm: (text: string) => { confirms.push(text); return confirmAnswer }, scrollTo() {}, setTimeout: (fn: () => void, ms = 0) => { timers.set(++timerId, { fn, ms }); return timerId }, clearTimeout(id: number) { timers.delete(id) }, addEventListener(name: string, fn: () => void) { listeners.set(name, fn) }, removeEventListener(name: string) { listeners.delete(name) } }
   const body = {}, document = { title: "", body, activeElement: body }
   const h = (type: unknown, props: Record<string, any> | null, ...children: any[]): Node => ({ type, props: props ?? {}, children })
-  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "activityListHash", "canonicalViewHash", "DEFAULT_ACTIVITY_LIST_QUERY", "parseActivityListQuery", "loadJourneyStatus", "MENU_SHEET_ID", "MENU_TEXT", "computeReadiness", "subscribeWrites", "loadScope3ReadinessLazy", "scope3ItemsLazy", ...componentNames, script)
+  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "activityListHash", "canonicalViewHash", "DEFAULT_ACTIVITY_LIST_QUERY", "parseActivityListQuery", "loadJourneyStatus", "MENU_SHEET_ID", "MENU_TEXT", "computeReadiness", "subscribeWrites", "subscribeWriteActivity", "loadScope3ReadinessLazy", "scope3ItemsLazy", ...componentNames, script)
   const Workspace = factory(useCallback, useEffect, useRef, useState, window, document, { Fragment: "fragment" }, h, parseViewHash, viewHash, activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery,
     (_workspaceId: string, actor: { signal: AbortSignal }) => new Promise((resolve, reject) => loads.push({ resolve, reject, signal: actor.signal })), MENU_SHEET_ID, MENU_TEXT, computeReadiness,
     (listener: (write: { userId: string; path: string }) => void) => { writeListeners.add(listener); return () => writeListeners.delete(listener) },
+    (listener: (write: { userId: string; path: string; phase: "started" | "failed" }) => void) => { activityListeners.add(listener); return () => activityListeners.delete(listener) },
     (_workspaceId: string, actor: { signal: AbortSignal }) => new Promise((resolve, reject) => scope3Loads.push({ resolve, reject, signal: actor.signal })),
     async () => [],
     ...componentNames.map(name => components[name])) as (props: unknown) => Node
@@ -96,10 +99,11 @@ function harness(initialHash: string, initialState: unknown = null, role = "owne
   /** A Back or Forward to an entry with this address and state. */
   async function pop(hash: string, state: unknown = null) { location.hash = hash; history.state = state; listeners.get("popstate")!(); await settle() }
   const write = async (path: string) => { for (const listener of [...writeListeners]) listener({ userId: actor.userId, path }); await settle() }
+  const writeActivity = async (path: string, phase: "started" | "failed") => { for (const listener of [...activityListeners]) listener({ userId: actor.userId, path, phase }); await settle() }
   /** Runs the pending timers of one delay (in the order they were set), then settles. */
   const elapse = async (ms: number) => { for (const [id, timer] of [...timers]) if (timer.ms === ms) { timers.delete(id); timer.fn() } await settle() }
   const pendingTimers = (ms: number) => [...timers.values()].filter(timer => timer.ms === ms).length
-  return { scope3Loads, write, elapse, pendingTimers, signOuts: () => signOuts, settle, child, text, nodes, loads, location, listeners, render, history, entries, pop, confirms, answer: (value: boolean) => { confirmAnswer = value } }
+  return { scope3Loads, write, writeActivity, elapse, pendingTimers, signOuts: () => signOuts, settle, child, text, nodes, loads, location, listeners, render, history, entries, pop, confirms, answer: (value: boolean) => { confirmAnswer = value } }
 }
 
 test("a failed progress refresh hides prior status from Overview, navigation and Ask", async () => {
@@ -526,4 +530,49 @@ test("a write while Results is shown sets no recheck and makes no workspace Scop
   expect(app.pendingTimers(400)).toBe(0)
   await app.elapse(400)
   expect(app.scope3Loads).toHaveLength(0)
+})
+
+// WO-13 (QA follow-up 4 of PR #55): during a spend import the file's unsaved state clears at the start of the upload, and
+// progress reloads; that reload used to show the visit's previous Scope 3 answer ("4 open") for 30–50 ms before the first
+// write was answered. Scope 3 now says "Checking…" from the write's start, and a write that fails rechecks once.
+test("a write's start shows Checking… at once, before it is answered; a reload of progress meanwhile keeps it", async () => {
+  const workspace = "33333333-3333-4333-8333-333333333333"
+  const app = harness("#/activity")
+  await app.settle()
+  const loaded = () => computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true, scope3: true })
+  app.loads[0]!.resolve(loaded())
+  await app.settle()
+  app.scope3Loads[0]!.resolve([])
+  await app.settle()
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("ready")
+  await app.writeActivity(`/workspace-api/workspace/${workspace}/collection/evidence`, "started")
+  for (const name of ["JourneyNav", "AskNeuvetra"]) expect(app.child(name).props.readiness.scope3).toBe("checking")
+  // The Activity screen reports its unsaved input gone (the upload started): progress reloads, Scope 3 stays "Checking…".
+  app.child("CollectionWorkspace").props.onDirtyChange(false)
+  await app.settle()
+  app.loads.at(-1)!.resolve(loaded())
+  await app.settle()
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
+  expect([app.scope3Loads.length, app.pendingTimers(400)]).toEqual([1, 0])
+  // Answered: one recheck 400 ms after the last write; the second write's start drops the first one's timer.
+  await app.write(`/workspace-api/workspace/${workspace}/collection/evidence`)
+  await app.writeActivity(`/workspace-api/workspace/${workspace}/scope3/spend-imports`, "started")
+  expect(app.pendingTimers(400)).toBe(0)
+  await app.write(`/workspace-api/workspace/${workspace}/scope3/spend-imports`)
+  await app.elapse(400)
+  expect(app.scope3Loads).toHaveLength(2)
+  app.scope3Loads[1]!.resolve([])
+  await app.settle()
+  // A write that starts and then fails ends "Checking…" with one recheck, never leaving it stuck.
+  await app.writeActivity(`/workspace-api/workspace/${workspace}/setup`, "started")
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
+  await app.writeActivity(`/workspace-api/workspace/${workspace}/setup`, "failed")
+  await app.elapse(400)
+  expect(app.scope3Loads).toHaveLength(3)
+  app.scope3Loads[2]!.resolve([])
+  await app.settle()
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("ready")
+  // Another user's write, or another workspace's, changes nothing.
+  await app.writeActivity("/workspace-api/workspace/44444444-4444-4444-8444-444444444444/setup", "started")
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("ready")
 })

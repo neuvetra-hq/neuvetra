@@ -64,7 +64,7 @@ function render(results: ResultsResponse, coverage: Coverage = READY, scope3Over
     actionsLabelled: nodes.filter(node => node.type === "button" && /Print or save|Download CSV/.test(text(node))).map(node => node.props["aria-describedby"]),
     tableRegions: nodes.filter(node => typeof node.props.className === "string" && node.props.className.startsWith("nv-report__scroll")).map(node => ({ role: node.props.role, label: node.props["aria-label"], tabIndex: node.props.tabIndex })),
     warnings: nodes.filter(node => node.props.className === "nv-stat__warn").map(text),
-    banner: nodes.filter(node => node.props.className === "nv-notice nv-notice--warn").map(text).find(line => / counted yet| partly calculated/.test(line)) ?? null,
+    banner: nodes.filter(node => node.props.className === "nv-notice nv-notice--warn").map(text).find(line => / counted yet| partly calculated|possible duplicates? to confirm/.test(line)) ?? null,
     csv,
   }
 }
@@ -330,6 +330,26 @@ describe("BF-01: possible duplicate records", () => {
     expect(view.notCounted.some(line => line.includes(reason("possible_duplicate_counted")) && line.includes(named))).toBe(true)
     expect(csvLines(view.csv).some(text => text.includes(reason("possible_duplicate_counted")) && text.includes(named))).toBe(true)
     expect(reason("possible_duplicate_counted")).toContain("Both records are included in the total.")
+  })
+  // WO-13 (QA follow-up 1 of PR #55): the records banner follows the ruling: both are counted, check them, withdraw one if it
+  // is a repeat, nothing to do if they are different. It never says "Fix them to complete your totals" of a duplicate.
+  test("WO-13: a counted possible duplicate's banner says both are counted and to check it, never to fix it or to complete the totals", () => {
+    const dup = row("GAS-1", "natural_gas", 1, { inSubtotal: { scope1: true, scope2LocationBased: false, scope2MarketBased: false }, plan: { action: "calculate", status: null, reasons: [], notes: [`possible_duplicate_of:${keeper.recordId}`] }, scope1: s1(GAS, "complete", { total: kg("5311.4500") }) })
+    const results = base([keeper, dup], { scope1: { knownSourceSubtotal: kg("10622.9000"), includedResults: [keeper.scope1!.resultSha256, dup.scope1!.resultSha256], incompleteResults: [], notCalculated: [], reportedOutsideScopes: [], resultCount: 2, complete: true } })
+    const banner = render(results).banner
+    expect(banner).toBe("1 possible duplicate to confirm: it may repeat another record, and both records are counted. Check it: if it is a repeat, withdraw one of the two; if they are different records, nothing needs doing.")
+    expect(banner).not.toMatch(/complete|Fix /)
+    // With a record that isn't counted yet as well: "Fix it" names only that record, and the duplicate keeps its own words.
+    const held = row("GAS-9", "natural_gas", 1, { outcome: "held", plan: { action: "hold", status: "input_needed", reasons: ["quantity_not_calculable"], notes: [] } })
+    expect(render(base([keeper, dup, held], { scope1: results.scope1 })).banner).toBe("1 record isn’t counted yet. Fix it to complete your totals. 1 possible duplicate to confirm: it may repeat another record, and both records are counted. Check it: if it is a repeat, withdraw one of the two; if they are different records, nothing needs doing.")
+  })
+  test("WO-13: the banner's wording for several duplicates and for a view-only member", () => {
+    const text = resultsView.attentionBannerText
+    expect(text({ notCounted: 0, partly: 0, duplicates: 2 }, true)).toBe("2 possible duplicates to confirm: each may repeat another record, and both records of each pair are counted. Check them: if a record is a repeat, withdraw one of the pair; if they are different records, nothing needs doing.")
+    expect(text({ notCounted: 0, partly: 0, duplicates: 1 }, false)).toBe("1 possible duplicate to confirm: it may repeat another record, and both records are counted. If one is a repeat, an owner or admin can withdraw it; if they are different records, nothing needs doing.")
+    expect(text({ notCounted: 4, partly: 2, duplicates: 0 }, true)).toBe("4 records aren’t counted yet and 2 records are only partly calculated. Fix them to complete your totals.")
+    expect(text({ notCounted: 1, partly: 0, duplicates: 0 }, false)).toBe("1 record isn’t counted yet.")
+    for (const n of [1, 2, 5]) for (const manage of [true, false]) expect(text({ notCounted: 0, partly: 0, duplicates: n }, manage)).not.toMatch(/complete|[Ff]ix/)
   })
   test("count mode: the totals themselves are flagged on screen, in the draft report (print) and in the CSV subtotal row", () => {
     const dup = row("GAS-1", "natural_gas", 1, { inSubtotal: { scope1: true, scope2LocationBased: false, scope2MarketBased: false }, plan: { action: "calculate", status: null, reasons: [], notes: [`possible_duplicate_of:${keeper.recordId}`] }, scope1: s1(GAS, "complete", { total: kg("5311.4500") }) })

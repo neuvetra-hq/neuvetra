@@ -32,8 +32,19 @@ export const DRAFT_TEXT = {
   discard: "Discard",
   restored: "Unsaved changes restored. They aren’t saved yet: save them when you’re ready.",
   discarded: "Unsaved changes discarded.",
-  /** The second sentence of the "Your session ended" screen (WO-05a left it to this order). */
-  sessionEnded: "Unsaved changes are kept on this browser tab until you sign out.",
+  /**
+   * The second sentence of the "Your session ended" screen (WO-05a left it to this order). WO-13 (WO-05b follow-up): it
+   * says how long the changes stay on this device and how to remove them now.
+   */
+  sessionEnded: "Unsaved changes are kept on this device, in this browser tab, until the next sign-in here (you’re offered them back if it’s you), until the tab is closed, or for up to 24 hours. Signing out or discarding removes them now.",
+  /** WO-13: the session-ended screen's controls and the in-page confirmation. */
+  discardOnDevice: "Discard unsaved changes on this device",
+  discardConfirmTitle: "Discard unsaved changes on this device?",
+  discardConfirmBody: "Your unsaved changes in this browser tab and this browser’s stored sign-in are removed. This can’t be undone.",
+  discardConfirm: "Discard changes and sign-in",
+  discardCancel: "Keep them",
+  discardDone: "Unsaved changes discarded. Signed out on this browser.",
+  signOut: "Sign out",
   /** Landing, "Shared computer?". */
   sharedComputer: "Sign out when you finish — it clears this browser’s session and any unsaved changes kept in this tab.",
 } as const
@@ -131,9 +142,31 @@ export function admitDrafts(storage: DraftStorage | null, active: { userId: stri
   } catch { /* storage refused: nothing can be offered either */ }
 }
 
+/**
+ * WO-13 (WO-05b follow-up): the saved record IDs last listed for a user and company (from the Activity list's own answer),
+ * so a "new record" draft that names one of them is refused on restore.
+ */
+const savedRecords = new Map<string, ReadonlySet<string>>()
+export function noteSavedRecords(scope: { userId: string; companyId: string }, recordIds: Iterable<string>): void {
+  savedRecords.set(`${scope.userId}:${scope.companyId}`, new Set([...recordIds].map(id => id.toLowerCase())))
+}
+/**
+ * WO-13: a draft of the new-record form must not carry an existing record's ID or a saved version (only a hand-written or
+ * corrupted draft does): restoring it would aim the new-record form at a record that exists.
+ */
+function newDraftAllowed(scope: DraftScope, found: StoredDraft<unknown>): boolean {
+  if (scope.view !== "activity" || scope.item !== "new") return true
+  if (found.binding.expectedRevision !== 0 || found.binding.expectedVersionId !== null) return false
+  const request = found.request
+  if (request && (request.expectedRevision !== 0 || request.expectedVersionId !== null)) return false
+  const recordId = (found.fields as { recordId?: unknown }).recordId
+  return !(typeof recordId === "string" && savedRecords.get(`${scope.userId}:${scope.companyId}`)?.has(recordId.toLowerCase()))
+}
+
 /** A deliberate sign-out (here or in another tab): every draft in this tab goes, and none is written until the next workspace opens. */
 export function clearAllDrafts(storage: DraftStorage | null): void {
   owner = null
+  savedRecords.clear()
   cancelPendingRemovals()
   if (!storage) return
   try { for (const key of allDraftKeys(storage)) storage.removeItem(key) } catch { /* nothing kept */ }
@@ -170,7 +203,7 @@ export function readDraft<F>(storage: DraftStorage | null, scope: DraftScope, fi
     if (raw === null) return null
     const allowed = owner?.canStore && owner.userId === scope.userId && owner.companyId === scope.companyId
     const found = allowed ? decode(raw, now) : null
-    const checked = found ? fields(found.fields) : null
+    const checked = found && newDraftAllowed(scope, found) ? fields(found.fields) : null
     if (!found || !checked) { storage.removeItem(key); return null }
     return { ...found, fields: checked }
   } catch { return null }

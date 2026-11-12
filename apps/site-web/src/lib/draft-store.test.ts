@@ -153,7 +153,7 @@ test("setup drafts check their shape; the texts are the order's", () => {
   expect(check({ setup, reason: "", step: 6 })).toEqual({ setup, reason: "", step: 6 })
   for (const bad of [{ setup, reason: "", step: 7 }, { setup, reason: 1, step: 0 }, { setup: { ...setup, locations: {} }, reason: "", step: 0 }, { setup: { ...setup, company: null }, reason: "", step: 0 }]) expect(check(bad)).toBeNull()
   expect(DRAFT_TEXT.offer(draftTime(NOW))).toBe("Restore unsaved changes from 2026-11-12 10:00 UTC?")
-  expect(DRAFT_TEXT.sessionEnded).toBe("Unsaved changes are kept on this browser tab until you sign out.")
+  expect(DRAFT_TEXT.sessionEnded).toBe("Unsaved changes are kept on this device, in this browser tab, until the next sign-in here (you’re offered them back if it’s you), until the tab is closed, or for up to 24 hours. Signing out or discarding removes them now.")
   expect(DRAFT_TEXT.sharedComputer).toBe("Sign out when you finish — it clears this browser’s session and any unsaved changes kept in this tab.")
 })
 

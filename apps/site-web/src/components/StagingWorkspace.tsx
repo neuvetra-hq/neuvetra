@@ -13,7 +13,7 @@ import { ContextBar } from "./ContextBar"
 import { MENU_SHEET_ID, MENU_TEXT, MenuSheet } from "./MenuSheet"
 import { loadJourneyStatus, type Coverage, type JourneyStatus } from "@/lib/journey-status"
 import { computeReadiness, loadScope3ReadinessLazy, scope3ItemsLazy, type Scope3Part } from "@/lib/readiness"
-import { subscribeWrites } from "@/lib/shared-get"
+import { subscribeWriteActivity, subscribeWrites } from "@/lib/shared-get"
 import type { Scope3State } from "@/lib/scope3-results-api"
 import { activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery, parseViewHash, viewHash, type ActivityListQuery, type WorkspaceView } from "@/lib/view-route"
 
@@ -227,17 +227,23 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
   // reloads its own Scope 3 answer, which it reports here.
   // WO-04c (QA follow-up 5): the labels say "Checking…" at the first write, but the request waits until writes have been
   // quiet for SCOPE3_RECHECK_DELAY_MS, so a spend import (file upload, then import) or a burst of saves costs one recheck.
-  useEffect(() => subscribeWrites(write => {
-    if (write.userId !== staging.actor.userId || !staging.workspaceId || !write.path.includes(`/workspace/${staging.workspaceId}/`)) return
-    if (current.current.panel === "results") return
-    scope3Request.current?.abort(); scope3Request.current = null
-    setScope3Part({ state: "checking" })
-    cancelRecheck()
-    recheckTimer.current = window.setTimeout(() => {
-      recheckTimer.current = null
-      if (current.current.panel !== "results") setScope3Retry(value => value + 1)
-    }, SCOPE3_RECHECK_DELAY_MS)
-  }), [staging.actor.userId, staging.workspaceId])
+  // WO-13 (QA follow-up 4 of PR #55): "Checking…" from the moment a write starts, not when it is answered, so a status
+  // reload during the write (a spend import's unsaved file is cleared at its start) never shows the previous Scope 3
+  // answer. A write that fails rechecks too, so the labels never stay on "Checking…".
+  useEffect(() => {
+    const ours = (write: { userId: string; path: string }) => write.userId === staging.actor.userId && Boolean(staging.workspaceId) && write.path.includes(`/workspace/${staging.workspaceId}/`) && current.current.panel !== "results"
+    const checking = () => { scope3Request.current?.abort(); scope3Request.current = null; setScope3Part({ state: "checking" }); cancelRecheck() }
+    const recheckLater = () => {
+      checking()
+      recheckTimer.current = window.setTimeout(() => {
+        recheckTimer.current = null
+        if (current.current.panel !== "results") setScope3Retry(value => value + 1)
+      }, SCOPE3_RECHECK_DELAY_MS)
+    }
+    const stopDone = subscribeWrites(write => { if (ours(write)) recheckLater() })
+    const stopActivity = subscribeWriteActivity(write => { if (!ours(write)) return; if (write.phase === "started") checking(); else recheckLater() })
+    return () => { stopDone(); stopActivity() }
+  }, [staging.actor.userId, staging.workspaceId])
   /** Results' own Scope 3 request (busy, answered, failed or not switched on) is the Scope 3 part while Results is shown. */
   const onResultsScope3 = useCallback((state: Scope3State) => {
     if (current.current.panel !== "results") return

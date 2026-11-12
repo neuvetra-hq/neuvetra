@@ -51,6 +51,13 @@ export function PrivateStaging() {
   // WO-05b: the role of the workspace that was open, so the session-ended screen speaks of kept changes only to an owner or admin.
   const lastRole = useRef<string | null>(null)
   const [endedCanStore, setEndedCanStore] = useState(false)
+  // WO-13 (WO-05b follow-up): "Discard unsaved changes on this device" asks first, inside the page (never a browser dialog).
+  const [confirmDiscard, setConfirmDiscard] = useState(false)
+  const discardButtonRef = useRef<HTMLButtonElement>(null)
+  const discardHeadingRef = useRef<HTMLHeadingElement>(null)
+  const discardAsked = useRef(false)
+  // The localStorage key under which Supabase keeps this origin's sign-in session (set once the configuration loads).
+  const sessionStorageKey = useRef<string | null>(null)
 
   useEffect(() => {
     let alive = true
@@ -120,6 +127,7 @@ export function PrivateStaging() {
         // WO-05b (QA-141): another tab's deliberate sign-out clears this tab's drafts too (the broadcast may come later).
         else clearAllDrafts(draftStorage())
         setEndedCanStore(!deliberateElsewhere && (lastRole.current === "owner" || lastRole.current === "admin"))
+        setConfirmDiscard(false); discardAsked.current = false
         clearViewHash()
         endedUser.current = { userId, email: endedEmail }
         // The next person at a shared computer doesn't see the previous email.
@@ -135,6 +143,7 @@ export function PrivateStaging() {
         if (!alive) return
         // Whose session this browser already held when the page loaded (read before Supabase can change it).
         const storageKey = `neuvetra:m63:${config.projectRef}:auth`
+        sessionStorageKey.current = storageKey
         if (opened.current === null && !signInFromUrl.current) loadUser.current = storedSessionUser(storageKey)
         authClient = createClient(config.supabaseUrl, config.anonKey, { auth: { storageKey, persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: "pkce" } })
         setClient(authClient)
@@ -161,6 +170,11 @@ export function PrivateStaging() {
   // Each access state puts focus on its own heading when it appears (WO-05a).
   const accessState = active ? null : problem
   useEffect(() => { if (accessState) accessHeadingRef.current?.focus() }, [accessState])
+  // WO-13: the confirmation takes focus when it opens; Keep them returns focus to the button that opened it.
+  useEffect(() => {
+    if (confirmDiscard) { discardAsked.current = true; discardHeadingRef.current?.focus() }
+    else if (discardAsked.current) { discardAsked.current = false; discardButtonRef.current?.focus() }
+  }, [confirmDiscard])
 
   async function signIn(event: FormEvent) {
     event.preventDefault()
@@ -173,7 +187,7 @@ export function PrivateStaging() {
     } catch { setMessage("Sign-in is unavailable. Please try again.") }
     finally { setPassword(""); setBusy(false) }
   }
-  async function signOut() {
+  async function signOut(done: string = "Signed out on this browser.") {
     // A deliberate sign-out is the only thing that forgets the view address. WO-05b: it also removes every unsaved draft in
     // this tab, stops further draft writes (before the workspace closes), and tells the other tabs to do the same.
     clearAllDrafts(draftStorage()); markDeliberateSignOut(viewStorage()); announceDraftClear()
@@ -184,10 +198,29 @@ export function PrivateStaging() {
       if (!client) throw new Error("Authentication unavailable")
       const { error } = await client.auth.signOut({ scope: "local" })
       if (error) throw error
-      setMessage("Signed out on this browser.")
+      setMessage(done)
     }
     catch { setMessage("The workspace is closed. Session sign-out could not be confirmed; retry before leaving a shared browser.") }
     finally { setBusy(false) }
+  }
+  /**
+   * WO-13 (WO-05b follow-up, before any pilot on a shared machine): the session-ended screen's "Discard unsaved changes on
+   * this device". Every draft goes (here, and in the other tabs by the sign-out broadcast), and the stored sign-in session
+   * of this origin is removed even when the sign-out can't reach the server, so nothing of the person stays readable here.
+   */
+  async function discardOnDevice() {
+    setConfirmDiscard(false); discardAsked.current = false
+    await signOut(DRAFT_TEXT.discardDone)
+    const key = sessionStorageKey.current
+    let removed = true
+    try {
+      const storage = window.localStorage
+      const keys: string[] = []
+      for (let index = 0; index < storage.length; index++) { const stored = storage.key(index); if (stored !== null) keys.push(stored) }
+      if (key) for (const stored of keys) if (stored === key || stored.startsWith(`${key}-`)) storage.removeItem(stored)
+    } catch { removed = false }
+    clearAllDrafts(draftStorage())
+    setMessage(removed ? DRAFT_TEXT.discardDone : "Unsaved changes discarded. The stored sign-in could not be removed; close this browser before leaving a shared computer.")
   }
   async function sendSignInLink() {
     if (!client || busy || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { setMessage("Enter your invited email address first."); return }
@@ -235,6 +268,16 @@ export function PrivateStaging() {
       <div className="nv-or">or</div>
       <button type="button" className="nv-btn nv-btn--block" disabled={!client} aria-disabled={busy || undefined} onClick={() => { if (!busy) void sendSignInLink() }}>Email me a sign-in link</button>
     </form>
+    {/* WO-13: on a shared computer, the person can leave nothing behind without signing in again. */}
+    <div className="nv-access__actions wo13-device-actions">
+      {endedCanStore && <button type="button" className="nv-btn" ref={discardButtonRef} aria-expanded={confirmDiscard} aria-disabled={busy || undefined} onClick={() => { if (!busy) setConfirmDiscard(true) }}>{DRAFT_TEXT.discardOnDevice}</button>}
+      <button type="button" className="nv-btn" aria-disabled={busy || undefined} onClick={() => { if (!busy) void signOut() }}>{DRAFT_TEXT.signOut}</button>
+    </div>
+    {confirmDiscard && <div className="nv-notice nv-notice--warn wo13-discard" role="group" aria-labelledby="wo13-discard-title"><Icon name="alert" /><div>
+      <h2 className="nv-h3" id="wo13-discard-title" tabIndex={-1} ref={discardHeadingRef}>{DRAFT_TEXT.discardConfirmTitle}</h2>
+      <p>{DRAFT_TEXT.discardConfirmBody}</p>
+      <div className="nv-access__actions"><button type="button" className="nv-btn nv-btn--danger" aria-disabled={busy || undefined} onClick={() => { if (!busy) void discardOnDevice() }}>{DRAFT_TEXT.discardConfirm}</button><button type="button" className="nv-btn" onClick={() => setConfirmDiscard(false)}>{DRAFT_TEXT.discardCancel}</button></div>
+    </div></div>}
   </div></div>
   if (problem) return <div className="nv-access">{live}<div className="nv-access__card">
     <Icon name="alert" size={32} className="nv-access__icon" />

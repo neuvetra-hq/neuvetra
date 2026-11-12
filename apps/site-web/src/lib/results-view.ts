@@ -51,6 +51,29 @@ export const countedDuplicate = (row: ResultRow) => duplicateReasonCodes(row).le
 /** Not yet counted (B02): held by the adapter, the period check or the engine, and neither withdrawn nor excluded. */
 export const notYetCounted = (row: ResultRow) => row.plan.status !== "withdrawn" && row.plan.status !== "excluded"
   && (row.outcome !== "calculated" || engineHold(row) === "input_needed" || engineHold(row) === "review_required")
+/**
+ * WO-13 (QA follow-up 1 of PR #55): the Results records banner. Records not counted yet or only partly calculated are
+ * fixed to complete the totals; a counted possible duplicate is not: both records are counted, and it is checked, then
+ * one is withdrawn if it is a repeat, or left alone if the two are different records (CEO ruling, 12 November 2026).
+ */
+export const ATTENTION_BANNER_TEXT = {
+  fix: (count: number) => ` Fix ${count === 1 ? "it" : "them"} to complete your totals.`,
+  duplicates: (count: number) => count === 1
+    ? "1 possible duplicate to confirm: it may repeat another record, and both records are counted."
+    : `${count} possible duplicates to confirm: each may repeat another record, and both records of each pair are counted.`,
+  duplicatesManage: (count: number) => count === 1
+    ? " Check it: if it is a repeat, withdraw one of the two; if they are different records, nothing needs doing."
+    : " Check them: if a record is a repeat, withdraw one of the pair; if they are different records, nothing needs doing.",
+  duplicatesView: " If one is a repeat, an owner or admin can withdraw it; if they are different records, nothing needs doing.",
+} as const
+export function attentionBannerText(counts: { notCounted: number; partly: number; duplicates: number }, canManage: boolean): string {
+  const plural = (count: number, one: string, many: string) => `${count} ${count === 1 ? one : many}`
+  const work = [counts.notCounted ? `${plural(counts.notCounted, "record isn’t", "records aren’t")} counted yet` : "", counts.partly ? `${plural(counts.partly, "record is", "records are")} only partly calculated` : ""].filter(Boolean).join(" and ")
+  const parts: string[] = []
+  if (work) parts.push(`${work}.${canManage ? ATTENTION_BANNER_TEXT.fix(counts.notCounted + counts.partly) : ""}`)
+  if (counts.duplicates) parts.push(`${ATTENTION_BANNER_TEXT.duplicates(counts.duplicates)}${canManage ? ATTENTION_BANNER_TEXT.duplicatesManage(counts.duplicates) : ATTENTION_BANNER_TEXT.duplicatesView}`)
+  return parts.join(" ")
+}
 /** A record needs attention when it is held, not calculated, or only partly calculated. Shared by results and overview. */
 export const needsWork = (row: ResultRow) => { const tone = rowStatus(row).tone; return tone === "warn" || tone === "danger" || row.scope1?.status === "partial" || rowStatus(row).label === "Partial calculation" }
 /** The dataset a register factor comes from, from its key prefix. */

@@ -1,0 +1,10 @@
+/* WO-13 (WO-05b follow-up): the "Your session ended" screen's device controls and its in-page confirmation. Unlayered on
+   purpose (see the developer brief): a layered rule would lose to journey.css and staging.css. */
+.nv-access .wo13-device-actions { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line-2); }
+.nv-access .wo13-device-actions > .nv-btn { flex: 1 1 100%; min-width: 0; white-space: normal; }
+.nv-access .wo13-discard { margin: 16px 0 0; text-align: left; }
+.nv-access .wo13-discard > div { min-width: 0; }
+.nv-access .wo13-discard h2 { margin: 0 0 4px; overflow-wrap: anywhere; }
+.nv-access .wo13-discard p { margin: 0; overflow-wrap: anywhere; }
+.nv-access .wo13-discard .nv-access__actions { justify-content: flex-start; margin-top: 12px; }
+.nv-access .wo13-discard .nv-access__actions > .nv-btn { white-space: normal; }

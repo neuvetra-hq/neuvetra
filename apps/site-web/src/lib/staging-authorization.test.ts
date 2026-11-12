@@ -40,7 +40,7 @@ function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;
  const location={origin:"https://synthetic.invalid",pathname:"/",search:options.search??"",hash:options.hash??""}
  const window={setInterval(fn:()=>void){listeners.set("interval",fn);return 1},clearInterval(){listeners.delete("interval")},addEventListener(name:string,fn:()=>void){listeners.set(name,fn)},removeEventListener(name:string){listeners.delete(name)},location,
   history:{replaceState(_s:unknown,_t:string,url:string){const at=url.indexOf("#");location.hash=at<0?"":url.slice(at)}},
-  localStorage:{getItem:(k:string)=>storage.get(k)??null,setItem:(k:string,v:string)=>{storage.set(k,v)},removeItem:(k:string)=>{storage.delete(k)}}}
+  localStorage:{getItem:(k:string)=>storage.get(k)??null,setItem:(k:string,v:string)=>{storage.set(k,v)},removeItem:(k:string)=>{storage.delete(k)},get length(){return storage.size},key:(i:number)=>[...storage.keys()][i]??null}}
  const useEffect=(effect:()=>void|(()=>void),deps?:unknown[])=>{const i=cursor++,prev=effects[i];if(!prev||!deps||!prev.deps||deps.some((d,k)=>!Object.is(d,prev.deps![k])))pendingEffects.push(()=>{if(prev&&typeof prev.cleanup==="function")prev.cleanup();effects[i]={deps,cleanup:effect()}})}
  const names={useEffect,useRef:(value:unknown)=>{const i=cursor++;return slots[i]??(slots[i]={current:value})},useState:(value:unknown)=>{const i=cursor++;if(!(i in slots))slots[i]=value;return [slots[i],(next:any)=>{slots[i]=typeof next==="function"?next(slots[i]):next}]},
   createClient:()=>client,StagingWorkspace:Workspace,decodeStagingAccess,decodeStagingConfig,
@@ -55,7 +55,7 @@ function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;
  },window,h,Landing:()=>null,Icon:()=>null,signInNoticeTone}
  const component=new Function(...Object.keys(names),script)(...Object.values(names))
  // As React attaches refs before effects run: each h1 with a ref records its focus calls.
- function render(){cursor=0;tree=component();for(const n of flatten(tree))if(n.type==="h1"&&n.props.ref){const label=text(n);n.props.ref.current={focus:()=>focused.push(label)}}return tree}
+ function render(){cursor=0;tree=component();for(const n of flatten(tree))if((n.type==="h1"||n.type==="h2"||n.type==="button")&&n.props.ref){const label=text(n);n.props.ref.current={focus:()=>focused.push(label)}}return tree}
  const flatten=(node:any):Node[]=>node&&typeof node==="object"&&"type" in node?[node,...node.children.flat(Infinity).flatMap(flatten)]:[]
  const nodes=()=>flatten(tree)
  const workspace=()=>nodes().find(n=>n.type===Workspace)
@@ -505,11 +505,50 @@ test("QA-141: a deliberate sign-out removes every draft here and tells the other
 })
 
 test("the session-ended screen says unsaved changes stay in this tab, to an owner or admin only",async()=>{
- const sentence="Sign in again to continue. Unsaved changes are kept on this browser tab until you sign out."
+ // WO-13: the sentence says how long they stay on this device and how to remove them now.
+ const sentence="Sign in again to continue. Unsaved changes are kept on this device, in this browser tab, until the next sign-in here (you’re offered them back if it’s you), until the tab is closed, or for up to 24 hours. Signing out or discarding removes them now."
  const h=harness();await h.flush();h.workspace()!.props.staging.actor.onUnauthorized(401);await h.flush()
  expect(h.nodes().some(n=>n.type==="p"&&h.text(n)===sentence)).toBe(true);h.cleanup()
  const m=harness();m.setVerification(async()=>Response.json(access(owner,"member")));await m.flush();m.workspace()!.props.staging.actor.onUnauthorized(401);await m.flush()
  expect(m.nodes().some(n=>n.type==="p"&&h.text(n)==="Sign in again to continue.")).toBe(true);m.cleanup()
+})
+
+// WO-13 (WO-05b follow-up): before any pilot on a shared machine, the session-ended screen lets the person leave nothing
+// behind without signing in again: "Discard unsaved changes on this device" (after a confirmation inside the page, never a
+// browser dialog) and "Sign out".
+test("WO-13: the session-ended screen discards every draft and the stored sign-in after an in-page confirmation, or signs out",async()=>{
+ const tab=tabWithDraftOf(owner),storage=new Map<string,string>([["neuvetra:m63:abcdefghijklmnopqrst:auth-code-verifier","v"],["unrelated","kept"]])
+ const h=harness({tab,storage});await h.flush()
+ h.workspace()!.props.staging.actor.onUnauthorized(401);await h.flush()
+ expect(h.text(h.heading()!)).toBe("Your session ended");expect(tab.entries.size).toBe(2)
+ const discard=()=>h.nodes().find(n=>n.type==="button"&&h.text(n)===drafts.DRAFT_TEXT.discardOnDevice)
+ expect(discard()).toBeDefined();expect(h.button("Sign out")).toBeDefined()
+ expect(discard()!.props["aria-expanded"]).toBe(false)
+ // The confirmation is part of the page (the harness window has no confirm(): a browser dialog would throw here).
+ discard()!.props.onClick();await h.flush()
+ const group=h.nodes().find(n=>n.props.role==="group"&&n.props["aria-labelledby"]==="wo13-discard-title")!
+ expect(h.text(group)).toContain(drafts.DRAFT_TEXT.discardConfirmTitle);expect(h.text(group)).toContain(drafts.DRAFT_TEXT.discardConfirmBody)
+ expect(h.focused.at(-1)).toBe(drafts.DRAFT_TEXT.discardConfirmTitle);expect(discard()!.props["aria-expanded"]).toBe(true)
+ // Keep them: nothing is removed and focus returns to the button.
+ h.button(drafts.DRAFT_TEXT.discardCancel)!.props.onClick();await h.flush()
+ expect(h.nodes().some(n=>n.props.role==="group"&&n.props["aria-labelledby"]==="wo13-discard-title")).toBe(false)
+ expect(h.focused.at(-1)).toBe(drafts.DRAFT_TEXT.discardOnDevice);expect(tab.entries.size).toBe(2)
+ // Confirmed: every draft, the stored sign-in session and its companion keys go; the other tabs are told; nothing else is touched.
+ const before=announced.count
+ discard()!.props.onClick();await h.flush()
+ await h.button(drafts.DRAFT_TEXT.discardConfirm)!.props.onClick();await h.flush()
+ expect(tab.entries.size).toBe(0);expect(announced.count).toBe(before+1)
+ expect([...storage.keys()].filter(k=>k.startsWith("neuvetra:m63:"))).toEqual([]);expect(storage.get("unrelated")).toBe("kept")
+ expect(recentlySignedOut({getItem:k=>storage.get(k)??null,setItem:()=>{},removeItem:()=>{}})).toBe(true)
+ expect(h.message()).toBe(drafts.DRAFT_TEXT.discardDone);expect(h.heading()).toBeUndefined();h.cleanup()
+ // "Sign out" signs out at once and removes the drafts too (a deliberate sign-out).
+ const second=tabWithDraftOf(owner),s=harness({tab:second});await s.flush()
+ s.workspace()!.props.staging.actor.onUnauthorized(401);await s.flush()
+ await s.button("Sign out")!.props.onClick();await s.flush()
+ expect(second.entries.size).toBe(0);expect(s.message()).toBe("Signed out on this browser.");s.cleanup()
+ // A member keeps no drafts, so there is nothing to discard: only Sign out.
+ const m=harness();m.setVerification(async()=>Response.json(access(owner,"member")));await m.flush();m.workspace()!.props.staging.actor.onUnauthorized(401);await m.flush()
+ expect(m.nodes().some(n=>n.type==="button"&&m.text(n)===drafts.DRAFT_TEXT.discardOnDevice)).toBe(false);expect(m.button("Sign out")).toBeDefined();m.cleanup()
 })
 
 test("WO-05a QA follow-up 1: a stale session at load that fails its check never vouches for a record address, for its own later sign-in either",async()=>{
