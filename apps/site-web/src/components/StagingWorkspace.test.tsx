@@ -3,7 +3,7 @@ import { expect, test } from "bun:test"
 import { computeJourneyStatus } from "@/lib/journey-status"
 import { computeReadiness } from "@/lib/readiness"
 import { MENU_SHEET_ID, MENU_TEXT } from "./MenuSheet"
-import { activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery, parseViewHash, viewHash } from "@/lib/view-route"
+import { activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery, parseSetupSection, parseViewHash, setupSectionHash, viewHash } from "@/lib/view-route"
 
 const source = await Bun.file(new URL("./StagingWorkspace.tsx", import.meta.url)).text()
 const script = new Bun.Transpiler({ loader: "tsx", tsconfig: { compilerOptions: { jsx: "react", jsxFactory: "h" } } })
@@ -70,8 +70,8 @@ function harness(initialHash: string, initialState: unknown = null, role = "owne
   const window = { location, history, confirm: (text: string) => { confirms.push(text); return confirmAnswer }, scrollTo() {}, setTimeout: (fn: () => void, ms = 0) => { timers.set(++timerId, { fn, ms }); return timerId }, clearTimeout(id: number) { timers.delete(id) }, addEventListener(name: string, fn: () => void) { listeners.set(name, fn) }, removeEventListener(name: string) { listeners.delete(name) } }
   const body = {}, document = { title: "", body, activeElement: body }
   const h = (type: unknown, props: Record<string, any> | null, ...children: any[]): Node => ({ type, props: props ?? {}, children })
-  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "activityListHash", "canonicalViewHash", "DEFAULT_ACTIVITY_LIST_QUERY", "parseActivityListQuery", "loadJourneyStatus", "MENU_SHEET_ID", "MENU_TEXT", "computeReadiness", "subscribeWrites", "subscribeWriteActivity", "loadScope3ReadinessLazy", "scope3ItemsLazy", ...componentNames, script)
-  const Workspace = factory(useCallback, useEffect, useRef, useState, window, document, { Fragment: "fragment" }, h, parseViewHash, viewHash, activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery,
+  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "activityListHash", "canonicalViewHash", "DEFAULT_ACTIVITY_LIST_QUERY", "parseActivityListQuery", "parseSetupSection", "setupSectionHash", "loadJourneyStatus", "MENU_SHEET_ID", "MENU_TEXT", "computeReadiness", "subscribeWrites", "subscribeWriteActivity", "loadScope3ReadinessLazy", "scope3ItemsLazy", ...componentNames, script)
+  const Workspace = factory(useCallback, useEffect, useRef, useState, window, document, { Fragment: "fragment" }, h, parseViewHash, viewHash, activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery, parseSetupSection, setupSectionHash,
     (_workspaceId: string, actor: { signal: AbortSignal }) => new Promise((resolve, reject) => loads.push({ resolve, reject, signal: actor.signal })), MENU_SHEET_ID, MENU_TEXT, computeReadiness,
     (listener: (write: { userId: string; path: string }) => void) => { writeListeners.add(listener); return () => writeListeners.delete(listener) },
     (listener: (write: { userId: string; path: string; phase: "started" | "failed"; definite?: boolean }) => void) => { activityListeners.add(listener); return () => activityListeners.delete(listener) },
@@ -645,4 +645,35 @@ test("a write refused by the server brings back the previous Scope 3 answer with
   await app.writeActivity(path, "started"); await app.writeActivity(path, "failed", false)
   await app.elapse(400)
   expect(app.scope3Loads).toHaveLength(loads + 1)
+})
+
+// ── WO-12b QA round 2: a notice's "Open company setup (03 …)" opens setup at that section ──
+
+test("an address #/setup/0N opens company setup at section N (load, Back or a link), keeps it as the section changes, and a menu visit starts at 01", async () => {
+  const loaded = harness("#/setup/04")
+  await loaded.settle()
+  expect([loaded.child("CompanySetup").props.initialStep, loaded.location.hash]).toEqual([3, "#/setup/04"])
+  // From Activity, the notice's link (a hash change, as Back or Forward): the section it names, after the unsaved-change guard.
+  const app = harness("#/activity")
+  await app.settle()
+  app.child("CollectionWorkspace").props.onDirtyChange(true); await app.settle()
+  app.answer(false)
+  await app.pop("#/setup/03")
+  expect([app.child("CompanySetup"), app.confirms]).toEqual([undefined, ["Discard unsaved activity changes?"]])
+  app.answer(true)
+  await app.pop("#/setup/03")
+  expect([app.child("CompanySetup").props.initialStep, app.location.hash]).toEqual([2, "#/setup/03"])
+  // Moving to another section replaces the address (a reload reopens it; Back still leaves setup in one step).
+  const entries = app.entries.length
+  app.child("CompanySetup").props.onStepChange(5); await app.settle()
+  expect([app.location.hash, app.entries.length]).toEqual(["#/setup/06", entries])
+  app.child("CompanySetup").props.onStepChange(0); await app.settle()
+  expect(app.location.hash).toBe("#/setup")
+  // A visit from the navigation starts at 01; an unknown section is plain #/setup.
+  await app.pop("#/overview")
+  app.child("JourneyHome").props.onNavigate("setup"); await app.settle()
+  expect([app.child("CompanySetup").props.initialStep, app.location.hash]).toEqual([0, "#/setup"])
+  const odd = harness("#/setup/09")
+  await odd.settle()
+  expect([odd.child("CompanySetup").props.initialStep, odd.location.hash]).toEqual([0, "#/setup"])
 })

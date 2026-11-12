@@ -102,12 +102,17 @@ describe("WO-12b 1: the record-hold notice", () => {
     const hold = recordHold({ kind: "natural_gas", payload: {} as any }, { boundary: { code: "equity_share_not_supported", site: "Plant", approach: "equity_share", entityControl: null } })!
     const owner = harness(make, () => ({ hold, canManage: true })), viewer = harness(make, () => ({ hold, canManage: false }))
     const links = (app: any) => app.nodes().filter((node: any) => node.type === "a").map((node: any) => [node.props.href, node.children.flat(Infinity).join("")])
-    expect(links(owner)).toEqual([["#/setup", "Open company setup (03 Entities & boundary)"]])
+    // QA round 2: the link opens the section it names (#/setup/03), not section 01.
+    expect(links(owner)).toEqual([["#/setup/03", "Open company setup (03 Entities & boundary)"]])
+    const site = (code: string) => recordHold({ kind: "natural_gas", payload: {} as any }, { boundary: { code: code as any, site: "Yard", approach: "operational_control", entityControl: null } })!
+    const period = recordHold({ kind: "natural_gas", payload: {} as any }, { boundary: { code: "reporting_period_unknown", site: "Plant", approach: "operational_control", entityControl: null } })!
+    expect([site("location_control_unresolved"), site("entity_excluded_by_company_setup"), period].map(hold => links(harness(make, () => ({ hold, canManage: true })))[0]))
+      .toEqual([["#/setup/04", "Open company setup (04 Locations)"], ["#/setup/03", "Open company setup (03 Entities & boundary)"], ["#/setup/02", "Open company setup (02 Reporting period)"]])
     expect([links(viewer), viewer.text().includes("See company setup, 03 Entities & boundary."), viewer.nodes().some((node: any) => node.type === "button")]).toEqual([[], true, false])
     expect(owner.text()).toContain("Company setup’s consolidation approach is equity share, which holds every Scope 1 and 2 record, whatever is filled in here.")
     // There is no answer on the form to change, so the labels sentence says "that changes", not "that answer changes".
     expect([owner.text().includes(RECORD_HOLD_TEXT.labelsElsewhere), owner.text().includes(RECORD_HOLD_TEXT.labels)]).toEqual([true, false])
-    const replaced = recordHold({ kind: "purchase_spend", payload: {} as any }, { supersededBy: { id: "r1", name: "Supplier-specific purchases · ACME-1" } })!
+    const replaced = recordHold({ kind: "purchase_spend", payload: {} as any }, { supersededBy: { id: "r1", name: "Supplier-specific purchases · ACME-1", match: "name", fields: ["supplier"] } })!
     expect(links(harness(make, () => ({ hold: replaced })))).toEqual([["#/activity/r1", "Open Supplier-specific purchases · ACME-1"]])
   })
 
@@ -196,6 +201,20 @@ describe("WO-12b 3: company setup for a member is text, never a disabled form", 
     expect((select as any)({ label: "Control", value: "landlord", options: [["landlord", "Landlord"]], onChange: () => {}, readOnly: true }).props).toEqual({ label: "Control", answer: "Landlord" })
     const answer = (await loadComponent("./CompanySetup.tsx", "ReadOnlyAnswer", { SETUP_READ_ONLY_TEXT }))({ h: (type: unknown, props: any, ...children: any[]) => ({ type, props: props ?? {}, children }) }) as any
     expect(JSON.stringify(answer({ label: "Legal name", answer: " " }))).toBe(JSON.stringify({ type: "dl", props: { className: "setup-readonly" }, children: [{ type: "dt", props: {}, children: ["Legal name"] }, { type: "dd", props: {}, children: [SETUP_READ_ONLY_TEXT.notAnswered] }] }))
+  })
+  test("QA round 2: opened at a section (#/setup/03), setup shows that section and focuses its heading once loaded; the section shown is reported", async () => {
+    const focused: string[] = [], steps: number[] = []
+    const make = await loadComponent("./CompanySetup.tsx", "CompanySetup", {
+      CompanySetupApiError, loadCompanySetup: async () => ({ profile: "neuvetra.company-setup.v1", syntheticOnly: true, canManage: true, currentVersion: { id: SETUP, revision: 1, setup }, history: [] }),
+      loadCompanySetupVersion: async () => null, saveCompanySetup: async () => { throw new Error("no") }, window: { confirm: () => true },
+      requestAnimationFrame: (fn: () => void) => { fn(); return 0 }, document: { getElementById: (id: string) => ({ focus: () => focused.push(id) }) },
+    })
+    const app = harness(make, () => ({ actor: owner, workspaceId: W, headingRef: { current: null }, onDirtyChange: () => {}, intro: null, initialStep: 2, onStepChange: (step: number) => steps.push(step) }))
+    await app.settle(); await new Promise(r => setTimeout(r, 5)); await app.settle()
+    const heading = app.nodes().find((node: any) => node.type === "h2" && node.props.id === "setup-form-heading")!
+    expect([heading.children.flat(Infinity).join(""), focused]).toEqual(["03 / Entities & boundary", ["setup-form-heading"]])
+    app.button("05 Changes & shared operations")!.props.onClick(); await app.settle()
+    expect([steps[0], steps.at(-1), focused.length]).toEqual([2, 4, 1])
   })
   test("an owner keeps the form (control)", async () => {
     const app = await screen(owner, true)

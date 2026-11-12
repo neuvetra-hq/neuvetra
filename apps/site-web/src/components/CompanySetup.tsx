@@ -90,8 +90,11 @@ const screening = [["unknown", "Not sure yet"], ["yes", "Yes"], ["no", "No — e
 const scope3Screening = [["unknown", "Not screened yet"], ["yes", "Included in the inventory"], ["no", "No: excluded from the inventory — explain"], ["not_applicable", "Not applicable: no such activity — explain"]] as const
 const scope3Decision = (state: string | undefined): Scope3SetupDecision => state === "yes" ? "included" : state === "no" ? "excluded" : state === "not_applicable" ? "not_relevant" : "not_screened"
 
-export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, intro, onNavigate }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; onDirtyChange?: (dirty: boolean) => void; intro?: ReactNode; onNavigate?: (view: "collection") => void }) {
-  const [step, setStep] = useState(0)
+export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, intro, onNavigate, initialStep = 0, onStepChange }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; onDirtyChange?: (dirty: boolean) => void; intro?: ReactNode; onNavigate?: (view: "collection") => void
+  /** WO-12b QA round 2: the section to open at (0 for 01 Company), from the address (#/setup/03), and where the section shown is reported. */
+  initialStep?: number; onStepChange?: (step: number) => void }) {
+  const [step, setStep] = useState(() => Number.isInteger(initialStep) && initialStep >= 0 && initialStep < sections.length ? initialStep : 0)
+  useEffect(() => { onStepChange?.(step) }, [step, onStepChange])
   const [view, setView] = useState<CompanySetupView | null>(null)
   const [draft, setDraft] = useState<Setup | null>(null)
   const [historical, setHistorical] = useState<CompanySetupVersion | null>(null)
@@ -160,6 +163,15 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
     return () => controller.abort()
   }, [actor.userId, workspaceId])
 
+  // WO-12b QA round 2: opened at a section other than 01 (a notice's "Open company setup (03 …)"), focus goes to that
+  // section's heading once the setup has loaded, so the person starts where the link said.
+  const sectionFocused = useRef(false)
+  const loaded = Boolean(draft && view)
+  useEffect(() => {
+    if (!loaded || sectionFocused.current || initialStep <= 0) return
+    sectionFocused.current = true
+    requestAnimationFrame(() => document.getElementById("setup-form-heading")?.focus())
+  }, [loaded, initialStep])
   const savedSetupId = view?.currentVersion?.id ?? null
   useEffect(() => {
     if (!workspaceId || !savedSetupId) { queueMicrotask(() => setAssessments({ view: null, note: null })); return }

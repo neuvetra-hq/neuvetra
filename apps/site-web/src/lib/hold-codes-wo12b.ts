@@ -32,6 +32,8 @@ export function typescriptCodes(source: string): string[] {
   for (const args of calls(source, "held")) codes.push(...quoted(args.split(",")[0]!))
   for (const args of calls(source, "hold")) { const list = args.match(/\[([^\]]*)\]/); if (list) codes.push(...quoted(list[1]!)) }
   for (const args of calls(source, "waiting")) codes.push(...quoted(lastArgument(args)))
+  // QA round 2: `pending('code')` (one argument: the 3A upstream lines' own pending). `pending(kind, optional)` names a kind.
+  for (const args of calls(source, "pending")) if (lastArgument(args) === args) codes.push(...quoted(args))
   for (const m of source.matchAll(/reasons\s*:\s*\[([^\]]*)\]/g)) codes.push(...quoted(m[1]!))
   for (const m of source.matchAll(/reasons\s*\?\s*[^:]*:\s*\[([^\]]*)\]/g)) codes.push(...quoted(m[1]!))
   for (const args of calls(source, "reasons\\.push")) codes.push(...quoted(args))
@@ -48,6 +50,31 @@ export function pythonCodes(source: string): string[] {
   for (const m of source.matchAll(new RegExp(`'(?:input_needed|review_required|excluded|method_pending|partial)', '${C}'`, "g"))) codes.push(m[1]!)
   for (const m of source.matchAll(new RegExp(`\\('${C}', '(?:input_needed|review_required|excluded|method_pending|partial)'\\)`, "g"))) codes.push(m[1]!)
   return codes.filter(code => !STATUSES.has(code))
+}
+/**
+ * QA round 2: the engines' refusal codes. An engine refuses a request it can't take (a malformed input); the adapters'
+ * holds and the save checks stop such records first, and Results show a refusal as "refused" with its code. Read from
+ * `Refused('code')` and from the three helpers that raise `Refused(code)` with the code their caller passes:
+ * `quantity(v, 'code')`, `integer(v, low, high, 'code')` and `_choice(v, allowed, 'code')`.
+ */
+export function pythonRefusalCodes(source: string): string[] {
+  const codes: string[] = []
+  for (const m of source.matchAll(new RegExp(`Refused\\('${C}'\\)`, "g"))) codes.push(m[1]!)
+  for (const helper of REFUSAL_HELPERS) for (const m of source.matchAll(new RegExp(`\\b${helper}\\([^\\n]*?'${C}'\\)`, "g"))) codes.push(m[1]!)
+  return codes
+}
+/** The helpers that raise `Refused(code)` with their caller's code; any other `raise Refused(<variable>)` fails the test. */
+export const REFUSAL_HELPERS = ["quantity", "integer", "_choice"] as const
+/** Each `raise Refused(<not a literal>)` in an engine, with the function it is in. */
+export function variableRefusals(source: string): string[] {
+  const out: string[] = []
+  let current = ""
+  for (const line of source.split("\n")) {
+    const def = /^def ([a-z_][a-z0-9_]*)\(/.exec(line)
+    if (def) current = def[1]!
+    if (/raise Refused\((?!['"])/.test(line)) out.push(current)
+  }
+  return out
 }
 /** The files read, relative to the repository root, and how. */
 export const HOLD_CODE_SOURCES: ReadonlyArray<readonly [string, "ts" | "py"]> = [

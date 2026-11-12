@@ -15,7 +15,8 @@ import type { Scope3ConsolidationApproach, Scope3PlanOptions } from "../../../..
 import type { Scope3SetupFacts } from "./scope3-forms"
 import { FIELD_NEED_NOTES, type FieldNeed } from "./wo12-text"
 import type { CollectionContext } from "../../../../packages/neuvetra-database/src/collection-contract"
-import { recordBoundaryHold, recordHold, type RecordBoundaryHold } from "./record-holds-wo12b"
+import { recordBoundaryHold, recordHold, type RecordBoundaryHold, type RecordSupersession } from "./record-holds-wo12b"
+import { scope3SpendMappingKeyInput } from "../../../../packages/neuvetra-database/src/scope3-collection"
 import { kindLabel } from "./plain-language"
 import type { CollectionActivityRecord } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { RECORD_HOLD_TEXT } from "./wo12b-text"
@@ -75,7 +76,7 @@ export interface FieldNeedFacts {
   /** WO-12b: the hold company setup places on the record (every record of its scope, or every record at its site), if any. */
   boundary?: RecordBoundaryHold | null
   /** WO-12b: the record that replaces this spend line (the adapter's supersession map), with its name. */
-  supersededBy?: { id: string; name: string } | null
+  supersededBy?: RecordSupersession | null
 }
 /** A field's label and, where the label depends on something the person can see or change, a note that says what. */
 export interface FieldLabel { need: FieldNeed; needNote?: string }
@@ -109,7 +110,8 @@ export function fieldLabel(activity: Pick<CollectionActivity, "kind" | "payload"
   // holds it keeps its label and says so, the answers read before it keep theirs, and every other result field is Optional.
   const hold = recordHold(activity, facts)
   if (!hold) return label
-  if (hold.fields.includes(field)) return { need: label.need, needNote: label.needNote ? `${label.needNote} ${RECORD_HOLD_TEXT.fieldNote}` : RECORD_HOLD_TEXT.fieldNote }
+  const note = hold.code === "superseded_by_supplier_record" ? RECORD_HOLD_TEXT.matchNote : RECORD_HOLD_TEXT.fieldNote
+  if (hold.fields.includes(field)) return { need: label.need, needNote: label.needNote ? `${label.needNote} ${note}` : note }
   if (hold.upstream.includes(field) || label.need !== "results") return label
   return { need: "optional" }
 }
@@ -147,20 +149,39 @@ export const fieldLabelsOf = (activity: Pick<CollectionActivity, "kind" | "paylo
  * The facts the Activity screen has for a record's labels: company setup as read (`undefined` until it is), the chosen site,
  * and the plan options the screen builds for this draft (`scope3ReadinessOptions`, the results route's options).
  */
-export function activityFieldFacts(input: { setup: Scope3SetupFacts | undefined; activity: Pick<CollectionActivity, "kind" | "locationId" | "period">; options: Scope3PlanOptions | null; context?: CollectionContext | null
-  /** WO-12b: this record's ID and the saved records, to name the record that replaces a spend line. */
-  recordId?: string; records?: readonly CollectionActivityRecord[] }): FieldNeedFacts {
+export function activityFieldFacts(input: { setup: Scope3SetupFacts | undefined; activity: Pick<CollectionActivity, "kind" | "locationId" | "period" | "payload">; options: Scope3PlanOptions | null; context?: CollectionContext | null
+  /** WO-12b: this record's ID and the saved records, to name the record that replaces a spend line; the spend lines' mapping keys, to say what it matches. */
+  recordId?: string; records?: readonly CollectionActivityRecord[]; mappingKeys?: ReadonlyMap<string, string> }): FieldNeedFacts {
   const { setup, activity, options } = input
   const boundary = recordBoundaryHold(activity, input.context, setup?.reportingPeriod ?? null)
   const replacing = activity.kind === "purchase_spend" && input.recordId ? options?.supersession?.get(input.recordId) : undefined
-  const replacer = replacing ? input.records?.find(record => record.id === replacing) : undefined
   const countries = setup?.locationCountries
   const period = activity.period
   return {
     ...(setup !== undefined ? { consolidationApproach: setup.consolidationApproach } : {}),
     ...(countries && activity.locationId ? { locationCountry: countries.get(activity.locationId) ?? null } : {}),
     ...(boundary ? { boundary } : {}),
-    ...(replacing ? { supersededBy: { id: replacing, name: replacer ? `${kindLabel(replacer.kind)} · ${(replacer.currentVersion.activity as { sourceId: string }).sourceId}` : "another record" } } : {}),
+    ...(replacing ? { supersededBy: supersessionOf(replacing, activity, input.records, input.mappingKeys) } : {}),
     ...(activity.kind === "commuting_average" && options ? { distanceCommutingOverlap: (options.distanceCommutingPeriods ?? []).some(other => other.start < period.endExclusive && period.start < other.endExclusive) } : {}),
   }
+}
+
+/** A supplier name as the supersession compares it (scope3-collection.ts comparableName). */
+const comparable = (name: string) => name.trim().toLowerCase().replace(/\s+/g, " ")
+/**
+ * WO-12b QA round 2: the record that replaces this spend line, and what it matches the line on, by the server's rule
+ * (planScope3Supersession): the line's supplier name equals the record's named supplier, or the line's mapping key (its
+ * GL account, supplier and description) is one the record lists. The key is the one the screen's spend lines carry for
+ * that text; an edited line has none, as on the server until it is saved.
+ */
+function supersessionOf(id: string, activity: Pick<CollectionActivity, "payload">, records: readonly CollectionActivityRecord[] | undefined, mappingKeys: ReadonlyMap<string, string> | undefined): RecordSupersession {
+  const replacer = records?.find(record => record.id === id)
+  const name = replacer ? `${kindLabel(replacer.kind)} · ${(replacer.currentVersion.activity as { sourceId: string }).sourceId}` : "another record"
+  const line = activity.payload as unknown as { supplierName: string; glAccount: string; description: string }
+  const named = (replacer?.currentVersion.activity.payload as { supersedesSpend?: { supplierName: string; mappingKeys: string[] } | null } | undefined)?.supersedesSpend ?? null
+  const byName = named !== null && comparable(line.supplierName) !== "" && comparable(line.supplierName) === comparable(named.supplierName)
+  const key = mappingKeys?.get(scope3SpendMappingKeyInput(line))
+  const byKey = named !== null && key !== undefined && key !== "" && named.mappingKeys.includes(key)
+  const match = byName && byKey ? "both" : byKey ? "key" : "name"
+  return { id, name, match, fields: match === "name" ? ["supplier"] : ["glAccount", "supplier", "description"] }
 }

@@ -231,6 +231,258 @@
   "level": "field",
   "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
  },
+ "invalid_aggregate": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_allocation": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_allocation_basis": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_annotation": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_attribution": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_basis": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_boundary": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_capital_full_cost": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_carrier": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_category": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_charge": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_combusted_in_use": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_consumption": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_country_basis": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_covered_days": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_date": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_dollar_year": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_energy_per_basis": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_factor_origin": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_factor_value": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_factory_gate": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_fuel_economy_source": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_grid_basis": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_gwp_basis": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_heat_content": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_holding_type": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_hybrid_upstream": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_input_shape": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_instrument": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_instrument_mwh": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_instrument_rate": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_instruments": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_investee_emissions": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_investment_path": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_lifetime": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_lifetime_basis": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_load_basis": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_margin_choice": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_miles": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_miles_basis": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_model_year": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_modes": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_mpg": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_naics_code": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_natural_gas_use": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_occupancy": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_passenger_segments": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_period_matches": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_projection": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_quantity": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_release_percent": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_request": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_revenue": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_revenue_year": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_scope2_basis": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_share": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_split": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_third_party_facilities": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_utility": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_vehicle_count": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_verification": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_working_days": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "invalid_zip": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
  "investee_emissions_required": {
   "level": "field",
   "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
@@ -351,6 +603,10 @@
   "level": "field",
   "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
  },
+ "natural_gas": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
  "natural_gas_use_unknown": {
   "level": "field",
   "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
@@ -374,6 +630,10 @@
  "no_upstream_factor_for_subregion_fuels": {
   "level": "waiting",
   "why": "Waiting for an upstream factor for the subregion's fuels: nothing on the record needs to change."
+ },
+ "occupancy_not_applicable": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
  },
  "occupancy_not_applicable_to_mode": {
   "level": "field",
@@ -410,6 +670,10 @@
  "passenger_segments_required": {
   "level": "field",
   "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "period_outside_2025_method_envelope": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
  },
  "period_outside_method_envelope": {
   "level": "field",
@@ -455,9 +719,17 @@
   "level": "company",
   "why": "Company setup has no complete reporting period: every Scope 1 and 2 record is held before anything on it is read (notice links to setup 02)."
  },
+ "request_too_large": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
  "resold_energy_in_scope2_not_confirmed": {
   "level": "field",
   "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "result_integrity": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
  },
  "revenue_year_index_missing": {
   "level": "field",
@@ -583,9 +855,77 @@
   "level": "field",
   "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
  },
+ "unknown_cbecs_activity": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "unknown_energy_carrier": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "unknown_fuel": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "unknown_gas": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "unknown_material": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "unknown_refrigerant": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "unknown_subregion": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "unknown_treatment": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "unknown_use_region": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "unsupported_currency": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "unsupported_fuel": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "unsupported_kind": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "unsupported_mode": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
  "unsupported_refrigerant": {
   "level": "field",
   "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "unsupported_unit": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "unsupported_vehicle": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "unsupported_vehicle_type": {
+  "level": "refusal",
+  "why": "An engine refusal of a malformed request: the adapter's own hold or the save check stops such a record first, so it never reaches the engine from the form; if it did, Results would show the record as refused with this code. Not a label question."
+ },
+ "upstream_factor_not_available_for_fuel": {
+  "level": "waiting",
+  "why": "A derived 3A upstream line waits for a verified upstream factor for its fuel: nothing on the Scope 1 record needs to change, and the line has no form of its own."
  },
  "use_region_not_an_engine_token": {
   "level": "field",

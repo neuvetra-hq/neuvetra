@@ -1,7 +1,7 @@
 // WO-07: viewHash and parseViewHash moved here from StagingWorkspace.tsx unchanged, except that every #/earlier/<x> is now the
 // static list (#/earlier). These tests pin the behaviour WO-05a (session return) and WO-06 (record view) rely on.
-import { expect, test } from "bun:test"
-import { acceptedViewHash, forgetReturnView, parseViewHash, peekReturnView, rememberReturnView, RETURN_VIEW_KEY, takeReturnView, viewHash, type WorkspaceView } from "./view-route"
+import { describe, expect, test } from "bun:test"
+import { acceptedViewHash, canonicalViewHash, forgetReturnView, parseSetupSection, parseViewHash, peekReturnView, rememberReturnView, RETURN_VIEW_KEY, setupSectionHash, takeReturnView, viewHash, type WorkspaceView } from "./view-route"
 
 const id = "29500000-0000-4000-8000-000000000001"
 
@@ -114,4 +114,14 @@ test("peekReturnView reads the stored view without removing it, under the same r
   expect(map.has(RETURN_VIEW_KEY)).toBe(true)
   expect(peekReturnView(storage, other, 2_000)).toBeNull()
   expect(map.has(RETURN_VIEW_KEY)).toBe(true)
+})
+
+describe("WO-12b QA round 2: company setup sections in the address", () => {
+  test("#/setup/02 to #/setup/07 open that section; #/setup and anything else open 01, and stay canonical and accepted", () => {
+    expect(["#/setup", "#/setup/01", "#/setup/02", "#/setup/03", "#/setup/07", "#/setup/08", "#/setup/3", "#/setup/03x", "#/activity", "#/overview"].map(parseSetupSection)).toEqual([1, 1, 2, 3, 7, 1, 1, 1, 1, 1])
+    expect([1, 2, 3, 4, 7, 0, 8, 2.5].map(setupSectionHash)).toEqual(["#/setup", "#/setup/02", "#/setup/03", "#/setup/04", "#/setup/07", "#/setup", "#/setup", "#/setup"])
+    expect(["#/setup/03", "#/setup/01", "#/setup/09", "#/setup"].map(canonicalViewHash)).toEqual(["#/setup/03", "#/setup", "#/setup", "#/setup"])
+    expect(parseViewHash("#/setup/03")).toEqual({ panel: "setup", recordId: null })
+    expect([acceptedViewHash("#/setup/04"), acceptedViewHash("#/setup/01")]).toEqual(["#/setup/04", "#/setup"])
+  })
 })

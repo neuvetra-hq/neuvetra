@@ -1073,7 +1073,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   // WO-12 QA round 1: what decides the conditional field labels, from what this screen has loaded: company setup's
   // consolidation approach and the chosen site's country (undefined until setup is read), and whether distance-based
   // commuting records cover this record's period (the same periods the results route plans with).
-  const fieldFacts: FieldNeedFacts = activityFieldFacts({ setup: setupFacts, activity: readinessDraft, options: draftScope3Options, context, recordId, records })
+  const fieldFacts: FieldNeedFacts = activityFieldFacts({ setup: setupFacts, activity: readinessDraft, options: draftScope3Options, context, recordId, records, mappingKeys })
   // WO-12b: one answer that holds the record whatever else is filled in (a record hold), shown at the top of the form.
   const hold = recordHold(draft, fieldFacts)
   const presave: FormProblem[] = canManage ? activityPresaveProblems(draft) : []

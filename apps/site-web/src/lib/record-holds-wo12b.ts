@@ -56,6 +56,14 @@ export interface RecordHold {
   link: { href: string; label: string } | null
 }
 
+/**
+ * WO-12b QA round 2: the record that replaces a spend line, and what it matches the line on (scope3-collection.ts
+ * planScope3Supersession): its "Spend lines this record replaces" names the line's supplier ("name"), lists the line's
+ * mapping key, made of its GL account, supplier and description ("key"), or both. `fields` are this form's fields the match
+ * is made on; they keep their own labels.
+ */
+export interface RecordSupersession { id: string; name: string; match: "name" | "key" | "both"; fields: readonly string[] }
+
 /** What company setup says about the record's site and scope, as the adapters decide it (`recordBoundaryHold`). */
 export interface RecordBoundaryHold { code: CompanyHoldCode | SiteHoldCode; site: string; approach: string; entityControl: string | null
   /** The hold company setup would place next, once this one is fixed as its notice says (so the instruction leads to a counted record). */
@@ -126,7 +134,7 @@ const LEASE_KINDS = new Set(["asset_energy", "building_average", "partner_report
  * Scope 3 adapter takes it (undefined when setup couldn't be read: no category 13 hold is decided then); `boundary` is
  * `recordBoundaryHold`; `supersededBy` the record that replaces a spend line (the adapter's supersession map).
  */
-export function recordHold(activity: Pick<CollectionActivity, "kind" | "payload">, facts: { consolidationApproach?: Scope3ConsolidationApproach | null; boundary?: RecordBoundaryHold | null; supersededBy?: { id: string; name: string } | null }): RecordHold | null {
+export function recordHold(activity: Pick<CollectionActivity, "kind" | "payload">, facts: { consolidationApproach?: Scope3ConsolidationApproach | null; boundary?: RecordBoundaryHold | null; supersededBy?: RecordSupersession | null }): RecordHold | null {
   const base = { upstream: [] as string[], setupStep: null as string | null, link: null as RecordHold["link"] }
   const boundary = facts.boundary
   if (boundary) {
@@ -142,8 +150,9 @@ export function recordHold(activity: Pick<CollectionActivity, "kind" | "payload"
     return { ...base, code: boundary.code, level: "site", fields: ["location"], question: "Company-setup location", cause: SETUP_HOLD_TEXT.siteCause(boundary.site, words.phrase(approach, control)),
       text: reasonText(boundary.code), instead, setupStep: words.step }
   }
-  if (facts.supersededBy) return { ...base, code: "superseded_by_supplier_record", level: "record", fields: [], question: null, cause: SETUP_HOLD_TEXT.supersededCause(facts.supersededBy.name),
-    text: reasonText("superseded_by_supplier_record"), instead: RECORD_HOLD_INSTEAD_TEXT.superseded(facts.supersededBy.name), link: { href: `#/activity/${facts.supersededBy.id}`, label: `Open ${facts.supersededBy.name}` } }
+  const by = facts.supersededBy
+  if (by) return { ...base, code: "superseded_by_supplier_record", level: "record", fields: by.fields, question: by.match === "key" ? "GL account" : "Supplier", cause: SETUP_HOLD_TEXT.supersededCause(by.name),
+    text: reasonText("superseded_by_supplier_record"), instead: RECORD_HOLD_INSTEAD_TEXT.superseded(by.name, by.match), link: { href: `#/activity/${by.id}`, label: `Open ${by.name}` } }
   const p = activity.payload as unknown as Record<string, unknown>
   const hold = (code: RecordHoldCode, fields: string[], question: string, answer: string, instead: string | null = null, upstream: string[] = []): RecordHold =>
     ({ ...base, code, level: "record", fields, upstream, question, cause: RECORD_HOLD_TEXT.cause(question, answer), text: reasonText(code), instead })

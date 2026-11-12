@@ -1,5 +1,6 @@
 import type { RecordHold } from "@/lib/record-holds-wo12b"
 import { RECORD_HOLD_TEXT, SETUP_HOLD_TEXT } from "@/lib/wo12b-text"
+import { setupSectionHash } from "@/lib/view-route"
 
 /**
  * WO-12b (CEO ruling after QA round 3 of PR #57): while the record isn't counted as entered whatever else is filled in,
@@ -7,7 +8,7 @@ import { RECORD_HOLD_TEXT, SETUP_HOLD_TEXT } from "@/lib/wo12b-text"
  * or another record that replaces it), gives the server's own hold text (and what to do instead where that text doesn't
  * say it), and says the field labels apply once that changes. The live region is always in the page, so the notice is
  * announced as it appears and as it goes. "Go to …" moves focus to the answer on this form; a hold company setup decides
- * links to company setup (owners and admins; plain text for anyone else); a replaced spend line links to the record that
+ * links to company setup at the section it names (#/setup/03; owners and admins; plain text for anyone else); a replaced spend line links to the record that
  * replaces it. It never blocks saving.
  */
 export function RecordHoldNotice({ hold, canManage = true }: { hold: RecordHold | null; canManage?: boolean }) {
@@ -30,7 +31,7 @@ export function RecordHoldNotice({ hold, canManage = true }: { hold: RecordHold 
     </>}</div>
     {hold && <div className="wo12b-hold__actions">
       {hold.question && <button type="button" className="nv-btn nv-btn--sm" onClick={goToAnswer}>{RECORD_HOLD_TEXT.goTo(hold.question)}</button>}
-      {hold.setupStep && canManage && <a className="nv-btn nv-btn--sm" href="#/setup">{`${SETUP_HOLD_TEXT.link} (${hold.setupStep})`}</a>}
+      {hold.setupStep && canManage && <a className="nv-btn nv-btn--sm" href={setupSectionHash(Number(hold.setupStep.slice(0, 2)))}>{`${SETUP_HOLD_TEXT.link} (${hold.setupStep})`}</a>}
       {hold.link && <a className="nv-btn nv-btn--sm" href={hold.link.href}>{hold.link.label}</a>}
     </div>}
   </div>

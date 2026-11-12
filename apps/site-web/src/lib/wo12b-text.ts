@@ -14,6 +14,8 @@ export const RECORD_HOLD_TEXT = {
   goTo: (question: string) => `Go to “${question}”`,
   /** Read after the label of the answer that holds the record (inside its <label>). */
   fieldNote: "(this answer holds the record: see the notice at the top of the form)",
+  /** WO-12b QA round 2: read after the label of a field a replacing record matches this spend line on. */
+  matchNote: "(the record that replaces this line matches it on this: see the notice at the top of the form)",
 } as const
 
 /**
@@ -24,7 +26,13 @@ export const RECORD_HOLD_INSTEAD_TEXT = {
   outsideBoundary: "Nothing else is needed for it. If the equipment is inside the boundary, change this answer.",
   simplifiedMethod: "The simplified method in this beta can’t calculate it, so it stays held for review whatever else is entered here. Change the answer only if it is wrong.",
   category3: "Withdraw the line rather than completing it: nothing on this form makes a category 3 spend line count.",
-  superseded: (name: string) => `Each purchase is counted once, so nothing on this form makes this line count. To count the line instead, open ${name} and change “Spend lines this record replaces” there.`,
+  /**
+   * WO-12b QA round 2: a replaced spend line. The supersession matches the line by its supplier name, by its mapping key
+   * (GL account, supplier and description together), or both; correcting a field it matches on stops the replacement.
+   */
+  superseded: (name: string, match: "name" | "key" | "both") => `${match === "name" ? `If this line isn’t one of ${name}’s purchases, correct its Supplier: the replacement stops, and the labels below then apply as shown.`
+    : match === "key" ? `If this line isn’t one of ${name}’s purchases, correct its GL account, Supplier or Description (the replacement matches those three together): the replacement stops, and the labels below then apply as shown.`
+    : `If this line isn’t one of ${name}’s purchases, correct its Supplier (the replacement matches the supplier name, and also the GL account, Supplier and Description together): the replacement stops, and the labels below then apply as shown.`} Otherwise each purchase is counted once, so nothing else on this form makes this line count; to count the line instead, open ${name} and change “Spend lines this record replaces” there.`,
 } as const
 
 /** Answers as the notice quotes them. */

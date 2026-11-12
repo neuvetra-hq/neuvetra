@@ -18,7 +18,7 @@ import { describe, expect, test } from "bun:test"
 import { fileURLToPath } from "node:url"
 import type { CollectionActivity, CollectionActivityRecord, CollectionContext, CollectionEvidenceMetadata } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { collectionBoundaryHold, planCollectionCalculation } from "../../../../packages/neuvetra-database/src/collection-engine-input"
-import { planScope3Calculation, SCOPE3_COMPLETION_KINDS, SCOPE3_LEGACY_KINDS, type Scope3CollectionVersion } from "../../../../packages/neuvetra-database/src/scope3-collection"
+import { planScope3Calculation, scope3SpendMappingKeyInput, SCOPE3_COMPLETION_KINDS, SCOPE3_LEGACY_KINDS, type Scope3CollectionVersion } from "../../../../packages/neuvetra-database/src/scope3-collection"
 import { SCOPE3_PAYLOAD_FIXTURES } from "../../../../packages/neuvetra-database/src/scope3-payload-fixtures"
 import { recordReadiness } from "../components/CollectionWorkspace"
 import { scope3BlankPayload } from "./scope3-form-defaults"
@@ -67,7 +67,9 @@ const savedRecord = (id: string, activity: A): CollectionActivityRecord => ({ id
   currentVersion: { id, recordId: id, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity, payloadSha256: "a".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" } }) as unknown as CollectionActivityRecord
 
 /** A company the field is checked in: the site's country, setup's consolidation approach and the saved records. */
-type World = { name: string; country: string | null; approach: Scope3SetupFacts["consolidationApproach"]; records: CollectionActivityRecord[]; noPeriod?: true }
+type World = { name: string; country: string | null; approach: Scope3SetupFacts["consolidationApproach"]; records: CollectionActivityRecord[]; noPeriod?: true
+  /** WO-12b QA round 2: the spend lines' mapping keys the screen holds (text → key), as CollectionWorkspace builds them. */
+  mappingKeys?: ReadonlyMap<string, string> }
 const distanceCommuting = savedRecord(COMMUTER, fixture("employee_commuting: 0029 payload"))
 const laterCommuting = savedRecord(COMMUTER, { ...fixture("employee_commuting: 0029 payload"), period: { start: "2026-01-01", endExclusive: "2026-02-01" } })
 const WORLDS = {
@@ -84,7 +86,7 @@ const setupOf = (world: World): Scope3SetupFacts => ({ reportingPeriod: world.no
 const saveRefusal = (draft: A): string | null => activitySaveProblems(draft, { context, evidence, correcting: false, reason: "", zipLookup: null, scope3Completion: true })[0]?.text ?? null
 /** WO-12b QA round 1: the company's own context: its consolidation approach is the world's (Scope 1 and 2 read it from here). */
 const contextOf = (world: World): CollectionContext => ({ ...context, boundaryApproach: world.approach, ...(world.noPeriod ? { reportingPeriod: { start: null, endExclusive: null } } : {}) }) as CollectionContext
-const optionsFor = (draft: A, world: World) => isScope3(draft.kind) ? scope3ReadinessOptions({ setup: setupOf(world), context: contextOf(world), records: world.records, draft: { recordId: DRAFT, activity: prepareActivityForSave(draft, true) }, mappingKeys: new Map() }) : null
+const optionsFor = (draft: A, world: World) => isScope3(draft.kind) ? scope3ReadinessOptions({ setup: setupOf(world), context: contextOf(world), records: world.records, draft: { recordId: DRAFT, activity: prepareActivityForSave(draft, true) }, mappingKeys: world.mappingKeys ?? new Map() }) : null
 const HOLDS = new Set(["input_needed", "review_required", "partial", "method_pending", "excluded"])
 /** What the record's readiness shows as still needed (the Activity list and record view use the same findings). */
 function readiness(draft: A, world: World): string[] {
@@ -101,7 +103,7 @@ function planScope12(draft: A, world: World = WORLDS.usOperational) {
   return planCollectionCalculation({ id: DRAFT, recordId: DRAFT, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity: prepareActivityForSave(draft, true), payloadSha256: "0".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" }, contextOf(world), evidence)
 }
 /** The label the screen shows for the field on this draft in this company. */
-const factsFor = (draft: A, world: World) => activityFieldFacts({ setup: setupOf(world), activity: prepareActivityForSave(draft, true), options: optionsFor(draft, world), context: contextOf(world), recordId: DRAFT, records: world.records })
+const factsFor = (draft: A, world: World) => activityFieldFacts({ setup: setupOf(world), activity: prepareActivityForSave(draft, true), options: optionsFor(draft, world), context: contextOf(world), recordId: DRAFT, records: world.records, mappingKeys: world.mappingKeys })
 const shown = (draft: A, field: string, world: World) => fieldLabel(draft, field, factsFor(draft, world))
 
 /**
@@ -392,10 +394,15 @@ for (const [world, expect] of COMPANY_WORLDS) for (const [kind, base, fields] of
   COMPANY_STATES.push(state); EXPECT.set(state.base, expect)
 }
 // QA round 1 (B2): a spend line a supplier record replaces (the supersession pre-pass, by the supplier name).
-const supplierRecord = savedRecord(SUPPLIER, (() => { const a = fixture("purchase_supplier: product factor"); a.payload.category = 1; a.payload.supersedesSpend = { supplierName: "Synthetic Software LLC", mappingKeys: [] }; return a })())
-const REPLACED_WORLDS: World[] = EVERY_COMPANY.map(world => ({ ...world, name: `${world.name}, a supplier record replacing the line`, records: [supplierRecord] }))
+// QA round 2: by each match kind the server's rule has (planScope3Supersession): the line's supplier name, its mapping key
+// (GL account, supplier and description together), or both. The fields the match is made on keep their labels.
 const replacedLine = () => fixture("purchase_spend: manual line")
-const replacedFields = { quantity: set("quantity.originalValue", ""), currency: set("quantity.originalUnit", ""), naicsCode: S("purchase_spend", "naicsCode"), dollarYear: S("purchase_spend", "dollarYear"), supplier: S("purchase_spend", "supplierName") }
+const LINE_KEY_TEXT = scope3SpendMappingKeyInput(replacedLine().payload), LINE_KEY = "b".repeat(64)
+const supplierRecordBy = (supplierName: string, mappingKeys: string[]) => savedRecord(SUPPLIER, (() => { const a = fixture("purchase_supplier: product factor"); a.payload.category = 1; a.payload.supersedesSpend = { supplierName, mappingKeys }; return a })())
+const MATCHES = [["name", supplierRecordBy("Synthetic Software LLC", [])], ["key", supplierRecordBy("A different supplier", [LINE_KEY])], ["both", supplierRecordBy("synthetic  software llc", [LINE_KEY])]] as const
+const REPLACED_WORLDS: World[] = MATCHES.flatMap(([match, record]) => EVERY_COMPANY.map(world => ({ ...world, name: `${world.name}, a supplier record replacing the line by ${match}`, records: [record], mappingKeys: new Map([[LINE_KEY_TEXT, LINE_KEY]]) })))
+const replacedFields = { quantity: set("quantity.originalValue", ""), currency: set("quantity.originalUnit", ""), naicsCode: S("purchase_spend", "naicsCode"), dollarYear: S("purchase_spend", "dollarYear"),
+  supplier: S("purchase_spend", "supplierName"), glAccount: S("purchase_spend", "glAccount"), description: S("purchase_spend", "description") }
 EXPECT.set(replacedLine, () => "superseded_by_supplier_record")
 for (const state of HOLD_STATES) add(state.kind, state.base, state.fields, EVERY_COMPANY, true)
 for (const state of COMPANY_STATES) add(state.kind, state.base, state.fields, [state.world], true)
@@ -555,6 +562,25 @@ describe("WO-12b: record holds (one answer holds the record whatever else is fil
     // Follow-up: category 3 spend says what to do instead.
     expect(at(withPayload(() => fixture("purchase_spend: manual line"), { category: 3 }), WORLDS.usOperational).instead).toBe("Withdraw the line rather than completing it: nothing on this form makes a category 3 spend line count.")
   })
+  test("QA round 2: a field whose answer, left blank or changed, makes a held record count is one the notice names (it keeps its label, with the note), in every match kind", () => {
+    const freeing = all.filter(row => row.holdsBefore.length > 0 && row.derived.why === "saves and calculates" && row.engine?.status !== "excluded")
+      .map(row => ({ row, hold: recordHold(row.before, factsFor(row.before, row.world))! }))
+    expect(freeing.filter(({ row, hold }) => !hold.fields.includes(row.item.field) && !hold.upstream.includes(row.item.field)).map(({ row }) => `${row.item.kind}.${row.item.field} (${row.world.name})`)).toEqual([])
+    // The replaced line: by name only Supplier frees it; by key, GL account and Supplier (Description is Required); by both, Supplier.
+    const freedBy = (match: string) => [...new Set(freeing.filter(({ row }) => row.world.name.endsWith(`by ${match}`)).map(({ row }) => row.item.field))].sort()
+    expect([freedBy("name"), freedBy("key"), freedBy("both")]).toEqual([["supplier"], ["glAccount", "supplier"], ["supplier"]])
+    const at = (world: World) => { const draft = replacedLine(); return recordHold(draft, factsFor(draft, world))! }
+    const [byName, byKey, byBoth] = ["name", "key", "both"].map(match => at(REPLACED_WORLDS.find(world => world.name.endsWith(`by ${match}`))!))
+    expect([byName!.fields, byKey!.fields, byBoth!.fields]).toEqual([["supplier"], ["glAccount", "supplier", "description"], ["glAccount", "supplier", "description"]])
+    expect(byName!.instead).toContain("If this line isn’t one of Supplier-specific purchases · SRC-1’s purchases, correct its Supplier: the replacement stops")
+    expect(byKey!.instead).toContain("correct its GL account, Supplier or Description (the replacement matches those three together)")
+    for (const hold of [byName!, byKey!, byBoth!]) expect(hold.instead).toContain("Otherwise each purchase is counted once, so nothing else on this form makes this line count")
+    const label = (world: World, field: string) => { const draft = replacedLine(); return fieldLabel(draft, field, factsFor(draft, world)) }
+    const keyWorld = REPLACED_WORLDS.find(world => world.name.endsWith("by key"))!
+    expect(["supplier", "glAccount", "description", "naicsCode", "quantity"].map(field => label(keyWorld, field))).toEqual([
+      { need: "optional", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "optional", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "required", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "optional" }, { need: "optional" }])
+  })
+
   test("while it holds: every other result field is Optional, the answer that holds it says so, and the save still needs what it needs", () => {
     const held = holdRows.filter(row => row.holdsBefore.length > 0)
     expect(held.length).toBeGreaterThan(150)
