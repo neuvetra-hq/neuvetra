@@ -596,24 +596,28 @@ jobs:
         working-directory: apps/site-web
         run: |
           dir=$(bun -e 'console.log(require("node:path").dirname(require.resolve("playwright-core")))')
-          echo "PLAYWRIGHT_CORE_DIR=$dir" >> "$GITHUB_ENV"
           pinned=$(bun -e 'const b = require(process.argv[1] + "/browsers.json"); console.log(b.browsers.find(x => x.name === "chromium").browserVersion)' "$dir")
           echo "playwright-core pins Chrome for Testing $pinned"
           if [ "$pinned" != "$E2E_CHROME_VERSION" ]; then echo "::error title=Browser smoke::playwright-core now pins Chrome $pinned; update E2E_CHROME_VERSION and the cache key together."; exit 1; fi
+      # Downloaded from the official Chrome for Testing bucket rather than with Playwright's installer, which refuses
+      # host images it does not know yet (it rejected ubuntu-26.04).
       - name: Restore the pinned Chrome for Testing
         id: chrome-cache
         uses: actions/cache@v4
         with:
-          path: ~/.cache/ms-playwright
-          key: chrome-for-testing-${{ env.E2E_CHROME_VERSION }}-${{ runner.os }}
+          path: ~/chrome-for-testing/${{ env.E2E_CHROME_VERSION }}
+          key: chrome-for-testing-${{ env.E2E_CHROME_VERSION }}-${{ runner.os }}-linux64
       - name: Install the pinned Chrome for Testing
         if: steps.chrome-cache.outputs.cache-hit != 'true'
-        working-directory: apps/site-web
-        run: bun "$PLAYWRIGHT_CORE_DIR/cli.js" install --no-shell chromium
-      - name: Use the pinned Chrome
-        working-directory: apps/site-web
         run: |
-          chrome=$(bun -e 'import { chromium } from "playwright-core"; console.log(chromium.executablePath())')
+          dir="$HOME/chrome-for-testing/$E2E_CHROME_VERSION"
+          mkdir -p "$dir"
+          curl --fail --show-error --silent --location --retry 3 --output "$RUNNER_TEMP/chrome.zip" \
+            "https://storage.googleapis.com/chrome-for-testing-public/$E2E_CHROME_VERSION/linux64/chrome-linux64.zip"
+          unzip -q "$RUNNER_TEMP/chrome.zip" -d "$dir"
+      - name: Use the pinned Chrome
+        run: |
+          chrome="$HOME/chrome-for-testing/$E2E_CHROME_VERSION/chrome-linux64/chrome"
           echo "CHROME_PATH=$chrome" >> "$GITHUB_ENV"
           "$chrome" --version
       - name: Build the site-web staging bundle

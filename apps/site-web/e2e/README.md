@@ -11,7 +11,7 @@ CI runs it as the job **Browser smoke (site-web end to end)** in `.github/workfl
   - the database connection (loopback, no TLS);
   - the token validator, which reads the suite's `TokenDirectory`;
   - an in-memory evidence store.
-- `harness/browser.ts` drives Chrome with `playwright-core`. CI installs and pins the Chrome for Testing build that playwright-core 1.59.1 is made for (147.0.7727.15) and refuses any other (`E2E_CHROME_VERSION`); locally, any installed Chrome is used. Each journey gets a new browser context. In that context the Supabase Auth API (`https://<ref>.supabase.co/auth/v1/...`) is answered by a stub at the network level, so nothing hosted is contacted. A password sign-in returns a session whose token the server's injected validator accepts. To end a session, a test revokes its token, and the server then answers 401.
+- `harness/browser.ts` drives Chrome with `playwright-core`. CI downloads (from the official Chrome for Testing bucket, cached by version) the Chrome for Testing build that playwright-core 1.59.1 is made for (147.0.7727.15) and refuses any other (`E2E_CHROME_VERSION`); locally, any installed Chrome is used. Each journey gets a new browser context. In that context the Supabase Auth API (`https://<ref>.supabase.co/auth/v1/...`) is answered by a stub at the network level, so nothing hosted is contacted. A password sign-in returns a session whose token the server's injected validator accepts. To end a session, a test revokes its token, and the server then answers 401.
 - `browser-smoke.test.ts` holds the journeys. Each one asserts that the page raised no uncaught error.
 
 ## Run it locally
