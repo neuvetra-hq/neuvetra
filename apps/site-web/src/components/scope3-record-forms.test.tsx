@@ -120,7 +120,8 @@ async function onScreen(kind: contract.Scope3CompletionKind, valid: Pick<Collect
   expect(said(screen.app)).toContain(`Before saving: ${invalid.message}`)
   await screen.save()
   expect(screen.sent).toHaveLength(1)
-  expect(said(screen.app)).toContain(`${invalid.message} Nothing was saved.`)
+  // WO-10: Save stays on; pressing it marks the problem and the summary says nothing was saved.
+  expect(said(screen.app)).toContain(`Not saved. Fix this: ${invalid.message}`)
   return screen
 }
 
@@ -751,7 +752,11 @@ describe("round 2c: amount labels, the estimate-basis message, named subregions"
     editor().props.onEdit((next: CollectionActivity) => { next.quality = "estimated"; next.estimateBasis = "" }); await flight.app.settle()
     expect(said(flight.app)).toContain(textsR2c.SAVE_TEXT_R2C.estimateBasisMissing)
     expect(said(flight.app)).not.toContain(CONTRACT)
-    expect(flight.app.button("Save activity")!.props.disabled).toBe(true)
+    // WO-10: Save stays on; pressing it sends nothing and the summary names the problem.
+    expect(flight.app.button("Save activity")!.props.disabled).toBe(false)
+    await flight.save()
+    expect(flight.sent).toHaveLength(0)
+    expect(said(flight.app)).toContain(`Not saved. Fix this: ${textsR2c.SAVE_TEXT_R2C.estimateBasisMissing}`)
     editor().props.onEdit((next: CollectionActivity) => { next.estimateBasis = "Booking export, 2025." }); await flight.app.settle()
     expect(said(flight.app)).not.toContain(textsR2c.SAVE_TEXT_R2C.estimateBasisMissing)
     await flight.save()
@@ -796,13 +801,15 @@ describe("round 3: key choice first, problems stopped before save and named by f
   })
   test("PR-6, PR-12: freight without a vehicle, a declared haul without its basis and an unpublished waste pair keep Save off, each naming its field, which is marked invalid", async () => {
     const problems = (app: { nodes: () => any[] }) => { const box = app.nodes().find(node => node.props.id === "collection-save-problems"); return box ? said({ text: () => JSON.stringify(box) }) : "" }
-    const invalid = (app: { nodes: () => any[] }) => app.nodes().filter(node => node.props["aria-invalid"] === true || node.props.invalid === true).map(node => node.props.label ?? node.type)
+    // WO-10: a field with a problem carries its own error (aria-invalid and aria-describedby on its control, not this list).
+    const invalid = (app: { nodes: () => any[] }) => app.nodes().filter(node => node.props["aria-invalid"] === true || typeof node.props.error === "string").map(node => node.props.label ?? node.type)
     const freight = await workspace()
     await freight.start("transport")
     expect(problems(freight.app)).toContain("Vehicle: choose the vehicle")
     expect(invalid(freight.app)).toContain("Vehicle")
-    expect(freight.app.button("Save activity")!.props.disabled).toBe(true)
+    expect(freight.app.button("Save activity")!.props.disabled).toBe(false)
     expect(freight.app.button("Save activity")!.props["aria-describedby"]).toBe("collection-save-problems")
+    expect(freight.app.byLabel("Vehicle")!.props).toMatchObject({ name: "transportVehicle", need: "required", error: "Vehicle: choose the vehicle (or “Something else” if none fits). A freight record without one can’t be calculated." })
     freight.app.byLabel("Vehicle")!.props.onChange("rail"); await freight.app.settle()
     expect(problems(freight.app)).not.toContain("Vehicle: choose the vehicle")
     expect(invalid(freight.app)).not.toContain("Vehicle")
@@ -833,16 +840,19 @@ describe("round 3: key choice first, problems stopped before save and named by f
     w.app.byLabel("Material")!.props.onChange("mixed_msw"); await w.app.settle()
     const text = said(w.app)
     expect(text).toContain("Treatment: EPA publishes no factor for Mixed MSW (municipal solid waste) that is recycled.")
-    expect(w.app.nodes().some(node => node.props.label === "Treatment" && node.props.invalid === true)).toBe(true)
-    expect(w.app.button("Save activity")!.props.disabled).toBe(true)
+    expect(w.app.nodes().some(node => node.props.label === "Treatment" && typeof node.props.error === "string")).toBe(true)
+    expect(w.app.button("Save activity")!.props.disabled).toBe(false)
   })
-  test("PR-12: a Save that is off because nothing changed says so", async () => {
+  test("WO-10 (was PR-12): Save stays on; pressing it on an untouched new record lists what to fill in, each linked to its field", async () => {
     const w = await workspace()
     const save = w.app.button("Save activity")!
-    expect(save.props.disabled).toBe(true)
-    expect(save.props["aria-describedby"]).toBe("collection-save-unchanged")
-    expect(w.app.nodes().find(node => node.props.id === "collection-save-unchanged")).toBeDefined()
+    expect(save.props.disabled).toBe(false)
     expect(save.props.className).toBe("collection-save")
+    expect(w.app.nodes().find(node => node.props.id === "collection-save-problems")).toBeUndefined()
+    save.props.onClick(); await w.app.settle()
+    expect(w.sent).toHaveLength(0)
+    const links = w.app.nodes().filter(node => node.type === "a" && String(node.props.href).startsWith("#collection-field-")).map(node => node.props.href)
+    expect(links).toEqual(["#collection-field-location", "#collection-field-source"])
   })
   test("PR-8: the end-of-life form lists EPA's material names, never title-cased tokens", async () => {
     const f = await form("end_of_life_split")
@@ -860,8 +870,7 @@ describe("round 3: a saved record opened by Fix shows its problem before any edi
     const w = await workspace({ records: [saved] })
     w.app.nodes().find(node => node.props.className === "collection-row-link")!.props.onClick({ preventDefault() {} }); await w.app.settle()
     expect(said(w.app)).toContain("Treatment: EPA publishes no factor for Mixed MSW (municipal solid waste) that is recycled.")
-    expect(w.app.nodes().some(node => node.props.label === "Treatment" && node.props.invalid === true)).toBe(true)
-    expect(w.app.nodes().find(node => node.props.id === "collection-save-unchanged")).toBeUndefined()
+    expect(w.app.nodes().some(node => node.props.label === "Treatment" && typeof node.props.error === "string")).toBe(true)
   })
 })
 

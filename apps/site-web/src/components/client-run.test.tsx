@@ -41,7 +41,9 @@ test("a record dated outside calendar 2025 says why, and nothing is sent or save
   app.byLabel("Original unit as printed")!.props.onChange("therm"); await app.settle()
   await app.button("Save activity")!.props.onClick(); await app.settle()
   expect(sent).toHaveLength(0)
-  expect(app.text()).toContain("Collection periods must fall inside calendar 2025. Nothing was saved.")
+  // WO-10: Save stays on; the summary says nothing was saved and names the dates, which carry the error.
+  expect(app.text()).toContain("Not saved. Fix this: Collection periods must fall inside calendar 2025.")
+  expect(app.byLabel("Period start")!.props.error).toBe("Collection periods must fall inside calendar 2025.")
 })
 
 // I-05 (DESIGN A14, A27): the Scope 3 adapter now recognises a hotel stay saved this way (mode "hotel", room-nights as
