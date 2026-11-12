@@ -2,17 +2,66 @@
    Dark, calm and legible: one accent for primary actions, amber for "needs input", muted for "not counted".
    All new UI lives under .nv-app, .nv-landing or .nv-access so earlier workspace views keep their own styles. */
 
+/* ---------- Design tokens (WO-01, design §7.2) ----------
+   Role tokens for all new UI. They live in a plain :root block (no Tailwind @theme), so they generate no utilities and
+   never touch Tailwind's --text-*, --radius-*, --breakpoint-* or --shadow-* namespaces. The existing short names
+   (--bg, --surface, ...) below are aliases of these tokens and resolve to the same values as before. */
+:root {
+  /* Type scale */
+  --nv-fs-xs: .78rem; --nv-fs-sm: .86rem; --nv-fs-ui: .92rem; --nv-fs-body: 1rem; --nv-fs-lead: 1.06rem;
+  --nv-fs-h3: 1.05rem; --nv-fs-h2: 1.28rem; --nv-fs-h1: clamp(1.9rem, 3.4vw, 2.6rem); --nv-fs-display: clamp(2.4rem, 5vw, 4rem);
+  --nv-lh-body: 1.55; --nv-lh-tight: 1.2; --nv-fw-regular: 400; --nv-fw-medium: 500; --nv-fw-strong: 600;
+  /* Spacing (4 px base) */
+  --nv-space-1: 4px; --nv-space-2: 8px; --nv-space-3: 12px; --nv-space-4: 16px; --nv-space-5: 20px;
+  --nv-space-6: 24px; --nv-space-7: 32px; --nv-space-8: 40px; --nv-space-9: 48px;
+  /* Colour roles */
+  --nv-color-bg: #0b0c0d; --nv-color-surface: #121611; --nv-color-surface-2: #171d16; --nv-color-surface-3: #1e261c;
+  --nv-color-line: #2b3528; --nv-color-line-2: #3e4b39; --nv-color-border-control: #7a8a71;
+  --nv-color-text: #f1efe8; --nv-color-text-muted: #bcc4b2; --nv-color-text-subtle: #939c89;
+  --nv-color-accent: #b8d997; --nv-color-accent-hi: #cfe8b3; --nv-color-accent-ink: #16200e; --nv-color-accent-soft: #223019;
+  --nv-color-focus: #cfe8b3;
+  --nv-color-warn: #f2d38a; --nv-color-warn-bg: #2d2613; --nv-color-warn-line: #5f4d1d;
+  --nv-color-danger: #f5b4a1; --nv-color-danger-bg: #331f19; --nv-color-danger-line: #6c3b2d;
+  --nv-color-info: #b3d4f5; --nv-color-info-bg: #15222f; --nv-color-info-line: #2f4a63;
+  --nv-color-ok: #a9dc9b; --nv-color-ok-bg: #18261a; --nv-color-ok-line: #365a33;
+  /* Radius */
+  --nv-radius-xs: 6px; --nv-radius-sm: 10px; --nv-radius-md: 14px; --nv-radius-lg: 20px; --nv-radius-pill: 999px;
+  /* Shadow */
+  --nv-shadow-card: 0 1px 0 rgba(255,255,255,.03) inset, 0 12px 32px rgba(0,0,0,.28);
+  --nv-shadow-raised: 0 10px 28px rgba(0,0,0,.45);
+  --nv-shadow-overlay: -20px 0 40px rgba(0,0,0,.4);
+  /* Motion */
+  --nv-motion-fast: .15s; --nv-motion-base: .3s; --nv-ease: ease;
+  /* Focus */
+  --nv-focus-width: 3px; --nv-focus-offset: 2px;
+  /* Layout: sticky chrome. --nv-sticky-offset is where a heading must land so no sticky bar covers it. */
+  --nv-content-max: 980px; --nv-shell-max: 1360px; --nv-sidenav-w: 260px;
+  --nv-topbar-h: 69px; --nv-contextbar-h: 0px; --nv-bottom-chrome: 0px;
+  --nv-sticky-offset: calc(var(--nv-topbar-h) + var(--nv-contextbar-h) + 15px);
+}
+/* Under 1080px the journey navigation becomes a sticky strip under the top bar; it occupies the context-bar slot until
+   WO-08 adds the real context bar. 69 + 48 + 15 = 132px, the offset the jump targets below already use. */
+@media (max-width: 1080px) { :root { --nv-contextbar-h: 48px; } }
+/* Headings land below the sticky chrome when the browser scrolls to them (hash links, scrollIntoView, focus after
+   navigation). In the base layer, so every existing, more specific scroll margin below (#spend-import,
+   #collection-record-editor, ...) still wins. */
+@layer base { .nv-app :is(h1, h2, h3, h4) { scroll-margin-top: var(--nv-sticky-offset); } }
+
 .nv-app, .nv-landing, .nv-access {
-  --bg: #0b0c0d; --surface: #121611; --surface-2: #171d16; --surface-3: #1e261c; --line: #2b3528; --line-2: #3e4b39;
-  --text: #f1efe8; --muted: #bcc4b2; --subtle: #939c89; --accent: #b8d997; --accent-hi: #cfe8b3; --accent-ink: #16200e; --accent-soft: #223019;
-  --warn: #f2d38a; --warn-bg: #2d2613; --warn-line: #5f4d1d; --danger: #f5b4a1; --danger-bg: #331f19; --danger-line: #6c3b2d;
-  --info: #b3d4f5; --info-bg: #15222f; --info-line: #2f4a63; --ok: #a9dc9b; --ok-bg: #18261a; --ok-line: #365a33;
-  --radius: 14px; --radius-sm: 10px; --shadow: 0 1px 0 rgba(255,255,255,.03) inset, 0 12px 32px rgba(0,0,0,.28);
+  --bg: var(--nv-color-bg); --surface: var(--nv-color-surface); --surface-2: var(--nv-color-surface-2); --surface-3: var(--nv-color-surface-3);
+  --line: var(--nv-color-line); --line-2: var(--nv-color-line-2);
+  --text: var(--nv-color-text); --muted: var(--nv-color-text-muted); --subtle: var(--nv-color-text-subtle);
+  --accent: var(--nv-color-accent); --accent-hi: var(--nv-color-accent-hi); --accent-ink: var(--nv-color-accent-ink); --accent-soft: var(--nv-color-accent-soft);
+  --warn: var(--nv-color-warn); --warn-bg: var(--nv-color-warn-bg); --warn-line: var(--nv-color-warn-line);
+  --danger: var(--nv-color-danger); --danger-bg: var(--nv-color-danger-bg); --danger-line: var(--nv-color-danger-line);
+  --info: var(--nv-color-info); --info-bg: var(--nv-color-info-bg); --info-line: var(--nv-color-info-line);
+  --ok: var(--nv-color-ok); --ok-bg: var(--nv-color-ok-bg); --ok-line: var(--nv-color-ok-line);
+  --radius: var(--nv-radius-md); --radius-sm: var(--nv-radius-sm); --shadow: var(--nv-shadow-card);
   color: var(--text); background: var(--bg); font-family: "Jost Variable", "Jost", system-ui, sans-serif; line-height: 1.55;
 }
 .nv-app *, .nv-landing *, .nv-access * { box-sizing: border-box; }
 .nv-app svg, .nv-landing svg, .nv-access svg { display: inline-block; vertical-align: middle; flex: none; }
-.nv-app :focus-visible, .nv-landing :focus-visible, .nv-access :focus-visible { outline: 3px solid var(--accent-hi); outline-offset: 3px; border-radius: 6px; }
+.nv-app :focus-visible, .nv-landing :focus-visible, .nv-access :focus-visible { outline: var(--nv-focus-width) solid var(--nv-color-focus); outline-offset: 3px; border-radius: 6px; }
 .nv-sr { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .nv-skip { position: absolute; left: 12px; top: -60px; z-index: 50; padding: 10px 16px; border-radius: 8px; background: var(--accent); color: var(--accent-ink); font-weight: 600; }
 .nv-skip:focus { top: 12px; }
@@ -146,7 +195,8 @@
 .nv-app .setup-field input, .nv-app .setup-field select, .nv-app .setup-field textarea {
   width: 100%; min-width: 0; min-height: 46px; padding: 11px 13px; border: 1px solid #6c7b64; border-radius: 10px; background: #0e120d; color: var(--text); font: inherit; transition: border-color .15s, box-shadow .15s; }
 .nv-field textarea, .nv-app .setup-field textarea { min-height: 88px; resize: vertical; }
-.nv-field input:focus, .nv-field select:focus, .nv-field textarea:focus, .nv-app .setup-field input:focus, .nv-app .setup-field select:focus, .nv-app .setup-field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(184,217,151,.18); outline: none; }
+/* UI-B05 / QA-170 (WO-01): a focused field shows the same 3px focus ring as every other control (it was an 18% alpha glow). */
+.nv-field input:focus, .nv-field select:focus, .nv-field textarea:focus, .nv-app .setup-field input:focus, .nv-app .setup-field select:focus, .nv-app .setup-field textarea:focus { border-color: var(--accent); outline: var(--nv-focus-width) solid var(--nv-color-focus); outline-offset: var(--nv-focus-offset); }
 .nv-field input[aria-invalid="true"], .nv-field select[aria-invalid="true"] { border-color: #b77763; }
 .nv-field__hint, .nv-app .setup-field small { color: var(--subtle); font-size: .86rem; line-height: 1.45; }
 .nv-field__error { color: var(--danger); font-size: .86rem; }

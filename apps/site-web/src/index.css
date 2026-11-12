@@ -1,16 +1,25 @@
+/* Cascade layers (WO-01, design §6 P0-00 / §7.1). Declared before Tailwind so that "legacy" sits between Tailwind's
+   base and components layers: theme < base < legacy < components < utilities < unlayered rules.
+   - base: Tailwind preflight and the global element defaults below.
+   - legacy: the earlier workspace screens (staging.css).
+   - components / utilities: new UI from later work orders (src/styles/<wo-id>.css).
+   Rules not yet moved stay unlayered and therefore still win over every layer, exactly as before. */
+@layer theme, base, legacy, components, utilities;
 @import "tailwindcss";
 @import "@fontsource-variable/jost";
 
-:root {
-  color-scheme: dark;
-  font-family: "Jost Variable", "Jost", sans-serif;
-  background: #0b0c0d;
-  color: #e8eae6;
-  font-synthesis: none;
-  -webkit-font-smoothing: antialiased;
-  --research-muted: #a4aaa7;
-  --research-accent: #c5e6c8;
-  --research-line: #ffffff1c;
+@layer base {
+  :root {
+    color-scheme: dark;
+    font-family: "Jost Variable", "Jost", sans-serif;
+    background: #0b0c0d;
+    color: #e8eae6;
+    font-synthesis: none;
+    -webkit-font-smoothing: antialiased;
+    --research-muted: #a4aaa7;
+    --research-accent: #c5e6c8;
+    --research-line: #ffffff1c;
+  }
 }
 
 .workspace-demo { padding: 5.5rem 0 7rem; }
@@ -69,20 +78,25 @@
   .workspace-record > div:last-child { border-bottom: 0; }
 }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; }
-button, input, a { -webkit-tap-highlight-color: transparent; }
-button, input { font: inherit; }
-button { cursor: pointer; }
-a { color: inherit; text-decoration: none; }
-button { color: inherit; }
-:is(button, input, a):focus-visible { outline: 2px solid var(--research-accent); outline-offset: 5px; }
-:is(textarea, summary):focus-visible { outline: 2px solid var(--research-accent); outline-offset: 5px; }
+/* Global element defaults: below every component rule and above Tailwind preflight (same layer, later). */
+@layer base {
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; min-width: 320px; }
+  button, input, a { -webkit-tap-highlight-color: transparent; }
+  button, input { font: inherit; }
+  button { cursor: pointer; }
+  a { color: inherit; text-decoration: none; }
+  button { color: inherit; }
+  :is(button, input, a):focus-visible { outline: 2px solid var(--research-accent); outline-offset: 5px; }
+  :is(textarea, summary):focus-visible { outline: 2px solid var(--research-accent); outline-offset: 5px; }
+  ::selection { color: #0b0c0d; background: var(--research-accent); }
+  h1, h2, h3, p { margin: 0; }
+  [tabindex="-1"]:focus { outline: none; }
+}
+/* Kept unlayered: in the base layer it would lose to unlayered button rules that set cursor (for example
+   `.workspace-identity button`), so a disabled button there would show a pointer cursor. */
 button:disabled { cursor: not-allowed; opacity: .55; transform: none; }
-::selection { color: #0b0c0d; background: var(--research-accent); }
-h1, h2, h3, p { margin: 0; }
-[tabindex="-1"]:focus { outline: none; }
 
 .research-page { min-height: 100svh; background: radial-gradient(ellipse at 85% 15%, #223b351c, transparent 43%); }
 
