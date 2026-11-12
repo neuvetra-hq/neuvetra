@@ -1,5 +1,4 @@
 import { duplicateReasonCodes, instrumentNotes, type ResultRow, type ResultsResponse } from "./results-api"
-import { possibleDuplicateCounted } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { reasonText } from "./plain-language"
 
 export type Tone = "ready" | "warn" | "danger" | "muted" | "info"
@@ -47,8 +46,8 @@ export function engineHold(row: ResultRow): "input_needed" | "review_required" |
   const status = row.scope1 ? row.scope1.status : row.scope2 ? row.scope2.locationBased.status : null
   return status === "input_needed" || status === "review_required" || status === "excluded" ? status : null
 }
-/** BF-01 (count mode): a calculated record the duplicate policy counted although it may repeat another record. */
-export const countedDuplicate = (row: ResultRow) => row.outcome === "calculated" && possibleDuplicateCounted({ reasons: row.plan.reasons, notes: row.plan.notes ?? [] })
+/** BF-01 (count mode): a record the duplicate policy counted (calculated and in a subtotal) although it may repeat another record. */
+export const countedDuplicate = (row: ResultRow) => duplicateReasonCodes(row).length > 0
 /** Not yet counted (B02): held by the adapter, the period check or the engine, and neither withdrawn nor excluded. */
 export const notYetCounted = (row: ResultRow) => row.plan.status !== "withdrawn" && row.plan.status !== "excluded"
   && (row.outcome !== "calculated" || engineHold(row) === "input_needed" || engineHold(row) === "review_required")

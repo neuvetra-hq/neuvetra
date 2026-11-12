@@ -295,13 +295,17 @@ export function Scope3Panel({ state, canManage, onFix, onRetry, reports, onNavig
   </div>
 }
 
-/** BF-01: the saved record a possible duplicate line may repeat, in words (the record's lines share its record ID). */
+/**
+ * BF-01: the record a possible duplicate line may repeat (the earlier record it overlaps), by source ID, site, period and
+ * record ID. The record's lines share its record ID; its own (not derived) line is preferred.
+ */
 function scope3PossibleDuplicateText(row: Scope3Row, records: readonly Scope3Row[]): string | null {
-  // The note is `possible_duplicate_of:<keeper record ID>` (collection-duplicates.ts); read here without an import, as the tests render this file alone.
-  const keeperId = row.plan.notes.find(note => note.startsWith("possible_duplicate_of:"))?.slice("possible_duplicate_of:".length) ?? null
-  if (keeperId === null) return null
-  const keeper = records.find(item => item.recordId === keeperId)
-  return `Possible duplicate of record ${keeper ? `${keeper.sourceId} (${keeperId})` : keeperId}.`
+  // The note is `possible_duplicate_of:<record ID>`, and the words are possibleDuplicateOfText's (collection-duplicates.ts);
+  // both are read here without an import, as the tests render this file alone with only its usual helpers.
+  const otherId = row.plan.notes.find(note => note.startsWith("possible_duplicate_of:"))?.slice("possible_duplicate_of:".length) ?? null
+  if (otherId === null) return null
+  const other = records.find(item => item.recordId === otherId && item.derivedFrom === null) ?? records.find(item => item.recordId === otherId)
+  return other ? `Possible duplicate of ${other.sourceId} at ${other.locationName ?? "an unknown site"}, ${periodLabel(other.period.start, other.period.endExclusive)} (record ${otherId}).` : `Possible duplicate of record ${otherId}.`
 }
 
 /**

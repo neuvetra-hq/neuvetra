@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test"
 import { createPostgresConnection, HostedWorkspaceDatabase, provisionStagingRoster, revokeStagingAccess, M61_LIMITATION_ACKNOWLEDGMENTS, M64_LIMITATIONS, type WorkspaceConnection } from "@neuvetra/database"
 import { createSyntheticCompanySetup } from "../../../../packages/neuvetra-database/src/company-setup-fixture"
+import { possibleDuplicatesCountedWarning } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { createStagingServer } from "./server"
 import { readStagingConfig, STAGING_PROFILE } from "./config"
 
@@ -229,10 +230,11 @@ integration("BF-03 Scope 1 and 2 Results count active records only: 401 refuse, 
   } finally { await app.close(); await database.close(); await operator.close() }
 }, 600_000)
 
-// BF-01 part A (auditor S1, BL-01): the same electricity bill saved twice through the collection route is counted once on
-// native PostgreSQL. Hold mode (the default policy): the second record is held as a possible duplicate, the location-based
-// subtotal stays the single-record figure, and withdrawing the duplicate restores the plain single-record response.
-integration("BF-01: a repeated electricity record is held as a possible duplicate, not added to the Scope 2 total", async () => {
+// BF-01 part A (auditor S1, BL-01): the same electricity bill saved twice through the collection route on native
+// PostgreSQL. Count mode (the default policy since the CEO's ruling of 12 November 2026): both records are counted, the
+// second carries the possible-duplicate note and the response warns; withdrawing the duplicate restores the plain
+// single-record response. Hold mode is covered at route level in collection-duplicates.test.ts.
+integration("BF-01: a repeated electricity record is counted with a possible-duplicate warning, and withdrawing it restores the single total", async () => {
   const REF = "abcdefghijklmnopqrst", ORIGIN = "http://127.0.0.1:3015"
   const owner = crypto.randomUUID(), company = crypto.randomUUID()
   const operator = createPostgresConnection(target!, { tls: false })
@@ -269,11 +271,12 @@ integration("BF-01: a repeated electricity record is held as a possible duplicat
     const repeated = await save(second, meter)
     expect(repeated.status).toBe(201)
     const after = await call(`${root}/results`)
-    expect(after.body.scope2.locationBasedSubtotal.display).toBe("48756.5305")
-    expect(after.body.scope2.locationBasedIncluded).toHaveLength(1)
-    expect(after.body.counts).toMatchObject({ records: 2, calculated: 1, inputNeeded: 1 })
-    expect(after.body.records.find((row: any) => row.recordId === second).plan).toEqual({ action: "hold", status: "input_needed", reasons: ["possible_duplicate_record"], notes: [`possible_duplicate_of:${first}`] })
+    expect(after.body.scope2.locationBasedSubtotal.display).toBe("97513.0609")
+    expect(after.body.scope2.locationBasedIncluded).toHaveLength(2)
+    expect(after.body.counts).toMatchObject({ records: 2, calculated: 2, inputNeeded: 0 })
+    expect(after.body.records.find((row: any) => row.recordId === second).plan).toMatchObject({ action: "calculate", reasons: [], notes: [`possible_duplicate_of:${first}`] })
     expect(after.body.records.find((row: any) => row.recordId === first).plan.notes).toEqual(["has_possible_duplicates:1"])
+    expect(after.body.warnings).toContain(possibleDuplicatesCountedWarning(1))
     // Withdrawing the duplicate restores the single-record result, with no note and no warning.
     expect((await save(second, { ...meter, state: "withdrawn", withdrawalReason: "Entered twice." }, 1, repeated.body.version.id, "Duplicate bill")).status).toBe(201)
     const restored = await call(`${root}/results`)

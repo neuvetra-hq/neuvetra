@@ -279,26 +279,58 @@ describe("BF-01: possible duplicate records", () => {
   ;(keeper.plan as any).notes = ["has_possible_duplicates:1"]
   const base = (records: ResultRow[], extra: Record<string, unknown> = {}) => ({ ...synthetic, records, methods: [method(GAS, 1)], scope2: null,
     scope1: { knownSourceSubtotal: kg("5311.4500"), includedResults: [keeper.scope1!.resultSha256], incompleteResults: [], notCalculated: [], reportedOutsideScopes: [], resultCount: 1, complete: true }, ...extra }) as unknown as ResultsResponse
+  // QA (PR #48): the named record is identifiable by site and period as well as its source ID and record ID.
+  const named = `Possible duplicate of GAS-1 at Office, ${plainLanguage.periodLabel("2025-01-01", "2026-01-01")} (record ${keeper.recordId}).`
   test("hold mode: the duplicate is input needed, named everywhere, and the totals say incomplete", () => {
     const dup = row("GAS-1", "natural_gas", 1, { outcome: "held", plan: { action: "hold", status: "input_needed", reasons: ["possible_duplicate_record"], notes: [`possible_duplicate_of:${keeper.recordId}`] } })
     const view = render(base([keeper, dup]))
     expect(resultsView.rowStatus(dup)).toEqual({ label: "Input needed", tone: "warn" })
     expect(view.completeness.scope1).toBe("Incomplete — 1 record not yet counted")
-    expect(view.notCounted.some(line => line.includes(reason("possible_duplicate_record")) && line.includes(`Possible duplicate of record GAS-1 (${keeper.recordId}).`))).toBe(true)
+    expect(view.notCounted.some(line => line.includes(reason("possible_duplicate_record")) && line.includes(named))).toBe(true)
     const line = csvLines(view.csv).find(text => text.includes(reason("possible_duplicate_record")))!
-    expect(line).toContain(`Possible duplicate of record GAS-1 (${keeper.recordId}).`)
+    expect(line).toContain(named)
     expect(line).toContain("input_needed")
+    // Held, not counted: it never says it is counted, and no subtotal is flagged.
+    expect(line).not.toContain(reason("possible_duplicate_counted"))
+    expect(view.warnings.some(text => text.includes("possible duplicate"))).toBe(false)
+    expect(view.printed).not.toContain("‡")
   })
   test("count mode: the counted duplicate is never \"No known gaps\", and the CSV says it is counted", () => {
     const dup = row("GAS-1", "natural_gas", 1, { inSubtotal: { scope1: true, scope2LocationBased: false, scope2MarketBased: false }, plan: { action: "calculate", status: null, reasons: [], notes: [`possible_duplicate_of:${keeper.recordId}`] }, scope1: s1(GAS, "complete", { total: kg("5311.4500") }) })
-    const results = base([keeper, dup], { warnings: ["1 record may repeat another record and is counted in these totals. Check the record marked as a possible duplicate."],
+    const results = base([keeper, dup], { warnings: ["These totals include 1 possible duplicate: a record that matches another active record for overlapping dates. Both records are counted. If they are the same record, withdraw or correct one of them; if they are different records, no action is needed."],
       scope1: { knownSourceSubtotal: kg("10622.9000"), includedResults: [keeper.scope1!.resultSha256, dup.scope1!.resultSha256], incompleteResults: [], notCalculated: [], reportedOutsideScopes: [], resultCount: 2, complete: true } })
     const view = render(results)
     expect(resultsView.rowStatus(dup)).toEqual({ label: "Counted — possible duplicate", tone: "warn" })
     expect(resultsView.needsWork(dup)).toBe(true)
     expect(view.completeness.scope1).toBe("Incomplete — 1 possible duplicate counted")
-    expect(view.notCounted.some(line => line.includes(reason("possible_duplicate_counted")))).toBe(true)
-    expect(csvLines(view.csv).some(text => text.includes(reason("possible_duplicate_counted")) && text.includes(`Possible duplicate of record GAS-1 (${keeper.recordId}).`))).toBe(true)
+    expect(view.notCounted.some(line => line.includes(reason("possible_duplicate_counted")) && line.includes(named))).toBe(true)
+    expect(csvLines(view.csv).some(text => text.includes(reason("possible_duplicate_counted")) && text.includes(named))).toBe(true)
+    expect(reason("possible_duplicate_counted")).toContain("Both records are included in the total.")
+  })
+  test("count mode: the totals themselves are flagged on screen, in the draft report (print) and in the CSV subtotal row", () => {
+    const dup = row("GAS-1", "natural_gas", 1, { inSubtotal: { scope1: true, scope2LocationBased: false, scope2MarketBased: false }, plan: { action: "calculate", status: null, reasons: [], notes: [`possible_duplicate_of:${keeper.recordId}`] }, scope1: s1(GAS, "complete", { total: kg("5311.4500") }) })
+    const results = base([keeper, dup], { scope1: { knownSourceSubtotal: kg("10622.9000"), includedResults: [keeper.scope1!.resultSha256, dup.scope1!.resultSha256], incompleteResults: [], notCalculated: [], reportedOutsideScopes: [], resultCount: 2, complete: true } })
+    const view = render(results)
+    const flag = "Includes 1 possible duplicate: this figure may be overstated"
+    expect(resultsApi.possibleDuplicateTotalText(1)).toBe(flag)
+    // Screen: the Scope 1 card carries the flag.
+    expect(view.warnings).toContain(flag)
+    expect(view.totalNotes[0]).toContain(flag)
+    // Draft report and print: the Scope 1 figure is marked ‡ and the note names the subtotal.
+    expect(view.printed).toContain("10,622.9000 ‡")
+    expect(view.printed).toContain(`‡ Scope 1: ${flag}.`)
+    // CSV: the Scope 1 subtotal row says it, and only that row.
+    const subtotals = csvLines(view.csv).filter(line => line.startsWith("Subtotal,"))
+    expect(subtotals.find(line => line.startsWith("Subtotal,Scope 1,"))).toContain(`${flag}.`)
+    expect(subtotals.filter(line => line.includes(flag))).toHaveLength(1)
+  })
+  test("count mode: a possible duplicate held for another reason is not called counted", () => {
+    const dup = row("GAS-1", "natural_gas", 1, { outcome: "held", plan: { action: "hold", status: "input_needed", reasons: ["quantity_required"], notes: [`possible_duplicate_of:${keeper.recordId}`] } })
+    const view = render(base([keeper, dup]))
+    expect(resultsView.countedDuplicate(dup)).toBe(false)
+    expect(resultsView.rowReasons(dup)).not.toContain(reason("possible_duplicate_counted"))
+    expect(view.completeness.scope1).toBe("Incomplete — 1 record not yet counted")
+    expect(view.notCounted.some(line => line.includes(named))).toBe(true)
   })
   test("no duplicates: the keeper note alone changes nothing on screen", () => {
     const plain = row("GAS-1", "natural_gas", 1, { inSubtotal: { scope1: true, scope2LocationBased: false, scope2MarketBased: false }, scope1: s1(GAS, "complete", { total: kg("5311.4500") }) })

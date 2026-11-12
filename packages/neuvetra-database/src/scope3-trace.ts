@@ -9,6 +9,7 @@
  * catalog, so a method added to the engine and the catalog appears without a change here.
  */
 import type { Scope3SupersededSpendMemo } from './scope3-r3a'
+import { possibleDuplicateCounted } from './collection-duplicates'
 import { scope3SpendConvertAmount, validateScope3SpendConversionInput, type Scope3SpendConversion } from './scope3-spend-currency'
 import { SCOPE3_NULL_ANNOTATION, type Scope3Annotation, type Scope3CategoryProfile, type Scope3CategoryRow, type Scope3Coverage, type Scope3EngineResult, type Scope3Ratio, type Scope3Total } from './scope3-coverage'
 import {
@@ -93,12 +94,16 @@ export const SCOPE3_READINESS_CODES: readonly Scope3ReadinessCode[] = ['input_ne
 /**
  * Round 2 (owner decision 7, UX-10): the readiness gate, from the response's own fields, in category then code order:
  * `input_needed` (category status), `screening_conflict` (category status), `needs_review` (a line the engine returned for
- * review) and `assessment_missing` (a category screened as included with no assessment for the reporting year).
+ * review, or, BF-01, a counted line that may repeat another record) and `assessment_missing` (a category screened as
+ * included with no assessment for the reporting year).
  */
 export function scope3Readiness(categories: ReadonlyArray<Pick<Scope3ResultsCategory, 'category' | 'status' | 'screening' | 'assessment'>>, lines: ReadonlyArray<Pick<Scope3ResultsLine, 'category' | 'result' | 'plan' | 'outcome'>>): Scope3Readiness {
   const openIssues: Scope3Readiness['openIssues'] = []
   for (const row of categories) {
-    const review = lines.some(line => line.category === row.category && line.result?.status === 'review_required' && line.plan.status !== 'withdrawn' && line.plan.status !== 'excluded' && line.outcome !== 'outside_period')
+    // BF-01 (count mode): a counted possible duplicate (a `possible_duplicate_of:` note without the hold reason) needs review
+    // too, so a version cannot be approved without acknowledging it. Lines without that note are unaffected.
+    const review = lines.some(line => line.category === row.category && line.plan.status !== 'withdrawn' && line.plan.status !== 'excluded' && line.outcome !== 'outside_period'
+      && (line.result?.status === 'review_required' || (line.outcome === 'calculated' && possibleDuplicateCounted({ reasons: line.plan.reasons ?? [], notes: line.plan.notes ?? [] }))))
     const codes: Scope3ReadinessCode[] = [
       ...(row.status === 'input_needed' ? ['input_needed' as const] : []), ...(row.status === 'screening_conflict' ? ['screening_conflict' as const] : []),
       ...(review ? ['needs_review' as const] : []), ...(row.screening.decision === 'included' && row.assessment === null ? ['assessment_missing' as const] : []),

@@ -727,7 +727,7 @@ export const SCOPE3_REASON_TEXT_R2A: Readonly<Record<string, string>> = {
  * The hold reason `possible_duplicate_record` has one text for every scope (plain-language-labels.ts).
  */
 export const SCOPE3_REASON_TEXT_BF01: Readonly<Record<string, string>> = {
-  possible_duplicate_counted: 'This record has the same activity type and source ID as another active record for overlapping dates, so it may be the same bill saved twice. It is counted in these totals. If it repeats the other record, withdraw one of them; otherwise correct its source ID or dates.',
+  possible_duplicate_counted: 'This record matches another active record (same activity type, location and source ID; for Scope 3, also the same category and quantity) for overlapping dates, so it may be the same record entered twice. Both records are included in the total. If they are the same record, withdraw or correct one of them; if they are different records, no action is needed.',
 }
 /** Round 2: the category 3 methodology sentences on what is not quantified and on the periods of the Scope 1 and 2 derived lines. */
 export const SCOPE3_METHODOLOGY_TEXT_R2A = {

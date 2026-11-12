@@ -6,7 +6,7 @@ import { createScope2Engine } from "../calculation/scope2-authority"
 import { createScope3Engine } from "../calculation/scope3-authority"
 import { buildCollectionResults, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256 } from "./collection-results-routes"
 import { buildScope3Results, REVIEWED_SCOPE3_ENGINE_SHA256 } from "./scope3-results-routes"
-import { COLLECTION_DUPLICATE_POLICY, normalizedSourceId, possibleDuplicateRecords } from "../../../../packages/neuvetra-database/src/collection-duplicates"
+import { COLLECTION_DUPLICATE_POLICY, normalizedSourceId, periodsOverlapAsDuplicates, possibleDuplicateRecords, possibleDuplicatesCountedWarning } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { COLLECTION_SCOPE12_KINDS } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { SCOPE3_SETUP_CATEGORY_TOKENS } from "../../../../packages/neuvetra-database/src/scope3-coverage"
 import { buildScope3ReportDocument, scope3ReportCsv, scope3ReportText, validateScope3ReportDocument, type Scope3ReportDocument } from "../../../../packages/neuvetra-database/src/scope3-report-document"
@@ -44,10 +44,19 @@ const power = (kwh: string, unit = "kWh", sourceId = "M-1", period = year) => re
 const withdraw = (r: CollectionActivityRecord): CollectionActivityRecord => ({ ...r, currentVersion: { ...r.currentVersion, revision: 2, activity: { ...r.currentVersion.activity, state: "withdrawn", withdrawalReason: "Entered twice." } } })
 const build = (records: CollectionActivityRecord[], duplicatePolicy?: "hold" | "count_and_warn") => buildCollectionResults({ companyId: company, context, records, evidence, setup: setupView, engines, ...(duplicatePolicy ? { duplicatePolicy } : {}) })
 const rowOf = (r: Awaited<ReturnType<typeof build>>, id: string) => r.records.find(row => row.recordId === id)!
-const HOLD_TEXT = "This record has the same activity type and source ID as another active record for overlapping dates, so it may be the same bill saved twice. It isn’t counted until you withdraw one of them or correct its source ID or dates."
+const HOLD_TEXT = "This record matches another active record (same activity type, location and source ID; for Scope 3, also the same category and quantity) for overlapping dates, so it may be the same record entered twice. It isn’t counted until you withdraw one of them or correct its source ID, location or dates."
+const COUNTED_TEXT = "This record matches another active record (same activity type, location and source ID; for Scope 3, also the same category and quantity) for overlapping dates, so it may be the same record entered twice. Both records are included in the total. If they are the same record, withdraw or correct one of them; if they are different records, no action is needed."
+const WARNING_ONE = "These totals include 1 possible duplicate: a record that matches another active record for overlapping dates. Both records are counted. If they are the same record, withdraw or correct one of them; if they are different records, no action is needed."
 
 describe("BF-01 the shared rule (possibleDuplicateRecords)", () => {
-  test("the policy defaults to hold until the board rules", () => expect(COLLECTION_DUPLICATE_POLICY).toBe("hold"))
+  test("the policy defaults to count_and_warn (CEO ruling, 12 November 2026)", () => expect(COLLECTION_DUPLICATE_POLICY).toBe("count_and_warn"))
+  test("the warning and reason texts are record-neutral and say what to do", () => {
+    expect(possibleDuplicatesCountedWarning(1)).toBe(WARNING_ONE)
+    expect(possibleDuplicatesCountedWarning(2)).toBe("These totals include 2 possible duplicates: records that match another active record for overlapping dates. Both records of each pair are counted. Where two are the same record, withdraw or correct one of them; where they are different records, no action is needed.")
+    expect(reasonText("possible_duplicate_counted")).toBe(COUNTED_TEXT)
+    expect(reasonText("possible_duplicate_record")).toBe(HOLD_TEXT)
+    for (const text of [WARNING_ONE, COUNTED_TEXT, HOLD_TEXT]) expect(text).not.toContain("bill")
+  })
   test("normalises source IDs: trim, NFC, en-US lower case, whitespace collapsed", () => {
     expect(normalizedSourceId("  M-1 ")).toBe("m-1")
     expect(normalizedSourceId("Gas\t  Meter\n 1")).toBe("gas meter 1")
@@ -64,12 +73,39 @@ describe("BF-01 the shared rule (possibleDuplicateRecords)", () => {
     const a = power("1000", "kWh", "M-1"), b = power("1000", "kWh", "m-1 ")
     expect([...possibleDuplicateRecords([a, b])]).toEqual([[b.id, a.id]])
   })
-  test("groups are transitive and the keeper is the record saved first (ties: the smaller ID)", () => {
+  test("not transitive: a record names the earliest-saved record it actually overlaps (QA B1, B3)", () => {
     const a = power("1", "kWh", "M-1", { start: "2025-01-01", endExclusive: "2025-02-01" }), b = power("1", "kWh", "M-1", { start: "2025-01-20", endExclusive: "2025-03-01" }), c = power("1", "kWh", "M-1", { start: "2025-02-20", endExclusive: "2025-04-01" })
+    // Saved a, b, c: b overlaps a, c overlaps b only.
+    expect(Object.fromEntries(possibleDuplicateRecords([a, b, c]))).toEqual({ [b.id]: a.id, [c.id]: b.id })
+    // a saved last: it overlaps b (saved first); c overlaps b too. Nobody names a record it does not overlap.
     const later = { ...a, history: [{ createdAt: "2026-01-01T00:00:00.000Z" }] } as CollectionActivityRecord
     expect(Object.fromEntries(possibleDuplicateRecords([later, b, c]))).toEqual({ [a.id]: b.id, [c.id]: b.id })
     const tieA = { ...a, history: [{ createdAt: "2025-01-01T00:00:00.000Z" }] } as CollectionActivityRecord, tieB = { ...b, history: [{ createdAt: "2025-01-01T00:00:00.000Z" }] } as CollectionActivityRecord
     expect(Object.fromEntries(possibleDuplicateRecords([tieB, tieA]))).toEqual({ [b.id]: a.id })
+  })
+  test("a shared meter-read day (one day: the last of one record, the first of the other) is not an overlap; a longer or contained one is", () => {
+    const p = (start: string, endExclusive: string) => ({ start, endExclusive })
+    expect(periodsOverlapAsDuplicates(p("2025-01-01", "2025-02-02"), p("2025-02-01", "2025-03-02"))).toBe(false)
+    expect(periodsOverlapAsDuplicates(p("2025-02-01", "2025-03-02"), p("2025-01-01", "2025-02-02"))).toBe(false)
+    expect(periodsOverlapAsDuplicates(p("2025-01-01", "2025-02-03"), p("2025-02-01", "2025-03-02"))).toBe(true)
+    // One-day records on the same day, and a one-day record inside a longer one, still overlap.
+    expect(periodsOverlapAsDuplicates(p("2025-07-14", "2025-07-15"), p("2025-07-14", "2025-07-15"))).toBe(true)
+    expect(periodsOverlapAsDuplicates(p("2025-07-01", "2025-08-01"), p("2025-07-14", "2025-07-15"))).toBe(true)
+    // A one-day record on the last day of a month record: it starts on the shared day but is contained, so it overlaps.
+    expect(periodsOverlapAsDuplicates(p("2025-07-01", "2025-08-01"), p("2025-07-31", "2025-08-01"))).toBe(true)
+    expect(periodsOverlapAsDuplicates(p("2025-01-01", "2025-02-01"), p("2025-02-01", "2025-03-01"))).toBe(false)
+  })
+  test("QA B1: twelve monthly bills whose dates share a meter-read day are not possible duplicates of each other", () => {
+    const starts = Array.from({ length: 12 }, (_, i) => `2025-${String(i + 1).padStart(2, "0")}-01`)
+    const nextDay = (date: string) => new Date(Date.parse(`${date}T00:00:00Z`) + 86_400_000).toISOString().slice(0, 10)
+    const bills = starts.map((start, i) => power("10000", "kWh", "M-1", { start, endExclusive: i === 11 ? "2026-01-01" : nextDay(starts[i + 1]!) }))
+    expect(possibleDuplicateRecords(bills).size).toBe(0)
+  })
+  test("QA B2/B3: the location is part of the key (two sites each with a \"Main meter\")", () => {
+    const a = power("1000", "kWh", "Main meter"), b = { ...power("1000", "kWh", "Main meter") }
+    const elsewhere = { ...b, currentVersion: { ...b.currentVersion, activity: { ...b.currentVersion.activity, locationId: "7d000000-0000-4000-8000-0000000000ff" } } } as CollectionActivityRecord
+    expect(possibleDuplicateRecords([a, elsewhere]).size).toBe(0)
+    expect(possibleDuplicateRecords([a, b]).size).toBe(1)
   })
   test("only active records, never a different kind, and never a record confirmed distinct", () => {
     const a = gas(), b = gas()
@@ -81,16 +117,16 @@ describe("BF-01 the shared rule (possibleDuplicateRecords)", () => {
   test("the module's Scope 1 and 2 kinds are the contract's", () => {
     // A Scope 1/2 kind compares without the quantity: the same meter as 100,000 kWh and as 100 MWh is flagged.
     for (const kind of COLLECTION_SCOPE12_KINDS) {
-      const make = (value: string) => ({ id: `${kind}-${value}`, kind, currentVersion: { activity: { state: "active", sourceId: "S", period: year, quantity: { originalValue: value, originalUnit: "u", normalizedValue: value, normalizedUnit: "u" }, payload: {} } }, history: [{ createdAt: value }] })
+      const make = (value: string) => ({ id: `${kind}-${value}`, kind, currentVersion: { activity: { state: "active", sourceId: "S", locationId: office, period: year, quantity: { originalValue: value, originalUnit: "u", normalizedValue: value, normalizedUnit: "u" }, payload: {} } }, history: [{ createdAt: value }] })
       expect([kind, possibleDuplicateRecords([make("1"), make("2")]).size]).toEqual([kind, 1])
     }
   })
 })
 
 describe("BF-01 possible duplicate records (Scope 1 and 2 results)", () => {
-  test("H1: the same gas bill saved twice is counted once (hold mode, the default)", async () => {
+  test("H1 in hold mode: the same gas record saved twice is counted once", async () => {
     const a = gas(), b = gas()
-    const r = await build([a, b])
+    const r = await build([a, b], "hold")
     expect(r.scope1?.knownSourceSubtotal.display).toBe("5311.4500")
     expect(rowOf(r, a.id)).toMatchObject({ outcome: "calculated", plan: { action: "calculate", notes: ["has_possible_duplicates:1"] } })
     expect(rowOf(r, b.id)).toMatchObject({ outcome: "held", inSubtotal: { scope1: false }, plan: { action: "hold", status: "input_needed", reasons: ["possible_duplicate_record"], notes: [`possible_duplicate_of:${a.id}`] } })
@@ -99,18 +135,18 @@ describe("BF-01 possible duplicate records (Scope 1 and 2 results)", () => {
     expect(r.warnings).toEqual([])
     expect(reasonText("possible_duplicate_record")).toBe(HOLD_TEXT)
   }, TIMEOUT)
-  test("H1 in count mode: both are counted (10622.9000), with the warning and the note", async () => {
+  test("H1 in count mode (the default): both are counted (10622.9000), with the warning and the note", async () => {
     const a = gas(), b = gas()
-    const r = await build([a, b], "count_and_warn")
+    const r = await build([a, b])
     expect(r.scope1?.knownSourceSubtotal.display).toBe("10622.9000")
-    expect(r.warnings).toEqual(["1 record may repeat another record and is counted in these totals. Check the record marked as a possible duplicate."])
+    expect(r.warnings).toEqual([WARNING_ONE])
     expect(rowOf(r, b.id)).toMatchObject({ outcome: "calculated", plan: { action: "calculate", reasons: [], notes: [`possible_duplicate_of:${a.id}`] } })
     expect(r.counts).toMatchObject({ calculated: 2, inputNeeded: 0 })
   }, TIMEOUT)
   test("H1b: the same meter as 100,000 kWh and as 100 MWh gives the single-bill location-based figure", async () => {
     const a = power("100000"), b = power("100", "MWh")
     const single = await build([a])
-    const r = await build([a, b])
+    const r = await build([a, b], "hold")
     expect(r.scope2?.locationBasedSubtotal.display).toBe(single.scope2!.locationBasedSubtotal.display)
     expect(Number(r.scope2!.locationBasedSubtotal.display)).toBeCloseTo(19502.61, 2)
     expect(rowOf(r, b.id).plan.reasons).toEqual(["possible_duplicate_record"])
@@ -134,7 +170,7 @@ describe("BF-01 possible duplicate records (Scope 1 and 2 results)", () => {
     const outside = record({ kind: "natural_gas", sourceId: "GAS-1", period: { start: "2025-06-01", endExclusive: "2025-08-01" }, quantity: q("1000", "therm"), payload: { heatContent: null } })
     const base = setupView.currentVersion!
     const halfSetup = { ...setupView, currentVersion: { ...base, setup: { ...base.setup, reportingPeriod: { ...base.setup.reportingPeriod, ...half } } } } as unknown as CompanySetupView
-    const r = await buildCollectionResults({ companyId: company, context: { ...context, reportingPeriod: half }, records: [a, outside], evidence, setup: halfSetup, engines })
+    const r = await buildCollectionResults({ companyId: company, context: { ...context, reportingPeriod: half }, records: [a, outside], evidence, setup: halfSetup, engines, duplicatePolicy: "hold" })
     expect(rowOf(r, outside.id)).toMatchObject({ periodCheck: "partial", plan: { notes: [] } })
     expect(rowOf(r, outside.id).plan.reasons).not.toContain("possible_duplicate_record")
     expect(r.counts).toMatchObject({ outsidePeriod: 1, inputNeeded: 0 })
@@ -167,15 +203,15 @@ describe("BF-01 possible duplicate records (Scope 3 results)", () => {
     const a = trip(), b = trip()
     const single = await build3([a])
     expect(category(single, 6).subtotal?.display).toBe("1578.1901")
-    const r = await build3([a, b])
+    const r = await build3([a, b], "hold")
     expect(category(r, 6).subtotal?.display).toBe("1578.1901")
     const held = r.records.find(row => row.recordId === b.id)!
     expect(held).toMatchObject({ outcome: "held", plan: { action: "hold", status: "input_needed", reasons: ["possible_duplicate_record"], notes: [`possible_duplicate_of:${a.id}`] } })
     expect(category(r, 6).status).toBe("input_needed")
     expect(r.readiness.openIssues).toContainEqual({ category: 6, code: "input_needed" })
-    const counted = await build3([a, b], "count_and_warn")
+    const counted = await build3([a, b])
     expect(category(counted, 6).subtotal?.display).toBe("3156.3802")
-    expect(counted.warnings).toContain("1 record may repeat another record and is counted in these totals. Check the record marked as a possible duplicate.")
+    expect(counted.warnings).toContain(WARNING_ONE)
   }, TIMEOUT)
   test("two trips with the same source ID but different miles are not flagged", async () => {
     const r = await build3([trip("2400"), trip("1800")])
@@ -183,7 +219,7 @@ describe("BF-01 possible duplicate records (Scope 3 results)", () => {
   }, TIMEOUT)
   test("a duplicated electricity record holds its derived 3C, 3C upstream and 3B lines too (hold mode)", async () => {
     const a = power("250000"), b = power("250000")
-    const r = await build3([a, b])
+    const r = await build3([a, b], "hold")
     const lines = r.records.filter(row => row.recordId === b.id)
     expect(lines.map(row => row.kind)).toEqual(["td_losses", "td_losses_upstream", "electricity_upstream"])
     for (const line of lines) expect([line.kind, line.outcome, line.plan.reasons.includes("possible_duplicate_record")]).toEqual([line.kind, "held", true])
@@ -193,17 +229,72 @@ describe("BF-01 possible duplicate records (Scope 3 results)", () => {
   }, TIMEOUT)
   test("a frozen version prepared with a held duplicate shows the reason in its CSV and lists it as an open issue", async () => {
     const a = trip(), b = trip()
-    const r = await build3([a, b])
+    const r = await build3([a, b], "hold")
     const document = buildScope3ReportDocument({ results: r, reportingYear: 2025, revision: 1, setupVersionId: setup, consolidationApproach: "operational_control", preparedBy: owner, preparedAt: "2026-11-12T00:00:00.000Z", previous: null })
     const stored = validateScope3ReportDocument(JSON.parse(scope3ReportText(document)), company) as Scope3ReportDocument
     expect(stored.results.readiness?.openIssues).toContainEqual({ category: 6, code: "input_needed" })
     const csv = scope3ReportCsv(stored, { kind: kindLabel, reason: reasonText, period: periodLabel })
     const line = csv.split("\n").find(text => text.startsWith("Record,") && text.includes(b.id))!
     expect(line).toContain("Needs input")
-    expect(line).toContain("same activity type and source ID as another active record")
+    expect(line).toContain("matches another active record")
     // Count mode: the counted duplicate's CSV line carries the possible_duplicate_counted words.
     const counted = await build3([a, b], "count_and_warn")
     const countedLine = scope3Csv(counted, { kind: kindLabel, reason: reasonText, period: periodLabel }).split("\n").find(text => text.startsWith("Record,") && text.includes(b.id))!
     expect(countedLine).toContain(reasonText("possible_duplicate_counted"))
+  }, TIMEOUT)
+})
+
+// QA of PR #48 (B1–B3) and the CEO's ruling: count mode is the default, and a counted possible duplicate needs an
+// acknowledgement before a Scope 3 version can be approved (readiness `needs_review`, a code 0030 already accepts).
+describe("BF-01 count mode: readiness, naming and QA scenarios", () => {
+  const nextDay = (date: string) => new Date(Date.parse(`${date}T00:00:00Z`) + 86_400_000).toISOString().slice(0, 10)
+  const starts = Array.from({ length: 12 }, (_, i) => `2025-${String(i + 1).padStart(2, "0")}-01`)
+  test("a counted possible duplicate makes its category needs_review; the frozen version lists it, so approval needs an acknowledgement", async () => {
+    const a = trip(), b = trip()
+    const r = await build3([a, b])
+    expect(category(r, 6).status).toBe("calculated")
+    expect(r.readiness.openIssues).toContainEqual({ category: 6, code: "needs_review" })
+    expect(r.readiness.ready).toBe(false)
+    const document = buildScope3ReportDocument({ results: r, reportingYear: 2025, revision: 1, setupVersionId: setup, consolidationApproach: "operational_control", preparedBy: owner, preparedAt: "2026-11-12T00:00:00.000Z", previous: null })
+    const stored = validateScope3ReportDocument(JSON.parse(scope3ReportText(document)), company) as Scope3ReportDocument
+    expect(stored.results.readiness?.openIssues).toContainEqual({ category: 6, code: "needs_review" })
+    // The 0030 gate accepts exactly these codes (prepare_scope3_report_version); the issue uses one of them.
+    for (const issue of stored.results.readiness!.openIssues) expect(["input_needed", "screening_conflict", "needs_review", "assessment_missing", "included_category_has_no_records"]).toContain(issue.code)
+    // Without the possible duplicate, category 6 has no needs_review issue.
+    const single = await build3([a])
+    expect(single.readiness.openIssues).not.toContainEqual({ category: 6, code: "needs_review" })
+  }, TIMEOUT)
+  test("a duplicated electricity record's derived lines make category 3 needs_review in count mode", async () => {
+    const r = await build3([power("250000"), power("250000")])
+    expect(r.readiness.openIssues).toContainEqual({ category: 3, code: "needs_review" })
+  }, TIMEOUT)
+  test("QA B1: twelve monthly bills sharing meter-read days count in full in both modes, with no warning", async () => {
+    const bills = starts.map((start, i) => power("10000", "kWh", "M-1", { start, endExclusive: i === 11 ? "2026-01-01" : nextDay(starts[i + 1]!) }))
+    for (const policy of ["hold", "count_and_warn"] as const) {
+      const r = await build(bills, policy)
+      expect([policy, r.scope2?.locationBasedSubtotal.display, r.counts.calculated, r.warnings]).toEqual([policy, "23403.1346", 12, []])
+    }
+  }, TIMEOUT)
+  test("QA B3: a stray annual record saved after twelve monthly bills names January, the record it overlaps first; only it is flagged", async () => {
+    const monthly = starts.map((start, i) => power("10000", "kWh", "M-1", { start, endExclusive: i === 11 ? "2026-01-01" : starts[i + 1]! }))
+    const annual = power("120000")
+    const hold = await build([...monthly, annual], "hold")
+    expect(hold.scope2?.locationBasedSubtotal.display).toBe("23403.1346")
+    expect(rowOf(hold, annual.id).plan.notes).toEqual([`possible_duplicate_of:${monthly[0]!.id}`])
+    expect(hold.records.filter(row => row.plan.reasons.includes("possible_duplicate_record")).map(row => row.recordId)).toEqual([annual.id])
+    const counted = await build([...monthly, annual])
+    expect(counted.scope2?.locationBasedSubtotal.display).toBe("46806.2692")
+    expect(counted.warnings).toEqual([WARNING_ONE])
+  }, TIMEOUT)
+  test("QA B3: a record at another site with the same source ID is not a possible duplicate", async () => {
+    const plant = "7d000000-0000-4000-8000-0000000000ff"
+    const twoSites = { ...context, locations: [...context.locations, { ...context.locations[0]!, id: plant, name: "Plant" }] } as CollectionContext
+    const base = setupView.currentVersion!
+    const twoSetup = { ...setupView, currentVersion: { ...base, setup: { ...base.setup, locations: [...base.setup.locations, { id: plant, name: "Plant", inclusion: "included" }] } } } as unknown as CompanySetupView
+    const a = power("50000", "kWh", "Main meter"), b = record({ ...a.currentVersion.activity, locationId: plant, quantity: q("80000", "kWh") } as unknown as Record<string, unknown>)
+    for (const policy of ["hold", "count_and_warn"] as const) {
+      const r = await buildCollectionResults({ companyId: company, context: twoSites, records: [a, b], evidence, setup: twoSetup, engines, duplicatePolicy: policy })
+      expect([policy, r.counts.calculated, r.warnings, r.records.every(row => row.plan.notes.length === 0)]).toEqual([policy, 2, [], true])
+    }
   }, TIMEOUT)
 })

@@ -291,6 +291,20 @@ describe("BF-01: possible duplicate Scope 3 records", () => {
     expect(scope3LineReasonCodes(line)).not.toContain("possible_duplicate_counted")
     line.plan = { ...line.plan, notes: [...line.plan.notes, "possible_duplicate_of:93000000-0000-4000-8000-000000001002"] }
     expect(scope3LineReasonCodes(line)).toContain("possible_duplicate_counted")
-    expect(reasonText("possible_duplicate_counted")).toContain("It is counted in these totals")
+    expect(reasonText("possible_duplicate_counted")).toContain("Both records are included in the total.")
+    // A held line (not calculated) with the note is not called counted.
+    expect(scope3LineReasonCodes({ ...line, outcome: "held" })).not.toContain("possible_duplicate_counted")
+  })
+  test("count mode: a counted possible duplicate gets a to-do (Withdraw or correct, not blocking) and shows under Needs attention", () => {
+    const data = clone(fixture) as any
+    const line = data.records.find((r: any) => r.outcome === "calculated" && r.derivedFrom === null)
+    expect(scope3Todos(data).some(todo => todo.kind === "line" && todo.recordId === line.recordId)).toBe(false)
+    line.plan = { ...line.plan, notes: [...line.plan.notes, "possible_duplicate_of:93000000-0000-4000-8000-000000001002"] }
+    const item = scope3Todos(data).find(todo => todo.kind === "line" && todo.recordId === line.recordId)!
+    expect(item.reasons).toContain(reasonText("possible_duplicate_counted"))
+    expect(item.actions).toEqual([{ type: "fix", recordId: line.recordId, fields: [SCOPE3_WITHDRAW_CONTROL], label: "Withdraw or correct" }])
+    expect(item.blocking).toBe(false)
+    const shown = scope3FilterRecords(data, { ...SCOPE3_DEFAULT_RECORD_FILTER, status: "attention" }).flatMap(group => group.rows)
+    expect(shown).toContain(line)
   })
 })

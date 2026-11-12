@@ -121,8 +121,8 @@ export const SCOPE3_READINESS_TEXT = {
     input_needed: (category: number) => `Category ${category} needs input: some of its records aren’t counted yet.`,
     screening_conflict: (category: number) => `Category ${category} has a screening conflict: records exist for a category screened out.`,
     // Round 2 integration: lane B's `needs_review` is a counted line the calculation returned for review (a screened-out
-    // category with records is `screening_conflict`), so the words say that.
-    needs_review: (category: number) => `Category ${category} needs review: some of its counted lines were returned for review by the calculation.`,
+    // category with records is `screening_conflict`), so the words say that. BF-01: or a counted line may repeat another record.
+    needs_review: (category: number) => `Category ${category} needs review: some of its counted lines were returned for review by the calculation or may repeat another record.`,
     assessment_missing: (category: number) => `Category ${category} is relevant but has no assessment.`,
     included_category_has_no_records: (category: number) => `Category ${category} is included but has no records. Add activity data or document a category-wide exclusion in screening.${category === 10 ? ' Obtain processor data; an average-data processing estimate is unavailable in this beta, and missing data is not zero.' : ''}`,
   } as Readonly<Record<string, (category: number) => string>>,

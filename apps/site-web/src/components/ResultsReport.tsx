@@ -3,7 +3,7 @@ import { Icon } from "./Icon"
 import type { JourneyView } from "./JourneyNav"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { coverageIssues, coverageLines, noteLabel, type Coverage } from "@/lib/journey-status"
-import { EVIDENCE_STATUS_TEXT, loadResults, methodLabel, NotSyntheticResultsError, possibleDuplicateText, releaseState, ResultsApiError, resultsCsv, unclearedEvidence, type EngineGas, type MethodUsed, type ResultRow, type ResultsResponse } from "@/lib/results-api"
+import { countedDuplicatesIn, EVIDENCE_STATUS_TEXT, loadResults, methodLabel, NotSyntheticResultsError, possibleDuplicateText, possibleDuplicateTotalText, releaseState, ResultsApiError, resultsCsv, unclearedEvidence, type EngineGas, type MethodUsed, type ResultRow, type ResultsResponse } from "@/lib/results-api"
 import { ACTIVITY_KINDS, BOUNDARY_LABELS, groupDigits, kgToTonnes, kindIcon, kindLabel, periodLabel, QUALITY_LABELS, reasonText, shortUnit } from "@/lib/plain-language"
 import { countedDuplicate, engineHold, factorSource, GAS_LABELS, INITIAL_RESULTS_STATE, KIND_COLORS, needsWork, notYetCounted, resultsReducer, rowReasons, rowStatus } from "@/lib/results-view"
 import { COPY_TEXT_R2E, formatTimeR2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
@@ -87,6 +87,9 @@ function Report({ results, coverage, scope3, onScope3Ready }: { results: Results
   const setup = results.setup
   const company = (setup?.legalName || "Company").slice(0, 60)
   const notes = completeness(results, coverage)
+  // BF-01 (count mode): counted possible duplicates per subtotal, marked ‡ on the figure.
+  const dups = { scope1: countedDuplicatesIn(results, "scope1"), location: countedDuplicatesIn(results, "scope2LocationBased"), market: countedDuplicatesIn(results, "scope2MarketBased") }
+  const dupMark = (count: number) => count ? " ‡" : ""
   const methodsText = methodsNote(releaseState(results.methods))
   const scope1Rows = results.records.filter(row => row.scope === 1)
   const scope2Rows = results.records.filter(row => row.scope === 2)
@@ -116,10 +119,12 @@ function Report({ results, coverage, scope3, onScope3Ready }: { results: Results
     </div>
     <h3>Summary</h3>
     <div className="nv-report__scroll" role="region" aria-label="Draft report: Summary table" tabIndex={0}><table><thead><tr><th>Scope</th><th>Basis</th><th className="nv-right">kg CO2e</th><th className="nv-right">t CO2e</th><th>Completeness</th></tr></thead><tbody>
-      <tr><td>Scope 1</td><td>Direct emissions</td><td className="nv-right">{results.scope1?.includedResults.length ? groupDigits(results.scope1.knownSourceSubtotal.display) : "—"}</td><td className="nv-right">{results.scope1?.includedResults.length ? kgToTonnes(results.scope1.knownSourceSubtotal.display) : "—"}</td><td>{notes.scope1}</td></tr>
-      <tr><td>Scope 2</td><td>Location-based</td><td className="nv-right">{results.scope2?.locationBasedIncluded.length ? groupDigits(results.scope2.locationBasedSubtotal.display) : "—"}</td><td className="nv-right">{results.scope2?.locationBasedIncluded.length ? kgToTonnes(results.scope2.locationBasedSubtotal.display) : "—"}</td><td>{notes.scope2Location}</td></tr>
-      <tr><td>Scope 2</td><td>Market-based</td><td className="nv-right">{results.scope2?.marketBasedIncluded.length ? groupDigits(results.scope2.marketBasedSubtotal.display) : "—"}</td><td className="nv-right">{results.scope2?.marketBasedIncluded.length ? kgToTonnes(results.scope2.marketBasedSubtotal.display) : "—"}</td><td>{notes.scope2Market}</td></tr>
+      <tr><td>Scope 1</td><td>Direct emissions</td><td className="nv-right">{results.scope1?.includedResults.length ? `${groupDigits(results.scope1.knownSourceSubtotal.display)}${dupMark(dups.scope1)}` : "—"}</td><td className="nv-right">{results.scope1?.includedResults.length ? `${kgToTonnes(results.scope1.knownSourceSubtotal.display)}${dupMark(dups.scope1)}` : "—"}</td><td>{notes.scope1}</td></tr>
+      <tr><td>Scope 2</td><td>Location-based</td><td className="nv-right">{results.scope2?.locationBasedIncluded.length ? `${groupDigits(results.scope2.locationBasedSubtotal.display)}${dupMark(dups.location)}` : "—"}</td><td className="nv-right">{results.scope2?.locationBasedIncluded.length ? `${kgToTonnes(results.scope2.locationBasedSubtotal.display)}${dupMark(dups.location)}` : "—"}</td><td>{notes.scope2Location}</td></tr>
+      <tr><td>Scope 2</td><td>Market-based</td><td className="nv-right">{results.scope2?.marketBasedIncluded.length ? `${groupDigits(results.scope2.marketBasedSubtotal.display)}${dupMark(dups.market)}` : "—"}</td><td className="nv-right">{results.scope2?.marketBasedIncluded.length ? `${kgToTonnes(results.scope2.marketBasedSubtotal.display)}${dupMark(dups.market)}` : "—"}</td><td>{notes.scope2Market}</td></tr>
     </tbody></table></div>
+    {/* BF-01 (count mode): a subtotal that includes possible duplicates is flagged on its figure (‡) and named here. */}
+    {dups.scope1 + dups.location + dups.market > 0 && <p className="nv-report__small nv-report__duplicates"><strong>‡ {[dups.scope1 ? `Scope 1: ${possibleDuplicateTotalText(dups.scope1)}` : "", dups.location ? `Scope 2 location-based: ${possibleDuplicateTotalText(dups.location)}` : "", dups.market ? `Scope 2 market-based: ${possibleDuplicateTotalText(dups.market)}` : ""].filter(Boolean).join(". ")}.</strong> Each possible duplicate matches another active record for overlapping dates, and both are counted. They are listed under “Not counted, incomplete and possible gaps”.</p>}
     <p className="nv-report__small">Scope 1 and Scope 2 are reported separately. Each subtotal is the calculation engine’s own aggregate of the calculated records below. Records that are held, excluded or withdrawn, and sources with no records, are listed separately and are not included.</p>
     {results.scope1?.reportedOutsideScopes.length ? <p className="nv-report__small">Reported outside the Scope 1 total: {results.scope1.reportedOutsideScopes.map(item => `${item.gas} ${groupDigits(item.massKg)} kg`).join("; ")}.</p> : null}
     <h3>Scope 1 sources</h3>
@@ -258,6 +263,8 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
   const calculatedIn = (scope: 1 | 2) => results.records.some(row => row.scope === scope && row.outcome === "calculated")
   const scope1Count = s1?.includedResults.length ?? 0
   const scope2Count = s2?.locationBasedIncluded.length ?? 0
+  // BF-01 (count mode): counted possible duplicates in each subtotal; each card that includes one says so.
+  const dup1 = countedDuplicatesIn(results, "scope1"), dupLocation = countedDuplicatesIn(results, "scope2LocationBased"), dupMarket = countedDuplicatesIn(results, "scope2MarketBased")
   const warnLine = (held: number, issues: ReturnType<typeof coverageIssues>, noun: string, complete = true) => [held ? `${plural(held, noun)} not counted yet` : "", !complete ? "some results partly calculated" : "", issues.open ? `${plural(issues.open, "setup answer")} open` : "", issues.gaps ? plural(issues.gaps, "possible gap") : "", issues.unchecked ? "coverage not checked" : ""].filter(Boolean).join(" · ")
   const incompleteText = (complete: boolean, held: number, open: number) => complete && !held && !open ? "" : " · incomplete"
   return <section aria-busy={busy}>
@@ -270,17 +277,17 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
       <div className="nv-stat">
         <span className="nv-stat__label">Scope 1 · direct</span>
         <span className="nv-stat__value">{s1?.includedResults.length ? kgToTonnes(s1.knownSourceSubtotal.display) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
-        <div className="nv-stat__foot">{s1?.includedResults.length ? `${groupDigits(s1.knownSourceSubtotal.display)} kg · ${plural(scope1Count, "source")} counted${incompleteText(s1.complete, held1, open1)}` : s1 ? "No Scope 1 results calculated" : calculatedIn(1) ? "Subtotal could not be verified; per-record results are listed below" : "No Scope 1 source calculated yet"}{held1 || open1 || (s1 && !s1.complete) ? <span className="nv-stat__warn">{warnLine(held1, issues1, "record", s1?.complete ?? true)}</span> : null}</div>
+        <div className="nv-stat__foot">{s1?.includedResults.length ? `${groupDigits(s1.knownSourceSubtotal.display)} kg · ${plural(scope1Count, "source")} counted${incompleteText(s1.complete, held1, open1)}` : s1 ? "No Scope 1 results calculated" : calculatedIn(1) ? "Subtotal could not be verified; per-record results are listed below" : "No Scope 1 source calculated yet"}{held1 || open1 || (s1 && !s1.complete) ? <span className="nv-stat__warn">{warnLine(held1, issues1, "record", s1?.complete ?? true)}</span> : null}{s1?.includedResults.length && dup1 ? <span className="nv-stat__warn" role="note"><strong>{possibleDuplicateTotalText(dup1)}</strong></span> : null}</div>
       </div>
       <div className="nv-stat">
         <span className="nv-stat__label">Scope 2 · location-based</span>
         <span className="nv-stat__value">{s2?.locationBasedIncluded.length ? kgToTonnes(s2.locationBasedSubtotal.display) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
-        <div className="nv-stat__foot">{s2?.locationBasedIncluded.length ? `${groupDigits(s2.locationBasedSubtotal.display)} kg · ${plural(scope2Count, "meter")} counted${incompleteText(s2.locationBasedComplete, held2, open2)}` : s2 ? "No location-based results calculated" : calculatedIn(2) ? "Subtotal could not be verified; per-record results are listed below" : "No electricity calculated yet"}{held2 || open2 || (s2 && !s2.locationBasedComplete) ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter", s2?.locationBasedComplete ?? true)}</span> : null}</div>
+        <div className="nv-stat__foot">{s2?.locationBasedIncluded.length ? `${groupDigits(s2.locationBasedSubtotal.display)} kg · ${plural(scope2Count, "meter")} counted${incompleteText(s2.locationBasedComplete, held2, open2)}` : s2 ? "No location-based results calculated" : calculatedIn(2) ? "Subtotal could not be verified; per-record results are listed below" : "No electricity calculated yet"}{held2 || open2 || (s2 && !s2.locationBasedComplete) ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter", s2?.locationBasedComplete ?? true)}</span> : null}{s2?.locationBasedIncluded.length && dupLocation ? <span className="nv-stat__warn" role="note"><strong>{possibleDuplicateTotalText(dupLocation)}</strong></span> : null}</div>
       </div>
       <div className="nv-stat">
         <span className="nv-stat__label">Scope 2 · market-based</span>
         <span className="nv-stat__value">{s2?.marketBasedIncluded.length ? kgToTonnes(s2.marketBasedSubtotal.display) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
-        <div className="nv-stat__foot">{s2?.marketBasedIncluded.length ? `${groupDigits(s2.marketBasedSubtotal.display)} kg${incompleteText(s2.marketBasedComplete, held2, open2)}${s2.marketBasedProvisional.length ? " · provisional" : ""}` : s2 ? "No market-based results calculated" : calculatedIn(2) ? "Subtotal could not be verified; per-record results are listed below" : "No electricity calculated yet"}{held2 || open2 || (s2 && !s2.marketBasedComplete) ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter", s2?.marketBasedComplete ?? true)}</span> : null}</div>
+        <div className="nv-stat__foot">{s2?.marketBasedIncluded.length ? `${groupDigits(s2.marketBasedSubtotal.display)} kg${incompleteText(s2.marketBasedComplete, held2, open2)}${s2.marketBasedProvisional.length ? " · provisional" : ""}` : s2 ? "No market-based results calculated" : calculatedIn(2) ? "Subtotal could not be verified; per-record results are listed below" : "No electricity calculated yet"}{held2 || open2 || (s2 && !s2.marketBasedComplete) ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter", s2?.marketBasedComplete ?? true)}</span> : null}{s2?.marketBasedIncluded.length && dupMarket ? <span className="nv-stat__warn" role="note"><strong>{possibleDuplicateTotalText(dupMarket)}</strong></span> : null}</div>
       </div>
     </div>
     <p className="nv-subtle nv-stats-note">Headline figures are metric tonnes (1 t = 1,000 kg), rounded half-even to 2 decimals, the same rule as the engine. The kilogram figures are exact engine output.</p>

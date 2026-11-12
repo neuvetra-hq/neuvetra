@@ -165,7 +165,7 @@ const REASONS: Record<string, string> = {
   // BF-01: a counted possible duplicate (count mode; the Scope 3 CSV prints it as a reason code).
   ...SCOPE3_REASON_TEXT_BF01,
   // BF-01: a possible duplicate held out of the totals (Scope 1 and 2 records, Scope 3 records and the lines derived from them).
-  possible_duplicate_record: 'This record has the same activity type and source ID as another active record for overlapping dates, so it may be the same bill saved twice. It isn’t counted until you withdraw one of them or correct its source ID or dates.',
+  possible_duplicate_record: 'This record matches another active record (same activity type, location and source ID; for Scope 3, also the same category and quantity) for overlapping dates, so it may be the same record entered twice. It isn’t counted until you withdraw one of them or correct its source ID, location or dates.',
 }
 export function reasonText(code: string): string {
   if (REASONS[code]) return REASONS[code]!
