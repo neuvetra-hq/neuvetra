@@ -15,7 +15,9 @@ import type { Scope3ConsolidationApproach, Scope3PlanOptions } from "../../../..
 import type { Scope3SetupFacts } from "./scope3-forms"
 import { FIELD_NEED_NOTES, type FieldNeed } from "./wo12-text"
 import type { CollectionContext } from "../../../../packages/neuvetra-database/src/collection-contract"
-import { recordHold, recordSiteExclusion, type RecordSiteExclusion } from "./record-holds-wo12b"
+import { recordBoundaryHold, recordHold, type RecordBoundaryHold } from "./record-holds-wo12b"
+import { kindLabel } from "./plain-language"
+import type { CollectionActivityRecord } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { RECORD_HOLD_TEXT } from "./wo12b-text"
 
 export const ACTIVITY_FIELD_NEEDS: Readonly<Record<string, Readonly<Record<string, FieldNeed>>>> = {
@@ -70,8 +72,10 @@ export interface FieldNeedFacts {
   consolidationApproach?: Scope3ConsolidationApproach | null
   locationCountry?: string | null
   distanceCommutingOverlap?: boolean
-  /** WO-12b: the chosen site, when company setup excludes it (or its entity); `null` or absent when it doesn't or isn't known. */
-  siteExclusion?: RecordSiteExclusion | null
+  /** WO-12b: the hold company setup places on the record (every record of its scope, or every record at its site), if any. */
+  boundary?: RecordBoundaryHold | null
+  /** WO-12b: the record that replaces this spend line (the adapter's supersession map), with its name. */
+  supersededBy?: { id: string; name: string } | null
 }
 /** A field's label and, where the label depends on something the person can see or change, a note that says what. */
 export interface FieldLabel { need: FieldNeed; needNote?: string }
@@ -143,15 +147,20 @@ export const fieldLabelsOf = (activity: Pick<CollectionActivity, "kind" | "paylo
  * The facts the Activity screen has for a record's labels: company setup as read (`undefined` until it is), the chosen site,
  * and the plan options the screen builds for this draft (`scope3ReadinessOptions`, the results route's options).
  */
-export function activityFieldFacts(input: { setup: Scope3SetupFacts | undefined; activity: Pick<CollectionActivity, "kind" | "locationId" | "period">; options: Scope3PlanOptions | null; context?: CollectionContext | null }): FieldNeedFacts {
+export function activityFieldFacts(input: { setup: Scope3SetupFacts | undefined; activity: Pick<CollectionActivity, "kind" | "locationId" | "period">; options: Scope3PlanOptions | null; context?: CollectionContext | null
+  /** WO-12b: this record's ID and the saved records, to name the record that replaces a spend line. */
+  recordId?: string; records?: readonly CollectionActivityRecord[] }): FieldNeedFacts {
   const { setup, activity, options } = input
-  const siteExclusion = recordSiteExclusion(activity, input.context)
+  const boundary = recordBoundaryHold(activity, input.context, setup?.reportingPeriod ?? null)
+  const replacing = activity.kind === "purchase_spend" && input.recordId ? options?.supersession?.get(input.recordId) : undefined
+  const replacer = replacing ? input.records?.find(record => record.id === replacing) : undefined
   const countries = setup?.locationCountries
   const period = activity.period
   return {
     ...(setup !== undefined ? { consolidationApproach: setup.consolidationApproach } : {}),
     ...(countries && activity.locationId ? { locationCountry: countries.get(activity.locationId) ?? null } : {}),
-    ...(siteExclusion ? { siteExclusion } : {}),
+    ...(boundary ? { boundary } : {}),
+    ...(replacing ? { supersededBy: { id: replacing, name: replacer ? `${kindLabel(replacer.kind)} · ${(replacer.currentVersion.activity as { sourceId: string }).sourceId}` : "another record" } } : {}),
     ...(activity.kind === "commuting_average" && options ? { distanceCommutingOverlap: (options.distanceCommutingPeriods ?? []).some(other => other.start < period.endExclusive && period.start < other.endExclusive) } : {}),
   }
 }

@@ -1,0 +1,638 @@
+{
+ "activity_outside_location_coverage": {
+  "level": "field",
+  "why": "The record's own dates fall outside the site's coverage: correcting the dates (or splitting the record) on this form clears it, and the other fields then still apply."
+ },
+ "activity_outside_reporting_period": {
+  "level": "field",
+  "why": "The record's own dates fall outside the reporting period: correcting the dates or splitting the record on this form clears it."
+ },
+ "allocated_share_exceeds_one": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "allocation_denominator_zero": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "allocation_not_applicable_to_product_factor": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "allocation_share_exceeds_one": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "amount_not_a_number": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "attribution_denominator_zero": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "attribution_share_exceeds_one": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "bioenergy_instrument_not_supported": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "boundary_approach_unknown": {
+  "level": "company",
+  "why": "Company setup has no Scope 1/2 consolidation approach: every Scope 1 and 2 record is held before anything on it is read (notice links to setup 03)."
+ },
+ "boundary_membership_unknown": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "boundary_metadata_unavailable": {
+  "level": "site",
+  "why": "The site's boundary details weren't read: every record there is held whatever is entered until the page reloads them."
+ },
+ "building_area_or_occupancy_zero": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "capital_goods_must_be_full_cost": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "category_9_spend_paid_by_company": {
+  "level": "record",
+  "why": "Category 9 transport the company paid for is category 4: held whatever else is entered until the attestation or category changes."
+ },
+ "cbecs_activity_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "cbecs_activity_not_loaded": {
+  "level": "waiting",
+  "why": "Waiting for the CBECS row of this activity: nothing on the record needs to change."
+ },
+ "closing_gallons_not_numeric": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "commuting_overlap_not_confirmed": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "consolidation_approach_required": {
+  "level": "shadowed",
+  "why": "The lease check's approach hold; the screen and the results route read the same setup, so scope3_consolidation_approach_required (company-level) always holds the record first."
+ },
+ "contractor_records_and_chronology_required": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "covered_days_exceed_days_in_period": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "covered_days_exceed_days_in_year": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "currency_not_supported": {
+  "level": "field",
+  "why": "The amount isn't in US dollars: converting it on this record clears the hold, and every other field still applies to the converted record."
+ },
+ "dollar_year_index_missing": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "dollar_year_required": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "electricity_record_held": {
+  "level": "derived",
+  "why": "A derived grid-loss (3C) line follows its electricity record's hold; it has no form of its own."
+ },
+ "energy_carrier_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "energy_resold_record_held": {
+  "level": "derived",
+  "why": "A derived upstream line follows its energy-resold record's hold; no form of its own."
+ },
+ "energy_spend_belongs_in_scope_1_2_or_cat3": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "energy_unit_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "entity_control_unresolved": {
+  "level": "site",
+  "why": "The site's entity's control differs from the approach (for example operational control under financial control): every Scope 1/2 record at that site, not every record of the company, is held whatever is entered."
+ },
+ "entity_excluded_by_company_setup": {
+  "level": "site",
+  "why": "The site's entity is excluded in setup: every record there is excluded whatever is entered; the notice speaks of the entity's inclusion."
+ },
+ "entity_inclusion_unknown": {
+  "level": "site",
+  "why": "The site's entity's inclusion is undecided in setup: every record there is held whatever is entered."
+ },
+ "entity_outside_control_boundary": {
+  "level": "site",
+  "why": "The site's entity has no control identified in setup: every Scope 1/2 record there is excluded whatever is entered; the notice speaks of the entity's control."
+ },
+ "equity_share_not_supported": {
+  "level": "company",
+  "why": "Equity share is chosen and these draft calculations don't support equity-share allocation yet: every Scope 1 and 2 record is held whatever is entered (notice links to setup 03)."
+ },
+ "factor_source_not_yet_loaded": {
+  "level": "waiting",
+  "why": "Waiting for a factor source: nothing on the record needs to change."
+ },
+ "factor_unit_mismatch": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "finance_lease_in_scope1_2": {
+  "level": "record",
+  "why": "Category 8 with a finance lease belongs in Scope 1 and 2: held whatever else is entered; changing the lease answer (or recording it in Scope 1/2) is the only fix."
+ },
+ "fuel_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "gallons_not_numeric": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "gas_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "haul_basis_required": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "heat_content_not_numeric": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "heat_content_outside_plausible_range": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "heat_content_outside_scf_range": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "heat_content_required_for_volume": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "hotel_country_not_in_factor_set": {
+  "level": "waiting",
+  "why": "Waiting for the country's hotel factor: nothing on the record needs to change."
+ },
+ "hotel_country_required": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "instrument_evidence_required": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "instrument_mwh_exceed_consumption": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "instrument_mwh_required": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "instrument_quality_criteria_not_met": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "instrument_rate_contradicts_technology": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "instrument_rate_not_numeric": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "instrument_rate_required": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "instrument_vintage_not_admissible": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "investee_emissions_required": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "investee_naics_code_not_in_factor_set": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "investee_naics_code_required": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "investee_revenue_required": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "investment_currency_not_supported": {
+  "level": "field",
+  "why": "The amount isn't in US dollars: converting it on this record clears the hold, and every other field still applies to the converted record."
+ },
+ "lease_in_scope1_2_under_boundary": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "lease_type_required": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "lessor_operating_lease_in_scope1_2": {
+  "level": "record",
+  "why": "Category 13 operating lease under financial control or equity share stays in Scope 1 and 2: held whatever else is entered."
+ },
+ "load_basis_not_available_for_vehicle": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "load_basis_required": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "location_control_unresolved": {
+  "level": "site",
+  "why": "Setup names no controller of the site's equipment (reporting company or linked related entity): every Scope 1/2 record there is held whatever is entered."
+ },
+ "location_coverage_unknown": {
+  "level": "site",
+  "why": "The site's coverage start or end is missing in setup: every record there is held whatever is entered."
+ },
+ "location_entity_unresolved": {
+  "level": "site",
+  "why": "The site points to an entity setup no longer has: every record there is held whatever is entered."
+ },
+ "location_excluded_by_company_setup": {
+  "level": "site",
+  "why": "The chosen site is excluded in setup: every record there is excluded whatever is entered."
+ },
+ "location_inclusion_unknown": {
+  "level": "site",
+  "why": "The chosen site's inclusion is undecided in setup: every record there is held whatever is entered."
+ },
+ "location_not_in_current_setup": {
+  "level": "site",
+  "why": "The chosen site is no longer in company setup: every record there is held whatever is entered; choosing a current site clears it."
+ },
+ "material_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "method_not_built_yet": {
+  "level": "waiting",
+  "why": "The method is designed but not built: nothing on the record needs to change, and its fields still apply once it is."
+ },
+ "miles_and_fuel_economy_both_given": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "miles_basis_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "miles_not_numeric": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "mode_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "mode_shares_must_total_100": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "model_year_before_first_factor_band": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "model_year_not_covered": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "mpg_not_numeric": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "mpg_source_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "naics_code_not_in_factor_set": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "naics_code_required": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "naics_not_valid_for_category": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "natural_gas_use_unknown": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "negative_amount_not_supported": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "negative_consumption_from_tank_levels": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "negative_material_balance": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "no_published_factor_for_material_and_treatment": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "no_upstream_factor_for_subregion_fuels": {
+  "level": "waiting",
+  "why": "Waiting for an upstream factor for the subregion's fuels: nothing on the record needs to change."
+ },
+ "occupancy_not_applicable_to_mode": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "occupancy_percent_over_100": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "opening_gallons_not_numeric": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "outside_declared_boundary": {
+  "level": "record",
+  "why": "Refrigerant equipment answered as outside the boundary is excluded whatever else is entered."
+ },
+ "outside_reporting_period": {
+  "level": "field",
+  "why": "Scope 3 Results' outcome for a record dated outside the reporting period: its own dates."
+ },
+ "partly_outside_reporting_period": {
+  "level": "field",
+  "why": "Scope 3 Results' outcome for a record partly outside the reporting period: its own dates."
+ },
+ "partner_period_mismatch": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "partner_share_denominator_zero": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "passenger_segments_required": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "period_outside_method_envelope": {
+  "level": "field",
+  "why": "The record's own dates fall outside the years the Scope 3 methods cover: correcting the dates clears it."
+ },
+ "possible_duplicate_counted": {
+  "level": "results",
+  "why": "A disclosure on a counted record (BF-01 count and warn); not a hold."
+ },
+ "possible_duplicate_record": {
+  "level": "results",
+  "why": "BF-01 policy hold, off by default (count and warn); when on, the fix is the confirm-distinct action (BF-09), not a field on this form."
+ },
+ "possible_duplicate_spend_line": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "purchased_gallons_not_numeric": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "quantity_not_calculable": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "record_withdrawn": {
+  "level": "state",
+  "why": "A withdrawn record: not edited in the form (the record view says it is withdrawn)."
+ },
+ "refrigerant_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "replacing_record_not_counted": {
+  "level": "results",
+  "why": "Decided by the results route after the engine run (the replacing record didn't calculate in full); the form shows the replacement notice, and the fix is on the replacing record."
+ },
+ "reporting_period_required_outside_2025": {
+  "level": "field",
+  "why": "Without a setup reporting period, Scope 3 records count in 2025; the record's own dates decide it and records dated in 2025 count."
+ },
+ "reporting_period_unknown": {
+  "level": "company",
+  "why": "Company setup has no complete reporting period: every Scope 1 and 2 record is held before anything on it is read (notice links to setup 02)."
+ },
+ "resold_energy_in_scope2_not_confirmed": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "revenue_year_index_missing": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "revenue_year_required": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "scope3_consolidation_approach_required": {
+  "level": "company",
+  "why": "Company setup has no consolidation approach: every Scope 3 record is held before anything on it is read (notice links to setup 03)."
+ },
+ "secondary_factor_boundary_not_cradle_to_gate": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "segment_distance_must_be_positive": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "simplified_method_applicability_unknown": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "simplified_method_not_applicable": {
+  "level": "record",
+  "why": "Refrigerant stock or retrofit = Yes ends the simplified method: held for review whatever else is entered."
+ },
+ "sold_fuel_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "source_scope1_record_held": {
+  "level": "derived",
+  "why": "A derived upstream (3A) line follows its Scope 1 record's hold; no form of its own."
+ },
+ "spend_line_date_outside_reporting_period": {
+  "level": "field",
+  "why": "The line's own date: correcting it on this form clears the hold."
+ },
+ "spend_overlap_not_confirmed": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "spend_overlaps_other_category": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "spend_proxy_for_category_3_not_enabled": {
+  "level": "record",
+  "why": "Category 3 spend isn't calculated in this beta: held whatever else is entered; the notice says to withdraw the line."
+ },
+ "stated_hhv_not_numeric": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "stated_hhv_outside_plausible_range": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "subregion_not_an_egrid_subregion": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "subregion_not_listed_for_zip": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "superseded_by_supplier_record": {
+  "level": "record",
+  "why": "Another (supplier or partner) record replaces this spend line: excluded whatever is entered on the line; the notice names and links the replacing record."
+ },
+ "supplier_boundary_not_cradle_to_gate": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "tank_levels_required_for_purchases": {
+  "level": "field",
+  "why": "“Purchases only”: choosing tank levels on this form and entering them clears it (accepted by QA round 3 of PR #57)."
+ },
+ "term_CD_not_numeric": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "term_CN_not_numeric": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "term_PN_not_numeric": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "term_PS_not_numeric": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "term_RD_not_numeric": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "trade_sector_naics_maps_margin_only": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "treatment_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "treatment_split_must_total_100": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "treatment_split_unknown": {
+  "level": "field",
+  "why": "An answer on this record that is still blank or unconfirmed: giving it on this form clears the hold, so it is labelled Needed for results (or Required where the save refuses it)."
+ },
+ "unit_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "unit_not_the_fuels_unit": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "unsupported_refrigerant": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "use_region_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "use_region_outside_us": {
+  "level": "waiting",
+  "why": "Use outside the U.S. waits for a factor: nothing on the record needs to change."
+ },
+ "utility_eia_id_not_numeric": {
+  "level": "field",
+  "why": "A number on this record that the method can't read: correcting it on this form clears it."
+ },
+ "utility_not_listed_for_zip_and_subregion": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "utility_required_for_multi_subregion_zip": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "vehicle_count_out_of_range": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "vehicle_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "vehicle_type_not_an_engine_token": {
+  "level": "field",
+  "why": "An unlisted (“something else”) value or unit on this record: choosing a listed one on this form clears it, and the other fields still apply."
+ },
+ "without_margins_requires_factory_gate": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "working_days_exceed_days_in_period": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ },
+ "zip_not_in_lookup": {
+  "level": "field",
+  "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
+ },
+ "zip_not_valid": {
+  "level": "field",
+  "why": "A combination of answers on this record the method can't take: changing one of them on this form clears it, and the other fields still apply."
+ }
+}

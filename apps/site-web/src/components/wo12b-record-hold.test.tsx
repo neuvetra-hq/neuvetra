@@ -30,14 +30,16 @@ import { harness, loadComponent } from "./component-harness"
 
 const W = "39120000-0000-4000-8000-000000000001", SETUP = "39120000-0000-4000-8000-0000000000aa", SITE = "39120000-0000-4000-8000-0000000000bb", CLOSED = "39120000-0000-4000-8000-0000000000bc"
 const PERIOD = { start: "2025-01-01", endExclusive: "2026-01-01" }
-const context = { companyId: W, setupVersionId: SETUP, setupRevision: 1, sameContentSetupVersionIds: [SETUP], boundaryApproach: "operational_control", reportingPeriod: PERIOD,
+const baseContext = { companyId: W, setupVersionId: SETUP, setupRevision: 1, sameContentSetupVersionIds: [SETUP], boundaryApproach: "operational_control", reportingPeriod: PERIOD,
   locations: [{ id: SITE, name: "Plant", inclusion: "included", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" },
     { id: CLOSED, name: "Closed depot", inclusion: "excluded", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" }] }
+const context = baseContext
 const owner = { userId: "u", role: "owner", accessToken: "t" }, member = { userId: "m", role: "member", accessToken: "t" }
 const WRITE = new Set(["input", "select", "textarea", "fieldset"])
 const hasHold = (app: any) => app.nodes().find((node: any) => typeof node.type === "function" && node.type.name === "RecordHoldNotice")
 
 async function workspace(approach = "operational_control") {
+  const context = { ...baseContext, boundaryApproach: approach }
   const make = await loadComponent("./CollectionWorkspace.tsx", "CollectionWorkspace", {
     deriveCollectionQuantity, planCollectionCalculation, reasonText, CollectionApiError, savedAgainstCurrentSetup, withCurrentSetupVersion, validateCollectionSaveInput,
     listCollectionActivities: async () => [], listCollectionEvidence: async () => [], listGridLossLineages: async () => [], loadCollectionContext: async () => context,
@@ -60,7 +62,7 @@ describe("WO-12b 1: the record-hold notice", () => {
     expect(hasHold(app).props.hold).toBeNull()
     app.byLabel(boundary)!.props.onChange(false); await app.settle()
     const notice = hasHold(app)
-    expect(notice.props.hold).toMatchObject({ code: "outside_declared_boundary", question: boundary, answer: "No", text: reasonText("outside_declared_boundary"), instead: RECORD_HOLD_INSTEAD_TEXT.outsideBoundary })
+    expect(notice.props.hold).toMatchObject({ code: "outside_declared_boundary", question: boundary, cause: RECORD_HOLD_TEXT.cause(boundary, "No"), text: reasonText("outside_declared_boundary"), instead: RECORD_HOLD_INSTEAD_TEXT.outsideBoundary })
     // At the top: before the fieldset that holds the fields.
     const order = app.nodes()
     expect(order.indexOf(notice)).toBeLessThan(order.findIndex((node: any) => node.type === "fieldset"))
@@ -74,11 +76,39 @@ describe("WO-12b 1: the record-hold notice", () => {
     const app = await workspace()
     app.button("Natural gas")!.props.onClick(); await app.settle()
     app.byLabel("Company-setup location")!.props.onChange(CLOSED); await app.settle()
-    expect(hasHold(app).props.hold).toMatchObject({ code: "location_excluded_by_company_setup", fields: ["location"], answer: "Closed depot, excluded in company setup" })
+    expect(hasHold(app).props.hold).toMatchObject({ code: "location_excluded_by_company_setup", level: "site", fields: ["location"], cause: "The site chosen (Closed depot) is excluded in company setup, which holds this record, whatever else is filled in.", setupStep: "04 Locations" })
     expect(app.byLabel("Original quantity from source")!.props.need).toBe("optional")
     app.byLabel("Company-setup location")!.props.onChange(SITE); await app.settle()
     expect(hasHold(app).props.hold).toBeNull()
     expect(app.byLabel("Original quantity from source")!.props.need).toBe("results")
+  })
+
+  test("QA round 1 (B1): under equity share every Scope 1 and 2 form says company setup holds it, plainly, and its result fields are Optional; Scope 3 forms are unaffected", async () => {
+    const app = await workspace("equity_share")
+    app.button("Natural gas")!.props.onClick(); await app.settle()
+    expect(hasHold(app).props.hold).toBeNull()
+    app.byLabel("Company-setup location")!.props.onChange(SITE); await app.settle()
+    expect(hasHold(app).props.hold).toMatchObject({ code: "equity_share_not_supported", level: "company", fields: [], question: null, setupStep: "03 Entities & boundary",
+      text: "These draft calculations don’t support equity-share allocation yet, so Scope 1 and 2 records are saved but not counted." })
+    expect(hasHold(app).props.canManage).toBe(true)
+    expect([app.byLabel("Original quantity from source")!.props.need, app.byLabel("Company-setup location")!.props.need]).toEqual(["optional", "required"])
+    app.button("Waste (Scope 3)")!.props.onClick(); await app.settle()
+    app.byLabel("Company-setup location")!.props.onChange(SITE); await app.settle()
+    expect(hasHold(app).props.hold).toBeNull()
+  })
+
+  test("a hold company setup decides links to company setup for an owner or admin and names the step in plain text otherwise; a replaced line links to the record that replaces it", async () => {
+    const make = await loadComponent("./RecordHoldNotice.tsx", "RecordHoldNotice", {})
+    const hold = recordHold({ kind: "natural_gas", payload: {} as any }, { boundary: { code: "equity_share_not_supported", site: "Plant", approach: "equity_share", entityControl: null } })!
+    const owner = harness(make, () => ({ hold, canManage: true })), viewer = harness(make, () => ({ hold, canManage: false }))
+    const links = (app: any) => app.nodes().filter((node: any) => node.type === "a").map((node: any) => [node.props.href, node.children.flat(Infinity).join("")])
+    expect(links(owner)).toEqual([["#/setup", "Open company setup (03 Entities & boundary)"]])
+    expect([links(viewer), viewer.text().includes("See company setup, 03 Entities & boundary."), viewer.nodes().some((node: any) => node.type === "button")]).toEqual([[], true, false])
+    expect(owner.text()).toContain("Company setup’s consolidation approach is equity share, which holds every Scope 1 and 2 record, whatever is filled in here.")
+    // There is no answer on the form to change, so the labels sentence says "that changes", not "that answer changes".
+    expect([owner.text().includes(RECORD_HOLD_TEXT.labelsElsewhere), owner.text().includes(RECORD_HOLD_TEXT.labels)]).toEqual([true, false])
+    const replaced = recordHold({ kind: "purchase_spend", payload: {} as any }, { supersededBy: { id: "r1", name: "Supplier-specific purchases · ACME-1" } })!
+    expect(links(harness(make, () => ({ hold: replaced })))).toEqual([["#/activity/r1", "Open Supplier-specific purchases · ACME-1"]])
   })
 
   test("the notice's region is always in the page (role=status, so it is announced as it appears and goes); it names the answer and links to it", async () => {

@@ -17,7 +17,7 @@
 import { describe, expect, test } from "bun:test"
 import { fileURLToPath } from "node:url"
 import type { CollectionActivity, CollectionActivityRecord, CollectionContext, CollectionEvidenceMetadata } from "../../../../packages/neuvetra-database/src/collection-contract"
-import { planCollectionCalculation } from "../../../../packages/neuvetra-database/src/collection-engine-input"
+import { collectionBoundaryHold, planCollectionCalculation } from "../../../../packages/neuvetra-database/src/collection-engine-input"
 import { planScope3Calculation, SCOPE3_COMPLETION_KINDS, SCOPE3_LEGACY_KINDS, type Scope3CollectionVersion } from "../../../../packages/neuvetra-database/src/scope3-collection"
 import { SCOPE3_PAYLOAD_FIXTURES } from "../../../../packages/neuvetra-database/src/scope3-payload-fixtures"
 import { recordReadiness } from "../components/CollectionWorkspace"
@@ -32,12 +32,25 @@ import { RECORD_HOLD_TEXT } from "./wo12b-text"
 const C = "94120000-0000-4000-8000-000000000001", SETUP = "94120000-0000-4000-8000-0000000000aa", SITE = "94120000-0000-4000-8000-0000000000bb", FILE = "94120000-0000-4000-8000-0000000000e1"
 const DRAFT = "94120000-0000-4000-8000-0000000000d1", COMMUTER = "94120000-0000-4000-8000-0000000000c7"
 const EXCLUDED_SITE = "94120000-0000-4000-8000-0000000000b2", ENTITY_SITE = "94120000-0000-4000-8000-0000000000b3", ENTITY = "94120000-0000-4000-8000-0000000000e7"
+const CONTROL_SITE = "94120000-0000-4000-8000-0000000000b4", NO_CONTROL_SITE = "94120000-0000-4000-8000-0000000000b5", LANDLORD_SITE = "94120000-0000-4000-8000-0000000000b6", UNDECIDED_SITE = "94120000-0000-4000-8000-0000000000b7"
+const ENTITY_UNDECIDED_SITE = "94120000-0000-4000-8000-0000000000b8", COVERAGE_SITE = "94120000-0000-4000-8000-0000000000b9", ORPHAN_SITE = "94120000-0000-4000-8000-0000000000ba", UNREAD_SITE = "94120000-0000-4000-8000-0000000000bd"
+const GONE_SITE = "94120000-0000-4000-8000-0000000000bc", ENTITY_GONE = "94120000-0000-4000-8000-0000000000eb"
+const ENTITY_OC = "94120000-0000-4000-8000-0000000000e8", ENTITY_NONE = "94120000-0000-4000-8000-0000000000e9", ENTITY_UNDECIDED = "94120000-0000-4000-8000-0000000000ea", SUPPLIER = "94120000-0000-4000-8000-0000000000f1"
 const PERIOD = { start: "2025-01-01", endExclusive: "2026-01-01" }
 const context: CollectionContext = { companyId: C, setupVersionId: SETUP, setupRevision: 1, sameContentSetupVersionIds: [SETUP], boundaryApproach: "operational_control", reportingPeriod: PERIOD,
   locations: [{ id: SITE, name: "Office", inclusion: "included", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" },
     // WO-12b: a site company setup excludes, and an included site whose entity it excludes.
     { id: EXCLUDED_SITE, name: "Closed depot", inclusion: "excluded", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" },
-    { id: ENTITY_SITE, name: "Joint venture plant", inclusion: "included", control: "related_entity", entityId: ENTITY, entity: { id: ENTITY, inclusion: "excluded", control: "operational_control", ownershipPercent: "40" }, startMode: "period_start", endMode: "period_end" }] } as CollectionContext
+    { id: ENTITY_SITE, name: "Joint venture plant", inclusion: "included", control: "related_entity", entityId: ENTITY, entity: { id: ENTITY, inclusion: "excluded", control: "operational_control", ownershipPercent: "40" }, startMode: "period_start", endMode: "period_end" },
+    // WO-12b QA round 1: the other holds company setup places on every record at a site.
+    { id: CONTROL_SITE, name: "Subsidiary plant", inclusion: "included", control: "related_entity", entityId: ENTITY_OC, entity: { id: ENTITY_OC, inclusion: "included", control: "operational_control", ownershipPercent: "60" }, startMode: "period_start", endMode: "period_end" },
+    { id: NO_CONTROL_SITE, name: "Minority plant", inclusion: "included", control: "related_entity", entityId: ENTITY_NONE, entity: { id: ENTITY_NONE, inclusion: "included", control: "none", ownershipPercent: "10" }, startMode: "period_start", endMode: "period_end" },
+    { id: LANDLORD_SITE, name: "Leased floor", inclusion: "included", control: "landlord", entityId: null, startMode: "period_start", endMode: "period_end" },
+    { id: UNDECIDED_SITE, name: "New depot", inclusion: "unknown", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" },
+    { id: ENTITY_UNDECIDED_SITE, name: "Partner yard", inclusion: "included", control: "related_entity", entityId: ENTITY_UNDECIDED, entity: { id: ENTITY_UNDECIDED, inclusion: "unknown", control: "operational_control", ownershipPercent: "50" }, startMode: "period_start", endMode: "period_end" },
+    { id: COVERAGE_SITE, name: "Pop-up store", inclusion: "included", control: "reporting_company", entityId: null, startMode: "unknown", endMode: "period_end" },
+    { id: ORPHAN_SITE, name: "Spun-off plant", inclusion: "included", control: "related_entity", entityId: ENTITY_GONE, entity: null, startMode: "period_start", endMode: "period_end" },
+    { id: UNREAD_SITE, name: "Old record site", inclusion: "included", control: "reporting_company", startMode: "period_start", endMode: "period_end" }] } as CollectionContext
 const evidence: CollectionEvidenceMetadata[] = [{ id: FILE, companyId: C, bucket: "neuvetra-private-company-evidence", objectKey: `${C}/original/${FILE}`, originalName: "rec.pdf", mediaType: "application/pdf", byteLength: 10, sha256: "a".repeat(64), quarantineStatus: "clean", uploadedBy: C, createdAt: "2025-06-01T00:00:00.000Z" }]
 const isScope3 = (kind: string) => (SCOPE3_LEGACY_KINDS as readonly string[]).includes(kind) || (SCOPE3_COMPLETION_KINDS as readonly string[]).includes(kind)
 
@@ -54,7 +67,7 @@ const savedRecord = (id: string, activity: A): CollectionActivityRecord => ({ id
   currentVersion: { id, recordId: id, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity, payloadSha256: "a".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" } }) as unknown as CollectionActivityRecord
 
 /** A company the field is checked in: the site's country, setup's consolidation approach and the saved records. */
-type World = { name: string; country: string | null; approach: Scope3SetupFacts["consolidationApproach"]; records: CollectionActivityRecord[] }
+type World = { name: string; country: string | null; approach: Scope3SetupFacts["consolidationApproach"]; records: CollectionActivityRecord[]; noPeriod?: true }
 const distanceCommuting = savedRecord(COMMUTER, fixture("employee_commuting: 0029 payload"))
 const laterCommuting = savedRecord(COMMUTER, { ...fixture("employee_commuting: 0029 payload"), period: { start: "2026-01-01", endExclusive: "2026-02-01" } })
 const WORLDS = {
@@ -65,28 +78,30 @@ const WORLDS = {
   commutingOverlap: { name: "U.S., operational control, distance-based commuting records for the same period", country: "US", approach: "operational_control", records: [distanceCommuting] },
 } satisfies Record<string, World>
 const EVERY_COMPANY: World[] = [WORLDS.usOperational, WORLDS.foreignFinancial, WORLDS.foreignEquity]
-const setupOf = (world: World): Scope3SetupFacts => ({ reportingPeriod: PERIOD, consolidationApproach: world.approach, locationCountries: new Map([[SITE, world.country]]) })
+const setupOf = (world: World): Scope3SetupFacts => ({ reportingPeriod: world.noPeriod ? null : PERIOD, consolidationApproach: world.approach, locationCountries: new Map([[SITE, world.country]]) })
 
 /** Why the screen refuses to save the draft (its own checks, ending with the shared contract), or null. */
 const saveRefusal = (draft: A): string | null => activitySaveProblems(draft, { context, evidence, correcting: false, reason: "", zipLookup: null, scope3Completion: true })[0]?.text ?? null
-const optionsFor = (draft: A, world: World) => isScope3(draft.kind) ? scope3ReadinessOptions({ setup: setupOf(world), context, records: world.records, draft: { recordId: DRAFT, activity: prepareActivityForSave(draft, true) }, mappingKeys: new Map() }) : null
+/** WO-12b QA round 1: the company's own context: its consolidation approach is the world's (Scope 1 and 2 read it from here). */
+const contextOf = (world: World): CollectionContext => ({ ...context, boundaryApproach: world.approach, ...(world.noPeriod ? { reportingPeriod: { start: null, endExclusive: null } } : {}) }) as CollectionContext
+const optionsFor = (draft: A, world: World) => isScope3(draft.kind) ? scope3ReadinessOptions({ setup: setupOf(world), context: contextOf(world), records: world.records, draft: { recordId: DRAFT, activity: prepareActivityForSave(draft, true) }, mappingKeys: new Map() }) : null
 const HOLDS = new Set(["input_needed", "review_required", "partial", "method_pending", "excluded"])
 /** What the record's readiness shows as still needed (the Activity list and record view use the same findings). */
 function readiness(draft: A, world: World): string[] {
   const a = prepareActivityForSave(draft, true), options = optionsFor(draft, world)
-  return recordReadiness(a, context, evidence, undefined, options ? { options, recordId: DRAFT } : undefined).filter(finding => HOLDS.has(finding.status)).map(finding => `${finding.status}: ${finding.reason}`)
+  return recordReadiness(a, contextOf(world), evidence, undefined, options ? { options, recordId: DRAFT } : undefined).filter(finding => HOLDS.has(finding.status)).map(finding => `${finding.status}: ${finding.reason}`)
 }
 /** The Scope 3 adapter's plan as the results route makes it (the engine request, when it calculates). */
 function plan(draft: A, world: World) {
   const a = prepareActivityForSave(draft, true)
-  return planScope3Calculation({ id: DRAFT, recordId: DRAFT, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity: a, payloadSha256: "0".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" } as unknown as Scope3CollectionVersion, context, evidence, optionsFor(draft, world)!)
+  return planScope3Calculation({ id: DRAFT, recordId: DRAFT, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity: a, payloadSha256: "0".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" } as unknown as Scope3CollectionVersion, contextOf(world), evidence, optionsFor(draft, world)!)
 }
 /** The Scope 1 and 2 adapter's plan as the results route makes it (the engine call, when it calculates). */
-function planScope12(draft: A) {
-  return planCollectionCalculation({ id: DRAFT, recordId: DRAFT, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity: prepareActivityForSave(draft, true), payloadSha256: "0".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" }, context, evidence)
+function planScope12(draft: A, world: World = WORLDS.usOperational) {
+  return planCollectionCalculation({ id: DRAFT, recordId: DRAFT, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity: prepareActivityForSave(draft, true), payloadSha256: "0".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" }, contextOf(world), evidence)
 }
 /** The label the screen shows for the field on this draft in this company. */
-const factsFor = (draft: A, world: World) => activityFieldFacts({ setup: setupOf(world), activity: prepareActivityForSave(draft, true), options: optionsFor(draft, world), context })
+const factsFor = (draft: A, world: World) => activityFieldFacts({ setup: setupOf(world), activity: prepareActivityForSave(draft, true), options: optionsFor(draft, world), context: contextOf(world), recordId: DRAFT, records: world.records })
 const shown = (draft: A, field: string, world: World) => fieldLabel(draft, field, factsFor(draft, world))
 
 /**
@@ -340,9 +355,51 @@ const SITE_HELD_FIELDS: Array<[string, () => A, Record<string, (a: A) => void>]>
   ["asset_energy", () => fixture("asset_energy: electricity, sub-metered"), { quantity: set("quantity.originalValue", ""), ...grid("asset_energy") }],
   ["investment", () => fixture("investment: equity share, investee reported"), { quantity: set("quantity.originalValue", ""), investeeEmissions: S("investment", "investeeEmissions") }],
 ]
-for (const [site, siteName] of [[EXCLUDED_SITE, "a site excluded in company setup"], [ENTITY_SITE, "a site whose entity company setup excludes"]] as const)
-  for (const [kind, base, fields] of SITE_HELD_FIELDS) HOLD_STATES.push({ name: `${kind} at ${siteName}`, code: null, kind, base: () => { const a = base(); a.locationId = site; if (a.kind === "electricity") a.payload.site = "x"; return a }, fields })
+const atSite = (base: () => A, site: string) => () => { const a = base(); a.locationId = site; return a }
+const SCOPE12_HELD = SITE_HELD_FIELDS.filter(([kind]) => !isScope3(kind)), SCOPE3_HELD = SITE_HELD_FIELDS.filter(([kind]) => isScope3(kind))
+/** What holds a state's record in a world (null: nothing, and the usual labels apply). */
+type Expect = (world: World, kind: string) => string | null
+const SITES: Array<[string, string, Expect]> = [
+  [EXCLUDED_SITE, "a site excluded in company setup", () => "location_excluded_by_company_setup"],
+  [ENTITY_SITE, "a site whose entity company setup excludes", () => "entity_excluded_by_company_setup"],
+  // QA round 1 (B1, B3): an entity's control. Scope 1 and 2 check it after the approach (equity share holds first).
+  [CONTROL_SITE, "a site whose entity is under operational control", (world, kind) => isScope3(kind) ? null : world.approach === "equity_share" ? "equity_share_not_supported" : world.approach === "financial_control" ? "entity_control_unresolved" : null],
+  [NO_CONTROL_SITE, "a site whose entity has no control identified", (world, kind) => isScope3(kind) ? null : world.approach === "equity_share" ? "equity_share_not_supported" : "entity_outside_control_boundary"],
+  [LANDLORD_SITE, "a site whose equipment the landlord controls", (world, kind) => isScope3(kind) ? null : world.approach === "equity_share" ? "equity_share_not_supported" : "location_control_unresolved"],
+  [UNDECIDED_SITE, "a site not yet included or excluded", () => "location_inclusion_unknown"],
+  [ENTITY_UNDECIDED_SITE, "a site whose entity is not yet included or excluded", () => "entity_inclusion_unknown"],
+  [ORPHAN_SITE, "a site linked to an entity setup no longer has", () => "location_entity_unresolved"],
+  [UNREAD_SITE, "a site whose boundary details weren't read", () => "boundary_metadata_unavailable"],
+  [GONE_SITE, "a site no longer in company setup", () => "location_not_in_current_setup"],
+  [COVERAGE_SITE, "a site without a coverage start", (world, kind) => !isScope3(kind) && world.approach === "equity_share" ? "equity_share_not_supported" : "location_coverage_unknown"],
+]
+const EXPECT: Map<() => A, Expect> = new Map()
+for (const state of HOLD_STATES) EXPECT.set(state.base, (world, kind) => !isScope3(kind) && world.approach === "equity_share" ? "equity_share_not_supported" : state.code === "lessor_operating_lease_in_scope1_2" && world.approach === "operational_control" ? null : state.code)
+for (const [site, siteName, expect] of SITES) for (const [kind, base, fields] of SITE_HELD_FIELDS) {
+  const state = { name: `${kind} at ${siteName}`, code: null, kind, base: atSite(base, site), fields }
+  HOLD_STATES.push(state); EXPECT.set(state.base, expect)
+}
+// QA round 1 (B1): company setup that holds every record of a scope: equity share and no approach (Scope 1 and 2), no
+// approach (Scope 3), no reporting period (Scope 1 and 2).
+const COMPANY_WORLDS: Array<[World, Expect]> = [
+  [WORLDS.foreignEquity, (_world, kind) => isScope3(kind) ? null : "equity_share_not_supported"],
+  [WORLDS.noApproach, (_world, kind) => isScope3(kind) ? "scope3_consolidation_approach_required" : "boundary_approach_unknown"],
+  [{ ...WORLDS.usOperational, name: "U.S. site, operational control, setup without a reporting period", noPeriod: true }, (_world, kind) => isScope3(kind) ? null : "reporting_period_unknown"],
+]
+const COMPANY_STATES: Array<{ name: string; kind: string; base: () => A; fields: Record<string, (a: A) => void>; world: World; expect: Expect }> = []
+for (const [world, expect] of COMPANY_WORLDS) for (const [kind, base, fields] of [...SCOPE12_HELD, ...SCOPE3_HELD]) {
+  const state = { name: `${kind} (${world.name})`, kind, base: () => base(), fields, world, expect }
+  COMPANY_STATES.push(state); EXPECT.set(state.base, expect)
+}
+// QA round 1 (B2): a spend line a supplier record replaces (the supersession pre-pass, by the supplier name).
+const supplierRecord = savedRecord(SUPPLIER, (() => { const a = fixture("purchase_supplier: product factor"); a.payload.category = 1; a.payload.supersedesSpend = { supplierName: "Synthetic Software LLC", mappingKeys: [] }; return a })())
+const REPLACED_WORLDS: World[] = EVERY_COMPANY.map(world => ({ ...world, name: `${world.name}, a supplier record replacing the line`, records: [supplierRecord] }))
+const replacedLine = () => fixture("purchase_spend: manual line")
+const replacedFields = { quantity: set("quantity.originalValue", ""), currency: set("quantity.originalUnit", ""), naicsCode: S("purchase_spend", "naicsCode"), dollarYear: S("purchase_spend", "dollarYear"), supplier: S("purchase_spend", "supplierName") }
+EXPECT.set(replacedLine, () => "superseded_by_supplier_record")
 for (const state of HOLD_STATES) add(state.kind, state.base, state.fields, EVERY_COMPANY, true)
+for (const state of COMPANY_STATES) add(state.kind, state.base, state.fields, [state.world], true)
+add("purchase_spend", replacedLine, replacedFields, REPLACED_WORLDS, true)
 
 type Outcome = { need: FieldNeed; why: string }
 /**
@@ -356,7 +413,7 @@ function evaluate() {
     const refusedBefore = saveRefusal(before)
     if (refusedBefore) throw new Error(`${item.kind}.${item.field} (${world.name}): the starting record doesn't save (${refusedBefore})`)
     const scope3 = isScope3(item.base().kind)
-    const plans = scope3 ? [plan(before, world), plan(after, world)] : [planScope12(before), planScope12(after)]
+    const plans = scope3 ? [plan(before, world), plan(after, world)] : [planScope12(before, world), planScope12(after, world)]
     return { item, world, before, after, refused: saveRefusal(after), held: readiness(after, world).filter(reason => !readiness(before, world).includes(reason)), plans, label: shown(before, item.field, world) }
   }))
   const requests: unknown[] = [], scope12: Array<{ engine: string }> = []
@@ -456,12 +513,47 @@ describe("WO-12b: record holds (one answer holds the record whatever else is fil
       .filter(item => item.screen !== item.rules).map(item => `${item.row.item.kind}.${item.row.item.field} (${item.row.world.name}): screen ${item.screen}, rules ${item.rules}`)
     expect(wrong).toEqual([])
   })
-  test("each state holds the record in every company world (the category 13 operating lease only away from operational control)", () => {
-    for (const state of HOLD_STATES) for (const world of EVERY_COMPANY) {
-      const row = all.find(item => item.item.base === state.base && item.world === world)!
-      const expected = state.code === "lessor_operating_lease_in_scope1_2" && world.approach === "operational_control" ? [] : [state.code ?? (state.name.includes("entity") ? "entity_excluded_by_company_setup" : "location_excluded_by_company_setup")]
-      expect([state.name, world.name, row.holdsBefore.slice(0, 1)]).toEqual([state.name, world.name, expected])
-    }
+  test("each state holds the record in every company world it should, with the code expected there (and nothing elsewhere)", () => {
+    const wrong = all.filter(row => EXPECT.has(row.item.base)).map(row => ({ row, expected: EXPECT.get(row.item.base)!(row.world, row.item.kind) }))
+      .filter(({ row, expected }) => (row.holdsBefore[0] ?? null) !== expected).map(({ row, expected }) => `${row.item.kind}.${row.item.field} (${row.world.name}): rules ${row.holdsBefore[0] ?? null}, expected ${expected}`)
+    expect(wrong).toEqual([])
+    // Every code the screen treats as a record hold is reached by some row.
+    const reached = new Set(all.flatMap(row => row.holdsBefore))
+    expect(RECORD_HOLD_CODES.filter(code => !reached.has(code))).toEqual([])
+  })
+  test("QA round 1: company setup's holds, a replaced spend line and the entity holds say what holds the record, plainly, and where it is decided", () => {
+    const at = (base: () => A, world: World) => { const draft = base(); return recordHold(draft, factsFor(draft, world))! }
+    const gas = at(gasBill, WORLDS.foreignEquity)
+    expect([gas.code, gas.level, gas.fields, gas.question, gas.setupStep]).toEqual(["equity_share_not_supported", "company", [], null, "03 Entities & boundary"])
+    expect(gas.text).toBe("These draft calculations don’t support equity-share allocation yet, so Scope 1 and 2 records are saved but not counted.")
+    expect([at(gasBill, WORLDS.noApproach).code, at(() => fixture("transport: 0029 payload"), WORLDS.noApproach).code]).toEqual(["boundary_approach_unknown", "scope3_consolidation_approach_required"])
+    for (const hold of [gas, at(gasBill, WORLDS.noApproach)]) expect(`${hold.cause} ${hold.text} ${hold.instead ?? ""}`).not.toMatch(/\byour\b|wrong|mistake/i)
+    // B3: an excluded entity is the entity's inclusion; no control identified is the entity's control; neither is the site's.
+    const excluded = at(atSite(gasBill, ENTITY_SITE), WORLDS.usOperational), outside = at(atSite(gasBill, NO_CONTROL_SITE), WORLDS.usOperational), control = at(atSite(gasBill, CONTROL_SITE), WORLDS.foreignFinancial)
+    expect(excluded.instead).toContain("change the entity’s inclusion in company setup (03 Entities & boundary)")
+    expect(outside.instead).toBe("If the company does control that entity, change the entity’s control in company setup (03 Entities & boundary) to operational control; otherwise choose another site.")
+    expect(outside.cause).toBe("The site chosen (Minority plant) belongs to an entity that company setup marks as outside the control boundary (no control identified), which holds this record, whatever else is filled in.")
+    expect(control.cause).toContain("(operational control) isn’t the consolidation approach (financial control)")
+    expect(control.instead).toContain("change the entity’s control to it in company setup")
+    for (const hold of [excluded, outside, control]) expect(hold.instead).not.toContain("site’s inclusion")
+    // Following the words literally leads to a counted record: under financial control, including the excluded entity
+    // isn't enough (its control is operational control), so the notice says the next step too; doing both clears the hold.
+    expect(excluded.instead).not.toContain("After that change")
+    const twoSteps = at(atSite(gasBill, ENTITY_SITE), WORLDS.foreignFinancial)
+    expect(twoSteps.instead).toBe("Choose a site of an included entity if the activity belongs to one, or change the entity’s inclusion in company setup (03 Entities & boundary). After that change, the record would still be held: The site chosen (Joint venture plant) belongs to an entity whose control in company setup (operational control) isn’t the consolidation approach (financial control). If financial control is right for that entity, change the entity’s control to it in company setup (03 Entities & boundary); otherwise choose another site.")
+    const followed = (world: World, change: (location: any) => void) => { const ctx = structuredClone(contextOf(world)); change(ctx.locations.find(item => item.id === ENTITY_SITE)); return collectionBoundaryHold({ ...gasBill(), locationId: ENTITY_SITE } as CollectionActivity, ctx) }
+    expect(followed(WORLDS.foreignFinancial, location => { location.entity.inclusion = "included" })?.reasons).toEqual(["entity_control_unresolved"])
+    expect(followed(WORLDS.foreignFinancial, location => { location.entity.inclusion = "included"; location.entity.control = "financial_control" })).toBeNull()
+    expect(followed(WORLDS.usOperational, location => { location.entity.inclusion = "included" })).toBeNull()
+    // Under equity share the next hold is the company's: the notice says so in the company notice's own words.
+    expect(at(atSite(gasBill, ENTITY_SITE), WORLDS.foreignEquity).instead).toContain("After that change, the record would still be held: Company setup’s consolidation approach is equity share, which holds every Scope 1 and 2 record, whatever is filled in here. These draft calculations don’t support equity-share allocation yet, so Scope 1 and 2 records are saved but not counted.")
+    const noControl = (world: World) => { const ctx = structuredClone(contextOf(world)); ctx.locations.find(item => item.id === NO_CONTROL_SITE)!.entity!.control = world.approach as "operational_control"; return collectionBoundaryHold({ ...gasBill(), locationId: NO_CONTROL_SITE } as CollectionActivity, ctx) }
+    expect([noControl(WORLDS.usOperational), noControl(WORLDS.foreignFinancial)]).toEqual([null, null])
+    // B2: the replaced spend line names the replacing record and links to it.
+    const replaced = at(replacedLine, REPLACED_WORLDS[0]!)
+    expect([replaced.code, replaced.cause, replaced.link]).toEqual(["superseded_by_supplier_record", "Another record replaces this spend line: Supplier-specific purchases · SRC-1.", { href: `#/activity/${SUPPLIER}`, label: "Open Supplier-specific purchases · SRC-1" }])
+    // Follow-up: category 3 spend says what to do instead.
+    expect(at(withPayload(() => fixture("purchase_spend: manual line"), { category: 3 }), WORLDS.usOperational).instead).toBe("Withdraw the line rather than completing it: nothing on this form makes a category 3 spend line count.")
   })
   test("while it holds: every other result field is Optional, the answer that holds it says so, and the save still needs what it needs", () => {
     const held = holdRows.filter(row => row.holdsBefore.length > 0)
@@ -474,7 +566,7 @@ describe("WO-12b: record holds (one answer holds the record whatever else is fil
       else expect([row.item.kind, row.item.field, row.label.needNote ?? null]).toEqual([row.item.kind, row.item.field, null])
     }
     // Away from the hold (category 13 under operational control) the usual labels are back.
-    const usual = holdRows.filter(row => row.holdsBefore.length === 0 && row.item.field === "subregion")
+    const usual = holdRows.filter(row => row.holdsBefore.length === 0 && row.item.field === "subregion" && row.item.base().payload.category === 13)
     expect(usual.map(row => row.label.need)).toEqual(["results", "results"])
   })
 })

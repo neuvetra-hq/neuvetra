@@ -1073,7 +1073,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   // WO-12 QA round 1: what decides the conditional field labels, from what this screen has loaded: company setup's
   // consolidation approach and the chosen site's country (undefined until setup is read), and whether distance-based
   // commuting records cover this record's period (the same periods the results route plans with).
-  const fieldFacts: FieldNeedFacts = activityFieldFacts({ setup: setupFacts, activity: readinessDraft, options: draftScope3Options, context })
+  const fieldFacts: FieldNeedFacts = activityFieldFacts({ setup: setupFacts, activity: readinessDraft, options: draftScope3Options, context, recordId, records })
   // WO-12b: one answer that holds the record whatever else is filled in (a record hold), shown at the top of the form.
   const hold = recordHold(draft, fieldFacts)
   const presave: FormProblem[] = canManage ? activityPresaveProblems(draft) : []
@@ -1214,7 +1214,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       {scope3FormGroups(availableScope3Kinds.filter(kind => FORM_KINDS.has(kind))).map(group => <div key={group.title} className="worksheet-nav" role="group" aria-label={group.title}><span className="nv-subtle">{group.title}</span>{group.kinds.map(kind => kindButton(kind, kindName(kind)))}</div>)}
       </>}
       {selected && !recordMode && <p>Activity type is fixed while correcting this record. Use “Start a new record” to collect another activity.</p>}
-      <RecordHoldNotice hold={hold} />
+      <RecordHoldNotice hold={hold} canManage={canManage} />
       <fieldset className="setup-inputs" disabled={busy || !canManage || offer !== null}>
         <div className="setup-grid">
           <Select {...anatomy("location")} label="Company-setup location" value={draft.locationId} options={[["", context?.setupVersionId ? "Choose a saved location" : "Save company setup locations first"], ...(context?.locations ?? []).map(location => [location.id, `${location.name || "Unnamed location"} · ${LOCATION_INCLUSION_TEXT_R2E[location.inclusion] ?? location.inclusion} · ${LOCATION_CONTROL_TEXT_R2E[location.control] ?? location.control}`] as const)]} onChange={value => edit(next => { next.locationId = value; next.setupVersionId = context?.setupVersionId ?? ""; if (next.kind === "electricity") next.payload.site = context?.locations.find(location => location.id === value)?.name ?? "" })} hint={context?.setupRevision ? `Linked to company setup version ${context.setupRevision}. Excluded and unknown locations remain visible.` : "A saved company setup version is required."} />

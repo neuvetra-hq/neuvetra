@@ -5,7 +5,8 @@
 .nv-app .wo12b-hold--none { margin: 0; }
 .nv-app .wo12b-hold { display: block; }
 .nv-app .wo12b-hold__text p { margin: 0 0 6px; overflow-wrap: anywhere; }
-.nv-app .wo12b-hold > button { margin-top: 4px; max-width: 100%; white-space: normal; text-align: left; }
+.nv-app .wo12b-hold__actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.nv-app .wo12b-hold__actions > :is(button, a) { max-width: 100%; white-space: normal; text-align: left; }
 
 /* A label with a note (a record hold's "this answer holds the record…", WO-12's notes) wraps rather than overflowing. */
 .nv-app :is(.setup-field, .setup-check) .setup-field__need { white-space: normal; overflow-wrap: anywhere; }
