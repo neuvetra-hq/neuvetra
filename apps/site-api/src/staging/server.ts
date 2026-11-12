@@ -153,25 +153,27 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   // Spend review can make several authenticated reads per correction. Allow a sustained review session
   // (300/user/minute), while bounding the instance to 1,200/minute of staging users' requests.
   // API-01 (CTO audit risk 3): nothing a caller can send before proving who they are spends a budget other people
-  // depend on. Order per request, after the local token pre-check: `overLimitTokens` (a token already found over its
-  // user's limit this window is refused before anything else) -> `unverified` (per client address, before any token
-  // validation or SQL) -> token validation -> release of `unverified` -> `actors` (per user) -> readiness -> staging
-  // access -> `admission` (instance ceiling).
-  // BF-04 (BL-04): `unverified` bounds validation calls per address for callers that have not proved who they are, so a
-  // request is given back to it as soon as its token validates to a user. It stays spent only by invalid and expired
-  // tokens (and requests still in flight); a user over their own limit no longer spends it, so a colleague behind the
-  // same office address is never refused because of them. Validated users are bounded per user instead: `actors`
-  // admits 300 a minute, and a token found over that limit is remembered until the user's window resets, so further
-  // requests with it are refused without another validation (one extra validation per token per window).
-  // Accepted trade-off: a validated Supabase user without staging access is now bounded per user, not per address.
-  // Sign-ups are invite-only (`shouldCreateUser: false`), so such users exist only through an invitation.
+  // depend on. Order per request, after the local token pre-check: `overLimitTokens` (a token already refused by its
+  // user's limit this window is refused again before anything else) -> `unverified` (per client address, before any
+  // token validation or SQL) -> token validation -> readiness -> staging access -> `actors` (per user) -> release of
+  // `unverified`, only for a staging user within their own limit -> `admission` (instance ceiling).
+  // `unverified` is the only bound on validation calls and SQL per address for callers who are not staging users, so
+  // it stays spent by invalid and expired tokens, by validated accounts without staging access (the shared Supabase
+  // project has self-service sign-up elsewhere, so such accounts can be minted) and by requests still in flight.
+  // BF-04 (BL-04): a staging user within their own limit gives the count back, so their traffic never spends their
+  // address's budget. When `actors` refuses one, the count stays spent and the token is remembered until the user's
+  // window resets: repeating that token is refused before the address budget, validation or SQL, so an over-limit user
+  // never refuses a colleague behind the same address, and each new token they bring costs that address one count (so
+  // cycling fresh tokens is still bounded at 120 validations per address per minute).
+  // `actors` tracks up to 10,000 users so count eviction cannot reset a user's limit (worst case a few MB; see BF-04).
   // Public config is limited per address too, so no single address can refuse the app's configuration to everyone else.
   const admission = createRateLimiter({ max: 1200, windowMs: 60_000, maxBuckets: 1 })
   const configAdmission = createRateLimiter({ max: 1200, windowMs: 60_000, maxBuckets: 10_000 })
   const unverified = createRateLimiter({ max: 120, windowMs: 60_000, maxBuckets: 10_000 })
-  const actors = createRateLimiter({ max: 300, windowMs: 60_000, maxBuckets: 100 })
-  // BF-04: SHA-256 of a validated token whose user is over their own limit -> when that user's window resets. Only ever
-  // refuses (never admits), holds only tokens that validated, and is bounded; evicting an entry costs one validation.
+  const actors = createRateLimiter({ max: 300, windowMs: 60_000, maxBuckets: 10_000 })
+  // BF-04: SHA-256 of a staging user's validated token that `actors` refused -> when that user's window resets. Only ever
+  // refuses (never admits), holds only tokens that validated, and is bounded; an evicted entry's next request spends
+  // the address budget again, as any new token does.
   const overLimitTokens = new Map<string, number>()
   const tokenKey = (token: string) => createHash("sha256").update(token).digest("hex")
   const overLimitUntil = (token: string) => {
@@ -364,17 +366,17 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       let user: AuthenticatedUser | null
       try { user = await auth(token) } catch { return json(503, { error: "Authentication is unavailable." }) }
       if (!user) return json(401, { error: "Authentication required." })
-      // BF-04: the token named a user, so the request leaves the per-address budget before any per-user check; from here
-      // on it is bounded per user, and an over-limit user cannot refuse colleagues behind the same address.
-      unverified.release(client, provisional)
-      const allowance = actors.check(user.id)
-      if (!allowance.allowed) { rememberOverLimit(token, allowance.resetAt); return rateLimited(allowance.resetAt) }
-      // API-02 (QA F1): the existing project's per-request readiness SQL runs only for a validated user within their own
-      // limit, and still before this request's first other SQL (staging access), as before.
+      // API-02 (QA F1): the existing project's per-request readiness SQL runs only for a validated user, and still before
+      // this request's first other SQL (staging access).
       const requestReadiness = existingProject ? await databaseReadiness() : undefined
       if (requestReadiness && !served(requestReadiness.schemaVersion)) return json(503, { error: "Staging database is upgrading." })
+      // Without staging access the address count stays spent, so such accounts stay bounded per address.
       if (!await database.hasStagingAccess(user.id)) return json(403, { error: "Private staging access required." })
-      // A staging user within their own limit spends the instance budget.
+      const allowance = actors.check(user.id)
+      // BF-04: over their own limit, the count stays spent and the token is remembered (see `overLimitTokens`).
+      if (!allowance.allowed) { rememberOverLimit(token, allowance.resetAt); return rateLimited(allowance.resetAt) }
+      // BF-04 (BL-04): a staging user within their own limit leaves the per-address budget and spends the instance one.
+      unverified.release(client, provisional)
       const admitted = admission.check("staging")
       if (!admitted.allowed) return rateLimited(admitted.resetAt)
       if (url.pathname === "/workspace-api/session" && isGet) {
