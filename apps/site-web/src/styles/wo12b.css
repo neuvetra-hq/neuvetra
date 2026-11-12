@@ -1,0 +1,17 @@
+/* WO-12b: the record-hold notice at the top of the record form, and company setup shown to a member as text. Unlayered on
+   purpose (see the developer brief): a layered rule would lose to the unlayered journey.css and staging.css rules. */
+
+.nv-app .wo12b-hold { margin: 12px 0; }
+.nv-app .wo12b-hold--none { margin: 0; }
+.nv-app .wo12b-hold { display: block; }
+.nv-app .wo12b-hold__text p { margin: 0 0 6px; overflow-wrap: anywhere; }
+.nv-app .wo12b-hold > button { margin-top: 4px; max-width: 100%; white-space: normal; text-align: left; }
+
+/* A label with a note (a record hold's "this answer holds the record…", WO-12's notes) wraps rather than overflowing. */
+.nv-app :is(.setup-field, .setup-check) .setup-field__need { white-space: normal; overflow-wrap: anywhere; }
+
+/* Company setup for a member: each answer as text (a term and its answer, in the setup grid's cells). */
+.nv-app .setup-readonly { margin: 0; min-width: 0; }
+.nv-app .setup-readonly dt { font-weight: 500; }
+.nv-app .setup-readonly dd { margin: 2px 0 0; overflow-wrap: anywhere; white-space: pre-wrap; }
+.nv-app .setup-inputs--read-only { border: 0; padding: 0; margin: 0; min-width: 0; }

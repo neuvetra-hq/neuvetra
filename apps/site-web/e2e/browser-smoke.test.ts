@@ -694,4 +694,81 @@ suite("site-web browser smoke (E2E-01)", () => {
     }))
     expect(lines.filter(([, count]) => count > 2)).toEqual([])
   }, 150_000)
+  // WO-12b (CEO ruling after QA round 3 of PR #57): one answer that holds the record whatever else is filled in (here a
+  // category 9 spend line the company paid for) is named at the top of the form, in a live region, with "Go to" its answer;
+  // the other result fields read Optional meanwhile, and the held record still saves.
+  journey("record holds (WO-12b): the notice comes and goes with the answer, labels follow, and a held record still saves, at 1360 and 390 px", { signedInAs: "owner" }, async opened => {
+    const { page } = opened
+    const editor = page.locator("#collection-record-editor")
+    const notice = editor.locator(".wo12b-hold [role=status]")
+    const needOf = (name: string) => editor.locator(".setup-field").filter({ has: page.locator(".setup-field__name", { hasText: new RegExp(`^${name.replace(/[()?]/g, "\\$&")}$`) }) }).locator(".setup-field__need").first()
+    const paid = () => editor.getByLabel(/^Did the company pay for this transport\?/)
+    for (const [width, height] of [[390, 844], [1360, 900]] as const) {
+      await page.setViewportSize({ width, height })
+      await page.goto("/#/activity")
+      await activityListLoaded(page)
+      await editor.getByRole("button", { name: "Purchases by spend (Scope 3)" }).click()
+      await editor.getByLabel(/^Category/).first().selectOption("9")
+      // The live region is in the page before anything is held (so its first words are announced).
+      expect(await notice.count()).toBe(1)
+      expect((await notice.innerText()).trim()).toBe("")
+      expect(await needOf("NAICS code (2017)").innerText()).toBe("Needed for results")
+      await paid().selectOption("yes")
+      await notice.getByText("This record won’t be counted as entered").waitFor()
+      await notice.getByText("Your answer to “Did the company pay for this transport?” (Yes) holds this record, whatever else is filled in.").waitFor()
+      await notice.getByText("Transport the company pays for is category 4, not category 9.", { exact: false }).waitFor()
+      expect(await needOf("NAICS code (2017)").innerText()).toBe("Optional")
+      expect(await needOf("Did the company pay for this transport?").innerText()).toBe("Required (this answer holds the record: see the notice at the top of the form)")
+      expect(await horizontalOverflow(page)).toBe(0)
+      // The notice is above the form's first field, and its button moves focus to the answer.
+      const [noticeTop, firstFieldTop] = await Promise.all([notice.evaluate(node => node.getBoundingClientRect().top), editor.locator(".setup-field").first().evaluate(node => node.getBoundingClientRect().top)])
+      expect(noticeTop).toBeLessThan(firstFieldTop)
+      await editor.getByRole("button", { name: "Go to “Did the company pay for this transport?”" }).click()
+      expect(await page.evaluate(() => document.activeElement?.closest(".setup-field")?.querySelector(".setup-field__name")?.textContent)).toBe("Did the company pay for this transport?")
+      await paid().selectOption("no")
+      await page.waitForFunction(() => (document.querySelector("#collection-record-editor .wo12b-hold [role=status]")?.textContent ?? "x").trim() === "")
+      expect(await needOf("NAICS code (2017)").innerText()).toBe("Needed for results")
+      if (width === 390) continue
+      // A held record saves: the owner fills what the save needs, with the answer that holds it.
+      await paid().selectOption("yes")
+      await editor.getByLabel(/^Company-setup location/).selectOption({ index: 1 })
+      await editor.getByLabel(/^Ledger line or invoice ID/).fill("E2E-HOLD-9")
+      await editor.getByLabel(/^Description/).fill("E2E: customers’ freight we paid for")
+      await editor.getByLabel(/^How the amount was estimated/).fill("Carrier invoices.")
+      await editor.getByLabel(/^Amount spent|^Amount/).first().fill("1200")
+      await editor.getByRole("button", { name: /^Save/ }).click()
+      const deadline = Date.now() + 20_000
+      let saved: Array<{ currentVersion: { activity: { sourceId: string; payload: { paidByReportingCompany: boolean | null } } } }> = []
+      while (Date.now() < deadline) {
+        saved = (await stack.api<{ records: typeof saved }>("owner", `/workspace/${COMPANIES.first}/collection/activities`)).records.filter(record => record.currentVersion.activity.sourceId === "E2E-HOLD-9")
+        if (saved.length) break
+        await page.waitForTimeout(200)
+      }
+      expect(saved.map(record => record.currentVersion.activity.payload.paidByReportingCompany)).toEqual([true])
+    }
+  }, 90_000)
+
+  // WO-12b: a member reads company setup steps 01-07 as text: no field, no disabled form, no add, remove or save button.
+  journey("a view-only member reads company setup steps 01-07 as text, at 1360 and 390 px (WO-12b)", { signedInAs: "member" }, async opened => {
+    const { page } = opened
+    const SETUP_READING = [/^button 0[1-7] /, /^button ← Back$/, /^button Continue →$/, /^button Reload saved setup$/, /^button Version \d+ · /]
+    const setupControls = (controls: string[]) => notAllowed(controls).filter(control => !SETUP_READING.some(rule => rule.test(control)))
+    for (const [width, height] of [[1360, 900], [390, 844]] as const) {
+      await page.setViewportSize({ width, height })
+      await page.goto("/#/setup")
+      await page.getByRole("button", { name: /^01 Company/ }).waitFor({ timeout: 30_000 })
+      await page.locator(".setup-readonly").first().waitFor({ timeout: 30_000 })
+      for (const step of ["01 Company", "02 Reporting period", "03 Entities & boundary", "04 Locations", "05 Changes & shared operations", "06 Source activities", "07 Review"]) {
+        await page.getByRole("button", { name: new RegExp(`^${step}`) }).click()
+        await page.locator("#setup-form-heading").filter({ hasText: step.replace(" ", " / ") }).waitFor()
+        await page.waitForLoadState("networkidle")
+        const main = page.locator("main")
+        expect([step, await main.locator("input, select, textarea, fieldset").count()]).toEqual([step, 0])
+        expect([step, setupControls(await enabledControls(page, "main", true))]).toEqual([step, []])
+        expect([step, await main.locator(".setup-readonly").count() > 0]).toEqual([step, true])
+        expect([step, await horizontalOverflow(page)]).toEqual([step, 0])
+      }
+    }
+    expect(opened.writes).toEqual([])
+  }, 120_000)
 })

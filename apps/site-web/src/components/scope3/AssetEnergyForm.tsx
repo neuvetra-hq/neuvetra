@@ -45,7 +45,7 @@ export function AssetEnergyForm({ activity, onEdit, env }: Scope3FormProps) {
         hint={`${LEASE_NO_CONTROL_HINT_WO12} For example the landlord operates the building’s systems and meters.`} />}
     </div>
     {hint && <p className="nv-subtle" role="note">{hint}</p>}
-    {p.carrier === "electricity" && <GridLocationFields kind="asset_energy" location={p} lookup={env.zipLookup} onLookup={env.onZipLookup} onChange={location => set(next => Object.assign(next, location))} />}
+    {p.carrier === "electricity" && <GridLocationFields kind="asset_energy" labels={need} location={p} lookup={env.zipLookup} onLookup={env.onZipLookup} onChange={location => set(next => Object.assign(next, location))} />}
     {p.carrier !== "refrigerant" && <div className="setup-subcard"><h4>Shared building</h4>
       <CheckField {...need("allocation")} label="Not sub-metered: allocate the building’s energy by floor area" checked={p.allocation !== null} onChange={checked => set(next => { next.allocation = checked ? { reportingArea: "", buildingArea: "", occupancyPercent: "", areaUnit: "sqft" } : null })}
         hint="Share = our area / (building area × occupancy). An estimate, disclosed with the result." />

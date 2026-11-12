@@ -14,6 +14,9 @@ import type { CollectionActivity } from "../../../../packages/neuvetra-database/
 import type { Scope3ConsolidationApproach, Scope3PlanOptions } from "../../../../packages/neuvetra-database/src/scope3-collection"
 import type { Scope3SetupFacts } from "./scope3-forms"
 import { FIELD_NEED_NOTES, type FieldNeed } from "./wo12-text"
+import type { CollectionContext } from "../../../../packages/neuvetra-database/src/collection-contract"
+import { recordHold, recordSiteExclusion, type RecordSiteExclusion } from "./record-holds-wo12b"
+import { RECORD_HOLD_TEXT } from "./wo12b-text"
 
 export const ACTIVITY_FIELD_NEEDS: Readonly<Record<string, Readonly<Record<string, FieldNeed>>>> = {
   common: { location: "required", source: "required", periodStart: "required", periodEnd: "required", quality: "optional", reference: "optional", notes: "optional", evidence: "optional", estimateBasis: "required", reason: "required", withdrawalReason: "required" },
@@ -67,6 +70,8 @@ export interface FieldNeedFacts {
   consolidationApproach?: Scope3ConsolidationApproach | null
   locationCountry?: string | null
   distanceCommutingOverlap?: boolean
+  /** WO-12b: the chosen site, when company setup excludes it (or its entity); `null` or absent when it doesn't or isn't known. */
+  siteExclusion?: RecordSiteExclusion | null
 }
 /** A field's label and, where the label depends on something the person can see or change, a note that says what. */
 export interface FieldLabel { need: FieldNeed; needNote?: string }
@@ -95,6 +100,16 @@ const LEASE_EXPLANATION_KINDS = new Set(["asset_energy", "building_average", "pa
  *   (lease_in_scope1_2_under_boundary).
  */
 export function fieldLabel(activity: Pick<CollectionActivity, "kind" | "payload">, field: string, facts: FieldNeedFacts = {}): FieldLabel {
+  const label = baseFieldLabel(activity, field, facts)
+  // WO-12b: while one answer holds the record (record-holds-wo12b.ts), no other answer can make it count: the answer that
+  // holds it keeps its label and says so, the answers read before it keep theirs, and every other result field is Optional.
+  const hold = recordHold(activity, facts)
+  if (!hold) return label
+  if (hold.fields.includes(field)) return { need: label.need, needNote: label.needNote ? `${label.needNote} ${RECORD_HOLD_TEXT.fieldNote}` : RECORD_HOLD_TEXT.fieldNote }
+  if (hold.upstream.includes(field) || label.need !== "results") return label
+  return { need: "optional" }
+}
+function baseFieldLabel(activity: Pick<CollectionActivity, "kind" | "payload">, field: string, facts: FieldNeedFacts): FieldLabel {
   const need = activityFieldNeed(activity.kind, field)
   const p = activity.payload as unknown as Record<string, unknown>
   if (activity.kind === "vehicle" && (VEHICLE_MILES.has(field) || VEHICLE_MPG.has(field))) {
@@ -128,13 +143,15 @@ export const fieldLabelsOf = (activity: Pick<CollectionActivity, "kind" | "paylo
  * The facts the Activity screen has for a record's labels: company setup as read (`undefined` until it is), the chosen site,
  * and the plan options the screen builds for this draft (`scope3ReadinessOptions`, the results route's options).
  */
-export function activityFieldFacts(input: { setup: Scope3SetupFacts | undefined; activity: Pick<CollectionActivity, "kind" | "locationId" | "period">; options: Scope3PlanOptions | null }): FieldNeedFacts {
+export function activityFieldFacts(input: { setup: Scope3SetupFacts | undefined; activity: Pick<CollectionActivity, "kind" | "locationId" | "period">; options: Scope3PlanOptions | null; context?: CollectionContext | null }): FieldNeedFacts {
   const { setup, activity, options } = input
+  const siteExclusion = recordSiteExclusion(activity, input.context)
   const countries = setup?.locationCountries
   const period = activity.period
   return {
     ...(setup !== undefined ? { consolidationApproach: setup.consolidationApproach } : {}),
     ...(countries && activity.locationId ? { locationCountry: countries.get(activity.locationId) ?? null } : {}),
+    ...(siteExclusion ? { siteExclusion } : {}),
     ...(activity.kind === "commuting_average" && options ? { distanceCommutingOverlap: (options.distanceCommutingPeriods ?? []).some(other => other.start < period.endExclusive && period.start < other.endExclusive) } : {}),
   }
 }

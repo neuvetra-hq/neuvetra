@@ -26,12 +26,18 @@ import { scope3ReadinessOptions, type Scope3SetupFacts } from "./scope3-forms"
 import { activitySaveProblems, prepareActivityForSave } from "./activity-save-checks"
 import { ACTIVITY_FIELD_NEEDS, activityFieldFacts, activityFieldNeed, fieldLabel, FIELD_NEED_KINDS } from "./field-needs-wo12"
 import { FIELD_NEED_NOTES, FIELD_NEED_TEXT, type FieldNeed } from "./wo12-text"
+import { RECORD_HOLD_CODES, recordHold } from "./record-holds-wo12b"
+import { RECORD_HOLD_TEXT } from "./wo12b-text"
 
 const C = "94120000-0000-4000-8000-000000000001", SETUP = "94120000-0000-4000-8000-0000000000aa", SITE = "94120000-0000-4000-8000-0000000000bb", FILE = "94120000-0000-4000-8000-0000000000e1"
 const DRAFT = "94120000-0000-4000-8000-0000000000d1", COMMUTER = "94120000-0000-4000-8000-0000000000c7"
+const EXCLUDED_SITE = "94120000-0000-4000-8000-0000000000b2", ENTITY_SITE = "94120000-0000-4000-8000-0000000000b3", ENTITY = "94120000-0000-4000-8000-0000000000e7"
 const PERIOD = { start: "2025-01-01", endExclusive: "2026-01-01" }
 const context: CollectionContext = { companyId: C, setupVersionId: SETUP, setupRevision: 1, sameContentSetupVersionIds: [SETUP], boundaryApproach: "operational_control", reportingPeriod: PERIOD,
-  locations: [{ id: SITE, name: "Office", inclusion: "included", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" }] } as CollectionContext
+  locations: [{ id: SITE, name: "Office", inclusion: "included", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" },
+    // WO-12b: a site company setup excludes, and an included site whose entity it excludes.
+    { id: EXCLUDED_SITE, name: "Closed depot", inclusion: "excluded", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" },
+    { id: ENTITY_SITE, name: "Joint venture plant", inclusion: "included", control: "related_entity", entityId: ENTITY, entity: { id: ENTITY, inclusion: "excluded", control: "operational_control", ownershipPercent: "40" }, startMode: "period_start", endMode: "period_end" }] } as CollectionContext
 const evidence: CollectionEvidenceMetadata[] = [{ id: FILE, companyId: C, bucket: "neuvetra-private-company-evidence", objectKey: `${C}/original/${FILE}`, originalName: "rec.pdf", mediaType: "application/pdf", byteLength: 10, sha256: "a".repeat(64), quarantineStatus: "clean", uploadedBy: C, createdAt: "2025-06-01T00:00:00.000Z" }]
 const isScope3 = (kind: string) => (SCOPE3_LEGACY_KINDS as readonly string[]).includes(kind) || (SCOPE3_COMPLETION_KINDS as readonly string[]).includes(kind)
 
@@ -80,7 +86,8 @@ function planScope12(draft: A) {
   return planCollectionCalculation({ id: DRAFT, recordId: DRAFT, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity: prepareActivityForSave(draft, true), payloadSha256: "0".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" }, context, evidence)
 }
 /** The label the screen shows for the field on this draft in this company. */
-const shown = (draft: A, field: string, world: World) => fieldLabel(draft, field, activityFieldFacts({ setup: setupOf(world), activity: prepareActivityForSave(draft, true), options: optionsFor(draft, world) }))
+const factsFor = (draft: A, world: World) => activityFieldFacts({ setup: setupOf(world), activity: prepareActivityForSave(draft, true), options: optionsFor(draft, world), context })
+const shown = (draft: A, field: string, world: World) => fieldLabel(draft, field, factsFor(draft, world))
 
 /**
  * QA round 2: the real Scope 1 and 2 engines (scope1_engine.py, scope2_engine.py), each request through the engine's own
@@ -293,6 +300,50 @@ add("fugitive", stocked, { retrofitInPeriod: set("payload.retrofitInPeriod", nul
 add("fugitive", retrofitted, { maintainsRefrigerantStock: set("payload.maintainsRefrigerantStock", null) }, EVERY_COMPANY, true)
 add("fugitive", stocked, { ...Object.fromEntries(["PN", "CN", "PS", "CD", "RD"].map(term => [`term-${term}`, set(`payload.terms.${term}`, "")])), contractorRecords: set("payload.contractorRecordsComplete", false), eventChronology: set("payload.eventChronologyComplete", false) }, EVERY_COMPANY, true)
 
+// ---- WO-12b: record holds. One answer holds the record whatever else is filled in (record-holds-wo12b.ts), so while it
+// stands no other result field can make the record count: each such field is Optional, the answer that holds it keeps its
+// own label, and fields the save needs stay Required. Every state is checked in every company world (the category 13
+// operating lease is held only under financial control or equity share, so its U.S. operational-control rows check that the
+// usual labels come back there).
+const withPayload = (base: () => A, change: Record<string, unknown>, extra: Partial<A> = {}) => () => { const a = base(); Object.assign(a.payload, change); Object.assign(a, extra); return a }
+const assetLease = (category: number, leaseType: string) => withPayload(() => fixture("asset_energy: electricity, sub-metered"), { category, leaseType, noOperationalControlBasis: category === 8 && leaseType === "operating" ? "Landlord operates HVAC and metering." : null })
+const buildingLease = (category: number, leaseType: string) => withPayload(() => fixture("building_average: office"), { category, leaseType, noOperationalControlBasis: category === 8 && leaseType === "operating" ? "Shared building; landlord meters." : null })
+const partnerLease = (category: number, leaseType: string) => withPayload(() => fixture("partner_reported: tenant share by area"), { category, leaseType, noOperationalControlBasis: null })
+const assetHeldFields = { counterparty: S("asset_energy", "counterpartyName"), quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), leaseType: S("asset_energy", "leaseType"), ...grid("asset_energy"), allocation: S("asset_energy", "allocation") }
+const buildingHeldFields = { cbecsActivity: S("building_average", "cbecsActivity"), quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), coveredDays: S("building_average", "coveredDays"), usesNaturalGas: S("building_average", "usesNaturalGas"), leaseType: S("building_average", "leaseType"), ...grid("building_average") }
+const partnerHeldFields = { partner: S("partner_reported", "counterpartyName"), quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), allocationBasis: S("partner_reported", "allocationBasis"), scope2Basis: S("partner_reported", "scope2Basis"),
+  verification: set("payload.verification", "unverified"), leaseType: S("partner_reported", "leaseType"), periodMatches: S("partner_reported", "periodMatches") }
+/** The states of the ruling and of the WO-12b search, each with the fields checked in it. */
+const HOLD_STATES: Array<{ name: string; code: string | null; kind: string; base: () => A; fields: Record<string, (a: A) => void> }> = [
+  { name: "category 8 finance lease (asset energy)", code: "finance_lease_in_scope1_2", kind: "asset_energy", base: assetLease(8, "finance"), fields: assetHeldFields },
+  { name: "category 8 finance lease (building average)", code: "finance_lease_in_scope1_2", kind: "building_average", base: buildingLease(8, "finance"), fields: buildingHeldFields },
+  { name: "category 8 finance lease (partner reported)", code: "finance_lease_in_scope1_2", kind: "partner_reported", base: partnerLease(8, "finance"), fields: partnerHeldFields },
+  { name: "category 13 operating lease (asset energy)", code: "lessor_operating_lease_in_scope1_2", kind: "asset_energy", base: assetLease(13, "operating"), fields: assetHeldFields },
+  { name: "category 13 operating lease (building average)", code: "lessor_operating_lease_in_scope1_2", kind: "building_average", base: buildingLease(13, "operating"), fields: buildingHeldFields },
+  { name: "category 13 operating lease (partner reported)", code: "lessor_operating_lease_in_scope1_2", kind: "partner_reported", base: partnerLease(13, "operating"), fields: partnerHeldFields },
+  { name: "category 9 spend the company paid for", code: "category_9_spend_paid_by_company", kind: "purchase_spend", base: withPayload(() => fixture("purchase_spend: longest texts; category 9 with overlap confirmed"), { paidByReportingCompany: true }),
+    fields: { quantity: set("quantity.originalValue", ""), currency: set("quantity.originalUnit", ""), naicsCode: S("purchase_spend", "naicsCode"), dollarYear: S("purchase_spend", "dollarYear"), "activityOverlap-fallback": S("purchase_spend", "activityOverlap"), paidByReportingCompany: S("purchase_spend", "paidByReportingCompany"), spendEstimateBasis: set("payload.spendEstimateBasis", "") } },
+  { name: "category 3 spend", code: "spend_proxy_for_category_3_not_enabled", kind: "purchase_spend", base: withPayload(() => fixture("purchase_spend: manual line"), { category: 3, naicsCode: "324110", activityOverlap: "none_confirmed" }),
+    fields: { category: set("payload.category", 0), quantity: set("quantity.originalValue", ""), currency: set("quantity.originalUnit", ""), naicsCode: S("purchase_spend", "naicsCode"), dollarYear: S("purchase_spend", "dollarYear"), "activityOverlap-fallback": S("purchase_spend", "activityOverlap") } },
+  { name: "refrigerant equipment retrofitted and with a stock", code: "simplified_method_not_applicable", kind: "fugitive", base: withPayload(refrigerant, { maintainsRefrigerantStock: true, retrofitInPeriod: true }),
+    fields: { insideBoundary: set("payload.insideBoundary", null), maintainsRefrigerantStock: set("payload.maintainsRefrigerantStock", null), retrofitInPeriod: set("payload.retrofitInPeriod", null), contractorRecords: set("payload.contractorRecordsComplete", false), "term-PS": set("payload.terms.PS", "") } },
+]
+// A site company setup excludes, or whose entity it excludes: a record of every kind there is never counted.
+const SITE_HELD_FIELDS: Array<[string, () => A, Record<string, (a: A) => void>]> = [
+  ["natural_gas", gasBill, { quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), location: set("locationId", "") }],
+  ["natural_gas", volumetric, { heatContent: set("payload.heatContent", null) }],
+  ["electricity", meter([instrument()]), { quantity: set("quantity.originalValue", ""), mwh: set("payload.instruments.0.mwh", ""), instrumentQuality: set("payload.instruments.0.qualityCriteriaMet", false), instrumentEvidence: set("payload.instruments.0.evidenceReference", null) }],
+  ["vehicle", van(), { vehicleGallons: set("payload.gallons", ""), miles: set("payload.miles", null) }],
+  ["fugitive", refrigerant, { "term-PN": set("payload.terms.PN", ""), insideBoundary: set("payload.insideBoundary", null), contractorRecords: set("payload.contractorRecordsComplete", false) }],
+  ["transport", () => fixture("transport: 0029 payload"), { quantity: set("quantity.originalValue", ""), loadBasis: set("payload.loadBasis", null) }],
+  ["purchase_spend", () => fixture("purchase_spend: manual line"), { quantity: set("quantity.originalValue", ""), naicsCode: S("purchase_spend", "naicsCode") }],
+  ["asset_energy", () => fixture("asset_energy: electricity, sub-metered"), { quantity: set("quantity.originalValue", ""), ...grid("asset_energy") }],
+  ["investment", () => fixture("investment: equity share, investee reported"), { quantity: set("quantity.originalValue", ""), investeeEmissions: S("investment", "investeeEmissions") }],
+]
+for (const [site, siteName] of [[EXCLUDED_SITE, "a site excluded in company setup"], [ENTITY_SITE, "a site whose entity company setup excludes"]] as const)
+  for (const [kind, base, fields] of SITE_HELD_FIELDS) HOLD_STATES.push({ name: `${kind} at ${siteName}`, code: null, kind, base: () => { const a = base(); a.locationId = site; if (a.kind === "electricity") a.payload.site = "x"; return a }, fields })
+for (const state of HOLD_STATES) add(state.kind, state.base, state.fields, EVERY_COMPANY, true)
+
 type Outcome = { need: FieldNeed; why: string }
 /**
  * Every case in every company it is checked in: the label the rules give and the label the screen shows. The engine runs
@@ -316,9 +367,15 @@ function evaluate() {
     const [before = null, after = null] = index[i]!.map(at => at === null ? null : at >= 0 ? results[at]! : results12[-at - 1]!)
     const baseHeld = readiness(row.before, row.world).length > 0 || (row.plans[0] !== undefined && row.plans[0].action !== "calculate") || (before !== null && before.status !== "complete" && before.status !== "partial")
     const engineNew = after && after.status !== "complete" && after.status !== "partial" ? after.findings.filter(finding => !(before?.findings ?? []).includes(finding)) : []
-    const derived: Outcome = row.refused ? { need: "required", why: row.refused } : row.held.length ? { need: "results", why: row.held.join(" | ") }
+    // WO-12b: the record holds the adapters and engines report, before and after the field is left blank. A hold present
+    // both times holds the record with the field answered too: no answer to it can make the record count.
+    const holdsOf = (plan: { reasons?: readonly string[] } | undefined, result: { findings: string[] } | null) => [...plan?.reasons ?? [], ...result?.findings ?? []].filter(code => (RECORD_HOLD_CODES as readonly string[]).includes(code))
+    const holdsBefore = holdsOf(row.plans[0], before), holdsAfter = holdsOf(row.plans[1], after)
+    const persists = holdsBefore.filter(code => holdsAfter.includes(code))
+    const derived: Outcome = row.refused ? { need: "required", why: row.refused } : persists.length ? { need: "optional", why: `held whatever this field says: ${persists.join(", ")}` }
+      : row.held.length ? { need: "results", why: row.held.join(" | ") }
       : engineNew.length ? { need: "results", why: `engine ${after!.status}: ${engineNew.join(", ")}` } : { need: "optional", why: "saves and calculates" }
-    return { ...row, derived, engine: after, baseHeld }
+    return { ...row, derived, engine: after, baseHeld, holdsBefore }
   })
 }
 /**
@@ -389,6 +446,36 @@ describe("WO-12 field labels: derived from the screen's save checks, the readine
     expect(unchecked).toEqual([])
     expect(activityFieldNeed("natural_gas", "location")).toBe("required")
     for (const kind of ["natural_gas", "distillate_no2", "vehicle", "fugitive", "electricity", ...SCOPE3_LEGACY_KINDS, ...SCOPE3_COMPLETION_KINDS]) expect(FIELD_NEED_KINDS).toContain(kind)
+  })
+})
+
+describe("WO-12b: record holds (one answer holds the record whatever else is filled in)", () => {
+  const holdRows = evaluated.filter(row => HOLD_STATES.some(state => state.base === row.item.base))
+  test("the screen's rule finds exactly the holds the adapters and engines report, on every row of every company world", () => {
+    const wrong = all.map(row => ({ row, screen: recordHold(row.before, factsFor(row.before, row.world))?.code ?? null, rules: row.holdsBefore[0] ?? null }))
+      .filter(item => item.screen !== item.rules).map(item => `${item.row.item.kind}.${item.row.item.field} (${item.row.world.name}): screen ${item.screen}, rules ${item.rules}`)
+    expect(wrong).toEqual([])
+  })
+  test("each state holds the record in every company world (the category 13 operating lease only away from operational control)", () => {
+    for (const state of HOLD_STATES) for (const world of EVERY_COMPANY) {
+      const row = all.find(item => item.item.base === state.base && item.world === world)!
+      const expected = state.code === "lessor_operating_lease_in_scope1_2" && world.approach === "operational_control" ? [] : [state.code ?? (state.name.includes("entity") ? "entity_excluded_by_company_setup" : "location_excluded_by_company_setup")]
+      expect([state.name, world.name, row.holdsBefore.slice(0, 1)]).toEqual([state.name, world.name, expected])
+    }
+  })
+  test("while it holds: every other result field is Optional, the answer that holds it says so, and the save still needs what it needs", () => {
+    const held = holdRows.filter(row => row.holdsBefore.length > 0)
+    expect(held.length).toBeGreaterThan(150)
+    const optionalNow = held.filter(row => activityFieldNeed(row.item.kind, row.item.field) === "results" && row.label.need === "optional")
+    expect(optionalNow.length).toBeGreaterThan(80)
+    for (const row of held) {
+      const hold = recordHold(row.before, factsFor(row.before, row.world))!
+      if (hold.fields.includes(row.item.field)) expect([row.item.kind, row.item.field, row.label.needNote?.endsWith(RECORD_HOLD_TEXT.fieldNote)]).toEqual([row.item.kind, row.item.field, true])
+      else expect([row.item.kind, row.item.field, row.label.needNote ?? null]).toEqual([row.item.kind, row.item.field, null])
+    }
+    // Away from the hold (category 13 under operational control) the usual labels are back.
+    const usual = holdRows.filter(row => row.holdsBefore.length === 0 && row.item.field === "subregion")
+    expect(usual.map(row => row.label.need)).toEqual(["results", "results"])
   })
 })
 

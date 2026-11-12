@@ -26,6 +26,6 @@ export function TeleworkingForm({ activity, onEdit, env }: Scope3FormProps) {
         onValue={value => onEdit(next => { next.quantity.originalValue = value })} onUnit={unit => onEdit(next => { next.quantity.originalUnit = unit })} />
       <TextField {...need("baselineBasis")} label="How the household baseline was taken off" value={p.baselineBasis} onChange={value => set(next => { next.baselineBasis = value })} multiline hint="For example the survey’s extra kWh per home-working day above a typical household (3 to 300 characters)." />
     </div>
-    {p.carrier === "electricity" && <GridLocationFields kind="teleworking" location={p} lookup={env.zipLookup} onLookup={env.onZipLookup} onChange={location => set(next => Object.assign(next, location))} />}
+    {p.carrier === "electricity" && <GridLocationFields kind="teleworking" labels={need} location={p} lookup={env.zipLookup} onLookup={env.onZipLookup} onChange={location => set(next => Object.assign(next, location))} />}
   </div>
 }

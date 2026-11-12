@@ -8,7 +8,10 @@ import { blankScope3Assessment } from "@/lib/scope3-assessment-api"
 import { scope3ExcludableNotesFor } from "@/lib/scope3-checklist"
 import { SCOPE3_PREFILL_TEXT } from "@/lib/scope3-results-text"
 // WO-12: a view-only member sees the saved assessment as text.
-import { SAVE_OUTCOME_TEXT_WO12, SCREENING_READ_ONLY_TEXT } from "@/lib/wo12-text"
+import { FIELD_NEED_TEXT, SAVE_OUTCOME_TEXT_WO12, SCREENING_READ_ONLY_TEXT } from "@/lib/wo12-text"
+// WO-12b: the owner's form labels each field "Required", "Needed for results" or "Optional" (derived from the save checks
+// and Results' open issues; see lib/assessment-field-needs-wo12b.ts).
+import { assessmentFieldLabel, type AssessmentField } from "@/lib/assessment-field-needs-wo12b"
 
 /**
  * The structured screening record behind one Scope 3 category's setup decision (Scope 3 completion I-04; Claude,
@@ -138,10 +141,17 @@ export function Scope3ScreeningEditor(props: Scope3ScreeningEditorProps) {
     } finally { setBusy(false) }
   }
 
-  const text = (label: string, value: string, onChange: (value: string) => void, multiline = false, hint?: string) => <label className="setup-field"><span>{label}</span>
-    {multiline ? <textarea aria-label={label} value={value} disabled={disabled} onChange={event => onChange(event.target.value)} /> : <input aria-label={label} value={value} disabled={disabled} onChange={event => onChange(event.target.value)} />}{hint && <small>{hint}</small>}</label>
-  const select = (label: string, value: string, options: ReadonlyArray<readonly [string, string]>, onChange: (value: string) => void) => <label className="setup-field"><span>{label}</span>
-    <select aria-label={label} value={value} disabled={disabled} onChange={event => onChange(event.target.value)}>{options.map(([id, words]) => <option key={id} value={id}>{words}</option>)}</select></label>
+  // WO-12b: each field's label after its name; the control is named by its own label and described by its need.
+  const needOf = (field: AssessmentField) => assessmentFieldLabel(field, decision)
+  const needId = (label: string) => `${idBase}-need-${label.replace(/\W+/g, "-")}`
+  const need = (field: AssessmentField, label: string, id = needId(label)) => { const l = needOf(field); return <span className={`setup-field__need setup-field__need--${l.need}`} id={id}>{l.needNote ? `${FIELD_NEED_TEXT[l.need]} ${l.needNote}` : FIELD_NEED_TEXT[l.need]}</span> }
+  const fieldProps = (field: AssessmentField, label: string) => ({ "aria-label": label, "aria-describedby": needId(label), "aria-required": needOf(field).need === "required" ? true as const : undefined })
+  const text = (field: AssessmentField, label: string, value: string, onChange: (value: string) => void, multiline = false, hint?: string) => <label className="setup-field"><span className="setup-field__label"><span className="setup-field__name">{label}</span> {need(field, label)}</span>
+    {multiline ? <textarea {...fieldProps(field, label)} value={value} disabled={disabled} onChange={event => onChange(event.target.value)} /> : <input {...fieldProps(field, label)} value={value} disabled={disabled} onChange={event => onChange(event.target.value)} />}{hint && <small>{hint}</small>}</label>
+  const select = (field: AssessmentField, label: string, value: string, options: ReadonlyArray<readonly [string, string]>, onChange: (value: string) => void) => <label className="setup-field"><span className="setup-field__label"><span className="setup-field__name">{label}</span> {need(field, label)}</span>
+    <select {...fieldProps(field, label)} value={value} disabled={disabled} onChange={event => onChange(event.target.value)}>{options.map(([id, words]) => <option key={id} value={id}>{words}</option>)}</select></label>
+  /** A group of checkboxes: its legend carries the label (the fieldset's name), so each box is read with it. */
+  const legend = (field: AssessmentField, label: string) => <legend><span className="setup-field__name">{label}</span> {need(field, label)}</legend>
   // Round 2 lane E (UX-11): a criterion's definition is visible text under its label (it was a tooltip only).
   const check = (label: string, checked: boolean, onChange: (checked: boolean) => void, hint?: string) => <label key={label} className="setup-check"><input type="checkbox" aria-label={label} aria-describedby={hint ? `${idBase}-${label.replace(/\W+/g, "-")}` : undefined} checked={checked} disabled={disabled} onChange={event => onChange(event.target.checked)} /> <span>{label}{hint && <small className="setup-check__hint" id={`${idBase}-${label.replace(/\W+/g, "-")}`}>{hint}</small>}</span></label>
 
@@ -153,49 +163,49 @@ export function Scope3ScreeningEditor(props: Scope3ScreeningEditorProps) {
     <p className="nv-subtle">{saved ? `Revision ${saved.revision}, saved ${formatTimeR2E(saved.createdAt)}${saved.correctionReason ? ` · ${saved.correctionReason}` : ""}.` : `No assessment saved for ${props.reportingYear} yet.`} {props.decisionNote ?? "The decision itself is the answer above, saved with company setup."}</p>
     {prefill && <p className="nv-subtle scope3-assessment__prefill" role="note">{prefill.note}</p>}
     <div className="setup-grid">
-      {select("Reason", draft.reasonCode ?? "", reasonOptions, value => edit(next => { next.reasonCode = (value || null) as Scope3Assessment["reasonCode"] }))}
-      {text(decision === "included" ? "Activities included" : "Activities in this category", draft.activitiesIncluded, value => edit(next => { next.activitiesIncluded = value }), true, decision === "included" ? "What the inventory covers in this category." : undefined)}
-      {text("Justification", draft.justification, value => edit(next => { next.justification = value }), true)}
+      {select("reason", "Reason", draft.reasonCode ?? "", reasonOptions, value => edit(next => { next.reasonCode = (value || null) as Scope3Assessment["reasonCode"] }))}
+      {text("activities", decision === "included" ? "Activities included" : "Activities in this category", draft.activitiesIncluded, value => edit(next => { next.activitiesIncluded = value }), true, decision === "included" ? "What the inventory covers in this category." : undefined)}
+      {text("justification", "Justification", draft.justification, value => edit(next => { next.justification = value }), true)}
     </div>
-    <fieldset className="setup-inputs"><legend>Relevance criteria (Scope 3 Standard, Table 6.1)</legend>
+    <fieldset className="setup-inputs">{legend("criteria", "Relevance criteria (Scope 3 Standard, Table 6.1)")}
       <p className="nv-subtle setup-grid__full">{RELEVANCE_CRITERIA_INTRO_R2E}</p>
       {SCOPE3_RELEVANCE_CRITERIA.map(name => check(SCOPE3_RELEVANCE_CRITERIA_TEXT[name].label, draft.criteria[name], checked => edit(next => { next.criteria[name] = checked; if (name === "other" && !checked) next.criteria.otherText = "" }), SCOPE3_RELEVANCE_CRITERIA_TEXT[name].description))}
-      {draft.criteria.other && text("Other criterion", draft.criteria.otherText, value => edit(next => { next.criteria.otherText = value }))}
+      {draft.criteria.other && text("otherCriterion", "Other criterion", draft.criteria.otherText, value => edit(next => { next.criteria.otherText = value }))}
     </fieldset>
     <div className="setup-grid">
-      {select("Estimated magnitude", draft.magnitudeKind ?? "", MAGNITUDE, value => edit(next => {
+      {select("magnitude", "Estimated magnitude", draft.magnitudeKind ?? "", MAGNITUDE, value => edit(next => {
         next.magnitudeKind = (value || null) as Scope3Assessment["magnitudeKind"]
         next.magnitudeTCo2e = value === "estimated" ? next.magnitudeTCo2e ?? "" : null
         if (value !== "estimated") next.magnitudeBasis = ""
         if (value !== "not_quantifiable") next.notQuantifiableReason = ""
       }))}
-      {draft.magnitudeKind === "estimated" && <>{text("Magnitude (t CO2e)", draft.magnitudeTCo2e ?? "", value => edit(next => { next.magnitudeTCo2e = value }), false, "A statement shown with its basis; never added to any total.")}
-        {text("Basis of the estimate", draft.magnitudeBasis, value => edit(next => { next.magnitudeBasis = value }), true)}</>}
-      {draft.magnitudeKind === "not_quantifiable" && text("Why it can’t be quantified", draft.notQuantifiableReason, value => edit(next => { next.notQuantifiableReason = value }), true)}
-      {category === 3 && select(SCOPE3_ENERGY_RESALE_QUESTION, draft.energyResale ?? "", RESALE, value => edit(next => { next.energyResale = (value || null) as Scope3Assessment["energyResale"] }))}
+      {draft.magnitudeKind === "estimated" && <>{text("magnitudeTCo2e", "Magnitude (t CO2e)", draft.magnitudeTCo2e ?? "", value => edit(next => { next.magnitudeTCo2e = value }), false, "A statement shown with its basis; never added to any total.")}
+        {text("magnitudeBasis", "Basis of the estimate", draft.magnitudeBasis, value => edit(next => { next.magnitudeBasis = value }), true)}</>}
+      {draft.magnitudeKind === "not_quantifiable" && text("notQuantifiableReason", "Why it can’t be quantified", draft.notQuantifiableReason, value => edit(next => { next.notQuantifiableReason = value }), true)}
+      {category === 3 && select("energyResale", SCOPE3_ENERGY_RESALE_QUESTION, draft.energyResale ?? "", RESALE, value => edit(next => { next.energyResale = (value || null) as Scope3Assessment["energyResale"] }))}
     </div>
-    <fieldset className="setup-inputs"><legend>Method types planned</legend>
+    <fieldset className="setup-inputs">{legend("methodTypes", "Method types planned")}
       {SCOPE3_METHOD_TYPES.map(type => check(SCOPE3_METHOD_TYPE_TEXT[type], draft.plannedMethodTypes.includes(type), checked => edit(next => { next.plannedMethodTypes = checked ? [...next.plannedMethodTypes, type] : next.plannedMethodTypes.filter(item => item !== type) })))}
     </fieldset>
-    <fieldset className="setup-inputs"><legend>Evidence</legend>
+    <fieldset className="setup-inputs">{legend("evidence", "Evidence")}
       {props.evidence.length === 0 ? <p className="nv-subtle">No collection evidence yet. Files uploaded in the collection step can be linked here.</p>
         : props.evidence.map(file => check(file.name, draft.evidenceIds.includes(file.id), checked => edit(next => { next.evidenceIds = checked ? [...next.evidenceIds, file.id] : next.evidenceIds.filter(item => item !== file.id) })))}
     </fieldset>
-    <fieldset className="setup-inputs"><legend>Documented exclusions within this category</legend>
+    <fieldset className="setup-inputs">{legend("exclusions", "Documented exclusions within this category")}
       {notes.length > 0 && <p className="nv-subtle">Only these minor gaps can be documented; each needs a justification and a magnitude or the reason it can’t be quantified. They are listed, never added to any total.</p>}
       {/* Round 2 polish (lane D, UX-15): only this category's own notes (and any the saved revision documents). */}
       {notes.length === 0 && <p className="nv-subtle">{SCOPE3_PREFILL_TEXT.noExclusions}</p>}
       {notes.map(note => { const item = exclusionOf(note)
         return <div key={note}>{check(SCOPE3_EXCLUDABLE_NOTE_TEXT[note] ?? note, item !== null, checked => setExclusion(note, checked ? () => {} : null))}
           {item && <div className="setup-grid">
-            {text(`Justification: ${SCOPE3_EXCLUDABLE_NOTE_TEXT[note] ?? note}`, item.justification, value => setExclusion(note, target => { target.justification = value }), true)}
-            {select(`Magnitude: ${SCOPE3_EXCLUDABLE_NOTE_TEXT[note] ?? note}`, item.magnitudeKind, MAGNITUDE.slice(1), value => setExclusion(note, target => { target.magnitudeKind = value as Scope3WithinCategoryExclusion["magnitudeKind"]; target.magnitudeTCo2e = value === "estimated" ? target.magnitudeTCo2e ?? "" : null }))}
-            {item.magnitudeKind === "estimated" && text(`t CO2e: ${SCOPE3_EXCLUDABLE_NOTE_TEXT[note] ?? note}`, item.magnitudeTCo2e ?? "", value => setExclusion(note, target => { target.magnitudeTCo2e = value }))}
-            {text(`Basis: ${SCOPE3_EXCLUDABLE_NOTE_TEXT[note] ?? note}`, item.basis, value => setExclusion(note, target => { target.basis = value }), true)}
+            {text("exclusionJustification", `Justification: ${SCOPE3_EXCLUDABLE_NOTE_TEXT[note] ?? note}`, item.justification, value => setExclusion(note, target => { target.justification = value }), true)}
+            {select("exclusionMagnitude", `Magnitude: ${SCOPE3_EXCLUDABLE_NOTE_TEXT[note] ?? note}`, item.magnitudeKind, MAGNITUDE.slice(1), value => setExclusion(note, target => { target.magnitudeKind = value as Scope3WithinCategoryExclusion["magnitudeKind"]; target.magnitudeTCo2e = value === "estimated" ? target.magnitudeTCo2e ?? "" : null }))}
+            {item.magnitudeKind === "estimated" && text("exclusionTCo2e", `t CO2e: ${SCOPE3_EXCLUDABLE_NOTE_TEXT[note] ?? note}`, item.magnitudeTCo2e ?? "", value => setExclusion(note, target => { target.magnitudeTCo2e = value }))}
+            {text("exclusionBasis", `Basis: ${SCOPE3_EXCLUDABLE_NOTE_TEXT[note] ?? note}`, item.basis, value => setExclusion(note, target => { target.basis = value }), true)}
           </div>}</div> })}
     </fieldset>
     {warnings.length > 0 && <div className="nv-notice nv-notice--warn" role="status"><div><p>Disclosed with the results (these never block a save or a result):</p><ul>{warnings.map(warning => <li key={warning}>{warning}</li>)}</ul></div></div>}
-    {saved && text("Reason for this correction", correction, value => { setCorrection(value); setPending(null) }, false, "A new revision is saved; the earlier one remains in history.")}
+    {saved && text("correctionReason", "Reason for this correction", correction, value => { setCorrection(value); setPending(null) }, false, "A new revision is saved; the earlier one remains in history.")}
     {props.blocked && <p className="worksheet-status" role="status">{props.blocked}</p>}
     {message && <p className={message.error ? "worksheet-error" : "worksheet-status"} role={message.error ? "alert" : "status"}>{message.text}</p>}
     {props.canManage && <button type="button" disabled={busy || props.blocked !== null} onClick={() => void save()}>{pending && !busy ? "Retry exact save" : saved ? "Save assessment correction" : "Save assessment"}</button>}

@@ -25,7 +25,7 @@ export function EnergyResoldForm({ activity, onEdit, env }: Scope3FormProps) {
         if (payload.gridBasis === "subregion") { payload.zip = payload.zip ?? ""; payload.subregion = payload.subregion ?? "" } else { payload.zip = null; payload.subregion = null; payload.utilityEiaId = null }
       })} />
     </div>
-    {p.gridBasis === "subregion" && <GridLocationFields kind="energy_resold" location={p} lookup={env.zipLookup} onLookup={env.onZipLookup} onChange={location => set(next => Object.assign(next, location))} />}
+    {p.gridBasis === "subregion" && <GridLocationFields kind="energy_resold" labels={need} location={p} lookup={env.zipLookup} onLookup={env.onZipLookup} onChange={location => set(next => Object.assign(next, location))} />}
     <CheckField {...need("resoldEnergyNotInScope2")} label="The electricity resold is kept out of the company’s own Scope 2 electricity records" checked={p.resoldEnergyNotInScope2} onChange={checked => set(next => { next.resoldEnergyNotInScope2 = checked })}
       hint="Otherwise the same electricity would be counted twice; the record is held until this is confirmed." />
   </div>

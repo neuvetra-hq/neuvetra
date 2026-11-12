@@ -38,8 +38,11 @@ async function scope3Defaults(injected: Record<string, unknown>): Promise<Record
   const assessmentTarget = await import("@/lib/scope3-assessment-target")
   // WO-12: the read-only texts, the three field labels and BF-08's save outcomes (and the setup ID check they name).
   const [wo12Text, fieldNeeds, setupContract, saveChecks] = await Promise.all([import("@/lib/wo12-text"), import("@/lib/field-needs-wo12"), import("../../../../packages/neuvetra-database/src/company-setup-contract"), import("@/lib/activity-save-checks")])
+  // WO-12b: the record-hold notice and its rule, the assessment form's labels and the texts.
+  const [wo12bText, holds, assessmentNeeds, holdNotice] = await Promise.all([import("@/lib/wo12b-text"), import("@/lib/record-holds-wo12b"), import("@/lib/assessment-field-needs-wo12b"), import("./RecordHoldNotice")])
   const loadContext = injected.loadCollectionContext as ((...args: unknown[]) => Promise<unknown>) | undefined
   return {
+    ...wo12bText, ...holds, ...assessmentNeeds, ...holdNotice,
     ...drafts, ...readiness, ...assessmentTarget, ...wo12Text, ...fieldNeeds, ...saveChecks, duplicateCompanySetupIds: setupContract.duplicateCompanySetupIds, subscribeWrites, ...textsR2e, ...textsR2c, ...textsWo10, ...textsR3c, ...spendTarget, ...displayR3d, ...textsR3d, ...collection, CARB_PROPOSED_MANDATORY_CATEGORIES: coverage.CARB_PROPOSED_MANDATORY_CATEGORIES, SCOPE3_ENGINE_CATEGORIES: coverage.SCOPE3_ENGINE_CATEGORIES, SCOPE3_SETUP_CATEGORY_TOKENS: coverage.SCOPE3_SETUP_CATEGORY_TOKENS,
     validateCollectionActivity: contract.validateCollectionActivity, instrumentEvidenceClaims: adapter.instrumentEvidenceClaims, M71_CATEGORIES: m71.M71_CATEGORIES, SCOPE3_ACTIVITY_KINDS: language.SCOPE3_ACTIVITY_KINDS, unitLabel: language.unitLabel, sourceCategoryLabel: language.sourceCategoryLabel,
     Scope3ResultsApiError: results.Scope3ResultsApiError, loadScope3Results: async () => { throw new results.Scope3ResultsApiError("Scope 3 results are not available yet.", 503, "scope3_unavailable") },
