@@ -3,13 +3,14 @@
 .nv-live-draft { flex: 1 1 100%; color: var(--muted); font-size: .9rem; }
 
 /* Wide tables scroll inside their own focusable region; the page itself never scrolls sideways. */
-.nv-report__scroll { max-width: 100%; overflow-x: auto; }
 .nv-report__scroll:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-.nv-report :is(th, td) { overflow-wrap: anywhere; }
+.nv-report :is(th, td) { overflow-wrap: break-word; }
 .nv-report .nv-right, .nv-report td.nv-right { font-variant-numeric: tabular-nums; overflow-wrap: normal; }
-.nv-report .worksheet-fingerprint, .nv-report__small { overflow-wrap: anywhere; }
+.nv-report .worksheet-fingerprint, .nv-report__small { overflow-wrap: break-word; }
 
-@media (max-width: 720px) {
+@media screen and (max-width: 720px) {
+  .s3-filter { min-width: 0; max-width: 100%; grid-template-columns: minmax(0, 1fr); }
+  .s3-filter select { min-width: 0; max-width: 100%; }
   .nv-main, .nv-report, .nv-card, .nv-card__head, .nv-stat { min-width: 0; }
   .nv-report { max-width: 100%; overflow-wrap: anywhere; }
   .nv-card__head { flex-wrap: wrap; }

@@ -116,10 +116,10 @@ function CalculationDetails({ row }: { row: Scope3Row }) {
 }
 
 /** I-06 (DESIGN 6.2; assurance-ux M1): every excluded or not-applicable category and every documented exclusion within a category. */
-function ExclusionRegister({ results }: { results: Scope3ResultsResponse }) {
+function ExclusionRegister({ results, prefix }: { results: Scope3ResultsResponse; prefix: string }) {
   const entries = scope3ExclusionRegister(results.coverage.categories)
   if (entries.length === 0) return null
-  return <><h3 className="nv-h3">Exclusion register</h3><div className="nv-report__scroll" role="region" aria-label="Exclusion register table" tabIndex={0}><table><thead><tr><th>Category</th><th>Decision</th><th>Reason</th><th>Relevance criteria</th><th>Justification</th><th className="nv-right">Magnitude t CO2e</th><th>Basis or not-quantifiable reason</th><th className="nv-right">Evidence</th></tr></thead><tbody>
+  return <><h3 className="nv-h3">Exclusion register</h3><div className="nv-report__scroll" role="region" aria-label={`${prefix}Exclusion register table`} tabIndex={0}><table><thead><tr><th>Category</th><th>Decision</th><th>Reason</th><th>Relevance criteria</th><th>Justification</th><th className="nv-right">Magnitude t CO2e</th><th>Basis or not-quantifiable reason</th><th className="nv-right">Evidence</th></tr></thead><tbody>
     {entries.map(entry => <tr key={`${entry.category}-${entry.level}-${entry.noteCode ?? ""}`}><td>{entry.category}. {entry.title}</td><td>{entry.level === "category" ? scope3ScreeningWord(entry.decision) : `within the category: ${SCOPE3_EXCLUDABLE_NOTE_TEXT[entry.noteCode!] ?? entry.noteCode}`}</td>
       <td>{entry.reasonCode ? SCOPE3_ASSESSMENT_REASON_TEXT[entry.reasonCode] ?? entry.reasonCode : "—"}</td><td>{entry.criteria.join(", ") || "—"}</td><td>{entry.justification || "—"}</td>
       <td className="nv-right">{entry.magnitudeKind === "estimated" ? entry.magnitudeTCo2e : entry.magnitudeKind === "not_quantifiable" ? "not quantifiable" : "—"}</td><td>{entry.magnitudeBasis || "—"}</td><td className="nv-right">{entry.evidenceIds.length}</td></tr>)}
@@ -225,7 +225,7 @@ export function Scope3Panel({ state, canManage, onFix, onRetry, reports, onNavig
         {ui && todos.length > TODO_PAGE && <button type="button" className="nv-btn nv-btn--sm nv-btn--ghost" aria-expanded={ui.todosOpen} onClick={() => ui.setTodosOpen(!ui.todosOpen)}>{ui.todosOpen ? SCOPE3_TODO_TEXT.showFewer : SCOPE3_TODO_TEXT.showAll(todos.length)}</button>}
       </section>
     </>}
-    <div className="nv-report__scroll s3-table-wrap" role="region" aria-label="Scope 3 categories table" tabIndex={0}><table className="s3-table"><thead><tr><th>Category</th><th>Status</th><th>Screening</th><th className="nv-right">Records</th><th className="nv-right">t CO2e</th><th>Method types</th><th className="nv-right">From suppliers / value chain</th><th>Data quality</th><th className="nv-right">Biogenic CO2 (outside totals)</th></tr></thead><tbody>
+    <div className="nv-report__scroll s3-table-wrap" role="region" aria-label="Results: Scope 3 categories table" tabIndex={0}><table className="s3-table"><thead><tr><th>Category</th><th>Status</th><th>Screening</th><th className="nv-right">Records</th><th className="nv-right">t CO2e</th><th>Method types</th><th className="nv-right">From suppliers / value chain</th><th>Data quality</th><th className="nv-right">Biogenic CO2 (outside totals)</th></tr></thead><tbody>
       {coverage.categories.map(row => { const lines = todos.filter(item => item.category === row.category && item.kind === "line"), action = empty ? null : scope3CategoryAction(row, todos)
         return <tr key={row.category}><td data-label="Category">{row.category}. {row.title}{row.proposedMandatory ? " *" : ""}</td>
           <td data-label="Status"><span className={`nv-chip nv-chip--${TONE[row.status] ?? "muted"}`}>{statusText(row.status)}</span>
@@ -247,7 +247,7 @@ export function Scope3Panel({ state, canManage, onFix, onRetry, reports, onNavig
     {scope3StatementLines(results).map(line => <p key={line} className="nv-report__small">{line}</p>)}
     <h3 className="nv-h3">Methodology by category</h3>
     {coverage.categories.map(row => <details key={row.category}><summary>{row.category}. {row.title} · {statusText(row.status)}</summary><ul>{row.methodology.map((sentence, i) => <li key={i}>{sentence.text}</li>)}</ul></details>)}
-    <ExclusionRegister results={results} />
+    <ExclusionRegister results={results} prefix="Results: " />
     {results.records.length > 0 && <section aria-labelledby="scope3-records-title">
       <h3 className="nv-h3" id="scope3-records-title">{SCOPE3_RECORD_FILTER_TEXT.heading}</h3>
       {/* UX-9: filters by category, status, activity and source ID; lines grouped by category; one page at a time. */}
@@ -325,13 +325,13 @@ export function Scope3ReportSection({ results, frozen = false, statements }: { r
     <p className="nv-report__small">{SCOPE3_PRINT_TEXT_D.notAdded(frozen)} Known-source subtotal: {coverage.knownSourceSubtotal ? `${groupDigits(coverage.knownSourceSubtotal.display)} kg CO2e` : "nothing calculated"}. {SCOPE3_PRINT_TEXT_D.proposedFive(coverage.proposedMandatory.line)}</p>
     {results.warnings.length > 0 && <ul>{results.warnings.map(warning => <li key={warning} className="nv-report__small"><strong>Warning:</strong> {warning}</li>)}</ul>}
     {results.unmatchedScreening.length > 0 && <p className="nv-report__small">Scope 3 screening answers not matched to any of the 15 categories (not counted for any category): {results.unmatchedScreening.map(name => `“${name}”`).join(", ")}.</p>}
-    <div className="nv-report__scroll" role="region" aria-label="Scope 3 category summary table" tabIndex={0}><table><thead><tr><th>Category</th><th>Status</th><th>Screening</th><th className="nv-right">t CO2e</th><th className="nv-right">kg CO2e</th><th>Method types</th><th className="nv-right">From suppliers / value chain</th><th>{SCOPE3_DQ_TEXT_R3D.printLabelHeading}</th><th>{SCOPE3_DQ_TEXT_R3D.printScoresHeading}</th><th className="nv-right">Biogenic CO2 (outside totals)</th></tr></thead><tbody>
+    <div className="nv-report__scroll" role="region" aria-label={`${frozen ? "Frozen version" : "Draft report"}: Scope 3 category summary table`} tabIndex={0}><table><thead><tr><th>Category</th><th>Status</th><th>Screening</th><th className="nv-right">t CO2e</th><th className="nv-right">kg CO2e</th><th>Method types</th><th className="nv-right">From suppliers / value chain</th><th>{SCOPE3_DQ_TEXT_R3D.printLabelHeading}</th><th>{SCOPE3_DQ_TEXT_R3D.printScoresHeading}</th><th className="nv-right">Biogenic CO2 (outside totals)</th></tr></thead><tbody>
       {coverage.categories.map(row => <tr key={row.category}><td>{row.category}. {row.title}</td><td>{statusText(row.status)}</td><td>{screeningText(row)}</td><td className="nv-right">{tonnes(row)}</td><td className="nv-right">{row.subtotal ? groupDigits(row.subtotal.display) : "—"}</td>
         <td>{methodMix(row)}</td><td className="nv-right">{valueChain(row)}</td><td>{printDqLabel(row)}</td><td>{scope3DqScoresText(row.profile)}</td><td className="nv-right">{biogenic(row)}</td></tr>)}
     </tbody></table></div>
     {/* Round 3 lane D (decision 5): a frozen version stored before labels were capped shows its stored labels, and says so. */}
     {coverage.categories.some(row => row.profile !== null && scope3CategoryDq(row).beforeCap) && <p className="nv-report__small">{SCOPE3_DQ_TEXT_R3D.storedBeforeCap}</p>}
-    {results.records.length > 0 && <div className="nv-report__scroll" role="region" aria-label="Scope 3 records table" tabIndex={0}><table><thead><tr><th>Category</th><th>Activity</th><th>Source</th><th>Period</th><th className="nv-right">Quantity</th><th>Status</th><th className="nv-right">kg CO2e</th><th>Method type</th><th>Data origin</th><th>Record</th></tr></thead><tbody>
+    {results.records.length > 0 && <div className="nv-report__scroll" role="region" aria-label={`${frozen ? "Frozen version" : "Draft report"}: Scope 3 records table`} tabIndex={0}><table><thead><tr><th>Category</th><th>Activity</th><th>Source</th><th>Period</th><th className="nv-right">Quantity</th><th>Status</th><th className="nv-right">kg CO2e</th><th>Method type</th><th>Data origin</th><th>Record</th></tr></thead><tbody>
       {results.records.map(row => <tr key={`${row.recordId}-${row.kind}`}><td>{row.category}</td><td>{kindLabel(row.kind)}</td><td>{row.sourceId}</td><td>{periodLabel(row.period.start, row.period.endExclusive)}</td><td className="nv-right">{row.quantity.value ? scope3QuantityText(row.quantity.value, row.quantity.unit) : "—"}</td><td>{rowStatus(row, printClosed.has(row)).label}{rowReasons(row).length ? ` — ${rowReasons(row).join(" ")}` : ""}</td><td className="nv-right">{row.result?.total ? groupDigits(row.result.total.display) : "—"}</td>
         <td>{row.methodType ? SCOPE3_METHOD_TYPE_TEXT[row.methodType] : "—"}</td><td>{originText(row)}</td><td>{row.recordId}</td></tr>)}
     </tbody></table></div>}
@@ -343,7 +343,7 @@ export function Scope3ReportSection({ results, frozen = false, statements }: { r
     {(statements ?? scope3StatementLines(results)).map(line => <p key={line} className="nv-report__small">{line}</p>)}
     <h4>Methodology by category</h4>
     {coverage.categories.map(row => <div key={row.category}><p className="nv-report__small"><strong>{row.category}. {row.title} · {statusText(row.status)}</strong></p><ul>{row.methodology.map((sentence, i) => <li key={i} className="nv-report__small">{sentence.text}</li>)}</ul></div>)}
-    <ExclusionRegister results={results} />
+    <ExclusionRegister results={results} prefix={frozen ? "Frozen version: " : "Draft report: "} />
     {results.records.length > 0 && <><h4>{SCOPE3_TRACE_TEXT.heading}</h4>{results.records.map(row => <div key={`${row.recordId}-${row.kind}-details`}><p className="nv-report__small"><strong>{kindLabel(row.kind)} · {row.sourceId} · category {row.category}</strong></p><CalculationDetails row={row} /></div>)}</>}
   </section>
 }
