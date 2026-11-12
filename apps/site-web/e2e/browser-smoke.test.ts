@@ -17,11 +17,40 @@ import { COMPANIES, RECORDS } from "./harness/seed"
 import { startStack, type Stack } from "./harness/stack"
 
 const DATABASE_URL = process.env.E2E_DATABASE_URL
+// E2E-02 (QA F2): outside CI the suite is skipped without a database; in CI a missing database is an error, never a
+// silently green run with every test skipped. The CI job also checks the pass count (E2E_EXPECTED_PASS).
+if (!DATABASE_URL && process.env.CI) throw new Error("E2E_DATABASE_URL is not set: in CI the browser smoke suite must run, not skip.")
 const suite = DATABASE_URL ? describe : describe.skip
-
 
 const ACTIVITY_LIST_HEADING = "Collect Scope 1, 2 and 3 activity"
 const DISCARD_ACTIVITY = "confirm: Discard unsaved activity changes?"
+
+/** Controls a view-only member may use on Activity: navigation, list filters and search, reloading, review tabs. */
+const MEMBER_READING_CONTROLS = [
+  /^button Results & report$/, /^button Reload saved records$/, /^button Ask about a field$/,
+  /^select (Status|Activity type)$/, /^input Find a source, vendor or description$/, /^input Find lines$/,
+  /^button (Needs a code|Other holds|Possible duplicates|Counted) \(\d+\)$/,
+]
+/**
+ * WO-12 (P1, open on main eeb944b): write controls a member is still shown enabled; the server refuses their writes.
+ * Exactly these, by accessible name: the new-record form (its 22 type buttons and the natural-gas form's fields and
+ * evidence link), the file pickers, the spend import's setup location and the spend mapping's "Map". When WO-12 lands,
+ * delete this list so the check becomes "no write control at all". If WO-10 (PR #46) renames a field, update its entry.
+ */
+const WO12_OPEN_MEMBER_CONTROLS = [
+  new RegExp(`^button (${["Natural gas", "Diesel or fuel-oil generator", "Road vehicle or vehicle group", "Refrigerants and fire suppression", "Purchased electricity",
+    "Purchases by spend", "Supplier-specific purchases", "Energy bought and resold", "Freight transport", "Waste", "End of life of sold products", "Business travel",
+    "Employee commuting", "Employee commuting \\(survey averages\\)", "Teleworking", "Energy use of leased, processing or franchise sites", "Partner-reported emissions",
+    "Buildings by floor area", "Fuels sold", "Energy-using products sold", "Products containing greenhouse gases", "Investments"].join("|")})( \\(Scope 3\\))?$`),
+  /^select (Company-setup location|Data quality)$/,
+  /^input\[text\] (Gas account or meter ID|Original quantity from source|Original unit as printed|Source reference)$/,
+  /^input\[date\] (Period start|Last day covered)$/,
+  /^textarea Notes and unresolved questions$/,
+  /^input\[checkbox\] ledger-2025\.csv · /,
+  /^input\[file\] (Spend file|Upload PDF, image, CSV or XLSX)/,
+  /^select Setup location$/,
+  /^button Map$/,
+]
 
 let stack: Stack
 let browser: Browser
@@ -75,11 +104,26 @@ async function openRecordByAddress(page: Page, recordId: string) {
   await page.waitForFunction(id => window.location.hash === `#/activity/${id}`, recordId)
   // The record view (WO-06): "Correct this record" reveals the correction form.
   await page.getByRole("button", { name: "Correct this record" }).click()
-  await page.locator("label.setup-field", { hasText: "Reason for this correction" }).waitFor()
+  await reasonInput(page).waitFor()
 }
 
+/**
+ * Form fields by their label. `getByLabel` matches both the current markup (a label wrapping its input) and WO-10's
+ * (PR #46: a label pointing at the input with `for`, plus "Required"/"Optional" text), so these survive that change.
+ */
 function quantityInput(page: Page) {
-  return page.locator("#collection-record-editor label.setup-field", { hasText: "Original quantity from source" }).locator("input")
+  return page.locator("#collection-record-editor").getByLabel("Original quantity from source").first()
+}
+function reasonInput(page: Page) {
+  return page.locator("#collection-record-editor").getByLabel("Reason for this correction").first()
+}
+
+/** Waits until the page has opened `count` dialogs, then a short settle so a second, unwanted dialog would be seen. */
+async function dialogsReach(journey: Journey, count: number) {
+  const deadline = Date.now() + 10_000
+  while (journey.dialogs.length < count && Date.now() < deadline) await journey.page.waitForTimeout(50)
+  expect(journey.dialogs.length).toBeGreaterThanOrEqual(count)
+  await journey.page.waitForTimeout(300)
 }
 
 type ActivityRecord = { id: string; currentVersion: { id: string; revision: number }; history: Array<{ id: string; revision: number }> }
@@ -168,36 +212,41 @@ suite("site-web browser smoke (E2E-01)", () => {
     opened.answerDialogs = false
     // 1. The navigation's Overview.
     await page.locator("nav").getByRole("button", { name: /Overview/ }).first().click()
-    await page.waitForTimeout(300)
+    await dialogsReach(opened, 1)
     expect(opened.dialogs).toEqual([DISCARD_ACTIVITY])
     expect(new URL(page.url()).hash).toBe(address)
     expect(await quantityInput(page).inputValue()).toBe("250001")
     // 2. The browser's Back.
     await page.goBack()
-    await page.waitForTimeout(300)
+    await dialogsReach(opened, 2)
     expect(opened.dialogs).toEqual([DISCARD_ACTIVITY, DISCARD_ACTIVITY])
     await page.waitForFunction(target => window.location.hash === target, address)
     expect(await quantityInput(page).inputValue()).toBe("250001")
     expect(opened.writes).toEqual([])
   })
 
-  journey("saving a correction creates exactly one new version", { signedInAs: "owner" }, async opened => {
+  journey("saving a correction, even by double-click, creates exactly one new version", { signedInAs: "owner" }, async opened => {
     const { page } = opened
     const before = await savedRecord(RECORDS.gasReady)
     await page.goto("/#/activity")
     await activityListLoaded(page)
     await openRecordByAddress(page, RECORDS.gasReady)
     await quantityInput(page).fill("12600")
-    await page.locator("label.setup-field", { hasText: "Reason for this correction" }).locator("input").fill("E2E: corrected meter reading")
+    await reasonInput(page).fill("E2E: corrected meter reading")
     const saved = page.waitForResponse(response => response.request().method() === "POST" && response.url().endsWith(`/collection/activities/${RECORDS.gasReady}`))
-    await page.getByRole("button", { name: "Save correction" }).click()
+    // E2E-02 (QA F3): an impatient double-click must still save once (the busy guard, the disabled button and the
+    // reused idempotency key all protect this).
+    await page.getByRole("button", { name: "Save correction" }).dblclick()
     expect((await saved).status()).toBe(201)
     // The screen settles on the saved version before the server is asked again.
     await page.getByRole("button", { name: new RegExp(`^Version ${before.currentVersion.revision + 1} ·`) }).waitFor()
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1000)
     const after = await savedRecord(RECORDS.gasReady)
     expect(after.currentVersion.revision).toBe(before.currentVersion.revision + 1)
     expect(after.history.length).toBe(before.history.length + 1)
+    // The database itself, not only the API: one new version row for this record.
+    const versions = await stack.operator.query<{ count: string }>("select count(*)::text as count from neuvetra.collection_activity_versions where record_id = $1", [RECORDS.gasReady])
+    expect(Number(versions.rows[0]?.count)).toBe(before.history.length + 1)
     expect(opened.writes.filter(write => write.endsWith(`/collection/activities/${RECORDS.gasReady}`))).toHaveLength(1)
   })
 
@@ -207,20 +256,17 @@ suite("site-web browser smoke (E2E-01)", () => {
     await activityListLoaded(page)
     await page.getByText("You have view access.").waitFor()
     await page.getByRole("button", { name: /^Counted \(/ }).waitFor()
+    // Every enabled control in the page's main region, by accessible name: aria-label, else the label's name (its first
+    // span, in both the current field markup and WO-10's, where "Required"/"Optional" and hints follow it), else text.
     const enabled = await page.evaluate(() => [...document.querySelectorAll<HTMLElement>("main button, main input, main select, main textarea")]
       .filter(element => element.getClientRects().length > 0 && !(element as HTMLButtonElement).disabled && element.getAttribute("aria-disabled") !== "true")
-      .map(element => ({ tag: element.tagName.toLowerCase(), type: element.getAttribute("type") ?? "", name: (element.getAttribute("aria-label") ?? element.textContent ?? "").trim().slice(0, 60),
-        inRecordForm: Boolean(element.closest("#collection-record-editor")) })))
-    // No enabled button that saves, imports, withdraws, corrects or starts a record.
-    const WRITE_ACTION = /^(save|import|withdraw|correct this record|start a new record|link grid-loss|restore|prepare|approve|delete|remove)/i
-    expect(enabled.filter(control => control.tag === "button" && WRITE_ACTION.test(control.name))).toEqual([])
-    // WO-12 (P1, open on main c580f77): a member still sees the new-record form's fields, the file pickers and the spend
-    // mapping's "Map" button enabled; the server refuses their writes. They are tolerated here and nothing else is. When
-    // WO-12 lands, delete this tolerance so the check becomes "no write control at all".
-    const tolerated = (control: (typeof enabled)[number]) => control.inRecordForm || control.type === "file" || control.name === "Map"
-    const navigationAndReading = /^(Results & report|Ask about a field|Review or correct|Reload saved records|Needs a code|Other holds|Possible duplicates|Counted|.*\(\d+\)$)/
-    const unexpected = enabled.filter(control => !tolerated(control) && !(control.tag === "button" && navigationAndReading.test(control.name))
-      && !(control.tag === "select") && !(control.tag === "input" && ["", "text", "search"].includes(control.type)))
+      .map(element => {
+        const label = (element as HTMLInputElement).labels?.[0] ?? null
+        const name = element.getAttribute("aria-label") ?? label?.querySelector("span")?.textContent ?? label?.textContent ?? element.textContent ?? ""
+        const type = element.tagName === "INPUT" && element.getAttribute("type") ? `[${element.getAttribute("type")}]` : ""
+        return `${element.tagName.toLowerCase()}${type} ${name.replace(/\s+/g, " ").trim()}`
+      }))
+    const unexpected = enabled.filter(control => !MEMBER_READING_CONTROLS.some(rule => rule.test(control)) && !WO12_OPEN_MEMBER_CONTROLS.some(rule => rule.test(control)))
     expect(unexpected).toEqual([])
     // The record view (WO-06) offers a member no "Correct this record".
     await page.evaluate(id => { window.location.hash = `#/activity/${id}` }, RECORDS.gasReady)
@@ -229,37 +275,44 @@ suite("site-web browser smoke (E2E-01)", () => {
     expect(opened.writes).toEqual([])
   })
 
-  journey("after user A's session ends, user B signing in on the same page never lands on A's record", { signedInAs: "owner" }, async ({ page }) => {
+  // E2E-02 (QA F1): B is the company-1 admin, so A's record exists for B too and no "record not found" fallback can hide
+  // a leak. The address is checked where it can leak: on the "Your session ended" screen and after B signs in.
+  journey("after user A's session ends, user B of the same company signing in on the same page never sees A's record address", { signedInAs: "owner" }, async ({ page }) => {
+    const leaked = RECORDS.gasNeedsInput
+    const addressNow = () => page.evaluate(() => ({ hash: window.location.hash, url: window.location.href, state: JSON.stringify(window.history.state) ?? "" }))
     await page.goto("/#/activity")
     await activityListLoaded(page)
-    await page.evaluate(id => { window.location.hash = `#/activity/${id}` }, RECORDS.gasNeedsInput)
-    await page.waitForFunction(id => window.location.hash === `#/activity/${id}`, RECORDS.gasNeedsInput)
-    await page.waitForTimeout(500)
+    await page.evaluate(id => { window.location.hash = `#/activity/${id}` }, leaked)
+    await headingIs(page, "GAS-2", true)
     const before = (await addressesSeen(page)).length
     // The server now answers 401 for A's token, as for an expired session; a focus makes the app check it.
     stack.tokens.revokeUser("owner")
     await focusUntil(page, page.getByRole("heading", { name: "Your session ended" }).waitFor({ timeout: 25_000 }))
+    const onEndedScreen = await addressNow()
+    expect(onEndedScreen.url).not.toContain(leaked)
+    expect(onEndedScreen.state).not.toContain(leaked)
     const form = page.locator("form", { has: page.locator("input[type=email]") }).first()
-    await form.locator("input[type=email]").fill("other-owner@example.test")
+    await form.locator("input[type=email]").fill("admin@example.test")
     await form.locator("input[type=password]").fill("synthetic-password")
     await form.getByRole("button", { name: "Sign in", exact: true }).click()
-    await pageHeading(page).waitFor()
     await page.locator("nav").first().waitFor()
-    await page.waitForTimeout(1000)
-    const afterEnd = (await addressesSeen(page)).slice(before)
-    expect(afterEnd.filter(address => address.includes(RECORDS.gasNeedsInput))).toEqual([])
-    expect(new URL(page.url()).hash).not.toContain(RECORDS.gasNeedsInput)
-    expect(JSON.stringify(await page.evaluate(() => window.history.state))).not.toContain(RECORDS.gasNeedsInput)
-    // B is in their own company: A's record is not on B's Activity page either.
-    await page.evaluate(() => { window.location.hash = "#/activity" })
-    await activityListLoaded(page)
-    expect(await page.locator("#saved-activities").innerText()).not.toContain("GAS-2")
+    await pageHeading(page).waitFor()
+    // Let the workspace settle (progress and the shown view load) before the final checks.
+    await page.waitForLoadState("networkidle")
+    await page.waitForTimeout(500)
+    const afterSignIn = await addressNow()
+    expect(afterSignIn.url).not.toContain(leaked)
+    expect(afterSignIn.state).not.toContain(leaked)
+    expect(await pageHeading(page).textContent()).not.toContain("GAS-2")
+    expect((await addressesSeen(page)).slice(before).filter(address => address.includes(leaked))).toEqual([])
+    // B is in the workspace as themselves.
+    expect(await page.locator(".nv-topbar__user").textContent()).toBe("admin@example.test")
   })
 
   journey("a transient 503 on the session check keeps the workspace and typed input", { signedInAs: "owner" }, async ({ page }) => {
     await page.goto("/#/activity")
     await activityListLoaded(page)
-    const reference = page.locator("#collection-record-editor label.setup-field", { hasText: "Source reference" }).locator("input")
+    const reference = page.locator("#collection-record-editor").getByLabel("Source reference").first()
     await reference.fill("E2E typed, not saved")
     let refused = 0
     await page.route("**/workspace-api/session", route => { refused++; return route.fulfill({ status: 503, contentType: "application/json", headers: { "retry-after": "1" }, body: JSON.stringify({ error: "Unavailable." }) }) })
