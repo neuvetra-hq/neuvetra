@@ -267,7 +267,7 @@ suite("site-web browser smoke (E2E-01)", () => {
       // Results). Each visit costs about a dozen requests, so not every item is opened (the server allows 300 a minute).
       expect(items.length).toBeGreaterThan(0)
       const targets = await page.locator("[data-readiness-target]").evaluateAll(buttons => buttons.map(button => [button.getAttribute("data-readiness-target")!, button.getAttribute("data-readiness-action")!] as const))
-      const actions = ["next", ...new Map(targets.toReversed()).values()]
+      const actions: string[] = ["next", ...new Map([...targets].reverse()).values()]
       expect(new Set(targets.map(([target]) => target))).toEqual(new Set(["record", "spend", "setup", "results", "collection"]))
       for (const action of actions) {
         if (action !== actions[0]) { await page.goto("/#/overview"); await overviewChecked(page) }
