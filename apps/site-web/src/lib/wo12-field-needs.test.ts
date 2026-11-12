@@ -17,6 +17,7 @@
 import { describe, expect, test } from "bun:test"
 import { fileURLToPath } from "node:url"
 import type { CollectionActivity, CollectionActivityRecord, CollectionContext, CollectionEvidenceMetadata } from "../../../../packages/neuvetra-database/src/collection-contract"
+import { planCollectionCalculation } from "../../../../packages/neuvetra-database/src/collection-engine-input"
 import { planScope3Calculation, SCOPE3_COMPLETION_KINDS, SCOPE3_LEGACY_KINDS, type Scope3CollectionVersion } from "../../../../packages/neuvetra-database/src/scope3-collection"
 import { SCOPE3_PAYLOAD_FIXTURES } from "../../../../packages/neuvetra-database/src/scope3-payload-fixtures"
 import { recordReadiness } from "../components/CollectionWorkspace"
@@ -74,8 +75,46 @@ function plan(draft: A, world: World) {
   const a = prepareActivityForSave(draft, true)
   return planScope3Calculation({ id: DRAFT, recordId: DRAFT, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity: a, payloadSha256: "0".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" } as unknown as Scope3CollectionVersion, context, evidence, optionsFor(draft, world)!)
 }
+/** The Scope 1 and 2 adapter's plan as the results route makes it (the engine call, when it calculates). */
+function planScope12(draft: A) {
+  return planCollectionCalculation({ id: DRAFT, recordId: DRAFT, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity: prepareActivityForSave(draft, true), payloadSha256: "0".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" }, context, evidence)
+}
 /** The label the screen shows for the field on this draft in this company. */
 const shown = (draft: A, field: string, world: World) => fieldLabel(draft, field, activityFieldFacts({ setup: setupOf(world), activity: prepareActivityForSave(draft, true), options: optionsFor(draft, world) }))
+
+/**
+ * QA round 2: the real Scope 1 and 2 engines (scope1_engine.py, scope2_engine.py), each request through the engine's own
+ * `handle`, as the engine bridges send it (`{action: "calculate", request}` and `{action: "calculate", input}`), in one
+ * Python process for every request. An outcome is "<status>: <findings>" (Scope 2: overall, location- and market-based
+ * findings together) or "refused: <code>".
+ */
+const CALCULATION_DIR = fileURLToPath(new URL("../../../site-api/src/calculation/", import.meta.url))
+const SCOPE12_DRIVER = `import json, sys
+sys.path.insert(0, sys.argv[1])
+import scope1_engine as s1, scope2_engine as s2
+out = []
+for item in json.load(sys.stdin):
+    engine = s1 if item["engine"] == "scope1" else s2
+    payload = {"action": "calculate", "request": item["request"]} if item["engine"] == "scope1" else {"action": "calculate", "input": item["input"]}
+    try:
+        r = engine.handle(payload)["result"]
+        findings = list(r.get("findings", [])) + list((r.get("locationBased") or {}).get("findings", [])) + list((r.get("marketBased") or {}).get("findings", []))
+        status = r["status"]
+        if item["engine"] == "scope2" and status == "complete" and (r.get("marketBased") or {}).get("status") not in (None, "complete"): status = "partial"
+        out.append({"status": status, "findings": sorted(set(findings))})
+    except engine.Refused as e:
+        out.append({"status": "refused", "findings": [e.code]})
+    except Exception as e:
+        out.append({"status": "error", "findings": [type(e).__name__]})
+print(json.dumps(out))
+`
+function runScope12(calls: Array<{ engine: string }>): Array<{ status: string; findings: string[] }> {
+  if (!calls.length) return []
+  const out = Bun.spawnSync([process.env.NEUVETRA_PYTHON ?? "python3", "-c", SCOPE12_DRIVER, CALCULATION_DIR], { stdin: new TextEncoder().encode(JSON.stringify(calls)), env: { ...process.env, PYTHONIOENCODING: "utf-8", PYTHONUTF8: "1", PYTHONDONTWRITEBYTECODE: "1" } })
+  if (out.exitCode !== 0) throw new Error(`Scope 1 and 2 engines failed: ${out.stderr.toString().slice(0, 400)}`)
+  return JSON.parse(out.stdout.toString())
+}
+const outcome = (result: { status: string; findings: string[] }) => `${result.status}: ${result.findings.join(", ")}`
 
 // The real Scope 3 engine, run as the package's engine tests run it (one process for every request).
 const ENGINE_PATH = fileURLToPath(new URL("../../../site-api/src/calculation/scope3_engine.py", import.meta.url))
@@ -248,6 +287,10 @@ const outside = () => { const a = refrigerant(); a.payload.insideBoundary = fals
 const stocked = () => { const a = refrigerant(); a.payload.maintainsRefrigerantStock = true; return a }
 add("fugitive", outside, { ...Object.fromEntries(["PN", "CN", "PS", "CD", "RD"].map(term => [`term-${term}`, set(`payload.terms.${term}`, "")])), maintainsRefrigerantStock: set("payload.maintainsRefrigerantStock", null),
   retrofitInPeriod: set("payload.retrofitInPeriod", null), contractorRecords: set("payload.contractorRecordsComplete", false), eventChronology: set("payload.eventChronologyComplete", false) }, EVERY_COMPANY, true)
+// QA round 2: either applicability question answered Yes makes the other moot (held for method review either way).
+const retrofitted = () => { const a = refrigerant(); a.payload.retrofitInPeriod = true; return a }
+add("fugitive", stocked, { retrofitInPeriod: set("payload.retrofitInPeriod", null) }, EVERY_COMPANY, true)
+add("fugitive", retrofitted, { maintainsRefrigerantStock: set("payload.maintainsRefrigerantStock", null) }, EVERY_COMPANY, true)
 add("fugitive", stocked, { ...Object.fromEntries(["PN", "CN", "PS", "CD", "RD"].map(term => [`term-${term}`, set(`payload.terms.${term}`, "")])), contractorRecords: set("payload.contractorRecordsComplete", false), eventChronology: set("payload.eventChronologyComplete", false) }, EVERY_COMPANY, true)
 
 type Outcome = { need: FieldNeed; why: string }
@@ -261,15 +304,16 @@ function evaluate() {
     item.leave(after)
     const refusedBefore = saveRefusal(before)
     if (refusedBefore) throw new Error(`${item.kind}.${item.field} (${world.name}): the starting record doesn't save (${refusedBefore})`)
-    const scope3 = isScope3(item.kind)
-    const plans = scope3 ? [plan(before, world), plan(after, world)] : []
+    const scope3 = isScope3(item.base().kind)
+    const plans = scope3 ? [plan(before, world), plan(after, world)] : [planScope12(before), planScope12(after)]
     return { item, world, before, after, refused: saveRefusal(after), held: readiness(after, world).filter(reason => !readiness(before, world).includes(reason)), plans, label: shown(before, item.field, world) }
   }))
-  const requests: unknown[] = []
-  const index = rows.map(row => row.plans.map(p => p.action === "calculate" && p.call ? requests.push(p.call.request) - 1 : -1))
-  const results = runEngine(requests)
+  const requests: unknown[] = [], scope12: Array<{ engine: string }> = []
+  // Scope 3 requests run in one engine process, Scope 1 and 2 calls in another; an index below 0 is a Scope 1/2 call.
+  const index = rows.map(row => row.plans.map(p => p.action !== "calculate" || !p.call ? null : "request" in p.call && isScope3(row.before.kind) ? requests.push(p.call.request) - 1 : -scope12.push(p.call as { engine: string })))
+  const results = runEngine(requests), results12 = runScope12(scope12)
   return rows.map((row, i) => {
-    const [before = null, after = null] = index[i]!.map(at => at >= 0 ? results[at]! : null)
+    const [before = null, after = null] = index[i]!.map(at => at === null ? null : at >= 0 ? results[at]! : results12[-at - 1]!)
     const baseHeld = readiness(row.before, row.world).length > 0 || (row.plans[0] !== undefined && row.plans[0].action !== "calculate") || (before !== null && before.status !== "complete" && before.status !== "partial")
     const engineNew = after && after.status !== "complete" && after.status !== "partial" ? after.findings.filter(finding => !(before?.findings ?? []).includes(finding)) : []
     const derived: Outcome = row.refused ? { need: "required", why: row.refused } : row.held.length ? { need: "results", why: row.held.join(" | ") }
@@ -350,3 +394,56 @@ describe("WO-12 field labels: derived from the screen's save checks, the readine
 
 /** Declared fields that are not a value of the record: checked by the component tests, not by a mutation here. */
 const NOT_A_RECORD_VALUE = new Set(["common.reason", "common.withdrawalReason"])
+
+/**
+ * QA round 2: the Scope 1 and 2 engines' own holds, pinned. Where the adapter already holds a blank field, the engine
+ * never sees it, so the label can't show a removed engine hold; these send the engine a complete record's call with the
+ * field left blank (at the engine's input) and pin what it answers. Removing or changing any of these holds in
+ * scope1_engine.py or scope2_engine.py fails here, which sends whoever changes it back to the labels.
+ */
+type Pin = { kind: string; field: string; base: () => A; leave: (call: any) => void; expect: string }
+const input = (call: any) => call.engine === "scope1" ? call.request.input : call.input
+const pins: Pin[] = [
+  { kind: "natural_gas", field: "heatContent", base: volumetric, leave: call => { delete input(call).heatContent }, expect: "input_needed: heat_content_required_for_volume" },
+  { kind: "distillate_no2", field: "openingGallons", base: tanks, leave: call => { input(call).consumption = { basis: "purchases_only", purchasedGallons: "100" } }, expect: "input_needed: tank_levels_required_for_purchases" },
+  { kind: "vehicle", field: "miles", base: van(), leave: call => { delete input(call).miles }, expect: "partial: " },
+  { kind: "fugitive", field: "insideBoundary", base: refrigerant, leave: call => { input(call).insideBoundary = null }, expect: "input_needed: boundary_membership_unknown" },
+  { kind: "fugitive", field: "maintainsRefrigerantStock", base: refrigerant, leave: call => { input(call).maintainsRefrigerantStock = null }, expect: "input_needed: simplified_method_applicability_unknown" },
+  { kind: "fugitive", field: "retrofitInPeriod", base: refrigerant, leave: call => { input(call).retrofitInPeriod = null }, expect: "input_needed: simplified_method_applicability_unknown" },
+  { kind: "fugitive", field: "retrofitInPeriod (stock Yes)", base: stocked, leave: call => { input(call).retrofitInPeriod = null }, expect: "review_required: simplified_method_not_applicable" },
+  { kind: "fugitive", field: "maintainsRefrigerantStock (retrofit Yes)", base: retrofitted, leave: call => { input(call).maintainsRefrigerantStock = null }, expect: "review_required: simplified_method_not_applicable" },
+  { kind: "fugitive", field: "contractorRecords", base: refrigerant, leave: call => { input(call).contractorRecordsComplete = false }, expect: "input_needed: contractor_records_and_chronology_required" },
+  { kind: "fugitive", field: "eventChronology", base: refrigerant, leave: call => { input(call).eventChronologyComplete = false }, expect: "input_needed: contractor_records_and_chronology_required" },
+  { kind: "electricity", field: "mwh", base: meter([instrument()]), leave: call => { input(call).instruments[0].mwh = "" }, expect: "input_needed: instrument_mwh_required" },
+  { kind: "electricity", field: "instrumentQuality", base: meter([instrument()]), leave: call => { input(call).instruments[0].qualityCriteriaMet = false }, expect: "review_required: instrument_quality_criteria_not_met" },
+  { kind: "electricity", field: "instrumentEvidence", base: meter([instrument()]), leave: call => { input(call).instruments[0].evidenceReference = null }, expect: "refused: invalid_instrument" },
+  { kind: "electricity", field: "technology", base: meter([instrument()]), leave: call => { input(call).instruments[0].generationTechnology = "unknown" }, expect: "input_needed: instrument_rate_required" },
+  { kind: "electricity", field: "co2", base: coal, leave: call => { delete input(call).instruments[0].rateLbPerMwh }, expect: "input_needed: instrument_rate_required" },
+  { kind: "electricity", field: "subregion", base: meter(), leave: call => { input(call).subregion = "" }, expect: "refused: unknown_subregion" },
+  { kind: "natural_gas", field: "quantity", base: gasBill, leave: call => { input(call).quantity = null }, expect: "refused: invalid_quantity" },
+  { kind: "natural_gas", field: "unit", base: gasBill, leave: call => { input(call).unit = null }, expect: "refused: unsupported_unit" },
+  { kind: "distillate_no2", field: "gallons", base: generator, leave: call => { input(call).consumption.gallons = "" }, expect: "refused: invalid_quantity" },
+  { kind: "distillate_no2", field: "purchasedGallons", base: tanks, leave: call => { input(call).consumption.purchasedGallons = "" }, expect: "refused: invalid_quantity" },
+  { kind: "distillate_no2", field: "closingGallons", base: tanks, leave: call => { input(call).consumption.closingGallons = "" }, expect: "refused: invalid_quantity" },
+  { kind: "vehicle", field: "vehicleGallons", base: van(), leave: call => { input(call).gallons = "" }, expect: "refused: invalid_quantity" },
+  { kind: "vehicle", field: "milesBasis", base: van(), leave: call => { input(call).miles.basis = "" }, expect: "refused: invalid_miles_basis" },
+  { kind: "vehicle", field: "mpg", base: van({ miles: null, fuelEconomy: { mpg: "22", source: "fleet_record" } }), leave: call => { delete input(call).fuelEconomy }, expect: "partial: " },
+  { kind: "vehicle", field: "mpgSource", base: van({ miles: null, fuelEconomy: { mpg: "22", source: "fleet_record" } }), leave: call => { input(call).fuelEconomy.source = "" }, expect: "refused: invalid_fuel_economy_source" },
+  ...["PN", "CN", "PS", "CD", "RD"].map((term): Pin => ({ kind: "fugitive", field: `term-${term}`, base: refrigerant, leave: call => { input(call).terms[term] = "" }, expect: "refused: invalid_quantity" })),
+  { kind: "electricity", field: "quantity", base: meter(), leave: call => { input(call).quantity = null }, expect: "refused: invalid_quantity" },
+  { kind: "electricity", field: "unit", base: meter(), leave: call => { input(call).unit = null }, expect: "refused: unsupported_unit" },
+]
+describe("QA round 2: the Scope 1 and 2 engines' holds behind the labels", () => {
+  test("each Needed-for-results field of a Scope 1 or 2 record, left blank at the engine's input, is held or refused by the engine as pinned", () => {
+    const calls = pins.map(pin => { const plan = planScope12(pin.base()); expect([pin.kind, pin.field, plan.action]).toEqual([pin.kind, pin.field, "calculate"]); const call = structuredClone(plan.call!) as any; pin.leave(call); return call })
+    const answers = runScope12(calls).map((result, i) => `${pins[i]!.kind}.${pins[i]!.field}: ${outcome(result)}`)
+    expect(answers).toEqual(pins.map(pin => `${pin.kind}.${pin.field}: ${pin.expect}`))
+  })
+  test("every Scope 1 and 2 field labelled Needed for results is pinned; the engines see the complete records as complete", () => {
+    const pinned = new Set(pins.map(pin => `${pin.kind}.${pin.field}`))
+    const results = ["natural_gas", "distillate_no2", "vehicle", "fugitive", "electricity"].flatMap(kind => Object.entries(ACTIVITY_FIELD_NEEDS[kind]!).filter(([, need]) => need === "results").map(([field]) => `${kind}.${field}`))
+    expect(results.filter(key => !pinned.has(key))).toEqual([])
+    const bases = [gasBill(), volumetric(), generator(), tanks(), van()(), refrigerant(), meter()(), meter([instrument()])(), coal()].map(base => planScope12(base).call!)
+    expect(runScope12(bases).map(outcome)).toEqual(["complete: ", "complete: ", "complete: ", "complete: ", "complete: ", "complete: ", "complete: ", "complete: ", "complete: "])
+  })
+})

@@ -74,6 +74,8 @@ export interface FieldLabel { need: FieldNeed; needNote?: string }
 const VEHICLE_MILES = new Set(["miles", "milesBasis"]), VEHICLE_MPG = new Set(["mpg", "mpgSource"])
 const FUGITIVE_AFTER_BOUNDARY = new Set(["term-PN", "term-CN", "term-PS", "term-CD", "term-RD", "maintainsRefrigerantStock", "retrofitInPeriod", "contractorRecords", "eventChronology"])
 const FUGITIVE_AFTER_APPLICABILITY = new Set(["term-PN", "term-CN", "term-PS", "term-CD", "term-RD", "contractorRecords", "eventChronology"])
+/** QA round 2: either applicability question answered Yes holds the record for review, so the other one is moot. */
+const FUGITIVE_APPLICABILITY = new Set(["maintainsRefrigerantStock", "retrofitInPeriod"])
 const LEASE_EXPLANATION_KINDS = new Set(["asset_energy", "building_average", "partner_reported"])
 
 /**
@@ -83,7 +85,8 @@ const LEASE_EXPLANATION_KINDS = new Set(["asset_energy", "building_average", "pa
  * - Vehicle miles and fuel economy are alternatives: the one in use is "Needed for results", the other "Optional"; with
  *   neither, both say "Needed for results (one of: …)" (CO2 calculates, CH4 and N2O wait for one of them).
  * - A refrigerant record outside the reporting boundary is excluded whatever else is answered; one that keeps a
- *   refrigerant stock or was retrofitted is held for method review whatever the five terms and records say.
+ *   refrigerant stock or was retrofitted is held for method review whatever the five terms, the records and the other
+ *   applicability question say (QA round 2).
  * - Business travel's hotel country: a blank country uses the site's when that is the U.S. (scope3-collection.ts
  *   hotel_country_from_reporting_location); otherwise the stay is held (hotel_country_required).
  * - Survey-average commuting's overlap answer holds the record only when distance-based commuting records cover an
@@ -101,6 +104,7 @@ export function fieldLabel(activity: Pick<CollectionActivity, "kind" | "payload"
   }
   if (activity.kind === "fugitive" && p.insideBoundary === false && FUGITIVE_AFTER_BOUNDARY.has(field)) return { need: "optional" }
   if (activity.kind === "fugitive" && (p.maintainsRefrigerantStock === true || p.retrofitInPeriod === true) && FUGITIVE_AFTER_APPLICABILITY.has(field)) return { need: "optional" }
+  if (activity.kind === "fugitive" && FUGITIVE_APPLICABILITY.has(field) && (field === "maintainsRefrigerantStock" ? p.retrofitInPeriod : p.maintainsRefrigerantStock) === true) return { need: "optional" }
   if (activity.kind === "business_travel" && field === "hotelCountry") {
     if (facts.locationCountry === undefined) return { need: "results", needNote: FIELD_NEED_NOTES.hotelCountryUnknown }
     return { need: facts.locationCountry === "US" ? "optional" : "results" }

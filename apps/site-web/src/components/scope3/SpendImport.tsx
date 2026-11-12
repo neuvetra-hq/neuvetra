@@ -471,7 +471,7 @@ function SpendGroupRow({ group, view, selected, disabled, readOnly = false, onSe
           {suggested.withdraw && (!open || readOnly) && <div className="spend-import__suggest-line spend-import__withdraw-suggest"><span className="nv-chip nv-chip--warn nv-chip--plain">{SPEND_TEXT_R3C.withdrawChip(suggested.withdraw.kind)}</span> <span>{SPEND_TEXT_R3C.withdrawWhy(suggested.withdraw.kind, suggested.withdraw.why)}</span>
             {!readOnly && <button type="button" className="nv-btn nv-btn--sm nv-btn--danger" disabled={disabled} onClick={() => void onWithdraw(SPEND_TEXT_R3C.withdrawReason(suggested.withdraw!.kind, suggested.withdraw!.why))}>{SPEND_TEXT_R3C.withdrawButton(group.lines.length)}</button>}</div>}
           {!suggested.withdraw && confident && (!open || readOnly) && <p className="spend-import__suggest-line"><span className="nv-chip nv-chip--info nv-chip--plain">Suggested</span> {confident.code} {confident.title}{suggested.category.value !== 1 ? ` · ${CATEGORY_WORDS[suggested.category.value]}` : ""} <span className="nv-subtle">· {confident.why}</span></p>}
-          {!suggested.withdraw && !confident && !group.mapping && (!open || readOnly) && <p className="nv-subtle spend-import__suggest-line">{SPEND_TEXT_R3C.noConfident}</p>}
+          {!suggested.withdraw && !confident && !group.mapping && (!open || readOnly) && <p className="nv-subtle spend-import__suggest-line">{readOnly ? SPEND_IMPORT_READ_ONLY_TEXT.noConfident : SPEND_TEXT_R3C.noConfident}</p>}
           {group.mapping && <p className="nv-subtle">Remembered: {group.mapping.naicsCode} {scope3NaicsTitle(group.mapping.naicsCode)}</p>}
         </div>
         <div className="spend-import__group-side">

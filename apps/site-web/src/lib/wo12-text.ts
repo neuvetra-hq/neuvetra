@@ -53,6 +53,8 @@ export const SPEND_IMPORT_READ_ONLY_TEXT = {
   upload: "View only: an owner or admin of your company imports spend files and maps or withdraws their lines.",
   /** Lines held for their currency, listed for a member (the rate form is an owner's or admin's). */
   currencies: "Only US dollars are calculated. These lines are held until an owner or admin converts them:",
+  /** QA round 2: a member has no Map control, so the owner's "open Map" instruction is not theirs. */
+  noConfident: "No confident suggestion: an owner or admin maps this group to a NAICS title.",
 } as const
 
 /** A view-only member's Activity screen: the list and each record, with no new-record form. */

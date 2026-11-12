@@ -98,6 +98,16 @@ describe("WO-12: a view-only member", () => {
     expect(suggestion()).toBe(before)
     expect(row.component("SpendMappingForm")).toEqual([])
   })
+  test("QA round 2: a group with no confident suggestion tells a member who maps it, not to open a Map control they lack", async () => {
+    const unknown = (canManage: boolean) => view([line(1, { vendor: "Qzx Holdings", description: "Sundry", glAccount: "9999" })], { canManage })
+    for (const [role, wording, absent] of [["member", "No confident suggestion: an owner or admin maps this group to a NAICS title.", /open Map/i], ["owner", "No confident suggestion: open Map to search the NAICS titles.", /an owner or admin maps/]] as const) {
+      const p = await panel(unknown(role === "owner"), () => {}, undefined, false, 0, {}, { actor: { ...member, role } })
+      const row = await groupRow(p, "Qzx Holdings")
+      const text = row.app.text().replace(/\s+/g, " ")
+      expect(text).toContain(wording)
+      expect(text).not.toMatch(absent)
+    }
+  })
   test("the role decides before the server's view does (no upload while it loads); an owner keeps every control", async () => {
     const early = await panel(view([line(1, {})]), undefined, undefined, false, 0, {}, { actor: member })
     expect(early.app.button("Import spend lines")).toBeUndefined()
