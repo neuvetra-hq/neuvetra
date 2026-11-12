@@ -692,4 +692,59 @@ suite("site-web browser smoke (E2E-01)", () => {
     expect(await page.locator(".nv-app").count()).toBe(0)
     expect(await page.locator("body").innerText()).not.toContain("E2E: A's reason left on a shared computer")
   })
+
+  // WO-13 (QA N1 and N2 of PR #56): a token refresh still on its way when the person signs out must not bring the sign-in
+  // back, and every other open tab closes its workspace at once and can't send a write.
+  journey("Sign out survives a late token refresh and closes the other tab at once, which sends no write", { signedInAs: "owner" }, async opened => {
+    const { page, context } = opened
+    await page.goto("/#/overview")
+    await page.locator("[data-readiness-summary]").waitFor({ timeout: 30_000 })
+    // Tab 2, on a record with a correction typed and ready to save. (It opens first: Supabase's client lock is shared by the
+    // tabs, and a tab starting up while a refresh holds it would take the lock over after a while.)
+    const tab2 = await context.newPage()
+    const tab2Writes: Array<{ at: number; url: string }> = []
+    tab2.on("request", request => { if (request.method() !== "GET" && new URL(request.url()).pathname.startsWith("/workspace-api/")) tab2Writes.push({ at: Date.now(), url: request.url() }) })
+    await tab2.goto(`/#/activity/${RECORDS.gasReady}`)
+    await tab2.getByRole("button", { name: "Correct this record" }).click({ timeout: 30_000 })
+    await reasonInput(tab2).fill("E2E: tab 2 after the other tab signed out")
+    await quantityInput(tab2).fill("12345")
+    // The stored session is made close to expiry, so a tab's Supabase client refreshes it at its next tick (every 30 s);
+    // that refresh is held until after the sign-out.
+    let release: () => void = () => {}
+    const gate = new Promise<void>(resolve => { release = resolve })
+    let refreshes = 0
+    await context.route(/\/auth\/v1\/token\?grant_type=refresh_token/, async route => { refreshes++; await gate; await route.fallback() })
+    await page.evaluate(key => {
+      const value = JSON.parse(localStorage.getItem(key) ?? "null")
+      value.expires_in = 125; value.expires_at = Math.floor(Date.now() / 1000) + 125
+      localStorage.setItem(key, JSON.stringify(value))
+    }, AUTH_STORAGE_KEY)
+    await page.reload()
+    await page.locator("[data-readiness-summary]").waitFor({ timeout: 30_000 })
+    for (let i = 0; i < 450 && refreshes === 0; i++) await page.waitForTimeout(100)
+    expect(refreshes).toBeGreaterThanOrEqual(1)
+    // Sign out in tab 1, then tab 2 tries to save at once.
+    const clickedAt = Date.now()
+    await page.locator("button.nv-topbar__wide", { hasText: "Sign out" }).click()
+    await tab2.getByRole("button", { name: "Save correction" }).click({ timeout: 300 }).catch(() => {})
+    await page.waitForFunction(key => !Object.keys(window.localStorage).some(item => item === key || item.startsWith(`${key}-`)), AUTH_STORAGE_KEY, { timeout: 1_000 })
+    await tab2.waitForFunction(() => document.querySelectorAll(".nv-app").length === 0, undefined, { timeout: 2_000 })
+    expect(Date.now() - clickedAt).toBeLessThan(5_000)
+    // The held refresh (from either tab's client) is answered now, with a valid new session: it must not come back.
+    const answered = context.waitForEvent("response", { predicate: response => response.url().includes("grant_type=refresh_token"), timeout: 10_000 })
+    release()
+    await answered
+    await page.waitForTimeout(150)
+    await page.waitForFunction(key => !Object.keys(window.localStorage).some(item => item === key || item.startsWith(`${key}-`)), AUTH_STORAGE_KEY, { timeout: 1_000 })
+    await page.waitForTimeout(1_000)
+    expect(await page.evaluate(key => Object.keys(window.localStorage).filter(item => item === key || item.startsWith(`${key}-`)), AUTH_STORAGE_KEY)).toEqual([])
+    expect(tab2Writes.filter(write => write.at >= clickedAt)).toEqual([])
+    // A reload of either tab finds no one signed in.
+    for (const tab of [page, tab2]) {
+      await tab.reload()
+      await tab.locator("input[type=email]").first().waitFor()
+      expect(await tab.locator(".nv-app").count()).toBe(0)
+    }
+    await tab2.close()
+  }, 150_000)
 })

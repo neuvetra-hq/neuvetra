@@ -613,15 +613,36 @@ test("a write refused by the server brings back the previous Scope 3 answer with
   expect(app.scope3Loads).toHaveLength(2)
   app.scope3Loads[1]!.resolve([])
   await app.settle()
-  // With no answer before the write (its check was still running and was dropped), a refused write checks again once.
-  await app.writeActivity(path, "started")
+  // WO-13 (QA F7 of PR #56): a refused write while a check is running leaves that check alone (no abort, no second
+  // request); its answer is shown once the write has ended.
   app.child("JourneyNav").props.onNavigate("home")
   await app.settle()
   app.loads.at(-1)!.resolve(computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true, scope3: true }))
   await app.settle()
-  const visitLoads = app.scope3Loads.length
+  const visitLoads = app.scope3Loads.length, running = app.scope3Loads.at(-1)!
   await app.writeActivity(path, "started")
   await app.writeActivity(path, "failed", true)
   await app.elapse(400)
-  expect(app.scope3Loads).toHaveLength(visitLoads + 1)
+  expect([app.scope3Loads.length, running.signal.aborted]).toEqual([visitLoads, false])
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
+  running.resolve([item])
+  await app.settle()
+  expect([app.child("JourneyNav").props.readiness.scope3, app.child("JourneyNav").props.readiness.open.scope3]).toEqual(["ready", 1])
+  // A check answered while a write is still under way waits for it: shown when the write is refused, with no request.
+  await app.writeActivity(path, "started")
+  app.child("AskNeuvetra").props.onRetryScope3()
+  await app.settle()
+  const retried = app.scope3Loads.at(-1)!
+  retried.resolve([])
+  await app.settle()
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
+  await app.writeActivity(path, "failed", true)
+  expect([app.child("JourneyNav").props.readiness.scope3, app.child("JourneyNav").props.readiness.open.scope3]).toEqual(["ready", 0])
+  const loads = app.scope3Loads.length
+  await app.elapse(400)
+  expect(app.scope3Loads).toHaveLength(loads)
+  // An indefinite failure (no answer, or a gateway's 502/503/504; QA F8) still rechecks once.
+  await app.writeActivity(path, "started"); await app.writeActivity(path, "failed", false)
+  await app.elapse(400)
+  expect(app.scope3Loads).toHaveLength(loads + 1)
 })

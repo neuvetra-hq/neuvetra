@@ -9,6 +9,7 @@ import { acceptedViewHash, forgetReturnView, markDeliberateSignOut, parseViewHas
 
 // WO-05b: unsaved activity and setup input kept in this tab (sessionStorage), admitted per user, company and role.
 import { admitDrafts, announceDraftClear, clearAllDrafts, draftStorage, DRAFT_TEXT, hasDraftsFor, listenForDraftClear, SIGN_OUT_SERVER_NOT_TOLD } from "@/lib/draft-store"
+import { removeStoredSignIn, revokeSession, SIGNED_OUT_ELSEWHERE, type AuthEndpoint } from "@/lib/device-sign-out"
 import { ACCESS_TEXT, AccessCheckError, accessCheckFailure, createStagingAuthorization, type AccessProblem, type ActiveStagingSession } from "@/lib/staging-authorization"
 
 // WO-05a: the session check has its own short limit (it is not a user action, so it doesn't raise the "Taking longer" notice).
@@ -22,43 +23,17 @@ function storedSessionUser(key: string): string | null {
     return typeof id === "string" ? id : null
   } catch { return null }
 }
-/** WO-13 (QA B1 of PR #56): how long a sign-out waits for the server, after everything on this device has gone. */
-const SIGN_OUT_TIMEOUT_MS = 5_000
 const SIGN_OUT_TEXT = {
   plain: { removed: "Signed out on this device. Telling the server…", done: "Signed out on this browser.", serverNotTold: SIGN_OUT_SERVER_NOT_TOLD.plain, notRemoved: "The workspace is closed, but the stored sign-in could not be removed from this browser. Close the browser before leaving a shared computer." },
   discard: { removed: "Unsaved changes discarded and signed out on this device. Telling the server…", done: DRAFT_TEXT.discardDone, serverNotTold: SIGN_OUT_SERVER_NOT_TOLD.discard, notRemoved: "Unsaved changes discarded, but the stored sign-in could not be removed from this browser. Close the browser before leaving a shared computer." },
 } as const
 /**
- * Removes this origin's stored Supabase session (`<key>`, `<key>-code-verifier`, `<key>-user`), synchronously, and returns the
- * access token it held so the server can still be told. `removed` is false only when the storage refused.
+ * WO-13 (QA N1 of PR #56): after a deliberate sign-out, a session that shows up again (a token refresh that was already on
+ * its way, another tab's client) is removed at once and, best effort, revoked. Nothing here waits for it.
  */
-function removeStoredSignIn(key: string | null): { removed: boolean; token: string | null } {
-  if (!key) return { removed: true, token: null }
-  try {
-    const storage = window.localStorage
-    let token: string | null = null
-    try { const value: unknown = JSON.parse(storage.getItem(key) ?? "null"); const access = value && typeof value === "object" ? (value as { access_token?: unknown }).access_token : null; token = typeof access === "string" && access ? access : null } catch { /* unreadable: nothing to tell */ }
-    const keys: string[] = []
-    for (let index = 0; index < storage.length; index++) { const stored = storage.key(index); if (stored !== null) keys.push(stored) }
-    for (const stored of keys) if (stored === key || stored.startsWith(`${key}-`)) storage.removeItem(stored)
-    return { removed: storage.getItem(key) === null, token }
-  } catch { return { removed: false, token: null } }
-}
-/**
- * Tells the server the session ended (Supabase's own logout call, scope "local"), for at most SIGN_OUT_TIMEOUT_MS. It goes
- * straight to the logout endpoint rather than through `auth.signOut`, which reads the session that is already gone and
- * holds the client's lock while it waits. A token the server already refuses (401/403/404) counts as told.
- */
-async function tellServer(client: SupabaseClient | null, token: string | null): Promise<boolean> {
-  if (!token) return true
-  if (!client) return false
-  let timer: ReturnType<typeof setTimeout> | undefined
-  const timeout = new Promise<false>(resolve => { timer = setTimeout(() => resolve(false), SIGN_OUT_TIMEOUT_MS) })
-  const call = client.auth.admin.signOut(token, "local").then(({ error }) => {
-    const status = (error as { status?: unknown } | null)?.status
-    return !error || status === 401 || status === 403 || status === 404
-  }, () => false)
-  try { return await Promise.race([call, timeout]) } finally { clearTimeout(timer) }
+function purgeStoredSignIn(key: string | null, endpoint: AuthEndpoint | null) {
+  const stored = removeStoredSignIn(viewStorage(), key)
+  if (stored.accessToken || stored.refreshToken) void revokeSession(endpoint, stored)
 }
 function clearViewHash() { if (window.location.hash) window.history.replaceState(null, "", window.location.pathname + window.location.search) }
 
@@ -99,6 +74,11 @@ export function PrivateStaging() {
   const discardAsked = useRef(false)
   // The localStorage key under which Supabase keeps this origin's sign-in session (set once the configuration loads).
   const sessionStorageKey = useRef<string | null>(null)
+  // WO-13 (QA N1/F10 of PR #56): where Supabase Auth answers (for revoking a session without the client), once configured.
+  const authEndpoint = useRef<AuthEndpoint | null>(null)
+  // WO-13 (QA N1/N2 of PR #56): set from a deliberate sign-out (here or in another tab of this browser) until the next
+  // deliberate sign-in (here, or in another tab, which removes the sign-out mark). Meanwhile no session may come back.
+  const signedOutHere = useRef(false)
 
   useEffect(() => {
     let alive = true
@@ -184,10 +164,17 @@ export function PrivateStaging() {
         // Whose session this browser already held when the page loaded (read before Supabase can change it).
         const storageKey = `neuvetra:m63:${config.projectRef}:auth`
         sessionStorageKey.current = storageKey
+        authEndpoint.current = { url: config.supabaseUrl, anonKey: config.anonKey, fetch: (input, init) => fetch(input, init) }
         if (opened.current === null && !signInFromUrl.current) loadUser.current = storedSessionUser(storageKey)
         authClient = createClient(config.supabaseUrl, config.anonKey, { auth: { storageKey, persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: "pkce" } })
         setClient(authClient)
-        const { data } = authClient.auth.onAuthStateChange((_event, session) => { authEvents++; void lifecycle.authorize(session) })
+        const { data } = authClient.auth.onAuthStateChange((_event, session) => {
+          authEvents++
+          // WO-13 (QA N1 of PR #56): signed out deliberately: a session that appears now (a late refresh answer, another
+          // tab's client) is removed at once, never opened.
+          if (session && signedOutHere.current) { purgeStoredSignIn(sessionStorageKey.current, authEndpoint.current); return }
+          void lifecycle.authorize(session)
+        })
         unsubscribe = () => data.subscription.unsubscribe()
         const initialAuthEvents = authEvents
         const result = await authClient.auth.getSession()
@@ -196,8 +183,30 @@ export function PrivateStaging() {
     }
     // WO-05b (QA-141): a deliberate sign-out in another tab removes every draft here, by BroadcastChannel or by the
     // sign-out mark it leaves in localStorage (whichever arrives first), and no draft is written until a workspace opens.
-    const stopDraftClear = listenForDraftClear(() => { clearAllDrafts(draftStorage()); setDraftsSeen(value => value + 1) })
-    const onStorage = (event: StorageEvent) => { if (event.key === SIGNED_OUT_MARK_KEY && event.newValue) { clearAllDrafts(draftStorage()); setDraftsSeen(value => value + 1) } }
+    // WO-13 (QA N2 of PR #56): ...and closes this tab's workspace at once, as Supabase's own sign-out did before this order,
+    // whether or not the other tab could reach the server. A write from here can't be sent after that.
+    const signedOutElsewhere = () => {
+      clearAllDrafts(draftStorage()); setDraftsSeen(value => value + 1)
+      if (signedOutHere.current) return
+      signedOutHere.current = true
+      void authClient?.auth.stopAutoRefresh()
+      const hadSession = opened.current !== null || endedUser.current !== null
+      lifecycle.signOut(); clearViewHash()
+      opened.current = null; loadUser.current = null; endedUser.current = null; setEndedUserId(null)
+      setConfirmDiscard(false); discardAsked.current = false
+      purgeStoredSignIn(sessionStorageKey.current, authEndpoint.current)
+      if (hadSession) setMessage(SIGNED_OUT_ELSEWHERE)
+    }
+    const stopDraftClear = listenForDraftClear(signedOutElsewhere)
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === SIGNED_OUT_MARK_KEY) {
+        if (event.newValue) signedOutElsewhere()
+        // Another tab signed in deliberately: a session may appear again.
+        else signedOutHere.current = false
+      }
+      // WO-13 (QA N1): a session written back while signed out (another tab's late refresh) goes at once.
+      else if (signedOutHere.current && event.key !== null && event.key === sessionStorageKey.current && event.newValue) purgeStoredSignIn(sessionStorageKey.current, authEndpoint.current)
+    }
     window.addEventListener("storage", onStorage)
     const onFocus = () => { void lifecycle.refresh() }
     const interval = window.setInterval(onFocus, 60_000)
@@ -225,7 +234,7 @@ export function PrivateStaging() {
   async function signIn(event: FormEvent) {
     event.preventDefault()
     if (!client || busy) return
-    authorization.current?.allowSignIn(); setBusy(true); setMessage("Signing in…")
+    allowSignInAgain(); setBusy(true); setMessage("Signing in…")
     if (opened.current === null) loadTrusted.current = false
     try {
       const { error } = await client.auth.signInWithPassword({ email: email.trim(), password })
@@ -242,24 +251,41 @@ export function PrivateStaging() {
    */
   async function signOut(kind: "plain" | "discard" = "plain") {
     const text = SIGN_OUT_TEXT[kind]
+    // WO-13 (QA N1 of PR #56): first, no refresh may start, and from now until a deliberate sign-in no session may come back.
+    signedOutHere.current = true
+    void client?.auth.stopAutoRefresh()
     // A deliberate sign-out is the only thing that forgets the view address. WO-05b: it also removes every unsaved draft in
-    // this tab, stops further draft writes (before the workspace closes), and tells the other tabs to do the same.
+    // this tab, stops further draft writes (before the workspace closes), and tells the other tabs to do the same (WO-13,
+    // QA N2: they close their workspace too).
     clearAllDrafts(draftStorage()); markDeliberateSignOut(viewStorage()); announceDraftClear()
     authorization.current?.signOut(); setBusy(true)
     clearViewHash(); forgetReturnView(viewStorage())
     opened.current = null; loadUser.current = null; endedUser.current = null; setEndedUserId(null)
     setConfirmDiscard(false); discardAsked.current = false; setDraftsSeen(value => value + 1)
-    const stored = removeStoredSignIn(sessionStorageKey.current)
+    const stored = removeStoredSignIn(viewStorage(), sessionStorageKey.current)
     if (!stored.removed) { setMessage(text.notRemoved); setBusy(false); return }
     setMessage(text.removed)
-    try { setMessage(await tellServer(client, stored.token) ? text.done : text.serverNotTold) }
-    finally { setBusy(false) }
+    try {
+      const told = await revokeSession(authEndpoint.current, stored)
+      // Anything written back while the server was asked (a refresh that was already on its way) goes too.
+      purgeStoredSignIn(sessionStorageKey.current, authEndpoint.current)
+      setMessage(told ? text.done : text.serverNotTold)
+    } finally { setBusy(false) }
+  }
+  /** WO-13 (QA N1 of PR #56): a deliberate sign-in, here: sessions may appear again, here and in the other tabs. */
+  function allowSignInAgain() {
+    authorization.current?.allowSignIn()
+    if (signedOutHere.current) {
+      signedOutHere.current = false
+      try { viewStorage()?.removeItem(SIGNED_OUT_MARK_KEY) } catch { /* best effort */ }
+      void client?.auth.startAutoRefresh()
+    }
   }
   /** WO-13: the session-ended screen's "Discard unsaved changes on this device", after its confirmation. */
   async function discardOnDevice() { await signOut("discard") }
   async function sendSignInLink() {
     if (!client || busy || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { setMessage("Enter your invited email address first."); return }
-    authorization.current?.allowSignIn(); setBusy(true)
+    allowSignInAgain(); setBusy(true)
     if (opened.current === null) loadTrusted.current = false
     try {
       // The link opens the view the session ended on (QA-146), but only for the person whose session ended: anyone else's

@@ -5,6 +5,7 @@ import { acceptedViewHash, forgetReturnView, markDeliberateSignOut, parseViewHas
 import { signInNoticeTone } from "./sign-in-notice"
 import { decodeStagingAccess, decodeStagingConfig, STAGING_PROFILE } from "./staging-session"
 import * as drafts from "./draft-store"
+import * as deviceSignOut from "./device-sign-out"
 import { SIGNED_OUT_MARK_KEY } from "./view-route"
 
 /** WO-05b: an in-memory sessionStorage for the tab under test (key/length as the draft store reads them). */
@@ -23,16 +24,17 @@ const session=(id=owner,token="original-token")=>({user:{id,email:emailOf(id)},a
 const access=(id=owner,role="owner",workspaceId=company,evidenceId:string|null=null)=>({profile:STAGING_PROFILE,user:{id},access:{role,workspaceId,evidenceId}})
 const deferred=()=>{let resolve!:(r:Response)=>void;const promise=new Promise<Response>(r=>{resolve=r});return {promise,resolve}}
 type Node={type:unknown;props:Record<string,any>;children:any[]}
-function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;search?:string;tab?:ReturnType<typeof memoryStorage>;onDraftClear?:(listener:()=>void)=>void;logout?:(token:string,scope:string)=>Promise<{error:any}>}={}){
+function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;search?:string;tab?:ReturnType<typeof memoryStorage>;onDraftClear?:(listener:()=>void)=>void;logout?:(token:string,scope:string)=>Promise<Response>;refresh?:(refreshToken:string)=>Promise<Response>}={}){
  // The lifecycle clock: each read moves 10 s on (no throttling) unless a test fixes it.
  const clock={fixed:null as number|null,t:1_000_000}
  const scheduled:Array<{run:()=>void;ms:number;cancelled:boolean}>=[]
  const slots:any[]=[],effects:Array<{deps?:unknown[];cleanup?:void|(()=>void)}>=[],pendingEffects:Array<()=>void>=[],listeners=new Map<string,()=>void>(),requests:Array<{token:string;signal:AbortSignal}>=[]
  let cursor=0,tree:Node,authCallback:((_event:string,s:any)=>void)|null=null,verification:(token:string)=>Promise<Response>=async()=>Response.json(access()),unsubscribed=false,stopped=false
- const otp:any[]=[],focused:string[]=[],logouts:Array<{token:string;scope:string}>=[]
+ const otp:any[]=[],focused:string[]=[],logouts:Array<{token:string;scope:string}>=[],refreshes:string[]=[]
+ let autoRefresh=true
  const Workspace=()=>null
  const h=(type:unknown,props:Record<string,any>|null,...children:any[]):Node=>({type,props:props??{},children})
- const client={auth:{onAuthStateChange(callback:typeof authCallback){authCallback=callback;return {data:{subscription:{unsubscribe(){unsubscribed=true}}}}},getSession:async()=>({data:{session:initialSession}}),signOut:async()=>({error:null}),admin:{signOut:(token:string,scope:string)=>{logouts.push({token,scope});return options.logout?options.logout(token,scope):Promise.resolve({error:null})}},signInWithPassword:async()=>({error:null}),signInWithOtp:async(args:any)=>{otp.push(args);return {error:null}},stopAutoRefresh(){stopped=true}}}
+ const client={auth:{onAuthStateChange(callback:typeof authCallback){authCallback=callback;return {data:{subscription:{unsubscribe(){unsubscribed=true}}}}},getSession:async()=>({data:{session:initialSession}}),signOut:async()=>({error:null}),startAutoRefresh(){autoRefresh=true},signInWithPassword:async()=>({error:null}),signInWithOtp:async(args:any)=>{otp.push(args);return {error:null}},stopAutoRefresh(){stopped=true;autoRefresh=false}}}
  const storage=options.storage??new Map<string,string>()
  // The Supabase session this browser holds at load (what supabase-js keeps under its storage key).
  const initialSession=options.initial===undefined?session():options.initial
@@ -48,9 +50,12 @@ function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;
   createStagingAuthorization:(deps:any)=>createStagingAuthorization({...deps,random:()=>0.5,now:()=>clock.fixed??(clock.t+=10_000),schedule:(run:()=>void,ms:number)=>{const item={run,ms,cancelled:false};scheduled.push(item);return ()=>{item.cancelled=true}}}),
   // The session check's 15 s limit runs in 5 ms here.
   setTimeout:(fn:()=>void,ms:number)=>globalThis.setTimeout(fn,ms===15_000||ms===5_000?5:ms),clearTimeout:(id:any)=>globalThis.clearTimeout(id),ACCESS_TEXT,AccessCheckError,accessCheckFailure,acceptedViewHash,forgetReturnView,rememberReturnView,takeReturnView,markDeliberateSignOut,parseViewHash,peekReturnView,recentlySignedOut,viewHash,SIGNED_OUT_MARK_KEY,
-  ...drafts,draftStorage:()=>options.tab??null,listenForDraftClear:(listener:()=>void)=>{options.onDraftClear?.(listener);return ()=>{}},announceDraftClear:()=>{announced.count++},
+  ...deviceSignOut,revokeSession:(endpoint:any,stored:any,o:any={})=>deviceSignOut.revokeSession(endpoint,stored,{...o,timeoutMs:5}),...drafts,draftStorage:()=>options.tab??null,listenForDraftClear:(listener:()=>void)=>{options.onDraftClear?.(listener);return ()=>{}},announceDraftClear:()=>{announced.count++},
   fetch:async(path:string,init:RequestInit)=>{
   if(path.endsWith("/config"))return Response.json({profile:STAGING_PROFILE,supabaseUrl:"https://abcdefghijklmnopqrst.supabase.co",anonKey:"sb_publishable_abcdefghijklmnopqrst"})
+  // WO-13: Supabase Auth's logout and refresh endpoints (the sign-out calls them directly, not through the client).
+  if(path.startsWith("https://abcdefghijklmnopqrst.supabase.co/auth/v1/logout")){const token=new Headers(init.headers).get("authorization")!.replace(/^Bearer /,""),scope=new URL(path).searchParams.get("scope")!;logouts.push({token,scope});return options.logout?options.logout(token,scope):new Response(null,{status:204})}
+  if(path.startsWith("https://abcdefghijklmnopqrst.supabase.co/auth/v1/token")){const refresh=JSON.parse(String(init.body)).refresh_token;refreshes.push(refresh);return options.refresh?options.refresh(refresh):Response.json({access_token:`refreshed-${refresh}`,refresh_token:`r2-${refresh}`})}
   const token=new Headers(init.headers).get("authorization")!;requests.push({token,signal:init.signal as AbortSignal});return verification(token)
  },window,h,Landing:()=>null,Icon:()=>null,signInNoticeTone}
  const component=new Function(...Object.keys(names),script)(...Object.values(names))
@@ -65,7 +70,7 @@ function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;
  const runEffects=()=>{while(pendingEffects.length)pendingEffects.shift()!()}
  async function flush(){for(let i=0;i<20;i++){await Promise.resolve();render();runEffects()}}
  render();runEffects()
- return {logouts,clock,scheduled,flush,render,workspace,message,heading,text,nodes,requests,listeners,location,storage,otp,focused,emit:(s:any,event="SIGNED_IN")=>authCallback!(event,s),setVerification(fn:typeof verification){verification=fn},
+ return {logouts,refreshes,autoRefresh:()=>autoRefresh,setInitialSession(value:any){storage.set("neuvetra:m63:abcdefghijklmnopqrst:auth",JSON.stringify(value))},clock,scheduled,flush,render,workspace,message,heading,text,nodes,requests,listeners,location,storage,otp,focused,emit:(s:any,event="SIGNED_IN")=>authCallback!(event,s),setVerification(fn:typeof verification){verification=fn},
   button:(label:string)=>nodes().find(n=>n.type==="button"&&text(n).includes(label)),
   // WO-08: with the workspace open, its top bar and Menu sheet call the account's onSignOut (this component's own signOut).
   clickSignOut:()=>{const ws=nodes().find(n=>n.type===Workspace);if(ws)return ws.props.account.onSignOut();return nodes().find(n=>n.type==="button"&&n.children[0]==="Sign out")!.props.onClick()},cleanup(){for(const e of effects)if(e&&typeof e.cleanup==="function")e.cleanup()},closed:()=>unsubscribed&&stopped}
@@ -573,8 +578,8 @@ test("WO-13 B1: with the logout request never answered, Discard removes the stor
  await new Promise(resolve=>setTimeout(resolve,30));await h.flush()
  expect(shown(h)).toBe(drafts.SIGN_OUT_SERVER_NOT_TOLD.discard);expect(AUTH_KEYS(storage)).toEqual([]);h.cleanup()
 })
-test("WO-13 B1: the plain Sign out is local-first too; a failed or refused logout says the server wasn't told, an expired token counts as told",async()=>{
- for(const [logout,expected] of [[()=>new Promise(()=>{}),drafts.SIGN_OUT_SERVER_NOT_TOLD.plain],[()=>Promise.reject(new TypeError("network")),drafts.SIGN_OUT_SERVER_NOT_TOLD.plain],[async()=>({error:{status:500,message:"x"}}),drafts.SIGN_OUT_SERVER_NOT_TOLD.plain],[async()=>({error:{status:401,message:"expired"}}),"Signed out on this browser."],[async()=>({error:null}),"Signed out on this browser."]] as const){
+test("WO-13 B1: the plain Sign out is local-first too; no answer or a failure says the server wasn't told; done, gone or refused without a refresh token counts as told",async()=>{
+ for(const [logout,expected] of [[()=>new Promise(()=>{}),drafts.SIGN_OUT_SERVER_NOT_TOLD.plain],[()=>Promise.reject(new TypeError("network")),drafts.SIGN_OUT_SERVER_NOT_TOLD.plain],[async()=>Response.json({code:500,msg:"x"},{status:500}),drafts.SIGN_OUT_SERVER_NOT_TOLD.plain],[async()=>new Response(null,{status:204}),"Signed out on this browser."],[async()=>Response.json({code:404,error_code:"user_not_found"},{status:404}),"Signed out on this browser."],[async()=>Response.json({code:401,error_code:"bad_jwt"},{status:401}),"Signed out on this browser."]] as const){
   const storage=new Map<string,string>(),h=harness({storage,logout:logout as any});await h.flush()
   h.workspace()!.props.staging.actor.onUnauthorized(401);await h.flush()
   void h.button("Sign out")!.props.onClick()
@@ -583,6 +588,51 @@ test("WO-13 B1: the plain Sign out is local-first too; a failed or refused logou
   expect(shown(h)).toBe(expected);expect(h.heading()).toBeUndefined();h.cleanup()
  }
 })
+// WO-13 (QA N1 of PR #56): a token refresh already on its way when the person signs out answers afterwards. Supabase's
+// client then writes the new session to storage and announces it (TOKEN_REFRESHED). It must not come back: it is removed
+// at once, revoked, and never opens anything, until a deliberate sign-in.
+test("WO-13 N1: a refresh answered after Sign out doesn't bring the sign-in back; it is removed and revoked, and a deliberate sign-in lifts the guard",async()=>{
+ const storage=new Map<string,string>(),h=harness({storage});await h.flush()
+ expect(h.autoRefresh()).toBe(true)
+ h.clickSignOut();await h.flush()
+ expect(h.autoRefresh()).toBe(false);expect(AUTH_KEYS(storage)).toEqual([])
+ // The late refresh: the client stores the new session, then tells its subscribers.
+ const refreshed={...session(owner,"late-refresh-token"),refresh_token:"late-refresh"}
+ h.setInitialSession(refreshed);h.emit(refreshed,"TOKEN_REFRESHED");await h.flush()
+ expect(AUTH_KEYS(storage)).toEqual([]);expect(h.workspace()).toBeUndefined()
+ // The client holds nothing (its session lives only in this storage), and the late session was revoked.
+ expect(storage.get("neuvetra:m63:abcdefghijklmnopqrst:auth")).toBeUndefined()
+ expect(h.logouts.map(l=>l.token)).toContain("late-refresh-token")
+ // Another tab's client writing a session back (a storage event) goes too.
+ h.setInitialSession({...refreshed,access_token:"other-tab-token"})
+ ;(h.listeners.get("storage") as unknown as (event:{key:string;newValue:string|null})=>void)({key:"neuvetra:m63:abcdefghijklmnopqrst:auth",newValue:"{}"})
+ expect(AUTH_KEYS(storage)).toEqual([]);await h.flush();expect(h.logouts.map(l=>l.token)).toContain("other-tab-token")
+ // A deliberate sign-in lifts the guard: the sign-out mark goes, refresh restarts and the new session opens the workspace.
+ const landing=h.nodes().find(n=>n.props&&"onSendLink" in n.props)!
+ landing.props.onSignIn({preventDefault(){}});await h.flush()
+ expect(storage.has(SIGNED_OUT_MARK_KEY)).toBe(false);expect(h.autoRefresh()).toBe(true)
+ h.setInitialSession(session(owner,"new-sign-in"));h.emit(session(owner,"new-sign-in"));await h.flush()
+ expect(h.workspace()).toBeDefined();expect(AUTH_KEYS(storage)).toEqual(["neuvetra:m63:abcdefghijklmnopqrst:auth"]);h.cleanup()
+})
+// WO-13 (QA N2 of PR #56): before this order Supabase's own sign-out told every other tab, which closed its workspace. Now
+// the sign-out's own signals (the nv-drafts broadcast, or the sign-out mark through localStorage) close it at once, whether
+// or not the server was reached.
+test("WO-13 N2: another tab's Sign out closes this tab's workspace at once, by either signal, and its client stops refreshing",async()=>{
+ for(const signal of ["broadcast","mark"] as const){
+  let broadcast=()=>{}
+  const tab=tabWithDraftOf(owner),storage=new Map<string,string>(),h=harness({tab,storage,onDraftClear:listener=>{broadcast=listener}});await h.flush()
+  const actor=h.workspace()!.props.staging.actor
+  if(signal==="broadcast")broadcast()
+  else (h.listeners.get("storage") as unknown as (event:{key:string;newValue:string|null})=>void)({key:SIGNED_OUT_MARK_KEY,newValue:String(Date.now())})
+  // Synchronously: the workspace is gone, its requests are aborted (no write can be sent), drafts and keys are gone.
+  h.render();expect(h.workspace()).toBeUndefined();expect(actor.signal.aborted).toBe(true)
+  expect(tab.entries.size).toBe(0);expect(AUTH_KEYS(storage)).toEqual([]);expect(h.autoRefresh()).toBe(false)
+  await h.flush();expect(shown(h)).toBe(deviceSignOut.SIGNED_OUT_ELSEWHERE)
+  // A session announced afterwards (the other tab's late refresh, relayed by Supabase) doesn't reopen it.
+  h.emit(session(owner,"relayed"),"TOKEN_REFRESHED");await h.flush();expect(h.workspace()).toBeUndefined();h.cleanup()
+ }
+})
+
 // WO-13 (QA F3 and F4 of PR #56).
 test("WO-13 F3: after a reload the session-ended screen still offers Discard while the tab holds the person's drafts",async()=>{
  const tab=tabWithDraftOf(owner)
@@ -603,10 +653,11 @@ test("WO-13 F4: Sign out names the discard while drafts are held; the confirmati
  let prevented=false
  group()!.props.onKeyDown({key:"Escape",preventDefault(){prevented=true}});await h.flush()
  expect(prevented).toBe(true);expect(group()).toBeUndefined();expect(h.focused.at(-1)).toBe(drafts.DRAFT_TEXT.discardOnDevice);expect(tab.entries.size).toBe(2)
- // Another tab discards (its broadcast): this tab's drafts go and the screen stops speaking of them.
+ // Another tab discards (its broadcast): this tab's drafts go, and (WO-13, QA N2) this tab is signed out too: the landing
+ // page, saying why, with nothing about kept changes.
  clear();await h.flush()
- expect(tab.entries.size).toBe(0);expect(buttons()).not.toContain(drafts.DRAFT_TEXT.discardOnDevice);expect(buttons()).toContain("Sign out")
- expect(h.nodes().some(n=>n.type==="p"&&h.text(n)==="Sign in again to continue.")).toBe(true);h.cleanup()
+ expect(tab.entries.size).toBe(0);expect(buttons()).not.toContain(drafts.DRAFT_TEXT.discardOnDevice);expect(h.heading()).toBeUndefined()
+ expect(shown(h)).toBe(deviceSignOut.SIGNED_OUT_ELSEWHERE);h.cleanup()
 })
 
 test("WO-05a QA follow-up 1: a stale session at load that fails its check never vouches for a record address, for its own later sign-in either",async()=>{

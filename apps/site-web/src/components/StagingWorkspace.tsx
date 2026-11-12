@@ -218,11 +218,17 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
     const controller = new AbortController()
     scope3Request.current?.abort(); scope3Request.current = controller
     const workspaceId = staging.workspaceId, actor = { ...staging.actor, signal: controller.signal }
-    loadScope3ReadinessLazy(workspaceId, actor, canManage).then(items => {
-      if (!controller.signal.aborted) setScope3Part({ state: "ready", items })
-    }, cause => {
-      if (!controller.signal.aborted) setScope3Part({ state: "failed", message: cause instanceof Error ? cause.message : null })
-    })
+    // WO-13 (QA F7 of PR #56): a check answered while writes are still under way is kept as the answer from before them
+    // (shown again if they are all refused); the labels stay "Checking…" until the writes end.
+    const settle = (part: Scope3Part) => {
+      if (controller.signal.aborted) return
+      if (scope3Request.current === controller) scope3Request.current = null
+      const burst = writeBurst.current
+      if (burst && burst.inFlight > 0) { burst.before = part; return }
+      setScope3Part(part)
+    }
+    loadScope3ReadinessLazy(workspaceId, actor, canManage).then(items => settle({ state: "ready", items }),
+      cause => settle({ state: "failed", message: cause instanceof Error ? cause.message : null }))
   }, [scope3On, panel, visit, scope3Retry, staging.workspaceId, staging.actor, canManage])
   useEffect(() => () => { scope3Request.current?.abort(); cancelRecheck() }, [])
   function cancelRecheck() { if (recheckTimer.current !== null) { window.clearTimeout(recheckTimer.current); recheckTimer.current = null } }
@@ -241,11 +247,12 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
     const ours = (write: { userId: string; path: string }) => write.userId === staging.actor.userId && Boolean(staging.workspaceId) && write.path.includes(`/workspace/${staging.workspaceId}/`) && current.current.panel !== "results"
     const checking = () => { scope3Request.current?.abort(); scope3Request.current = null; setScope3Part({ state: "checking" }); cancelRecheck() }
     const started = () => {
-      // The answer before the burst is kept only while it is settled: a check still running was just dropped, so it must run again.
+      // The answer before the burst, when it is settled. WO-13 (QA F7 of PR #56): a check still running is left to finish
+      // (its answer becomes the one from before the burst); it is dropped only if a write turns out to have changed data.
       const before = scope3PartNow.current.state === "ready" || scope3PartNow.current.state === "failed" ? scope3PartNow.current : null
       const burst = writeBurst.current ?? (writeBurst.current = { inFlight: 0, changed: false, before })
       burst.inFlight++
-      checking()
+      setScope3Part({ state: "checking" }); cancelRecheck()
     }
     const ended = (changed: boolean) => {
       const burst = writeBurst.current
@@ -256,6 +263,8 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
       if (changed) now.changed = true
       if (now.inFlight > 0) return
       if (!now.changed && now.before) { writeBurst.current = null; cancelRecheck(); setScope3Part(now.before); return }
+      // Every write was refused while a check is still running: it answers for itself, with no second request.
+      if (!now.changed && scope3Request.current) { writeBurst.current = null; return }
       checking()
       recheckTimer.current = window.setTimeout(() => {
         recheckTimer.current = null; writeBurst.current = null

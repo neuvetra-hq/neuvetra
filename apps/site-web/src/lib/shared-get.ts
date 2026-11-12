@@ -51,8 +51,9 @@ export function notifyWrite(write: CompletedWrite): void {
  * the previous Scope 3 answer for a moment.
  */
 /**
- * WO-13 (QA F2 of PR #56): `definite` is true when the server answered the failed write (any 4xx or 5xx), so nothing was
- * saved; false when there was no answer (a network failure or a timeout), so the write may have landed.
+ * WO-13 (QA F2 of PR #56): `definite` is true when the server refused the write (any 4xx, or a 5xx other than a gateway's
+ * 502, 503 or 504), so nothing was saved; false when there was no answer (a network failure or a timeout) or a gateway
+ * error (QA F8), so the write may have landed.
  */
 export type WriteActivity = { userId: string; path: string; phase: "started" } | { userId: string; path: string; phase: "failed"; definite: boolean }
 const activityListeners = new Set<(write: WriteActivity) => void>()
@@ -71,17 +72,18 @@ export async function sharedFetch(actor: { userId: string; signal?: AbortSignal 
   const kind = options.kind ?? "default"
   if (method !== "GET") {
     clearSharedGets(actor.userId)
-    let succeeded = false, answered = false
+    let succeeded = false, definite = false
     notifyWriteActivity({ userId: actor.userId, path, phase: "started" })
     try {
       const response = await withRequestTimeout(kind, init.signal, signal => withRetry(path, { ...init, signal }, false))
       // WO-04b: a completed write tells the workspace, so readiness that depends on saved data (Scope 3) is checked again.
-      answered = true
+      // WO-13 (QA F8 of PR #56): a gateway's 502, 503 or 504 can come after the write was saved, so it is not definite.
+      definite = !response.ok && response.status !== 502 && response.status !== 503 && response.status !== 504
       if (response.ok) { succeeded = true; notifyWrite({ userId: actor.userId, path }) }
       return response
     } finally {
       clearSharedGets(actor.userId)
-      if (!succeeded) notifyWriteActivity({ userId: actor.userId, path, phase: "failed", definite: answered })
+      if (!succeeded) notifyWriteActivity({ userId: actor.userId, path, phase: "failed", definite })
     }
   }
   const key = `${actor.userId}\u0000${path}`
