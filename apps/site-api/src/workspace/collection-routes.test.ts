@@ -43,7 +43,8 @@ function activity() {
   }
 }
 
-function harness() {
+function harness(options: { schema?: number } = {}) {
+  let saveError: { code: string } | null = null
   const calls: Array<{ name: string; args: unknown[] }> = []
   let evidence: any[] = []
   let downloadable: any = null
@@ -61,7 +62,7 @@ function harness() {
     async findCollectionContext(...args) { calls.push({ name: "findContext", args }); if (failures.context) throw failures.context; return hasAccess ? { companyId: COMPANY, setupVersionId: SETUP, setupRevision: 1, locations: [{ id: LOCATION, name: "Office", inclusion: "included", control: "operational_control" }] } : null },
     async findCollectionActivities(...args) { calls.push({ name: "findActivities", args }); return [record, ...others] },
     async findCollectionActivityVersion(...args) { calls.push({ name: "findVersion", args }); return current },
-    async saveCollectionActivity(...args) { calls.push({ name: "save", args }); if (failures.save) throw failures.save; return { record, version: current, replayed: false } },
+    async saveCollectionActivity(...args) { calls.push({ name: "save", args }); if (saveError) throw saveError; if (failures.save) throw failures.save; return { record, version: current, replayed: false } },
     async findCollectionEvidence(...args) { calls.push({ name: "findEvidence", args }); return evidence },
     async reserveCollectionEvidenceUpload(...args) { calls.push({ name: "reserveEvidence", args }); if (failures.reserve) throw failures.reserve; const input = args[2] as any; return { uploadId: input.uploadId, evidenceId: input.evidenceId, objectKey: input.objectKey, bucket: COLLECTION_EVIDENCE_BUCKET } },
     async registerCollectionEvidence(...args) { calls.push({ name: "registerEvidence", args }); if (failRegister) throw new Error("sensitive-registration-marker"); return { uploadId: (args[2] as any).uploadId, evidenceId: evidence[0]?.id ?? (args[2] as any).evidenceId, reused: evidence.length > 0, quarantineStatus: "pending", orphanRecoveryRequired: false } },
@@ -74,9 +75,9 @@ function harness() {
     async put(...args) { calls.push({ name: "put", args }); if (failPut) throw new Error("sensitive-storage-marker"); stored = args[3] },
     async get(...args) { calls.push({ name: "get", args }); return stored },
   }
-  const route = createCollectionRoutes({ database, evidenceStorage: storage, origin: ORIGIN, lookupZip: async zip => { calls.push({ name: "lookupZip", args: [zip] }); return zipLookup }, validateUser: async token => token === "valid" ? { id: ACTOR, email: "fixture@example.test", phone: null, fullName: null } : null })
+  const route = createCollectionRoutes({ database, evidenceStorage: storage, origin: ORIGIN, ...(options.schema === undefined ? {} : { schemaVersion: async () => options.schema! }), lookupZip: async zip => { calls.push({ name: "lookupZip", args: [zip] }); return zipLookup }, validateUser: async token => token === "valid" ? { id: ACTOR, email: "fixture@example.test", phone: null, fullName: null } : null })
   const request = (path: string, init: RequestInit = {}) => route(new Request(`https://api.example.test${path}`, { ...init, headers: { origin: ORIGIN, authorization: "Bearer valid", ...(init.headers ?? {}) } }))
-  return { calls, request, failures, setLineages(value: any[]) { lineages = value }, setOthers(value: any[]) { others = value }, setEvidence(value: any[]) { evidence = value }, setDownloadable(value: any) { downloadable = value }, setStored(value: Uint8Array<ArrayBuffer>) { stored = value }, setAccess(value: boolean) { hasAccess = value }, setZipLookup(value: any) { zipLookup = value }, failNextPut() { failPut = true }, failNextRegistration() { failRegister = true } }
+  return { calls, request, failures, setLineages(value: any[]) { lineages = value }, setOthers(value: any[]) { others = value }, setEvidence(value: any[]) { evidence = value }, setDownloadable(value: any) { downloadable = value }, setStored(value: Uint8Array<ArrayBuffer>) { stored = value }, setAccess(value: boolean) { hasAccess = value }, setZipLookup(value: any) { zipLookup = value }, failNextPut() { failPut = true }, failNextRegistration() { failRegister = true }, failSavesWith(code: string) { saveError = { code } } }
 }
 
 describe("collection routes", () => {
@@ -101,6 +102,38 @@ describe("collection routes", () => {
     expect(sent.activity.payload.maintainsRefrigerantStock).toBeNull()
     expect(sent.activity.payload.retrofitInPeriod).toBeNull()
     expect(sent.activity.quantity.originalValue).toBe("12.5")
+  })
+
+  // BF-09: the same image runs against hosted staging at schema 30 (before the owner applies 0031) and at 31. At both the BF-03
+  // route check refuses a new record at 400 before any SQL; 0031's own refusal (54N31: reactivation, or a save that raced
+  // past the check) is the same 422; duplicateConfirmedDistinct is refused before any SQL below 31 and passed on at 31.
+  for (const schema of [30, 31]) test(`at schema ${schema}: the cap, 0031's refusal and the duplicate confirmation`, async () => {
+    const h = harness({ schema })
+    const gas = (i: number) => ({ id: `55555555-0000-4000-8000-${String(i).padStart(12, "0")}`, companyId: COMPANY, kind: "natural_gas", currentVersion: { activity: { state: "active" } }, history: [] })
+    const post = (id: string, body: unknown) => h.request(`/workspace/${COMPANY}/collection/activities/${id}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
+    const fresh = () => ({ ...activity(), idempotencyKey: crypto.randomUUID() })
+    const saves = () => h.calls.filter(call => call.name === "save").length
+    const capability = await (await h.request(`/workspace/${COMPANY}/collection`)).json() as any
+    expect(capability.capabilities.duplicateConfirmation).toBe(schema >= 31)
+    // The route check: 1 + 399 = 400 active, a new record is refused before any SQL.
+    h.setOthers(Array.from({ length: 399 }, (_, i) => gas(i)))
+    const refused = await post("00000000-0000-4000-8000-0000000000b1", fresh())
+    expect([refused.status, (await refused.json() as any).code, saves()]).toEqual([422, "record_limit_reached", 0])
+    h.setOthers([])
+    // The flag: refused before any SQL below 31 (the answer any unknown key got before this change); sent on at 31.
+    const confirmed = { ...activity(), idempotencyKey: crypto.randomUUID(), activity: { ...activity().activity, payload: { ...activity().activity.payload, duplicateConfirmedDistinct: true } } }
+    const flagged = await post("00000000-0000-4000-8000-0000000000b2", confirmed)
+    if (schema < 31) expect([flagged.status, await flagged.json(), saves()]).toEqual([422, { error: "Invalid or unsupported collection record." }, 0])
+    else {
+      expect([flagged.status, saves()]).toEqual([201, 1])
+      expect((h.calls.find(call => call.name === "save")!.args[3] as any).activity.payload.duplicateConfirmedDistinct).toBe(true)
+    }
+    // A wrongly typed flag is invalid at every schema.
+    expect((await post("00000000-0000-4000-8000-0000000000b3", { ...confirmed, activity: { ...confirmed.activity, payload: { ...confirmed.activity.payload, duplicateConfirmedDistinct: "yes" } } })).status).toBe(422)
+    // 0031's refusal (raised only at 31, mapped at every schema): a reactivation the route check does not see.
+    h.failSavesWith("54N31")
+    const reactivated = await post(RECORD, { ...fresh(), expectedRevision: 2, expectedVersionId: VERSION, correctionReason: "Reactivated" })
+    expect([reactivated.status, await reactivated.json()]).toEqual([422, { code: "record_limit_reached", error: "This company already has 400 active Scope 1 and 2 records, the most one draft can calculate. Withdraw records you no longer need, then save again." }])
   })
 
   // BF-03 (BL-02): a new active Scope 1/2 record is refused once 400 are active; corrections and withdrawals are not.

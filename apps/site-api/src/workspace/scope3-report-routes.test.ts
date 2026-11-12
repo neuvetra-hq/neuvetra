@@ -228,6 +228,21 @@ describe("Scope 3 report version routes (I-10)", () => {
     expect((await a.json(await a.call("POST", `${base}/${three.id}/approval`, owner, { reportSha256: three.reportSha256, ...flags }))).status).toBe(201)
   })
 
+  // BF-09 (0031): the route's check reads the versions before the approval transaction; a prepare can commit in between. At
+  // schema 31 the database then refuses with 55N31, which is the same 409 as the route's own check, and nothing is stored.
+  test("BF-09: the database's superseded refusal (55N31) after the route's check passed is 409 version_superseded", async () => {
+    const a = app()
+    const one = (await a.json(await a.call("POST", base, owner, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, reason: null }))).body.version
+    const approve = a.database.approveScope3Report
+    // The race: a newer revision commits after the route read the versions, and the database refuses under its lock.
+    a.database.approveScope3Report = async () => { a.calls.push("approve"); throw coded("55N31") }
+    const refused = await a.json(await a.call("POST", `${base}/${one.id}/approval`, admin, { reportSha256: one.reportSha256, acknowledgeOpenIssues: one.openIssues.length > 0, confirmSelfApproval: false }))
+    expect([refused.status, refused.body]).toEqual([409, { code: "version_superseded", error: "A newer version of this report exists. Review and approve the newest version." }])
+    expect(a.calls).toContain("approve")
+    expect(a.rows[0]!.version.approval).toBeNull()
+    a.database.approveScope3Report = approve
+  })
+
   test("BF-05 F1: the rule also applies to a version of another reporting year than the current setup's, and an unknown version is never approved", async () => {
     const a = app()
     const prepare = async (expectedRevision: number, reason: string | null) => (await a.json(await a.call("POST", base, owner, { idempotencyKey: crypto.randomUUID(), expectedRevision, reason }))).body.version

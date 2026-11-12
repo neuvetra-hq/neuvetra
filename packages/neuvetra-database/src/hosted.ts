@@ -6,13 +6,16 @@ import { readMigrationManifest, type StagingMigration } from "./staging-migratio
 import { SCOPE3_COLLECTION_KINDS, SCOPE3_COMPLETION_SCHEMA, SCOPE3_LEGACY_KINDS, scope3SchemaRequired } from "./scope3-collection-contract"
 
 export const STAGING_PROFILE = "neuvetra.private-synthetic-staging.v1" as const
-export const STAGING_SCHEMA_VERSION = 30
+export const STAGING_SCHEMA_VERSION = 31
 /**
  * Temporary image-activation bridge for the pinned existing synthetic project; never migrates.
- * Schema 29 adds only Scope 3 collection (0029) and schema 30 only Scope 3 completion (0030). Hosted 0029 is on hold, so
- * the schema-30 image serves the existing project at exactly 28, 29 or 30 (every prefix from this bridge up). Below 29
+ * Schema 29 adds only Scope 3 collection (0029), schema 30 only Scope 3 completion (0030) and schema 31 only the integrity
+ * guards (0031). Hosted staging is at 30 when this image deploys, and the owner applies 0031 by hand afterwards, so the
+ * schema-31 image serves the existing project at exactly 28, 29, 30 or 31 (every prefix from this bridge up). Below 29
  * every Scope 3 write and Scope 3 result is refused before any SQL runs (D5); below 30 the 0030 record kinds and the
- * assessment, spend-import and report routes are refused the same way; Scope 1 and 2 behave the same at all three.
+ * assessment, spend-import and report routes are refused the same way; below 31 a Scope 1 or 2 save carrying
+ * `duplicateConfirmedDistinct` is refused before any SQL, and the BF-03 and BF-05 route checks are the only cap and
+ * superseded-approval guards (from 31 the database enforces both again under its company lock).
  */
 export const STAGING_SCHEMA_BRIDGE_VERSION = 28
 /** First schema with the collection tables and draft results (0027). */
@@ -21,7 +24,21 @@ export const STAGING_COLLECTION_SCHEMA_VERSION = 27
 export const STAGING_SCOPE3_SCHEMA_VERSION = 29
 /** First schema with the Scope 3 completion kinds, assessments, spend imports and report versions (0030). */
 export const STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION = 30
-/** The exact prefixes a schema-30 image serves for the existing project: 28, 29 and 30. A new project must be at 30. */
+/**
+ * First schema with the integrity guards (0031): the Scope 1 and 2 active-record cap (54N31) and the superseded-approval
+ * refusal (55N31) in SQL, TRUNCATE guards on the setup and collection history, and the optional Scope 1 and 2 payload flag
+ * `duplicateConfirmedDistinct`. Code that needs 0031 is gated on this, never on STAGING_SCHEMA_VERSION.
+ */
+export const STAGING_INTEGRITY_GUARDS_SCHEMA_VERSION = 31
+/**
+ * Whether the database at `schemaVersion` stores this Scope 1 or 2 payload: one carrying `duplicateConfirmedDistinct` needs
+ * 0031 (below it the database refuses the key, so the route refuses the save first, exactly as before 0031). Scope 3
+ * payloads are judged by `scope3ActivityAvailable`.
+ */
+export function scope12PayloadAvailable(payload: unknown, schemaVersion: number): boolean {
+  return schemaVersion >= STAGING_INTEGRITY_GUARDS_SCHEMA_VERSION || !(payload !== null && typeof payload === "object" && !Array.isArray(payload) && Object.prototype.hasOwnProperty.call(payload, "duplicateConfirmedDistinct"))
+}
+/** The exact prefixes a schema-31 image serves for the existing project: 28, 29, 30 and 31. A new project must be at 31. */
 export const STAGING_SERVED_SCHEMA_VERSIONS: readonly number[] = Array.from({ length: STAGING_SCHEMA_VERSION - STAGING_SCHEMA_BRIDGE_VERSION + 1 }, (_, i) => STAGING_SCHEMA_BRIDGE_VERSION + i)
 /**
  * Whether the database at `schemaVersion` stores this Scope 3 activity: the 0029 kinds with 0029 payloads from 29;

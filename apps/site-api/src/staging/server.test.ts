@@ -46,7 +46,7 @@ async function fixture() {
       if (!allowed) return null
       return { companyId: allowed.id, role: userId === OWNER ? "owner" as const : userId === ADMIN ? "admin" as const : "member" as const, evidenceId }
     },
-    async checkReadiness() { if (!healthy) throw new Error("sensitive-driver-value"); return { profile: STAGING_PROFILE, schemaVersion: 30 } },
+    async checkReadiness() { if (!healthy) throw new Error("sensitive-driver-value"); return { profile: STAGING_PROFILE, schemaVersion: 31 } },
   }) as StagingDatabase
   const app = await createStagingServer(readStagingConfig(environment), {
     database, validateUser: async (token) => (validations++, token === "broken-session") ? Promise.reject(new Error("sensitive-auth-value")) : users[token] ? { id: users[token]!, phone: null, email: "private@example.invalid", fullName: "Private fixture" } : null,
@@ -59,8 +59,8 @@ async function fixture() {
 }
 
 describe("M63 private staging boundary", () => {
-  test("nonexisting-project runtime refuses the schema-28 and schema-29 bridges and older prefixes before serving", async () => {
-    for (const schemaVersion of [23, 26, 27, 28, 29]) {
+  test("nonexisting-project runtime refuses the schema-28, 29 and 30 bridges and older prefixes before serving", async () => {
+    for (const schemaVersion of [23, 26, 27, 28, 29, 30]) {
       let closed=false
       const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion}),close:async()=>{closed=true}} as unknown as StagingDatabase
       await expect(createStagingServer(readStagingConfig(environment),{database,validateUser:async()=>null,verifyAssets:async()=>{}})).rejects.toThrow("Private staging dependencies are unavailable.")
@@ -68,7 +68,7 @@ describe("M63 private staging boundary", () => {
     }
   })
 
-  test("existing-project schema-28 bridge serves setup, collection and results, and keeps serving them at 29 and 30", async () => {
+  test("existing-project schema-28 bridge serves setup, collection and results, and keeps serving them at 29, 30 and 31", async () => {
     const company = "80000000-0000-4000-8000-000000000901"
     let schemaVersion = 28, setupReads = 0, collectionReads = 0
     const database = {
@@ -84,8 +84,8 @@ describe("M63 private staging boundary", () => {
     cleanup = app.close
     const request = (pathname: string, token?: string) => app.fetch(new Request(`${ORIGIN}${pathname}`, { headers: token ? { authorization: `Bearer ${token}` } : undefined }))
     const routes = [`/workspace-api/workspace/${company}/collection`, `/workspace-api/workspace/${company}/collection/evidence`, `/workspace-api/workspace/${company}/results`]
-    // Before and after the operator applies 0029 and 0030 (hosted 0029 is on hold): same readiness, same routes.
-    for (const version of [28, 29, 30]) {
+    // Before and after the operator applies 0029, 0030 and 0031 (BF-09): same readiness, same routes.
+    for (const version of [28, 29, 30, 31]) {
       schemaVersion = version
       const ready = await request("/ready")
       expect(ready.status).toBe(200)
@@ -139,9 +139,9 @@ describe("M63 private staging boundary", () => {
     }
   })
 
-  test("existing-project runtime refuses to start at any prefix other than 28, 29 or 30", async () => {
+  test("existing-project runtime refuses to start at any prefix other than 28, 29, 30 or 31", async () => {
     const config = readStagingConfig({ ...environment, NEUVETRA_STAGING_PROJECT_REF: "icockcoguyadhryzydvl", NEUVETRA_STAGING_REUSE_EXISTING: "confirmed", SUPABASE_URL: "https://icockcoguyadhryzydvl.supabase.co", DATABASE_URL: environment.DATABASE_URL.replace(REF, "icockcoguyadhryzydvl") })
-    for (const schemaVersion of [22, 23, 26, 27, 31]) {
+    for (const schemaVersion of [22, 23, 26, 27, 32]) {
       let closed = false
       const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion, legacyContainmentVerified: true }), close: async () => { closed = true } } as unknown as StagingDatabase
       await expect(createStagingServer(config, { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {} })).rejects.toThrow("Private staging dependencies are unavailable.")
@@ -149,14 +149,14 @@ describe("M63 private staging boundary", () => {
     }
   })
 
-  test("a running existing-project server stops serving if the database leaves 28, 29 or 30", async () => {
+  test("a running existing-project server stops serving if the database leaves 28, 29, 30 or 31", async () => {
     const config = readStagingConfig({ ...environment, NEUVETRA_STAGING_PROJECT_REF: "icockcoguyadhryzydvl", NEUVETRA_STAGING_REUSE_EXISTING: "confirmed", SUPABASE_URL: "https://icockcoguyadhryzydvl.supabase.co", DATABASE_URL: environment.DATABASE_URL.replace(REF, "icockcoguyadhryzydvl") })
     let schemaVersion = 28
     const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion, legacyContainmentVerified: true }), close: async () => {} } as unknown as StagingDatabase
     const app = await createStagingServer(config, { database, validateUser: async token => token === "ok" ? { id: OWNER, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, log: () => {} })
     cleanup = app.close
     expect((await app.fetch(new Request(`${ORIGIN}/ready`))).status).toBe(200)
-    for (const version of [27, 31]) {
+    for (const version of [27, 32]) {
       schemaVersion = version
       expect((await app.fetch(new Request(`${ORIGIN}/health`))).status).toBe(200)
       expect((await app.fetch(new Request(`${ORIGIN}/ready`))).status).toBe(503)
@@ -697,7 +697,7 @@ describe("API-02: token pre-check, readiness after validation, address observabi
     const lines: string[] = []
     console.warn = (...args: unknown[]) => { lines.push(args.map(String).join(" ")) }
     try {
-      const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion: 30 }), close: async () => {}, hasStagingAccess: async () => false } as unknown as StagingDatabase
+      const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion: 31 }), close: async () => {}, hasStagingAccess: async () => false } as unknown as StagingDatabase
       const app = await createStagingServer(readStagingConfig(environment), { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {} })
       cleanup = app.close
       for (let i = 0; i < 5; i++) await app.fetch(new Request(`${ORIGIN}/workspace-api/session`, { headers: { authorization: "Bearer secret-token-value" } }))

@@ -2,6 +2,9 @@ import { expect, test } from "bun:test"
 import { createPostgresConnection, HostedWorkspaceDatabase, provisionStagingRoster, revokeStagingAccess, M61_LIMITATION_ACKNOWLEDGMENTS, M64_LIMITATIONS, type WorkspaceConnection } from "@neuvetra/database"
 import { createSyntheticCompanySetup } from "../../../../packages/neuvetra-database/src/company-setup-fixture"
 import { possibleDuplicatesCountedWarning } from "../../../../packages/neuvetra-database/src/collection-duplicates"
+import { createStagingSchemaFixture, snapshotStagingTables } from "../../../../packages/neuvetra-database/src/staging-schema-fixture"
+import { EXISTING_PROJECT_REF, migratePrivateStaging } from "@neuvetra/database"
+import { RECORD_LIMIT_SAVE_TEXT } from "../workspace/collection-results-routes"
 import { createStagingServer } from "./server"
 import { readStagingConfig, STAGING_PROFILE } from "./config"
 
@@ -186,48 +189,197 @@ integration("M65 queued review captures post-lock time and cannot invalidate an 
  }finally{await review?.catch(()=>{});await database.close();await operator.close()}
 },30000)
 
-// BF-03 (BL-02, hunt-logic-c S10): Scope 1/2 Results count active records only, so withdrawing records always recovers Results.
-// 401 records are saved through the same RPC the route calls (the route's new save guard is checked at 400 further down).
-integration("BF-03 Scope 1 and 2 Results count active records only: 401 refuse, withdrawing 2 recovers, and a save past 400 is refused", async () => {
+// BF-03 (BL-02, hunt-logic-c S10) and BF-09 (0031): on this schema-31 fixture the 400-active-record cap is enforced in SQL,
+// under the company lock: through the RPC directly (54N31), for a withdrawn record made active again, and for 25
+// simultaneous saves at 399 active (QA drove the same race to 424 before 0031). Corrections that keep a record active,
+// withdrawals and Scope 3 saves are never refused. Through the HTTP route a refused save is 422 record_limit_reached, from the
+// route's own check (new records) or from 54N31 (reactivation). The over-400 Results case needs records saved before 0031
+// and is in the schema-30 test below.
+const bf09 = () => {
   const REF = "abcdefghijklmnopqrst", ORIGIN = "http://127.0.0.1:3015"
+  const config = (ref = REF) => readStagingConfig({ NODE_ENV: "test", NEUVETRA_STAGING_ENABLED: "enabled", NEUVETRA_STAGING_PROFILE: STAGING_PROFILE, NEUVETRA_STAGING_PROJECT_REF: ref, NEUVETRA_STAGING_ORIGIN: ORIGIN, SUPABASE_URL: `https://${ref}.supabase.co`, SUPABASE_ANON_KEY: "sb_publishable_synthetic_fixture_not_a_real_key",
+    DATABASE_URL: `postgres://neuvetra_runtime:fixture@db.${ref}.supabase.co:5432/postgres`, ...(ref === EXISTING_PROJECT_REF ? { NEUVETRA_STAGING_REUSE_EXISTING: "confirmed" } : {}) })
+  const construct = (url: string, ref = REF, maxConnections = 4) => new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string, reuse: boolean) => HostedWorkspaceDatabase)(createPostgresConnection(url, { tls: false, maxConnections }), ref, ref === EXISTING_PROJECT_REF)
+  /** `users`: bearer token to Auth user ID (the token validator is injected, as in every staged native test). */
+  const serve = (database: HostedWorkspaceDatabase, users: Record<string, string>, ref = REF) => createStagingServer(config(ref), { database, validateUser: async token => users[token] ? { id: users[token]!, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, serveAsset: async () => null, log: () => {} })
+  const caller = (app: Awaited<ReturnType<typeof serve>>, token = "owner") => async (method: string, route: string, body?: unknown) => {
+    const response = await app.fetch(new Request(`${ORIGIN}${route.startsWith("/ready") ? "" : "/workspace-api"}${route}`, { method, body: body === undefined ? undefined : JSON.stringify(body), headers: { origin: ORIGIN, authorization: `Bearer ${token}`, ...(body === undefined ? {} : { "content-type": "application/json" }) } }))
+    return { status: response.status, body: await response.json() as any }
+  }
+  /** One included California site, Scope 1 screened out; saved through the setup route. */
+  const setUp = async (call: ReturnType<typeof caller>, company: string) => {
+    const base = createSyntheticCompanySetup(), site = { ...base.locations[0]!, inclusion: "included" as const, control: "reporting_company" as const, startMode: "period_start" as const, endMode: "period_end" as const }
+    const setup = { ...base, boundary: { ...base.boundary, approach: "operational_control" as const }, entities: base.entities.map(e => ({ ...e, inclusion: "included" as const, control: "operational_control" as const })), locations: [site], screening: base.screening.map(s => s.scope === 1 ? { ...s, state: "no" as const, reason: "None here" } : s) }
+    const saved = await call("POST", `/workspace/${company}/setup`, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, setup })
+    expect(saved.status).toBe(201)
+    const setupVersionId = saved.body.savedVersion.id as string
+    const common = { locationId: site.id, setupVersionId, withdrawalReason: null, quality: "actual", estimateBasis: null, period: { start: "2025-01-01", endExclusive: "2026-01-01" }, reference: "Synthetic BF-09", notes: "", evidenceIds: [] }
+    return {
+      electricity: (sourceId: string, state: "active" | "withdrawn" = "active") => ({ ...common, state, withdrawalReason: state === "withdrawn" ? "Entered twice." : null, kind: "electricity", sourceId,
+        quantity: { originalValue: "100", originalUnit: "kWh", normalizedValue: "100", normalizedUnit: "kWh" },
+        payload: { meterOrAccountNumber: sourceId, utilityName: "City & County of San Francisco", site: "Office", zip: "94105", subregion: "CAMX", utilityEiaId: "16612", instruments: [] } }),
+      travel: (sourceId: string) => ({ ...common, state: "active", kind: "business_travel", sourceId, quantity: { originalValue: "2400", originalUnit: "mile", normalizedValue: "2400", normalizedUnit: "mile" }, payload: { mode: "air", passengerSegments: 4, haulBasis: null } }),
+    }
+  }
+  const request = (revision: number, versionId: string | null, activity: unknown, reason: string | null = null) => ({ idempotencyKey: crypto.randomUUID(), expectedRevision: revision, expectedVersionId: versionId, correctionReason: reason, activity })
+  const code = (promise: Promise<unknown>) => promise.then(() => "saved", (error: { code?: string }) => error.code ?? "no code")
+  return { REF, construct, serve, caller, setUp, request, code }
+}
+
+integration("BF-09 at schema 31: the Scope 1 and 2 cap holds in SQL for new records, reactivation and 25 simultaneous saves at 399", async () => {
+  const { construct, serve, caller, setUp, request, code } = bf09()
   const owner = crypto.randomUUID(), company = crypto.randomUUID()
   const operator = createPostgresConnection(target!, { tls: false })
   const runtimeUrl = new URL(target!); runtimeUrl.username = "neuvetra_runtime"
-  const database = new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string) => HostedWorkspaceDatabase)(createPostgresConnection(runtimeUrl.toString(), { tls: false }), REF)
-  const config = readStagingConfig({ NODE_ENV: "test", NEUVETRA_STAGING_ENABLED: "enabled", NEUVETRA_STAGING_PROFILE: STAGING_PROFILE, NEUVETRA_STAGING_PROJECT_REF: REF, NEUVETRA_STAGING_ORIGIN: ORIGIN, SUPABASE_URL: `https://${REF}.supabase.co`, SUPABASE_ANON_KEY: "sb_publishable_synthetic_fixture_not_a_real_key", DATABASE_URL: `postgres://neuvetra_runtime:fixture@db.${REF}.supabase.co:5432/postgres` })
-  const app = await createStagingServer(config, { database, validateUser: async token => token === "owner" ? { id: owner, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, serveAsset: async () => null, log: () => {} })
-  const call = async (method: string, route: string, body?: unknown) => {
-    const response = await app.fetch(new Request(`${ORIGIN}/workspace-api${route}`, { method, body: body === undefined ? undefined : JSON.stringify(body), headers: { origin: ORIGIN, authorization: "Bearer owner", ...(body === undefined ? {} : { "content-type": "application/json" }) } }))
-    return { status: response.status, body: await response.json() as any }
-  }
+  const database = construct(runtimeUrl.toString())
+  // A pool wide enough that every one of the simultaneous saves holds its own backend at once.
+  const wide = construct(runtimeUrl.toString(), undefined, 25)
+  const app = await serve(database, { owner })
+  const call = caller(app)
   try {
+    expect((await call("GET", "/ready")).body.schemaVersion).toBe(31)
     await operator.query("insert into auth.users(id) values($1)", [owner])
-    await provisionStagingRoster(operator, { expectedProjectRef: REF, workspaceId: company, ownerUserId: owner, members: [] })
+    await provisionStagingRoster(operator, { expectedProjectRef: "abcdefghijklmnopqrst", workspaceId: company, ownerUserId: owner, members: [] })
+    const { electricity, travel } = await setUp(call, company)
     const root = `/workspace/${company}`
-    const base = createSyntheticCompanySetup(), loc = { ...base.locations[0]!, inclusion: "included" as const, control: "reporting_company" as const, startMode: "period_start" as const, endMode: "period_end" as const }
-    const setup = { ...base, boundary: { ...base.boundary, approach: "operational_control" as const }, entities: base.entities.map(e => ({ ...e, inclusion: "included" as const, control: "operational_control" as const })), locations: [loc], screening: base.screening.map(s => s.scope === 1 ? { ...s, state: "no" as const, reason: "None here" } : s) }
-    const saved = await call("POST", `${root}/setup`, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, setup })
-    expect(saved.status).toBe(201)
-    const setupVersionId = saved.body.savedVersion.id as string
-    const electricity = (sourceId: string) => ({ locationId: loc.id, setupVersionId, state: "active", withdrawalReason: null, quality: "actual", estimateBasis: null, period: { start: "2025-01-01", endExclusive: "2026-01-01" }, reference: "Synthetic BF-03", notes: "", evidenceIds: [], kind: "electricity", sourceId,
-      quantity: { originalValue: "100", originalUnit: "kWh", normalizedValue: "100", normalizedUnit: "kWh" },
-      payload: { meterOrAccountNumber: sourceId, utilityName: "City & County of San Francisco", site: "Office", zip: "94105", subregion: "CAMX", utilityEiaId: "16612", instruments: [] } })
-    const saveVia = (id: string, revision: number, versionId: string | null, activity: unknown, reason: string | null) => database.saveCollectionActivity(owner, company, id, { idempotencyKey: crypto.randomUUID(), expectedRevision: revision, expectedVersionId: versionId, correctionReason: reason, activity } as never)
     const saves: Array<{ id: string; version: string }> = []
-    for (let i = 0; i < 401; i++) { const id = crypto.randomUUID(); saves.push({ id, version: (await saveVia(id, 0, null, electricity(`M-${i}`), null)).version.id }) }
+    for (let i = 0; i < 399; i++) { const id = crypto.randomUUID(); saves.push({ id, version: (await database.saveCollectionActivity(owner, company, id, request(0, null, electricity(`M-${i}`)))).version.id }) }
+    // 25 simultaneous new records at 399 active: exactly one is saved, 24 are refused with 54N31, and nothing else is written.
+    const raced = await Promise.all(Array.from({ length: 25 }, (_, i) => code(wide.saveCollectionActivity(owner, company, crypto.randomUUID(), request(0, null, electricity(`RACE-${i}`))))))
+    expect([raced.filter(c => c === "saved").length, raced.filter(c => c === "54N31").length]).toEqual([1, 24])
+    const active = async () => Number((await operator.query<{ n: string }>(`select count(*) n from neuvetra.collection_activity_records r join neuvetra.collection_activity_heads h on h.record_id=r.id and h.company_id=r.company_id
+      join neuvetra.collection_activity_versions v on v.id=h.version_id and v.company_id=r.company_id where r.company_id=$1 and r.scope in(1,2) and v.state='active'`, [company])).rows[0]!.n)
+    expect(await active()).toBe(400)
+    expect(Number((await operator.query<{ n: string }>("select count(*) n from neuvetra.collection_activity_records where company_id=$1", [company])).rows[0]!.n)).toBe(400)
+    // S10 through the RPC directly: the 401st active record is refused.
+    expect(await code(database.saveCollectionActivity(owner, company, crypto.randomUUID(), request(0, null, electricity("M-401"))))).toBe("54N31")
+    // At the cap: a correction that keeps a record active and a withdrawal are saved; a Scope 3 record never counts.
+    expect(await code(database.saveCollectionActivity(owner, company, saves[0]!.id, request(1, saves[0]!.version, electricity("M-0-corrected"), "Corrected meter")))).toBe("saved")
+    const withdrawn = (await database.saveCollectionActivity(owner, company, saves[1]!.id, request(1, saves[1]!.version, electricity("M-1", "withdrawn"), "Withdrawn: entered twice"))).version
+    expect(await code(database.saveCollectionActivity(owner, company, crypto.randomUUID(), request(0, null, travel("T-1"))))).toBe("saved")
+    // 399 active again: one new record fills the cap, and then the withdrawn record cannot be made active again (CEO addendum).
+    expect(await code(database.saveCollectionActivity(owner, company, crypto.randomUUID(), request(0, null, electricity("M-402"))))).toBe("saved")
+    expect(await code(database.saveCollectionActivity(owner, company, saves[1]!.id, request(2, withdrawn.id, electricity("M-1"), "Reactivated")))).toBe("54N31")
+    expect(await active()).toBe(400)
+    // Through the HTTP route: a new record is refused by the route's own check, the reactivation by 54N31; both are 422.
+    const newRecord = await call("POST", `${root}/collection/activities/${crypto.randomUUID()}`, request(0, null, electricity("M-403")))
+    expect([newRecord.status, newRecord.body.code]).toEqual([422, "record_limit_reached"])
+    const reactivated = await call("POST", `${root}/collection/activities/${saves[1]!.id}`, request(2, withdrawn.id, electricity("M-1"), "Reactivated"))
+    expect([reactivated.status, reactivated.body]).toEqual([422, { code: "record_limit_reached", error: RECORD_LIMIT_SAVE_TEXT }])
+    expect((await call("POST", `${root}/collection/activities/${saves[2]!.id}`, request(1, saves[2]!.version, electricity("M-2", "withdrawn"), "Withdrawn: entered twice"))).status).toBe(201)
+    expect(await active()).toBe(399)
+    // At exactly 400 active Results are available.
+    expect((await call("POST", `${root}/collection/activities/${saves[1]!.id}`, request(2, withdrawn.id, electricity("M-1"), "Reactivated"))).status).toBe(201)
+    expect((await call("GET", `${root}/results`)).status).toBe(200)
+    // The capability tells the web it may send duplicateConfirmedDistinct; a Scope 1 or 2 save may carry it at 31.
+    expect((await call("GET", `${root}/collection`)).body.capabilities.duplicateConfirmation).toBe(true)
+    const confirmed = await call("POST", `${root}/collection/activities/${saves[3]!.id}`, request(1, saves[3]!.version, { ...electricity("M-3"), payload: { ...electricity("M-3").payload, duplicateConfirmedDistinct: true } }, "Confirmed a different meter"))
+    expect([confirmed.status, confirmed.body.version?.activity?.payload?.duplicateConfirmedDistinct]).toEqual([201, true])
+  } finally { await app.close(); await database.close().catch(() => {}); await wide.close(); await operator.close() }
+}, 600_000)
+
+integration("BF-09 at schema 31: TRUNCATE of any setup or collection history table is refused, even for the operator", async () => {
+  const operator = createPostgresConnection(target!, { tls: false })
+  const tables = ["company_setup_versions", "company_setup_heads", "company_setup_requests", "company_setup_entities", "company_setup_relationships", "company_setup_locations", "company_setup_screening", "company_setup_changes",
+    "collection_evidence_objects", "collection_evidence_quarantine_events", "collection_evidence_upload_intents", "collection_evidence_uploads", "collection_evidence_orphan_recovery", "collection_activity_records", "collection_activity_versions",
+    "collection_activity_heads", "collection_activity_requests", "collection_activity_evidence_links", "collection_electricity_instruments", "collection_grid_loss_lineage"]
+  try {
+    const before = Number((await operator.query<{ n: string }>("select count(*) n from neuvetra.collection_activity_versions")).rows[0]!.n)
+    expect(before).toBeGreaterThan(0)
+    for (const table of tables) {
+      // Always rolled back: if the guard were missing the sentinel would surface instead, and nothing would be lost.
+      const failure = await operator.transaction(async tx => { await tx.exec(`truncate neuvetra.${table} cascade`); throw new Error("SENTINEL: truncate succeeded") }).then(() => null, (error: { code?: string; message: string }) => error)
+      expect([table, failure?.code, failure?.message]).toEqual([table, "55000", "setup and collection history cannot be truncated"])
+    }
+    expect(Number((await operator.query<{ n: string }>("select count(*) n from neuvetra.collection_activity_versions")).rows[0]!.n)).toBe(before)
+  } finally { await operator.close() }
+}, 60_000)
+
+// BF-09: the image this PR deploys, against an existing-project database at schema 30 (hosted staging today), behaves as
+// before 0031: the BF-03 route check is the only cap, so a withdrawn record can still be made active again past 400 (the
+// gap QA found) and Results over 400 are refused until records are withdrawn (BF-03 S10); duplicateConfirmedDistinct is
+// refused before any SQL and the capability says so. Then 0031 is applied the way the owner will apply it
+// (migratePrivateStaging, existing project confirmed) while the same server keeps running: /ready reports 31, the records
+// and Results are unchanged, the reactivation gap is closed (422 from 54N31) and the flag is stored.
+integration("BF-09: the same server at schema 30, then after 0031 is applied at 31 (existing-project bridge)", async () => {
+  const { construct, serve, caller, setUp, request } = bf09()
+  const owner = crypto.randomUUID(), other = crypto.randomUUID(), company = crypto.randomUUID(), small = crypto.randomUUID()
+  const fixture = await createStagingSchemaFixture(target!, "m63_bf09_routes", 30, EXISTING_PROJECT_REF)
+  const operator = fixture.operator
+  const database = construct(fixture.runtimeUrl, EXISTING_PROJECT_REF)
+  let app: Awaited<ReturnType<typeof serve>> | undefined
+  try {
+    // provisionStagingRoster's statements (it validates a complete schema-31 receipt set, so it cannot run at 30).
+    for (const [user, id] of [[owner, company], [other, small]] as const) {
+      await operator.query("insert into auth.users(id) values($1)", [user])
+      await operator.transaction(async tx => {
+        await tx.query("insert into neuvetra.staging_access(user_id,active) values($1,true)", [user])
+        await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [user])
+        await tx.query("select neuvetra.create_company_workspace($1,'Synthetic Acme, Inc.',$2,'Synthetic California office',$3,2023,$4)", [id, crypto.randomUUID(), crypto.randomUUID(), crypto.randomUUID()])
+        await tx.query("insert into neuvetra.company_members(company_id,user_id,role) values($1,$2,'owner') on conflict(company_id,user_id) do update set role=excluded.role", [id, user])
+        await tx.query("update neuvetra.staging_access set company_id=$2,active=true where user_id=$1", [user, id])
+      })
+    }
+    app = await serve(database, { owner, other }, EXISTING_PROJECT_REF)
+    const call = caller(app), callOther = caller(app, "other")
+    const ready30 = await call("GET", "/ready")
+    expect([ready30.status, ready30.body.schemaVersion]).toEqual([200, 30])
+    // The second company is the one whose Results are compared across the migration (the owner's check on staging).
+    const few = await setUp(callOther, small)
+    for (const meter of ["S-1", "S-2"]) expect((await callOther("POST", `/workspace/${small}/collection/activities/${crypto.randomUUID()}`, request(0, null, few.electricity(meter)))).status).toBe(201)
+    expect((await callOther("POST", `/workspace/${small}/collection/activities/${crypto.randomUUID()}`, request(0, null, few.travel("T-1")))).status).toBe(201)
+    const resultsAt30 = await callOther("GET", `/workspace/${small}/results`)
+    const scope3At30 = await callOther("GET", `/workspace/${small}/results/scope3`)
+    expect([resultsAt30.status, scope3At30.status]).toEqual([200, 200])
+
+    const root = `/workspace/${company}`
+    const { electricity } = await setUp(call, company)
+    expect((await call("GET", `${root}/collection`)).body.capabilities.duplicateConfirmation).toBe(false)
+    const saves: Array<{ id: string; version: string }> = []
+    for (let i = 0; i < 400; i++) { const id = crypto.randomUUID(); saves.push({ id, version: (await database.saveCollectionActivity(owner, company, id, request(0, null, electricity(`M-${i}`)))).version.id }) }
+    // At 30 the route's check refuses a new record at 400 ...
+    const refused = await call("POST", `${root}/collection/activities/${crypto.randomUUID()}`, request(0, null, electricity("M-400")))
+    expect([refused.status, refused.body.code]).toEqual([422, "record_limit_reached"])
+    // ... and the flag is refused before any SQL, exactly as any unknown key was before this PR.
+    const flagged = await call("POST", `${root}/collection/activities/${saves[5]!.id}`, request(1, saves[5]!.version, { ...electricity("M-5"), payload: { ...electricity("M-5").payload, duplicateConfirmedDistinct: true } }, "Confirmed a different meter"))
+    expect([flagged.status, flagged.body]).toEqual([422, { error: "Invalid or unsupported collection record." }])
+    // ... but a withdrawn record made active again is not caught at 30 (the gap 0031 closes): 401 active.
+    const withdrawn = (await call("POST", `${root}/collection/activities/${saves[0]!.id}`, request(1, saves[0]!.version, electricity("M-0", "withdrawn"), "Withdrawn: entered twice"))).body.version.id as string
+    expect((await call("POST", `${root}/collection/activities/${crypto.randomUUID()}`, request(0, null, electricity("M-401")))).status).toBe(201)
+    const back = await call("POST", `${root}/collection/activities/${saves[0]!.id}`, request(2, withdrawn, electricity("M-0"), "Reactivated"))
+    expect(back.status).toBe(201)
+    // BF-03 S10: more than 400 active records refuse Results; withdrawing 2 brings them back (399 active).
     const over = await call("GET", `${root}/results`)
     expect([over.status, over.body.code]).toEqual([422, "record_limit_reached"])
-    const withdraw = async (item: { id: string; version: string }, sourceId: string) => saveVia(item.id, 1, item.version, { ...electricity(sourceId), state: "withdrawn", withdrawalReason: "Entered twice" }, "Withdrawn: entered twice")
-    await withdraw(saves[0]!, "M-0"); await withdraw(saves[1]!, "M-1")
+    const latest = back.body.version.id as string
+    expect((await call("POST", `${root}/collection/activities/${saves[0]!.id}`, request(3, latest, electricity("M-0", "withdrawn"), "Withdrawn again"))).status).toBe(201)
+    expect((await call("POST", `${root}/collection/activities/${saves[1]!.id}`, request(1, saves[1]!.version, electricity("M-1", "withdrawn"), "Withdrawn: entered twice"))).status).toBe(201)
     expect((await call("GET", `${root}/results`)).status).toBe(200)
-    // 399 active: exactly one more is accepted through the HTTP route; the next new record is refused, a correction and a withdrawal are not.
-    const post = (id: string, revision: number, versionId: string | null, activity: unknown, reason: string | null) => call("POST", `${root}/collection/activities/${id}`, { idempotencyKey: crypto.randomUUID(), expectedRevision: revision, expectedVersionId: versionId, correctionReason: reason, activity })
-    expect((await post(crypto.randomUUID(), 0, null, electricity("M-401"), null)).status).toBe(201)
-    const refused = await post(crypto.randomUUID(), 0, null, electricity("M-402"), null)
-    expect([refused.status, refused.body.code]).toEqual([422, "record_limit_reached"])
-    expect((await post(saves[2]!.id, 1, saves[2]!.version, electricity("M-2-corrected"), "Corrected meter")).status).toBe(201)
-    expect((await post(saves[3]!.id, 1, saves[3]!.version, { ...electricity("M-3"), state: "withdrawn", withdrawalReason: "Entered twice" }, "Withdrawn: entered twice")).status).toBe(201)
-  } finally { await app.close(); await database.close(); await operator.close() }
+    const recordsAt30 = await database.findCollectionActivities(owner, company)
+
+    // The owner's step: apply 0031 through the operator path while the server keeps running.
+    const before = await snapshotStagingTables(operator)
+    expect((await migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true })).schemaVersion).toBe(31)
+    const after = await snapshotStagingTables(operator)
+    expect(Object.keys(before).filter(table => JSON.stringify(before[table]) !== JSON.stringify(after[table]))).toEqual(["neuvetra.schema_migrations"])
+    const ready31 = await call("GET", "/ready")
+    expect([ready31.status, ready31.body.schemaVersion]).toEqual([200, 31])
+    expect(await database.findCollectionActivities(owner, company)).toEqual(recordsAt30)
+    // At 31 the same withdrawn record cannot be made active past 400 (399 active plus one new = 400 first).
+    expect((await call("POST", `${root}/collection/activities/${crypto.randomUUID()}`, request(0, null, electricity("M-402")))).status).toBe(201)
+    const current0 = recordsAt30.find(record => record.id === saves[0]!.id)!.currentVersion
+    const closed = await call("POST", `${root}/collection/activities/${saves[0]!.id}`, request(current0.revision, current0.id, electricity("M-0"), "Reactivated"))
+    expect([closed.status, closed.body.code]).toEqual([422, "record_limit_reached"])
+    expect((await call("GET", `${root}/collection`)).body.capabilities.duplicateConfirmation).toBe(true)
+    const stored = await call("POST", `${root}/collection/activities/${saves[5]!.id}`, request(1, saves[5]!.version, { ...electricity("M-5"), payload: { ...electricity("M-5").payload, duplicateConfirmedDistinct: true } }, "Confirmed a different meter"))
+    expect(stored.status).toBe(201)
+
+    // The second company's Results are unchanged by the migration (apart from when they were generated).
+    const resultsAt31 = await callOther("GET", `/workspace/${small}/results`)
+    const scope3At31 = await callOther("GET", `/workspace/${small}/results/scope3`)
+    expect({ ...resultsAt31.body, generatedAt: "" }).toEqual({ ...resultsAt30.body, generatedAt: "" })
+    expect({ ...scope3At31.body, generatedAt: "" }).toEqual({ ...scope3At30.body, generatedAt: "" })
+  } finally { await app?.close(); await database.close().catch(() => {}); await fixture.close() }
 }, 600_000)
 
 // BF-01 part A (auditor S1, BL-01): the same electricity bill saved twice through the collection route on native

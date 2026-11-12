@@ -36,11 +36,18 @@ export interface CollectionInstrument {
   generationTechnology: 'wind' | 'solar_photovoltaic' | 'hydro' | 'nuclear' | 'geothermal' | 'natural_gas' | 'coal' | 'oil' | 'biomass' | 'biogas' | 'landfill_gas' | 'mixed' | 'unknown'
   rateLbPerMwh: null | { co2: string; ch4: string | null; n2o: string | null }
 }
-export type NaturalGasCollectionPayload = { heatContent: null | { value: string; unit: 'MMBtu per scf' | 'MMBtu per ccf' | 'MMBtu per mcf' | 'therm per ccf' } }
-export type DistillateCollectionPayload = { consumption: { basis: 'measured'; gallons: string } | { basis: 'purchases_with_tank_levels'; purchasedGallons: string; openingGallons: string; closingGallons: string } | { basis: 'purchases_only'; purchasedGallons: string }; statedHhvMmbtuPerGallon: string | null }
-export type VehicleCollectionPayload = { vehicleGroupId: string; fuel: string; vehicleType: string; modelYear: number; gallons: string; vehicleCount: number | null; miles: null | { value: string; basis: string }; fuelEconomy: null | { mpg: string; source: string } }
-export type FugitiveCollectionPayload = { gas: 'HFC-134a' | 'HFC-227ea' | 'R-404A' | 'R-407C' | 'R-410A' | 'R-507A' | 'R-22' | 'R-12' | 'R-502'; unit: 'kg' | 'lb'; terms: { PN: string; CN: string; PS: string; CD: string; RD: string }; insideBoundary: boolean | null; maintainsRefrigerantStock: boolean | null; retrofitInPeriod: boolean | null; contractorRecordsComplete: boolean; eventChronologyComplete: boolean }
-export type ElectricityCollectionPayload = { meterOrAccountNumber: string; utilityName: string; site: string; zip: string; subregion: string; utilityEiaId: string | null; instruments: CollectionInstrument[] }
+/**
+ * BF-09 (0031): a Scope 1 or 2 payload may carry `duplicateConfirmedDistinct`, the user's confirmation that a record flagged as
+ * a possible duplicate is a different record. Optional: absent (as every record saved before 0031), true or false. Storage and
+ * validation only; nothing reads it yet. A database below schema 31 refuses the key, so the route refuses such a save first
+ * (`scope12PayloadAvailable`), and the web must not send it while the server reports schema 30.
+ */
+export type DuplicateConfirmation = { duplicateConfirmedDistinct?: boolean }
+export type NaturalGasCollectionPayload = DuplicateConfirmation & { heatContent: null | { value: string; unit: 'MMBtu per scf' | 'MMBtu per ccf' | 'MMBtu per mcf' | 'therm per ccf' } }
+export type DistillateCollectionPayload = DuplicateConfirmation & { consumption: { basis: 'measured'; gallons: string } | { basis: 'purchases_with_tank_levels'; purchasedGallons: string; openingGallons: string; closingGallons: string } | { basis: 'purchases_only'; purchasedGallons: string }; statedHhvMmbtuPerGallon: string | null }
+export type VehicleCollectionPayload = DuplicateConfirmation & { vehicleGroupId: string; fuel: string; vehicleType: string; modelYear: number; gallons: string; vehicleCount: number | null; miles: null | { value: string; basis: string }; fuelEconomy: null | { mpg: string; source: string } }
+export type FugitiveCollectionPayload = DuplicateConfirmation & { gas: 'HFC-134a' | 'HFC-227ea' | 'R-404A' | 'R-407C' | 'R-410A' | 'R-507A' | 'R-22' | 'R-12' | 'R-502'; unit: 'kg' | 'lb'; terms: { PN: string; CN: string; PS: string; CD: string; RD: string }; insideBoundary: boolean | null; maintainsRefrigerantStock: boolean | null; retrofitInPeriod: boolean | null; contractorRecordsComplete: boolean; eventChronologyComplete: boolean }
+export type ElectricityCollectionPayload = DuplicateConfirmation & { meterOrAccountNumber: string; utilityName: string; site: string; zip: string; subregion: string; utilityEiaId: string | null; instruments: CollectionInstrument[] }
 export type CollectionPayload = NaturalGasCollectionPayload | DistillateCollectionPayload | VehicleCollectionPayload | FugitiveCollectionPayload | ElectricityCollectionPayload
   | TransportCollectionPayload | WasteCollectionPayload | BusinessTravelCollectionPayload | CommutingCollectionPayload | Scope3CompletionPayload
 
@@ -221,6 +228,16 @@ function validatePayload(kind: CollectionActivityKind, value: unknown): Collecti
   if (isScope3CollectionKind(kind)) {
     try { return validateScope3Payload(kind, value) } catch { return fail() }
   }
+  // BF-09: the optional confirmation is validated here and the kind's own key list is checked without it, as 0031 does.
+  if (!value || typeof value !== 'object' || Array.isArray(value)) fail()
+  const { duplicateConfirmedDistinct, ...rest } = value as Record<string, unknown>
+  const confirmed = Object.prototype.hasOwnProperty.call(value, 'duplicateConfirmedDistinct')
+  if (confirmed && typeof duplicateConfirmedDistinct !== 'boolean') fail()
+  const payload = validateScope12Payload(kind, rest)
+  return confirmed ? { ...payload, duplicateConfirmedDistinct: duplicateConfirmedDistinct as boolean } : payload
+}
+
+function validateScope12Payload(kind: CollectionScope12Kind, value: unknown): CollectionPayload {
   if (kind === 'natural_gas') {
     const p = object(value, ['heatContent'])
     if (p.heatContent === null) return { heatContent: null }
