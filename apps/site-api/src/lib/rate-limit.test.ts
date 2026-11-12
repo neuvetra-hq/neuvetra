@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { createRateLimiter, extractClientIp } from "./rate-limit"
+import { createRateLimiter, extractClientIp, extractProxiedClientAddress } from "./rate-limit"
 
 describe("createRateLimiter()", () => {
   test("allows up to `max` requests per window for a given key", () => {
@@ -94,5 +94,51 @@ describe("extractClientIp()", () => {
   test("ignores empty x-forwarded-for and falls through", () => {
     const headers = make({ "x-forwarded-for": "" })
     expect(extractClientIp(headers, "198.51.100.9")).toBe("198.51.100.9")
+  })
+})
+
+describe("RateLimiter.release()", () => {
+  test("gives back one request from the same window", () => {
+    const now = 1_000
+    const limiter = createRateLimiter({ max: 1, windowMs: 1000, now: () => now })
+    const first = limiter.check("a")
+    expect(limiter.check("a").allowed).toBe(false)
+    limiter.release("a", first)
+    expect(limiter.check("a").allowed).toBe(true)
+  })
+
+  test("never gives back into a later window, for a refused check, or below zero", () => {
+    let now = 1_000
+    const limiter = createRateLimiter({ max: 1, windowMs: 1000, now: () => now })
+    const stale = limiter.check("a")
+    now = 2_500
+    expect(limiter.check("a").allowed).toBe(true)
+    limiter.release("a", stale)
+    const refused = limiter.check("a")
+    expect(refused.allowed).toBe(false)
+    limiter.release("a", refused)
+    expect(limiter.check("a").allowed).toBe(false)
+    limiter.release("missing", stale)
+  })
+})
+
+describe("extractProxiedClientAddress()", () => {
+  const make = (init: Record<string, string>) => new Headers(init)
+
+  test("prefers the edge-written x-real-ip", () => {
+    expect(extractProxiedClientAddress(make({ "x-real-ip": "203.0.113.5", "x-forwarded-for": "198.51.100.1" }))).toBe("203.0.113.5")
+  })
+
+  test("uses the rightmost x-forwarded-for hop, never the caller-controlled leftmost", () => {
+    expect(extractProxiedClientAddress(make({ "x-forwarded-for": "8.8.8.8, 203.0.113.9" }))).toBe("203.0.113.9")
+  })
+
+  test("takes the last value of a duplicated x-real-ip", () => {
+    expect(extractProxiedClientAddress(make({ "x-real-ip": "8.8.8.8, 203.0.113.5" }))).toBe("203.0.113.5")
+  })
+
+  test("falls back to one shared 'unknown' key", () => {
+    expect(extractProxiedClientAddress(make({}))).toBe("unknown")
+    expect(extractProxiedClientAddress(make({ "x-forwarded-for": " , " }))).toBe("unknown")
   })
 })
