@@ -93,20 +93,21 @@ test("a coverage date hidden by switching back to 'At period start' is not sent 
 
 // ── Workspace navigation: the skip link keeps the current view ──
 // WO-07: the retired milestone panels are no longer imported by the workspace.
-const names = ["CompanySetup", "CollectionWorkspace", "JourneyNav", "JourneyHome", "ResultsReport", "AskNeuvetra", "EarlierViews", "PanelGuide", "Icon"]
+// WO-08: the workspace also draws the context bar and the Menu sheet.
+const names = ["CompanySetup", "CollectionWorkspace", "JourneyNav", "JourneyHome", "ResultsReport", "AskNeuvetra", "EarlierViews", "PanelGuide", "Icon", "ContextBar", "MenuSheet"]
 const stubs = Object.fromEntries(names.map(name => [name, function Stub() { return name }]))
 
 test("following the 'Skip to content' link (#workspace-main) on Results keeps the Results view", async () => {
   const listeners = new Map<string, () => void>()
   const location = { hash: "#/results", pathname: "/staging", search: "" }
   const make = await loadComponent("./StagingWorkspace.tsx", "StagingWorkspace", {
-    ...stubs, ...viewRoute,
+    ...stubs, ...viewRoute, MENU_SHEET_ID: "nv-menu-sheet", MENU_TEXT: { open: "Menu" },
     loadJourneyStatus: () => new Promise(() => {}),
     window: { location, history: { pushState(_s: unknown, _t: string, url: string) { location.hash = url }, replaceState(_s: unknown, _t: string, url: string) { location.hash = url.startsWith("#") ? url : "" } }, confirm: () => true, scrollTo() {}, setTimeout: () => 1, clearTimeout() {},
       addEventListener(name: string, fn: () => void) { listeners.set(name, fn) }, removeEventListener(name: string) { listeners.delete(name) } },
     document: { title: "", body: {}, activeElement: {} },
   })
-  const app = harness(make, () => ({ headingRef: { current: null }, staging: { actor: { userId: "u", role: "owner" }, workspaceId: "33333333-3333-4333-8333-333333333333", evidenceId: null } }))
+  const app = harness(make, () => ({ headingRef: { current: null }, staging: { actor: { userId: "u", role: "owner" }, workspaceId: "33333333-3333-4333-8333-333333333333", evidenceId: null }, account: { email: "owner@synthetic.invalid", signingOut: false, onSignOut: () => {} } }))
   await app.settle()
   expect(app.nodes().some(node => node.type === stubs.ResultsReport)).toBe(true)
   // A same-document fragment navigation (clicking <a href="#workspace-main">) updates the URL and fires popstate (HTML "navigate to a fragment").

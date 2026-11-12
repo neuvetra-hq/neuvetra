@@ -1,0 +1,92 @@
+/* WO-08: mobile shell — top bar, context bar, Menu sheet. Unlayered on purpose (see the developer brief): a layered rule
+   would lose to the unlayered journey.css and staging.css rules. */
+
+/* ---------- Sticky chrome heights ----------
+   ContextBar measures the top bar and itself at runtime (ResizeObserver) and publishes --nv-topbar-measured and
+   --nv-contextbar-measured. QA measured the real top bar at 61 px against the 69 px token; the fallbacks below are the
+   heights measured in headless Chrome, used only until the first measurement (or without ResizeObserver). */
+:root {
+  --nv-topbar-h: var(--nv-topbar-measured, 61px);
+  --nv-contextbar-h: var(--nv-contextbar-measured, 41px);
+}
+@media (max-width: 1080px) { :root { --nv-topbar-h: var(--nv-topbar-measured, 57px); --nv-contextbar-h: var(--nv-contextbar-measured, 41px); } }
+/* Short viewports: only the top bar is sticky; while a form with its own action bar is open (company setup), that action
+   bar is the only sticky bar. A bar that isn't sticky takes no room in the offset. */
+@media (max-height: 37.5rem) {
+  :root { --nv-contextbar-h: 0px; }
+  :root:has(.nv-app .setup-actions) { --nv-topbar-h: 0px; }
+  .nv-app:has(.setup-actions) .nv-topbar { position: relative; }
+}
+/* A focused control is never hidden under the sticky chrome (QA-180). */
+html:has(.nv-app) { scroll-padding-top: var(--nv-sticky-offset); }
+
+/* ---------- Top bar ---------- */
+.nv-app .nv-topbar { min-width: 0; }
+.nv-app .nv-topbar .nv-brand { flex: none; }
+.nv-app .nv-topbar__company { flex: 1 1 auto; }
+.nv-app .nv-topbar__actions { flex: none; }
+.nv-app .nv-topbar__menu { gap: 6px; }
+/* 1080 px and wider: brand, badge, email and Sign out. Narrower: the mark, the company name and ≡ Menu. */
+.nv-app .nv-topbar__narrow { display: none; }
+@media (max-width: 1080px) {
+  .nv-app .nv-topbar { padding: 10px 16px; gap: 12px; }
+  .nv-app .nv-topbar__wide, .nv-app .nv-brand__word { display: none; }
+  .nv-app .nv-topbar__narrow { display: inline-flex; }
+  .nv-app .nv-topbar__company.nv-topbar__narrow { display: block; }
+}
+
+/* ---------- Context bar ---------- */
+.nv-contextbar { position: sticky; top: var(--nv-topbar-h); z-index: 19; border-bottom: 1px solid var(--line); background: rgba(14,17,13,.96); backdrop-filter: blur(10px); }
+.nv-contextbar__inner { display: flex; align-items: center; gap: 4px 12px; max-width: var(--nv-shell-max); margin: 0 auto; padding: 6px 28px; min-width: 0; }
+.nv-contextbar__line { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; flex: 1 1 auto; min-width: 0; margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.4; }
+.nv-contextbar__wide { display: contents; }
+.nv-contextbar__item { min-width: 0; overflow-wrap: anywhere; }
+.nv-contextbar__company { color: var(--text); font-weight: 500; }
+.nv-contextbar__sep { color: var(--subtle); }
+.nv-contextbar__badge { padding: 1px 8px; border-radius: var(--nv-radius-pill); border: 1px solid var(--info-line); background: var(--info-bg); color: var(--info); font-size: .8rem; white-space: nowrap; }
+.nv-contextbar__toggle { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 2px 10px; border: 1px solid var(--line-2); border-radius: var(--nv-radius-pill); background: transparent; color: var(--muted); font: inherit; font-size: .84rem; cursor: pointer; }
+.nv-contextbar__toggle:hover { color: var(--text); border-color: #5a6a53; }
+.nv-contextbar__details { position: absolute; top: 100%; left: 0; right: 0; max-height: min(70vh, 420px); overflow-y: auto; border-bottom: 1px solid var(--line-2); background: var(--surface); box-shadow: var(--nv-shadow-raised); }
+.nv-contextbar__details dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px 20px; max-width: var(--nv-shell-max); margin: 0 auto; padding: 14px 28px 16px; }
+.nv-contextbar__details dt { color: var(--subtle); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; }
+.nv-contextbar__details dd { margin: 2px 0 0; color: var(--text); font-size: .92rem; overflow-wrap: anywhere; }
+.nv-contextbar__note { display: block; margin-top: 4px; color: var(--muted); font-size: .86rem; }
+@media (max-width: 1080px) { .nv-contextbar__inner, .nv-contextbar__details dl { padding-inline: 16px; } }
+/* Below 720 px: company and period only (and "View only" for a member); the rest is under Details ▸. */
+@media (max-width: 720px) {
+  .nv-contextbar__wide, .nv-contextbar__line > .nv-contextbar__sep { display: none; }
+  /* Two short lines at most: the company (one line, truncated; the full name is under Details), then the period. */
+  .nv-contextbar__line { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 8px; }
+  .nv-contextbar__company { grid-column: 1 / -1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; overflow-wrap: normal; }
+  .nv-contextbar__line > [data-context="period"] { white-space: nowrap; }
+  .nv-contextbar__badge { justify-self: start; }
+}
+@media (max-height: 37.5rem) { .nv-contextbar { position: relative; top: auto; } }
+
+/* ---------- Side navigation (1080 px and wider) ---------- */
+.nv-app .nv-layout > .nv-sidenav { top: calc(var(--nv-topbar-h) + var(--nv-contextbar-h)); height: calc(100vh - var(--nv-topbar-h) - var(--nv-contextbar-h)); }
+/* Below 1080 px the Menu sheet replaces the step strip. */
+@media (max-width: 1080px) { .nv-app .nv-layout > .nv-sidenav { display: none; } }
+
+/* ---------- Menu sheet ---------- */
+.nv-sheet { position: fixed; inset: 0; z-index: 40; display: flex; justify-content: flex-end; background: rgba(0,0,0,.5); }
+.nv-sheet__panel { display: flex; flex-direction: column; width: min(380px, 100%); height: 100%; height: 100dvh; overflow-y: auto; overscroll-behavior: contain; scroll-padding-top: 64px; scroll-padding-bottom: 8px; background: var(--surface); border-left: 1px solid var(--line-2); box-shadow: var(--nv-shadow-overlay); }
+.nv-sheet__head { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px 10px 20px; border-bottom: 1px solid var(--line); background: var(--surface); }
+.nv-sheet__title { margin: 0; color: var(--text); font-size: 1.1rem; font-weight: 500; }
+.nv-sheet__body { padding: 12px 14px 24px; }
+.nv-sheet__account { margin-top: 18px; padding: 14px 10px 0; border-top: 1px solid var(--line); }
+.nv-sheet__label { margin: 0; color: var(--subtle); font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; }
+.nv-sheet__email { margin: 4px 0 12px; color: var(--text); overflow-wrap: anywhere; }
+/* The navigation items keep their full layout in the sheet (journey.css turns them into chips under 1080 px). */
+.nv-app .nv-sheetnav .nv-sidenav__label { display: block; }
+.nv-app .nv-sheetnav .nv-sidenav__help { display: block; margin-top: 16px; }
+.nv-app .nv-sheetnav .nv-navitem { display: grid; width: 100%; grid-template-columns: 30px minmax(0, 1fr); gap: 2px 10px; padding: 10px; margin: 2px 0; white-space: normal; }
+.nv-app .nv-sheetnav .nv-navitem__icon { grid-row: span 2; width: 30px; height: 30px; }
+.nv-app .nv-sheetnav .nv-navitem__meta { display: block; }
+
+/* ---------- Jump targets and notices land below the measured chrome ---------- */
+.nv-app #spend-import, .nv-app [data-spend-review-heading], .nv-app #scope3-todo, .nv-app .s3-todo__group, .nv-app #collection-record-editor { scroll-margin-top: var(--nv-sticky-offset); }
+.nv-reconnecting-wrap { top: calc(var(--nv-topbar-h) + var(--nv-contextbar-h) + 8px); }
+
+/* Printing a view other than the report: no context bar or sheet (journey.css already drops the top bar and navigation). */
+@media print { .nv-contextbar, .nv-sheet { display: none !important; } }

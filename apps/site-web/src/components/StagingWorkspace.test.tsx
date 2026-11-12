@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- The injected hook harness runs the actual workspace component without a browser DOM. */
 import { expect, test } from "bun:test"
 import { computeJourneyStatus } from "@/lib/journey-status"
+import { MENU_SHEET_ID, MENU_TEXT } from "./MenuSheet"
 import { activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery, parseViewHash, viewHash } from "@/lib/view-route"
 
 const source = await Bun.file(new URL("./StagingWorkspace.tsx", import.meta.url)).text()
@@ -14,14 +15,14 @@ const retiredPanels = [
 ] as const
 const componentNames = [
   "CompanySetup", "CollectionWorkspace", "JourneyNav", "JourneyHome", "ResultsReport", "AskNeuvetra",
-  "EarlierViews", "PanelGuide", "Icon",
+  "EarlierViews", "PanelGuide", "Icon", "ContextBar", "MenuSheet",
 ] as const
 const components = Object.fromEntries(componentNames.map(name => [name, function Child() { return name }])) as Record<string, unknown>
 type Node = { type: unknown; props: Record<string, any>; children: any[] }
 const status = () => computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true })
 const recordId = "29500000-0000-4000-8000-000000000001"
 
-function harness(initialHash: string, initialState: unknown = null) {
+function harness(initialHash: string, initialState: unknown = null, role = "owner") {
   const slots: any[] = [], pending: Array<() => void> = [], loads: Array<{ resolve: (value: ReturnType<typeof status>) => void; reject: (error: Error) => void; signal: AbortSignal }> = []
   const listeners = new Map<string, () => void>()
   let cursor = 0, changed = false, tree: Node
@@ -60,12 +61,14 @@ function harness(initialHash: string, initialState: unknown = null) {
   const window = { location, history, confirm: (text: string) => { confirms.push(text); return confirmAnswer }, scrollTo() {}, setTimeout: () => 1, clearTimeout() {}, addEventListener(name: string, fn: () => void) { listeners.set(name, fn) }, removeEventListener(name: string) { listeners.delete(name) } }
   const body = {}, document = { title: "", body, activeElement: body }
   const h = (type: unknown, props: Record<string, any> | null, ...children: any[]): Node => ({ type, props: props ?? {}, children })
-  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "activityListHash", "canonicalViewHash", "DEFAULT_ACTIVITY_LIST_QUERY", "parseActivityListQuery", "loadJourneyStatus", ...componentNames, script)
+  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "activityListHash", "canonicalViewHash", "DEFAULT_ACTIVITY_LIST_QUERY", "parseActivityListQuery", "loadJourneyStatus", "MENU_SHEET_ID", "MENU_TEXT", ...componentNames, script)
   const Workspace = factory(useCallback, useEffect, useRef, useState, window, document, { Fragment: "fragment" }, h, parseViewHash, viewHash, activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery,
-    (_workspaceId: string, actor: { signal: AbortSignal }) => new Promise((resolve, reject) => loads.push({ resolve, reject, signal: actor.signal })),
+    (_workspaceId: string, actor: { signal: AbortSignal }) => new Promise((resolve, reject) => loads.push({ resolve, reject, signal: actor.signal })), MENU_SHEET_ID, MENU_TEXT,
     ...componentNames.map(name => components[name])) as (props: unknown) => Node
-  const actor = { userId: "11111111-1111-4111-8111-111111111111", role: "owner" }
-  function render() { cursor = 0; tree = Workspace({ headingRef: { current: null }, staging: { actor, workspaceId: "33333333-3333-4333-8333-333333333333", evidenceId: null } }) }
+  const actor = { userId: "11111111-1111-4111-8111-111111111111", role }
+  let signOuts = 0
+  const account = { email: "owner@synthetic.invalid", signingOut: false, onSignOut: () => { signOuts++ } }
+  function render() { cursor = 0; tree = Workspace({ headingRef: { current: null }, staging: { actor, workspaceId: "33333333-3333-4333-8333-333333333333", evidenceId: null }, account }) }
   async function settle() {
     for (let pass = 0; pass < 30; pass++) {
       while (pending.length) pending.shift()!()
@@ -82,7 +85,7 @@ function harness(initialHash: string, initialState: unknown = null) {
   const nodes = () => flatten(tree)
   /** A Back or Forward to an entry with this address and state. */
   async function pop(hash: string, state: unknown = null) { location.hash = hash; history.state = state; listeners.get("popstate")!(); await settle() }
-  return { settle, child, text, nodes, loads, location, listeners, render, history, entries, pop, confirms, answer: (value: boolean) => { confirmAnswer = value } }
+  return { signOuts: () => signOuts, settle, child, text, nodes, loads, location, listeners, render, history, entries, pop, confirms, answer: (value: boolean) => { confirmAnswer = value } }
 }
 
 test("a failed progress refresh hides prior status from Overview, navigation and Ask", async () => {
@@ -289,4 +292,102 @@ test("a record the record view can't find shows the not-found text under the lis
   expect(app.location.hash).toBe("#/activity")
   expect(app.child("CollectionWorkspace").props.openRecordId).toBeNull()
   expect(app.text()).toContain("That record wasn’t found")
+})
+
+// ── WO-08: top bar, Menu sheet and context bar ──
+
+const menuButton = (app: ReturnType<typeof harness>) => app.nodes().find(node => node.type === "button" && node.props["aria-controls"] === MENU_SHEET_ID)!
+const sheet = (app: ReturnType<typeof harness>) => app.child("MenuSheet")
+const sheetNav = (app: ReturnType<typeof harness>) => sheet(app).children.flat(Infinity).find((node: any) => node?.type === app.child("JourneyNav").type)
+
+test("the ≡ Menu button opens the sheet with dialog wiring; the sheet holds the same navigation in its sheet variant", async () => {
+  const app = harness("#/overview")
+  await app.settle()
+  expect(menuButton(app).props).toMatchObject({ "aria-haspopup": "dialog", "aria-expanded": false, "aria-controls": MENU_SHEET_ID })
+  expect(sheet(app).props.open).toBe(false)
+  menuButton(app).props.onClick(); await app.settle()
+  expect(menuButton(app).props["aria-expanded"]).toBe(true)
+  expect(sheet(app).props.open).toBe(true)
+  expect(sheet(app).props.trigger.current).toBeNull() // the ref the sheet returns focus to (attached by React in the browser)
+  expect(sheetNav(app).props).toMatchObject({ variant: "sheet", current: "home" })
+  // Everything behind the sheet is inert while it is open.
+  expect(app.nodes().find(node => node.type === "header")!.props.inert).toBe(true)
+  expect(app.nodes().find(node => node.props.className === "nv-layout")!.props.inert).toBe(true)
+  expect(app.child("ContextBar").props.inert).toBe(true)
+  sheet(app).props.onClose(); await app.settle()
+  expect(sheet(app).props.open).toBe(false)
+  expect(app.nodes().find(node => node.type === "header")!.props.inert).toBeUndefined()
+})
+
+test("a sheet item navigates through the guarded navigate and closes the sheet; the same view only closes it", async () => {
+  const app = harness("#/overview")
+  await app.settle()
+  menuButton(app).props.onClick(); await app.settle()
+  sheetNav(app).props.onNavigate("results"); await app.settle()
+  expect(app.location.hash).toBe("#/results")
+  expect(app.child("ResultsReport")).toBeDefined()
+  expect(sheet(app).props.open).toBe(false)
+  const pushes = app.entries.length
+  menuButton(app).props.onClick(); await app.settle()
+  sheetNav(app).props.onNavigate("results"); await app.settle()
+  expect(sheet(app).props.open).toBe(false)
+  expect(app.entries.length).toBe(pushes)
+})
+
+test("with an unsaved correction, a sheet item asks once; declining keeps the record and the open sheet, accepting leaves", async () => {
+  const app = harness(`#/activity/${recordId}`)
+  await app.settle()
+  app.child("CollectionWorkspace").props.onDirtyChange(true); await app.settle()
+  menuButton(app).props.onClick(); await app.settle()
+  app.answer(false)
+  sheetNav(app).props.onNavigate("results"); await app.settle()
+  expect(app.confirms).toEqual(["Discard unsaved activity changes?"])
+  expect(app.location.hash).toBe(`#/activity/${recordId}`)
+  expect(app.child("CollectionWorkspace").props.openRecordId).toBe(recordId)
+  expect(sheet(app).props.open).toBe(true)
+  app.answer(true)
+  sheetNav(app).props.onNavigate("results"); await app.settle()
+  expect(app.confirms).toHaveLength(2)
+  expect(app.location.hash).toBe("#/results")
+  expect(sheet(app).props.open).toBe(false)
+})
+
+test("Ask from the sheet closes the sheet first; the sheet can't open over Ask, so the two never stack", async () => {
+  const app = harness("#/overview")
+  await app.settle()
+  menuButton(app).props.onClick(); await app.settle()
+  sheetNav(app).props.onAsk(); await app.settle()
+  expect(app.child("AskNeuvetra").props.open).toBe(true)
+  expect(sheet(app).props.open).toBe(false)
+  menuButton(app).props.onClick(); await app.settle()
+  expect(sheet(app).props.open).toBe(false)
+  expect(app.child("AskNeuvetra").props.open).toBe(true)
+  app.child("AskNeuvetra").props.onClose(); await app.settle()
+  expect(app.child("AskNeuvetra").props.open).toBe(false)
+})
+
+test("both Sign out controls call the account's own sign-out; the top bar shows the email and, once loaded, the company", async () => {
+  const app = harness("#/overview")
+  await app.settle()
+  const topSignOut = app.nodes().find(node => node.type === "button" && node.children.includes("Sign out"))!
+  topSignOut.props.onClick()
+  sheet(app).props.onSignOut()
+  expect(app.signOuts()).toBe(2)
+  expect(sheet(app).props.email).toBe("owner@synthetic.invalid")
+  expect(app.text()).toContain("owner@synthetic.invalid")
+  const loaded = status()
+  loaded.setup.legalName = "Synthetic Bayline Co"
+  app.loads[0]!.resolve(loaded); await app.settle()
+  expect(app.nodes().find(node => String(node.props.className).includes("nv-topbar__company"))!.children).toEqual(["Synthetic Bayline Co"])
+  expect(app.child("ContextBar").props.status).toBe(loaded)
+})
+
+test("a member sees View only in the context bar and no duplicate view-access notice", async () => {
+  const app = harness("#/overview", null, "member")
+  await app.settle()
+  expect(app.child("ContextBar").props.canManage).toBe(false)
+  expect(app.text()).not.toContain("You have view access")
+  const owner = harness("#/overview")
+  await owner.settle()
+  expect(owner.child("ContextBar").props.canManage).toBe(true)
 })
