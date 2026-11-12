@@ -8,14 +8,14 @@ import { readFileSync } from 'node:fs'
 import * as coverage from './scope3-coverage'
 import { scope3BoundaryClosures, scope3DefaultDataQualityOf, scope3FactorSourceOf, SCOPE3_ACTIVITY_DATA_ORIGINS, SCOPE3_COMPLETION_FACTOR_SOURCES, SCOPE3_CONSTANT_DEFINITIONS, SCOPE3_DQ_INDICATORS, SCOPE3_DQ_RATINGS, SCOPE3_FACTOR_SOURCES, SCOPE3_METHOD_TYPES,
   SCOPE3_METHODS } from './scope3-method-catalog'
-import { CARB_PROPOSAL_TEXT, SCOPE3_DISCLOSURE_TEXT, SCOPE3_DISCLOSURE_TEXT_I03, SCOPE3_DISCLOSURE_TEXT_I04, SCOPE3_DISCLOSURE_TEXT_I05, SCOPE3_DISCLOSURE_TEXT_I06, SCOPE3_DISCLOSURE_TEXT_I07, SCOPE3_DISCLOSURE_TEXT_I12H, SCOPE3_DISCLOSURE_TEXT_I12U, SCOPE3_DISCLOSURE_TEXT_R2B, SCOPE3_GWP_SET_TEXT, SCOPE3_STATUS_PHRASE, SCOPE3_DISCLOSURE_TEXT_R2A, SCOPE3_DISCLOSURE_TEXT_R3A } from './scope3-text'
+import { CARB_PROPOSAL_TEXT, SCOPE3_DISCLOSURE_TEXT, SCOPE3_DISCLOSURE_TEXT_I03, SCOPE3_DISCLOSURE_TEXT_I04, SCOPE3_DISCLOSURE_TEXT_I05, SCOPE3_DISCLOSURE_TEXT_I06, SCOPE3_DISCLOSURE_TEXT_I07, SCOPE3_DISCLOSURE_TEXT_I12H, SCOPE3_DISCLOSURE_TEXT_I12U, SCOPE3_DISCLOSURE_TEXT_R2B, SCOPE3_GWP_SET_TEXT, SCOPE3_STATUS_PHRASE, SCOPE3_DISCLOSURE_TEXT_R2A, SCOPE3_DISCLOSURE_TEXT_R3A, SCOPE3_REASON_TEXT_BF02 } from './scope3-text'
 
 const sha = (v: unknown) => createHash('sha256').update(JSON.stringify(v)).digest('hex')
 
 describe('Scope 3 method catalog and texts (I-01)', () => {
   test('the moved constants are byte-identical to the base tree and still exported by scope3-coverage', () => {
     // The base texts (later increments append new codes in their own sections; a shipped text is never edited).
-    const baseCodes = Object.keys(SCOPE3_DISCLOSURE_TEXT).filter(code => !(code in SCOPE3_DISCLOSURE_TEXT_I03) && !(code in SCOPE3_DISCLOSURE_TEXT_I04) && !(code in SCOPE3_DISCLOSURE_TEXT_I05) && !(code in SCOPE3_DISCLOSURE_TEXT_I06) && !(code in SCOPE3_DISCLOSURE_TEXT_I07) && !(code in SCOPE3_DISCLOSURE_TEXT_I12U) && !(code in SCOPE3_DISCLOSURE_TEXT_I12H) && !(code in SCOPE3_DISCLOSURE_TEXT_R2B) && !(code in SCOPE3_DISCLOSURE_TEXT_R2A) && !(code in SCOPE3_DISCLOSURE_TEXT_R3A))
+    const baseCodes = Object.keys(SCOPE3_DISCLOSURE_TEXT).filter(code => !(code in SCOPE3_DISCLOSURE_TEXT_I03) && !(code in SCOPE3_DISCLOSURE_TEXT_I04) && !(code in SCOPE3_DISCLOSURE_TEXT_I05) && !(code in SCOPE3_DISCLOSURE_TEXT_I06) && !(code in SCOPE3_DISCLOSURE_TEXT_I07) && !(code in SCOPE3_DISCLOSURE_TEXT_I12U) && !(code in SCOPE3_DISCLOSURE_TEXT_I12H) && !(code in SCOPE3_DISCLOSURE_TEXT_R2B) && !(code in SCOPE3_DISCLOSURE_TEXT_R2A) && !(code in SCOPE3_DISCLOSURE_TEXT_R3A) && !(code in SCOPE3_REASON_TEXT_BF02))
     expect(sha(Object.fromEntries(baseCodes.map(code => [code, SCOPE3_DISCLOSURE_TEXT[code]])))).toBe('6e7552731c7ae1b7e61f4255fae7f6df4d35498ae7804d5742a84e86d50ad12b')
     expect(Object.keys(SCOPE3_DISCLOSURE_TEXT).slice(0, baseCodes.length)).toEqual(baseCodes)
     // I-04 appended the phrase of the new status `awaiting_factor_source`; the shipped phrases are unchanged.
