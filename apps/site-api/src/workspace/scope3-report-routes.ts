@@ -47,6 +47,8 @@ export interface Scope3ReportRouteDatabase {
 const ROUTE = new RegExp(`^/workspace/(${SCOPE3_UUID_SOURCE})/scope3/reports(?:/(${SCOPE3_UUID_SOURCE})(/approval)?)?$`, "i")
 const UUID = SCOPE3_UUID
 const NOT_FOUND = { error: "Scope 3 report not found." }
+/** BF-05 (route) and BF-09 (0031's 55N31): approving a revision a later one replaces. */
+const VERSION_SUPERSEDED = { code: "version_superseded", error: "A newer version of this report exists. Review and approve the newest version." }
 const MAX_BODY_BYTES = 10_000
 const exactKeys = hasExactKeys
 const invalid = (message: string) => Object.assign(new Error(message), { code: "22023" })
@@ -184,7 +186,7 @@ export function createScope3ReportRoutes(deps: {
           // BF-05 (BL-03): approval signs off the current figures, so a revision that a later one replaces cannot be approved
           // (checked first: the hash, open-issue and self-approval answers are about a version nobody should approve). An approval
           // recorded before the newer revision existed is not touched, and its repeat is still a replay (it has an approval).
-          if (yearVersions.some(item => item.revision > stored.revision)) return respond(409, { code: "version_superseded", error: "A newer version of this report exists. Review and approve the newest version." })
+          if (yearVersions.some(item => item.revision > stored.revision)) return respond(409, VERSION_SUPERSEDED)
           if (stored.reportSha256 !== body.reportSha256) return respond(409, { code: "report_hash_changed", error: "The report you reviewed is not this stored version. Reload the version, review it again and approve what you see." })
           if (stored.openIssues.length > 0 && !body.acknowledgeOpenIssues) return respond(409, { code: "open_issues_not_acknowledged", openIssues: stored.openIssues, error: "This version has open issues. Review them and approve with open issues acknowledged, or prepare a new version once they are resolved." })
           if (stored.createdBy === actor.id && !body.confirmSelfApproval) return respond(409, { code: "self_approval_not_confirmed", error: "You prepared this version. Confirm the self-approval explicitly; it is recorded and printed as a control exception." })
@@ -196,6 +198,9 @@ export function createScope3ReportRoutes(deps: {
         } catch (error) {
           const code = (error as { code?: string }).code
           if (code === "23503") return respond(404, NOT_FOUND)
+          // BF-09 (0031): the database refuses a superseded revision under the company lock prepare also takes, closing the race
+          // between the check above and the approval; the same answer as that check.
+          if (code === "55N31") return respond(409, VERSION_SUPERSEDED)
           if (code === "23505") return respond(409, { code: "report_hash_changed", error: "The report you reviewed is not this stored version. Reload the version, review it again and approve what you see." })
           if (code === "23514") return respond(409, { code: "approval_requirements", error: "This approval needs the open issues acknowledged and, for your own version, the self-approval confirmed." })
           throw error

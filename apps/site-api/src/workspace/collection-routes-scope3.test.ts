@@ -47,7 +47,7 @@ describe("Scope 3 collection behind the schema 29 gate (D5)", () => {
       expect((await request(`/workspace/${COMPANY}/collection/activities/${RECORD}`, { method: "POST", body: JSON.stringify(save(activities.natural_gas)) })).status).toBe(201)
       expect(calls.filter(call => call === "save")).toHaveLength(1)
       const root = await (await request(`/workspace/${COMPANY}/collection`)).json()
-      expect(root.capabilities).toEqual({ calculations: false, zipLookup: "available", scope3: { gridLossLineage: true, calculations: false, kinds: [], completion: false } })
+      expect(root.capabilities).toEqual({ calculations: false, zipLookup: "available", duplicateConfirmation: false, scope3: { gridLossLineage: true, calculations: false, kinds: [], completion: false } })
     }
   })
 

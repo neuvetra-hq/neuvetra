@@ -5,6 +5,8 @@ import {
   isScope3CollectionKind,
   scope3ActivityAvailable,
   scope3KindsAvailable,
+  scope12PayloadAvailable,
+  STAGING_INTEGRITY_GUARDS_SCHEMA_VERSION,
   STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION,
   STAGING_SCOPE3_SCHEMA_VERSION,
   COLLECTION_EVIDENCE_BUCKET,
@@ -162,6 +164,9 @@ function mappedError(error: unknown): Response {
   if (code === "54000") return fail(422, "Collection history capacity reached.", "history_limit")
   // Round 3 (owner decision 7, EN-3): 0030 refuses a Scope 3 save that adds a line past the 3,000-line cap.
   if (code === "54N30") return fail(409, SCOPE3_CAPACITY_TEXT.lineBudgetSaveRefused(MAX_SCOPE3_LINES), "line_budget_exceeded")
+  // BF-09 (0031): the database's own Scope 1 and 2 cap, checked under the company lock (also for a withdrawn record made active
+  // again, and for saves that raced past the route's check below): the same answer as that check.
+  if (code === "54N31") return fail(422, RECORD_LIMIT_SAVE_TEXT, "record_limit_reached")
   // DB-01 (Scope 3 package 2 r2): text the database can't store (22P05, 22021) is invalid input, never an outage.
   if (["22023", "22P02", "22P05", "22021", "22007", "22008", "22003", "23514", "23503", "23502"].includes(code ?? "")) return fail(422, "Invalid or unsupported collection record.")
   return fail(503, "Collection service is unavailable.")
@@ -192,7 +197,8 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
         if (request.method !== "GET") return fail(405, "Method not allowed.")
         const schema = await (deps.schemaVersion?.() ?? 0)
         // `kinds`: the Scope 3 kinds this database stores; `completion`: the 0030 payload features (data quality, travel v2).
-        return respond(200, { profile: COLLECTION_PROFILE, context, capabilities: { calculations: false, zipLookup: "available", scope3: { gridLossLineage: true, calculations: schema >= STAGING_SCOPE3_SCHEMA_VERSION, kinds: scope3KindsAvailable(schema), completion: schema >= STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION } } })
+        // `duplicateConfirmation` (BF-09): the database stores a Scope 1 or 2 payload's `duplicateConfirmedDistinct` (schema 31).
+        return respond(200, { profile: COLLECTION_PROFILE, context, capabilities: { calculations: false, zipLookup: "available", duplicateConfirmation: schema >= STAGING_INTEGRITY_GUARDS_SCHEMA_VERSION, scope3: { gridLossLineage: true, calculations: schema >= STAGING_SCOPE3_SCHEMA_VERSION, kinds: scope3KindsAvailable(schema), completion: schema >= STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION } } })
       }
 
       if (collection === "zip-lookup") {
@@ -221,6 +227,9 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
           const schema = await (deps.schemaVersion?.() ?? 0)
           if (schema < STAGING_SCOPE3_SCHEMA_VERSION) throw new RequestProblem(503, "Scope 3 activity is not available yet.", "scope3_unavailable")
           if (!scope3ActivityAvailable(validated.activity, schema)) throw new RequestProblem(503, "This record type needs database schema 30.", "scope3_schema_30_required")
+        } else if (!scope12PayloadAvailable(validated.activity.payload, 0) && !scope12PayloadAvailable(validated.activity.payload, await (deps.schemaVersion?.() ?? 0))) {
+          // BF-09: below schema 31 the database refuses `duplicateConfirmedDistinct`; refuse first, with the answer saves got before 0031.
+          throw new RequestProblem(422, "Invalid or unsupported collection record.")
         }
         if (validated.activity.kind === "electricity") {
           const lookup = await (deps.lookupZip ?? lookupCollectionZip)(validated.activity.payload.zip)

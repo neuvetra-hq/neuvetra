@@ -246,20 +246,26 @@ describe("draft results (Claude UX journey)", () => {
   }, 60_000)
 
   // BF-03 (BL-02): withdrawn records are not calculated, so they must not count toward the cap; withdrawing always recovers.
+  // BF-09 (QA follow-up c): the cap counts every active Scope 1 and 2 record whether or not it can be calculated, so the
+  // records here have no quantity yet: each needs input, and no request runs an engine over hundreds of records (this test
+  // took about 40 s in CI with calculable records). One calculable record is added to show calculation still happens.
   test("the 400-record cap counts active records only: withdrawing records brings Results back", async () => {
-    const gas = record({ kind: "natural_gas", sourceId: "GAS-1", quantity: q("10", "therm"), payload: { heatContent: null } })
+    const gas = record({ kind: "natural_gas", sourceId: "GAS-1", quantity: q("", "therm"), payload: { heatContent: null } })
     const retire = (r: CollectionActivityRecord): CollectionActivityRecord => ({ ...r, currentVersion: { ...r.currentVersion, activity: { ...r.currentVersion.activity, state: "withdrawn", withdrawalReason: "Entered twice." } } as never })
     const many = Array.from({ length: 401 }, (_, i) => ({ ...gas, id: `22222222-0000-4000-8000-${String(i).padStart(12, "0")}` }))
     const serve = (records: CollectionActivityRecord[]) => createCollectionResultsRoutes({ database: { findCollectionContext: async () => context, findCollectionActivities: async () => records, findCollectionEvidence: async () => [], findCompanySetup: async () => setupView, findCurrentMethodReleases: async () => [] }, engines, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }) })
     const get = (records: CollectionActivityRecord[]) => serve(records)(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } }))
-    expect((await get(many)).status).toBe(422)
-    // 401 saved, two withdrawn: 399 active.
-    expect((await get([retire(many[0]!), retire(many[1]!), ...many.slice(2)])).status).toBe(200)
+    const counts = async (records: CollectionActivityRecord[]) => { const response = await get(records); return response.status === 200 ? (await response.json() as CollectionResultsResponse).counts : response.status }
+    expect(await counts(many)).toBe(422)
+    // 401 saved, two withdrawn: 399 active, and the response lists them (withdrawn records are never calculated).
+    expect(await counts([retire(many[0]!), retire(many[1]!), ...many.slice(2)])).toMatchObject({ records: 401, withdrawn: 2, calculated: 0, inputNeeded: 399 })
     // 400 active plus 100 withdrawn is exactly at the cap: allowed. 401 active is not.
     const withdrawnMany = Array.from({ length: 100 }, (_, i) => retire({ ...gas, id: `33333333-0000-4000-8000-${String(i).padStart(12, "0")}` }))
-    expect((await get([...many.slice(0, 400), ...withdrawnMany])).status).toBe(200)
-    expect((await get([...many, ...withdrawnMany])).status).toBe(422)
-  }, 120_000)
+    expect(await counts([...many.slice(0, 400), ...withdrawnMany])).toMatchObject({ records: 500, withdrawn: 100, calculated: 0, inputNeeded: 400 })
+    expect(await counts([...many, ...withdrawnMany])).toBe(422)
+    // At the cap one calculable record (the 400th) is calculated as usual.
+    expect(await counts([...many.slice(0, 399), gasOffice, ...withdrawnMany])).toMatchObject({ records: 500, withdrawn: 100, calculated: 1, inputNeeded: 399 })
+  }, 60_000)
 
   test("a record from another company is never calculated", async () => {
     const foreign = record({ kind: "natural_gas", sourceId: "GAS-X", quantity: q("10", "therm"), payload: { heatContent: null } }, other)

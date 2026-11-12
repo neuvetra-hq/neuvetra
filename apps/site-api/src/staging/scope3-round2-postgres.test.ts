@@ -240,25 +240,35 @@ integration("round 2 integration natively: a 2026 Scope 3 record saves; a 2026 S
   } finally { await h.close() }
 }, 300_000)
 
-integration("round 2 natively: a company at the line cap with worst-case electricity lines can always freeze its report (larger than 16 MiB, inside 0030's limit)", async () => {
+// BF-09: 0031 caps a company at 400 active Scope 1 and 2 records, so the most electricity lines a company can now hold is
+// 1,200 (400 records, each with its 3C, 3C upstream and 3B lines). The fixture keeps every one of them at the worst case and
+// fills the remaining 1,800 lines of the 3,000-line cap with worst-case business travel records (category 6, one line each).
+integration("round 2 natively: a company at the line cap with the most worst-case electricity lines it can hold can always freeze its report (larger than 16 MiB, inside 0030's limit)", async () => {
   const h = await harness()
   try {
-    const w = await h.company("worst", [3])
+    const w = await h.company("worst", [3, 6])
     // 20 evidence files per line, each with a 255-character name; every free-text field at its maximum.
     const files = Array.from({ length: 20 }, () => crypto.randomUUID())
     for (const [i, file] of files.entries()) await h.operator.query("insert into neuvetra.collection_evidence_objects(id,company_id,storage_key,original_name,media_type,byte_length,sha256,uploaded_by) values($1,$2,$3,$4,'application/pdf',1,$5,$6)",
       [file, w.id, `${w.id}/original/${file}`, `${String(i).padStart(4, "0")}${"E".repeat(247)}.pdf`, "f".repeat(62) + i.toString(16).padStart(2, "0"), w.owner])
     const started = performance.now()
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 400; i++) {
       const meter = `${String(i).padStart(6, "0")}${"M".repeat(114)}`
       const activity = { locationId: w.site, setupVersionId: w.setupVersionId, state: "active", withdrawalReason: null, quality: "estimated", estimateBasis: "B".repeat(2000), period: { start: "2025-01-01", endExclusive: "2026-01-01" },
         reference: "R".repeat(1000), notes: "N".repeat(4000), evidenceIds: files, kind: "electricity", sourceId: meter, quantity: { originalValue: String(250000 + i), originalUnit: "kWh", normalizedValue: String(250000 + i), normalizedUnit: "kWh" },
         payload: { meterOrAccountNumber: meter, utilityName: "U".repeat(200), site: "S".repeat(200), zip: "94105", subregion: "CAMX", utilityEiaId: "16612", instruments: [] } }
       // Saved through the same database method and RPC the collection route uses (the route's per-user rate limit would
-      // otherwise stop a 1,000-record fixture).
+      // otherwise stop a 2,200-record fixture).
       await h.database.saveCollectionActivity(w.owner, w.id, crypto.randomUUID(), { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity })
     }
-    console.info(`round 2 native: 1,000 worst-case electricity records saved in ${Math.round(performance.now() - started)} ms`)
+    for (let i = 0; i < 1800; i++) {
+      const trip = `${String(i).padStart(6, "0")}${"T".repeat(114)}`
+      const activity = { locationId: w.site, setupVersionId: w.setupVersionId, state: "active", withdrawalReason: null, quality: "estimated", estimateBasis: "B".repeat(2000), period: { start: "2025-01-01", endExclusive: "2026-01-01" },
+        reference: "R".repeat(1000), notes: "N".repeat(4000), evidenceIds: files, kind: "business_travel", sourceId: trip, quantity: { originalValue: String(250000 + i), originalUnit: "mile", normalizedValue: String(250000 + i), normalizedUnit: "mile" },
+        payload: { mode: "air", passengerSegments: 9999999, haulBasis: "H".repeat(200) } }
+      await h.database.saveCollectionActivity(w.owner, w.id, crypto.randomUUID(), { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity })
+    }
+    console.info(`round 2 native: 400 worst-case electricity and 1,800 worst-case travel records saved in ${Math.round(performance.now() - started)} ms`)
     const prepareStarted = performance.now()
     const prepared = await h.json(`${w.root}/scope3/reports`, w.name, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, reason: null })
     const body = await prepared.json()

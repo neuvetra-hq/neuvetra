@@ -153,3 +153,77 @@ integration("Scope 3 report versions freeze, approve and stay byte-identical on 
     expect(decodeScope3Reports(await read(reports), company).versions[0]!.approval).toMatchObject({ approvedBy: owner })
   } finally { await app.close?.(); await database.close(); await operator.close() }
 }, 180_000)
+
+// BF-09 (0031, BL-03 SQL half): approving a revision that a later revision of the same year replaces is refused inside the
+// approval transaction (55N31), not only by the route's earlier read (BF-05). Directly through the RPC; and in the race QA
+// measured: the approval route reads the versions (revision 2 is newest, so its check passes) while a prepare of revision 3
+// is about to commit. Both wait on the company row lock, the prepare first; when it commits, the approval is refused (409
+// version_superseded from 55N31) and records nothing. Before 0031 that approval was stored.
+integration("BF-09: a superseded revision is refused in SQL (55N31), including when a prepare commits between the route's check and the approval", async () => {
+  const REF = "abcdefghijklmnopqrst", ORIGIN = "http://127.0.0.1:3015"
+  const owner = crypto.randomUUID(), company = crypto.randomUUID()
+  const operator = createPostgresConnection(target!, { tls: false })
+  const runtimeUrl = new URL(target!); runtimeUrl.username = "neuvetra_runtime"
+  const runtime = createPostgresConnection(runtimeUrl.toString(), { tls: false })
+  const database = new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string) => HostedWorkspaceDatabase)(createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 6 }), REF)
+  const config = readStagingConfig({ NODE_ENV: "test", NEUVETRA_STAGING_ENABLED: "enabled", NEUVETRA_STAGING_PROFILE: STAGING_PROFILE, NEUVETRA_STAGING_PROJECT_REF: REF, NEUVETRA_STAGING_ORIGIN: ORIGIN, SUPABASE_URL: `https://${REF}.supabase.co`, SUPABASE_ANON_KEY: "sb_publishable_synthetic_fixture_not_a_real_key", DATABASE_URL: `postgres://neuvetra_runtime:fixture@db.${REF}.supabase.co:5432/postgres` })
+  const app = await createStagingServer(config, { database, validateUser: async token => token === "owner" ? { id: owner, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, serveAsset: async () => null, log: () => {} })
+  const request = (route: string, body?: unknown) => app.fetch(new Request(`${ORIGIN}/workspace-api${route}`, { method: body === undefined ? "GET" : "POST", body: body === undefined ? undefined : JSON.stringify(body),
+    headers: { origin: ORIGIN, authorization: "Bearer owner", ...(body === undefined ? {} : { "content-type": "application/json" }) } }))
+  const read = async (route: string, body?: unknown, status = body === undefined ? 200 : 201) => { const response = await request(route, body); const text = await response.text(); expect([route, response.status, response.status === status ? "" : text]).toEqual([route, status, ""]); return JSON.parse(text) as any }
+  const approvals = async (versionId: string) => (await operator.query("select 1 from neuvetra.scope3_report_approvals where version_id=$1", [versionId])).rows.length
+  try {
+    await operator.query("insert into auth.users(id) values($1)", [owner])
+    await provisionStagingRoster(operator, { expectedProjectRef: REF, workspaceId: company, ownerUserId: owner, members: [] })
+    const root = `/workspace/${company}`, reports = `${root}/scope3/reports`
+    const base = createSyntheticCompanySetup(), site = base.locations[0]!.id
+    const setup = { ...base, boundary: { ...base.boundary, approach: "operational_control" as const },
+      entities: base.entities.map(entity => ({ ...entity, inclusion: "included" as const, control: "operational_control" as const })),
+      locations: [{ ...base.locations[0]!, inclusion: "included" as const, control: "reporting_company" as const, startMode: "period_start" as const, endMode: "period_end" as const }],
+      screening: [6].map(category => ({ id: `s3-${category}`, scope: 3, category: SCOPE3_SETUP_CATEGORY_TOKENS[category - 1]!, state: "yes" as const, reason: "", details: "", locationId: null })) }
+    const setupVersionId: string = (await read(`${root}/setup`, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, setup })).savedVersion.id
+    await read(`${root}/collection/activities/${crypto.randomUUID()}`, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null,
+      activity: { locationId: site, setupVersionId, state: "active", withdrawalReason: null, quality: "actual", estimateBasis: null, period: { start: "2025-01-01", endExclusive: "2026-01-01" }, reference: "Synthetic BF-09", notes: "", evidenceIds: [],
+        kind: "business_travel", sourceId: "T-1", quantity: { originalValue: "2400", originalUnit: "mile", normalizedValue: "2400", normalizedUnit: "mile" }, payload: { mode: "air", passengerSegments: 4, haulBasis: null } } })
+    const prepare = (expectedRevision: number) => read(reports, { idempotencyKey: crypto.randomUUID(), expectedRevision, reason: expectedRevision ? `Revision ${expectedRevision + 1}.` : null })
+    const one = (await prepare(0)).version, two = (await prepare(1)).version
+    const flags = (version: any) => ({ acknowledgeOpenIssues: version.openIssues.length > 0, confirmSelfApproval: true })
+
+    // Through the RPC directly (no route check in front): revision 1 is superseded by revision 2.
+    const direct = await runtime.transaction(async tx => {
+      await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [owner])
+      await tx.query("select neuvetra.has_staging_access()")
+      return tx.query("select * from neuvetra.approve_scope3_report($1,$2::text::jsonb)", [company, JSON.stringify({ versionId: one.id, reportSha256: one.reportSha256, ...flags(one) })])
+    }).then(() => "approved", (error: { code?: string }) => error.code)
+    expect(direct).toBe("55N31")
+    expect(await approvals(one.id)).toBe(0)
+
+    // The race: hold the company row lock; queue the prepare of revision 3, then the approval of revision 2 (its route check
+    // passes: revision 2 is still the newest), then release. The approval waits behind the queued prepare (its blocker is the
+    // prepare's backend), so waiters are counted by their lock wait, not by who blocks them.
+    let preparing: Promise<Response> | undefined, approving: Promise<Response> | undefined
+    await operator.transaction(async tx => {
+      await tx.query("select id from neuvetra.companies where id=$1 for update", [company])
+      const pid = (await tx.query<{ pid: number }>("select pg_backend_pid() pid")).rows[0]!.pid
+      const waiting = async (count: number) => {
+        for (let attempt = 0; attempt < 600; attempt++) {
+          const n = Number((await tx.query<{ n: string }>("select count(*) n from pg_stat_activity where datname=current_database() and pid<>$1 and wait_event_type='Lock'", [pid])).rows[0]!.n)
+          if (n >= count) return n
+          await new Promise(resolve => setTimeout(resolve, 50))
+        }
+        return -1
+      }
+      preparing = request(reports, { idempotencyKey: crypto.randomUUID(), expectedRevision: 2, reason: "Revision 3." })
+      expect(await waiting(1)).toBe(1)
+      approving = request(`${reports}/${two.id}/approval`, { reportSha256: two.reportSha256, ...flags(two) })
+      expect(await waiting(2)).toBe(2)
+    })
+    const [prepared, approved] = await Promise.all([preparing!, approving!])
+    const three = await prepared.json() as any
+    expect([prepared.status, three.version?.revision]).toEqual([201, 3])
+    expect([approved.status, await approved.json()]).toEqual([409, { code: "version_superseded", error: "A newer version of this report exists. Review and approve the newest version." }])
+    expect(await approvals(two.id)).toBe(0)
+    // The newest revision is approved as usual.
+    expect((await read(`${reports}/${three.version.id}/approval`, { reportSha256: three.version.reportSha256, ...flags(three.version) })).version.approval).toMatchObject({ approvedBy: owner })
+  } finally { await app.close?.(); await database.close().catch(() => {}); await runtime.close(); await operator.close() }
+}, 180_000)
