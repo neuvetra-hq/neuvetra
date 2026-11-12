@@ -13,7 +13,7 @@ import { ContextBar } from "./ContextBar"
 import { MENU_SHEET_ID, MENU_TEXT, MenuSheet } from "./MenuSheet"
 import { loadJourneyStatus, type Coverage, type JourneyStatus } from "@/lib/journey-status"
 import { computeReadiness, loadScope3ReadinessLazy, scope3ItemsLazy, type Scope3Part } from "@/lib/readiness"
-import { subscribeWrites } from "@/lib/shared-get"
+import { subscribeWriteActivity, subscribeWrites } from "@/lib/shared-get"
 import type { Scope3State } from "@/lib/scope3-results-api"
 import { activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery, parseViewHash, viewHash, type ActivityListQuery, type WorkspaceView } from "@/lib/view-route"
 
@@ -71,6 +71,11 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
   const scope3Request = useRef<AbortController | null>(null)
   // WO-04c: the debounced recheck after writes (one timer), and Results' own Scope 3 reload (Ask's Try again on Results).
   const recheckTimer = useRef<number | null>(null)
+  // WO-13 (QA F2 of PR #56): the writes under way, whether any changed saved data (or may have), and the Scope 3 answer
+  // from before them; and the Scope 3 part as last rendered.
+  const writeBurst = useRef<{ inFlight: number; changed: boolean; before: Scope3Part | null } | null>(null)
+  const scope3PartNow = useRef<Scope3Part>(scope3Part)
+  useEffect(() => { scope3PartNow.current = scope3Part })
   const [resultsScope3Reload, setResultsScope3Reload] = useState(0)
   // WO-08: the Menu sheet (below 1080 px). It and the Ask drawer never stack: each opens only with the other closed.
   const [menuOpen, setMenuOpen] = useState(false)
@@ -101,7 +106,7 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
     setMissingRecordNotice(false)
     // WO-04b: a new visit: its Scope 3 part is checked again (an older request still running is dropped). WO-04c: a
     // recheck still waiting after a write is dropped too, as the visit makes its own request.
-    cancelRecheck()
+    cancelRecheck(); writeBurst.current = null
     scope3Request.current?.abort(); scope3Request.current = null
     setScope3Part({ state: "checking" }); setVisit(value => value + 1)
     refreshStatus()
@@ -213,11 +218,17 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
     const controller = new AbortController()
     scope3Request.current?.abort(); scope3Request.current = controller
     const workspaceId = staging.workspaceId, actor = { ...staging.actor, signal: controller.signal }
-    loadScope3ReadinessLazy(workspaceId, actor, canManage).then(items => {
-      if (!controller.signal.aborted) setScope3Part({ state: "ready", items })
-    }, cause => {
-      if (!controller.signal.aborted) setScope3Part({ state: "failed", message: cause instanceof Error ? cause.message : null })
-    })
+    // WO-13 (QA F7 of PR #56): a check answered while writes are still under way is kept as the answer from before them
+    // (shown again if they are all refused); the labels stay "Checking…" until the writes end.
+    const settle = (part: Scope3Part) => {
+      if (controller.signal.aborted) return
+      if (scope3Request.current === controller) scope3Request.current = null
+      const burst = writeBurst.current
+      if (burst && burst.inFlight > 0) { burst.before = part; return }
+      setScope3Part(part)
+    }
+    loadScope3ReadinessLazy(workspaceId, actor, canManage).then(items => settle({ state: "ready", items }),
+      cause => settle({ state: "failed", message: cause instanceof Error ? cause.message : null }))
   }, [scope3On, panel, visit, scope3Retry, staging.workspaceId, staging.actor, canManage])
   useEffect(() => () => { scope3Request.current?.abort(); cancelRecheck() }, [])
   function cancelRecheck() { if (recheckTimer.current !== null) { window.clearTimeout(recheckTimer.current); recheckTimer.current = null } }
@@ -227,17 +238,43 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
   // reloads its own Scope 3 answer, which it reports here.
   // WO-04c (QA follow-up 5): the labels say "Checking…" at the first write, but the request waits until writes have been
   // quiet for SCOPE3_RECHECK_DELAY_MS, so a spend import (file upload, then import) or a burst of saves costs one recheck.
-  useEffect(() => subscribeWrites(write => {
-    if (write.userId !== staging.actor.userId || !staging.workspaceId || !write.path.includes(`/workspace/${staging.workspaceId}/`)) return
-    if (current.current.panel === "results") return
-    scope3Request.current?.abort(); scope3Request.current = null
-    setScope3Part({ state: "checking" })
-    cancelRecheck()
-    recheckTimer.current = window.setTimeout(() => {
-      recheckTimer.current = null
-      if (current.current.panel !== "results") setScope3Retry(value => value + 1)
-    }, SCOPE3_RECHECK_DELAY_MS)
-  }), [staging.actor.userId, staging.workspaceId])
+  // WO-13 (QA follow-up 4 of PR #55): "Checking…" from the moment a write starts, not when it is answered, so a status
+  // reload during the write (a spend import's unsaved file is cleared at its start) never shows the previous Scope 3
+  // answer. WO-13 (QA F2 of PR #56): writes are followed as a burst. When the last one ends, the Scope 3 part is checked
+  // again (once, after the quiet delay) only if a write succeeded or may have landed (no answer); when every write was
+  // refused by the server (a 4xx or 5xx), nothing changed, so the answer from before the burst comes back, with no request.
+  useEffect(() => {
+    const ours = (write: { userId: string; path: string }) => write.userId === staging.actor.userId && Boolean(staging.workspaceId) && write.path.includes(`/workspace/${staging.workspaceId}/`) && current.current.panel !== "results"
+    const checking = () => { scope3Request.current?.abort(); scope3Request.current = null; setScope3Part({ state: "checking" }); cancelRecheck() }
+    const started = () => {
+      // The answer before the burst, when it is settled. WO-13 (QA F7 of PR #56): a check still running is left to finish
+      // (its answer becomes the one from before the burst); it is dropped only if a write turns out to have changed data.
+      const before = scope3PartNow.current.state === "ready" || scope3PartNow.current.state === "failed" ? scope3PartNow.current : null
+      const burst = writeBurst.current ?? (writeBurst.current = { inFlight: 0, changed: false, before })
+      burst.inFlight++
+      setScope3Part({ state: "checking" }); cancelRecheck()
+    }
+    const ended = (changed: boolean) => {
+      const burst = writeBurst.current
+      // A refused write with no burst (it started on an earlier visit) changes nothing here.
+      if (!burst && !changed) return
+      const now = burst ?? (writeBurst.current = { inFlight: 1, changed: false, before: null })
+      now.inFlight = Math.max(0, now.inFlight - 1)
+      if (changed) now.changed = true
+      if (now.inFlight > 0) return
+      if (!now.changed && now.before) { writeBurst.current = null; cancelRecheck(); setScope3Part(now.before); return }
+      // Every write was refused while a check is still running: it answers for itself, with no second request.
+      if (!now.changed && scope3Request.current) { writeBurst.current = null; return }
+      checking()
+      recheckTimer.current = window.setTimeout(() => {
+        recheckTimer.current = null; writeBurst.current = null
+        if (current.current.panel !== "results") setScope3Retry(value => value + 1)
+      }, SCOPE3_RECHECK_DELAY_MS)
+    }
+    const stopDone = subscribeWrites(write => { if (ours(write)) ended(true) })
+    const stopActivity = subscribeWriteActivity(write => { if (!ours(write)) return; if (write.phase === "started") started(); else ended(!write.definite) })
+    return () => { stopDone(); stopActivity() }
+  }, [staging.actor.userId, staging.workspaceId])
   /** Results' own Scope 3 request (busy, answered, failed or not switched on) is the Scope 3 part while Results is shown. */
   const onResultsScope3 = useCallback((state: Scope3State) => {
     if (current.current.panel !== "results") return
@@ -254,6 +291,8 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
   /** Try again (the Overview's, or Ask's on any view): one new Scope 3 request; on Results, the screen's own reload. */
   function retryScope3() {
     cancelRecheck()
+    // A fresh answer is coming: the one from before any write under way is no longer the one to bring back.
+    if (writeBurst.current) writeBurst.current.before = null
     if (current.current.panel === "results") { setResultsScope3Reload(value => value + 1); return }
     scope3Request.current?.abort(); scope3Request.current = null; setScope3Part({ state: "checking" }); setScope3Retry(value => value + 1)
   }

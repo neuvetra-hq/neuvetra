@@ -131,9 +131,31 @@ export function admitDrafts(storage: DraftStorage | null, active: { userId: stri
   } catch { /* storage refused: nothing can be offered either */ }
 }
 
+/**
+ * WO-13 (WO-05b follow-up): the saved record IDs last listed for a user and company (from the Activity list's own answer),
+ * so a "new record" draft that names one of them is refused on restore.
+ */
+const savedRecords = new Map<string, ReadonlySet<string>>()
+export function noteSavedRecords(scope: { userId: string; companyId: string }, recordIds: Iterable<string>): void {
+  savedRecords.set(`${scope.userId}:${scope.companyId}`, new Set([...recordIds].map(id => id.toLowerCase())))
+}
+/**
+ * WO-13: a draft of the new-record form must not carry an existing record's ID or a saved version (only a hand-written or
+ * corrupted draft does): restoring it would aim the new-record form at a record that exists.
+ */
+function newDraftAllowed(scope: DraftScope, found: StoredDraft<unknown>): boolean {
+  if (scope.view !== "activity" || scope.item !== "new") return true
+  if (found.binding.expectedRevision !== 0 || found.binding.expectedVersionId !== null) return false
+  const request = found.request
+  if (request && (request.expectedRevision !== 0 || request.expectedVersionId !== null)) return false
+  const recordId = (found.fields as { recordId?: unknown }).recordId
+  return !(typeof recordId === "string" && savedRecords.get(`${scope.userId}:${scope.companyId}`)?.has(recordId.toLowerCase()))
+}
+
 /** A deliberate sign-out (here or in another tab): every draft in this tab goes, and none is written until the next workspace opens. */
 export function clearAllDrafts(storage: DraftStorage | null): void {
   owner = null
+  savedRecords.clear()
   cancelPendingRemovals()
   if (!storage) return
   try { for (const key of allDraftKeys(storage)) storage.removeItem(key) } catch { /* nothing kept */ }
@@ -170,7 +192,7 @@ export function readDraft<F>(storage: DraftStorage | null, scope: DraftScope, fi
     if (raw === null) return null
     const allowed = owner?.canStore && owner.userId === scope.userId && owner.companyId === scope.companyId
     const found = allowed ? decode(raw, now) : null
-    const checked = found ? fields(found.fields) : null
+    const checked = found && newDraftAllowed(scope, found) ? fields(found.fields) : null
     if (!found || !checked) { storage.removeItem(key); return null }
     return { ...found, fields: checked }
   } catch { return null }
