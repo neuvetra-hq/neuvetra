@@ -22,9 +22,11 @@ export interface JourneyRecord { id: string; kind: string; label: string; source
   possibleDuplicate?: string
   /** WO-04b: the other record of the pair (its kind label and source ID), so the Overview names both records. WO-04c: and
    * its site and period, so a pair with the same name can be told apart. */
-  possibleDuplicateOther?: { id: string; label: string; sourceId: string; site?: string; period?: string }
+  possibleDuplicateOther?: { id: string; label: string; sourceId: string; site?: string; period?: string; fuel?: string; modelYear?: number }
   /** WO-04c: the record's own period, in words. */
-  period?: string }
+  period?: string
+  /** WO-13: a vehicle group's fuel and model year, which tell apart a possible-duplicate pair with the same period. */
+  fuel?: string; modelYear?: number }
 /** A company-setup answer that is still open. `scopes` lists the totals it can leave incomplete (empty: it doesn't affect totals). */
 export interface SetupOpenItem { id: string; title: string; detail: string; scopes: Array<1 | 2> }
 /** A possible coverage gap: missing records, an unsupported source or an unresolved legacy source family. */
@@ -123,6 +125,13 @@ export function coverageGaps(view: CompanySetupView | null, records: JourneyReco
   return gaps
 }
 
+/** WO-13: a vehicle record's fuel and model year, when its payload has them. */
+function vehicleFacts(kind: string, payload: unknown): { fuel?: string; modelYear?: number } {
+  if (kind !== "vehicle" || !payload || typeof payload !== "object") return {}
+  const { fuel, modelYear } = payload as { fuel?: unknown; modelYear?: unknown }
+  return { ...(typeof fuel === "string" && fuel.trim() ? { fuel: fuel.trim() } : {}), ...(typeof modelYear === "number" && Number.isInteger(modelYear) ? { modelYear } : {}) }
+}
+
 export function computeJourneyStatus(input: { setup: CompanySetupView | null; context: CollectionContext | null; records: CollectionActivityRecord[]; evidence: CollectionEvidenceMetadata[]; canManage: boolean; scope3?: boolean; scope3MappingKeys?: ReadonlyMap<string, string> }): JourneyStatus {
   const setupVersion = input.setup?.currentVersion ?? null
   const setup = setupVersion?.setup
@@ -157,7 +166,7 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
       state = "held_period"
     }
     const imported = row.kind === "purchase_spend" && typeof (activity.payload as { importId?: unknown }).importId === "string"
-    return { id: row.id, kind: row.kind, label: kindLabel(row.kind), sourceId: activity.sourceId, locationId: activity.locationId, site: siteName(activity.locationId), state, reasons, evidenceCount: activity.evidenceIds.length, quality: activity.quality, period: periodLabel(activity.period.start, activity.period.endExclusive), ...(imported ? { importedSpend: true as const } : {}) }
+    return { id: row.id, kind: row.kind, label: kindLabel(row.kind), sourceId: activity.sourceId, locationId: activity.locationId, site: siteName(activity.locationId), state, reasons, evidenceCount: activity.evidenceIds.length, quality: activity.quality, period: periodLabel(activity.period.start, activity.period.endExclusive), ...vehicleFacts(row.kind, activity.payload), ...(imported ? { importedSpend: true as const } : {}) }
   })
   // WO-04b (BF-01A): Scope 1 and 2 possible duplicates, by the results route's own rule over the same records (Scope 3
   // duplicates come from the Scope 3 results). Withdrawn, excluded and held records keep their precedence, as there.
@@ -168,7 +177,7 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
     if (otherId === undefined || row.state === "withdrawn" || row.state === "excluded" || row.state === "held_period") continue
     const other = scope12.find(item => item.id === otherId)?.currentVersion.activity
     const otherRecord = scope12.find(item => item.id === otherId)
-    if (otherRecord) row.possibleDuplicateOther = { id: otherId, label: kindLabel(otherRecord.kind), sourceId: otherRecord.currentVersion.activity.sourceId, site: siteName(otherRecord.currentVersion.activity.locationId), period: periodLabel(otherRecord.currentVersion.activity.period.start, otherRecord.currentVersion.activity.period.endExclusive) }
+    if (otherRecord) row.possibleDuplicateOther = { id: otherId, label: kindLabel(otherRecord.kind), sourceId: otherRecord.currentVersion.activity.sourceId, site: siteName(otherRecord.currentVersion.activity.locationId), period: periodLabel(otherRecord.currentVersion.activity.period.start, otherRecord.currentVersion.activity.period.endExclusive), ...vehicleFacts(otherRecord.kind, otherRecord.currentVersion.activity.payload) }
     row.possibleDuplicate = possibleDuplicateOfText(otherId, other ? { sourceId: other.sourceId, locationName: input.context?.locations.find(location => location.id === other.locationId)?.name ?? null, period: periodLabel(other.period.start, other.period.endExclusive) } : null)
   }
   const byKind: Record<string, number> = {}

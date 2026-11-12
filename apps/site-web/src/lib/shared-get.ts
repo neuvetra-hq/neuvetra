@@ -44,6 +44,27 @@ export function notifyWrite(write: CompletedWrite): void {
   for (const listener of [...writeListeners]) { try { listener(write) } catch { /* a listener never breaks a write */ } }
 }
 
+/**
+ * WO-13 (QA follow-up 4 of PR #55): a write's start, and its end when it did not succeed (a failed answer, a timeout or
+ * no answer). A successful end is the completed write above. The workspace says "Checking…" for Scope 3 from a write's
+ * start, so a screen that reloads while the write runs (a spend import clears its unsaved file at the start) never shows
+ * the previous Scope 3 answer for a moment.
+ */
+/**
+ * WO-13 (QA F2 of PR #56): `definite` is true when the server refused the write (any 4xx, or a 5xx other than a gateway's
+ * 502, 503 or 504), so nothing was saved; false when there was no answer (a network failure or a timeout) or a gateway
+ * error (QA F8), so the write may have landed.
+ */
+export type WriteActivity = { userId: string; path: string; phase: "started" } | { userId: string; path: string; phase: "failed"; definite: boolean }
+const activityListeners = new Set<(write: WriteActivity) => void>()
+export function subscribeWriteActivity(listener: (write: WriteActivity) => void): () => void {
+  activityListeners.add(listener)
+  return () => { activityListeners.delete(listener) }
+}
+export function notifyWriteActivity(write: WriteActivity): void {
+  for (const listener of [...activityListeners]) { try { listener(write) } catch { /* a listener never breaks a write */ } }
+}
+
 /** fetch for one signed-in user: GETs shared and retried once on 429; writes clear the shared GETs. */
 /** WO-09: each request (a write, or the one shared GET) is limited by its kind's timeout and reported when slow. */
 export async function sharedFetch(actor: { userId: string; signal?: AbortSignal }, path: string, init: RequestInit, options: { kind?: RequestKind } = {}): Promise<Response> {
@@ -51,12 +72,19 @@ export async function sharedFetch(actor: { userId: string; signal?: AbortSignal 
   const kind = options.kind ?? "default"
   if (method !== "GET") {
     clearSharedGets(actor.userId)
+    let succeeded = false, definite = false
+    notifyWriteActivity({ userId: actor.userId, path, phase: "started" })
     try {
       const response = await withRequestTimeout(kind, init.signal, signal => withRetry(path, { ...init, signal }, false))
       // WO-04b: a completed write tells the workspace, so readiness that depends on saved data (Scope 3) is checked again.
-      if (response.ok) notifyWrite({ userId: actor.userId, path })
+      // WO-13 (QA F8 of PR #56): a gateway's 502, 503 or 504 can come after the write was saved, so it is not definite.
+      definite = !response.ok && response.status !== 502 && response.status !== 503 && response.status !== 504
+      if (response.ok) { succeeded = true; notifyWrite({ userId: actor.userId, path }) }
       return response
-    } finally { clearSharedGets(actor.userId) }
+    } finally {
+      clearSharedGets(actor.userId)
+      if (!succeeded) notifyWriteActivity({ userId: actor.userId, path, phase: "failed", definite })
+    }
   }
   const key = `${actor.userId}\u0000${path}`
   const now = Date.now(), hit = shared.get(key)

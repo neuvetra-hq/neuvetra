@@ -29,6 +29,8 @@ function harness(initialHash: string, initialState: unknown = null, role = "owne
   // WO-04b: the Scope 3 part's requests and the completed-write listeners (shared-get's subscribeWrites).
   const scope3Loads: Array<{ resolve: (items: unknown[]) => void; reject: (error: Error) => void; signal: AbortSignal }> = []
   const writeListeners = new Set<(write: { userId: string; path: string }) => void>()
+  // WO-13: a write's start and a failed write's end (shared-get's subscribeWriteActivity).
+  const activityListeners = new Set<(write: { userId: string; path: string; phase: "started" | "failed"; definite?: boolean }) => void>()
   let cursor = 0, changed = false, tree: Node
   const same = (a?: unknown[], b?: unknown[]) => a?.length === b?.length && a?.every((value, index) => Object.is(value, b?.[index]))
   function useState(initial: any) {
@@ -68,10 +70,11 @@ function harness(initialHash: string, initialState: unknown = null, role = "owne
   const window = { location, history, confirm: (text: string) => { confirms.push(text); return confirmAnswer }, scrollTo() {}, setTimeout: (fn: () => void, ms = 0) => { timers.set(++timerId, { fn, ms }); return timerId }, clearTimeout(id: number) { timers.delete(id) }, addEventListener(name: string, fn: () => void) { listeners.set(name, fn) }, removeEventListener(name: string) { listeners.delete(name) } }
   const body = {}, document = { title: "", body, activeElement: body }
   const h = (type: unknown, props: Record<string, any> | null, ...children: any[]): Node => ({ type, props: props ?? {}, children })
-  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "activityListHash", "canonicalViewHash", "DEFAULT_ACTIVITY_LIST_QUERY", "parseActivityListQuery", "loadJourneyStatus", "MENU_SHEET_ID", "MENU_TEXT", "computeReadiness", "subscribeWrites", "loadScope3ReadinessLazy", "scope3ItemsLazy", ...componentNames, script)
+  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "activityListHash", "canonicalViewHash", "DEFAULT_ACTIVITY_LIST_QUERY", "parseActivityListQuery", "loadJourneyStatus", "MENU_SHEET_ID", "MENU_TEXT", "computeReadiness", "subscribeWrites", "subscribeWriteActivity", "loadScope3ReadinessLazy", "scope3ItemsLazy", ...componentNames, script)
   const Workspace = factory(useCallback, useEffect, useRef, useState, window, document, { Fragment: "fragment" }, h, parseViewHash, viewHash, activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery,
     (_workspaceId: string, actor: { signal: AbortSignal }) => new Promise((resolve, reject) => loads.push({ resolve, reject, signal: actor.signal })), MENU_SHEET_ID, MENU_TEXT, computeReadiness,
     (listener: (write: { userId: string; path: string }) => void) => { writeListeners.add(listener); return () => writeListeners.delete(listener) },
+    (listener: (write: { userId: string; path: string; phase: "started" | "failed"; definite?: boolean }) => void) => { activityListeners.add(listener); return () => activityListeners.delete(listener) },
     (_workspaceId: string, actor: { signal: AbortSignal }) => new Promise((resolve, reject) => scope3Loads.push({ resolve, reject, signal: actor.signal })),
     async () => [],
     ...componentNames.map(name => components[name])) as (props: unknown) => Node
@@ -96,10 +99,11 @@ function harness(initialHash: string, initialState: unknown = null, role = "owne
   /** A Back or Forward to an entry with this address and state. */
   async function pop(hash: string, state: unknown = null) { location.hash = hash; history.state = state; listeners.get("popstate")!(); await settle() }
   const write = async (path: string) => { for (const listener of [...writeListeners]) listener({ userId: actor.userId, path }); await settle() }
+  const writeActivity = async (path: string, phase: "started" | "failed", definite = false) => { for (const listener of [...activityListeners]) listener({ userId: actor.userId, path, phase, ...(phase === "failed" ? { definite } : {}) }); await settle() }
   /** Runs the pending timers of one delay (in the order they were set), then settles. */
   const elapse = async (ms: number) => { for (const [id, timer] of [...timers]) if (timer.ms === ms) { timers.delete(id); timer.fn() } await settle() }
   const pendingTimers = (ms: number) => [...timers.values()].filter(timer => timer.ms === ms).length
-  return { scope3Loads, write, elapse, pendingTimers, signOuts: () => signOuts, settle, child, text, nodes, loads, location, listeners, render, history, entries, pop, confirms, answer: (value: boolean) => { confirmAnswer = value } }
+  return { scope3Loads, write, writeActivity, elapse, pendingTimers, signOuts: () => signOuts, settle, child, text, nodes, loads, location, listeners, render, history, entries, pop, confirms, answer: (value: boolean) => { confirmAnswer = value } }
 }
 
 test("a failed progress refresh hides prior status from Overview, navigation and Ask", async () => {
@@ -526,4 +530,119 @@ test("a write while Results is shown sets no recheck and makes no workspace Scop
   expect(app.pendingTimers(400)).toBe(0)
   await app.elapse(400)
   expect(app.scope3Loads).toHaveLength(0)
+})
+
+// WO-13 (QA follow-up 4 of PR #55): during a spend import the file's unsaved state clears at the start of the upload, and
+// progress reloads; that reload used to show the visit's previous Scope 3 answer ("4 open") for 30–50 ms before the first
+// write was answered. Scope 3 now says "Checking…" from the write's start, and a write that fails rechecks once.
+test("a write's start shows Checking… at once, before it is answered; a reload of progress meanwhile keeps it", async () => {
+  const workspace = "33333333-3333-4333-8333-333333333333"
+  const app = harness("#/activity")
+  await app.settle()
+  const loaded = () => computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true, scope3: true })
+  app.loads[0]!.resolve(loaded())
+  await app.settle()
+  app.scope3Loads[0]!.resolve([])
+  await app.settle()
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("ready")
+  await app.writeActivity(`/workspace-api/workspace/${workspace}/collection/evidence`, "started")
+  for (const name of ["JourneyNav", "AskNeuvetra"]) expect(app.child(name).props.readiness.scope3).toBe("checking")
+  // The Activity screen reports its unsaved input gone (the upload started): progress reloads, Scope 3 stays "Checking…".
+  app.child("CollectionWorkspace").props.onDirtyChange(false)
+  await app.settle()
+  app.loads.at(-1)!.resolve(loaded())
+  await app.settle()
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
+  expect([app.scope3Loads.length, app.pendingTimers(400)]).toEqual([1, 0])
+  // Answered: one recheck 400 ms after the last write; the second write's start drops the first one's timer.
+  await app.write(`/workspace-api/workspace/${workspace}/collection/evidence`)
+  await app.writeActivity(`/workspace-api/workspace/${workspace}/scope3/spend-imports`, "started")
+  expect(app.pendingTimers(400)).toBe(0)
+  await app.write(`/workspace-api/workspace/${workspace}/scope3/spend-imports`)
+  await app.elapse(400)
+  expect(app.scope3Loads).toHaveLength(2)
+  app.scope3Loads[1]!.resolve([])
+  await app.settle()
+  // A write that starts and then gets no answer (it may have landed) ends "Checking…" with one recheck, never leaving it stuck.
+  await app.writeActivity(`/workspace-api/workspace/${workspace}/setup`, "started")
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
+  await app.writeActivity(`/workspace-api/workspace/${workspace}/setup`, "failed")
+  await app.elapse(400)
+  expect(app.scope3Loads).toHaveLength(3)
+  app.scope3Loads[2]!.resolve([])
+  await app.settle()
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("ready")
+  // Another user's write, or another workspace's, changes nothing.
+  await app.writeActivity("/workspace-api/workspace/44444444-4444-4444-8444-444444444444/setup", "started")
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("ready")
+})
+
+// WO-13 (QA F2 of PR #56): a write the server refused (any 4xx or 5xx) changed nothing, so it costs no Scope 3 request: the
+// answer from before it comes back. A burst with one write that succeeded or may have landed still rechecks once.
+test("a write refused by the server brings back the previous Scope 3 answer with no new request", async () => {
+  const workspace = "33333333-3333-4333-8333-333333333333"
+  const app = harness("#/activity")
+  await app.settle()
+  app.loads[0]!.resolve(computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true, scope3: true }))
+  await app.settle()
+  const item = { key: "scope3:category:6:screening_conflict", group: "scope3-decision", scope: "3", title: "Category 6: Screening conflict", detail: "", target: { type: "view", view: "setup" }, action: "Change the screening", blocking: true }
+  app.scope3Loads[0]!.resolve([item])
+  await app.settle()
+  const before = app.child("JourneyNav").props.readiness
+  expect([before.scope3, before.open.scope3]).toEqual(["ready", 1])
+  const path = `/workspace-api/workspace/${workspace}/collection/activities/29500000-0000-4000-8000-000000000001`
+  await app.writeActivity(path, "started")
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
+  await app.writeActivity(path, "failed", true)
+  const after = app.child("JourneyNav").props.readiness
+  expect([after.scope3, after.open.scope3, after.s3.text]).toEqual(["ready", 1, before.s3.text])
+  await app.elapse(400)
+  expect([app.scope3Loads.length, app.pendingTimers(400)]).toEqual([1, 0])
+  // Two refused writes overlapping: the answer comes back when the last one ends, not before.
+  await app.writeActivity(path, "started"); await app.writeActivity(path, "started")
+  await app.writeActivity(path, "failed", true)
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
+  await app.writeActivity(path, "failed", true)
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("ready")
+  expect(app.scope3Loads).toHaveLength(1)
+  // A refused write in a burst with one that succeeded: one recheck.
+  await app.writeActivity(path, "started"); await app.writeActivity(path, "started")
+  await app.write(path)
+  await app.writeActivity(path, "failed", true)
+  await app.elapse(400)
+  expect(app.scope3Loads).toHaveLength(2)
+  app.scope3Loads[1]!.resolve([])
+  await app.settle()
+  // WO-13 (QA F7 of PR #56): a refused write while a check is running leaves that check alone (no abort, no second
+  // request); its answer is shown once the write has ended.
+  app.child("JourneyNav").props.onNavigate("home")
+  await app.settle()
+  app.loads.at(-1)!.resolve(computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true, scope3: true }))
+  await app.settle()
+  const visitLoads = app.scope3Loads.length, running = app.scope3Loads.at(-1)!
+  await app.writeActivity(path, "started")
+  await app.writeActivity(path, "failed", true)
+  await app.elapse(400)
+  expect([app.scope3Loads.length, running.signal.aborted]).toEqual([visitLoads, false])
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
+  running.resolve([item])
+  await app.settle()
+  expect([app.child("JourneyNav").props.readiness.scope3, app.child("JourneyNav").props.readiness.open.scope3]).toEqual(["ready", 1])
+  // A check answered while a write is still under way waits for it: shown when the write is refused, with no request.
+  await app.writeActivity(path, "started")
+  app.child("AskNeuvetra").props.onRetryScope3()
+  await app.settle()
+  const retried = app.scope3Loads.at(-1)!
+  retried.resolve([])
+  await app.settle()
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
+  await app.writeActivity(path, "failed", true)
+  expect([app.child("JourneyNav").props.readiness.scope3, app.child("JourneyNav").props.readiness.open.scope3]).toEqual(["ready", 0])
+  const loads = app.scope3Loads.length
+  await app.elapse(400)
+  expect(app.scope3Loads).toHaveLength(loads)
+  // An indefinite failure (no answer, or a gateway's 502/503/504; QA F8) still rechecks once.
+  await app.writeActivity(path, "started"); await app.writeActivity(path, "failed", false)
+  await app.elapse(400)
+  expect(app.scope3Loads).toHaveLength(loads + 1)
 })

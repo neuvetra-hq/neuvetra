@@ -117,6 +117,8 @@ export const READINESS_TEXT = {
   /** While Scope 3 is checking or failed: the count covers Scope 1 and 2 so far (QA follow-up 1). */
   openSummaryPartial: (scope12: number, failed: boolean) => `${scope12 ? `${plural(scope12, "open item")} in Scope 1 and 2 so far` : "Nothing open in Scope 1 and 2"} · Scope 3 ${failed ? "couldn’t be checked, so its items aren’t counted" : "is still being checked"}`,
   duplicatesSummary: (count: number) => `${plural(count, "possible duplicate")} to confirm (both records are counted; not counted as open)`,
+  /** WO-13 (QA follow-up 2 of PR #55): the Next step's note, with "is" for one and "are" for several. */
+  duplicatesListed: (count: number) => `${plural(count, "possible duplicate")} to confirm (both records are counted; not counted as open) ${count === 1 ? "is" : "are"} listed under “What needs attention”.`,
   failedNext: { title: "Couldn’t check Scope 3", body: "Scope 1 and 2 have nothing waiting on you. Scope 3’s open items couldn’t be loaded, so none are listed or counted. Try again, or open Results & report to see them.", action: "Try again" },
   more: (others: number) => others ? ` ${plural(others, "more open item")} ${others === 1 ? "is" : "are"} listed under “What needs attention” on the Overview.` : "",
 } as const
@@ -139,7 +141,7 @@ function resultsScope3Note(scope3: number, duplicates: number) {
   return `Results’ Scope 3 to-do shows ${scope3 ? `the same ${scope3} to do and ` : ""}${duplicates} to confirm (counted): the possible duplicate${duplicates === 1 ? "" : "s"} listed below`
 }
 /** WO-04c: one side of a possible-duplicate pair (its site and period, in words, when known). */
-export interface DuplicateSide { id: string; label: string; sourceId: string; site?: string | null; period?: string | null }
+export interface DuplicateSide { id: string; label: string; sourceId: string; site?: string | null; period?: string | null; fuel?: string | null; modelYear?: number | null }
 /**
  * WO-04c (QA follow-up 2 of PR #51): a pair's title names both records so they can be told apart: "Natural gas · GAS-A and
  * Natural gas · gas-a" when the names differ; otherwise each side adds what differs (site, period), or failing that its
@@ -149,10 +151,14 @@ export function duplicatePairTitle(a: DuplicateSide, b: DuplicateSide | null): s
   const name = (side: DuplicateSide) => `${side.label} · ${side.sourceId}`
   if (!b) return `${name(a)} and an earlier record`
   if (name(a) !== name(b)) return `${name(a)} and ${name(b)}`
-  const differs = (key: "site" | "period") => Boolean(a[key] && b[key] && a[key] !== b[key])
+  const differs = (key: "site" | "period" | "fuel" | "modelYear") => Boolean(a[key] && b[key] && a[key] !== b[key])
+  // WO-13 (QA follow-up 3 of PR #55): a vehicle group's pair with the same site and period is told apart by its fuel, then
+  // its model year, before the full record ID.
+  const vehicle = (side: DuplicateSide) => differs("fuel") ? side.fuel!.replace(/_/g, " ") : differs("modelYear") ? `model year ${side.modelYear}` : null
   const extra = (side: DuplicateSide) => {
     const parts = [differs("site") ? side.site : null, differs("period") ? side.period : null].filter(Boolean) as string[]
-    return (parts.length ? parts : [side.period ?? null, `record ${side.id}`].filter(Boolean) as string[]).join(", ")
+    const told = parts.length ? parts : [vehicle(side)].filter(Boolean) as string[]
+    return (told.length ? told : [side.period ?? null, `record ${side.id}`].filter(Boolean) as string[]).join(", ")
   }
   return `${name(a)} (${extra(a)}) and ${name(b)} (${extra(b)})`
 }
@@ -182,7 +188,7 @@ export function scope12Items(status: JourneyStatus): ReadinessItem[] {
   const items: ReadinessItem[] = []
   for (const row of records) {
     if (row.state === "input_needed" || row.state === "review_required") items.push({ key: `record:${row.id}`, group: "input", scope: "1-2", title: `${row.label} · ${row.sourceId}`, detail: row.reasons[0] ?? "More information is needed.", target: { type: "record", recordId: row.id }, action: manage ? "Fix" : "View", blocking: false })
-    else if (row.possibleDuplicate) items.push({ key: `duplicate:${row.id}`, group: "duplicate", scope: "1-2", title: duplicatePairTitle({ id: row.id, label: row.label, sourceId: row.sourceId, site: row.site, period: row.period ?? null }, row.possibleDuplicateOther ?? null), detail: `${row.possibleDuplicate} Both records are counted. If they are the same record, withdraw or correct one of them; if they are different records, nothing needs doing.`, target: { type: "record", recordId: row.id }, action: manage ? DUPLICATE_ACTION : "View", blocking: false })
+    else if (row.possibleDuplicate) items.push({ key: `duplicate:${row.id}`, group: "duplicate", scope: "1-2", title: duplicatePairTitle({ id: row.id, label: row.label, sourceId: row.sourceId, site: row.site, period: row.period ?? null, fuel: row.fuel ?? null, modelYear: row.modelYear ?? null }, row.possibleDuplicateOther ?? null), detail: `${row.possibleDuplicate} Both records are counted. If they are the same record, withdraw or correct one of them; if they are different records, nothing needs doing.`, target: { type: "record", recordId: row.id }, action: manage ? DUPLICATE_ACTION : "View", blocking: false })
   }
   for (const row of records) if (row.state === "held_period") items.push({ key: `held:${row.id}`, group: "held", scope: "1-2", title: `${row.label} · ${row.sourceId}`, detail: row.reasons[0] ?? "Outside the reporting period, so it isn’t counted.", target: view("setup"), action: manage ? "Open setup" : "View setup", blocking: false })
   for (const item of status.setup.missing) items.push({ key: `setup:${item.id}`, group: "setup", scope: "1-2", title: item.title, detail: `Company setup · ${item.detail}`, target: view("setup"), action: manage ? "Open" : "View", blocking: false })
@@ -266,7 +272,7 @@ function nextStep(status: JourneyStatus, items: ReadinessItem[], duplicates: Rea
   // B2 (QA of PR #51): a failed Scope 3 check says so, with Try again, as every other line does.
   if (scope3State === "failed") return { title: READINESS_TEXT.failedNext.title, body: READINESS_TEXT.failedNext.body, action: READINESS_TEXT.failedNext.action, target: { type: "retryScope3" }, secondary: { action: "Open Results", target: view("results") } }
   if (scope3State === "checking") return { title: "Checking Scope 3", body: "Scope 1 and 2 have nothing waiting on you. Scope 3 is still being checked; its open items appear here when the check finishes, and on Results.", action: READINESS_TEXT.review.action, target: view("results") }
-  const confirm = duplicates.length ? ` ${READINESS_TEXT.duplicatesSummary(duplicates.length)} are listed under “What needs attention”.` : ""
+  const confirm = duplicates.length ? ` ${READINESS_TEXT.duplicatesListed(duplicates.length)}` : ""
   return { title: READINESS_TEXT.review.title, body: `${READINESS_TEXT.reviewBody(scope3On)}${items.length ? READINESS_TEXT.more(items.length) : ""}${confirm}`, action: READINESS_TEXT.review.action, target: view("results") }
 }
 

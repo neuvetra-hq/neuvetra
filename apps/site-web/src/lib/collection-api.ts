@@ -12,6 +12,7 @@ import type {
 } from "../../../../packages/neuvetra-database/src/collection-contract"
 import type { HostedWorkspaceActor } from "./workspace-api"
 import { SCOPE3_COLLECTION_KINDS, SCOPE3_LEGACY_KINDS, type Scope3CollectionKind } from "../../../../packages/neuvetra-database/src/scope3-collection-contract"
+import { noteSavedRecords } from "./draft-store"
 
 export type { CollectionActivityRecord, CollectionActivitySaveInput, CollectionActivityVersion, CollectionEvidenceMetadata, CollectionEvidenceReceipt, GridLossLineage }
 export type CollectionContext = DatabaseCollectionContext
@@ -79,6 +80,8 @@ async function json<T>(response: Response): Promise<T> {
 export async function listCollectionActivities(companyId: string, actor: HostedWorkspaceActor) {
   const value = await json<{ profile: string; records: CollectionActivityRecord[] }>(await request(actor, `${companyPath(companyId)}/activities`))
   if (!Array.isArray(value.records)) throw new Error("The collection response was not recognized.")
+  // WO-13: the saved record IDs, so a "new record" draft naming one of them is refused when it is offered back.
+  noteSavedRecords({ userId: actor.userId, companyId }, value.records.flatMap(record => typeof record?.id === "string" ? [record.id] : []))
   return value.records
 }
 
