@@ -1,0 +1,26 @@
+/* WO-11: Results labels and 320 px reflow. Own file (no design tokens yet); uses the existing journey variables only. */
+
+.nv-live-draft { flex: 1 1 100%; color: var(--muted); font-size: .9rem; }
+
+/* Wide tables scroll inside their own focusable region; the page itself never scrolls sideways. */
+.nv-report__scroll { max-width: 100%; overflow-x: auto; }
+.nv-report__scroll:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.nv-report :is(th, td) { overflow-wrap: anywhere; }
+.nv-report .nv-right, .nv-report td.nv-right { font-variant-numeric: tabular-nums; overflow-wrap: normal; }
+.nv-report .worksheet-fingerprint, .nv-report__small { overflow-wrap: anywhere; }
+
+@media (max-width: 720px) {
+  .nv-main, .nv-report, .nv-card, .nv-card__head, .nv-stat { min-width: 0; }
+  .nv-report { max-width: 100%; overflow-wrap: anywhere; }
+  .nv-card__head { flex-wrap: wrap; }
+  .nv-card__head .nv-segmented { max-width: 100%; flex-wrap: wrap; }
+  .nv-record-card__side .nv-num, .nv-record-card__title { overflow-wrap: anywhere; min-width: 0; }
+  .nv-record-card__side { flex-wrap: wrap; }
+  .nv-stat__value { overflow-wrap: anywhere; }
+  .nv-report__head { flex-wrap: wrap; gap: 8px; }
+  .nv-report__meta > div { min-width: 0; overflow-wrap: anywhere; }
+  .nv-actions > .nv-btn { max-width: 100%; white-space: normal; }
+  .nv-detail dl { overflow-wrap: anywhere; }
+  .nv-detail dd { margin-left: 0; min-width: 0; }
+}
+@media print { .nv-live-draft { display: none !important; } }
