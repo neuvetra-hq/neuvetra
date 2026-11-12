@@ -802,8 +802,7 @@ suite("site-web browser smoke (E2E-01)", () => {
     async function follow(site: string, link: string) {
       await page.goto("/#/activity"); await page.reload()
       await editor.getByRole("button", { name: "Natural gas" }).click({ timeout: 30_000 })
-      const location = editor.getByLabel(/^Company-setup location/)
-      await location.selectOption(site)
+      await editor.getByLabel(/^Company-setup location/).selectOption(site)
       await editor.locator(".wo12b-hold [role=status]").getByText("This record won’t be counted as entered").waitFor()
       expect(await horizontalOverflow(page)).toBe(0)
       const prompts = opened.dialogs.length
