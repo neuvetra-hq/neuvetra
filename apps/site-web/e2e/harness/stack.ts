@@ -32,7 +32,7 @@ export interface Stack {
   tokens: TokenDirectory
   operator: WorkspaceConnection
   /** A JSON request to the workspace API as `user` (for seeding and for assertions against the server's own answers). */
-  api<T = unknown>(user: UserKey, route: string, init?: { body?: unknown; raw?: Uint8Array<ArrayBuffer>; headers?: Record<string, string> }): Promise<T>
+  api<T = unknown>(user: UserKey, route: string, init?: { body?: unknown; raw?: Uint8Array<ArrayBuffer>; headers?: Record<string, string>; method?: "GET" | "POST" | "PUT" }): Promise<T>
   stop(): Promise<void>
 }
 
@@ -71,7 +71,7 @@ export async function startStack(databaseUrl: string): Promise<Stack> {
     const token = tokens.issue(user)
     try {
       const hasBody = init.body !== undefined || init.raw !== undefined
-      const response = await fetch(`${origin}/workspace-api${route}`, { method: hasBody ? "POST" : "GET", body: init.raw ?? (init.body === undefined ? undefined : JSON.stringify(init.body)),
+      const response = await fetch(`${origin}/workspace-api${route}`, { method: init.method ?? (hasBody ? "POST" : "GET"), body: init.raw ?? (init.body === undefined ? undefined : JSON.stringify(init.body)),
         headers: { origin, authorization: `Bearer ${token}`, ...(init.body !== undefined ? { "content-type": "application/json" } : {}), ...init.headers } })
       const text = await response.text()
       if (response.status >= 300) throw new Error(`${route} answered ${response.status}: ${text.slice(0, 300)}`)

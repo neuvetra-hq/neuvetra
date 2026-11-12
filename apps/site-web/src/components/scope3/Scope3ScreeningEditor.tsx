@@ -130,10 +130,11 @@ export function Scope3ScreeningEditor(props: Scope3ScreeningEditorProps) {
       const conflict = typeof cause === "object" && cause !== null && (cause as { conflict?: boolean }).conflict === true
       // BF-08: a refusal (422) or a permission answer (403) is definite: the request is retired, so no "Retry exact save".
       const status = typeof cause === "object" && cause !== null ? (cause as { status?: unknown }).status : undefined
+      const code = typeof cause === "object" && cause !== null && typeof (cause as { code?: unknown }).code === "string" ? (cause as { code: string }).code : null
       const definite = status === 422 || status === 403
       if (conflict || definite) setPending(null)
       const words = cause instanceof Error ? cause.message : "The assessment could not be saved."
-      setMessage({ text: definite ? status === 422 ? SAVE_OUTCOME_TEXT_WO12.refused(words) : SAVE_OUTCOME_TEXT_WO12.readOnly(words) : `${words}${conflict ? "" : " Retry keeps the same save request."}`, error: true })
+      setMessage({ text: definite ? status === 422 ? SAVE_OUTCOME_TEXT_WO12.refused(words, code) : SAVE_OUTCOME_TEXT_WO12.readOnly(words) : `${words}${conflict ? "" : " Retry keeps the same save request."}`, error: true })
     } finally { setBusy(false) }
   }
 

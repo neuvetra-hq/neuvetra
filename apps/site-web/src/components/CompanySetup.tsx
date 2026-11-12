@@ -222,7 +222,7 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
       // BF-08: a repeated ID is named by its kind (duplicate_setup_id), and a refusal (422) or a permission answer (403) is
       // definite: the request is retired and no "Retry exact save" is offered.
       else if (cause instanceof CompanySetupApiError && cause.status === 422 && cause.code === "duplicate_setup_id") { pending.current = null; setRetryAvailable(false); setMessage(SAVE_OUTCOME_TEXT_WO12.duplicateSetupId[duplicateCompanySetupIds(input.setup) ?? "unknown"]) }
-      else if (cause instanceof CompanySetupApiError && (cause.status === 422 || cause.status === 403)) { pending.current = null; setRetryAvailable(false); setMessage(cause.status === 422 ? SAVE_OUTCOME_TEXT_WO12.refused(cause.message) : SAVE_OUTCOME_TEXT_WO12.readOnly(cause.message)) }
+      else if (cause instanceof CompanySetupApiError && (cause.status === 422 || cause.status === 403)) { pending.current = null; setRetryAvailable(false); setMessage(cause.status === 422 ? SAVE_OUTCOME_TEXT_WO12.refused(cause.message, cause.code) : SAVE_OUTCOME_TEXT_WO12.readOnly(cause.message)) }
       else { setRetryAvailable(true); setMessage(`${cause instanceof Error ? cause.message : "The setup could not be saved."} Retry keeps the same save request.`) }
       // WO-05b: the input is still unsaved; keep it with whatever request the next save will reuse (none after a conflict).
       persistSetupDraft({ ...draftState.current, scope: savingScope, unsaved: true }, pending.current, false)

@@ -6,7 +6,7 @@ import { scope3TokenLabel, scope3TokenOptions } from "@/lib/scope3-forms"
 import { SCOPE3_SOLD_FUEL_FACTS } from "@/lib/scope3-register-labels"
 import { egridSubregionLabel } from "../../../../../packages/neuvetra-database/src/scope3-text-r2e"
 import { ChoiceField, QuantityFields, SelectField, TextField } from "./Scope3Fields"
-import { fieldNeedsOf } from "@/lib/field-needs-wo12"
+import { fieldLabelsOf } from "@/lib/field-needs-wo12"
 
 const CARRIERS = [["electricity", scope3TokenLabel("energyCarrier", "electricity")] as const, ...SCOPE3_SOLD_FUELS.map(fuel => [fuel, SCOPE3_SOLD_FUEL_FACTS[fuel]?.label ?? fuel] as const).sort((a, b) => a[1].localeCompare(b[1]))]
 /**
@@ -22,29 +22,29 @@ const REGIONS = [["US", scope3TokenLabel("useRegion", "US")] as const, ...ENGINE
  * used per year or per use and its carrier and unit, where the products are used (an eGRID subregion, the U.S., or
  * outside the U.S., which is held), and where the lifetime and energy figures come from.
  */
-export function SoldEnergyProductForm({ activity, onEdit }: Scope3FormProps) {
+export function SoldEnergyProductForm({ activity, onEdit, env }: Scope3FormProps) {
   const p = scope3PayloadOf(activity, "sold_energy_product")
-  const need = fieldNeedsOf("sold_energy_product")
+  const need = fieldLabelsOf(activity, env.fieldFacts)
   const set = (change: (payload: SoldEnergyProductCollectionPayload) => void) => onEdit(next => change(scope3PayloadOf(next, "sold_energy_product")))
   const per = p.lifetimeBasis === "uses" ? "use" : "year"
   return <div className="setup-subcard"><h3>Energy-using products sold (Scope 3, category 11)</h3>
     <p>The direct use-phase emissions of products sold in the year, over their expected lifetime, at the reporting year’s grid or fuel factors.</p>
     <div className="setup-grid">
-      <TextField need={need("product")} label="Product" value={p.productLabel} onChange={value => set(next => { next.productLabel = value })} />
-      <QuantityFields need={need("quantity")} unitNeed={need("unit")} label={scope3QuantityLabel("sold_energy_product", p)} value={activity.quantity.originalValue} unit={activity.quantity.originalUnit} units={scope3FormUnits("sold_energy_product", p)}
+      <TextField {...need("product")} label="Product" value={p.productLabel} onChange={value => set(next => { next.productLabel = value })} />
+      <QuantityFields {...need("quantity")} unitNeed={need("unit").need} label={scope3QuantityLabel("sold_energy_product", p)} value={activity.quantity.originalValue} unit={activity.quantity.originalUnit} units={scope3FormUnits("sold_energy_product", p)}
         onValue={value => onEdit(next => { next.quantity.originalValue = value })} onUnit={unit => onEdit(next => { next.quantity.originalUnit = unit })} />
-      <SelectField need={need("lifetimeBasis")} label="Lifetime counted in" value={p.lifetimeBasis} options={scope3TokenOptions("lifetimeBasis", ["years", "uses"])} onChange={value => set(next => { next.lifetimeBasis = value as SoldEnergyProductCollectionPayload["lifetimeBasis"] })} />
-      <TextField need={need("lifetime")} label={p.lifetimeBasis === "uses" ? "Expected lifetime (uses)" : "Expected lifetime (years)"} value={p.lifetimeQuantity} onChange={value => set(next => { next.lifetimeQuantity = value })} />
-      <ChoiceField need={need("energyCarrier")} label="Energy used" value={p.energyCarrier} choices={CARRIERS} placeholder="Choose electricity or a fuel" describeLabel="Energy as described" onChange={value => set(next => {
+      <SelectField {...need("lifetimeBasis")} label="Lifetime counted in" value={p.lifetimeBasis} options={scope3TokenOptions("lifetimeBasis", ["years", "uses"])} onChange={value => set(next => { next.lifetimeBasis = value as SoldEnergyProductCollectionPayload["lifetimeBasis"] })} />
+      <TextField {...need("lifetime")} label={p.lifetimeBasis === "uses" ? "Expected lifetime (uses)" : "Expected lifetime (years)"} value={p.lifetimeQuantity} onChange={value => set(next => { next.lifetimeQuantity = value })} />
+      <ChoiceField {...need("energyCarrier")} label="Energy used" value={p.energyCarrier} choices={CARRIERS} placeholder="Choose electricity or a fuel" describeLabel="Energy as described" onChange={value => set(next => {
         next.energyCarrier = value
         const units = energyUnits(value)
         if (!units.includes(next.energyUnit)) next.energyUnit = units[0]!
       })} />
-      <TextField need={need("energyPer")} label={`Energy per ${per}`} value={p.energyPerBasis} onChange={value => set(next => { next.energyPerBasis = value })} />
-      <ChoiceField need={need("energyUnit")} label="Energy unit" value={p.energyUnit} choices={energyUnits(p.energyCarrier).map(unit => [unit, unitLabel(unit)] as const)} placeholder="Choose a unit" describeLabel="Energy unit as written" onChange={value => set(next => { next.energyUnit = value })} />
-      <ChoiceField need={need("useRegion")} label="Where the products are used" value={p.useRegion} choices={REGIONS} placeholder="Choose the region of use" describeLabel="Region of use as described" onChange={value => set(next => { next.useRegion = value })}
+      <TextField {...need("energyPer")} label={`Energy per ${per}`} value={p.energyPerBasis} onChange={value => set(next => { next.energyPerBasis = value })} />
+      <ChoiceField {...need("energyUnit")} label="Energy unit" value={p.energyUnit} choices={energyUnits(p.energyCarrier).map(unit => [unit, unitLabel(unit)] as const)} placeholder="Choose a unit" describeLabel="Energy unit as written" onChange={value => set(next => { next.energyUnit = value })} />
+      <ChoiceField {...need("useRegion")} label="Where the products are used" value={p.useRegion} choices={REGIONS} placeholder="Choose the region of use" describeLabel="Region of use as described" onChange={value => set(next => { next.useRegion = value })}
         hint="The eGRID subregion where they are sold, or the U.S. average for U.S.-wide sales. Outside the U.S. there is no verified free grid factor, so the record is held." />
-      <TextField need={need("lifetimeSource")} label="Where the lifetime and energy figures come from" value={p.lifetimeSource} onChange={value => set(next => { next.lifetimeSource = value })} multiline hint="For example the product specification or a test standard (3 to 300 characters)." />
+      <TextField {...need("lifetimeSource")} label="Where the lifetime and energy figures come from" value={p.lifetimeSource} onChange={value => set(next => { next.lifetimeSource = value })} multiline hint="For example the product specification or a test standard (3 to 300 characters)." />
     </div>
   </div>
 }

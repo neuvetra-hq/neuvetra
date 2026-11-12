@@ -37,12 +37,12 @@ const meter = (n: number) => ({ id: idOf(n), companyId: W, kind: "electricity", 
     payload: { meterOrAccountNumber: `M-${n}`, utilityName: "Synthetic", site: "Plant", zip: "94105", subregion: "CAMX", utilityEiaId: null, instruments: [] } } } })
 const WRITE = new Set(["input", "select", "textarea"])
 
-async function workspace(options: { actor?: any; records?: any[]; openRecordId?: string | null; lineages?: any[]; scope3?: boolean; save?: (recordId: string, input: any) => Promise<any>; upload?: (file: File, id: string) => Promise<any> } = {}) {
+async function workspace(options: { actor?: any; records?: any[]; openRecordId?: string | null; lineages?: any[]; scope3?: boolean; save?: (recordId: string, input: any) => Promise<any>; upload?: (file: File, id: string) => Promise<any>; country?: string | null; approach?: string } = {}) {
   const make = await loadComponent("./CollectionWorkspace.tsx", "CollectionWorkspace", {
     deriveCollectionQuantity, planCollectionCalculation, reasonText, CollectionApiError, savedAgainstCurrentSetup, withCurrentSetupVersion, validateCollectionSaveInput,
     listCollectionActivities: async () => options.records ?? [], listCollectionEvidence: async () => evidence, listGridLossLineages: async () => options.lineages ?? [], loadCollectionContext: async () => context,
     loadCollectionOverview: async () => ({ context, scope3: options.scope3 ?? false, scope3Kinds: options.scope3 ? [...scope3Contract.SCOPE3_COLLECTION_KINDS] : [], scope3Completion: options.scope3 ?? false }),
-    loadCompanySetup: async () => ({ profile: "neuvetra.company-setup.v1", syntheticOnly: true, canManage: true, history: [], currentVersion: { id: SETUP, setup: { reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, boundary: { approach: "operational_control" } } } }),
+    loadCompanySetup: async () => ({ profile: "neuvetra.company-setup.v1", syntheticOnly: true, canManage: true, history: [], currentVersion: { id: SETUP, setup: { reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, boundary: { approach: options.approach ?? "operational_control" }, locations: [{ id: SITE, countryCode: options.country === undefined ? "US" : options.country }] } } }),
     saveCollectionActivity: async (_c: string, recordId: string, input: any) => { validateCollectionSaveInput(input); if (options.save) return options.save(recordId, input); throw new CollectionApiError("stop", 500) },
     uploadCollectionEvidence: async (_c: string, file: File, id: string) => { if (options.upload) return options.upload(file, id); throw new CollectionApiError("stop", 500) },
     downloadCollectionEvidence: async () => null, loadCollectionVersion: async () => null, lookupCollectionZip: async () => null, saveGridLossLineage: async () => null,
@@ -268,5 +268,74 @@ describe("BF-08 web follow-ups", () => {
       expect([status, label === "Retry exact save"]).toEqual([status, retry])
       expect([status, app.text().includes("Retry keeps the same save request.")]).toEqual([status, retry])
     }
+  })
+})
+
+describe("WO-12 QA round 1: the words after a definite refusal", () => {
+  test("one instruction: the server's own when it gives one; a capacity limit isn't sent back to editing; a bare refusal asks to check the form", () => {
+    const limit = "This company already has 400 active Scope 1 and 2 records, the most one draft can calculate. Withdraw records you no longer need, then save again."
+    expect(SAVE_OUTCOME_TEXT_WO12.refused(limit, "record_limit_reached")).toBe(`Nothing was saved. ${limit}`)
+    expect(SAVE_OUTCOME_TEXT_WO12.refused("Choose a utility for this ZIP.", "utility_required")).toBe("Nothing was saved. Choose a utility for this ZIP.")
+    expect(SAVE_OUTCOME_TEXT_WO12.refused("Collection history capacity reached.", "history_limit")).toBe("Collection history capacity reached. Nothing was saved.")
+    expect(SAVE_OUTCOME_TEXT_WO12.refused("Invalid or unsupported collection record.", null)).toBe("Invalid or unsupported collection record. Nothing was saved. Check the answers on this form, then save again.")
+    for (const text of [limit, "Choose a utility for this ZIP.", "Invalid or unsupported collection record."]) expect(SAVE_OUTCOME_TEXT_WO12.refused(text).match(/save again/g)?.length ?? 0).toBeLessThanOrEqual(1)
+    expect(SAVE_OUTCOME_TEXT_WO12.duplicateSetupId.screening_category).not.toContain("Scope 3")
+  })
+})
+
+describe("WO-12 QA round 1: labels follow the live form and the company", () => {
+  const labelOf = (app: any, label: string) => { const node = app.byLabel(label); return node ? [node.props.need, node.props.needNote ?? null] : null }
+  const field = (app: any, label: string) => app.byLabel(label)!
+  test("vehicle miles and fuel economy: with neither, both say 'one of'; typing one makes the other Optional", async () => {
+    const app = await workspace()
+    app.button("Road vehicle or vehicle group")!.props.onClick(); await app.settle()
+    const either = ["results", "(one of: miles driven, or fuel economy)"]
+    expect([labelOf(app, "Miles driven"), labelOf(app, "Fuel economy (mpg), if miles unavailable")]).toEqual([either, either])
+    field(app, "Miles driven").props.onChange("1200"); await app.settle()
+    expect([labelOf(app, "Miles driven"), labelOf(app, "Miles source / basis"), labelOf(app, "Fuel economy (mpg), if miles unavailable"), labelOf(app, "MPG source")]).toEqual([["results", null], ["results", null], ["optional", null], ["optional", null]])
+    field(app, "Fuel economy (mpg), if miles unavailable").props.onChange("21"); await app.settle()
+    expect([labelOf(app, "Miles driven"), labelOf(app, "Fuel economy (mpg), if miles unavailable")]).toEqual([["optional", null], ["results", null]])
+  })
+
+  async function hotel(country: string | null) {
+    const app = await workspace({ scope3: true, country })
+    app.button("Business travel (Scope 3)")!.props.onClick(); await app.settle()
+    field(app, "Company-setup location").props.onChange(SITE); await app.settle()
+    field(app, "Mode").props.onChange("hotel_stay"); await app.settle(); await new Promise(r => setTimeout(r, 5)); await app.settle()
+    return labelOf(app, "Hotel country (two-letter code)")
+  }
+  test("hotel country: Optional at a U.S. site, Needed for results at a non-U.S. site or one with no country in setup", async () => {
+    expect(await hotel("US")).toEqual(["optional", null])
+    expect(await hotel("CA")).toEqual(["results", null])
+    expect(await hotel(null)).toEqual(["results", null])
+  })
+
+  async function leaseLabel(approach: string) {
+    const app = await workspace({ scope3: true, approach })
+    app.button("Energy use of leased, processing or franchise sites (Scope 3)")!.props.onClick(); await app.settle(); await new Promise(r => setTimeout(r, 5)); await app.settle()
+    const form = app.nodes().find((node: any) => typeof node.type === "function" && node.type.name === "Scope3RecordForm")!
+    return form.props.env.fieldFacts
+  }
+  test("the record forms are given the company's facts: approach (operational control or not) and the site's country", async () => {
+    expect(await leaseLabel("financial_control")).toEqual({ consolidationApproach: "financial_control" })
+    const facts = await leaseLabel("operational_control")
+    expect(facts.consolidationApproach).toBe("operational_control")
+  })
+
+  test("a form's lease explanation and commuting overlap labels follow those facts", async () => {
+    const inject = { ...scope3Contract, ENGINE_SUBREGIONS: engineInput.ENGINE_SUBREGIONS, ...scope3Texts, ...defaults, ...forms, ...registerLabels, ...fields, SCOPE3_REPORT_TEXT_V3 }
+    const asset = { ...(SCOPE3_PAYLOAD_FIXTURES.find(item => item.label === "asset_energy: electricity, sub-metered")!.payload as object) }
+    const make = await loadComponent("./scope3/AssetEnergyForm.tsx", "AssetEnergyForm", inject)
+    const render = async (facts: object) => {
+      const activity = { kind: "asset_energy", locationId: SITE, setupVersionId: SETUP, sourceId: "S", state: "active", withdrawalReason: null, quantity: defaults.scope3InitialQuantity("asset_energy"), quality: "actual", estimateBasis: null, period: { start: "2025-01-01", endExclusive: "2026-01-01" }, reference: "", notes: "", evidenceIds: [], payload: asset }
+      const app = harness(make, () => ({ activity, disabled: false, onEdit: () => {}, env: { zipLookup: null, onZipLookup: () => {}, spendLines: [], context, reportingPeriod: null, consolidationApproach: (facts as any).consolidationApproach, fieldFacts: facts } }))
+      await app.settle()
+      const node = app.nodes().find((item: any) => typeof item.props.label === "string" && item.props.label.startsWith("If the company has no operational control"))!
+      return [node.props.need, node.props.needNote ?? null]
+    }
+    expect(await render({ consolidationApproach: "operational_control" })).toEqual(["results", null])
+    expect(await render({ consolidationApproach: "financial_control" })).toEqual(["optional", null])
+    expect(await render({ consolidationApproach: "equity_share" })).toEqual(["optional", null])
+    expect((await render({}))[1]).toBe("(only under operational control in company setup)")
   })
 })

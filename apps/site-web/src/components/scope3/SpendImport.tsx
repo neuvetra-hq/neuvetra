@@ -356,6 +356,11 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
         </div>}
 
         {tab === "other" && <div aria-label="Other holds" className="spend-import__panel">
+          {/* WO-12 QA: a member sees which currencies are held and their totals, as text (no rate form). */}
+          {readOnly && foreign.length > 0 && <div className="spend-import__convert" aria-label="Held in another currency">
+            <p className="nv-subtle">{SPEND_IMPORT_READ_ONLY_TEXT.currencies}</p>
+            <ul>{foreign.map(({ currency, lines: count, total }) => <li key={currency}>{SPEND_TEXT_R3C.convertLegend(currency, count, total)}</li>)}</ul>
+          </div>}
           {!readOnly && foreign.length > 0 && <div className="spend-import__convert" aria-label="Convert to US dollars">
             <h5 className="spend-import__convert-title">{SPEND_TEXT_R3C.convertTitle}</h5>
             <p className="nv-subtle">{SPEND_TEXT_R3C.convertIntro}</p>
@@ -462,10 +467,11 @@ function SpendGroupRow({ group, view, selected, disabled, readOnly = false, onSe
         <div className="spend-import__group-main">
           <p className="spend-import__group-title"><strong>{group.vendor || "(no vendor)"}</strong> <span className="nv-subtle">{group.glAccount ? `· account ${group.glAccount}` : "· no account"}{group.glDescriptions.length ? ` ${group.glDescriptions.join(", ")}` : ""}</span></p>
           <p className="nv-subtle spend-import__group-desc">{group.descriptions.slice(0, 4).join(" · ")}{group.descriptions.length > 4 ? ` · and ${group.descriptions.length - 4} more` : ""}</p>
-          {suggested.withdraw && !open && <div className="spend-import__suggest-line spend-import__withdraw-suggest"><span className="nv-chip nv-chip--warn nv-chip--plain">{SPEND_TEXT_R3C.withdrawChip(suggested.withdraw.kind)}</span> <span>{SPEND_TEXT_R3C.withdrawWhy(suggested.withdraw.kind, suggested.withdraw.why)}</span>
+          {/* WO-12 QA: a member's open group keeps its suggestion (shown as text; there is no mapping form to replace it). */}
+          {suggested.withdraw && (!open || readOnly) && <div className="spend-import__suggest-line spend-import__withdraw-suggest"><span className="nv-chip nv-chip--warn nv-chip--plain">{SPEND_TEXT_R3C.withdrawChip(suggested.withdraw.kind)}</span> <span>{SPEND_TEXT_R3C.withdrawWhy(suggested.withdraw.kind, suggested.withdraw.why)}</span>
             {!readOnly && <button type="button" className="nv-btn nv-btn--sm nv-btn--danger" disabled={disabled} onClick={() => void onWithdraw(SPEND_TEXT_R3C.withdrawReason(suggested.withdraw!.kind, suggested.withdraw!.why))}>{SPEND_TEXT_R3C.withdrawButton(group.lines.length)}</button>}</div>}
-          {!suggested.withdraw && confident && !open && <p className="spend-import__suggest-line"><span className="nv-chip nv-chip--info nv-chip--plain">Suggested</span> {confident.code} {confident.title}{suggested.category.value !== 1 ? ` · ${CATEGORY_WORDS[suggested.category.value]}` : ""} <span className="nv-subtle">· {confident.why}</span></p>}
-          {!suggested.withdraw && !confident && !group.mapping && !open && <p className="nv-subtle spend-import__suggest-line">{SPEND_TEXT_R3C.noConfident}</p>}
+          {!suggested.withdraw && confident && (!open || readOnly) && <p className="spend-import__suggest-line"><span className="nv-chip nv-chip--info nv-chip--plain">Suggested</span> {confident.code} {confident.title}{suggested.category.value !== 1 ? ` · ${CATEGORY_WORDS[suggested.category.value]}` : ""} <span className="nv-subtle">· {confident.why}</span></p>}
+          {!suggested.withdraw && !confident && !group.mapping && (!open || readOnly) && <p className="nv-subtle spend-import__suggest-line">{SPEND_TEXT_R3C.noConfident}</p>}
           {group.mapping && <p className="nv-subtle">Remembered: {group.mapping.naicsCode} {scope3NaicsTitle(group.mapping.naicsCode)}</p>}
         </div>
         <div className="spend-import__group-side">

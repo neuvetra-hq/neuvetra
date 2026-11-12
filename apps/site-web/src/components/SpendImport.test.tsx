@@ -81,11 +81,21 @@ describe("WO-12: a view-only member", () => {
     // Each group row on its own (the panel keeps it as a node): read-only, its lines shown by a disclosure, each one opened.
     p.app.button("Needs a code (1)")!.props.onClick(); await p.app.settle()
     expect(p.component("SpendGroupRow").map(row => row.props.readOnly)).toEqual([true])
+    // Read-only must not hide data: the held currencies and their totals are listed as text.
+    p.app.button("Other holds (1)")!.props.onClick(); await p.app.settle()
+    p.says("Only US dollars are calculated. These lines are held until an owner or admin converts them:")
+    p.says("EUR: 1 held line")
+    p.app.button("Needs a code (1)")!.props.onClick(); await p.app.settle()
     const row = await groupRow(p, "Events")
+    const suggestion = () => row.app.nodes().filter(n => typeof n.props.className === "string" && n.props.className.includes("spend-import__suggest-line")).length
     const offered = () => row.app.nodes().filter(n => n.type === "button" || ["input", "select", "textarea"].includes(n.type as string)).map(n => n.children.flat(Infinity).filter((c: unknown) => typeof c === "string").join("") || n.props["aria-label"])
     expect(offered()).toEqual(["Show lines"])
+    const before = suggestion()
+    expect(before).toBe(1)
     row.app.button("Show lines")!.props.onClick(); await row.app.settle()
     expect(offered()).toEqual(["Hide lines", "Open"])
+    // The group's suggestion stays shown with its lines (an owner's opens a mapping form in its place).
+    expect(suggestion()).toBe(before)
     expect(row.component("SpendMappingForm")).toEqual([])
   })
   test("the role decides before the server's view does (no upload while it loads); an owner keeps every control", async () => {

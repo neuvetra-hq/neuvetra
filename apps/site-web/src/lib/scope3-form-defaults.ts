@@ -17,6 +17,7 @@ import { scope3IsHotelMode } from "../../../../packages/neuvetra-database/src/sc
 import { SCOPE3_METHODS, type Scope3DqIndicator, type Scope3DqRating, type Scope3MethodType, type Scope3ActivityDataOrigin } from "../../../../packages/neuvetra-database/src/scope3-method-catalog"
 import { SCOPE3_SOLD_FUEL_FACTS } from "./scope3-register-labels"
 import type { CollectionZipLookup } from "./collection-api"
+import type { FieldNeedFacts } from "./field-needs-wo12"
 
 /** The units each form offers: the engine's tokens for the family the payload names (the contract lists their union). */
 export function scope3FormUnits(kind: Scope3CompletionKind, payload: Record<string, unknown>): readonly string[] {
@@ -193,6 +194,8 @@ export interface Scope3FormEnvironment {
   context: CollectionContext | null
   /** Round 2 UX-12: company setup's reporting period (a dated spend line counts in it); undefined when unknown. */
   reportingPeriod?: { start: string; endExclusive: string } | null
+  /** WO-12 QA round 1: what decides the conditional field labels (consolidation approach, the site's country, a commuting overlap). */
+  fieldFacts?: FieldNeedFacts
 }
 /** The props every record form takes: the draft, the screen's edit function, whether it is read-only, and the environment. */
 export interface Scope3FormProps {

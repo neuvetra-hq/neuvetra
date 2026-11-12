@@ -1,92 +1,102 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- the derivation edits records of every kind by path. */
-// WO-12 follow-up, the three field labels (CEO ruling, 12 Nov 2026): every field of the Activity record form and the Scope 3
-// record forms is "Required" (the record can't be saved without it), "Needed for results" (it saves, and the record shows
-// as needing input until it is filled) or "Optional". This test derives each field's label from the real rules rather
-// than trusting the table: starting from a complete record that saves and calculates, the field is left as a person who
-// doesn't answer it leaves it, and then
-// - the save checks (the Activity screen's own, the Scope 3 form checks and the shared contract the server applies)
-//   refuse it → "Required";
-// - else the readiness the screen shows (the calculation adapters, `recordReadiness`) holds it, or the Scope 3 engine
-//   holds it with a named finding (checked to exist in scope3_engine.py) → "Needed for results";
+// WO-12 follow-up, the three field labels (CEO ruling, 12 Nov 2026; QA round 1 of PR #57): every field of the Activity record
+// form and the Scope 3 record forms is "Required" (the record can't be saved without it), "Needed for results" (it saves,
+// and the record shows as needing input until it is filled) or "Optional", in every state the person can be in. This test
+// derives each field's label from the real rules rather than trusting the table. Starting from a record that saves, the
+// field is left as a person who doesn't answer it leaves it, in each company it is checked in (a U.S. site under
+// operational control, a non-U.S. site under financial control or equity share, setup without an approach, with and
+// without distance-based commuting records), and then
+// - the screen's own save checks (lib/activity-save-checks.ts, which CollectionWorkspace calls; they end with the shared
+//   contract the server applies) refuse it → "Required";
+// - else the readiness the screen shows (`recordReadiness`, the calculation adapters with the plan options the screen and
+//   the results route build) gains a hold, or, where the adapter would calculate, the Python Scope 3 engine
+//   (scope3_engine.py, run as the package's engine tests run it) gains a finding → "Needed for results";
 // - else → "Optional".
+// The label compared is the one the screen shows in that state: `fieldLabel` with the facts `activityFieldFacts` gives.
+// Scope 1 and 2 records are judged by the screen's findings and the Scope 1 and 2 adapter (their engines are not run here).
 import { describe, expect, test } from "bun:test"
-import { deriveCollectionQuantity, validateCollectionActivity, type CollectionActivity, type CollectionContext, type CollectionEvidenceMetadata } from "../../../../packages/neuvetra-database/src/collection-contract"
-import { SCOPE3_COLLECTION_UNITS, SCOPE3_COMPLETION_KINDS, SCOPE3_LEGACY_KINDS } from "../../../../packages/neuvetra-database/src/scope3-collection"
+import { fileURLToPath } from "node:url"
+import type { CollectionActivity, CollectionActivityRecord, CollectionContext, CollectionEvidenceMetadata } from "../../../../packages/neuvetra-database/src/collection-contract"
+import { planScope3Calculation, SCOPE3_COMPLETION_KINDS, SCOPE3_LEGACY_KINDS, type Scope3CollectionVersion } from "../../../../packages/neuvetra-database/src/scope3-collection"
 import { SCOPE3_PAYLOAD_FIXTURES } from "../../../../packages/neuvetra-database/src/scope3-payload-fixtures"
 import { recordReadiness } from "../components/CollectionWorkspace"
-import { scope3BlankCommutingMode, scope3BlankPayload } from "./scope3-form-defaults"
-import { scope3DataQualityProblem, scope3PayloadProblem, scope3ReadinessOptions } from "./scope3-forms"
-import { scope3PreSaveProblems } from "./scope3-display-r3d"
-import { ACTIVITY_FIELD_NEEDS, activityFieldNeed, FIELD_NEED_KINDS } from "./field-needs-wo12"
-import { FIELD_NEED_TEXT, type FieldNeed } from "./wo12-text"
+import { scope3BlankPayload } from "./scope3-form-defaults"
+import { scope3ReadinessOptions, type Scope3SetupFacts } from "./scope3-forms"
+import { activitySaveProblems, prepareActivityForSave } from "./activity-save-checks"
+import { ACTIVITY_FIELD_NEEDS, activityFieldFacts, activityFieldNeed, fieldLabel, FIELD_NEED_KINDS } from "./field-needs-wo12"
+import { FIELD_NEED_NOTES, FIELD_NEED_TEXT, type FieldNeed } from "./wo12-text"
 
 const C = "94120000-0000-4000-8000-000000000001", SETUP = "94120000-0000-4000-8000-0000000000aa", SITE = "94120000-0000-4000-8000-0000000000bb", FILE = "94120000-0000-4000-8000-0000000000e1"
-const context: CollectionContext = { companyId: C, setupVersionId: SETUP, setupRevision: 1, sameContentSetupVersionIds: [SETUP], boundaryApproach: "operational_control", reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" },
+const DRAFT = "94120000-0000-4000-8000-0000000000d1", COMMUTER = "94120000-0000-4000-8000-0000000000c7"
+const PERIOD = { start: "2025-01-01", endExclusive: "2026-01-01" }
+const context: CollectionContext = { companyId: C, setupVersionId: SETUP, setupRevision: 1, sameContentSetupVersionIds: [SETUP], boundaryApproach: "operational_control", reportingPeriod: PERIOD,
   locations: [{ id: SITE, name: "Office", inclusion: "included", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" }] } as CollectionContext
 const evidence: CollectionEvidenceMetadata[] = [{ id: FILE, companyId: C, bucket: "neuvetra-private-company-evidence", objectKey: `${C}/original/${FILE}`, originalName: "rec.pdf", mediaType: "application/pdf", byteLength: 10, sha256: "a".repeat(64), quarantineStatus: "clean", uploadedBy: C, createdAt: "2025-06-01T00:00:00.000Z" }]
-const DECIMAL = /^(0|[1-9][0-9]{0,11})(\.[0-9]{1,3})?$/
-const SCOPE12_UNITS: Record<string, readonly string[]> = { natural_gas: ["therm", "MMBtu", "scf", "ccf", "mcf"], distillate_no2: ["US_gallon"], vehicle: ["US_gallon"], fugitive: ["kg", "lb"], electricity: ["kWh", "MWh"] }
 const isScope3 = (kind: string) => (SCOPE3_LEGACY_KINDS as readonly string[]).includes(kind) || (SCOPE3_COMPLETION_KINDS as readonly string[]).includes(kind)
 
 type A = CollectionActivity & { payload: any }
 const record = (kind: string, quantity: [string, string], payload: unknown, extra: Partial<A> = {}): A => ({ kind, locationId: SITE, setupVersionId: SETUP, sourceId: "SRC-1", state: "active", withdrawalReason: null,
-  quantity: { originalValue: quantity[0], originalUnit: quantity[1], normalizedValue: null, normalizedUnit: null }, quality: "actual", estimateBasis: null, period: { start: "2025-01-01", endExclusive: "2026-01-01" },
+  quantity: { originalValue: quantity[0], originalUnit: quantity[1], normalizedValue: null, normalizedUnit: null }, quality: "actual", estimateBasis: null, period: { ...PERIOD },
   reference: "Bill 1", notes: "", evidenceIds: [], payload: structuredClone(payload), ...extra }) as A
 const fixture = (label: string): A => {
   const found = SCOPE3_PAYLOAD_FIXTURES.find(item => item.label === label)
   if (!found) throw new Error(`no fixture ${label}`)
   return record(found.kind, [found.quantity.originalValue, found.quantity.originalUnit], found.payload)
 }
+const savedRecord = (id: string, activity: A): CollectionActivityRecord => ({ id, companyId: C, kind: activity.kind, history: [],
+  currentVersion: { id, recordId: id, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity, payloadSha256: "a".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" } }) as unknown as CollectionActivityRecord
 
-/** The activity as the Activity screen saves it (prepareActivityForSave): derived quantities and normalization. */
-function prepared(draft: A): A {
-  const copy = structuredClone(draft)
-  if (copy.kind === "vehicle") { copy.payload.vehicleGroupId = copy.sourceId; if (!copy.quantity.originalValue) copy.quantity.originalValue = copy.payload.gallons }
-  if (copy.kind === "electricity") copy.payload.meterOrAccountNumber = copy.sourceId
-  if (copy.kind === "distillate_no2" && !copy.quantity.originalValue) copy.quantity.originalValue = copy.payload.consumption.basis === "measured" ? copy.payload.consumption.gallons : copy.payload.consumption.purchasedGallons
-  if (copy.kind === "natural_gas" && !["scf", "ccf", "mcf"].includes(copy.quantity.originalUnit)) copy.payload.heatContent = null
-  const units = (isScope3(copy.kind) ? (SCOPE3_COLLECTION_UNITS as Record<string, readonly string[]>)[copy.kind] : SCOPE12_UNITS[copy.kind]) ?? []
-  const q = copy.quantity
-  if (DECIMAL.test(q.originalValue) && units.includes(q.originalUnit)) { q.normalizedValue = q.originalValue; q.normalizedUnit = q.originalUnit } else { q.normalizedValue = null; q.normalizedUnit = null }
-  copy.quantity = deriveCollectionQuantity(copy.kind, copy.payload, copy.quantity)
-  return copy
-}
+/** A company the field is checked in: the site's country, setup's consolidation approach and the saved records. */
+type World = { name: string; country: string | null; approach: Scope3SetupFacts["consolidationApproach"]; records: CollectionActivityRecord[] }
+const distanceCommuting = savedRecord(COMMUTER, fixture("employee_commuting: 0029 payload"))
+const laterCommuting = savedRecord(COMMUTER, { ...fixture("employee_commuting: 0029 payload"), period: { start: "2026-01-01", endExclusive: "2026-02-01" } })
+const WORLDS = {
+  usOperational: { name: "U.S. site, operational control", country: "US", approach: "operational_control", records: [] },
+  foreignFinancial: { name: "non-U.S. site, financial control", country: "CA", approach: "financial_control", records: [] },
+  foreignEquity: { name: "non-U.S. site, equity share", country: "GB", approach: "equity_share", records: [] },
+  noApproach: { name: "setup without an approach, no site country", country: null, approach: "unknown", records: [] },
+  commutingOverlap: { name: "U.S., operational control, distance-based commuting records for the same period", country: "US", approach: "operational_control", records: [distanceCommuting] },
+} satisfies Record<string, World>
+const EVERY_COMPANY: World[] = [WORLDS.usOperational, WORLDS.foreignFinancial, WORLDS.foreignEquity]
+const setupOf = (world: World): Scope3SetupFacts => ({ reportingPeriod: PERIOD, consolidationApproach: world.approach, locationCountries: new Map([[SITE, world.country]]) })
 
-/** Why the Activity screen refuses to save the draft (CollectionWorkspace's save checks, then the shared contract), or null. */
-function saveRefusal(draft: A): string | null {
-  const a = prepared(draft), p = a.payload
-  if (!a.locationId) return "location"
-  if (!a.sourceId.trim()) return "source"
-  if (a.kind === "electricity" && !/^\d{5}$/.test(p.zip)) return "zip"
-  if (a.kind === "electricity" && !p.utilityName.trim()) return "utility"
-  if (a.kind === "electricity" && p.instruments.some((i: any) => !Number.isInteger(i.vintageYear) || i.vintageYear < 1000 || i.vintageYear > 9999)) return "vintage"
-  if (a.kind === "vehicle" && (!p.fuel.trim() || !p.vehicleType.trim() || !Number.isInteger(p.modelYear) || p.modelYear < 1900 || p.modelYear > 2026 || p.vehicleCount !== null && !(p.vehicleCount > 0))) return "vehicle"
-  if (a.quality === "estimated" && !a.estimateBasis?.trim()) return "estimate basis"
-  if (isScope3(a.kind)) {
-    const problem = scope3PayloadProblem(a.kind as never, a.payload) ?? scope3DataQualityProblem(a.payload) ?? scope3PreSaveProblems(a)[0]?.text
-    if (problem) return problem
-  }
-  try { validateCollectionActivity(a) } catch (cause) { return (cause as Error).message || "contract" }
-  return null
-}
-const HOLDS = new Set(["input_needed", "review_required", "partial", "method_pending"])
+/** Why the screen refuses to save the draft (its own checks, ending with the shared contract), or null. */
+const saveRefusal = (draft: A): string | null => activitySaveProblems(draft, { context, evidence, correcting: false, reason: "", zipLookup: null, scope3Completion: true })[0]?.text ?? null
+const optionsFor = (draft: A, world: World) => isScope3(draft.kind) ? scope3ReadinessOptions({ setup: setupOf(world), context, records: world.records, draft: { recordId: DRAFT, activity: prepareActivityForSave(draft, true) }, mappingKeys: new Map() }) : null
+const HOLDS = new Set(["input_needed", "review_required", "partial", "method_pending", "excluded"])
 /** What the record's readiness shows as still needed (the Activity list and record view use the same findings). */
-function needsInput(draft: A): string[] {
-  const a = prepared(draft)
-  const scope3 = isScope3(a.kind) ? { options: scope3ReadinessOptions({ setup: { reportingPeriod: context.reportingPeriod!, consolidationApproach: "operational_control" } as never, context, records: [], draft: { recordId: C, activity: a }, mappingKeys: new Map() }), recordId: C } : undefined
-  return recordReadiness(a, context, evidence, undefined, scope3).filter(finding => HOLDS.has(finding.status)).map(finding => finding.reason)
+function readiness(draft: A, world: World): string[] {
+  const a = prepareActivityForSave(draft, true), options = optionsFor(draft, world)
+  return recordReadiness(a, context, evidence, undefined, options ? { options, recordId: DRAFT } : undefined).filter(finding => HOLDS.has(finding.status)).map(finding => `${finding.status}: ${finding.reason}`)
 }
-const ENGINE = await Bun.file(new URL("../../../site-api/src/calculation/scope3_engine.py", import.meta.url)).text()
+/** The Scope 3 adapter's plan as the results route makes it (the engine request, when it calculates). */
+function plan(draft: A, world: World) {
+  const a = prepareActivityForSave(draft, true)
+  return planScope3Calculation({ id: DRAFT, recordId: DRAFT, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity: a, payloadSha256: "0".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" } as unknown as Scope3CollectionVersion, context, evidence, optionsFor(draft, world)!)
+}
+/** The label the screen shows for the field on this draft in this company. */
+const shown = (draft: A, field: string, world: World) => fieldLabel(draft, field, activityFieldFacts({ setup: setupOf(world), activity: prepareActivityForSave(draft, true), options: optionsFor(draft, world) }))
+
+// The real Scope 3 engine, run as the package's engine tests run it (one process for every request).
+const ENGINE_PATH = fileURLToPath(new URL("../../../site-api/src/calculation/scope3_engine.py", import.meta.url))
+function runEngine(requests: unknown[]): Array<{ status: string; findings: string[] }> {
+  if (!requests.length) return []
+  const out = Bun.spawnSync([process.env.NEUVETRA_PYTHON ?? "python3", ENGINE_PATH], { stdin: new TextEncoder().encode(JSON.stringify({ action: "calculate_many", requests })), env: { ...process.env, PYTHONIOENCODING: "utf-8", PYTHONUTF8: "1" } })
+  const parsed = JSON.parse(out.stdout.toString()) as { status: string; results: Array<{ status: string; result?: { status: string; findings?: string[] } }> }
+  if (parsed.status !== "ok") throw new Error(`engine refused: ${out.stdout.toString().slice(0, 300)}`)
+  return parsed.results.map(item => ({ status: item.result?.status ?? item.status, findings: item.result?.findings ?? [] }))
+}
 
 /**
- * One field: the complete record it is checked on, how a person leaves it unanswered, and, where only the Scope 3 engine
- * (not the adapter) holds the record, the engine's finding. A field always answered (a choice with no empty option the
- * contract requires) is checked by giving it no value at all.
+ * One field: the record it is checked on, how a person leaves it unanswered, and the companies it is checked in (every
+ * field in the three companies; a field whose need depends on the company in the companies that tell its states apart).
+ * A field always answered (a choice with no empty option the contract requires) is checked by giving it no value at all.
  */
-type Case = { kind: string; field: string; base: () => A; leave: (a: A) => void; engine?: string }
+type Case = { kind: string; field: string; base: () => A; leave: (a: A) => void; worlds: World[]; heldBase?: boolean }
 const cases: Case[] = []
-const add = (kind: string, base: () => A, fields: Record<string, ((a: A) => void) | [((a: A) => void), string]>) => {
-  for (const [field, how] of Object.entries(fields)) cases.push({ kind, field, base, leave: Array.isArray(how) ? how[0] : how, ...(Array.isArray(how) ? { engine: how[1] } : {}) })
+/** `heldBase`: the starting record is held on purpose (the state under test holds it whatever this field says). */
+const add = (kind: string, base: () => A, fields: Record<string, (a: A) => void>, worlds: World[] = EVERY_COMPANY, heldBase = false) => {
+  for (const [field, leave] of Object.entries(fields)) cases.push({ kind, field, base, leave, worlds, heldBase })
 }
 const blank = (kind: string, key: string) => (a: A) => { a.payload[key] = structuredClone((scope3BlankPayload(kind as never) as any)[key]) }
 const set = (path: string, value: unknown) => (a: A) => { const keys = path.split("."); let target: any = a; for (const key of keys.slice(0, -1)) target = target[key]; target[keys.at(-1)!] = value }
@@ -174,14 +184,13 @@ add("purchase_supplier", () => fixture("purchase_supplier: allocated total by re
 add("purchase_supplier", () => fixture("purchase_supplier: hybrid, upstream in other records"), { hybridUpstreamCoveredBy: set("payload.hybridUpstreamCoveredBy", "") })
 add("purchase_supplier", () => fixture("purchase_supplier: supersedes fifty mapping keys"), { supersedesSupplier: set("payload.supersedesSpend.supplierName", ""), supersedesLines: set("payload.supersedesSpend.mappingKeys", []) })
 const grid = (kind: string) => ({ zip: S(kind, "zip"), subregion: S(kind, "subregion"), utilityEiaId: set("payload.utilityEiaId", null), utilityChoice: S(kind, "subregion") })
-add("energy_resold", () => fixture("energy_resold: with utility and data quality"), { quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), gridBasis: set("payload.gridBasis", ""), ...grid("energy_resold"), resoldEnergyNotInScope2: S("energy_resold", "resoldEnergyNotInScope2") })
+add("energy_resold", () => fixture("energy_resold: subregion"), { quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), gridBasis: set("payload.gridBasis", ""), ...grid("energy_resold"), resoldEnergyNotInScope2: S("energy_resold", "resoldEnergyNotInScope2") })
 add("commuting_average", () => fixture("commuting_average: three modes"), {
   quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), workingDays: S("commuting_average", "workingDays"), sharesBasis: S("commuting_average", "sharesBasis"), distanceBasis: S("commuting_average", "distanceBasis"),
-  activityOverlap: S("commuting_average", "activityOverlap"), mode: set("payload.modes.0.mode", ""), share: set("payload.modes.0.sharePercent", ""), distance: set("payload.modes.0.oneWayDistance", ""),
+  mode: set("payload.modes.0.mode", ""), share: set("payload.modes.0.sharePercent", ""), distance: set("payload.modes.0.oneWayDistance", ""),
   distanceUnit: set("payload.modes.0.distanceUnit", ""), occupancy: set("payload.modes.0.occupancy", null),
 })
-void scope3BlankCommutingMode
-add("teleworking", () => fixture("teleworking: electricity in MWh with utility"), { carrier: set("payload.carrier", ""), quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), baselineBasis: S("teleworking", "baselineBasis"), ...grid("teleworking") })
+add("teleworking", () => fixture("teleworking: electricity"), { carrier: set("payload.carrier", ""), quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), baselineBasis: S("teleworking", "baselineBasis"), ...grid("teleworking") })
 add("asset_energy", () => fixture("asset_energy: electricity, sub-metered"), {
   category: S("asset_energy", "category"), asset: S("asset_energy", "assetLabel"), counterparty: S("asset_energy", "counterpartyName"), carrier: set("payload.carrier", ""), quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""),
   leaseType: S("asset_energy", "leaseType"), noOperationalControlBasis: S("asset_energy", "noOperationalControlBasis"), ...grid("asset_energy"), allocation: S("asset_energy", "allocation"),
@@ -193,12 +202,12 @@ add("asset_energy", () => fixture("asset_energy: natural gas with area allocatio
 add("partner_reported", () => fixture("partner_reported: tenant share by area"), {
   category: S("partner_reported", "category"), partner: S("partner_reported", "counterpartyName"), quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), allocationBasis: S("partner_reported", "allocationBasis"),
   allocationNumerator: set("payload.allocationNumerator", ""), allocationDenominator: set("payload.allocationDenominator", ""), scope2Basis: S("partner_reported", "scope2Basis"), gwpBasis: S("partner_reported", "gwpBasis"),
-  verification: set("payload.verification", "unverified"), leaseType: S("partner_reported", "leaseType"), periodMatches: [S("partner_reported", "periodMatches"), "partner_period_mismatch"], supersedes: S("partner_reported", "supersedesSpend"),
+  verification: set("payload.verification", "unverified"), leaseType: S("partner_reported", "leaseType"), periodMatches: S("partner_reported", "periodMatches"), supersedes: S("partner_reported", "supersedesSpend"),
 })
 add("partner_reported", () => { const a = fixture("partner_reported: tenant share by area"); a.payload.category = 8; a.payload.noOperationalControlBasis = "Partner operates the site."; return a }, { noOperationalControlBasis: S("partner_reported", "noOperationalControlBasis") })
 add("building_average", () => fixture("building_average: office"), {
   category: S("building_average", "category"), cbecsActivity: S("building_average", "cbecsActivity"), quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), coveredDays: S("building_average", "coveredDays"),
-  usesNaturalGas: [S("building_average", "usesNaturalGas"), "natural_gas_use_unknown"], gridBasis: set("payload.gridBasis", ""), leaseType: S("building_average", "leaseType"), noOperationalControlBasis: S("building_average", "noOperationalControlBasis"), ...grid("building_average"),
+  usesNaturalGas: S("building_average", "usesNaturalGas"), gridBasis: set("payload.gridBasis", ""), leaseType: S("building_average", "leaseType"), noOperationalControlBasis: S("building_average", "noOperationalControlBasis"), ...grid("building_average"),
 })
 add("sold_fuel", () => fixture("sold_fuel: propane in gallons"), { fuel: S("sold_fuel", "fuel"), quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), combustedInUse: set("payload.combustedInUse", "") })
 add("sold_energy_product", () => fixture("sold_energy_product: electricity over ten years"), {
@@ -211,11 +220,11 @@ add("sold_ghg_product", () => fixture("sold_ghg_product: annual leak rate"), {
 })
 add("end_of_life_split", () => fixture("end_of_life_split: packaging with a known split"), {
   basis: set("payload.basis", ""), product: S("end_of_life_split", "productLabel"), material: S("end_of_life_split", "material"), quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""),
-  splitKnown: [(a: A) => { a.payload.split = null; a.payload.splitBasis = null }, "treatment_split_unknown"], share: set("payload.split.recycled", ""), splitBasis: set("payload.splitBasis", ""),
+  splitKnown: (a: A) => { a.payload.split = null; a.payload.splitBasis = null }, share: set("payload.split.recycled", ""), splitBasis: set("payload.splitBasis", ""),
 })
 add("investment", () => fixture("investment: equity share, investee reported"), {
   investee: S("investment", "investeeName"), holding: S("investment", "holdingType"), quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), snapshotDate: S("investment", "snapshotDate"),
-  attribution: set("payload.attribution.basis", ""), equityShare: set("payload.attribution.percent", ""), path: set("payload.path", ""), investeeEmissions: [S("investment", "investeeEmissions"), "investee_emissions_required"],
+  attribution: set("payload.attribution.basis", ""), equityShare: set("payload.attribution.percent", ""), path: set("payload.path", ""), investeeEmissions: S("investment", "investeeEmissions"),
   emissionsVerified: S("investment", "emissionsVerified"), gwpBasis: S("investment", "gwpBasis"),
 })
 add("investment", () => fixture("investment: listed equity over EVIC"), { denominatorType: set("payload.attribution.denominatorType", ""), denominator: set("payload.attribution.denominator", "") })
@@ -224,49 +233,118 @@ add("investment", () => fixture("investment: revenue EEIO proxy"), {
 })
 add("investment", () => fixture("investment: project finance as initial sponsor"), { initialSponsor: (a: A) => { a.payload.initialSponsor = false; a.payload.projectedAnnual = null; a.payload.lifetimeYears = null }, projectedAnnual: S("investment", "projectedAnnual"), lifetimeYears: S("investment", "lifetimeYears") })
 
-/** The label the rules give the field. */
-function derived(item: Case): { need: FieldNeed; why: string } {
-  const before = item.base()
-  // The starting record is complete: it saves and nothing is needed.
-  if (saveRefusal(before)) throw new Error(`${item.kind}.${item.field}: the starting record doesn't save (${saveRefusal(before)})`)
-  if (needsInput(before).length) throw new Error(`${item.kind}.${item.field}: the starting record already needs input (${needsInput(before).join(" | ")})`)
-  const after = structuredClone(before)
-  item.leave(after)
-  const refused = saveRefusal(after)
-  if (refused) return { need: "required", why: refused }
-  const needed = needsInput(after)
-  if (needed.length) return { need: "results", why: needed.join(" | ") }
-  if (item.engine) return { need: "results", why: `engine: ${item.engine}` }
-  return { need: "optional", why: "saves and calculates" }
-}
+// ---- The fields whose need depends on another answer, the site or company setup (QA round 1 of PR #57), in each state.
+const hotelStay = () => fixture("business_travel: v2 hotel stay in room-nights (normalized from 0030)")
+add("business_travel", hotelStay, { hotelCountry: set("payload.hotelCountry", null) }, [WORLDS.usOperational, WORLDS.foreignFinancial, WORLDS.noApproach])
+add("commuting_average", () => fixture("commuting_average: overlap ruled out"), { activityOverlap: S("commuting_average", "activityOverlap") }, [WORLDS.usOperational, WORLDS.commutingOverlap, { ...WORLDS.commutingOverlap, name: "distance-based commuting records for another period", records: [laterCommuting] }])
+const leaseIn = (base: () => A) => () => { const a = base(); a.payload.category = 8; a.payload.leaseType = "operating"; a.payload.noOperationalControlBasis = "The landlord operates the site."; return a }
+for (const [kind, base] of [["asset_energy", () => fixture("asset_energy: electricity, sub-metered")], ["building_average", () => fixture("building_average: office")], ["partner_reported", () => fixture("partner_reported: tenant share by area")]] as const)
+  add(kind, leaseIn(base), { noOperationalControlBasis: S(kind, "noOperationalControlBasis") }, [WORLDS.usOperational, WORLDS.foreignFinancial, WORLDS.foreignEquity, WORLDS.noApproach], true)
+// Vehicle miles and fuel economy are alternatives: the one in use is needed, the other is not (the pair: below).
+add("vehicle", van(), { mpg: set("payload.fuelEconomy", null), mpgSource: set("payload.fuelEconomy", null) })
+add("vehicle", van({ miles: null, fuelEconomy: { mpg: "22", source: "fleet_record" } }), { miles: set("payload.miles", null), milesBasis: set("payload.miles", null) })
+// A refrigerant record outside the boundary is excluded, and one that keeps a stock is held for review, whatever else is answered.
+const outside = () => { const a = refrigerant(); a.payload.insideBoundary = false; return a }
+const stocked = () => { const a = refrigerant(); a.payload.maintainsRefrigerantStock = true; return a }
+add("fugitive", outside, { ...Object.fromEntries(["PN", "CN", "PS", "CD", "RD"].map(term => [`term-${term}`, set(`payload.terms.${term}`, "")])), maintainsRefrigerantStock: set("payload.maintainsRefrigerantStock", null),
+  retrofitInPeriod: set("payload.retrofitInPeriod", null), contractorRecords: set("payload.contractorRecordsComplete", false), eventChronology: set("payload.eventChronologyComplete", false) }, EVERY_COMPANY, true)
+add("fugitive", stocked, { ...Object.fromEntries(["PN", "CN", "PS", "CD", "RD"].map(term => [`term-${term}`, set(`payload.terms.${term}`, "")])), contractorRecords: set("payload.contractorRecordsComplete", false), eventChronology: set("payload.eventChronologyComplete", false) }, EVERY_COMPANY, true)
 
-describe("WO-12 field labels: derived from the save checks and the readiness rules", () => {
+type Outcome = { need: FieldNeed; why: string }
+/**
+ * Every case in every company it is checked in: the label the rules give and the label the screen shows. The engine runs
+ * once, over every plan the adapter would calculate (the starting records and the records with the field left blank).
+ */
+function evaluate() {
+  const rows = cases.flatMap(item => item.worlds.map(world => {
+    const before = item.base(), after = structuredClone(before)
+    item.leave(after)
+    const refusedBefore = saveRefusal(before)
+    if (refusedBefore) throw new Error(`${item.kind}.${item.field} (${world.name}): the starting record doesn't save (${refusedBefore})`)
+    const scope3 = isScope3(item.kind)
+    const plans = scope3 ? [plan(before, world), plan(after, world)] : []
+    return { item, world, before, after, refused: saveRefusal(after), held: readiness(after, world).filter(reason => !readiness(before, world).includes(reason)), plans, label: shown(before, item.field, world) }
+  }))
+  const requests: unknown[] = []
+  const index = rows.map(row => row.plans.map(p => p.action === "calculate" && p.call ? requests.push(p.call.request) - 1 : -1))
+  const results = runEngine(requests)
+  return rows.map((row, i) => {
+    const [before = null, after = null] = index[i]!.map(at => at >= 0 ? results[at]! : null)
+    const baseHeld = readiness(row.before, row.world).length > 0 || (row.plans[0] !== undefined && row.plans[0].action !== "calculate") || (before !== null && before.status !== "complete" && before.status !== "partial")
+    const engineNew = after && after.status !== "complete" && after.status !== "partial" ? after.findings.filter(finding => !(before?.findings ?? []).includes(finding)) : []
+    const derived: Outcome = row.refused ? { need: "required", why: row.refused } : row.held.length ? { need: "results", why: row.held.join(" | ") }
+      : engineNew.length ? { need: "results", why: `engine ${after!.status}: ${engineNew.join(", ")}` } : { need: "optional", why: "saves and calculates" }
+    return { ...row, derived, engine: after, baseHeld }
+  })
+}
+/**
+ * A starting record held for another reason says nothing about this field (it stays held either way), so such a row is
+ * left out, unless the state under test is the one that holds it (`heldBase`). Every field is still checked somewhere.
+ */
+const all = evaluate()
+const evaluated = all.filter(row => !row.baseHeld || row.item.heldBase)
+
+describe("WO-12 field labels: derived from the screen's save checks, the readiness rules and the Scope 3 engine", () => {
   test("each label has its words", () => {
     expect(FIELD_NEED_TEXT).toEqual({ required: "Required", results: "Needed for results", optional: "Optional" })
   })
 
-  test("every field's label is the one the rules give it", () => {
-    const wrong: string[] = []
-    for (const item of cases) {
-      const { need, why } = derived(item)
-      const declared = ACTIVITY_FIELD_NEEDS[item.kind]?.[item.field]
-      if (declared !== need) wrong.push(`${item.kind}.${item.field}: declared ${declared ?? "nothing"}, rules say ${need} (${why})`)
-    }
+  test("every field's label, in every company it is checked in, is the one the rules give it", () => {
+    const wrong = evaluated.filter(row => row.label.need !== row.derived.need)
+      .map(row => `${row.item.kind}.${row.item.field} (${row.world.name}): shown ${row.label.need}, rules say ${row.derived.need} (${row.derived.why})`)
     expect(wrong).toEqual([])
   })
 
-  test("every declared label is checked against the rules, and the engine findings named exist", () => {
-    const checked = new Set(cases.map(item => `${item.kind}.${item.field}`))
-    const unchecked = Object.entries(ACTIVITY_FIELD_NEEDS).flatMap(([kind, fields]) => Object.keys(fields).map(field => `${kind}.${field}`)).filter(key => !checked.has(key) && !NOT_A_RECORD_VALUE.has(key))
-    expect(unchecked).toEqual([])
-    for (const item of cases.filter(entry => entry.engine)) expect(ENGINE).toContain(`'${item.engine}'`)
+  test("the four QA findings, state by state", () => {
+    const label = (kind: string, field: string, world: World, base?: () => A) => evaluated.find(row => row.item.kind === kind && row.item.field === field && row.world === world && (!base || row.item.base === base))!
+    // 1. Hotel country: optional at a U.S. site (its country is used), needed elsewhere.
+    expect([label("business_travel", "hotelCountry", WORLDS.usOperational).label.need, label("business_travel", "hotelCountry", WORLDS.foreignFinancial).label.need]).toEqual(["optional", "results"])
+    // 3. The survey profile's overlap answer: needed only with distance-based commuting records for the same period.
+    const overlap = evaluated.filter(row => row.item.kind === "commuting_average" && row.item.field === "activityOverlap").map(row => [row.world.name, row.label.need])
+    expect(overlap).toEqual([[WORLDS.usOperational.name, "optional"], [WORLDS.commutingOverlap.name, "results"], ["distance-based commuting records for another period", "optional"]])
+    // 4. Why no operational control: needed only under operational control.
+    for (const kind of ["asset_energy", "building_average", "partner_reported"]) {
+      const rows = evaluated.filter(row => row.item.kind === kind && row.item.field === "noOperationalControlBasis" && row.item.heldBase).map(row => row.label.need)
+      expect([kind, ...rows]).toEqual([kind, "results", "optional", "optional", "optional"])
+    }
+    // The engine was run, and holds what only it holds.
+    expect(evaluated.find(row => row.item.kind === "building_average" && row.item.field === "usesNaturalGas")!.derived.why).toContain("natural_gas_use_unknown")
+    expect(evaluated.find(row => row.item.kind === "investment" && row.item.field === "investeeEmissions")!.derived.why).toContain("investee_emissions_required")
   })
 
-  test("a kind's field takes the kind's label, else the label every record shares; every kind has a table", () => {
+  test("2. vehicle miles and fuel economy: the one in use is needed, the other optional; with neither, either one completes the record", () => {
+    const complete = van()()
+    expect(["miles", "milesBasis", "mpg", "mpgSource"].map(field => fieldLabel(complete, field).need)).toEqual(["results", "results", "optional", "optional"])
+    const byMpg = van({ miles: null, fuelEconomy: { mpg: "22", source: "fleet_record" } })()
+    expect(["miles", "milesBasis", "mpg", "mpgSource"].map(field => fieldLabel(byMpg, field).need)).toEqual(["optional", "optional", "results", "results"])
+    // A complete record never shows an empty field as needed.
+    for (const draft of [complete, byMpg]) for (const field of ["miles", "milesBasis", "mpg", "mpgSource"]) {
+      const empty = field.startsWith("miles") ? draft.payload.miles === null : draft.payload.fuelEconomy === null
+      if (empty) expect([field, fieldLabel(draft, field).need]).toEqual([field, "optional"])
+    }
+    // Neither: the record shows as partly calculated; each alternative alone completes it, so both say "one of".
+    const neither = van({ miles: null })()
+    expect(readiness(neither, WORLDS.usOperational).length).toBeGreaterThan(0)
+    for (const field of ["miles", "milesBasis", "mpg", "mpgSource"]) expect(fieldLabel(neither, field)).toEqual({ need: "results", needNote: FIELD_NEED_NOTES.vehicleEither })
+    expect(readiness(van()(), WORLDS.usOperational)).toEqual([])
+    expect(readiness(byMpg, WORLDS.usOperational)).toEqual([])
+    expect(`${FIELD_NEED_TEXT.results} ${FIELD_NEED_NOTES.vehicleEither}`).toBe("Needed for results (one of: miles driven, or fuel economy)")
+  })
+
+  test("what the form can't know is said in the label, not guessed", () => {
+    const stay = hotelStay()
+    expect(fieldLabel(stay, "hotelCountry", {})).toEqual({ need: "results", needNote: FIELD_NEED_NOTES.hotelCountryUnknown })
+    expect(fieldLabel(fixture("commuting_average: three modes"), "activityOverlap", {})).toEqual({ need: "results", needNote: FIELD_NEED_NOTES.commutingOverlapUnknown })
+    expect(fieldLabel(leaseIn(() => fixture("asset_energy: electricity, sub-metered"))(), "noOperationalControlBasis", {})).toEqual({ need: "results", needNote: FIELD_NEED_NOTES.leaseApproachUnknown })
+    expect(fieldLabel(leaseIn(() => fixture("asset_energy: electricity, sub-metered"))(), "noOperationalControlBasis", { consolidationApproach: "unknown" })).toEqual({ need: "optional", needNote: FIELD_NEED_NOTES.leaseApproachNotChosen })
+  })
+
+  test("every declared label is checked against the rules (in at least one company where its record isn't held otherwise); every kind has a table", () => {
+    const checked = new Set(evaluated.map(row => `${row.item.kind}.${row.item.field}`))
+    const unchecked = Object.entries(ACTIVITY_FIELD_NEEDS).flatMap(([kind, fields]) => Object.keys(fields).map(field => `${kind}.${field}`)).filter(key => !checked.has(key) && !NOT_A_RECORD_VALUE.has(key))
+    expect(unchecked).toEqual([])
     expect(activityFieldNeed("natural_gas", "location")).toBe("required")
-    expect(activityFieldNeed("purchase_spend", "description")).toBe("required")
-    expect(activityFieldNeed("natural_gas", "notes")).toBe("optional")
-    for (const kind of [...Object.keys(SCOPE12_UNITS), ...SCOPE3_LEGACY_KINDS, ...SCOPE3_COMPLETION_KINDS]) expect(FIELD_NEED_KINDS).toContain(kind)
+    for (const kind of ["natural_gas", "distillate_no2", "vehicle", "fugitive", "electricity", ...SCOPE3_LEGACY_KINDS, ...SCOPE3_COMPLETION_KINDS]) expect(FIELD_NEED_KINDS).toContain(kind)
   })
 })
 

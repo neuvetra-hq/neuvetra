@@ -14,6 +14,7 @@ import { afterAll, beforeAll, describe, expect, test } from "bun:test"
 import type { Browser, Page } from "playwright-core"
 import { addressesSeen, closeJourney, focusReport, horizontalOverflow, launchBrowser, openJourney, pageHeading, type Journey, type JourneyOptions } from "./harness/browser"
 import { COMPANIES, RECORDS } from "./harness/seed"
+import { fixtureAssessment } from "../../../packages/neuvetra-database/src/scope3-payload-fixtures"
 import { startStack, type Stack } from "./harness/stack"
 
 const DATABASE_URL = process.env.E2E_DATABASE_URL
@@ -42,6 +43,9 @@ const MEMBER_READING_CONTROLS = [
   /^select (Status|Activity type)$/, /^input Find a source, vendor or description$/, /^input Find lines$/,
   /^button (Needs a code|Other holds|Possible duplicates|Counted) \(\d+\)$/, /^button (Show lines|Hide lines|Open|Open the line)$/,
   /^button Version \d+ · /, /^button Download original$/,
+  // Links and disclosures (WO-12 QA): a record's row (its address), the jump to the spend import, "← All activity", the
+  // spend template download, and any <summary> (it only opens details).
+  /^a [^·]+ · .+, (Needs input|No input needed|Withdrawn)$/, /^a (Spend import and mapping|New record|Download the template|(← )?All activity|Neuvetra workspace home)$/, /^summary /,
   /^button Menu$/, /^button Close menu$/, /^button Details[▸▾]$/,
   /^button (Overview|1Step 1: Company setup|2Step 2: Activity & evidence|3Step 3: Results & report|Ask Neuvetra)/,
   /^button Sign out$/,
@@ -138,7 +142,7 @@ async function dialogsReach(journey: Journey, count: number) {
  */
 async function enabledControls(page: Page, roots: string, withDisabled = false) {
   return page.evaluate(([selector, all]) => [...document.querySelectorAll<HTMLElement>(selector)]
-    .flatMap(root => [...root.querySelectorAll<HTMLElement>("button, input, select, textarea")])
+    .flatMap(root => [...root.querySelectorAll<HTMLElement>("button, input, select, textarea, a[href], summary")])
     .filter(element => element.getClientRects().length > 0 && (all || !(element as HTMLButtonElement).disabled && element.getAttribute("aria-disabled") !== "true"))
     .map(element => {
       const label = (element as HTMLInputElement).labels?.[0] ?? null
@@ -395,10 +399,11 @@ suite("site-web browser smoke (E2E-01)", () => {
     // WO-08: the shell's controls are a member's too, outside the main region. At 1360 px the top bar has Sign out and
     // the context bar Details; below 1080 px the top bar has ≡ Menu, and the sheet holds the navigation, Ask and Sign out.
     const shellWide = await enabledControls(page, "header.nv-topbar, [role=region][aria-label='Reporting context']")
-    expect(shellWide).toEqual(["button Sign out", "button Details▸"])
+    expect(shellWide.filter(control => control !== "a Neuvetra workspace home")).toEqual(["button Sign out", "button Details▸"])
     await page.setViewportSize({ width: 390, height: 844 })
     const shellNarrow = await enabledControls(page, "header.nv-topbar, [role=region][aria-label='Reporting context']")
-    expect(shellNarrow).toEqual(["button Menu", "button Details▸"])
+    expect(shellNarrow.filter(control => control !== "a Neuvetra workspace home")).toEqual(["button Menu", "button Details▸"])
+    expect(notAllowed([...shellWide, ...shellNarrow])).toEqual([])
     await page.getByRole("button", { name: "Menu", exact: true }).click()
     const sheet = page.getByRole("dialog", { name: "Menu" })
     await sheet.waitFor()
@@ -439,8 +444,12 @@ suite("site-web browser smoke (E2E-01)", () => {
       await assessment.getByText("View only: an owner or admin of your company can change it.").waitFor()
       expect(results(await enabledControls(page, "main", true))).toEqual([])
     }
-    // Company setup's category screening: a member is offered no "Add an assessment" or "Review or correct the assessment"
-    // (a saved assessment is shown open, as text; the seed saves none).
+    // Company setup's category screening: a member is offered no "Add an assessment" or "Review or correct the assessment";
+    // a saved assessment (saved here by the owner, category 6) is shown open, as text.
+    const assessments = await stack.api<{ setupVersionId: string; reportingYear: number }>("owner", `/workspace/${COMPANIES.first}/scope3/assessments`)
+    await stack.api("owner", `/workspace/${COMPANIES.first}/scope3/assessments/6`, { method: "PUT", body: { idempotencyKey: "e2e00000-0000-4000-8000-000000000a12", expectedRevision: 0, correctionReason: null,
+      assessment: fixtureAssessment(assessments.setupVersionId, { category: 6, reportingYear: assessments.reportingYear, reasonCode: null, activitiesIncluded: "E2E: flights and hotel stays booked through the agency.",
+        justification: "E2E: travel is a visible share of value chain emissions.", plannedMethodTypes: ["activity_average_data"] }) } })
     await page.setViewportSize({ width: 1360, height: 900 })
     await page.goto("/#/setup")
     await page.locator("main h1").first().waitFor()
@@ -448,7 +457,10 @@ suite("site-web browser smoke (E2E-01)", () => {
     await page.getByText("Scope 3 · 1.", { exact: false }).first().waitFor({ timeout: 30_000 })
     await page.waitForLoadState("networkidle")
     expect(await page.locator("main").getByRole("button", { name: /assessment/i }).count()).toBe(0)
-    for (const assessment of await page.locator(".scope3-assessment").all()) expect(await assessment.locator("input, select, textarea, button").count()).toBe(0)
+    const saved = page.locator('[aria-label="Assessment for category 6"]')
+    await saved.getByText("E2E: travel is a visible share of value chain emissions.").waitFor({ timeout: 30_000 })
+    expect(await saved.locator("input, select, textarea, button, summary").count()).toBe(0)
+    expect(await page.locator(".scope3-assessment").count()).toBe(1)
     expect(opened.writes).toEqual([])
   }, 120_000)
 

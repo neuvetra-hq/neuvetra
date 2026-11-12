@@ -10,7 +10,10 @@
 // with no empty option the contract requires) is "required". Keys ending in a qualifier are the same field in another
 // state: `co2-zero` (a zero-emission technology), `activityOverlap-fallback` (a category where spend is only a fallback)
 // and `dq-basis-default` (no rating or origin set, so no reason is asked for).
-import type { FieldNeed } from "./wo12-text"
+import type { CollectionActivity } from "../../../../packages/neuvetra-database/src/collection-contract"
+import type { Scope3ConsolidationApproach, Scope3PlanOptions } from "../../../../packages/neuvetra-database/src/scope3-collection"
+import type { Scope3SetupFacts } from "./scope3-forms"
+import { FIELD_NEED_NOTES, type FieldNeed } from "./wo12-text"
 
 export const ACTIVITY_FIELD_NEEDS: Readonly<Record<string, Readonly<Record<string, FieldNeed>>>> = {
   common: { location: "required", source: "required", periodStart: "required", periodEnd: "required", quality: "optional", reference: "optional", notes: "optional", evidence: "optional", estimateBasis: "required", reason: "required", withdrawalReason: "required" },
@@ -50,3 +53,84 @@ export function activityFieldNeed(kind: string, field: string): FieldNeed {
 }
 /** The labels of one kind's form (components/scope3 pass these to their fields). */
 export const fieldNeedsOf = (kind: string) => (field: string): FieldNeed => activityFieldNeed(kind, field)
+
+/**
+ * WO-12 QA round 1: what the form knows about the company that decides a field's label. Each is `undefined` when the
+ * form can't know it (company setup couldn't be read, or no site is chosen yet); the label then says what it depends on
+ * rather than guessing.
+ * - `consolidationApproach`: company setup's boundary approach (`null` or "unknown" when setup hasn't chosen one).
+ * - `locationCountry`: the chosen site's country in company setup (`null` when setup records none).
+ * - `distanceCommutingOverlap`: whether the company has distance-based commuting records for a period that overlaps
+ *   this record's (the adapter's `distanceCommutingPeriods`, scope3-collection.ts commuting_overlap_not_confirmed).
+ */
+export interface FieldNeedFacts {
+  consolidationApproach?: Scope3ConsolidationApproach | null
+  locationCountry?: string | null
+  distanceCommutingOverlap?: boolean
+}
+/** A field's label and, where the label depends on something the person can see or change, a note that says what. */
+export interface FieldLabel { need: FieldNeed; needNote?: string }
+
+const VEHICLE_MILES = new Set(["miles", "milesBasis"]), VEHICLE_MPG = new Set(["mpg", "mpgSource"])
+const FUGITIVE_AFTER_BOUNDARY = new Set(["term-PN", "term-CN", "term-PS", "term-CD", "term-RD", "maintainsRefrigerantStock", "retrofitInPeriod", "contractorRecords", "eventChronology"])
+const FUGITIVE_AFTER_APPLICABILITY = new Set(["term-PN", "term-CN", "term-PS", "term-CD", "term-RD", "contractorRecords", "eventChronology"])
+const LEASE_EXPLANATION_KINDS = new Set(["asset_energy", "building_average", "partner_reported"])
+
+/**
+ * A field's label in the form's current state (WO-12 QA round 1): the table's label, except where the rules make the need
+ * depend on another answer, the site or company setup. Every case here is re-derived in each of its states by
+ * wo12-field-needs.test.ts.
+ * - Vehicle miles and fuel economy are alternatives: the one in use is "Needed for results", the other "Optional"; with
+ *   neither, both say "Needed for results (one of: …)" (CO2 calculates, CH4 and N2O wait for one of them).
+ * - A refrigerant record outside the reporting boundary is excluded whatever else is answered; one that keeps a
+ *   refrigerant stock or was retrofitted is held for method review whatever the five terms and records say.
+ * - Business travel's hotel country: a blank country uses the site's when that is the U.S. (scope3-collection.ts
+ *   hotel_country_from_reporting_location); otherwise the stay is held (hotel_country_required).
+ * - Survey-average commuting's overlap answer holds the record only when distance-based commuting records cover an
+ *   overlapping period (commuting_overlap_not_confirmed).
+ * - "Why no operational control" (category 8, operating lease) holds the record only under operational control
+ *   (lease_in_scope1_2_under_boundary).
+ */
+export function fieldLabel(activity: Pick<CollectionActivity, "kind" | "payload">, field: string, facts: FieldNeedFacts = {}): FieldLabel {
+  const need = activityFieldNeed(activity.kind, field)
+  const p = activity.payload as unknown as Record<string, unknown>
+  if (activity.kind === "vehicle" && (VEHICLE_MILES.has(field) || VEHICLE_MPG.has(field))) {
+    const miles = p.miles !== null && p.miles !== undefined, mpg = p.fuelEconomy !== null && p.fuelEconomy !== undefined
+    if (!miles && !mpg) return { need: "results", needNote: FIELD_NEED_NOTES.vehicleEither }
+    return { need: (VEHICLE_MILES.has(field) ? miles : mpg) ? "results" : "optional" }
+  }
+  if (activity.kind === "fugitive" && p.insideBoundary === false && FUGITIVE_AFTER_BOUNDARY.has(field)) return { need: "optional" }
+  if (activity.kind === "fugitive" && (p.maintainsRefrigerantStock === true || p.retrofitInPeriod === true) && FUGITIVE_AFTER_APPLICABILITY.has(field)) return { need: "optional" }
+  if (activity.kind === "business_travel" && field === "hotelCountry") {
+    if (facts.locationCountry === undefined) return { need: "results", needNote: FIELD_NEED_NOTES.hotelCountryUnknown }
+    return { need: facts.locationCountry === "US" ? "optional" : "results" }
+  }
+  if (activity.kind === "commuting_average" && field === "activityOverlap") {
+    if (facts.distanceCommutingOverlap === undefined) return { need: "results", needNote: FIELD_NEED_NOTES.commutingOverlapUnknown }
+    return { need: facts.distanceCommutingOverlap ? "results" : "optional" }
+  }
+  if (LEASE_EXPLANATION_KINDS.has(activity.kind) && field === "noOperationalControlBasis") {
+    const approach = facts.consolidationApproach
+    if (approach === undefined) return { need: "results", needNote: FIELD_NEED_NOTES.leaseApproachUnknown }
+    if (approach === null || approach === "unknown") return { need: "optional", needNote: FIELD_NEED_NOTES.leaseApproachNotChosen }
+    return { need: approach === "operational_control" ? "results" : "optional" }
+  }
+  return { need }
+}
+/** The labels of one record's form in its current state (the forms in components/scope3 spread these into their fields). */
+export const fieldLabelsOf = (activity: Pick<CollectionActivity, "kind" | "payload">, facts: FieldNeedFacts = {}) => (field: string): FieldLabel => fieldLabel(activity, field, facts)
+
+/**
+ * The facts the Activity screen has for a record's labels: company setup as read (`undefined` until it is), the chosen site,
+ * and the plan options the screen builds for this draft (`scope3ReadinessOptions`, the results route's options).
+ */
+export function activityFieldFacts(input: { setup: Scope3SetupFacts | undefined; activity: Pick<CollectionActivity, "kind" | "locationId" | "period">; options: Scope3PlanOptions | null }): FieldNeedFacts {
+  const { setup, activity, options } = input
+  const countries = setup?.locationCountries
+  const period = activity.period
+  return {
+    ...(setup !== undefined ? { consolidationApproach: setup.consolidationApproach } : {}),
+    ...(countries && activity.locationId ? { locationCountry: countries.get(activity.locationId) ?? null } : {}),
+    ...(activity.kind === "commuting_average" && options ? { distanceCommutingOverlap: (options.distanceCommutingPeriods ?? []).some(other => other.start < period.endExclusive && period.start < other.endExclusive) } : {}),
+  }
+}
