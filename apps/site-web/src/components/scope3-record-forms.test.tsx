@@ -858,7 +858,7 @@ describe("round 3: a saved record opened by Fix shows its problem before any edi
   test("PR-7, PR-12: a saved waste pair without a factor names the Treatment field and marks it invalid when opened", async () => {
     const saved = savedRecord("93900000-0000-4000-8000-0000000000c1", { ...blank("end_of_life_split"), kind: "waste", sourceId: "W-OLD", quantity: { originalValue: "2", originalUnit: "short_ton", normalizedValue: "2", normalizedUnit: "short_ton" }, payload: { category: 5, material: "mixed_msw", treatment: "recycled" } } as unknown as CollectionActivity)
     const w = await workspace({ records: [saved] })
-    w.app.button("Review or correct")!.props.onClick(); await w.app.settle()
+    w.app.nodes().find(node => node.props.className === "collection-row-link")!.props.onClick({ preventDefault() {} }); await w.app.settle()
     expect(said(w.app)).toContain("Treatment: EPA publishes no factor for Mixed MSW (municipal solid waste) that is recycled.")
     expect(w.app.nodes().some(node => node.props.label === "Treatment" && node.props.invalid === true)).toBe(true)
     expect(w.app.nodes().find(node => node.props.id === "collection-save-unchanged")).toBeUndefined()
@@ -880,7 +880,7 @@ describe("bug hunt C: a rewritten correction reason is the one saved", () => {
     const fixtureActivity = SCOPE3_PAYLOAD_FIXTURES.find(item => item.kind === "purchase_spend")!
     const saved = savedRecord("93900000-0000-4000-8000-0000000000d1", { ...blank("purchase_spend"), sourceId: "SPEND-1", quantity: structuredClone((fixtureActivity as any).quantity ?? blank("purchase_spend").quantity), payload: structuredClone(fixtureActivity.payload) } as unknown as CollectionActivity)
     const w = await workspace({ records: [saved] })
-    w.app.button("Review or correct")!.props.onClick(); await w.app.settle()
+    w.app.nodes().find(node => node.props.className === "collection-row-link")!.props.onClick({ preventDefault() {} }); await w.app.settle()
     w.recordForm()!.props.onEdit((next: CollectionActivity) => { next.notes = "Amount checked against the reissued invoice." }); await w.app.settle()
     const saveCorrection = async () => { await w.app.button("Save correction")!.props.onClick(); await w.app.settle() }
     w.app.byLabel("Reason for this correction")!.props.onChange("First reason typed"); await w.app.settle()
