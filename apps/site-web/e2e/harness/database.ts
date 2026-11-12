@@ -30,12 +30,36 @@ export function checkE2eDatabaseUrl(raw: string): URL {
   return url
 }
 
+/** The databases a server dedicated to this suite may hold. */
+export const DEDICATED_SERVER_DATABASES = ["neuvetra_e2e", "postgres", "template0", "template1"] as const
+
+/** True for a loopback address as PostgreSQL's inet_server_addr() prints it (null means a Unix socket). */
+export function isLoopbackServerAddress(address: string | null): boolean {
+  if (address === null) return true
+  const bare = address.replace(/\/\d+$/, "")
+  return bare === "::1" || /^127\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(bare) || /^::ffff:127\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(bare)
+}
+
+/**
+ * Before anything server-wide is dropped: the server must say that its own address is loopback (a loopback URL can
+ * still be a tunnel or port forward to another machine) and must hold no database but the suite's and the defaults.
+ */
+async function assertDedicatedServer(maintenance: WorkspaceConnection) {
+  const server = await maintenance.query<{ address: string | null }>("select inet_server_addr()::text as address")
+  const address = server.rows[0]?.address ?? null
+  if (!isLoopbackServerAddress(address)) throw new Error(`Refusing to reset: the PostgreSQL server's own address is ${address}, not loopback. Use a server on this machine dedicated to the suite.`)
+  const databases = (await maintenance.query<{ name: string }>("select datname as name from pg_database order by datname")).rows.map(row => row.name)
+  const foreign = databases.filter(name => !(DEDICATED_SERVER_DATABASES as readonly string[]).includes(name))
+  if (foreign.length > 0) throw new Error(`Refusing to reset: the PostgreSQL server also holds ${foreign.join(", ")}. The suite drops a server-wide role, so it needs a server of its own.`)
+}
+
 /** Drops and recreates the e2e database, provides the Supabase-shaped auth and storage baseline, and migrates it. */
 export async function prepareDatabase(raw: string): Promise<PreparedDatabase> {
   const url = checkE2eDatabaseUrl(raw)
   const maintenanceUrl = new URL(url); maintenanceUrl.pathname = "/postgres"
   const maintenance = createPostgresConnection(maintenanceUrl.toString(), { tls: false, maxConnections: 1 })
   try {
+    await assertDedicatedServer(maintenance)
     await maintenance.exec(`drop database if exists ${E2E_DATABASE_NAME} with (force)`)
     await maintenance.exec("drop role if exists neuvetra_runtime")
     await maintenance.exec(`create database ${E2E_DATABASE_NAME}`)

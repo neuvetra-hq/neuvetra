@@ -566,24 +566,23 @@ jobs:
     # E2E-01: one browser smoke suite for site-web (apps/site-web/e2e/README.md). The real staging server serves the built
     # staging bundle against a PostgreSQL 17 database migrated by the repository's own helper and seeded with fixed synthetic
     # data; Supabase is stubbed in the browser and the token validator is injected, so nothing hosted is contacted.
+    # E2E-02: PostgreSQL runs on the runner's own loopback (host network), so the harness can check that the server it
+    # resets is local and dedicated; Chrome is the Chrome for Testing build pinned by playwright-core; a run that passes
+    # fewer journeys than expected (or none, if the database variable went missing) fails.
     name: Browser smoke (site-web end to end)
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    services:
-      e2e-postgres:
-        image: postgres:17
-        env:
-          POSTGRES_USER: e2e_admin
-          POSTGRES_DB: postgres
-          POSTGRES_HOST_AUTH_METHOD: trust
-        ports:
-          - 55480:5432
-        options: >-
-          --health-cmd "pg_isready -U e2e_admin -d postgres"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
+    env:
+      E2E_DATABASE_URL: postgres://e2e_admin@127.0.0.1:55480/neuvetra_e2e
+      # The journeys in apps/site-web/e2e/browser-smoke.test.ts; raise it with every journey added.
+      E2E_EXPECTED_PASS: "10"
+      # playwright-core 1.59.1 drives Chrome for Testing 147.0.7727.15 (its browsers.json, chromium revision 1217).
+      E2E_CHROME_VERSION: "147.0.7727.15"
     steps:
+      - name: Start a dedicated PostgreSQL 17 on the runner's loopback
+        run: |
+          docker run --detach --name e2e-postgres --network host -e POSTGRES_USER=e2e_admin -e POSTGRES_HOST_AUTH_METHOD=trust \
+            postgres:17 -c listen_addresses=127.0.0.1 -c port=55480
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
         with:
@@ -593,21 +592,48 @@ jobs:
         with:
           python-version: '3.12'
       - run: bun install --frozen-lockfile
+      - name: Check that playwright-core still pins the expected Chrome for Testing
+        working-directory: apps/site-web
+        run: |
+          dir=$(bun -e 'console.log(require("node:path").dirname(require.resolve("playwright-core")))')
+          echo "PLAYWRIGHT_CORE_DIR=$dir" >> "$GITHUB_ENV"
+          pinned=$(bun -e 'const b = require(process.argv[1] + "/browsers.json"); console.log(b.browsers.find(x => x.name === "chromium").browserVersion)' "$dir")
+          echo "playwright-core pins Chrome for Testing $pinned"
+          if [ "$pinned" != "$E2E_CHROME_VERSION" ]; then echo "::error title=Browser smoke::playwright-core now pins Chrome $pinned; update E2E_CHROME_VERSION and the cache key together."; exit 1; fi
+      - name: Restore the pinned Chrome for Testing
+        id: chrome-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: chrome-for-testing-${{ env.E2E_CHROME_VERSION }}-${{ runner.os }}
+      - name: Install the pinned Chrome for Testing
+        if: steps.chrome-cache.outputs.cache-hit != 'true'
+        working-directory: apps/site-web
+        run: bun "$PLAYWRIGHT_CORE_DIR/cli.js" install --no-shell chromium
+      - name: Use the pinned Chrome
+        working-directory: apps/site-web
+        run: |
+          chrome=$(bun -e 'import { chromium } from "playwright-core"; console.log(chromium.executablePath())')
+          echo "CHROME_PATH=$chrome" >> "$GITHUB_ENV"
+          "$chrome" --version
       - name: Build the site-web staging bundle
         working-directory: apps/site-web
         run: bun run build:staging
       - name: Typecheck the browser smoke suite
         working-directory: apps/site-web
         run: bun ../../node_modules/typescript/bin/tsc --noEmit --module esnext --moduleResolution bundler --target es2022 --types bun --strict --skipLibCheck --lib es2022,dom,dom.iterable e2e/browser-smoke.test.ts
-      - name: Show the preinstalled Chrome
+      - name: Wait for PostgreSQL
         run: |
-          echo "CHROME_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
-          google-chrome --version
+          for i in $(seq 1 30); do docker exec e2e-postgres pg_isready -h 127.0.0.1 -p 55480 -U e2e_admin -d postgres && exit 0; sleep 1; done
+          docker logs e2e-postgres; exit 1
       - name: Run the browser smoke suite
         working-directory: apps/site-web
-        run: bun run test:e2e
-        env:
-          E2E_DATABASE_URL: postgres://e2e_admin@127.0.0.1:55480/neuvetra_e2e
+        run: |
+          set -o pipefail
+          bun run test:e2e 2>&1 | tee "$RUNNER_TEMP/browser-smoke.log"
+          passed=$(grep -oE '^ *[0-9]+ pass$' "$RUNNER_TEMP/browser-smoke.log" | grep -oE '[0-9]+' | tail -1)
+          echo "Journeys passed: ${passed:-0} of $E2E_EXPECTED_PASS expected"
+          if [ "${passed:-0}" -lt "$E2E_EXPECTED_PASS" ]; then echo "::error title=Browser smoke::only ${passed:-0} journeys passed; $E2E_EXPECTED_PASS expected (were tests skipped?)"; exit 1; fi
       - name: Keep screenshots and traces of failed journeys
         if: failure()
         uses: actions/upload-artifact@v4

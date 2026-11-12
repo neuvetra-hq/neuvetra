@@ -11,16 +11,22 @@ CI runs it as the job **Browser smoke (site-web end to end)** in `.github/workfl
   - the database connection (loopback, no TLS);
   - the token validator, which reads the suite's `TokenDirectory`;
   - an in-memory evidence store.
-- `harness/browser.ts` drives the installed Chrome with `playwright-core` (no browser download). Each journey gets a new browser context. In that context the Supabase Auth API (`https://<ref>.supabase.co/auth/v1/...`) is answered by a stub at the network level, so nothing hosted is contacted. A password sign-in returns a session whose token the server's injected validator accepts. To end a session, a test revokes its token, and the server then answers 401.
+- `harness/browser.ts` drives Chrome with `playwright-core`. CI installs and pins the Chrome for Testing build that playwright-core 1.59.1 is made for (147.0.7727.15) and refuses any other (`E2E_CHROME_VERSION`); locally, any installed Chrome is used. Each journey gets a new browser context. In that context the Supabase Auth API (`https://<ref>.supabase.co/auth/v1/...`) is answered by a stub at the network level, so nothing hosted is contacted. A password sign-in returns a session whose token the server's injected validator accepts. To end a session, a test revokes its token, and the server then answers 401.
 - `browser-smoke.test.ts` holds the journeys. Each one asserts that the page raised no uncaught error.
 
 ## Run it locally
 
-You need a PostgreSQL 16 or 17 server that **only this suite uses**. Migration 0009 creates the cluster-wide role `neuvetra_runtime`, so the harness drops that role and recreates it with the database. You also need Chrome or Chromium, and `python` on the PATH (the Results engines use only the standard library).
+You need a PostgreSQL 16 or 17 server that **only this suite uses**. Migration 0009 creates the cluster-wide role `neuvetra_runtime`, so the harness drops that role and recreates it with the database. Before it drops anything, the harness asks the server itself and refuses unless:
+
+- the server's own address (`inet_server_addr()`) is loopback or a Unix socket. A loopback URL alone is not enough, because it can be a tunnel or a port forward to another machine. A Docker container reached through `-p` port mapping is refused for the same reason, so run it on the host network;
+- the server holds no database except `postgres`, `template0`, `template1` and `neuvetra_e2e`.
+
+You also need Chrome or Chromium, and `python` on the PATH (the Results engines use only the standard library).
 
 ```bash
-# A throwaway PostgreSQL in Docker (any port):
-docker run --rm -d --name neuvetra-e2e -e POSTGRES_USER=e2e_admin -e POSTGRES_HOST_AUTH_METHOD=trust -p 55480:5432 postgres:17
+# A throwaway PostgreSQL in Docker on the host's loopback (Linux), as CI runs it:
+docker run --rm -d --name neuvetra-e2e --network host -e POSTGRES_USER=e2e_admin -e POSTGRES_HOST_AUTH_METHOD=trust postgres:17 -c listen_addresses=127.0.0.1 -c port=55480
+# Elsewhere, a native throwaway server: initdb -D /some/empty/dir -U e2e_admin --auth=trust; pg_ctl -D /some/empty/dir -o "-p 55480 -c listen_addresses=127.0.0.1" start
 
 cd apps/site-web
 bun run build:staging          # the bundle under test; rebuild after changing src
@@ -32,8 +38,10 @@ Optional environment variables:
 - `CHROME_PATH`: the Chrome or Chromium executable. Without it, the usual Linux and macOS locations are tried.
 - `E2E_WEB_ROOT`: test another build, for example another branch's `dist-staging`.
 - `NEUVETRA_PYTHON`: the Python the engines run with.
+- `E2E_CHROME_VERSION`: refuse any Chrome whose version is not exactly this one.
+- `E2E_VERBOSE`: print the server's requests per minute. The server allows 300 a minute per user, and the suite peaks at about 140 a minute, almost all as `owner`.
 
-Without `E2E_DATABASE_URL` the suite is skipped. The harness refuses any database that is not on loopback or is not named `neuvetra_e2e`.
+Without `E2E_DATABASE_URL` the suite is skipped locally. When `CI` is set, a missing `E2E_DATABASE_URL` is an error. The CI job also fails when fewer journeys pass than `E2E_EXPECTED_PASS` in `verify.yml`, so raise that number with every journey you add. The harness refuses any URL that is not on loopback or whose database is not named `neuvetra_e2e`.
 
 ## The seed (`harness/seed.ts`)
 
@@ -59,10 +67,46 @@ Setup, records and the import go through the HTTP API as the owner, so they pass
 3. Check what the server stored through `stack.api(...)` or `stack.operator`, not only what the screen shows.
 4. The `Journey` object records the dialogs the page opened (`dialogs`; they are declined unless `answerDialogs` is set), the workspace API writes it sent (`writes`), and every address the tab showed (`addressesSeen`).
 5. Journeys share one seeded database and run in file order. A journey that changes data changes a record that no other journey reads for that value.
-6. Run the suite five times in a row before you push. A journey that fails even once gets fixed or removed, never retried.
+6. Find form fields with `getByLabel(...)`, not by label markup. WO-10 (PR #46) moves fields from a wrapping `<label>` to `<label for>`, and `getByLabel` works with both.
+7. Raise `E2E_EXPECTED_PASS` in `verify.yml`.
+8. Run the suite five times in a row before you push. A journey that fails even once gets fixed or removed, never retried.
+
+## What the suite covers, and what it does not
+
+The server's token validator is injected (`StagingOverrides.validateUser`), so the suite says nothing about how a real token is validated.
+
+It covers, through the real server and database:
+
+- the browser's whole signed-in workspace on the built bundle;
+- bearer-token extraction and the origin check;
+- the staging-access roster check (`hasStagingAccess`) and the per-route role checks;
+- tenant isolation as the restricted `neuvetra_runtime` role, through row-level security;
+- the rate limiters;
+- real asset verification and serving;
+- the Python engines behind Results;
+- how the browser handles 401 (session ended), 503 (transient) and the session check.
+
+It does **not** cover:
+
+- the local token pre-check (`isPlausibleUnexpiredJwt`, PR #38). `createStagingServer` turns it off whenever a validator is injected;
+- real Supabase `/auth/v1/user` validation, including its failure path. When Auth is unavailable, the server treats it as transient (`throwWhenUnavailable`), behind a 5-second bounded fetch;
+- Supabase Storage. The in-memory evidence store ignores the token and the bucket, so storage access rules and object authorization are not exercised;
+- `HostedWorkspaceDatabase.create`: its Supabase host, TLS, CA and project-ref checks. The harness constructs the adapter directly on the loopback connection, through a cast that also hides constructor signature changes from `tsc`;
+- the email-link (PKCE) exchange and token refresh. Sessions in the stub last a day and are never refreshed.
+
+Those are covered, where they are covered at all, by the site-api and database unit and native suites and by the staging image smoke.
 
 ## Tolerated check: member write controls (WO-12, still open)
 
-On `main`, a member still sees the new-record form fields, the file pickers and the spend mapping's "Map" button enabled. The server refuses those writes. The member journey requires that no save, import, withdraw or correct button is enabled. It tolerates only those known WO-12 controls. When WO-12 lands, delete the `tolerated` rule so the check becomes "no write control at all".
+On `main`, a member still sees some write controls enabled. The server refuses those writes. The member journey lists, by accessible name, every enabled control in the main region. It allows two lists and fails on anything else:
+
+- `MEMBER_READING_CONTROLS`: navigation, list filters and search, reload, and the spend review's tabs.
+- `WO12_OPEN_MEMBER_CONTROLS`: exactly the known WO-12 controls:
+  - the new-record form's 22 type buttons, fields and evidence checkbox;
+  - the file pickers;
+  - the spend import's setup location;
+  - the spend mapping's "Map".
+
+A control's name is its `aria-label`, otherwise its label's first `span` (the field name in both the current markup and WO-10's), otherwise its text. When WO-12 lands, delete `WO12_OPEN_MEMBER_CONTROLS` so the check becomes "no write control at all". If a later PR renames one of those fields, update its entry.
 
 The record-view journeys (WO-06) were written while PR #39 was open and ran only when the bundle contained the record view. PR #39 merged before this suite did, so they now run unconditionally. A regression that removes the record view fails them; it does not skip them.
