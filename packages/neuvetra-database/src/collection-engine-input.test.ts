@@ -305,9 +305,9 @@ describe('BF1 adapter fixes', () => {
     expect([plan(slip).action, plan(slip).reasons]).toEqual(['hold', ['heat_content_outside_plausible_range']])
     const ok = run(plan(right).call!).result!, tenfold = run({ engine: 'scope1', request: { kind: 'natural_gas', input: { period: year, quantity: '1000', unit: 'ccf', heatContent: { value: '1.037', unit: 'MMBtu per ccf' } } } }).result!
     expect(Number(tenfold.total.display) / Number(ok.total.display)).toBeCloseTo(10, 6)
-    // Inclusive bounds: ±15% of 0.001026 MMBtu per scf at standard conditions; half to double it per ccf or mcf (metered).
+    // Inclusive bounds for a ccf bill (BF-06: the band follows the quantity's unit): half to double 0.001026 MMBtu per scf, whatever unit it is written in.
     // [unit, lowest accepted, just under, highest accepted, just over] at the six fractional digits a stated value may have.
-    const bounds = [['MMBtu per scf', '0.000873', '0.000872', '0.001179', '0.00118'], ['MMBtu per ccf', '0.0513', '0.051299', '0.2052', '0.205201'],
+    const bounds = [['MMBtu per scf', '0.000513', '0.000512', '0.002052', '0.002053'], ['MMBtu per ccf', '0.0513', '0.051299', '0.2052', '0.205201'],
       ['MMBtu per mcf', '0.513', '0.512999', '2.052', '2.052001'], ['therm per ccf', '0.513', '0.512999', '2.052', '2.052001']] as const
     for (const [unit, low, under, high, over] of bounds) {
       for (const value of [low, high]) expect([unit, value, plan(gas('1000', 'ccf', { value, unit })).action]).toEqual([unit, value, 'calculate'])
@@ -320,6 +320,20 @@ describe('BF1 adapter fixes', () => {
     for (const [value, unit] of correct) expect([value, unit, plan(gas('1000', unit === 'MMBtu per mcf' ? 'mcf' : 'ccf', { value, unit })).action]).toEqual([value, unit, 'calculate'])
     const slips: Array<[string, string]> = [['1.037', 'MMBtu per ccf'], ['0.01037', 'MMBtu per ccf'], ['10.37', 'therm per ccf'], ['0.1037', 'therm per ccf'], ['0.1026', 'MMBtu per mcf'], ['10.26', 'MMBtu per mcf']]
     for (const [value, unit] of slips) expect([value, unit, plan(gas('1000', unit === 'MMBtu per mcf' ? 'mcf' : 'ccf', { value, unit })).reasons]).toEqual([value, unit, ['heat_content_outside_plausible_range']])
+    // BF-06 (S12-03): the band follows the quantity's unit, so the same physical heat content gets the same answer in every heat-content unit.
+    for (const [value, unit] of [['0.000830', 'MMBtu per scf'], ['0.083', 'MMBtu per ccf'], ['0.83', 'therm per ccf'], ['0.83', 'MMBtu per mcf']] as const)
+      expect([value, unit, plan(gas('850', unit === 'MMBtu per mcf' ? 'mcf' : 'ccf', { value, unit })).action]).toEqual([value, unit, 'calculate'])
+    // A tenfold slip is held in every heat-content unit, for every volume unit.
+    for (const q of ['scf', 'ccf', 'mcf']) for (const [value, unit] of [['0.00830', 'MMBtu per scf'], ['0.000083', 'MMBtu per scf'], ['0.83', 'MMBtu per ccf'], ['0.0083', 'MMBtu per ccf'], ['8.3', 'therm per ccf'], ['0.083', 'therm per ccf'], ['8.3', 'MMBtu per mcf'], ['0.083', 'MMBtu per mcf']] as const)
+      expect([q, value, unit, plan(gas('850', q, { value, unit })).reasons]).toEqual([q, value, unit, ['heat_content_outside_plausible_range']])
+    // A standard-cubic-foot quantity keeps the tight band whatever unit the heat content is written in: 0.083 MMBtu per ccf is 0.00083 per scf.
+    expect(plan(gas('850', 'scf', { value: '0.083', unit: 'MMBtu per ccf' })).reasons).toEqual(['heat_content_outside_plausible_range'])
+    expect(plan(gas('850', 'scf', { value: '0.1026', unit: 'MMBtu per ccf' })).action).toBe('calculate')
+    expect(plan(gas('850', 'scf', { value: '1.026', unit: 'therm per ccf' })).action).toBe('calculate')
+    // Inclusive at the converted edges.
+    for (const [q, value, unit, action] of [['scf', '0.08721', 'MMBtu per ccf', 'calculate'], ['scf', '0.087209', 'MMBtu per ccf', 'hold'], ['scf', '0.11799', 'MMBtu per ccf', 'calculate'], ['scf', '0.117991', 'MMBtu per ccf', 'hold'],
+      ['mcf', '0.513', 'therm per ccf', 'calculate'], ['mcf', '0.000513', 'MMBtu per scf', 'calculate'], ['mcf', '0.000512', 'MMBtu per scf', 'hold'], ['ccf', '0.002052', 'MMBtu per scf', 'calculate'], ['ccf', '0.002053', 'MMBtu per scf', 'hold']] as const)
+      expect([q, value, unit, plan(gas('850', q, { value, unit })).action]).toEqual([q, value, unit, action])
     // An energy unit doesn't use the heat content, so it is never held for it.
     expect(plan(gas('100', 'therm', { value: '1.037', unit: 'MMBtu per ccf' })).action).toBe('calculate')
     // Distillate: 0.138 MMBtu per gallon ±15%. Blank still means the default.
