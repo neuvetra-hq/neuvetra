@@ -1,4 +1,6 @@
 import type { HostedWorkspaceActor } from "./workspace-api"
+import { POSSIBLE_DUPLICATE_COUNTED_REASON, possibleDuplicateCounted, possibleDuplicateOf, possibleDuplicateOfText } from "../../../../packages/neuvetra-database/src/collection-duplicates"
+import { periodLabel } from "../../../../packages/neuvetra-database/src/plain-language-labels"
 
 export const RESULTS_PROFILE = "neuvetra.collection-results.v2"
 /** Board decision 2026-09-29: draft numbers are for synthetic test companies only. Matches the server label when any method is unreleased. */
@@ -97,6 +99,25 @@ export class NotSyntheticResultsError extends Error { constructor() { super("Dra
 
 /** Rejects anything that is not the draft-results contract, so a malformed response can never show a number. */
 /** A-01/A-03: the adapter's notes on why an instrument's certificate wasn't counted, shown next to the engine's own findings. */
+/**
+ * BF-01: the record a possible duplicate may repeat (the earlier record it overlaps), by source ID, site, period and record
+ * ID ("Possible duplicate of GAS-1 at Office, Jan 1 – Jan 31, 2025 (record <id>)."); null when the row is not one.
+ */
+export function possibleDuplicateText(row: Pick<ResultRow, "plan">, records: ReadonlyArray<Pick<ResultRow, "recordId" | "sourceId" | "locationName" | "period">>): string | null {
+  const otherId = possibleDuplicateOf(row.plan.notes ?? [])
+  if (otherId === null) return null
+  const other = records.find(item => item.recordId === otherId)
+  return possibleDuplicateOfText(otherId, other ? { sourceId: other.sourceId, locationName: other.locationName, period: periodLabel(other.period.start, other.period.endExclusive) } : null)
+}
+/** BF-01 (count mode): how many counted possible duplicates are in one subtotal (rows marked in that subtotal only). */
+export function countedDuplicatesIn(results: Pick<ResultsResponse, "records">, basis: "scope1" | "scope2LocationBased" | "scope2MarketBased"): number {
+  return results.records.filter(row => row.outcome === "calculated" && row.inSubtotal[basis] && possibleDuplicateCounted({ reasons: row.plan.reasons, notes: row.plan.notes ?? [] })).length
+}
+/** BF-01 (count mode): the flag on a subtotal that includes possible duplicates (screen, draft report, print and CSV). */
+export const possibleDuplicateTotalText = (count: number) => `Includes ${count} possible duplicate${count === 1 ? "" : "s"}: this figure may be overstated`
+/** BF-01: the reason codes a row shows, with `possible_duplicate_counted` for a possible duplicate the policy counted (count mode) and that is in a subtotal. */
+export const duplicateReasonCodes = (row: Pick<ResultRow, "plan" | "outcome" | "inSubtotal">): string[] => row.outcome === "calculated" && (row.inSubtotal.scope1 || row.inSubtotal.scope2LocationBased || row.inSubtotal.scope2MarketBased)
+  && possibleDuplicateCounted({ reasons: row.plan.reasons, notes: row.plan.notes ?? [] }) ? [POSSIBLE_DUPLICATE_COUNTED_REASON] : []
 export const instrumentNotes = (row: Pick<ResultRow, "plan">): string[] => (row.plan.notes ?? []).filter(note => /^instrument_\d+_evidence_(?:pending_scan|shared|not_usable)$/.test(note))
 export function decodeResults(value: unknown, companyId: string): ResultsResponse {
   if (!record(value) || value.profile !== RESULTS_PROFILE || value.companyId !== companyId || typeof value.label !== "string" || !Array.isArray(value.records) || !record(value.counts)) throw new Error("The results response was not recognized.")
@@ -209,14 +230,18 @@ export function resultsCsv(results: ResultsResponse, labels: CsvLabels): string 
     const code = row.outcome === "calculated" ? (s1?.status ?? s2?.locationBased.status ?? "") : row.plan.status === "withdrawn" || row.plan.status === "excluded" ? row.plan.status : row.periodCheck === "outside" || row.periodCheck === "partial" ? `${row.periodCheck === "partial" ? "partly_" : ""}outside_reporting_period` : row.plan.status ?? row.outcome
     const yes = (flag: boolean, applies: boolean) => applies ? (flag ? "Yes" : "No") : ""
     const periodHeld = row.plan.status !== "withdrawn" && row.plan.status !== "excluded"
-    const notes = [...new Set([...(periodHeld && row.periodCheck === "outside" ? ["outside_reporting_period"] : periodHeld && row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...instrumentNotes(row), ...(row.refusalCode ? [row.refusalCode] : []), ...(s1?.findings ?? []), ...(s1?.estimates ?? []), ...(s2?.findings ?? []), ...(s2?.estimates ?? [])].map(labels.reason))].join(" ")
+    // BF-01: a possible duplicate names the record it may repeat (held, or counted in count mode).
+    const duplicate = possibleDuplicateText(row, results.records)
+    const notes = [...new Set([...[...(periodHeld && row.periodCheck === "outside" ? ["outside_reporting_period"] : periodHeld && row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...duplicateReasonCodes(row), ...instrumentNotes(row), ...(row.refusalCode ? [row.refusalCode] : []), ...(s1?.findings ?? []), ...(s1?.estimates ?? []), ...(s2?.findings ?? []), ...(s2?.estimates ?? [])].map(labels.reason), ...(duplicate ? [duplicate] : [])])].join(" ")
     const files = row.evidence.map(evidenceFileText).join("; ")
     const run = s1 ?? s2
     return [String(row.scope), labels.kind(row.kind), row.locationName ?? "", row.sourceId, row.period.start, lastDayCovered(row.period.endExclusive), row.quantity.value, labels.unit?.(row.quantity.unit) ?? row.quantity.unit, labels.quality?.(row.quality) ?? row.quality, labels.status(row), code,
       yes(row.inSubtotal.scope1, row.scope === 1), yes(row.inSubtotal.scope2LocationBased, row.scope === 2), yes(row.inSubtotal.scope2MarketBased, row.scope === 2),
       s1?.total?.display ?? "", s2?.locationBased.total?.display ?? "", s2?.marketBased.total?.display ?? "", run ? methodLabel(run, results.methods) : "", s1?.gwpSetId ?? s2?.gwpSetId ?? "", files, notes].map(escape).join(",")
   })
-  const subtotal = (label: string, value: string | undefined) => ["Subtotal", label, "", "", "", "", "", "", "", "", "", "", "", "", label === "Scope 1" ? value ?? "" : "", label === "Scope 2 location-based" ? value ?? "" : "", label === "Scope 2 market-based" ? value ?? "" : "", "", "", "", `Engine aggregate of rows marked Yes under "In ${label === "Scope 1" ? "Scope 1" : label === "Scope 2 location-based" ? "location-based" : "market-based"} subtotal"`].map(escape).join(",")
+  // BF-01 (count mode): a subtotal that includes possible duplicates says so in its own row.
+  const duplicateNote = (label: string) => { const n = countedDuplicatesIn(results, label === "Scope 1" ? "scope1" : label === "Scope 2 location-based" ? "scope2LocationBased" : "scope2MarketBased"); return n ? `. ${possibleDuplicateTotalText(n)}.` : "" }
+  const subtotal = (label: string, value: string | undefined) => ["Subtotal", label, "", "", "", "", "", "", "", "", "", "", "", "", label === "Scope 1" ? value ?? "" : "", label === "Scope 2 location-based" ? value ?? "" : "", label === "Scope 2 market-based" ? value ?? "" : "", "", "", "", `Engine aggregate of rows marked Yes under "In ${label === "Scope 1" ? "Scope 1" : label === "Scope 2 location-based" ? "location-based" : "market-based"} subtotal"${value === undefined ? "" : duplicateNote(label)}`].map(escape).join(",")
   const totals = [subtotal("Scope 1", results.scope1?.includedResults.length ? results.scope1.knownSourceSubtotal.display : undefined),
     subtotal("Scope 2 location-based", results.scope2?.locationBasedIncluded.length ? results.scope2.locationBasedSubtotal.display : undefined),
     subtotal("Scope 2 market-based", results.scope2?.marketBasedIncluded.length ? results.scope2.marketBasedSubtotal.display : undefined)]

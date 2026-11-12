@@ -10,6 +10,8 @@ import { extractBearerToken, type AuthenticatedUser } from "../lib/auth"
 import type { Scope3Request } from "../calculation/scope3-authority"
 import { checkPeriod, classifyMethodRelease, DRAFT_RESULTS_ENVIRONMENT, DRAFT_RESULTS_LABEL, RELEASED_DRAFT_RESULTS_LABEL, type EngineDescription, type EngineMethodFacts, type EvidenceStatus, type MethodReleaseStatus, type PeriodCheck, type ReleaseEvidence } from "./collection-results-routes"
 import { createResultsScheduler } from "./results-scheduler"
+// BF-01: the shared, browser-safe duplicate rule (the same module the Scope 1 and 2 results use).
+import { applyDuplicatePolicy, COLLECTION_DUPLICATE_POLICY, possibleDuplicateCounts, possibleDuplicateRecords, possibleDuplicatesCountedWarning, type CollectionDuplicatePolicy } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 
 /**
  * Draft Scope 3 results (Scope 3 package 2; Claude, 26 October 2026). A separate route and response from the Scope 1 and
@@ -245,6 +247,8 @@ export async function buildScope3Results(input: {
   clock?: () => number
   /** I-06: each method's formula by method id (absent: read from `engine.describe()`, cached; null: unavailable). */
   formulas?: ReadonlyMap<string, string> | null
+  /** BF-01: hold possible duplicates or count them with a warning (defaults to COLLECTION_DUPLICATE_POLICY; tests cover both). */
+  duplicatePolicy?: CollectionDuplicatePolicy
 }): Promise<Scope3ResultsResponse> {
   const { context, records, evidence, engine } = input
   const clock = input.clock ?? Date.now, deadline = input.deadline ?? null
@@ -286,6 +290,10 @@ export async function buildScope3Results(input: {
     // I-12h (A14): a hotel stay without a hotel country takes its reporting location's country from setup.
     locationCountries: new Map((current?.setup.locations ?? []).map(location => [location.id, location.countryCode])) }
   // --- end I-03 ---
+  // BF-01: possible duplicates among the saved records (Scope 1 and 2 records too, for the lines derived from them).
+  const duplicatePolicy = input.duplicatePolicy ?? COLLECTION_DUPLICATE_POLICY
+  const duplicates = possibleDuplicateRecords(records), keeperCounts = possibleDuplicateCounts(duplicates)
+  const duplicatesCounted = new Set<string>()
   // Lines the engine will calculate, in line order: their row, coverage entry and annotation are completed after the batch.
   const pending: Array<{ row: Scope3ResultRow; coverage: Scope3CoverageRecord; request: Scope3Request; annotation: Scope3Annotation }> = []
   // Round 3, lane A (owner decision 4): each superseded spend line, planned again without the supersession for its would-be
@@ -299,11 +307,17 @@ export async function buildScope3Results(input: {
   for (const { record, grid, line } of ordered) {
     const version = record.currentVersion
     const activity = version.activity
-    const plan = grid ? planGridLossCalculation(version, context, evidence) : line === 5 ? planEnergyResoldUpstream(version as unknown as Scope3CollectionVersion, context, evidence, planOptions)
+    const planned = grid ? planGridLossCalculation(version, context, evidence) : line === 5 ? planEnergyResoldUpstream(version as unknown as Scope3CollectionVersion, context, evidence, planOptions)
       : line === 2 || line === 3 ? planElectricityUpstream(version, context, evidence, line === 2 ? "td_losses_upstream" : "electricity_upstream", planOptions)
       : line === 4 ? planFuelUpstream(version, context, evidence, planOptions)
       : planScope3Calculation(version as unknown as Scope3CollectionVersion, context, evidence, planOptions)
     const periodCheck = checkPeriod(activity.period, reportingPeriod)
+    // BF-01: after the withdrawn, excluded and outside-period checks (which keep their precedence), a line of a possible
+    // duplicate record (a saved Scope 3 record, or a 3A/3B/3C/3D line derived from one) follows the duplicate policy.
+    const duplicateOf = duplicates.get(record.id) ?? null
+    const plan = planned.status === "withdrawn" || planned.status === "excluded" || periodCheck === "outside" || periodCheck === "partial" ? planned
+      : applyDuplicatePolicy(planned, duplicateOf, keeperCounts.get(record.id) ?? 0, duplicatePolicy)
+    if (plan !== planned && duplicateOf !== null && plan.action === "calculate") duplicatesCounted.add(record.id)
     const row: Scope3ResultRow = {
       recordId: record.id, versionId: version.id, revision: version.revision, kind: plan.kind, category: plan.category,
       sourceId: activity.sourceId, locationId: activity.locationId, locationName: locations.get(activity.locationId)?.name ?? null,
@@ -348,6 +362,8 @@ export async function buildScope3Results(input: {
     }
     rows.push(row)
   }
+  // BF-01 (count mode): the totals include records that may repeat others, and the response says so.
+  if (duplicatesCounted.size) warnings.push(possibleDuplicatesCountedWarning(duplicatesCounted.size))
   const annotations: Scope3Annotation[] = []
   const unavailable = (line: (typeof pending)[number]) => {
     line.row.outcome = "unavailable"; line.row.result = null; line.row.methodType = null; line.row.effectiveDataQuality = null; line.coverage.result = { outcome: "unavailable" }

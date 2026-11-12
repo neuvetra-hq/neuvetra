@@ -222,8 +222,9 @@ describe("draft Scope 3 results (Scope 3 package 2)", () => {
 // the aggregate annotations taken from each record's payload.
 const clone = (source: CollectionActivityRecord, i: number): CollectionActivityRecord => {
   const id = `95000000-0000-4000-8000-${String(i).padStart(12, "0")}`, versionId = `96000000-0000-4000-8000-${String(i).padStart(12, "0")}`
-  // A copy down to the activity, so a test that edits a clone's payload never changes the shared record.
-  return { ...source, id, currentVersion: { ...source.currentVersion, id: versionId, recordId: id, activity: { ...source.currentVersion.activity } } }
+  // A copy down to the activity, so a test that edits a clone's payload never changes the shared record. BF-01: each copy has
+  // its own source ID, so the copies are different bills, not possible duplicates of each other.
+  return { ...source, id, currentVersion: { ...source.currentVersion, id: versionId, recordId: id, activity: { ...source.currentVersion.activity, sourceId: `${source.currentVersion.activity.sourceId}-${i}` } } }
 }
 /** Wraps the real engine and records how it is called. */
 function spy(changeItems?: (items: Awaited<ReturnType<Scope3ResultsEngine["calculateMany"]>>) => Awaited<ReturnType<Scope3ResultsEngine["calculateMany"]>>) {

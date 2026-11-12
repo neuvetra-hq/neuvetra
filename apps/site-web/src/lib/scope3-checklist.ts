@@ -161,7 +161,11 @@ const COUNTED_STATES: ReadonlySet<Scope3LineState> = new Set(["calculated", "par
 export function scope3LineNeedsAttention(state: Scope3LineState, category: Pick<Category, "status"> | undefined): boolean {
   return TODO_STATES.has(state) || (!!category && SCOPE3_CONFLICT_STATUSES.has(statusOf(category)) && COUNTED_STATES.has(state))
 }
-/** Every Scope 3 line that isn't counted (held, pending, outside the period) or sits in a conflicting category, and every open category step. */
+/** BF-01 (count mode): a counted line that may repeat another record (the readiness gate lists it as `needs_review`). */
+export function scope3CountedDuplicate(row: Pick<Scope3Row, "outcome" | "periodCheck" | "plan" | "result">): boolean {
+  return row.outcome === "calculated" && scope3LineReasonCodes(row).includes("possible_duplicate_counted")
+}
+/** Every Scope 3 line that isn't counted (held, pending, outside the period) or sits in a conflicting category, every counted possible duplicate (BF-01), and every open category step. */
 export function scope3Todos(results: Scope3ResultsResponse): Scope3TodoItem[] {
   const closed = scope3ClosedLines(results.records)
   const categories = new Map(results.coverage.categories.map(row => [row.category, row]))
@@ -174,7 +178,8 @@ export function scope3Todos(results: Scope3ResultsResponse): Scope3TodoItem[] {
   for (const row of lines) {
     const state = scope3LineState(row, closed.has(row)), category = categories.get(row.category)
     const conflict = !!category && SCOPE3_CONFLICT_STATUSES.has(statusOf(category)) && COUNTED_STATES.has(state)
-    if (!scope3LineNeedsAttention(state, category)) continue
+    const countedDuplicate = scope3CountedDuplicate(row)
+    if (!scope3LineNeedsAttention(state, category) && !countedDuplicate) continue
     const codes = scope3LineReasonCodes(row), target = row.derivedFrom?.recordId ?? row.recordId
     // Round 3 lane C (PR-3): an imported spend line held for input joins its reason's group (the spend import maps by
     // vendor and account, many lines at once); a screening conflict or a pending line stays its own item.
@@ -194,7 +199,7 @@ export function scope3Todos(results: Scope3ResultsResponse): Scope3TodoItem[] {
     }
     const source = row.derivedFrom ? results.records.find(line => line.recordId === row.derivedFrom!.recordId && line.derivedFrom === null) : undefined
     const merged = source ? bySource.get(source.recordId) : undefined
-    if (merged) { merged.reasons.push(SCOPE3_TODO_TEXT.alsoHolds([kindLabel(row.kind)])); continue }
+    if (merged) { if (!countedDuplicate) merged.reasons.push(SCOPE3_TODO_TEXT.alsoHolds([kindLabel(row.kind)])); continue }
     const reasons = [...(conflict ? [SCOPE3_TODO_TEXT.conflictLine(row.category)] : []), ...codes.map(reasonText),
       ...(state === "methodPending" ? [SCOPE3_TODO_TEXT.pendingLine] : state === "optionalPending" ? [SCOPE3_TODO_TEXT.optionalPendingLine] : []),
       // A derived line held for its source names that record; a pending one (no factor yet) has nothing to fix there.
@@ -202,6 +207,9 @@ export function scope3Todos(results: Scope3ResultsResponse): Scope3TodoItem[] {
     const fix = (label: string, fields = scope3FixFields(codes)): Scope3TodoAction => ({ type: "fix", recordId: target, fields, label })
     const actions: Scope3TodoAction[] = conflict ? [fix(SCOPE3_ACTION_TEXT.withdraw, [SCOPE3_WITHDRAW_CONTROL]), { type: "setup", label: SCOPE3_ACTION_TEXT.changeScreening }]
       : state === "methodPending" || state === "optionalPending" ? [fix(SCOPE3_ACTION_TEXT.openRecord), { type: "assessment", category: row.category, label: SCOPE3_ACTION_TEXT.documentExclusion }]
+        // BF-01: a possible duplicate is resolved by withdrawing one of the records, or by correcting its source ID or dates.
+        // BF-01 (count mode): a counted one too, if it is the same record; otherwise no action is needed.
+        : !row.derivedFrom && (codes.includes("possible_duplicate_record") || countedDuplicate) ? [fix(SCOPE3_ACTION_TEXT.withdraw, [SCOPE3_WITHDRAW_CONTROL])]
         : [fix(row.derivedFrom ? SCOPE3_ACTION_TEXT.fixSource(row.sourceId) : SCOPE3_ACTION_TEXT.fix)]
     const item: Scope3TodoItem = { key: `line:${row.recordId}:${row.kind}`, category: row.category, kind: "line", blocking: (conflict || state === "inputNeeded") && issueOf(row.category),
       title: SCOPE3_TODO_TEXT.lineTitle(kindLabel(row.kind), row.sourceId), recordId: row.recordId, reasons: [...new Set(reasons)], actions }
@@ -312,7 +320,7 @@ export function scope3FilterRecords(results: Scope3ResultsResponse, filter: Scop
     if (filter.category !== null && row.category !== filter.category) return false
     if (filter.kind !== null && row.kind !== filter.kind) return false
     if (query && !`${row.sourceId} ${row.reference}`.toLowerCase().includes(query)) return false
-    if (filter.status === "attention") return scope3LineNeedsAttention(state, categories.get(row.category))
+    if (filter.status === "attention") return scope3LineNeedsAttention(state, categories.get(row.category)) || scope3CountedDuplicate(row)
     if (filter.status === "counted") return state === "calculated" || state === "partialBoundary"
     if (filter.status === "not_counted") return !(state === "calculated" || state === "partialBoundary")
     return true
