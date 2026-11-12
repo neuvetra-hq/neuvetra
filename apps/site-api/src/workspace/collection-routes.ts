@@ -1,4 +1,5 @@
 import { MAX_SCOPE3_LINES } from "./scope3-results-routes"
+import { isActiveScope12Record, MAX_ACTIVE_SCOPE12_RECORDS, RECORD_LIMIT_SAVE_TEXT } from "./collection-results-routes"
 import { SCOPE3_CAPACITY_TEXT } from "../../../../packages/neuvetra-database/src/scope3-text"
 import {
   isScope3CollectionKind,
@@ -224,6 +225,13 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
         if (validated.activity.kind === "electricity") {
           const lookup = await (deps.lookupZip ?? lookupCollectionZip)(validated.activity.payload.zip)
           validateElectricityLookup(validated.activity, lookup)
+        }
+        // BF-03: a new active Scope 1 or 2 record is refused once 400 are active (Results refuses to calculate more). Corrections and
+        // withdrawals of existing records are always allowed. A concurrent-save race can overshoot by a few; BF-09 closes it in SQL.
+        if (!isScope3CollectionKind(validated.activity.kind) && validated.expectedRevision === 0 && validated.activity.state === "active") {
+          const existing = await deps.database.findCollectionActivities(actor.id, companyId)
+          // A replay of an already-saved first version is not a new record.
+          if (!existing.some(record => record.id.toLowerCase() === resourceId) && existing.filter(isActiveScope12Record).length >= MAX_ACTIVE_SCOPE12_RECORDS) throw new RequestProblem(422, RECORD_LIMIT_SAVE_TEXT, "record_limit_reached")
         }
         const saved = await deps.database.saveCollectionActivity(actor.id, companyId, resourceId, input)
         return respond(saved.replayed ? 200 : 201, saved)
