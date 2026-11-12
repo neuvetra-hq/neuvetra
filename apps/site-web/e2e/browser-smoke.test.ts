@@ -421,9 +421,9 @@ suite("site-web browser smoke (E2E-01)", () => {
     const { page } = opened
     // Results' reading controls: its filters and search, downloads and print, "Show all"/"Show fewer", "Go to the Scope 3
     // to-do list", "View …" (a record, the draft report, an assessment, company setup or the spend import: navigation or a
-    // disclosure), "Close the assessment" and "Recalculate" (it reads the results again).
+    // disclosure) and "Close the assessment". WO-12b: a member is not offered "Recalculate" (checked below).
     const RESULTS_READING = [/^button (Download|Print)/, /^button (Show all|Show fewer)/, /^button Go to the Scope 3 to-do list$/, /^button View /, /^button Close the assessment: /,
-      /^select (Status|Category|Activity)$/, /^input\[search\] Search source ID or reference$/, /^button (All|Needs attention) \(\d+\)$/, /^button Recalculate$/]
+      /^select (Status|Category|Activity)$/, /^input\[search\] Search source ID or reference$/, /^button (All|Needs attention) \(\d+\)$/]
     const results = (controls: string[]) => notAllowed(controls).filter(control => !RESULTS_READING.some(rule => rule.test(control)))
     for (const [width, height] of [[1360, 900], [390, 844]] as const) {
       await page.setViewportSize({ width, height })
@@ -443,6 +443,7 @@ suite("site-web browser smoke (E2E-01)", () => {
       expect(await assessment.locator("input, select, textarea, button").count()).toBe(0)
       await assessment.getByText("View only: an owner or admin of your company can change it.").waitFor()
       expect(results(await enabledControls(page, "main", true))).toEqual([])
+      expect(await page.locator("main").getByRole("button", { name: /^Recalculat/ }).count()).toBe(0)
     }
     // Company setup's category screening: a member is offered no "Add an assessment" or "Review or correct the assessment";
     // a saved assessment (saved here by the owner, category 6) is shown open, as text.
@@ -608,6 +609,8 @@ suite("site-web browser smoke (E2E-01)", () => {
     await page.setViewportSize({ width: 320, height: 720 })
     await page.waitForTimeout(400)
     expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0)
+    // WO-12b: an owner keeps "Recalculate" (a member is checked for its absence).
+    expect(await page.locator("main").getByRole("button", { name: /^Recalculat/ }).count()).toBe(1)
   }, 60_000)
 
   journey("readiness follow-ups (WO-04c): Scope 3 possible duplicates read the same on the Overview and Results, Ask's Try again retries once, and a spend import rechecks once", { signedInAs: "admin" }, async ({ page }) => {
@@ -636,6 +639,8 @@ suite("site-web browser smoke (E2E-01)", () => {
     expect(left).not.toBe(right)
     await page.locator("nav.nv-sidenav").getByRole("button", { name: /Results & report/ }).click()
     await page.locator("#scope3-todo .nv-chip").getByText(new RegExp(`^${note![1]} to do · 1 to confirm \\(counted\\)( · \\d+ blocks? approval)?$`)).waitFor({ timeout: 30_000 })
+    // WO-12b: an admin keeps "Recalculate" (a member is checked for its absence).
+    expect(await page.locator("main").getByRole("button", { name: /^Recalculat/ }).count()).toBe(1)
     // The to-do shows its first 8 items until "Show all" is pressed.
     const showAll = page.locator("#scope3-todo").getByRole("button", { name: /^Show all/ })
     if (await showAll.count()) await showAll.click()
@@ -694,4 +699,128 @@ suite("site-web browser smoke (E2E-01)", () => {
     }))
     expect(lines.filter(([, count]) => count > 2)).toEqual([])
   }, 150_000)
+  // WO-12b (CEO ruling after QA round 3 of PR #57): one answer that holds the record whatever else is filled in (here a
+  // category 9 spend line the company paid for) is named at the top of the form, in a live region, with "Go to" its answer;
+  // the other result fields read Optional meanwhile, and the held record still saves.
+  journey("record holds (WO-12b): the notice comes and goes with the answer, labels follow, and a held record still saves, at 1360 and 390 px", { signedInAs: "owner" }, async opened => {
+    const { page } = opened
+    const editor = page.locator("#collection-record-editor")
+    const notice = editor.locator(".wo12b-hold [role=status]")
+    const needOf = (name: string) => editor.locator(".setup-field").filter({ has: page.locator(".setup-field__name", { hasText: new RegExp(`^${name.replace(/[()?]/g, "\\$&")}$`) }) }).locator(".setup-field__need").first()
+    const paid = () => editor.getByLabel(/^Did the company pay for this transport\?/)
+    for (const [width, height] of [[390, 844], [1360, 900]] as const) {
+      await page.setViewportSize({ width, height })
+      await page.goto("/#/activity")
+      await activityListLoaded(page)
+      await editor.getByRole("button", { name: "Purchases by spend (Scope 3)" }).click()
+      await editor.getByLabel(/^Category/).first().selectOption("9")
+      // The live region is in the page before anything is held (so its first words are announced).
+      expect(await notice.count()).toBe(1)
+      expect((await notice.innerText()).trim()).toBe("")
+      expect(await needOf("NAICS code (2017)").innerText()).toBe("Needed for results")
+      await paid().selectOption("yes")
+      await notice.getByText("This record won’t be counted as entered").waitFor()
+      await notice.getByText("Your answer to “Did the company pay for this transport?” (Yes) holds this record, whatever else is filled in.").waitFor()
+      await notice.getByText("Transport the company pays for is category 4, not category 9.", { exact: false }).waitFor()
+      expect(await needOf("NAICS code (2017)").innerText()).toBe("Optional")
+      expect(await needOf("Did the company pay for this transport?").innerText()).toBe("Required (this answer holds the record: see the notice at the top of the form)")
+      expect(await horizontalOverflow(page)).toBe(0)
+      // The notice is above the form's first field, and its button moves focus to the answer.
+      const [noticeTop, firstFieldTop] = await Promise.all([notice.evaluate(node => node.getBoundingClientRect().top), editor.locator(".setup-field").first().evaluate(node => node.getBoundingClientRect().top)])
+      expect(noticeTop).toBeLessThan(firstFieldTop)
+      await editor.getByRole("button", { name: "Go to “Did the company pay for this transport?”" }).click()
+      expect(await page.evaluate(() => document.activeElement?.closest(".setup-field")?.querySelector(".setup-field__name")?.textContent)).toBe("Did the company pay for this transport?")
+      await paid().selectOption("no")
+      await page.waitForFunction(() => (document.querySelector("#collection-record-editor .wo12b-hold [role=status]")?.textContent ?? "x").trim() === "")
+      expect(await needOf("NAICS code (2017)").innerText()).toBe("Needed for results")
+      if (width === 390) continue
+      // A held record saves: the owner fills what the save needs, with the answer that holds it.
+      await paid().selectOption("yes")
+      await editor.getByLabel(/^Company-setup location/).selectOption({ index: 1 })
+      await editor.getByLabel(/^Ledger line or invoice ID/).fill("E2E-HOLD-9")
+      await editor.getByLabel(/^Description/).fill("E2E: customers’ freight we paid for")
+      await editor.getByLabel(/^How the amount was estimated/).fill("Carrier invoices.")
+      await editor.getByLabel(/^Amount spent|^Amount/).first().fill("1200")
+      await editor.getByRole("button", { name: /^Save/ }).click()
+      const deadline = Date.now() + 20_000
+      let saved: Array<{ currentVersion: { activity: { sourceId: string; payload: { paidByReportingCompany: boolean | null } } } }> = []
+      while (Date.now() < deadline) {
+        saved = (await stack.api<{ records: typeof saved }>("owner", `/workspace/${COMPANIES.first}/collection/activities`)).records.filter(record => record.currentVersion.activity.sourceId === "E2E-HOLD-9")
+        if (saved.length) break
+        await page.waitForTimeout(200)
+      }
+      expect(saved.map(record => record.currentVersion.activity.payload.paidByReportingCompany)).toEqual([true])
+    }
+  }, 90_000)
+
+  // WO-12b: a member reads company setup steps 01-07 as text: no field, no disabled form, no add, remove or save button.
+  journey("a view-only member reads company setup steps 01-07 as text, at 1360 and 390 px (WO-12b)", { signedInAs: "member" }, async opened => {
+    const { page } = opened
+    const SETUP_READING = [/^button 0[1-7] /, /^button ← Back$/, /^button Continue →$/, /^button Reload saved setup$/, /^button Version \d+ · /]
+    const setupControls = (controls: string[]) => notAllowed(controls).filter(control => !SETUP_READING.some(rule => rule.test(control)))
+    for (const [width, height] of [[1360, 900], [390, 844]] as const) {
+      await page.setViewportSize({ width, height })
+      await page.goto("/#/setup")
+      await page.getByRole("button", { name: /^01 Company/ }).waitFor({ timeout: 30_000 })
+      await page.locator(".setup-readonly").first().waitFor({ timeout: 30_000 })
+      for (const step of ["01 Company", "02 Reporting period", "03 Entities & boundary", "04 Locations", "05 Changes & shared operations", "06 Source activities", "07 Review"]) {
+        await page.getByRole("button", { name: new RegExp(`^${step}`) }).click()
+        await page.locator("#setup-form-heading").filter({ hasText: step.replace(" ", " / ") }).waitFor()
+        await page.waitForLoadState("networkidle")
+        const main = page.locator("main")
+        expect([step, await main.locator("input, select, textarea, fieldset").count()]).toEqual([step, 0])
+        expect([step, setupControls(await enabledControls(page, "main", true))]).toEqual([step, []])
+        expect([step, await main.locator(".setup-readonly").count() > 0]).toEqual([step, true])
+        expect([step, await horizontalOverflow(page)]).toEqual([step, 0])
+      }
+    }
+    expect(opened.writes).toEqual([])
+  }, 120_000)
+  // WO-12b QA round 2: a notice's "Open company setup (<section>)" opens setup at that section, after the unsaved-activity
+  // prompt, with focus on the section's heading. Company 2 only (its setup is changed here; no later journey reads it).
+  journey("record holds (WO-12b): a setup notice's link opens the section it names, at 1360 and 390 px", { signedInAs: "otherOwner" }, async opened => {
+    const { page } = opened
+    opened.answerDialogs = true
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- a setup edited by path in this journey only.
+    type AnySetup = Record<string, any>
+    type Setup = { currentVersion: { id: string; revision: number; setup: AnySetup } }
+    const correct = async (why: string, change: (setup: AnySetup) => void) => {
+      const view = await stack.api<Setup>("otherOwner", `/workspace/${COMPANIES.second}/setup`)
+      const setup = structuredClone(view.currentVersion.setup); change(setup)
+      await stack.api("otherOwner", `/workspace/${COMPANIES.second}/setup`, { body: { idempotencyKey: crypto.randomUUID(), expectedRevision: view.currentVersion.revision, expectedVersionId: view.currentVersion.id, correctionReason: why, setup } })
+    }
+    const ENTITY = "e2e00000-0000-4000-8000-00000000e1b2", CLOSED = "e2e00000-0000-4000-8000-00000000a1b2", JV = "e2e00000-0000-4000-8000-00000000a1b3"
+    await correct("E2E: equity share, a closed site and an excluded joint venture", setup => {
+      const site = setup.locations[0]
+      setup.boundary.approach = "equity_share"
+      setup.entities.push({ id: ENTITY, name: "E2E excluded JV", ownershipPercent: "20", control: "operational_control", inclusion: "excluded", reason: "E2E: outside the boundary" })
+      setup.locations.push({ ...site, id: CLOSED, name: "E2E closed site", inclusion: "excluded", reason: "E2E: closed" }, { ...site, id: JV, name: "E2E JV yard", entityId: ENTITY, control: "related_entity", inclusion: "included" })
+    })
+    const editor = page.locator("#collection-record-editor")
+    /** A natural-gas draft at a site (so leaving asks to discard it), then the notice's setup link; returns the section shown. */
+    const HQ = (await stack.api<Setup>("otherOwner", `/workspace/${COMPANIES.second}/setup`)).currentVersion.setup.locations[0].id as string
+    async function follow(site: string, link: string) {
+      await page.goto("/#/activity"); await page.reload()
+      await editor.getByRole("button", { name: "Natural gas" }).click({ timeout: 30_000 })
+      await editor.getByLabel(/^Company-setup location/).selectOption(site)
+      await editor.locator(".wo12b-hold [role=status]").getByText("This record won’t be counted as entered").waitFor()
+      expect(await horizontalOverflow(page)).toBe(0)
+      const prompts = opened.dialogs.length
+      await editor.getByRole("link", { name: link }).click()
+      await page.locator("#setup-form-heading").waitFor()
+      await page.waitForFunction(() => document.activeElement?.id === "setup-form-heading")
+      expect(opened.dialogs.slice(prompts)).toEqual(["confirm: Discard unsaved activity changes?"])
+      return { hash: await page.evaluate(() => location.hash), heading: (await page.locator("#setup-form-heading").innerText()).replace(/\s+/g, " ") }
+    }
+    await page.setViewportSize({ width: 1360, height: 900 })
+    expect(await follow(HQ, "Open company setup (03 Entities & boundary)")).toEqual({ hash: "#/setup/03", heading: "03 / Entities & boundary" })
+    // Reload keeps the section; Back leaves setup for Activity.
+    await page.reload(); await page.locator("#setup-form-heading").filter({ hasText: "03 / Entities & boundary" }).waitFor()
+    await page.goBack(); await editor.getByRole("button", { name: "Natural gas" }).waitFor()
+    expect(await follow(CLOSED, "Open company setup (04 Locations)")).toEqual({ hash: "#/setup/04", heading: "04 / Locations" })
+    await page.setViewportSize({ width: 390, height: 844 })
+    expect(await follow(JV, "Open company setup (03 Entities & boundary)")).toEqual({ hash: "#/setup/03", heading: "03 / Entities & boundary" })
+    await correct("E2E: operational control, no reporting period yet", setup => { setup.boundary.approach = "operational_control"; setup.reportingPeriod.start = null; setup.reportingPeriod.endExclusive = null })
+    expect(await follow(HQ, "Open company setup (02 Reporting period)")).toEqual({ hash: "#/setup/02", heading: "02 / Reporting period" })
+  }, 120_000)
 })

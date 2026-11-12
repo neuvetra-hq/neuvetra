@@ -38,6 +38,6 @@ export function BuildingAverageForm({ activity, onEdit, env }: Scope3FormProps) 
       {p.category === 8 && p.leaseType === "operating" && <TextField {...need("noOperationalControlBasis")} label={COPY_TEXT_R2E.leaseNoControlLabel} value={p.noOperationalControlBasis ?? ""} onChange={value => set(next => { next.noOperationalControlBasis = value || null })} multiline hint={LEASE_NO_CONTROL_HINT_WO12} />}
     </div>
     {hint && <p className="nv-subtle" role="note">{hint}</p>}
-    {p.gridBasis === "subregion" && <GridLocationFields kind="building_average" location={p} lookup={env.zipLookup} onLookup={env.onZipLookup} onChange={location => set(next => Object.assign(next, location))} />}
+    {p.gridBasis === "subregion" && <GridLocationFields kind="building_average" labels={need} location={p} lookup={env.zipLookup} onLookup={env.onZipLookup} onChange={location => set(next => Object.assign(next, location))} />}
   </div>
 }

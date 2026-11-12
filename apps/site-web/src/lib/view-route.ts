@@ -4,7 +4,8 @@
  *
  * Addresses:
  *   #/overview            the Overview ("home")
- *   #/setup               Company setup
+ *   #/setup               Company setup (its first section, 01 Company)
+ *   #/setup/02 … /07      Company setup open at that section (WO-12b QA round 2: a notice's "Open company setup (03 …)")
  *   #/activity            Activity & evidence
  *   #/activity/<uuid>     Activity & evidence with one record open (the record view, WO-06)
  *   #/activity?status=…   the Activity list with its filters (WO-06; see parseActivityListQuery)
@@ -63,9 +64,22 @@ export function activityListHash(query: Partial<ActivityListQuery>): string {
   return params.length ? `#/activity?${params.join("&")}` : "#/activity"
 }
 
-/** The canonical form of any address: `viewHash` of what it parses to, keeping valid Activity list filters. */
+/** WO-12b QA round 2: company setup's sections, 01 to 07. `#/setup/0N` opens section N; section 01 is plain `#/setup`. */
+export const SETUP_SECTIONS = 7
+/** The section a company setup address opens (1 to 7); 1 for `#/setup`, for any other view and for anything malformed. */
+export function parseSetupSection(hash: string): number {
+  const match = /^#\/setup\/0([1-7])$/.exec(hash)
+  return match ? Number(match[1]) : 1
+}
+/** The address of a company setup section; section 1 (or anything out of range) is plain `#/setup`. */
+export function setupSectionHash(section: number): string {
+  return Number.isInteger(section) && section >= 2 && section <= SETUP_SECTIONS ? `#/setup/0${section}` : "#/setup"
+}
+
+/** The canonical form of any address: `viewHash` of what it parses to, keeping valid Activity list filters and the setup section. */
 export function canonicalViewHash(hash: string): string {
   const route = parseViewHash(hash)
+  if (route.panel === "setup") return setupSectionHash(parseSetupSection(hash))
   return route.panel === "collection" && route.recordId === null ? activityListHash(parseActivityListQuery(hash)) : viewHash(route.panel, route.recordId)
 }
 

@@ -15,7 +15,7 @@ import { loadJourneyStatus, type Coverage, type JourneyStatus } from "@/lib/jour
 import { computeReadiness, loadScope3ReadinessLazy, scope3ItemsLazy, type Scope3Part } from "@/lib/readiness"
 import { subscribeWriteActivity, subscribeWrites } from "@/lib/shared-get"
 import type { Scope3State } from "@/lib/scope3-results-api"
-import { activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery, parseViewHash, viewHash, type ActivityListQuery, type WorkspaceView } from "@/lib/view-route"
+import { activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery, parseSetupSection, parseViewHash, setupSectionHash, viewHash, type ActivityListQuery, type WorkspaceView } from "@/lib/view-route"
 
 /** WO-04c: how long writes must be quiet before Scope 3 is checked again (QA asked for 300–500 ms). */
 const SCOPE3_RECHECK_DELAY_MS = 400
@@ -81,6 +81,11 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
   const [menuOpen, setMenuOpen] = useState(false)
   const menuButton = useRef<HTMLButtonElement>(null)
   const [openRecordId, setOpenRecordId] = useState<string | null>(() => parseViewHash(window.location.hash).recordId)
+  // WO-12b QA round 2: the company setup section the address opens (#/setup/03), kept in the address as it changes.
+  const [setupSection, setSetupSection] = useState(() => parseSetupSection(window.location.hash))
+  // QA round 3: the section company setup shows now (it reports each change), so an address change that is declined or
+  // that names another section on the setup screen leaves the address on the section still shown.
+  const shownSetupSection = useRef(setupSection)
   const [missingRecordNotice, setMissingRecordNotice] = useState(false)
   const [listRoute, setListRoute] = useState<ListRoute>(() => ({ query: parseActivityListQuery(window.location.hash), returnTo: openedFromState(window.history.state), from: listHashFromState(window.history.state), version: 0 }))
   const lastListHash = useRef(activityListHash(listRoute.query))
@@ -115,6 +120,7 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
     if (target === panel && recordId === openRecordId) return false
     if (!leaveAllowed(panel)) return false
     show(target, recordId)
+    setSetupSection(1); shownSetupSection.current = 1
     window.history.pushState(null, "", viewHash(target, recordId))
     return true
   }
@@ -157,14 +163,16 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
       const canonical = canonicalViewHash(window.location.hash)
       // WO-06: the Activity list under other filters (an edited address) is a different list.
       const sameList = next.panel !== "collection" || next.recordId !== null || canonical === lastListHash.current
-      if (next.panel === now.panel && next.recordId === now.openRecordId && sameList) { if (window.location.hash !== canonical) window.history.replaceState(window.history.state, "", canonical); return }
+      const shownHash = now.panel === "setup" ? setupSectionHash(shownSetupSection.current) : canonical
+      if (next.panel === now.panel && next.recordId === now.openRecordId && sameList) { if (window.location.hash !== shownHash) window.history.replaceState(window.history.state, "", shownHash); return }
       if (!leaveAllowed(now.panel)) {
         if (now.panel === "collection" && now.openRecordId) window.history.pushState(recordListHash.current ? { nvListHash: recordListHash.current } : null, "", viewHash(now.panel, now.openRecordId))
-        else window.history.pushState(null, "", now.panel === "collection" ? lastListHash.current : viewHash(now.panel, now.openRecordId))
+        else window.history.pushState(null, "", now.panel === "collection" ? lastListHash.current : now.panel === "setup" ? setupSectionHash(shownSetupSection.current) : viewHash(now.panel, now.openRecordId))
         return
       }
       // An address that isn't a known view shows the overview under its own address.
       if (window.location.hash !== canonical) window.history.replaceState(window.history.state, "", canonical)
+      setSetupSection(parseSetupSection(canonical)); shownSetupSection.current = parseSetupSection(canonical)
       show(next.panel, next.recordId, { query: parseActivityListQuery(canonical), returnTo: openedFromState(window.history.state), from: next.recordId ? listHashFromState(window.history.state) : null })
     }
     window.addEventListener("popstate", onPop)
@@ -179,6 +187,13 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
     if (same || navigate(view)) setMenuOpen(false)
   }
   const onCollectionDirty = useCallback((dirty: boolean) => { setCollectionDirty(dirty); if (!dirty) { setStatus(null); setStatusError(null); setStatusVersion(value => value + 1) } }, [])
+  /** WO-12b QA round 2: the section shown is kept in the address (replaced, not pushed), so a reload reopens it. */
+  const onSetupStep = useCallback((step: number) => {
+    shownSetupSection.current = step + 1
+    if (current.current.panel !== "setup") return
+    const hash = setupSectionHash(step + 1)
+    if (window.location.hash !== hash) window.history.replaceState(window.history.state, "", hash)
+  }, [])
   const onSetupDirty = useCallback((dirty: boolean) => { setSetupDirty(dirty); if (!dirty) { setStatus(null); setStatusError(null); setStatusVersion(value => value + 1) } }, [])
   useEffect(() => {
     if (!setupDirty) return
@@ -359,6 +374,7 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
     {panel === "collection" && missingRecordNotice && <div className="nv-notice nv-notice--warn" role="status" style={{ marginTop: 0 }}><Icon name="alert" /><p>That record wasn’t found. It may have been withdrawn or belong to another company, so the activity page is shown instead.</p></div>}
     {heldRecord && <div className="nv-notice nv-notice--warn" role="status" style={{ marginTop: 0 }}><Icon name="alert" /><div><p><strong>Outside the reporting period.</strong> {heldRecord.reasons[0]}</p>{canManage && <p><button type="button" className="nv-link" onClick={() => navigate("setup")}>Open company setup</button></p>}</div></div>}
     {panel === "setup" && <CompanySetup key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onDirtyChange={onSetupDirty} onNavigate={view => navigate(view)}
+      initialStep={setupSection - 1} onStepChange={onSetupStep}
       intro={canManage ? <PanelGuide kind="setup" defaultOpen={status ? !status.setup.saved : false} onAsk={() => setAskOpen(true)} /> : null} />}
     {panel === "collection" && <CollectionWorkspace key={`${staging.actor.userId}:${staging.workspaceId}:${openRecordId ?? ""}:${listRoute.version}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onDirtyChange={onCollectionDirty} openRecordId={openRecordId}
       listQuery={listRoute.query} listReturnRecordId={listRoute.returnTo} onOpenRecord={openFromList} onListQueryChange={onListQueryChange} onRecordMissing={recordMissing}

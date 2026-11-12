@@ -27,7 +27,10 @@ import * as fields from "./scope3/Scope3Fields"
 import { harness, loadComponent } from "./component-harness"
 
 const W = "29120000-0000-4000-8000-000000000001", SETUP = "29120000-0000-4000-8000-0000000000aa", SITE = "29120000-0000-4000-8000-0000000000bb", FILE = "29120000-0000-4000-8000-0000000000e1"
-const context = { companyId: W, setupVersionId: SETUP, setupRevision: 1, sameContentSetupVersionIds: [SETUP], locations: [{ id: SITE, name: "Plant", inclusion: "included", control: "reporting_company" }] }
+// WO-12b QA round 1: a context as the server sends it (approach, period and the site's entity and coverage), so no hold
+// company setup places on every record applies here.
+const context = { companyId: W, setupVersionId: SETUP, setupRevision: 1, sameContentSetupVersionIds: [SETUP], boundaryApproach: "operational_control", reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" },
+  locations: [{ id: SITE, name: "Plant", inclusion: "included", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" }] }
 const idOf = (n: number) => `29120000-0000-4000-8000-${String(n).padStart(12, "0")}`
 const owner = { userId: "u", role: "owner", accessToken: "t" }, member = { userId: "m", role: "member", accessToken: "t" }
 const evidence = [{ id: FILE, companyId: W, bucket: "b", objectKey: `${W}/original/${FILE}`, originalName: "bill.pdf", mediaType: "application/pdf", byteLength: 10, sha256: "a".repeat(64), quarantineStatus: "clean", uploadedBy: W, createdAt: "2025-06-01T00:00:00.000Z" }]

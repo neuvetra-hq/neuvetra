@@ -11,7 +11,7 @@ import { scope3NaicsChoices, scope3NaicsTitle } from "@/lib/scope3-naics"
 import { SPEND_TEXT_R3C } from "@/lib/scope3-text-r3c"
 // WO-12 follow-up (CEO ruling): every field says "Required", "Needed for results" or "Optional", as part of its name.
 import { FIELD_NEED_TEXT, type FieldNeed } from "@/lib/wo12-text"
-import { fieldNeedsOf } from "@/lib/field-needs-wo12"
+import { fieldNeedsOf, type FieldLabel } from "@/lib/field-needs-wo12"
 
 /**
  * The fields the Scope 3 record forms share (Scope 3 completion I-08; Claude, 30 October 2026; DESIGN 7.2). The markup and
@@ -75,19 +75,22 @@ type GridLocation = { zip: string | null; subregion: string | null; utilityEiaId
  * An electricity location as the electricity record has it: the site's ZIP code, the eGRID subregion and, where known, the
  * utility's EIA ID. "Look up ZIP" runs the pinned ZIP, utility and eGRID lookup (the electricity form's) and fills them.
  */
-export function GridLocationFields({ kind, location, onChange, lookup, onLookup }: { kind: string; location: GridLocation; onChange: (next: GridLocation) => void; lookup: CollectionZipLookup | null; onLookup: (zip: string) => void }) {
-  const need = fieldNeedsOf(kind)
+export function GridLocationFields({ kind, location, onChange, lookup, onLookup, labels }: { kind: string; location: GridLocation; onChange: (next: GridLocation) => void; lookup: CollectionZipLookup | null; onLookup: (zip: string) => void
+  /** WO-12b: the record form's labels in its current state (`fieldLabelsOf`), so a record hold reaches these fields too. */
+  labels?: (field: string) => FieldLabel }) {
+  const table = fieldNeedsOf(kind)
+  const need = (field: string): FieldLabel => labels ? labels(field) : { need: table(field) }
   const zip = location.zip ?? ""
   const current = lookup && lookup.zip === zip ? lookup : null
   const subregions: Array<readonly [string, string]> = [["", "Choose, or look up the ZIP code"], ...ENGINE_SUBREGIONS.map(code => [code, egridSubregionLabel(code)] as const),
     ...(location.subregion && !(ENGINE_SUBREGIONS as readonly string[]).includes(location.subregion) ? [[location.subregion, `${location.subregion} (not an eGRID subregion: held)`] as const] : [])]
   return <div className="setup-subcard"><h4>Grid location</h4><div className="setup-grid">
-    <TextField label="Site ZIP code" need={need("zip")} value={zip} onChange={value => onChange({ zip: value, subregion: "", utilityEiaId: null })} hint="Five digits. Look it up to set the eGRID subregion and utility." />
-    <SelectField label="eGRID subregion" need={need("subregion")} value={location.subregion ?? ""} options={subregions} onChange={subregion => onChange({ ...location, subregion })} />
-    {current?.found && current.utilities.length > 1 && <SelectField label="Verified utility and eGRID subregion" need={need("utilityChoice")} value={location.utilityEiaId ? `${location.subregion}|${location.utilityEiaId}` : ""}
+    <TextField label="Site ZIP code" {...need("zip")} value={zip} onChange={value => onChange({ zip: value, subregion: "", utilityEiaId: null })} hint="Five digits. Look it up to set the eGRID subregion and utility." />
+    <SelectField label="eGRID subregion" {...need("subregion")} value={location.subregion ?? ""} options={subregions} onChange={subregion => onChange({ ...location, subregion })} />
+    {current?.found && current.utilities.length > 1 && <SelectField label="Verified utility and eGRID subregion" {...need("utilityChoice")} value={location.utilityEiaId ? `${location.subregion}|${location.utilityEiaId}` : ""}
       options={[["", "Choose the utility serving the site"] as const, ...current.utilities.map(utility => [`${utility.subregion}|${utility.eiaId}`, `${utility.utility} · ${utility.subregion}`] as const)]}
       onChange={value => { const [subregion = "", utilityEiaId = ""] = value.split("|"); onChange({ ...location, subregion, utilityEiaId: utilityEiaId || null }) }} />}
-    <TextField label="Utility EIA ID" need={need("utilityEiaId")} value={location.utilityEiaId ?? ""} onChange={value => onChange({ ...location, utilityEiaId: value || null })} hint="A whole number from the lookup; leave it empty if not known." />
+    <TextField label="Utility EIA ID" {...need("utilityEiaId")} value={location.utilityEiaId ?? ""} onChange={value => onChange({ ...location, utilityEiaId: value || null })} hint="A whole number from the lookup; leave it empty if not known." />
   </div>
     <button type="button" disabled={!/^\d{5}$/.test(zip)} onClick={() => onLookup(zip)}>Look up ZIP</button>
     {current && !current.found && <p className="worksheet-error">No verified eGRID match was found for ZIP {current.zip}. Choose the subregion, or the record stays held.</p>}

@@ -21,6 +21,7 @@ import { DRAFT_DEBOUNCE_MS, DRAFT_TEXT, draftKey, draftStorage, draftTime, keepD
 // BF-08 web follow-ups: a repeated setup ID is named by its kind; a 422 or 403 is definite (no "Retry exact save").
 import { duplicateCompanySetupIds } from "../../../../packages/neuvetra-database/src/company-setup-contract"
 import { SAVE_OUTCOME_TEXT_WO12 } from "@/lib/wo12-text"
+import { SETUP_READ_ONLY_TEXT } from "@/lib/wo12b-text"
 
 const sections = ["Company", "Reporting period", "Entities & boundary", "Locations", "Changes & shared operations", "Source activities", "Review"] as const
 const changes = ["Acquisitions or disposals", "Site openings or closures", "Changes in ownership or control", "Joint ventures or shared operations", "Franchises, outsourcing or leased assets"] as const
@@ -63,10 +64,19 @@ function setupDraftOffer(actor: Pick<HostedWorkspaceActor, "userId" | "role">, c
 function exclusive(date: string) { if (!date) return null; const value = new Date(`${date}T00:00:00Z`); value.setUTCDate(value.getUTCDate() + 1); return value.toISOString().slice(0, 10) }
 function inclusive(date: string | null) { if (!date) return ""; const value = new Date(`${date}T00:00:00Z`); value.setUTCDate(value.getUTCDate() - 1); return value.toISOString().slice(0, 10) }
 
-function Field({ label, value, onChange, type = "text", hint, multiline = false }: { label: string; value: string; onChange: (value: string) => void; type?: string; hint?: string; multiline?: boolean }) {
+/**
+ * WO-12b: a member (view only) sees every setup answer as text, never a disabled form: each field is a term and its
+ * answer, and the add, remove and save controls are not rendered.
+ */
+function ReadOnlyAnswer({ label, answer }: { label: string; answer: string }) {
+  return <dl className="setup-readonly"><dt>{label}</dt><dd>{answer.trim() ? answer : SETUP_READ_ONLY_TEXT.notAnswered}</dd></dl>
+}
+function Field({ label, value, onChange, type = "text", hint, multiline = false, readOnly = false }: { readOnly?: boolean; label: string; value: string; onChange: (value: string) => void; type?: string; hint?: string; multiline?: boolean }) {
+  if (readOnly) return <ReadOnlyAnswer label={label} answer={value} />
   return <label className="setup-field"><span>{label}</span>{multiline ? <textarea value={value} onChange={event => onChange(event.target.value)} /> : <input type={type} value={value} onChange={event => onChange(event.target.value)} />}{hint && <small>{hint}</small>}</label>
 }
-function Select({ label, value, options, onChange, hint }: { label: string; value: string; options: readonly (readonly [string, string])[]; onChange: (value: string) => void; hint?: string }) {
+function Select({ label, value, options, onChange, hint, readOnly = false }: { readOnly?: boolean; label: string; value: string; options: readonly (readonly [string, string])[]; onChange: (value: string) => void; hint?: string }) {
+  if (readOnly) return <ReadOnlyAnswer label={label} answer={options.find(([id]) => id === value)?.[1] ?? value} />
   return <label className="setup-field"><span>{label}</span><select value={value} onChange={event => onChange(event.target.value)}>{options.map(([id, text]) => <option key={id} value={id}>{text}</option>)}</select>{hint && <small>{hint}</small>}</label>
 }
 const yesNo = [["unknown", "Not sure yet"], ["yes", "Yes"], ["no", "No"]] as const
@@ -80,8 +90,11 @@ const screening = [["unknown", "Not sure yet"], ["yes", "Yes"], ["no", "No — e
 const scope3Screening = [["unknown", "Not screened yet"], ["yes", "Included in the inventory"], ["no", "No: excluded from the inventory — explain"], ["not_applicable", "Not applicable: no such activity — explain"]] as const
 const scope3Decision = (state: string | undefined): Scope3SetupDecision => state === "yes" ? "included" : state === "no" ? "excluded" : state === "not_applicable" ? "not_relevant" : "not_screened"
 
-export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, intro, onNavigate }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; onDirtyChange?: (dirty: boolean) => void; intro?: ReactNode; onNavigate?: (view: "collection") => void }) {
-  const [step, setStep] = useState(0)
+export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, intro, onNavigate, initialStep = 0, onStepChange }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; onDirtyChange?: (dirty: boolean) => void; intro?: ReactNode; onNavigate?: (view: "collection") => void
+  /** WO-12b QA round 2: the section to open at (0 for 01 Company), from the address (#/setup/03), and where the section shown is reported. */
+  initialStep?: number; onStepChange?: (step: number) => void }) {
+  const [step, setStep] = useState(() => Number.isInteger(initialStep) && initialStep >= 0 && initialStep < sections.length ? initialStep : 0)
+  useEffect(() => { onStepChange?.(step) }, [step, onStepChange])
   const [view, setView] = useState<CompanySetupView | null>(null)
   const [draft, setDraft] = useState<Setup | null>(null)
   const [historical, setHistorical] = useState<CompanySetupVersion | null>(null)
@@ -150,6 +163,15 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
     return () => controller.abort()
   }, [actor.userId, workspaceId])
 
+  // WO-12b QA round 2: opened at a section other than 01 (a notice's "Open company setup (03 …)"), focus goes to that
+  // section's heading once the setup has loaded, so the person starts where the link said.
+  const sectionFocused = useRef(false)
+  const loaded = Boolean(draft && view)
+  useEffect(() => {
+    if (!loaded || sectionFocused.current || initialStep <= 0) return
+    sectionFocused.current = true
+    requestAnimationFrame(() => document.getElementById("setup-form-heading")?.focus())
+  }, [loaded, initialStep])
   const savedSetupId = view?.currentVersion?.id ?? null
   useEffect(() => {
     if (!workspaceId || !savedSetupId) { queueMicrotask(() => setAssessments({ view: null, note: null })); return }
@@ -257,6 +279,8 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
 
   if (!draft || !view) return <section className="worksheet company-setup" aria-busy={busy}><p className="worksheet-eyebrow">Company setup · Synthetic staging</p><h1 ref={headingRef} tabIndex={-1}>Your company, in context</h1><p role={error ? "alert" : "status"}>{message}</p>{error && <button type="button" onClick={() => void refresh()}>Try again</button>}</section>
   const update = edit
+  // WO-12b: a member (view only) reads every answer as text.
+  const readOnly = !view.canManage
   return <section className="worksheet company-setup" aria-busy={busy}>
     <p className="worksheet-eyebrow">Company setup · Synthetic staging</p>
     <h1 ref={headingRef} tabIndex={-1}>Your company, in context</h1>
@@ -281,79 +305,79 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
       </div></div>
     })()}
     {!view.canManage && <p className="scope1-beta-readonly">You can review this setup. An owner or admin must save corrections.</p>}
-    <div className="worksheet-card worksheet-form"><h2 id="setup-form-heading" tabIndex={-1}>{String(step + 1).padStart(2, "0")} / {sections[step]}</h2><fieldset className="setup-inputs" disabled={busy || !view.canManage || offer !== null}>
+    <div className="worksheet-card worksheet-form"><h2 id="setup-form-heading" tabIndex={-1}>{String(step + 1).padStart(2, "0")} / {sections[step]}</h2>{(() => { const inputs = (children: ReactNode) => view.canManage ? <fieldset className="setup-inputs" disabled={busy || offer !== null}>{children}</fieldset> : <div className="setup-inputs setup-inputs--read-only">{children}</div>; return inputs(<>
     {step === 0 && <div className="setup-grid">
-      <Field label="Legal name" value={draft.company.legalName} onChange={value => update(next => { next.company.legalName = value })} />
-      <Field label="Trading name (optional)" value={draft.company.tradingName} onChange={value => update(next => { next.company.tradingName = value })} />
-      <Field label="Country code" value={draft.company.countryCode ?? ""} onChange={value => update(next => { next.company.countryCode = value ? value.toUpperCase() : null })} hint="Two-letter code, such as US. Unknown cannot be treated as a completed company identity." />
-      <Field label="State, province or region" value={draft.company.regionCode ?? ""} onChange={value => update(next => { next.company.regionCode = value || null })} />
-      <Field label="Business activity / industry" value={draft.company.industry} onChange={value => update(next => { next.company.industry = value })} />
-      <Field label="Other industry detail" value={draft.company.otherIndustry} onChange={value => update(next => { next.company.otherIndustry = value })} />
-      <Field label="Additional business activities" value={draft.company.additionalBusinessActivities} onChange={value => update(next => { next.company.additionalBusinessActivities = value })} multiline />
-      <Field label="NAICS code (2022), if known" value={draft.company.naics} onChange={value => update(next => { next.company.naics = value })} hint={`${SPEND_TEXT_R3C.setupNaicsHint} Leave blank if unresolved; a code does not determine source applicability.`} />
-      <Field label="Preparer role" value={draft.company.preparerRole} onChange={value => update(next => { next.company.preparerRole = value })} />
+      <Field readOnly={readOnly} label="Legal name" value={draft.company.legalName} onChange={value => update(next => { next.company.legalName = value })} />
+      <Field readOnly={readOnly} label="Trading name (optional)" value={draft.company.tradingName} onChange={value => update(next => { next.company.tradingName = value })} />
+      <Field readOnly={readOnly} label="Country code" value={draft.company.countryCode ?? ""} onChange={value => update(next => { next.company.countryCode = value ? value.toUpperCase() : null })} hint="Two-letter code, such as US. Unknown cannot be treated as a completed company identity." />
+      <Field readOnly={readOnly} label="State, province or region" value={draft.company.regionCode ?? ""} onChange={value => update(next => { next.company.regionCode = value || null })} />
+      <Field readOnly={readOnly} label="Business activity / industry" value={draft.company.industry} onChange={value => update(next => { next.company.industry = value })} />
+      <Field readOnly={readOnly} label="Other industry detail" value={draft.company.otherIndustry} onChange={value => update(next => { next.company.otherIndustry = value })} />
+      <Field readOnly={readOnly} label="Additional business activities" value={draft.company.additionalBusinessActivities} onChange={value => update(next => { next.company.additionalBusinessActivities = value })} multiline />
+      <Field readOnly={readOnly} label="NAICS code (2022), if known" value={draft.company.naics} onChange={value => update(next => { next.company.naics = value })} hint={`${SPEND_TEXT_R3C.setupNaicsHint} Leave blank if unresolved; a code does not determine source applicability.`} />
+      <Field readOnly={readOnly} label="Preparer role" value={draft.company.preparerRole} onChange={value => update(next => { next.company.preparerRole = value })} />
     </div>}
     {step === 1 && <div className="setup-grid">
-      <Field label="Period start" type="date" value={draft.reportingPeriod.start ?? ""} onChange={value => update(next => { next.reportingPeriod.start = value || null })} />
-      <Field label="Period end (inclusive)" type="date" value={inclusive(draft.reportingPeriod.endExclusive)} onChange={value => update(next => { next.reportingPeriod.endExclusive = exclusive(value) })} />
-      <Select label="Is this the first inventory?" value={draft.reportingPeriod.firstInventory} options={yesNo} onChange={value => update(next => { next.reportingPeriod.firstInventory = value as Setup["reportingPeriod"]["firstInventory"] })} />
-      <Field label="Prior inventory / base-year reference" value={draft.reportingPeriod.priorInventoryReference} onChange={value => update(next => { next.reportingPeriod.priorInventoryReference = value })} />
+      <Field readOnly={readOnly} label="Period start" type="date" value={draft.reportingPeriod.start ?? ""} onChange={value => update(next => { next.reportingPeriod.start = value || null })} />
+      <Field readOnly={readOnly} label="Period end (inclusive)" type="date" value={inclusive(draft.reportingPeriod.endExclusive)} onChange={value => update(next => { next.reportingPeriod.endExclusive = exclusive(value) })} />
+      <Select readOnly={readOnly} label="Is this the first inventory?" value={draft.reportingPeriod.firstInventory} options={yesNo} onChange={value => update(next => { next.reportingPeriod.firstInventory = value as Setup["reportingPeriod"]["firstInventory"] })} />
+      <Field readOnly={readOnly} label="Prior inventory / base-year reference" value={draft.reportingPeriod.priorInventoryReference} onChange={value => update(next => { next.reportingPeriod.priorInventoryReference = value })} />
     </div>}
     {step === 2 && <>
       <div className="setup-grid">
-        <Select label="Does the reporting company have a parent?" value={draft.boundary.hasParent} options={yesNo} onChange={value => update(next => { next.boundary.hasParent = value as Setup["boundary"]["hasParent"] })} />
-        {draft.boundary.hasParent === "yes" && <Field label="Parent company" value={draft.boundary.parentName} onChange={value => update(next => { next.boundary.parentName = value })} />}
-        <Select label="Proposed consolidation approach" value={draft.boundary.approach} options={[["unknown", "Not sure yet"], ["operational_control", "Operational control"], ["financial_control", "Financial control"], ["equity_share", "Equity share"]]} onChange={value => update(next => { next.boundary.approach = value as Setup["boundary"]["approach"] })} />
-        <Field label="Operations proposed for inclusion" value={draft.boundary.includedOperations} onChange={value => update(next => { next.boundary.includedOperations = value })} multiline />
-        <Field label="Boundary notes / open questions" value={draft.boundary.notes} onChange={value => update(next => { next.boundary.notes = value })} multiline />
+        <Select readOnly={readOnly} label="Does the reporting company have a parent?" value={draft.boundary.hasParent} options={yesNo} onChange={value => update(next => { next.boundary.hasParent = value as Setup["boundary"]["hasParent"] })} />
+        {draft.boundary.hasParent === "yes" && <Field readOnly={readOnly} label="Parent company" value={draft.boundary.parentName} onChange={value => update(next => { next.boundary.parentName = value })} />}
+        <Select readOnly={readOnly} label="Proposed consolidation approach" value={draft.boundary.approach} options={[["unknown", "Not sure yet"], ["operational_control", "Operational control"], ["financial_control", "Financial control"], ["equity_share", "Equity share"]]} onChange={value => update(next => { next.boundary.approach = value as Setup["boundary"]["approach"] })} />
+        <Field readOnly={readOnly} label="Operations proposed for inclusion" value={draft.boundary.includedOperations} onChange={value => update(next => { next.boundary.includedOperations = value })} multiline />
+        <Field readOnly={readOnly} label="Boundary notes / open questions" value={draft.boundary.notes} onChange={value => update(next => { next.boundary.notes = value })} multiline />
       </div>
       {draft.entities.map((entity, index) => <div className="setup-subcard" key={entity.id}><h3>Related entity {index + 1}</h3><div className="setup-grid">
-        <Field label="Legal name" value={entity.name} onChange={value => update(next => { next.entities[index]!.name = value })} />
-        <Field label="Ownership share (%)" value={entity.ownershipPercent ?? ""} onChange={value => update(next => { next.entities[index]!.ownershipPercent = value || null })} />
-        <Select label="Control" value={entity.control} options={[["unknown", "Not sure"], ["operational_control", "Operational control"], ["financial_control", "Financial control"], ["none", "No control identified"]]} onChange={value => update(next => { next.entities[index]!.control = value as Setup["entities"][number]["control"] })} />
-        <Select label="Proposed inclusion" value={entity.inclusion} options={inclusion} onChange={value => update(next => { next.entities[index]!.inclusion = value as Setup["entities"][number]["inclusion"] })} />
-        <Field label="Inclusion / exclusion reason" value={entity.reason} onChange={value => update(next => { next.entities[index]!.reason = value })} multiline />
-      </div><button type="button" onClick={() => update(next => { next.entities.splice(index, 1); next.relationships = next.relationships.filter(row => row.parentEntityId !== entity.id && row.childEntityId !== entity.id); next.locations.forEach(row => { if (row.entityId === entity.id) row.entityId = null }) })}>Remove entity</button></div>)}
-      <button type="button" onClick={() => update(next => { next.entities.push({ id: crypto.randomUUID(), name: "", ownershipPercent: null, control: "unknown", inclusion: "unknown", reason: "" }) })}>+ Add related entity</button>
+        <Field readOnly={readOnly} label="Legal name" value={entity.name} onChange={value => update(next => { next.entities[index]!.name = value })} />
+        <Field readOnly={readOnly} label="Ownership share (%)" value={entity.ownershipPercent ?? ""} onChange={value => update(next => { next.entities[index]!.ownershipPercent = value || null })} />
+        <Select readOnly={readOnly} label="Control" value={entity.control} options={[["unknown", "Not sure"], ["operational_control", "Operational control"], ["financial_control", "Financial control"], ["none", "No control identified"]]} onChange={value => update(next => { next.entities[index]!.control = value as Setup["entities"][number]["control"] })} />
+        <Select readOnly={readOnly} label="Proposed inclusion" value={entity.inclusion} options={inclusion} onChange={value => update(next => { next.entities[index]!.inclusion = value as Setup["entities"][number]["inclusion"] })} />
+        <Field readOnly={readOnly} label="Inclusion / exclusion reason" value={entity.reason} onChange={value => update(next => { next.entities[index]!.reason = value })} multiline />
+      </div>{view.canManage && <button type="button" onClick={() => update(next => { next.entities.splice(index, 1); next.relationships = next.relationships.filter(row => row.parentEntityId !== entity.id && row.childEntityId !== entity.id); next.locations.forEach(row => { if (row.entityId === entity.id) row.entityId = null }) })}>Remove entity</button>}</div>)}
+      {view.canManage && <button type="button" onClick={() => update(next => { next.entities.push({ id: crypto.randomUUID(), name: "", ownershipPercent: null, control: "unknown", inclusion: "unknown", reason: "" }) })}>+ Add related entity</button>}
       {draft.relationships.map((relation, index) => <div className="setup-subcard" key={relation.id}><h3>Entity relationship {index + 1}</h3><div className="setup-grid">
-        <Select label="Parent / owner" value={relation.parentEntityId} options={draft.entities.map(item => [item.id, item.name || "Unnamed entity"])} onChange={value => update(next => { next.relationships[index]!.parentEntityId = value })} />
-        <Select label="Related entity" value={relation.childEntityId} options={draft.entities.map(item => [item.id, item.name || "Unnamed entity"])} onChange={value => update(next => { next.relationships[index]!.childEntityId = value })} />
-        <Select label="Relationship" value={relation.type} options={[["unknown", "Not sure"], ["ownership", "Ownership"], ["joint_venture", "Joint venture"], ["other", "Other"]]} onChange={value => update(next => { next.relationships[index]!.type = value as Setup["relationships"][number]["type"] })} />
-        <Field label="Notes" value={relation.notes} onChange={value => update(next => { next.relationships[index]!.notes = value })} />
-      </div><button type="button" onClick={() => update(next => { next.relationships.splice(index, 1) })}>Remove relationship</button></div>)}
-      {draft.entities.length > 1 && <button type="button" onClick={() => update(next => { next.relationships.push({ id: crypto.randomUUID(), parentEntityId: next.entities[0]!.id, childEntityId: next.entities[1]!.id, type: "unknown", notes: "" }) })}>+ Add relationship</button>}
+        <Select readOnly={readOnly} label="Parent / owner" value={relation.parentEntityId} options={draft.entities.map(item => [item.id, item.name || "Unnamed entity"])} onChange={value => update(next => { next.relationships[index]!.parentEntityId = value })} />
+        <Select readOnly={readOnly} label="Related entity" value={relation.childEntityId} options={draft.entities.map(item => [item.id, item.name || "Unnamed entity"])} onChange={value => update(next => { next.relationships[index]!.childEntityId = value })} />
+        <Select readOnly={readOnly} label="Relationship" value={relation.type} options={[["unknown", "Not sure"], ["ownership", "Ownership"], ["joint_venture", "Joint venture"], ["other", "Other"]]} onChange={value => update(next => { next.relationships[index]!.type = value as Setup["relationships"][number]["type"] })} />
+        <Field readOnly={readOnly} label="Notes" value={relation.notes} onChange={value => update(next => { next.relationships[index]!.notes = value })} />
+      </div>{view.canManage && <button type="button" onClick={() => update(next => { next.relationships.splice(index, 1) })}>Remove relationship</button>}</div>)}
+      {view.canManage && draft.entities.length > 1 && <button type="button" onClick={() => update(next => { next.relationships.push({ id: crypto.randomUUID(), parentEntityId: next.entities[0]!.id, childEntityId: next.entities[1]!.id, type: "unknown", notes: "" }) })}>+ Add relationship</button>}
     </>}
     {step === 3 && <>
       <p>Include locations outside California or the U.S. when they belong in the proposed boundary. Ownership alone does not settle control.</p>
       {draft.locations.map((location, index) => <div className="setup-subcard" key={location.id}><h3>Location {index + 1}{location.name ? ` · ${location.name}` : ""}</h3><div className="setup-grid">
-        <Field label="Location name" value={location.name} onChange={value => update(next => { next.locations[index]!.name = value })} />
-        <Field label="Country code" value={location.countryCode ?? ""} onChange={value => update(next => { next.locations[index]!.countryCode = value ? value.toUpperCase() : null })} />
-        <Field label="State / province / region" value={location.regionCode ?? ""} onChange={value => update(next => { next.locations[index]!.regionCode = value || null })} />
-        <Field label="Address or identifying locality" value={location.locality} onChange={value => update(next => { next.locations[index]!.locality = value })} multiline />
-        <Field label="Site purpose and business activities" value={location.purpose} onChange={value => update(next => { next.locations[index]!.purpose = value })} multiline />
-        <Select label="Reporting entity" value={location.entityId ?? ""} options={[["", draft.company.legalName || "Reporting company"] as const, ...draft.entities.map(item => [item.id, item.name || "Unnamed entity"] as const)]} onChange={value => update(next => { next.locations[index]!.entityId = value || null })} />
-        <Field label="Other entity involved" value={location.otherEntity} onChange={value => update(next => { next.locations[index]!.otherEntity = value })} />
-        <Select label="Property arrangement" value={location.occupancy} options={[["unknown", "Not sure"], ["owned", "Owned"], ["leased", "Leased"], ["shared", "Shared"], ["other", "Other"]]} onChange={value => update(next => { next.locations[index]!.occupancy = value as Setup["locations"][number]["occupancy"] })} />
-        <Select label="Who controls the equipment?" value={location.control} options={[["unknown", "Not sure"], ["reporting_company", "Reporting company"], ["related_entity", "Related entity"], ["landlord", "Landlord"], ["shared", "Shared control"], ["other", "Other"]]} onChange={value => update(next => { next.locations[index]!.control = value as Setup["locations"][number]["control"] })} />
-        <Field label="Operator / control details" value={location.operatorDetails} onChange={value => update(next => { next.locations[index]!.operatorDetails = value })} multiline />
-        <Select label="Proposed inclusion" value={location.inclusion} options={inclusion} onChange={value => update(next => { next.locations[index]!.inclusion = value as Setup["locations"][number]["inclusion"] })} />
-        <Field label="Inclusion / exclusion reason" value={location.reason} onChange={value => update(next => { next.locations[index]!.reason = value })} multiline />
-        <Select label="Coverage starts" value={location.startMode} options={[["unknown", "Not sure"], ["period_start", "At period start"], ["specific", "On a specific date"]]} onChange={value => update(next => { next.locations[index]!.startMode = value as Setup["locations"][number]["startMode"]; if (value !== "specific") next.locations[index]!.start = null /* BF1: a hidden date must not be saved */ })} />
-        {location.startMode === "specific" && <Field label="Coverage start date" type="date" value={location.start ?? ""} onChange={value => update(next => { next.locations[index]!.start = value || null })} />}
-        <Select label="Coverage ends" value={location.endMode} options={[["unknown", "Not sure"], ["period_end", "At period end"], ["specific", "On a specific date"]]} onChange={value => update(next => { next.locations[index]!.endMode = value as Setup["locations"][number]["endMode"]; if (value !== "specific") next.locations[index]!.endExclusive = null /* BF1: a hidden date must not be saved */ })} />
-        {location.endMode === "specific" && <Field label="Active through (inclusive)" type="date" value={inclusive(location.endExclusive)} onChange={value => update(next => { next.locations[index]!.endExclusive = exclusive(value) })} />}
-        <Field label="Original site opening date (optional)" type="date" value={location.opened ?? ""} onChange={value => update(next => { next.locations[index]!.opened = value || null })} />
-      </div><button type="button" onClick={() => update(next => { next.locations.splice(index, 1); next.screening.forEach(row => { if (row.locationId === location.id) row.locationId = null }) })}>Remove location</button></div>)}
-      <button type="button" onClick={() => update(next => { next.locations.push({ id: crypto.randomUUID(), entityId: null, facilityId: null, name: "", countryCode: null, regionCode: null, locality: "", purpose: "", occupancy: "unknown", control: "unknown", inclusion: "unknown", reason: "", start: null, endExclusive: null, otherEntity: "", operatorDetails: "", startMode: "unknown", endMode: "unknown", opened: null }) })}>+ Add location</button>
+        <Field readOnly={readOnly} label="Location name" value={location.name} onChange={value => update(next => { next.locations[index]!.name = value })} />
+        <Field readOnly={readOnly} label="Country code" value={location.countryCode ?? ""} onChange={value => update(next => { next.locations[index]!.countryCode = value ? value.toUpperCase() : null })} />
+        <Field readOnly={readOnly} label="State / province / region" value={location.regionCode ?? ""} onChange={value => update(next => { next.locations[index]!.regionCode = value || null })} />
+        <Field readOnly={readOnly} label="Address or identifying locality" value={location.locality} onChange={value => update(next => { next.locations[index]!.locality = value })} multiline />
+        <Field readOnly={readOnly} label="Site purpose and business activities" value={location.purpose} onChange={value => update(next => { next.locations[index]!.purpose = value })} multiline />
+        <Select readOnly={readOnly} label="Reporting entity" value={location.entityId ?? ""} options={[["", draft.company.legalName || "Reporting company"] as const, ...draft.entities.map(item => [item.id, item.name || "Unnamed entity"] as const)]} onChange={value => update(next => { next.locations[index]!.entityId = value || null })} />
+        <Field readOnly={readOnly} label="Other entity involved" value={location.otherEntity} onChange={value => update(next => { next.locations[index]!.otherEntity = value })} />
+        <Select readOnly={readOnly} label="Property arrangement" value={location.occupancy} options={[["unknown", "Not sure"], ["owned", "Owned"], ["leased", "Leased"], ["shared", "Shared"], ["other", "Other"]]} onChange={value => update(next => { next.locations[index]!.occupancy = value as Setup["locations"][number]["occupancy"] })} />
+        <Select readOnly={readOnly} label="Who controls the equipment?" value={location.control} options={[["unknown", "Not sure"], ["reporting_company", "Reporting company"], ["related_entity", "Related entity"], ["landlord", "Landlord"], ["shared", "Shared control"], ["other", "Other"]]} onChange={value => update(next => { next.locations[index]!.control = value as Setup["locations"][number]["control"] })} />
+        <Field readOnly={readOnly} label="Operator / control details" value={location.operatorDetails} onChange={value => update(next => { next.locations[index]!.operatorDetails = value })} multiline />
+        <Select readOnly={readOnly} label="Proposed inclusion" value={location.inclusion} options={inclusion} onChange={value => update(next => { next.locations[index]!.inclusion = value as Setup["locations"][number]["inclusion"] })} />
+        <Field readOnly={readOnly} label="Inclusion / exclusion reason" value={location.reason} onChange={value => update(next => { next.locations[index]!.reason = value })} multiline />
+        <Select readOnly={readOnly} label="Coverage starts" value={location.startMode} options={[["unknown", "Not sure"], ["period_start", "At period start"], ["specific", "On a specific date"]]} onChange={value => update(next => { next.locations[index]!.startMode = value as Setup["locations"][number]["startMode"]; if (value !== "specific") next.locations[index]!.start = null /* BF1: a hidden date must not be saved */ })} />
+        {location.startMode === "specific" && <Field readOnly={readOnly} label="Coverage start date" type="date" value={location.start ?? ""} onChange={value => update(next => { next.locations[index]!.start = value || null })} />}
+        <Select readOnly={readOnly} label="Coverage ends" value={location.endMode} options={[["unknown", "Not sure"], ["period_end", "At period end"], ["specific", "On a specific date"]]} onChange={value => update(next => { next.locations[index]!.endMode = value as Setup["locations"][number]["endMode"]; if (value !== "specific") next.locations[index]!.endExclusive = null /* BF1: a hidden date must not be saved */ })} />
+        {location.endMode === "specific" && <Field readOnly={readOnly} label="Active through (inclusive)" type="date" value={inclusive(location.endExclusive)} onChange={value => update(next => { next.locations[index]!.endExclusive = exclusive(value) })} />}
+        <Field readOnly={readOnly} label="Original site opening date (optional)" type="date" value={location.opened ?? ""} onChange={value => update(next => { next.locations[index]!.opened = value || null })} />
+      </div>{view.canManage && <button type="button" onClick={() => update(next => { next.locations.splice(index, 1); next.screening.forEach(row => { if (row.locationId === location.id) row.locationId = null }) })}>Remove location</button>}</div>)}
+      {view.canManage && <button type="button" onClick={() => update(next => { next.locations.push({ id: crypto.randomUUID(), entityId: null, facilityId: null, name: "", countryCode: null, regionCode: null, locality: "", purpose: "", occupancy: "unknown", control: "unknown", inclusion: "unknown", reason: "", start: null, endExclusive: null, otherEntity: "", operatorDetails: "", startMode: "unknown", endMode: "unknown", opened: null }) })}>+ Add location</button>}
     </>}
     {step === 4 && <>{draft.changes.map((change, index) => <div className="setup-subcard" key={change.id}><h3>{change.category}</h3><div className="setup-grid">
-      <Select label="Did this affect the reporting period?" value={change.state} options={yesNo} onChange={value => update(next => { next.changes[index]!.state = value as Setup["changes"][number]["state"] })} />
-      {change.state !== "no" && <><Field label="Effective date, if known" type="date" value={change.effectiveDate ?? ""} onChange={value => update(next => { next.changes[index]!.effectiveDate = value || null })} /><Field label="Affected entities, locations and details" value={change.details} onChange={value => update(next => { next.changes[index]!.details = value })} multiline /></>}
-    </div></div>)}<Field label="Other changes or shared operations" value={draft.changeNotes} onChange={value => update(next => { next.changeNotes = value })} multiline /></>}
+      <Select readOnly={readOnly} label="Did this affect the reporting period?" value={change.state} options={yesNo} onChange={value => update(next => { next.changes[index]!.state = value as Setup["changes"][number]["state"] })} />
+      {change.state !== "no" && <><Field readOnly={readOnly} label="Effective date, if known" type="date" value={change.effectiveDate ?? ""} onChange={value => update(next => { next.changes[index]!.effectiveDate = value || null })} /><Field readOnly={readOnly} label="Affected entities, locations and details" value={change.details} onChange={value => update(next => { next.changes[index]!.details = value })} multiline /></>}
+    </div></div>)}<Field readOnly={readOnly} label="Other changes or shared operations" value={draft.changeNotes} onChange={value => update(next => { next.changeNotes = value })} multiline /></>}
     {step === 5 && <><p>A Yes records a possible source. It does not establish a supported calculation method. Unknown is never treated as No.</p>{draft.screening.map((row, index) => row.scope === 3 ? null : <div className="setup-subcard" key={row.id}><h3>Scope {row.scope} · {sourceCategoryLabel(row.category)}</h3><div className="setup-grid">
-      <Select label="Does this apply within your proposed boundary?" value={row.state} options={screening} onChange={value => update(next => { next.screening[index]!.state = value as Setup["screening"][number]["state"] })} />
-      {(row.state === "no" || row.state === "not_applicable") && <Field label="Reason for this answer" value={row.reason} onChange={value => update(next => { next.screening[index]!.reason = value })} multiline />}
-      {(row.state === "yes" || row.state === "unknown") && <><Field label="Equipment / activity names and notes" value={row.details} onChange={value => update(next => { next.screening[index]!.details = value })} multiline /><Select label="Location, if known" value={row.locationId ?? ""} options={[["", "Not linked / company-wide"] as const, ...draft.locations.map(item => [item.id, item.name || "Unnamed location"] as const)]} onChange={value => update(next => { next.screening[index]!.locationId = value || null })} /></>}
+      <Select readOnly={readOnly} label="Does this apply within your proposed boundary?" value={row.state} options={screening} onChange={value => update(next => { next.screening[index]!.state = value as Setup["screening"][number]["state"] })} />
+      {(row.state === "no" || row.state === "not_applicable") && <Field readOnly={readOnly} label="Reason for this answer" value={row.reason} onChange={value => update(next => { next.screening[index]!.reason = value })} multiline />}
+      {(row.state === "yes" || row.state === "unknown") && <><Field readOnly={readOnly} label="Equipment / activity names and notes" value={row.details} onChange={value => update(next => { next.screening[index]!.details = value })} multiline /><Select readOnly={readOnly} label="Location, if known" value={row.locationId ?? ""} options={[["", "Not linked / company-wide"] as const, ...draft.locations.map(item => [item.id, item.name || "Unnamed location"] as const)]} onChange={value => update(next => { next.screening[index]!.locationId = value || null })} /></>}
     </div></div>)}
       <h2 className="setup-section-title">Scope 3 categories</h2>
       <p>Screen each of the 15 GHG Protocol Scope 3 categories. Each category says what this beta calculates; a category with nothing calculated is listed, never shown as zero. Categories marked “proposed mandatory” are the five CARB has proposed for 2027 (a proposal, not adopted). Once setup is saved, each category can also have an assessment for the reporting year: the reason, the Scope 3 Standard Table 6.1 relevance criteria, an estimated magnitude and evidence.</p>
@@ -376,9 +400,9 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
         const savedAssessment = assessments.view?.assessments.find(item => item.category === category) ?? null
         const downstream = category >= 9 && category <= 12 ? scope3DownstreamWarning(c => scope3Decision(draft.screening.find(item => item.scope === 3 && item.category === SCOPE3_SETUP_CATEGORY_TOKENS[c - 1])?.state), assessments.view?.assessments ?? []) : null
         return <div className="setup-subcard" key={token}><h3>Scope 3 · {category}. {title}</h3><p className="nv-subtle">{notes}</p><div className="setup-grid">
-          <Select label="Is this category part of your inventory?" value={row?.state ?? "unknown"} options={scope3Screening} onChange={value => set(target => { target.state = value as Setup["screening"][number]["state"] })} />
-          {(row?.state === "no" || row?.state === "not_applicable") && <Field label="Reason (at least 3 characters)" value={row.reason} onChange={value => set(target => { target.reason = value })} multiline />}
-          {row?.state === "yes" && <Field label="What activity is in this category? (optional)" value={row.details} onChange={value => set(target => { target.details = value })} multiline />}
+          <Select readOnly={readOnly} label="Is this category part of your inventory?" value={row?.state ?? "unknown"} options={scope3Screening} onChange={value => set(target => { target.state = value as Setup["screening"][number]["state"] })} />
+          {(row?.state === "no" || row?.state === "not_applicable") && <Field readOnly={readOnly} label="Reason (at least 3 characters)" value={row.reason} onChange={value => set(target => { target.reason = value })} multiline />}
+          {row?.state === "yes" && <Field readOnly={readOnly} label="What activity is in this category? (optional)" value={row.details} onChange={value => set(target => { target.details = value })} multiline />}
         </div>
           {year !== null && setupVersionId !== null && <>
             <p className="nv-subtle">{savedAssessment ? `Assessment for ${year}: revision ${savedAssessment.revision}${savedAssessment.reasonCode ? ` · ${SCOPE3_ASSESSMENT_REASON_TEXT[savedAssessment.reasonCode] ?? savedAssessment.reasonCode}` : ""}${savedAssessment.magnitudeKind === "estimated" ? ` · about ${savedAssessment.magnitudeTCo2e} t CO2e` : savedAssessment.magnitudeKind === "not_quantifiable" ? " · magnitude not quantifiable" : ""}.` : `No assessment saved for ${year} yet.`}</p>
@@ -394,12 +418,13 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, in
       })}</>}
     {step === 6 && <>
       <div className="setup-review-grid"><div><small>REPORTING COMPANY</small><strong>{draft.company.legalName || "Not answered"}</strong><span>{draft.company.countryCode || "Country not answered"}</span></div><div><small>REPORTING PERIOD</small><strong>{draft.reportingPeriod.start || "Not answered"} → {inclusive(draft.reportingPeriod.endExclusive) || "Not answered"}</strong></div><div><small>PROPOSED BOUNDARY</small><strong>{draft.boundary.approach.replace(/_/g, " ")}</strong><span>{draft.entities.length} related entities · {draft.locations.length} locations</span></div><div><small>SOURCE SCREENING</small><strong>{draft.screening.filter(item => item.scope !== 3 && item.state === "yes").length} yes · {draft.screening.filter(item => item.scope !== 3 && item.state === "no").length} no</strong><span>{draft.screening.filter(item => item.scope !== 3 && item.state === "unknown").length} uncertain · Scope 3: {draft.screening.filter(item => item.scope === 3 && item.state !== "unknown").length} of 15 screened</span></div></div>
-      <label className="setup-check"><input type="checkbox" checked={draft.review.acknowledged} onChange={event => editReview(next => { next.review.acknowledged = event.target.checked })} /> I have listed known entities, locations and source types, and left uncertain facts visible for review.</label>
-      <Field label="Reviewer role and open questions" value={draft.review.notes} onChange={value => editReview(next => { next.review.notes = value })} multiline />
-      {view.currentVersion && <Field label="Reason for this correction" value={reason} onChange={value => { setReason(value); pending.current = null; setRetryAvailable(false) }} hint="A new save appends a version; the earlier version remains in history." />}
-      <button type="button" disabled={!view.canManage || busy || !dirty && !!view.currentVersion} onClick={() => void save()}>{retryAvailable ? "Retry exact save" : view.currentVersion ? "Save correction" : "Save setup"}</button>
+      {view.canManage ? <label className="setup-check"><input type="checkbox" checked={draft.review.acknowledged} onChange={event => editReview(next => { next.review.acknowledged = event.target.checked })} /> {SETUP_READ_ONLY_TEXT.acknowledgement}</label>
+        : <ReadOnlyAnswer label={SETUP_READ_ONLY_TEXT.acknowledgement} answer={draft.review.acknowledged ? SETUP_READ_ONLY_TEXT.yes : SETUP_READ_ONLY_TEXT.no} />}
+      <Field readOnly={readOnly} label="Reviewer role and open questions" value={draft.review.notes} onChange={value => editReview(next => { next.review.notes = value })} multiline />
+      {view.canManage && view.currentVersion && <Field readOnly={readOnly} label="Reason for this correction" value={reason} onChange={value => { setReason(value); pending.current = null; setRetryAvailable(false) }} hint="A new save appends a version; the earlier version remains in history." />}
+      {view.canManage && <button type="button" disabled={busy || !dirty && !!view.currentVersion} onClick={() => void save()}>{retryAvailable ? "Retry exact save" : view.currentVersion ? "Save correction" : "Save setup"}</button>}
     </>}
-    </fieldset>
+    </>) })()}
     {step === 6 && <><h3>Correction history</h3>{view.history.length ? <ol className="setup-history">{[...view.history].reverse().map(item => <li key={item.id}><button type="button" disabled={busy} onClick={() => void showVersion(item.id)}>Version {item.revision} · {formatTimeR2E(item.createdAt)}</button><span>{item.correctionReason || "Initial setup"}</span></li>)}</ol> : <p>No saved version yet.</p>}
       {historical && <div className="setup-history-detail"><h4>Saved version {historical.revision}</h4><p>{historical.setup.company.legalName} · {historical.setup.locations.length} locations · {historical.setup.screening.length} source screens</p><p>{historical.correctionReason || "Initial setup"}</p><p>Saved {formatTimeR2E(historical.createdAt)}. This record is read only.</p></div>}</>}
     </div>

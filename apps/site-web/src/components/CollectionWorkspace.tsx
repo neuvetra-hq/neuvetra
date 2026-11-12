@@ -28,6 +28,8 @@ import { ACTIVITY_FORM_TEXT_WO10 } from "@/lib/activity-form-text-wo10"
 // ruling, derived from the save checks and the readiness rules in field-needs-wo12.ts); BF-08's definite answers.
 import { ACTIVITY_READ_ONLY_TEXT, FIELD_NEED_TEXT, SAVE_OUTCOME_TEXT_WO12, type FieldNeed } from "@/lib/wo12-text"
 import { activityFieldFacts, activityFieldNeed, fieldLabel, type FieldNeedFacts } from "@/lib/field-needs-wo12"
+import { RecordHoldNotice } from "./RecordHoldNotice"
+import { recordHold } from "@/lib/record-holds-wo12b"
 import { activityPresaveProblems, activitySaveProblems, CONTRACT_FIELDS, DECIMAL, prepareActivityForSave, SUPPORTED_UNITS, VOLUMETRIC_GAS_UNITS, type FormProblem } from "@/lib/activity-save-checks"
 import { activityDraftFields, DRAFT_DEBOUNCE_MS, DRAFT_TEXT, draftKey, draftStorage, draftTime, keepDraft, readDraft, removeDraft, removeDraftSoon, writeDraft, type ActivityDraftFields, type DraftBinding, type DraftScope, type StoredDraft } from "@/lib/draft-store"
 
@@ -1071,7 +1073,9 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   // WO-12 QA round 1: what decides the conditional field labels, from what this screen has loaded: company setup's
   // consolidation approach and the chosen site's country (undefined until setup is read), and whether distance-based
   // commuting records cover this record's period (the same periods the results route plans with).
-  const fieldFacts: FieldNeedFacts = activityFieldFacts({ setup: setupFacts, activity: readinessDraft, options: draftScope3Options })
+  const fieldFacts: FieldNeedFacts = activityFieldFacts({ setup: setupFacts, activity: readinessDraft, options: draftScope3Options, context, recordId, records, mappingKeys })
+  // WO-12b: one answer that holds the record whatever else is filled in (a record hold), shown at the top of the form.
+  const hold = recordHold(draft, fieldFacts)
   const presave: FormProblem[] = canManage ? activityPresaveProblems(draft) : []
   const saveChecks: FormProblem[] = canManage ? activitySaveProblems(draft, { context, evidence, correcting: Boolean(selected), reason, zipLookup, scope3Completion }) : []
   const problems = dirty || attempted ? saveChecks : presave
@@ -1210,6 +1214,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       {scope3FormGroups(availableScope3Kinds.filter(kind => FORM_KINDS.has(kind))).map(group => <div key={group.title} className="worksheet-nav" role="group" aria-label={group.title}><span className="nv-subtle">{group.title}</span>{group.kinds.map(kind => kindButton(kind, kindName(kind)))}</div>)}
       </>}
       {selected && !recordMode && <p>Activity type is fixed while correcting this record. Use “Start a new record” to collect another activity.</p>}
+      <RecordHoldNotice hold={hold} canManage={canManage} />
       <fieldset className="setup-inputs" disabled={busy || !canManage || offer !== null}>
         <div className="setup-grid">
           <Select {...anatomy("location")} label="Company-setup location" value={draft.locationId} options={[["", context?.setupVersionId ? "Choose a saved location" : "Save company setup locations first"], ...(context?.locations ?? []).map(location => [location.id, `${location.name || "Unnamed location"} · ${LOCATION_INCLUSION_TEXT_R2E[location.inclusion] ?? location.inclusion} · ${LOCATION_CONTROL_TEXT_R2E[location.control] ?? location.control}`] as const)]} onChange={value => edit(next => { next.locationId = value; next.setupVersionId = context?.setupVersionId ?? ""; if (next.kind === "electricity") next.payload.site = context?.locations.find(location => location.id === value)?.name ?? "" })} hint={context?.setupRevision ? `Linked to company setup version ${context.setupRevision}. Excluded and unknown locations remain visible.` : "A saved company setup version is required."} />

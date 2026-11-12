@@ -17,8 +17,8 @@
 import { describe, expect, test } from "bun:test"
 import { fileURLToPath } from "node:url"
 import type { CollectionActivity, CollectionActivityRecord, CollectionContext, CollectionEvidenceMetadata } from "../../../../packages/neuvetra-database/src/collection-contract"
-import { planCollectionCalculation } from "../../../../packages/neuvetra-database/src/collection-engine-input"
-import { planScope3Calculation, SCOPE3_COMPLETION_KINDS, SCOPE3_LEGACY_KINDS, type Scope3CollectionVersion } from "../../../../packages/neuvetra-database/src/scope3-collection"
+import { collectionBoundaryHold, planCollectionCalculation } from "../../../../packages/neuvetra-database/src/collection-engine-input"
+import { planScope3Calculation, scope3SpendMappingKeyInput, SCOPE3_COMPLETION_KINDS, SCOPE3_LEGACY_KINDS, type Scope3CollectionVersion } from "../../../../packages/neuvetra-database/src/scope3-collection"
 import { SCOPE3_PAYLOAD_FIXTURES } from "../../../../packages/neuvetra-database/src/scope3-payload-fixtures"
 import { recordReadiness } from "../components/CollectionWorkspace"
 import { scope3BlankPayload } from "./scope3-form-defaults"
@@ -26,12 +26,31 @@ import { scope3ReadinessOptions, type Scope3SetupFacts } from "./scope3-forms"
 import { activitySaveProblems, prepareActivityForSave } from "./activity-save-checks"
 import { ACTIVITY_FIELD_NEEDS, activityFieldFacts, activityFieldNeed, fieldLabel, FIELD_NEED_KINDS } from "./field-needs-wo12"
 import { FIELD_NEED_NOTES, FIELD_NEED_TEXT, type FieldNeed } from "./wo12-text"
+import { RECORD_HOLD_CODES, recordHold } from "./record-holds-wo12b"
+import { RECORD_HOLD_TEXT } from "./wo12b-text"
 
 const C = "94120000-0000-4000-8000-000000000001", SETUP = "94120000-0000-4000-8000-0000000000aa", SITE = "94120000-0000-4000-8000-0000000000bb", FILE = "94120000-0000-4000-8000-0000000000e1"
 const DRAFT = "94120000-0000-4000-8000-0000000000d1", COMMUTER = "94120000-0000-4000-8000-0000000000c7"
+const EXCLUDED_SITE = "94120000-0000-4000-8000-0000000000b2", ENTITY_SITE = "94120000-0000-4000-8000-0000000000b3", ENTITY = "94120000-0000-4000-8000-0000000000e7"
+const CONTROL_SITE = "94120000-0000-4000-8000-0000000000b4", NO_CONTROL_SITE = "94120000-0000-4000-8000-0000000000b5", LANDLORD_SITE = "94120000-0000-4000-8000-0000000000b6", UNDECIDED_SITE = "94120000-0000-4000-8000-0000000000b7"
+const ENTITY_UNDECIDED_SITE = "94120000-0000-4000-8000-0000000000b8", COVERAGE_SITE = "94120000-0000-4000-8000-0000000000b9", ORPHAN_SITE = "94120000-0000-4000-8000-0000000000ba", UNREAD_SITE = "94120000-0000-4000-8000-0000000000bd"
+const GONE_SITE = "94120000-0000-4000-8000-0000000000bc", ENTITY_GONE = "94120000-0000-4000-8000-0000000000eb"
+const ENTITY_OC = "94120000-0000-4000-8000-0000000000e8", ENTITY_NONE = "94120000-0000-4000-8000-0000000000e9", ENTITY_UNDECIDED = "94120000-0000-4000-8000-0000000000ea", SUPPLIER = "94120000-0000-4000-8000-0000000000f1"
 const PERIOD = { start: "2025-01-01", endExclusive: "2026-01-01" }
 const context: CollectionContext = { companyId: C, setupVersionId: SETUP, setupRevision: 1, sameContentSetupVersionIds: [SETUP], boundaryApproach: "operational_control", reportingPeriod: PERIOD,
-  locations: [{ id: SITE, name: "Office", inclusion: "included", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" }] } as CollectionContext
+  locations: [{ id: SITE, name: "Office", inclusion: "included", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" },
+    // WO-12b: a site company setup excludes, and an included site whose entity it excludes.
+    { id: EXCLUDED_SITE, name: "Closed depot", inclusion: "excluded", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" },
+    { id: ENTITY_SITE, name: "Joint venture plant", inclusion: "included", control: "related_entity", entityId: ENTITY, entity: { id: ENTITY, inclusion: "excluded", control: "operational_control", ownershipPercent: "40" }, startMode: "period_start", endMode: "period_end" },
+    // WO-12b QA round 1: the other holds company setup places on every record at a site.
+    { id: CONTROL_SITE, name: "Subsidiary plant", inclusion: "included", control: "related_entity", entityId: ENTITY_OC, entity: { id: ENTITY_OC, inclusion: "included", control: "operational_control", ownershipPercent: "60" }, startMode: "period_start", endMode: "period_end" },
+    { id: NO_CONTROL_SITE, name: "Minority plant", inclusion: "included", control: "related_entity", entityId: ENTITY_NONE, entity: { id: ENTITY_NONE, inclusion: "included", control: "none", ownershipPercent: "10" }, startMode: "period_start", endMode: "period_end" },
+    { id: LANDLORD_SITE, name: "Leased floor", inclusion: "included", control: "landlord", entityId: null, startMode: "period_start", endMode: "period_end" },
+    { id: UNDECIDED_SITE, name: "New depot", inclusion: "unknown", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" },
+    { id: ENTITY_UNDECIDED_SITE, name: "Partner yard", inclusion: "included", control: "related_entity", entityId: ENTITY_UNDECIDED, entity: { id: ENTITY_UNDECIDED, inclusion: "unknown", control: "operational_control", ownershipPercent: "50" }, startMode: "period_start", endMode: "period_end" },
+    { id: COVERAGE_SITE, name: "Pop-up store", inclusion: "included", control: "reporting_company", entityId: null, startMode: "unknown", endMode: "period_end" },
+    { id: ORPHAN_SITE, name: "Spun-off plant", inclusion: "included", control: "related_entity", entityId: ENTITY_GONE, entity: null, startMode: "period_start", endMode: "period_end" },
+    { id: UNREAD_SITE, name: "Old record site", inclusion: "included", control: "reporting_company", startMode: "period_start", endMode: "period_end" }] } as CollectionContext
 const evidence: CollectionEvidenceMetadata[] = [{ id: FILE, companyId: C, bucket: "neuvetra-private-company-evidence", objectKey: `${C}/original/${FILE}`, originalName: "rec.pdf", mediaType: "application/pdf", byteLength: 10, sha256: "a".repeat(64), quarantineStatus: "clean", uploadedBy: C, createdAt: "2025-06-01T00:00:00.000Z" }]
 const isScope3 = (kind: string) => (SCOPE3_LEGACY_KINDS as readonly string[]).includes(kind) || (SCOPE3_COMPLETION_KINDS as readonly string[]).includes(kind)
 
@@ -48,7 +67,9 @@ const savedRecord = (id: string, activity: A): CollectionActivityRecord => ({ id
   currentVersion: { id, recordId: id, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity, payloadSha256: "a".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" } }) as unknown as CollectionActivityRecord
 
 /** A company the field is checked in: the site's country, setup's consolidation approach and the saved records. */
-type World = { name: string; country: string | null; approach: Scope3SetupFacts["consolidationApproach"]; records: CollectionActivityRecord[] }
+type World = { name: string; country: string | null; approach: Scope3SetupFacts["consolidationApproach"]; records: CollectionActivityRecord[]; noPeriod?: true
+  /** WO-12b QA round 2: the spend lines' mapping keys the screen holds (text → key), as CollectionWorkspace builds them. */
+  mappingKeys?: ReadonlyMap<string, string> }
 const distanceCommuting = savedRecord(COMMUTER, fixture("employee_commuting: 0029 payload"))
 const laterCommuting = savedRecord(COMMUTER, { ...fixture("employee_commuting: 0029 payload"), period: { start: "2026-01-01", endExclusive: "2026-02-01" } })
 const WORLDS = {
@@ -59,28 +80,31 @@ const WORLDS = {
   commutingOverlap: { name: "U.S., operational control, distance-based commuting records for the same period", country: "US", approach: "operational_control", records: [distanceCommuting] },
 } satisfies Record<string, World>
 const EVERY_COMPANY: World[] = [WORLDS.usOperational, WORLDS.foreignFinancial, WORLDS.foreignEquity]
-const setupOf = (world: World): Scope3SetupFacts => ({ reportingPeriod: PERIOD, consolidationApproach: world.approach, locationCountries: new Map([[SITE, world.country]]) })
+const setupOf = (world: World): Scope3SetupFacts => ({ reportingPeriod: world.noPeriod ? null : PERIOD, consolidationApproach: world.approach, locationCountries: new Map([[SITE, world.country]]) })
 
 /** Why the screen refuses to save the draft (its own checks, ending with the shared contract), or null. */
 const saveRefusal = (draft: A): string | null => activitySaveProblems(draft, { context, evidence, correcting: false, reason: "", zipLookup: null, scope3Completion: true })[0]?.text ?? null
-const optionsFor = (draft: A, world: World) => isScope3(draft.kind) ? scope3ReadinessOptions({ setup: setupOf(world), context, records: world.records, draft: { recordId: DRAFT, activity: prepareActivityForSave(draft, true) }, mappingKeys: new Map() }) : null
+/** WO-12b QA round 1: the company's own context: its consolidation approach is the world's (Scope 1 and 2 read it from here). */
+const contextOf = (world: World): CollectionContext => ({ ...context, boundaryApproach: world.approach, ...(world.noPeriod ? { reportingPeriod: { start: null, endExclusive: null } } : {}) }) as CollectionContext
+const optionsFor = (draft: A, world: World) => isScope3(draft.kind) ? scope3ReadinessOptions({ setup: setupOf(world), context: contextOf(world), records: world.records, draft: { recordId: DRAFT, activity: prepareActivityForSave(draft, true) }, mappingKeys: world.mappingKeys ?? new Map() }) : null
 const HOLDS = new Set(["input_needed", "review_required", "partial", "method_pending", "excluded"])
 /** What the record's readiness shows as still needed (the Activity list and record view use the same findings). */
 function readiness(draft: A, world: World): string[] {
   const a = prepareActivityForSave(draft, true), options = optionsFor(draft, world)
-  return recordReadiness(a, context, evidence, undefined, options ? { options, recordId: DRAFT } : undefined).filter(finding => HOLDS.has(finding.status)).map(finding => `${finding.status}: ${finding.reason}`)
+  return recordReadiness(a, contextOf(world), evidence, undefined, options ? { options, recordId: DRAFT } : undefined).filter(finding => HOLDS.has(finding.status)).map(finding => `${finding.status}: ${finding.reason}`)
 }
 /** The Scope 3 adapter's plan as the results route makes it (the engine request, when it calculates). */
 function plan(draft: A, world: World) {
   const a = prepareActivityForSave(draft, true)
-  return planScope3Calculation({ id: DRAFT, recordId: DRAFT, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity: a, payloadSha256: "0".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" } as unknown as Scope3CollectionVersion, context, evidence, optionsFor(draft, world)!)
+  return planScope3Calculation({ id: DRAFT, recordId: DRAFT, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity: a, payloadSha256: "0".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" } as unknown as Scope3CollectionVersion, contextOf(world), evidence, optionsFor(draft, world)!)
 }
 /** The Scope 1 and 2 adapter's plan as the results route makes it (the engine call, when it calculates). */
-function planScope12(draft: A) {
-  return planCollectionCalculation({ id: DRAFT, recordId: DRAFT, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity: prepareActivityForSave(draft, true), payloadSha256: "0".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" }, context, evidence)
+function planScope12(draft: A, world: World = WORLDS.usOperational) {
+  return planCollectionCalculation({ id: DRAFT, recordId: DRAFT, companyId: C, revision: 1, previousVersionId: null, correctionReason: null, activity: prepareActivityForSave(draft, true), payloadSha256: "0".repeat(64), createdBy: C, createdAt: "2025-06-01T00:00:00.000Z" }, contextOf(world), evidence)
 }
 /** The label the screen shows for the field on this draft in this company. */
-const shown = (draft: A, field: string, world: World) => fieldLabel(draft, field, activityFieldFacts({ setup: setupOf(world), activity: prepareActivityForSave(draft, true), options: optionsFor(draft, world) }))
+const factsFor = (draft: A, world: World) => activityFieldFacts({ setup: setupOf(world), activity: prepareActivityForSave(draft, true), options: optionsFor(draft, world), context: contextOf(world), recordId: DRAFT, records: world.records, mappingKeys: world.mappingKeys })
+const shown = (draft: A, field: string, world: World) => fieldLabel(draft, field, factsFor(draft, world))
 
 /**
  * QA round 2: the real Scope 1 and 2 engines (scope1_engine.py, scope2_engine.py), each request through the engine's own
@@ -293,6 +317,97 @@ add("fugitive", stocked, { retrofitInPeriod: set("payload.retrofitInPeriod", nul
 add("fugitive", retrofitted, { maintainsRefrigerantStock: set("payload.maintainsRefrigerantStock", null) }, EVERY_COMPANY, true)
 add("fugitive", stocked, { ...Object.fromEntries(["PN", "CN", "PS", "CD", "RD"].map(term => [`term-${term}`, set(`payload.terms.${term}`, "")])), contractorRecords: set("payload.contractorRecordsComplete", false), eventChronology: set("payload.eventChronologyComplete", false) }, EVERY_COMPANY, true)
 
+// ---- WO-12b: record holds. One answer holds the record whatever else is filled in (record-holds-wo12b.ts), so while it
+// stands no other result field can make the record count: each such field is Optional, the answer that holds it keeps its
+// own label, and fields the save needs stay Required. Every state is checked in every company world (the category 13
+// operating lease is held only under financial control or equity share, so its U.S. operational-control rows check that the
+// usual labels come back there).
+const withPayload = (base: () => A, change: Record<string, unknown>, extra: Partial<A> = {}) => () => { const a = base(); Object.assign(a.payload, change); Object.assign(a, extra); return a }
+const assetLease = (category: number, leaseType: string) => withPayload(() => fixture("asset_energy: electricity, sub-metered"), { category, leaseType, noOperationalControlBasis: category === 8 && leaseType === "operating" ? "Landlord operates HVAC and metering." : null })
+const buildingLease = (category: number, leaseType: string) => withPayload(() => fixture("building_average: office"), { category, leaseType, noOperationalControlBasis: category === 8 && leaseType === "operating" ? "Shared building; landlord meters." : null })
+const partnerLease = (category: number, leaseType: string) => withPayload(() => fixture("partner_reported: tenant share by area"), { category, leaseType, noOperationalControlBasis: null })
+const assetHeldFields = { counterparty: S("asset_energy", "counterpartyName"), quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), leaseType: S("asset_energy", "leaseType"), ...grid("asset_energy"), allocation: S("asset_energy", "allocation") }
+const buildingHeldFields = { cbecsActivity: S("building_average", "cbecsActivity"), quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), coveredDays: S("building_average", "coveredDays"), usesNaturalGas: S("building_average", "usesNaturalGas"), leaseType: S("building_average", "leaseType"), ...grid("building_average") }
+const partnerHeldFields = { partner: S("partner_reported", "counterpartyName"), quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), allocationBasis: S("partner_reported", "allocationBasis"), scope2Basis: S("partner_reported", "scope2Basis"),
+  verification: set("payload.verification", "unverified"), leaseType: S("partner_reported", "leaseType"), periodMatches: S("partner_reported", "periodMatches") }
+/** The states of the ruling and of the WO-12b search, each with the fields checked in it. */
+const HOLD_STATES: Array<{ name: string; code: string | null; kind: string; base: () => A; fields: Record<string, (a: A) => void> }> = [
+  { name: "category 8 finance lease (asset energy)", code: "finance_lease_in_scope1_2", kind: "asset_energy", base: assetLease(8, "finance"), fields: assetHeldFields },
+  { name: "category 8 finance lease (building average)", code: "finance_lease_in_scope1_2", kind: "building_average", base: buildingLease(8, "finance"), fields: buildingHeldFields },
+  { name: "category 8 finance lease (partner reported)", code: "finance_lease_in_scope1_2", kind: "partner_reported", base: partnerLease(8, "finance"), fields: partnerHeldFields },
+  { name: "category 13 operating lease (asset energy)", code: "lessor_operating_lease_in_scope1_2", kind: "asset_energy", base: assetLease(13, "operating"), fields: assetHeldFields },
+  { name: "category 13 operating lease (building average)", code: "lessor_operating_lease_in_scope1_2", kind: "building_average", base: buildingLease(13, "operating"), fields: buildingHeldFields },
+  { name: "category 13 operating lease (partner reported)", code: "lessor_operating_lease_in_scope1_2", kind: "partner_reported", base: partnerLease(13, "operating"), fields: partnerHeldFields },
+  { name: "category 9 spend the company paid for", code: "category_9_spend_paid_by_company", kind: "purchase_spend", base: withPayload(() => fixture("purchase_spend: longest texts; category 9 with overlap confirmed"), { paidByReportingCompany: true }),
+    fields: { quantity: set("quantity.originalValue", ""), currency: set("quantity.originalUnit", ""), naicsCode: S("purchase_spend", "naicsCode"), dollarYear: S("purchase_spend", "dollarYear"), "activityOverlap-fallback": S("purchase_spend", "activityOverlap"), paidByReportingCompany: S("purchase_spend", "paidByReportingCompany"), spendEstimateBasis: set("payload.spendEstimateBasis", "") } },
+  { name: "category 3 spend", code: "spend_proxy_for_category_3_not_enabled", kind: "purchase_spend", base: withPayload(() => fixture("purchase_spend: manual line"), { category: 3, naicsCode: "324110", activityOverlap: "none_confirmed" }),
+    fields: { category: set("payload.category", 0), quantity: set("quantity.originalValue", ""), currency: set("quantity.originalUnit", ""), naicsCode: S("purchase_spend", "naicsCode"), dollarYear: S("purchase_spend", "dollarYear"), "activityOverlap-fallback": S("purchase_spend", "activityOverlap") } },
+  { name: "refrigerant equipment retrofitted and with a stock", code: "simplified_method_not_applicable", kind: "fugitive", base: withPayload(refrigerant, { maintainsRefrigerantStock: true, retrofitInPeriod: true }),
+    fields: { insideBoundary: set("payload.insideBoundary", null), maintainsRefrigerantStock: set("payload.maintainsRefrigerantStock", null), retrofitInPeriod: set("payload.retrofitInPeriod", null), contractorRecords: set("payload.contractorRecordsComplete", false), "term-PS": set("payload.terms.PS", "") } },
+]
+// A site company setup excludes, or whose entity it excludes: a record of every kind there is never counted.
+const SITE_HELD_FIELDS: Array<[string, () => A, Record<string, (a: A) => void>]> = [
+  ["natural_gas", gasBill, { quantity: set("quantity.originalValue", ""), unit: set("quantity.originalUnit", ""), location: set("locationId", "") }],
+  ["natural_gas", volumetric, { heatContent: set("payload.heatContent", null) }],
+  ["electricity", meter([instrument()]), { quantity: set("quantity.originalValue", ""), mwh: set("payload.instruments.0.mwh", ""), instrumentQuality: set("payload.instruments.0.qualityCriteriaMet", false), instrumentEvidence: set("payload.instruments.0.evidenceReference", null) }],
+  ["vehicle", van(), { vehicleGallons: set("payload.gallons", ""), miles: set("payload.miles", null) }],
+  ["fugitive", refrigerant, { "term-PN": set("payload.terms.PN", ""), insideBoundary: set("payload.insideBoundary", null), contractorRecords: set("payload.contractorRecordsComplete", false) }],
+  ["transport", () => fixture("transport: 0029 payload"), { quantity: set("quantity.originalValue", ""), loadBasis: set("payload.loadBasis", null) }],
+  ["purchase_spend", () => fixture("purchase_spend: manual line"), { quantity: set("quantity.originalValue", ""), naicsCode: S("purchase_spend", "naicsCode") }],
+  ["asset_energy", () => fixture("asset_energy: electricity, sub-metered"), { quantity: set("quantity.originalValue", ""), ...grid("asset_energy") }],
+  ["investment", () => fixture("investment: equity share, investee reported"), { quantity: set("quantity.originalValue", ""), investeeEmissions: S("investment", "investeeEmissions") }],
+]
+const atSite = (base: () => A, site: string) => () => { const a = base(); a.locationId = site; return a }
+const SCOPE12_HELD = SITE_HELD_FIELDS.filter(([kind]) => !isScope3(kind)), SCOPE3_HELD = SITE_HELD_FIELDS.filter(([kind]) => isScope3(kind))
+/** What holds a state's record in a world (null: nothing, and the usual labels apply). */
+type Expect = (world: World, kind: string) => string | null
+const SITES: Array<[string, string, Expect]> = [
+  [EXCLUDED_SITE, "a site excluded in company setup", () => "location_excluded_by_company_setup"],
+  [ENTITY_SITE, "a site whose entity company setup excludes", () => "entity_excluded_by_company_setup"],
+  // QA round 1 (B1, B3): an entity's control. Scope 1 and 2 check it after the approach (equity share holds first).
+  [CONTROL_SITE, "a site whose entity is under operational control", (world, kind) => isScope3(kind) ? null : world.approach === "equity_share" ? "equity_share_not_supported" : world.approach === "financial_control" ? "entity_control_unresolved" : null],
+  [NO_CONTROL_SITE, "a site whose entity has no control identified", (world, kind) => isScope3(kind) ? null : world.approach === "equity_share" ? "equity_share_not_supported" : "entity_outside_control_boundary"],
+  [LANDLORD_SITE, "a site whose equipment the landlord controls", (world, kind) => isScope3(kind) ? null : world.approach === "equity_share" ? "equity_share_not_supported" : "location_control_unresolved"],
+  [UNDECIDED_SITE, "a site not yet included or excluded", () => "location_inclusion_unknown"],
+  [ENTITY_UNDECIDED_SITE, "a site whose entity is not yet included or excluded", () => "entity_inclusion_unknown"],
+  [ORPHAN_SITE, "a site linked to an entity setup no longer has", () => "location_entity_unresolved"],
+  [UNREAD_SITE, "a site whose boundary details weren't read", () => "boundary_metadata_unavailable"],
+  [GONE_SITE, "a site no longer in company setup", () => "location_not_in_current_setup"],
+  [COVERAGE_SITE, "a site without a coverage start", (world, kind) => !isScope3(kind) && world.approach === "equity_share" ? "equity_share_not_supported" : "location_coverage_unknown"],
+]
+const EXPECT: Map<() => A, Expect> = new Map()
+for (const state of HOLD_STATES) EXPECT.set(state.base, (world, kind) => !isScope3(kind) && world.approach === "equity_share" ? "equity_share_not_supported" : state.code === "lessor_operating_lease_in_scope1_2" && world.approach === "operational_control" ? null : state.code)
+for (const [site, siteName, expect] of SITES) for (const [kind, base, fields] of SITE_HELD_FIELDS) {
+  const state = { name: `${kind} at ${siteName}`, code: null, kind, base: atSite(base, site), fields }
+  HOLD_STATES.push(state); EXPECT.set(state.base, expect)
+}
+// QA round 1 (B1): company setup that holds every record of a scope: equity share and no approach (Scope 1 and 2), no
+// approach (Scope 3), no reporting period (Scope 1 and 2).
+const COMPANY_WORLDS: Array<[World, Expect]> = [
+  [WORLDS.foreignEquity, (_world, kind) => isScope3(kind) ? null : "equity_share_not_supported"],
+  [WORLDS.noApproach, (_world, kind) => isScope3(kind) ? "scope3_consolidation_approach_required" : "boundary_approach_unknown"],
+  [{ ...WORLDS.usOperational, name: "U.S. site, operational control, setup without a reporting period", noPeriod: true }, (_world, kind) => isScope3(kind) ? null : "reporting_period_unknown"],
+]
+const COMPANY_STATES: Array<{ name: string; kind: string; base: () => A; fields: Record<string, (a: A) => void>; world: World; expect: Expect }> = []
+for (const [world, expect] of COMPANY_WORLDS) for (const [kind, base, fields] of [...SCOPE12_HELD, ...SCOPE3_HELD]) {
+  const state = { name: `${kind} (${world.name})`, kind, base: () => base(), fields, world, expect }
+  COMPANY_STATES.push(state); EXPECT.set(state.base, expect)
+}
+// QA round 1 (B2): a spend line a supplier record replaces (the supersession pre-pass, by the supplier name).
+// QA round 2: by each match kind the server's rule has (planScope3Supersession): the line's supplier name, its mapping key
+// (GL account, supplier and description together), or both. The fields the match is made on keep their labels.
+const replacedLine = () => fixture("purchase_spend: manual line")
+const LINE_KEY_TEXT = scope3SpendMappingKeyInput(replacedLine().payload), LINE_KEY = "b".repeat(64)
+const supplierRecordBy = (supplierName: string, mappingKeys: string[]) => savedRecord(SUPPLIER, (() => { const a = fixture("purchase_supplier: product factor"); a.payload.category = 1; a.payload.supersedesSpend = { supplierName, mappingKeys }; return a })())
+const MATCHES = [["name", supplierRecordBy("Synthetic Software LLC", [])], ["key", supplierRecordBy("A different supplier", [LINE_KEY])], ["both", supplierRecordBy("synthetic  software llc", [LINE_KEY])]] as const
+const REPLACED_WORLDS: World[] = MATCHES.flatMap(([match, record]) => EVERY_COMPANY.map(world => ({ ...world, name: `${world.name}, a supplier record replacing the line by ${match}`, records: [record], mappingKeys: new Map([[LINE_KEY_TEXT, LINE_KEY]]) })))
+const replacedFields = { quantity: set("quantity.originalValue", ""), currency: set("quantity.originalUnit", ""), naicsCode: S("purchase_spend", "naicsCode"), dollarYear: S("purchase_spend", "dollarYear"),
+  supplier: S("purchase_spend", "supplierName"), glAccount: S("purchase_spend", "glAccount"), description: S("purchase_spend", "description") }
+EXPECT.set(replacedLine, () => "superseded_by_supplier_record")
+for (const state of HOLD_STATES) add(state.kind, state.base, state.fields, EVERY_COMPANY, true)
+for (const state of COMPANY_STATES) add(state.kind, state.base, state.fields, [state.world], true)
+add("purchase_spend", replacedLine, replacedFields, REPLACED_WORLDS, true)
+
 type Outcome = { need: FieldNeed; why: string }
 /**
  * Every case in every company it is checked in: the label the rules give and the label the screen shows. The engine runs
@@ -305,7 +420,7 @@ function evaluate() {
     const refusedBefore = saveRefusal(before)
     if (refusedBefore) throw new Error(`${item.kind}.${item.field} (${world.name}): the starting record doesn't save (${refusedBefore})`)
     const scope3 = isScope3(item.base().kind)
-    const plans = scope3 ? [plan(before, world), plan(after, world)] : [planScope12(before), planScope12(after)]
+    const plans = scope3 ? [plan(before, world), plan(after, world)] : [planScope12(before, world), planScope12(after, world)]
     return { item, world, before, after, refused: saveRefusal(after), held: readiness(after, world).filter(reason => !readiness(before, world).includes(reason)), plans, label: shown(before, item.field, world) }
   }))
   const requests: unknown[] = [], scope12: Array<{ engine: string }> = []
@@ -316,9 +431,15 @@ function evaluate() {
     const [before = null, after = null] = index[i]!.map(at => at === null ? null : at >= 0 ? results[at]! : results12[-at - 1]!)
     const baseHeld = readiness(row.before, row.world).length > 0 || (row.plans[0] !== undefined && row.plans[0].action !== "calculate") || (before !== null && before.status !== "complete" && before.status !== "partial")
     const engineNew = after && after.status !== "complete" && after.status !== "partial" ? after.findings.filter(finding => !(before?.findings ?? []).includes(finding)) : []
-    const derived: Outcome = row.refused ? { need: "required", why: row.refused } : row.held.length ? { need: "results", why: row.held.join(" | ") }
+    // WO-12b: the record holds the adapters and engines report, before and after the field is left blank. A hold present
+    // both times holds the record with the field answered too: no answer to it can make the record count.
+    const holdsOf = (plan: { reasons?: readonly string[] } | undefined, result: { findings: string[] } | null) => [...plan?.reasons ?? [], ...result?.findings ?? []].filter(code => (RECORD_HOLD_CODES as readonly string[]).includes(code))
+    const holdsBefore = holdsOf(row.plans[0], before), holdsAfter = holdsOf(row.plans[1], after)
+    const persists = holdsBefore.filter(code => holdsAfter.includes(code))
+    const derived: Outcome = row.refused ? { need: "required", why: row.refused } : persists.length ? { need: "optional", why: `held whatever this field says: ${persists.join(", ")}` }
+      : row.held.length ? { need: "results", why: row.held.join(" | ") }
       : engineNew.length ? { need: "results", why: `engine ${after!.status}: ${engineNew.join(", ")}` } : { need: "optional", why: "saves and calculates" }
-    return { ...row, derived, engine: after, baseHeld }
+    return { ...row, derived, engine: after, baseHeld, holdsBefore }
   })
 }
 /**
@@ -389,6 +510,110 @@ describe("WO-12 field labels: derived from the screen's save checks, the readine
     expect(unchecked).toEqual([])
     expect(activityFieldNeed("natural_gas", "location")).toBe("required")
     for (const kind of ["natural_gas", "distillate_no2", "vehicle", "fugitive", "electricity", ...SCOPE3_LEGACY_KINDS, ...SCOPE3_COMPLETION_KINDS]) expect(FIELD_NEED_KINDS).toContain(kind)
+  })
+})
+
+describe("WO-12b: record holds (one answer holds the record whatever else is filled in)", () => {
+  const holdRows = evaluated.filter(row => HOLD_STATES.some(state => state.base === row.item.base))
+  test("the screen's rule finds exactly the holds the adapters and engines report, on every row of every company world", () => {
+    const wrong = all.map(row => ({ row, screen: recordHold(row.before, factsFor(row.before, row.world))?.code ?? null, rules: row.holdsBefore[0] ?? null }))
+      .filter(item => item.screen !== item.rules).map(item => `${item.row.item.kind}.${item.row.item.field} (${item.row.world.name}): screen ${item.screen}, rules ${item.rules}`)
+    expect(wrong).toEqual([])
+  })
+  test("each state holds the record in every company world it should, with the code expected there (and nothing elsewhere)", () => {
+    const wrong = all.filter(row => EXPECT.has(row.item.base)).map(row => ({ row, expected: EXPECT.get(row.item.base)!(row.world, row.item.kind) }))
+      .filter(({ row, expected }) => (row.holdsBefore[0] ?? null) !== expected).map(({ row, expected }) => `${row.item.kind}.${row.item.field} (${row.world.name}): rules ${row.holdsBefore[0] ?? null}, expected ${expected}`)
+    expect(wrong).toEqual([])
+    // Every code the screen treats as a record hold is reached by some row.
+    const reached = new Set(all.flatMap(row => row.holdsBefore))
+    expect(RECORD_HOLD_CODES.filter(code => !reached.has(code))).toEqual([])
+  })
+  test("QA round 1: company setup's holds, a replaced spend line and the entity holds say what holds the record, plainly, and where it is decided", () => {
+    const at = (base: () => A, world: World) => { const draft = base(); return recordHold(draft, factsFor(draft, world))! }
+    const gas = at(gasBill, WORLDS.foreignEquity)
+    expect([gas.code, gas.level, gas.fields, gas.question, gas.setupStep]).toEqual(["equity_share_not_supported", "company", [], null, "03 Entities & boundary"])
+    expect(gas.text).toBe("These draft calculations don’t support equity-share allocation yet, so Scope 1 and 2 records are saved but not counted.")
+    expect([at(gasBill, WORLDS.noApproach).code, at(() => fixture("transport: 0029 payload"), WORLDS.noApproach).code]).toEqual(["boundary_approach_unknown", "scope3_consolidation_approach_required"])
+    for (const hold of [gas, at(gasBill, WORLDS.noApproach)]) expect(`${hold.cause} ${hold.text} ${hold.instead ?? ""}`).not.toMatch(/\byour\b|wrong|mistake/i)
+    // B3: an excluded entity is the entity's inclusion; no control identified is the entity's control; neither is the site's.
+    const excluded = at(atSite(gasBill, ENTITY_SITE), WORLDS.usOperational), outside = at(atSite(gasBill, NO_CONTROL_SITE), WORLDS.usOperational), control = at(atSite(gasBill, CONTROL_SITE), WORLDS.foreignFinancial)
+    expect(excluded.instead).toContain("change the entity’s inclusion in company setup (03 Entities & boundary)")
+    expect(outside.instead).toBe("If the company does control that entity, change the entity’s control in company setup (03 Entities & boundary) to operational control; otherwise choose another site.")
+    expect(outside.cause).toBe("The site chosen (Minority plant) belongs to an entity that company setup marks as outside the control boundary (no control identified), which holds this record, whatever else is filled in.")
+    expect(control.cause).toContain("(operational control) isn’t the consolidation approach (financial control)")
+    expect(control.instead).toContain("change the entity’s control to it in company setup")
+    for (const hold of [excluded, outside, control]) expect(hold.instead).not.toContain("site’s inclusion")
+    // Following the words literally leads to a counted record: under financial control, including the excluded entity
+    // isn't enough (its control is operational control), so the notice says the next step too; doing both clears the hold.
+    expect(excluded.instead).not.toContain("After that change")
+    const twoSteps = at(atSite(gasBill, ENTITY_SITE), WORLDS.foreignFinancial)
+    expect(twoSteps.instead).toBe("Choose a site of an included entity if the activity belongs to one, or change the entity’s inclusion in company setup (03 Entities & boundary). After that change, the record would still be held: The site chosen (Joint venture plant) belongs to an entity whose control in company setup (operational control) isn’t the consolidation approach (financial control). If financial control is right for that entity, change the entity’s control to it in company setup (03 Entities & boundary); otherwise choose another site.")
+    const followed = (world: World, change: (location: any) => void) => { const ctx = structuredClone(contextOf(world)); change(ctx.locations.find(item => item.id === ENTITY_SITE)); return collectionBoundaryHold({ ...gasBill(), locationId: ENTITY_SITE } as CollectionActivity, ctx) }
+    expect(followed(WORLDS.foreignFinancial, location => { location.entity.inclusion = "included" })?.reasons).toEqual(["entity_control_unresolved"])
+    expect(followed(WORLDS.foreignFinancial, location => { location.entity.inclusion = "included"; location.entity.control = "financial_control" })).toBeNull()
+    expect(followed(WORLDS.usOperational, location => { location.entity.inclusion = "included" })).toBeNull()
+    // Under equity share the next hold is the company's: the notice says so in the company notice's own words.
+    expect(at(atSite(gasBill, ENTITY_SITE), WORLDS.foreignEquity).instead).toContain("After that change, the record would still be held: Company setup’s consolidation approach is equity share, which holds every Scope 1 and 2 record, whatever is filled in here. These draft calculations don’t support equity-share allocation yet, so Scope 1 and 2 records are saved but not counted.")
+    const noControl = (world: World) => { const ctx = structuredClone(contextOf(world)); ctx.locations.find(item => item.id === NO_CONTROL_SITE)!.entity!.control = world.approach as "operational_control"; return collectionBoundaryHold({ ...gasBill(), locationId: NO_CONTROL_SITE } as CollectionActivity, ctx) }
+    expect([noControl(WORLDS.usOperational), noControl(WORLDS.foreignFinancial)]).toEqual([null, null])
+    // B2: the replaced spend line names the replacing record and links to it.
+    const replaced = at(replacedLine, REPLACED_WORLDS[0]!)
+    expect([replaced.code, replaced.cause, replaced.link]).toEqual(["superseded_by_supplier_record", "Another record replaces this spend line: Supplier-specific purchases · SRC-1.", { href: `#/activity/${SUPPLIER}`, label: "Open Supplier-specific purchases · SRC-1" }])
+    // Follow-up: category 3 spend says what to do instead.
+    expect(at(withPayload(() => fixture("purchase_spend: manual line"), { category: 3 }), WORLDS.usOperational).instead).toBe("Withdraw the line rather than completing it: nothing on this form makes a category 3 spend line count.")
+  })
+  test("QA round 2: a field whose answer, left blank or changed, makes a held record count is one the notice names (it keeps its label, with the note), in every match kind", () => {
+    const freeing = all.filter(row => row.holdsBefore.length > 0 && row.derived.why === "saves and calculates" && row.engine?.status !== "excluded")
+      .map(row => ({ row, hold: recordHold(row.before, factsFor(row.before, row.world))! }))
+    expect(freeing.filter(({ row, hold }) => !hold.fields.includes(row.item.field) && !hold.upstream.includes(row.item.field)).map(({ row }) => `${row.item.kind}.${row.item.field} (${row.world.name})`)).toEqual([])
+    // The replaced line: by name only Supplier frees it; by key, GL account and Supplier (Description is Required); by both, Supplier.
+    const freedBy = (match: string) => [...new Set(freeing.filter(({ row }) => row.world.name.endsWith(`by ${match}`)).map(({ row }) => row.item.field))].sort()
+    expect([freedBy("name"), freedBy("key"), freedBy("both")]).toEqual([["supplier"], ["glAccount", "supplier"], ["supplier"]])
+    const at = (world: World) => { const draft = replacedLine(); return recordHold(draft, factsFor(draft, world))! }
+    const [byName, byKey, byBoth] = ["name", "key", "both"].map(match => at(REPLACED_WORLDS.find(world => world.name.endsWith(`by ${match}`))!))
+    expect([byName!.fields, byKey!.fields, byBoth!.fields]).toEqual([["supplier", "category"], ["glAccount", "supplier", "description", "category"], ["supplier", "category"]])
+    expect(byName!.instead).toContain("If this line isn’t one of Supplier-specific purchases · SRC-1’s purchases, correct its Supplier; if it isn’t a category 1 or 2 purchase, correct its Category. Any of these stops the replacement")
+    expect(byKey!.instead).toContain("correct its GL account, Supplier or Description (the replacement matches those three together); if it isn’t a category 1 or 2 purchase, correct its Category.")
+    // QA round 3: complete, not absolute: what frees the line is listed; nothing says "nothing else".
+    for (const hold of [byName!, byKey!, byBoth!]) {
+      expect(hold.instead).toContain("Otherwise each purchase is counted once: to count this line instead, open Supplier-specific purchases · SRC-1 and change “Spend lines this record replaces” there, or withdraw Supplier-specific purchases · SRC-1.")
+      expect(hold.instead).not.toContain("nothing else")
+    }
+    const label = (world: World, field: string) => { const draft = replacedLine(); return fieldLabel(draft, field, factsFor(draft, world)) }
+    const keyWorld = REPLACED_WORLDS.find(world => world.name.endsWith("by key"))!, bothWorld = REPLACED_WORLDS.find(world => world.name.endsWith("by both"))!
+    expect(["supplier", "glAccount", "description", "category", "naicsCode", "quantity"].map(field => label(keyWorld, field))).toEqual([
+      { need: "optional", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "optional", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "required", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "required", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "optional" }, { need: "optional" }])
+    // By both, GL account or Description alone leaves the name match, so they carry no note (their own labels stay).
+    expect(["supplier", "glAccount", "description", "category"].map(field => label(bothWorld, field))).toEqual([
+      { need: "optional", needNote: RECORD_HOLD_TEXT.matchNote }, { need: "optional" }, { need: "required" }, { need: "required", needNote: RECORD_HOLD_TEXT.matchNote }])
+  })
+
+  test("QA round 3: changing a replaced line's Category to one the record doesn't replace makes it count, in every match kind and company; 1 or 2 doesn't", () => {
+    const moved = (category: number) => () => { const a = replacedLine(); a.payload.category = category; if (category === 4) { a.payload.naicsCode = "484121"; a.payload.activityOverlap = "none_confirmed" } return a }
+    const rows = REPLACED_WORLDS.flatMap(world => [moved(4), moved(2)].map((base, i) => {
+      const draft = base(), p = plan(draft, world)
+      expect([world.name, saveRefusal(draft)]).toEqual([world.name, null])
+      return { world, category: i === 0 ? 4 : 2, plan: p, hold: recordHold(draft, factsFor(draft, world)) }
+    }))
+    const results = runEngine(rows.filter(row => row.plan.action === "calculate").map(row => row.plan.call!.request))
+    let next = 0
+    const outcome = rows.map(row => `${row.world.name} → category ${row.category}: ${row.plan.action === "calculate" ? `engine ${results[next++]!.status}` : row.plan.reasons.join(",")}${row.hold ? ` [notice ${row.hold.code}]` : ""}`)
+    expect(outcome).toEqual(REPLACED_WORLDS.flatMap(world => [`${world.name} → category 4: engine complete`, `${world.name} → category 2: superseded_by_supplier_record [notice superseded_by_supplier_record]`]))
+  })
+
+  test("while it holds: every other result field is Optional, the answer that holds it says so, and the save still needs what it needs", () => {
+    const held = holdRows.filter(row => row.holdsBefore.length > 0)
+    expect(held.length).toBeGreaterThan(150)
+    const optionalNow = held.filter(row => activityFieldNeed(row.item.kind, row.item.field) === "results" && row.label.need === "optional")
+    expect(optionalNow.length).toBeGreaterThan(80)
+    for (const row of held) {
+      const hold = recordHold(row.before, factsFor(row.before, row.world))!
+      if (hold.fields.includes(row.item.field)) expect([row.item.kind, row.item.field, row.label.needNote?.endsWith(RECORD_HOLD_TEXT.fieldNote)]).toEqual([row.item.kind, row.item.field, true])
+      else expect([row.item.kind, row.item.field, row.label.needNote ?? null]).toEqual([row.item.kind, row.item.field, null])
+    }
+    // Away from the hold (category 13 under operational control) the usual labels are back.
+    const usual = holdRows.filter(row => row.holdsBefore.length === 0 && row.item.field === "subregion" && row.item.base().payload.category === 13)
+    expect(usual.map(row => row.label.need)).toEqual(["results", "results"])
   })
 })
 
