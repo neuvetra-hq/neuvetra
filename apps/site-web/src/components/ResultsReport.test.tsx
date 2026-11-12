@@ -343,6 +343,23 @@ describe("BF-01: possible duplicate records", () => {
     const held = row("GAS-9", "natural_gas", 1, { outcome: "held", plan: { action: "hold", status: "input_needed", reasons: ["quantity_not_calculable"], notes: [] } })
     expect(render(base([keeper, dup, held], { scope1: results.scope1 })).banner).toBe("1 record isn’t counted yet. Fix it to complete your totals. 1 possible duplicate to confirm: it may repeat another record, and both records are counted. Check it: if it is a repeat, withdraw one of the two; if they are different records, nothing needs doing.")
   })
+  // WO-13 (QA F1 of PR #56): a possible duplicate that is also only partly calculated is counted in "Fix" too (so the
+  // banner's counts match the Overview's), and is never told "nothing needs doing".
+  test("WO-13 F1: a partly calculated possible duplicate is in the Fix count and never gets “nothing needs doing”", () => {
+    const dup = row("GAS-1", "natural_gas", 1, { inSubtotal: { scope1: true, scope2LocationBased: false, scope2MarketBased: false }, plan: { action: "calculate", status: null, reasons: [], notes: [`possible_duplicate_of:${keeper.recordId}`] }, scope1: s1(GAS, "partial", { total: kg("5311.4500") }) })
+    expect(resultsView.partlyCalculated(dup)).toBe(true)
+    const results = base([keeper, dup], { scope1: { knownSourceSubtotal: kg("10622.9000"), includedResults: [keeper.scope1!.resultSha256, dup.scope1!.resultSha256], incompleteResults: [], notCalculated: [], reportedOutsideScopes: [], resultCount: 2, complete: false } })
+    const banner = render(results).banner!
+    expect(banner).toBe("1 record is only partly calculated. Fix it to complete your totals. 1 possible duplicate to confirm: it may repeat another record, and both records are counted. Check it: if it is a repeat, withdraw one of the two; if they are different records, keep both — it still needs the fix above.")
+    expect(banner).not.toContain("nothing needs doing")
+    // QA's example: 8 partly calculated vehicles, 4 of them possible duplicates.
+    const text = resultsView.attentionBannerText
+    expect(text({ notCounted: 0, partly: 8, duplicates: 4, duplicatesAlsoFix: 4 }, true)).toBe("8 records are only partly calculated. Fix them to complete your totals. 4 possible duplicates to confirm: each may repeat another record, and both records of each pair are counted. Check them: if a record is a repeat, withdraw one of the pair; if they are different records, keep both — they still need the fix above.")
+    expect(text({ notCounted: 0, partly: 3, duplicates: 2, duplicatesAlsoFix: 1 }, true)).toContain("keep both — 1 of them still needs the fix above.")
+    expect(text({ notCounted: 0, partly: 1, duplicates: 1, duplicatesAlsoFix: 1 }, false)).toBe("1 record is only partly calculated. 1 possible duplicate to confirm: it may repeat another record, and both records are counted. If one is a repeat, an owner or admin can withdraw it. It also isn’t fully calculated yet.")
+    expect(text({ notCounted: 0, partly: 3, duplicates: 3, duplicatesAlsoFix: 2 }, false)).toContain("2 of them also aren’t fully calculated yet.")
+    for (const manage of [true, false]) for (const [d, a] of [[1, 1], [4, 4], [3, 1]]) expect(text({ notCounted: 0, partly: 5, duplicates: d!, duplicatesAlsoFix: a }, manage)).not.toContain("nothing needs doing")
+  })
   test("WO-13: the banner's wording for several duplicates and for a view-only member", () => {
     const text = resultsView.attentionBannerText
     expect(text({ notCounted: 0, partly: 0, duplicates: 2 }, true)).toBe("2 possible duplicates to confirm: each may repeat another record, and both records of each pair are counted. Check them: if a record is a repeat, withdraw one of the pair; if they are different records, nothing needs doing.")

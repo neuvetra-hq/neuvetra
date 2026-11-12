@@ -30,7 +30,7 @@ function harness(initialHash: string, initialState: unknown = null, role = "owne
   const scope3Loads: Array<{ resolve: (items: unknown[]) => void; reject: (error: Error) => void; signal: AbortSignal }> = []
   const writeListeners = new Set<(write: { userId: string; path: string }) => void>()
   // WO-13: a write's start and a failed write's end (shared-get's subscribeWriteActivity).
-  const activityListeners = new Set<(write: { userId: string; path: string; phase: "started" | "failed" }) => void>()
+  const activityListeners = new Set<(write: { userId: string; path: string; phase: "started" | "failed"; definite?: boolean }) => void>()
   let cursor = 0, changed = false, tree: Node
   const same = (a?: unknown[], b?: unknown[]) => a?.length === b?.length && a?.every((value, index) => Object.is(value, b?.[index]))
   function useState(initial: any) {
@@ -74,7 +74,7 @@ function harness(initialHash: string, initialState: unknown = null, role = "owne
   const Workspace = factory(useCallback, useEffect, useRef, useState, window, document, { Fragment: "fragment" }, h, parseViewHash, viewHash, activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery,
     (_workspaceId: string, actor: { signal: AbortSignal }) => new Promise((resolve, reject) => loads.push({ resolve, reject, signal: actor.signal })), MENU_SHEET_ID, MENU_TEXT, computeReadiness,
     (listener: (write: { userId: string; path: string }) => void) => { writeListeners.add(listener); return () => writeListeners.delete(listener) },
-    (listener: (write: { userId: string; path: string; phase: "started" | "failed" }) => void) => { activityListeners.add(listener); return () => activityListeners.delete(listener) },
+    (listener: (write: { userId: string; path: string; phase: "started" | "failed"; definite?: boolean }) => void) => { activityListeners.add(listener); return () => activityListeners.delete(listener) },
     (_workspaceId: string, actor: { signal: AbortSignal }) => new Promise((resolve, reject) => scope3Loads.push({ resolve, reject, signal: actor.signal })),
     async () => [],
     ...componentNames.map(name => components[name])) as (props: unknown) => Node
@@ -99,7 +99,7 @@ function harness(initialHash: string, initialState: unknown = null, role = "owne
   /** A Back or Forward to an entry with this address and state. */
   async function pop(hash: string, state: unknown = null) { location.hash = hash; history.state = state; listeners.get("popstate")!(); await settle() }
   const write = async (path: string) => { for (const listener of [...writeListeners]) listener({ userId: actor.userId, path }); await settle() }
-  const writeActivity = async (path: string, phase: "started" | "failed") => { for (const listener of [...activityListeners]) listener({ userId: actor.userId, path, phase }); await settle() }
+  const writeActivity = async (path: string, phase: "started" | "failed", definite = false) => { for (const listener of [...activityListeners]) listener({ userId: actor.userId, path, phase, ...(phase === "failed" ? { definite } : {}) }); await settle() }
   /** Runs the pending timers of one delay (in the order they were set), then settles. */
   const elapse = async (ms: number) => { for (const [id, timer] of [...timers]) if (timer.ms === ms) { timers.delete(id); timer.fn() } await settle() }
   const pendingTimers = (ms: number) => [...timers.values()].filter(timer => timer.ms === ms).length
@@ -563,7 +563,7 @@ test("a write's start shows Checking… at once, before it is answered; a reload
   expect(app.scope3Loads).toHaveLength(2)
   app.scope3Loads[1]!.resolve([])
   await app.settle()
-  // A write that starts and then fails ends "Checking…" with one recheck, never leaving it stuck.
+  // A write that starts and then gets no answer (it may have landed) ends "Checking…" with one recheck, never leaving it stuck.
   await app.writeActivity(`/workspace-api/workspace/${workspace}/setup`, "started")
   expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
   await app.writeActivity(`/workspace-api/workspace/${workspace}/setup`, "failed")
@@ -575,4 +575,53 @@ test("a write's start shows Checking… at once, before it is answered; a reload
   // Another user's write, or another workspace's, changes nothing.
   await app.writeActivity("/workspace-api/workspace/44444444-4444-4444-8444-444444444444/setup", "started")
   expect(app.child("JourneyNav").props.readiness.scope3).toBe("ready")
+})
+
+// WO-13 (QA F2 of PR #56): a write the server refused (any 4xx or 5xx) changed nothing, so it costs no Scope 3 request: the
+// answer from before it comes back. A burst with one write that succeeded or may have landed still rechecks once.
+test("a write refused by the server brings back the previous Scope 3 answer with no new request", async () => {
+  const workspace = "33333333-3333-4333-8333-333333333333"
+  const app = harness("#/activity")
+  await app.settle()
+  app.loads[0]!.resolve(computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true, scope3: true }))
+  await app.settle()
+  const item = { key: "scope3:category:6:screening_conflict", group: "scope3-decision", scope: "3", title: "Category 6: Screening conflict", detail: "", target: { type: "view", view: "setup" }, action: "Change the screening", blocking: true }
+  app.scope3Loads[0]!.resolve([item])
+  await app.settle()
+  const before = app.child("JourneyNav").props.readiness
+  expect([before.scope3, before.open.scope3]).toEqual(["ready", 1])
+  const path = `/workspace-api/workspace/${workspace}/collection/activities/29500000-0000-4000-8000-000000000001`
+  await app.writeActivity(path, "started")
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
+  await app.writeActivity(path, "failed", true)
+  const after = app.child("JourneyNav").props.readiness
+  expect([after.scope3, after.open.scope3, after.s3.text]).toEqual(["ready", 1, before.s3.text])
+  await app.elapse(400)
+  expect([app.scope3Loads.length, app.pendingTimers(400)]).toEqual([1, 0])
+  // Two refused writes overlapping: the answer comes back when the last one ends, not before.
+  await app.writeActivity(path, "started"); await app.writeActivity(path, "started")
+  await app.writeActivity(path, "failed", true)
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
+  await app.writeActivity(path, "failed", true)
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("ready")
+  expect(app.scope3Loads).toHaveLength(1)
+  // A refused write in a burst with one that succeeded: one recheck.
+  await app.writeActivity(path, "started"); await app.writeActivity(path, "started")
+  await app.write(path)
+  await app.writeActivity(path, "failed", true)
+  await app.elapse(400)
+  expect(app.scope3Loads).toHaveLength(2)
+  app.scope3Loads[1]!.resolve([])
+  await app.settle()
+  // With no answer before the write (its check was still running and was dropped), a refused write checks again once.
+  await app.writeActivity(path, "started")
+  app.child("JourneyNav").props.onNavigate("home")
+  await app.settle()
+  app.loads.at(-1)!.resolve(computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true, scope3: true }))
+  await app.settle()
+  const visitLoads = app.scope3Loads.length
+  await app.writeActivity(path, "started")
+  await app.writeActivity(path, "failed", true)
+  await app.elapse(400)
+  expect(app.scope3Loads).toHaveLength(visitLoads + 1)
 })

@@ -8,7 +8,7 @@ import { decodeStagingAccess, decodeStagingConfig } from "@/lib/staging-session"
 import { acceptedViewHash, forgetReturnView, markDeliberateSignOut, parseViewHash, peekReturnView, recentlySignedOut, rememberReturnView, SIGNED_OUT_MARK_KEY, takeReturnView, viewHash } from "@/lib/view-route"
 
 // WO-05b: unsaved activity and setup input kept in this tab (sessionStorage), admitted per user, company and role.
-import { admitDrafts, announceDraftClear, clearAllDrafts, draftStorage, DRAFT_TEXT, listenForDraftClear } from "@/lib/draft-store"
+import { admitDrafts, announceDraftClear, clearAllDrafts, draftStorage, DRAFT_TEXT, hasDraftsFor, listenForDraftClear, SIGN_OUT_SERVER_NOT_TOLD } from "@/lib/draft-store"
 import { ACCESS_TEXT, AccessCheckError, accessCheckFailure, createStagingAuthorization, type AccessProblem, type ActiveStagingSession } from "@/lib/staging-authorization"
 
 // WO-05a: the session check has its own short limit (it is not a user action, so it doesn't raise the "Taking longer" notice).
@@ -21,6 +21,44 @@ function storedSessionUser(key: string): string | null {
     const id = value && typeof value === "object" ? (value as { user?: { id?: unknown } }).user?.id : null
     return typeof id === "string" ? id : null
   } catch { return null }
+}
+/** WO-13 (QA B1 of PR #56): how long a sign-out waits for the server, after everything on this device has gone. */
+const SIGN_OUT_TIMEOUT_MS = 5_000
+const SIGN_OUT_TEXT = {
+  plain: { removed: "Signed out on this device. Telling the server…", done: "Signed out on this browser.", serverNotTold: SIGN_OUT_SERVER_NOT_TOLD.plain, notRemoved: "The workspace is closed, but the stored sign-in could not be removed from this browser. Close the browser before leaving a shared computer." },
+  discard: { removed: "Unsaved changes discarded and signed out on this device. Telling the server…", done: DRAFT_TEXT.discardDone, serverNotTold: SIGN_OUT_SERVER_NOT_TOLD.discard, notRemoved: "Unsaved changes discarded, but the stored sign-in could not be removed from this browser. Close the browser before leaving a shared computer." },
+} as const
+/**
+ * Removes this origin's stored Supabase session (`<key>`, `<key>-code-verifier`, `<key>-user`), synchronously, and returns the
+ * access token it held so the server can still be told. `removed` is false only when the storage refused.
+ */
+function removeStoredSignIn(key: string | null): { removed: boolean; token: string | null } {
+  if (!key) return { removed: true, token: null }
+  try {
+    const storage = window.localStorage
+    let token: string | null = null
+    try { const value: unknown = JSON.parse(storage.getItem(key) ?? "null"); const access = value && typeof value === "object" ? (value as { access_token?: unknown }).access_token : null; token = typeof access === "string" && access ? access : null } catch { /* unreadable: nothing to tell */ }
+    const keys: string[] = []
+    for (let index = 0; index < storage.length; index++) { const stored = storage.key(index); if (stored !== null) keys.push(stored) }
+    for (const stored of keys) if (stored === key || stored.startsWith(`${key}-`)) storage.removeItem(stored)
+    return { removed: storage.getItem(key) === null, token }
+  } catch { return { removed: false, token: null } }
+}
+/**
+ * Tells the server the session ended (Supabase's own logout call, scope "local"), for at most SIGN_OUT_TIMEOUT_MS. It goes
+ * straight to the logout endpoint rather than through `auth.signOut`, which reads the session that is already gone and
+ * holds the client's lock while it waits. A token the server already refuses (401/403/404) counts as told.
+ */
+async function tellServer(client: SupabaseClient | null, token: string | null): Promise<boolean> {
+  if (!token) return true
+  if (!client) return false
+  let timer: ReturnType<typeof setTimeout> | undefined
+  const timeout = new Promise<false>(resolve => { timer = setTimeout(() => resolve(false), SIGN_OUT_TIMEOUT_MS) })
+  const call = client.auth.admin.signOut(token, "local").then(({ error }) => {
+    const status = (error as { status?: unknown } | null)?.status
+    return !error || status === 401 || status === 403 || status === 404
+  }, () => false)
+  try { return await Promise.race([call, timeout]) } finally { clearTimeout(timer) }
 }
 function clearViewHash() { if (window.location.hash) window.history.replaceState(null, "", window.location.pathname + window.location.search) }
 
@@ -48,9 +86,12 @@ export function PrivateStaging() {
   const signInFromUrl = useRef(typeof window !== "undefined" && /[?&]code=/.test(window.location.search))
   // Whose session ended here: the sign-in link carries their view only if they are the one signing in again.
   const endedUser = useRef<{ userId: string; email: string | null } | null>(null)
-  // WO-05b: the role of the workspace that was open, so the session-ended screen speaks of kept changes only to an owner or admin.
-  const lastRole = useRef<string | null>(null)
-  const [endedCanStore, setEndedCanStore] = useState(false)
+  // WO-13 (QA F3/F4 of PR #56): the session-ended screen speaks of kept changes, and offers to discard them, whenever this
+  // tab holds drafts of the person whose session ended (also after a reload, when the role is no longer known). The tab's
+  // drafts are read when the screen renders; this counter renders it again when they may have changed (the workspace keeps
+  // its draft as it closes, another tab's sign-out or discard removes them).
+  const [, setDraftsSeen] = useState(0)
+  const [endedUserId, setEndedUserId] = useState<string | null>(null)
   // WO-13 (WO-05b follow-up): "Discard unsaved changes on this device" asks first, inside the page (never a browser dialog).
   const [confirmDiscard, setConfirmDiscard] = useState(false)
   const discardButtonRef = useRef<HTMLButtonElement>(null)
@@ -105,7 +146,6 @@ export function PrivateStaging() {
           // WO-05b: before this workspace renders, the tab keeps only this user's drafts for this company, and none at all
           // for a member (QA-142). Any other user's draft is removed here, whatever happened on this page before.
           admitDrafts(draftStorage(), { userId, companyId: value.access.access.workspaceId, role: value.actor.role })
-          lastRole.current = value.actor.role
         }
         setActive(value)
       },
@@ -126,10 +166,10 @@ export function PrivateStaging() {
         if (!deliberateElsewhere) rememberReturnView(viewStorage(), userId, kept)
         // WO-05b (QA-141): another tab's deliberate sign-out clears this tab's drafts too (the broadcast may come later).
         else clearAllDrafts(draftStorage())
-        setEndedCanStore(!deliberateElsewhere && (lastRole.current === "owner" || lastRole.current === "admin"))
         setConfirmDiscard(false); discardAsked.current = false
         clearViewHash()
         endedUser.current = { userId, email: endedEmail }
+        setEndedUserId(userId)
         // The next person at a shared computer doesn't see the previous email.
         setEmail(""); setPassword("")
       },
@@ -156,8 +196,8 @@ export function PrivateStaging() {
     }
     // WO-05b (QA-141): a deliberate sign-out in another tab removes every draft here, by BroadcastChannel or by the
     // sign-out mark it leaves in localStorage (whichever arrives first), and no draft is written until a workspace opens.
-    const stopDraftClear = listenForDraftClear(() => clearAllDrafts(draftStorage()))
-    const onStorage = (event: StorageEvent) => { if (event.key === SIGNED_OUT_MARK_KEY && event.newValue) clearAllDrafts(draftStorage()) }
+    const stopDraftClear = listenForDraftClear(() => { clearAllDrafts(draftStorage()); setDraftsSeen(value => value + 1) })
+    const onStorage = (event: StorageEvent) => { if (event.key === SIGNED_OUT_MARK_KEY && event.newValue) { clearAllDrafts(draftStorage()); setDraftsSeen(value => value + 1) } }
     window.addEventListener("storage", onStorage)
     const onFocus = () => { void lifecycle.refresh() }
     const interval = window.setInterval(onFocus, 60_000)
@@ -171,6 +211,12 @@ export function PrivateStaging() {
   const accessState = active ? null : problem
   useEffect(() => { if (accessState) accessHeadingRef.current?.focus() }, [accessState])
   // WO-13: the confirmation takes focus when it opens; Keep them returns focus to the button that opened it.
+  // The workspace keeps its draft as it closes (its effect cleanup runs before this effect), so the screen looks again then.
+  useEffect(() => {
+    if (accessState !== "session_ended") return
+    const timer = setTimeout(() => setDraftsSeen(value => value + 1), 0)
+    return () => clearTimeout(timer)
+  }, [accessState])
   useEffect(() => {
     if (confirmDiscard) { discardAsked.current = true; discardHeadingRef.current?.focus() }
     else if (discardAsked.current) { discardAsked.current = false; discardButtonRef.current?.focus() }
@@ -187,41 +233,30 @@ export function PrivateStaging() {
     } catch { setMessage("Sign-in is unavailable. Please try again.") }
     finally { setPassword(""); setBusy(false) }
   }
-  async function signOut(done: string = "Signed out on this browser.") {
+  /**
+   * A deliberate sign-out. WO-13 (QA B1 of PR #56): everything on this device goes first, at once and without the network,
+   * so a stalled connection can't leave the sign-in behind: every unsaved draft (here, and in the other tabs by the
+   * broadcast and the sign-out mark), the view address and this origin's stored Supabase session. Only then is the server
+   * told, through the token that session held, for at most SIGN_OUT_TIMEOUT_MS. The message says whether it was told.
+   * "discard" is the session-ended screen's "Discard unsaved changes on this device"; every other Sign out is "plain".
+   */
+  async function signOut(kind: "plain" | "discard" = "plain") {
+    const text = SIGN_OUT_TEXT[kind]
     // A deliberate sign-out is the only thing that forgets the view address. WO-05b: it also removes every unsaved draft in
     // this tab, stops further draft writes (before the workspace closes), and tells the other tabs to do the same.
     clearAllDrafts(draftStorage()); markDeliberateSignOut(viewStorage()); announceDraftClear()
     authorization.current?.signOut(); setBusy(true)
     clearViewHash(); forgetReturnView(viewStorage())
-    opened.current = null; loadUser.current = null; endedUser.current = null; lastRole.current = null
-    try {
-      if (!client) throw new Error("Authentication unavailable")
-      const { error } = await client.auth.signOut({ scope: "local" })
-      if (error) throw error
-      setMessage(done)
-    }
-    catch { setMessage("The workspace is closed. Session sign-out could not be confirmed; retry before leaving a shared browser.") }
+    opened.current = null; loadUser.current = null; endedUser.current = null; setEndedUserId(null)
+    setConfirmDiscard(false); discardAsked.current = false; setDraftsSeen(value => value + 1)
+    const stored = removeStoredSignIn(sessionStorageKey.current)
+    if (!stored.removed) { setMessage(text.notRemoved); setBusy(false); return }
+    setMessage(text.removed)
+    try { setMessage(await tellServer(client, stored.token) ? text.done : text.serverNotTold) }
     finally { setBusy(false) }
   }
-  /**
-   * WO-13 (WO-05b follow-up, before any pilot on a shared machine): the session-ended screen's "Discard unsaved changes on
-   * this device". Every draft goes (here, and in the other tabs by the sign-out broadcast), and the stored sign-in session
-   * of this origin is removed even when the sign-out can't reach the server, so nothing of the person stays readable here.
-   */
-  async function discardOnDevice() {
-    setConfirmDiscard(false); discardAsked.current = false
-    await signOut(DRAFT_TEXT.discardDone)
-    const key = sessionStorageKey.current
-    let removed = true
-    try {
-      const storage = window.localStorage
-      const keys: string[] = []
-      for (let index = 0; index < storage.length; index++) { const stored = storage.key(index); if (stored !== null) keys.push(stored) }
-      if (key) for (const stored of keys) if (stored === key || stored.startsWith(`${key}-`)) storage.removeItem(stored)
-    } catch { removed = false }
-    clearAllDrafts(draftStorage())
-    setMessage(removed ? DRAFT_TEXT.discardDone : "Unsaved changes discarded. The stored sign-in could not be removed; close this browser before leaving a shared computer.")
-  }
+  /** WO-13: the session-ended screen's "Discard unsaved changes on this device", after its confirmation. */
+  async function discardOnDevice() { await signOut("discard") }
   async function sendSignInLink() {
     if (!client || busy || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { setMessage("Enter your invited email address first."); return }
     authorization.current?.allowSignIn(); setBusy(true)
@@ -256,10 +291,11 @@ export function PrivateStaging() {
       // WO-08: the workspace shows it as the last row of the sticky context bar, so it covers neither the heading nor the Menu sheet.
       notice={reconnecting ? <div className="nv-reconnecting-wrap"><div className="nv-notice nv-notice--warn"><Icon name="alert" /><p>{ACCESS_TEXT.retrying} Your work on this page stays here.</p></div></div> : null} />
   </div>
+  const endedDrafts = problem === "session_ended" && endedUserId !== null && hasDraftsFor(draftStorage(), endedUserId)
   if (problem === "session_ended") return <div className="nv-access">{tone === "error" ? <p className="nv-sr" role="status" aria-live="polite" /> : live}<div className="nv-access__card">
     <Icon name="info" size={32} className="nv-access__icon" />
     <h1 className="nv-h2" tabIndex={-1} ref={accessHeadingRef}>Your session ended</h1>
-    <p className="nv-muted">Sign in again to continue.{endedCanStore && ` ${DRAFT_TEXT.sessionEnded}`}</p>
+    <p className="nv-muted">Sign in again to continue.{endedDrafts && ` ${DRAFT_TEXT.sessionEnded}`}</p>
     <form className="nv-access__form" onSubmit={event => { if (busy) { event.preventDefault(); return } void signIn(event) }}>
       <label className="nv-field"><span>Email</span><input type="email" autoComplete="username" required value={email} onChange={event => setEmail(event.target.value)} /></label>
       <label className="nv-field"><span>Password</span><input type="password" autoComplete="current-password" required value={password} onChange={event => setPassword(event.target.value)} /></label>
@@ -270,10 +306,10 @@ export function PrivateStaging() {
     </form>
     {/* WO-13: on a shared computer, the person can leave nothing behind without signing in again. */}
     <div className="nv-access__actions wo13-device-actions">
-      {endedCanStore && <button type="button" className="nv-btn" ref={discardButtonRef} aria-expanded={confirmDiscard} aria-disabled={busy || undefined} onClick={() => { if (!busy) setConfirmDiscard(true) }}>{DRAFT_TEXT.discardOnDevice}</button>}
-      <button type="button" className="nv-btn" aria-disabled={busy || undefined} onClick={() => { if (!busy) void signOut() }}>{DRAFT_TEXT.signOut}</button>
+      {endedDrafts && <button type="button" className="nv-btn" ref={discardButtonRef} aria-expanded={confirmDiscard} aria-disabled={busy || undefined} onClick={() => { if (!busy) setConfirmDiscard(true) }}>{DRAFT_TEXT.discardOnDevice}</button>}
+      <button type="button" className="nv-btn" aria-disabled={busy || undefined} onClick={() => { if (!busy) void signOut() }}>{endedDrafts ? DRAFT_TEXT.signOutAndDiscard : DRAFT_TEXT.signOut}</button>
     </div>
-    {confirmDiscard && <div className="nv-notice nv-notice--warn wo13-discard" role="group" aria-labelledby="wo13-discard-title"><Icon name="alert" /><div>
+    {confirmDiscard && endedDrafts && <div className="nv-notice nv-notice--warn wo13-discard" role="group" aria-labelledby="wo13-discard-title" onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); setConfirmDiscard(false) } }}><Icon name="alert" /><div>
       <h2 className="nv-h3" id="wo13-discard-title" tabIndex={-1} ref={discardHeadingRef}>{DRAFT_TEXT.discardConfirmTitle}</h2>
       <p>{DRAFT_TEXT.discardConfirmBody}</p>
       <div className="nv-access__actions"><button type="button" className="nv-btn nv-btn--danger" aria-disabled={busy || undefined} onClick={() => { if (!busy) void discardOnDevice() }}>{DRAFT_TEXT.discardConfirm}</button><button type="button" className="nv-btn" onClick={() => setConfirmDiscard(false)}>{DRAFT_TEXT.discardCancel}</button></div>

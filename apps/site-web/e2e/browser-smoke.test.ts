@@ -655,7 +655,8 @@ suite("site-web browser smoke (E2E-01)", () => {
     await focusUntil(page, page.getByRole("heading", { name: "Your session ended" }).waitFor({ timeout: 25_000 }))
     await page.getByText("or for up to 24 hours. Signing out or discarding removes them now.", { exact: false }).waitFor()
     const discard = page.getByRole("button", { name: "Discard unsaved changes on this device" })
-    expect(await page.getByRole("button", { name: "Sign out", exact: true }).isVisible()).toBe(true)
+    // WO-13 (QA F4 of PR #56): while drafts are held, Sign out says it discards them.
+    expect(await page.getByRole("button", { name: "Sign out and discard unsaved changes", exact: true }).isVisible()).toBe(true)
     for (const width of [390, 1360]) {
       await page.setViewportSize({ width, height: 844 })
       // Keyboard: the button opens the confirmation, which takes focus; "Keep them" closes it and returns focus.
@@ -665,14 +666,22 @@ suite("site-web browser smoke (E2E-01)", () => {
       await confirm.waitFor()
       await page.waitForFunction(() => document.activeElement?.id === "wo13-discard-title")
       expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0)
-      await confirm.getByRole("button", { name: "Keep them" }).click()
+      // "Keep them" at one width, Escape at the other (QA F4): either closes it.
+      if (width === 390) await page.keyboard.press("Escape")
+      else await confirm.getByRole("button", { name: "Keep them" }).click()
       await page.waitForFunction(() => document.activeElement?.textContent === "Discard unsaved changes on this device")
       expect(await page.evaluate(() => Object.keys(sessionStorage).filter(key => key.startsWith("nv:draft:v1:")).length)).toBeGreaterThan(0)
     }
     expect(await page.evaluate(key => window.localStorage.getItem(key), AUTH_STORAGE_KEY)).not.toBeNull()
+    // WO-13 (QA B1 of PR #56): the logout request gets no answer (a stalled connection). The stored sign-in still goes from
+    // this device at once, and the page says the server couldn't be told.
+    let logoutCalls = 0
+    await page.route(/\/auth\/v1\/logout/, () => { logoutCalls++; return new Promise<void>(() => {}) })
     await discard.click()
     await page.getByRole("group", { name: "Discard unsaved changes on this device?" }).getByRole("button", { name: "Discard changes and sign-in" }).click()
-    await page.getByText("Unsaved changes discarded. Signed out on this browser.").first().waitFor()
+    await page.waitForFunction(key => !Object.keys(window.localStorage).some(item => item === key || item.startsWith(`${key}-`)), AUTH_STORAGE_KEY, { timeout: 1_000 })
+    await page.getByText("Unsaved changes discarded and the sign-in removed from this device. The server could not be told, so the sign-in may stay valid elsewhere until it expires.").first().waitFor({ timeout: 10_000 })
+    expect(logoutCalls).toBe(1)
     expect(opened.dialogs).toEqual([])
     expect(await page.evaluate(() => Object.keys(sessionStorage).filter(key => key.startsWith("nv:draft:v1:")))).toEqual([])
     expect(await page.evaluate(key => Object.keys(window.localStorage).filter(item => item === key || item.startsWith(`${key}-`)), AUTH_STORAGE_KEY)).toEqual([])

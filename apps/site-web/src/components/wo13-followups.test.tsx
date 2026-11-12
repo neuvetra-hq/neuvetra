@@ -68,7 +68,8 @@ describe("follow-up 4: a write's start says so at once, and a failed write ends 
   afterEach(() => { globalThis.fetch = original })
   test("sharedFetch tells the listeners a write started before it is answered, and a failed write's end", async () => {
     const events: string[] = []
-    const stopActivity = subscribeWriteActivity(write => events.push(`${write.phase} ${write.path}`))
+    const definite: boolean[] = []
+    const stopActivity = subscribeWriteActivity(write => { events.push(`${write.phase} ${write.path}`); if (write.phase === "failed") definite.push(write.definite) })
     const stopDone = subscribeWrites(write => events.push(`done ${write.path}`))
     let answer: (response: Response) => void = () => {}
     globalThis.fetch = mock(() => new Promise<Response>(resolve => { answer = resolve })) as any
@@ -87,6 +88,8 @@ describe("follow-up 4: a write's start says so at once, and a failed write ends 
       globalThis.fetch = mock(async () => new Response("{}", { status: 200 })) as any
       await sharedFetch(actor, "/workspace-api/workspace/w/setup", { method: "GET" })
       expect(events).toEqual(["started /workspace-api/workspace/w/scope3/spend-imports", "failed /workspace-api/workspace/w/scope3/spend-imports", "started /workspace-api/workspace/w/setup", "failed /workspace-api/workspace/w/setup"])
+      // WO-13 (QA F2 of PR #56): an answered failure is definite (nothing was saved); no answer is not (it may have landed).
+      expect(definite).toEqual([true, false])
     } finally { stopActivity(); stopDone() }
   })
 })

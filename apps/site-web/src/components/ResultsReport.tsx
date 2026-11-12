@@ -5,7 +5,7 @@ import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { coverageIssues, coverageLines, noteLabel, type Coverage } from "@/lib/journey-status"
 import { countedDuplicatesIn, EVIDENCE_STATUS_TEXT, loadResults, methodLabel, NotSyntheticResultsError, possibleDuplicateText, possibleDuplicateTotalText, releaseState, ResultsApiError, resultsCsv, unclearedEvidence, type EngineGas, type MethodUsed, type ResultRow, type ResultsResponse } from "@/lib/results-api"
 import { ACTIVITY_KINDS, BOUNDARY_LABELS, groupDigits, kgToTonnes, kindIcon, kindLabel, periodLabel, QUALITY_LABELS, reasonText, shortUnit } from "@/lib/plain-language"
-import { attentionBannerText, countedDuplicate, engineHold, factorSource, GAS_LABELS, INITIAL_RESULTS_STATE, KIND_COLORS, needsWork, notYetCounted, resultsReducer, rowReasons, rowStatus } from "@/lib/results-view"
+import { attentionBannerText, attentionCounts, countedDuplicate, engineHold, factorSource, GAS_LABELS, INITIAL_RESULTS_STATE, KIND_COLORS, needsWork, notYetCounted, resultsReducer, rowReasons, rowStatus } from "@/lib/results-view"
 import { COPY_TEXT_R2E, formatTimeR2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
 import { INITIAL_SCOPE3_STATE, loadScope3Results, Scope3ResultsApiError, type Scope3ResultsResponse, type Scope3State } from "@/lib/scope3-results-api"
 import { Scope3ReportSection, Scope3ResultsPanel } from "./scope3/lazy-results"
@@ -257,7 +257,8 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
   // BF2: the banner names the two kinds separately, so it agrees with the header (which counts partly calculated records
   // as calculated): records not counted yet, and records only partly calculated.
   // BF-01 (count mode): a counted possible duplicate needs attention but is neither uncounted nor partly calculated.
-  const notCountedRows = attentionRows.filter(notYetCounted).length, duplicateRows = attentionRows.filter(countedDuplicate).length, partlyRows = attentionRows.length - notCountedRows - duplicateRows
+  // WO-13 (QA F1 of PR #56): a possible duplicate that is also partly calculated is in the "Fix" count too.
+  const attentionCountsNow = attentionCounts(attentionRows)
   const heldInScope = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && notYetCounted(row)).length
   const issues1 = coverageIssues(coverage, 1), issues2 = coverageIssues(coverage, 2)
   const held1 = heldInScope(1), held2 = heldInScope(2)
@@ -316,7 +317,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
         <div><h2 className="nv-h2">Records</h2><p className="nv-muted">{counts.calculated} calculated · {counts.inputNeeded} input needed{counts.outsidePeriod ? ` · ${counts.outsidePeriod} outside the reporting period` : ""} · {counts.excluded} excluded · {counts.withdrawn} withdrawn</p></div>
         <div className="nv-segmented" role="group" aria-label="Filter records"><button type="button" aria-pressed={filter === "all"} onClick={() => setFilter("all")}>All ({results.records.length})</button><button type="button" aria-pressed={filter === "attention"} onClick={() => setFilter("attention")}>Needs attention ({attentionRows.length})</button></div>
       </div>
-      {attentionRows.length > 0 && filter === "all" && <div className="nv-notice nv-notice--warn"><Icon name="alert" /><p>{attentionBannerText({ notCounted: notCountedRows, partly: partlyRows, duplicates: duplicateRows }, canManage)}</p></div>}
+      {attentionRows.length > 0 && filter === "all" && <div className="nv-notice nv-notice--warn"><Icon name="alert" /><p>{attentionBannerText(attentionCountsNow, canManage)}</p></div>}
       {/* Round 2 lane D (UX-2): Scope 3 items are listed in their own to-do list; this names them so "Needs attention" isn't silent about them. */}
       {scope3Attention && scope3Attention.total > 0 && <div className="nv-notice nv-notice--info"><Icon name="info" /><p>{SCOPE3_ATTENTION_LINK_TEXT.line(scope3Attention.total, scope3Attention.blocking, scope3Attention.confirm)} <button type="button" className="nv-link" onClick={() => document.getElementById("scope3-todo")?.scrollIntoView({ block: "start" })}>{SCOPE3_ATTENTION_LINK_TEXT.go}</button></p></div>}
       {visible.length === 0 ? <p className="nv-muted">No record needs attention.</p> : visible.map(row => {

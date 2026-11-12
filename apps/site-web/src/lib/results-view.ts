@@ -65,13 +65,37 @@ export const ATTENTION_BANNER_TEXT = {
     ? " Check it: if it is a repeat, withdraw one of the two; if they are different records, nothing needs doing."
     : " Check them: if a record is a repeat, withdraw one of the pair; if they are different records, nothing needs doing.",
   duplicatesView: " If one is a repeat, an owner or admin can withdraw it; if they are different records, nothing needs doing.",
+  /**
+   * WO-13 (QA F1 of PR #56): some duplicates are also not counted yet or only partly calculated. They are in the "Fix"
+   * count too, and are never told "nothing needs doing".
+   */
+  duplicatesAlsoFixManage: (count: number, also: number) => `${count === 1 ? " Check it: if it is a repeat, withdraw one of the two" : " Check them: if a record is a repeat, withdraw one of the pair"}; if they are different records, keep both — ${also === count ? count === 1 ? "it still needs" : "they still need" : also === 1 ? "1 of them still needs" : `${also} of them still need`} the fix above.`,
+  duplicatesAlsoFixView: (count: number, also: number) => ` If one is a repeat, an owner or admin can withdraw it. ${also === count ? count === 1 ? "It also isn’t" : "They also aren’t" : also === 1 ? "1 of them also isn’t" : `${also} of them also aren’t`} fully calculated yet.`,
 } as const
-export function attentionBannerText(counts: { notCounted: number; partly: number; duplicates: number }, canManage: boolean): string {
+/** WO-13 (QA F1): a counted record whose figure is only partial (a Scope 1 partial result, or electricity without its market-based figure). */
+export function partlyCalculated(row: ResultRow): boolean {
+  return row.scope1?.status === "partial"
+    || Boolean(row.scope2 && row.scope2.locationBased.status === "complete" && (row.scope2.marketBased.status === "input_needed" || row.scope2.marketBased.status === "review_required"))
+}
+/**
+ * The banner's counts over the records that need attention: not counted yet, only partly calculated (a possible duplicate
+ * that is also partly calculated counts here as well), counted possible duplicates, and how many of those also need a fix.
+ */
+export function attentionCounts(rows: ResultRow[]): { notCounted: number; partly: number; duplicates: number; duplicatesAlsoFix: number } {
+  const notCounted = rows.filter(notYetCounted).length
+  const partly = rows.filter(row => !notYetCounted(row) && (!countedDuplicate(row) || partlyCalculated(row))).length
+  const duplicateRows = rows.filter(countedDuplicate)
+  return { notCounted, partly, duplicates: duplicateRows.length, duplicatesAlsoFix: duplicateRows.filter(row => notYetCounted(row) || partlyCalculated(row)).length }
+}
+export function attentionBannerText(counts: { notCounted: number; partly: number; duplicates: number; duplicatesAlsoFix?: number }, canManage: boolean): string {
   const plural = (count: number, one: string, many: string) => `${count} ${count === 1 ? one : many}`
   const work = [counts.notCounted ? `${plural(counts.notCounted, "record isn’t", "records aren’t")} counted yet` : "", counts.partly ? `${plural(counts.partly, "record is", "records are")} only partly calculated` : ""].filter(Boolean).join(" and ")
   const parts: string[] = []
   if (work) parts.push(`${work}.${canManage ? ATTENTION_BANNER_TEXT.fix(counts.notCounted + counts.partly) : ""}`)
-  if (counts.duplicates) parts.push(`${ATTENTION_BANNER_TEXT.duplicates(counts.duplicates)}${canManage ? ATTENTION_BANNER_TEXT.duplicatesManage(counts.duplicates) : ATTENTION_BANNER_TEXT.duplicatesView}`)
+  const also = Math.min(counts.duplicatesAlsoFix ?? 0, counts.duplicates)
+  if (counts.duplicates) parts.push(`${ATTENTION_BANNER_TEXT.duplicates(counts.duplicates)}${also
+    ? canManage ? ATTENTION_BANNER_TEXT.duplicatesAlsoFixManage(counts.duplicates, also) : ATTENTION_BANNER_TEXT.duplicatesAlsoFixView(counts.duplicates, also)
+    : canManage ? ATTENTION_BANNER_TEXT.duplicatesManage(counts.duplicates) : ATTENTION_BANNER_TEXT.duplicatesView}`)
   return parts.join(" ")
 }
 /** A record needs attention when it is held, not calculated, or only partly calculated. Shared by results and overview. */

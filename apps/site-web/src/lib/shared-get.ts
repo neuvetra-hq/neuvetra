@@ -50,7 +50,11 @@ export function notifyWrite(write: CompletedWrite): void {
  * start, so a screen that reloads while the write runs (a spend import clears its unsaved file at the start) never shows
  * the previous Scope 3 answer for a moment.
  */
-export type WriteActivity = { userId: string; path: string; phase: "started" | "failed" }
+/**
+ * WO-13 (QA F2 of PR #56): `definite` is true when the server answered the failed write (any 4xx or 5xx), so nothing was
+ * saved; false when there was no answer (a network failure or a timeout), so the write may have landed.
+ */
+export type WriteActivity = { userId: string; path: string; phase: "started" } | { userId: string; path: string; phase: "failed"; definite: boolean }
 const activityListeners = new Set<(write: WriteActivity) => void>()
 export function subscribeWriteActivity(listener: (write: WriteActivity) => void): () => void {
   activityListeners.add(listener)
@@ -67,16 +71,17 @@ export async function sharedFetch(actor: { userId: string; signal?: AbortSignal 
   const kind = options.kind ?? "default"
   if (method !== "GET") {
     clearSharedGets(actor.userId)
-    let succeeded = false
+    let succeeded = false, answered = false
     notifyWriteActivity({ userId: actor.userId, path, phase: "started" })
     try {
       const response = await withRequestTimeout(kind, init.signal, signal => withRetry(path, { ...init, signal }, false))
       // WO-04b: a completed write tells the workspace, so readiness that depends on saved data (Scope 3) is checked again.
+      answered = true
       if (response.ok) { succeeded = true; notifyWrite({ userId: actor.userId, path }) }
       return response
     } finally {
       clearSharedGets(actor.userId)
-      if (!succeeded) notifyWriteActivity({ userId: actor.userId, path, phase: "failed" })
+      if (!succeeded) notifyWriteActivity({ userId: actor.userId, path, phase: "failed", definite: answered })
     }
   }
   const key = `${actor.userId}\u0000${path}`

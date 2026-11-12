@@ -23,16 +23,16 @@ const session=(id=owner,token="original-token")=>({user:{id,email:emailOf(id)},a
 const access=(id=owner,role="owner",workspaceId=company,evidenceId:string|null=null)=>({profile:STAGING_PROFILE,user:{id},access:{role,workspaceId,evidenceId}})
 const deferred=()=>{let resolve!:(r:Response)=>void;const promise=new Promise<Response>(r=>{resolve=r});return {promise,resolve}}
 type Node={type:unknown;props:Record<string,any>;children:any[]}
-function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;search?:string;tab?:ReturnType<typeof memoryStorage>;onDraftClear?:(listener:()=>void)=>void}={}){
+function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;search?:string;tab?:ReturnType<typeof memoryStorage>;onDraftClear?:(listener:()=>void)=>void;logout?:(token:string,scope:string)=>Promise<{error:any}>}={}){
  // The lifecycle clock: each read moves 10 s on (no throttling) unless a test fixes it.
  const clock={fixed:null as number|null,t:1_000_000}
  const scheduled:Array<{run:()=>void;ms:number;cancelled:boolean}>=[]
  const slots:any[]=[],effects:Array<{deps?:unknown[];cleanup?:void|(()=>void)}>=[],pendingEffects:Array<()=>void>=[],listeners=new Map<string,()=>void>(),requests:Array<{token:string;signal:AbortSignal}>=[]
  let cursor=0,tree:Node,authCallback:((_event:string,s:any)=>void)|null=null,verification:(token:string)=>Promise<Response>=async()=>Response.json(access()),unsubscribed=false,stopped=false
- const otp:any[]=[],focused:string[]=[]
+ const otp:any[]=[],focused:string[]=[],logouts:Array<{token:string;scope:string}>=[]
  const Workspace=()=>null
  const h=(type:unknown,props:Record<string,any>|null,...children:any[]):Node=>({type,props:props??{},children})
- const client={auth:{onAuthStateChange(callback:typeof authCallback){authCallback=callback;return {data:{subscription:{unsubscribe(){unsubscribed=true}}}}},getSession:async()=>({data:{session:initialSession}}),signOut:async()=>({error:null}),signInWithPassword:async()=>({error:null}),signInWithOtp:async(args:any)=>{otp.push(args);return {error:null}},stopAutoRefresh(){stopped=true}}}
+ const client={auth:{onAuthStateChange(callback:typeof authCallback){authCallback=callback;return {data:{subscription:{unsubscribe(){unsubscribed=true}}}}},getSession:async()=>({data:{session:initialSession}}),signOut:async()=>({error:null}),admin:{signOut:(token:string,scope:string)=>{logouts.push({token,scope});return options.logout?options.logout(token,scope):Promise.resolve({error:null})}},signInWithPassword:async()=>({error:null}),signInWithOtp:async(args:any)=>{otp.push(args);return {error:null}},stopAutoRefresh(){stopped=true}}}
  const storage=options.storage??new Map<string,string>()
  // The Supabase session this browser holds at load (what supabase-js keeps under its storage key).
  const initialSession=options.initial===undefined?session():options.initial
@@ -47,7 +47,7 @@ function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;
   // Retries are scheduled on a fake clock the test advances; jitter is fixed at its midpoint (×1.0).
   createStagingAuthorization:(deps:any)=>createStagingAuthorization({...deps,random:()=>0.5,now:()=>clock.fixed??(clock.t+=10_000),schedule:(run:()=>void,ms:number)=>{const item={run,ms,cancelled:false};scheduled.push(item);return ()=>{item.cancelled=true}}}),
   // The session check's 15 s limit runs in 5 ms here.
-  setTimeout:(fn:()=>void,ms:number)=>globalThis.setTimeout(fn,ms===15_000?5:ms),clearTimeout:(id:any)=>globalThis.clearTimeout(id),ACCESS_TEXT,AccessCheckError,accessCheckFailure,acceptedViewHash,forgetReturnView,rememberReturnView,takeReturnView,markDeliberateSignOut,parseViewHash,peekReturnView,recentlySignedOut,viewHash,SIGNED_OUT_MARK_KEY,
+  setTimeout:(fn:()=>void,ms:number)=>globalThis.setTimeout(fn,ms===15_000||ms===5_000?5:ms),clearTimeout:(id:any)=>globalThis.clearTimeout(id),ACCESS_TEXT,AccessCheckError,accessCheckFailure,acceptedViewHash,forgetReturnView,rememberReturnView,takeReturnView,markDeliberateSignOut,parseViewHash,peekReturnView,recentlySignedOut,viewHash,SIGNED_OUT_MARK_KEY,
   ...drafts,draftStorage:()=>options.tab??null,listenForDraftClear:(listener:()=>void)=>{options.onDraftClear?.(listener);return ()=>{}},announceDraftClear:()=>{announced.count++},
   fetch:async(path:string,init:RequestInit)=>{
   if(path.endsWith("/config"))return Response.json({profile:STAGING_PROFILE,supabaseUrl:"https://abcdefghijklmnopqrst.supabase.co",anonKey:"sb_publishable_abcdefghijklmnopqrst"})
@@ -65,7 +65,7 @@ function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;
  const runEffects=()=>{while(pendingEffects.length)pendingEffects.shift()!()}
  async function flush(){for(let i=0;i<20;i++){await Promise.resolve();render();runEffects()}}
  render();runEffects()
- return {clock,scheduled,flush,render,workspace,message,heading,text,nodes,requests,listeners,location,storage,otp,focused,emit:(s:any,event="SIGNED_IN")=>authCallback!(event,s),setVerification(fn:typeof verification){verification=fn},
+ return {logouts,clock,scheduled,flush,render,workspace,message,heading,text,nodes,requests,listeners,location,storage,otp,focused,emit:(s:any,event="SIGNED_IN")=>authCallback!(event,s),setVerification(fn:typeof verification){verification=fn},
   button:(label:string)=>nodes().find(n=>n.type==="button"&&text(n).includes(label)),
   // WO-08: with the workspace open, its top bar and Menu sheet call the account's onSignOut (this component's own signOut).
   clickSignOut:()=>{const ws=nodes().find(n=>n.type===Workspace);if(ws)return ws.props.account.onSignOut();return nodes().find(n=>n.type==="button"&&n.children[0]==="Sign out")!.props.onClick()},cleanup(){for(const e of effects)if(e&&typeof e.cleanup==="function")e.cleanup()},closed:()=>unsubscribed&&stopped}
@@ -504,11 +504,14 @@ test("QA-141: a deliberate sign-out removes every draft here and tells the other
  t4.emit(null,"SIGNED_OUT");await t4.flush();expect(fourth.entries.size).toBe(0);t4.cleanup()
 })
 
-test("the session-ended screen says unsaved changes stay in this tab, to an owner or admin only",async()=>{
- // WO-13: the sentence says how long they stay on this device and how to remove them now.
+test("the session-ended screen says unsaved changes stay in this tab whenever it holds some (owners and admins keep them)",async()=>{
+ // WO-13: the sentence says how long they stay on this device and how to remove them now. WO-13 (QA F3 of PR #56): it is
+ // shown when this tab holds the person's drafts, not by role, so an owner with nothing kept isn't told otherwise.
  const sentence="Sign in again to continue. Unsaved changes are kept on this device, in this browser tab, until the next sign-in here (you’re offered them back if it’s you), until the tab is closed, or for up to 24 hours. Signing out or discarding removes them now."
- const h=harness();await h.flush();h.workspace()!.props.staging.actor.onUnauthorized(401);await h.flush()
+ const h=harness({tab:tabWithDraftOf(owner)});await h.flush();h.workspace()!.props.staging.actor.onUnauthorized(401);await h.flush()
  expect(h.nodes().some(n=>n.type==="p"&&h.text(n)===sentence)).toBe(true);h.cleanup()
+ const none=harness({tab:memoryStorage()});await none.flush();none.workspace()!.props.staging.actor.onUnauthorized(401);await none.flush()
+ expect(none.nodes().some(n=>n.type==="p"&&none.text(n)==="Sign in again to continue.")).toBe(true);none.cleanup()
  const m=harness();m.setVerification(async()=>Response.json(access(owner,"member")));await m.flush();m.workspace()!.props.staging.actor.onUnauthorized(401);await m.flush()
  expect(m.nodes().some(n=>n.type==="p"&&h.text(n)==="Sign in again to continue.")).toBe(true);m.cleanup()
 })
@@ -549,6 +552,61 @@ test("WO-13: the session-ended screen discards every draft and the stored sign-i
  // A member keeps no drafts, so there is nothing to discard: only Sign out.
  const m=harness();m.setVerification(async()=>Response.json(access(owner,"member")));await m.flush();m.workspace()!.props.staging.actor.onUnauthorized(401);await m.flush()
  expect(m.nodes().some(n=>n.type==="button"&&m.text(n)===drafts.DRAFT_TEXT.discardOnDevice)).toBe(false);expect(m.button("Sign out")).toBeDefined();m.cleanup()
+})
+
+// WO-13 (QA B1 of PR #56): when the logout request gets no answer (a stalled connection), the stored sign-in used to stay
+// in localStorage for as long as it hung, under a screen that said nothing. Now this device is cleared first, at once,
+// and the server is told within 5 s or the message says it couldn't be.
+const AUTH_KEYS=(storage:Map<string,string>)=>[...storage.keys()].filter(k=>k.startsWith("neuvetra:m63:"))
+/** The message the landing page shows (its own card shows errors; the polite region stays empty for them). */
+const shown=(h:ReturnType<typeof harness>)=>h.nodes().find(n=>n.props&&"onSendLink" in n.props)?.props.message??h.message()
+test("WO-13 B1: with the logout request never answered, Discard removes the stored sign-in at once and says the server wasn't told",async()=>{
+ const tab=tabWithDraftOf(owner),storage=new Map<string,string>([["neuvetra:m63:abcdefghijklmnopqrst:auth-user","u"]])
+ const h=harness({tab,storage,logout:()=>new Promise(()=>{})});await h.flush()
+ h.workspace()!.props.staging.actor.onUnauthorized(401);await h.flush()
+ h.button(drafts.DRAFT_TEXT.discardOnDevice)!.props.onClick();await h.flush()
+ void h.button(drafts.DRAFT_TEXT.discardConfirm)!.props.onClick()
+ // Synchronously, before the network is asked: no draft and no stored sign-in key remain.
+ expect(tab.entries.size).toBe(0);expect(AUTH_KEYS(storage)).toEqual([])
+ await h.flush();expect(shown(h)).toBe("Unsaved changes discarded and signed out on this device. Telling the server…")
+ expect(h.logouts).toEqual([{token:"original-token",scope:"local"}])
+ await new Promise(resolve=>setTimeout(resolve,30));await h.flush()
+ expect(shown(h)).toBe(drafts.SIGN_OUT_SERVER_NOT_TOLD.discard);expect(AUTH_KEYS(storage)).toEqual([]);h.cleanup()
+})
+test("WO-13 B1: the plain Sign out is local-first too; a failed or refused logout says the server wasn't told, an expired token counts as told",async()=>{
+ for(const [logout,expected] of [[()=>new Promise(()=>{}),drafts.SIGN_OUT_SERVER_NOT_TOLD.plain],[()=>Promise.reject(new TypeError("network")),drafts.SIGN_OUT_SERVER_NOT_TOLD.plain],[async()=>({error:{status:500,message:"x"}}),drafts.SIGN_OUT_SERVER_NOT_TOLD.plain],[async()=>({error:{status:401,message:"expired"}}),"Signed out on this browser."],[async()=>({error:null}),"Signed out on this browser."]] as const){
+  const storage=new Map<string,string>(),h=harness({storage,logout:logout as any});await h.flush()
+  h.workspace()!.props.staging.actor.onUnauthorized(401);await h.flush()
+  void h.button("Sign out")!.props.onClick()
+  expect(AUTH_KEYS(storage)).toEqual([])
+  await new Promise(resolve=>setTimeout(resolve,30));await h.flush()
+  expect(shown(h)).toBe(expected);expect(h.heading()).toBeUndefined();h.cleanup()
+ }
+})
+// WO-13 (QA F3 and F4 of PR #56).
+test("WO-13 F3: after a reload the session-ended screen still offers Discard while the tab holds the person's drafts",async()=>{
+ const tab=tabWithDraftOf(owner)
+ const h=harness({tab});h.setVerification(status(401));await h.flush();await h.flush();await new Promise(resolve=>setTimeout(resolve,5));await h.flush()
+ expect(h.text(h.heading()!)).toBe("Your session ended")
+ expect(h.nodes().some(n=>n.type==="button"&&h.text(n)===drafts.DRAFT_TEXT.discardOnDevice)).toBe(true)
+ expect(h.nodes().some(n=>n.type==="p"&&h.text(n).includes(drafts.DRAFT_TEXT.sessionEnded))).toBe(true);h.cleanup()
+})
+test("WO-13 F4: Sign out names the discard while drafts are held; the confirmation names every tab; Escape closes it; another tab's discard updates this screen",async()=>{
+ let clear=()=>{}
+ const tab=tabWithDraftOf(owner),h=harness({tab,onDraftClear:listener=>{clear=listener}});await h.flush()
+ h.workspace()!.props.staging.actor.onUnauthorized(401);await h.flush();await new Promise(resolve=>setTimeout(resolve,5));await h.flush()
+ const buttons=()=>h.nodes().filter(n=>n.type==="button").map(n=>h.text(n))
+ expect(buttons()).toContain(drafts.DRAFT_TEXT.signOutAndDiscard);expect(buttons()).not.toContain("Sign out")
+ h.button(drafts.DRAFT_TEXT.discardOnDevice)!.props.onClick();await h.flush()
+ const group=()=>h.nodes().find(n=>n.props.role==="group"&&n.props["aria-labelledby"]==="wo13-discard-title")
+ expect(h.text(group()!)).toContain("Your unsaved changes in every open tab of this browser on this device, and this browser’s stored sign-in, are removed.")
+ let prevented=false
+ group()!.props.onKeyDown({key:"Escape",preventDefault(){prevented=true}});await h.flush()
+ expect(prevented).toBe(true);expect(group()).toBeUndefined();expect(h.focused.at(-1)).toBe(drafts.DRAFT_TEXT.discardOnDevice);expect(tab.entries.size).toBe(2)
+ // Another tab discards (its broadcast): this tab's drafts go and the screen stops speaking of them.
+ clear();await h.flush()
+ expect(tab.entries.size).toBe(0);expect(buttons()).not.toContain(drafts.DRAFT_TEXT.discardOnDevice);expect(buttons()).toContain("Sign out")
+ expect(h.nodes().some(n=>n.type==="p"&&h.text(n)==="Sign in again to continue.")).toBe(true);h.cleanup()
 })
 
 test("WO-05a QA follow-up 1: a stale session at load that fails its check never vouches for a record address, for its own later sign-in either",async()=>{
