@@ -139,5 +139,17 @@ integration("Scope 3 report versions freeze, approve and stay byte-identical on 
     expect((await request(`${reports}/${one.id}`, "outsider")).status).toBe(404)
     expect((await request(`${reports}/${two.id}/approval`, "outsider", { reportSha256: two.reportSha256, acknowledgeOpenIssues: true, confirmSelfApproval: false })).status).toBe(404)
     expect(decodeScope3Reports(await read(reports), company).versions[1]!.approval).toBeNull()
+
+    // BF-05 (BL-03, hunt S9): only the newest revision can be approved. Revision 3 supersedes the unapproved revision 2.
+    const three = (await read(reports, "owner", { idempotencyKey: crypto.randomUUID(), expectedRevision: 2, reason: "Third revision." })).version
+    const superseded = await request(`${reports}/${two.id}/approval`, "owner", { reportSha256: two.reportSha256, acknowledgeOpenIssues: two.openIssues.length > 0, confirmSelfApproval: true })
+    expect([superseded.status, (await superseded.json() as any).code]).toEqual([409, "version_superseded"])
+    const approvalRows = await operator.query("select 1 from neuvetra.scope3_report_approvals where version_id=$1", [two.id])
+    expect(approvalRows.rows).toHaveLength(0)
+    expect(decodeScope3Reports(await read(reports), company).versions.map(v => [v.revision, Boolean(v.approval)])).toEqual([[1, true], [2, false], [3, false]])
+    const newest = (await read(`${reports}/${three.id}/approval`, "owner", { reportSha256: three.reportSha256, acknowledgeOpenIssues: three.openIssues.length > 0, confirmSelfApproval: true })).version
+    expect(newest.approval).toMatchObject({ approvedBy: owner, reportSha256: three.reportSha256 })
+    // Revision 1 keeps the approval recorded before revision 2 existed.
+    expect(decodeScope3Reports(await read(reports), company).versions[0]!.approval).toMatchObject({ approvedBy: owner })
   } finally { await app.close?.(); await database.close(); await operator.close() }
 }, 180_000)

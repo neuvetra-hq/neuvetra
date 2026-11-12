@@ -10,6 +10,7 @@ import { SCOPE3_FROZEN_TEXT_R3D, SCOPE3_STATUS_TEXT_R3D } from "@/lib/scope3-tex
 import { SCOPE3_READINESS_TEXT } from "@/lib/scope3-results-text"
 import { scope3ChangeLogLines } from "@/lib/scope3-change-log"
 import { formatTimeR2E } from "../../../../../packages/neuvetra-database/src/scope3-text-r2e"
+import { scope3CsvEscape } from "../../../../../packages/neuvetra-database/src/scope3-report-csv"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 
 /**
@@ -26,16 +27,22 @@ const who = (id: string, actorId: string) => id === actorId ? "you" : `user ${id
 // Round 2 polish (lane D): one time format with the Activity and setup screens, `YYYY-MM-DD HH:MM UTC` (lane E's helper).
 const when = (iso: string) => formatTimeR2E(iso)
 const approvalOf = (version: Scope3ReportVersionSummary) => version.approval as Scope3ApprovalR2 | null
+/** BF-05: the sentence that says a later revision replaced this one (true whenever it is shown; no claim about when the approval was made). */
+const supersededLine = (newest: number) => `Revision ${newest} has since replaced this one.`
+const supersededNotice = (newest: number, approved: boolean, canManage: boolean) => approved
+  ? `${supersededLine(newest)} This approval remains on record.`
+  : `${supersededLine(newest)} It can no longer be approved.${canManage ? " Review and approve the newest version." : ""}`
 
 /** The version history table: who prepared each version, when and why, and who approved it when. */
 export function Scope3ReportHistory({ versions, actorId, onOpen }: { versions: Scope3ReportVersionSummary[]; actorId: string; onOpen: (id: string) => void }) {
   if (versions.length === 0) return <p className="nv-muted">No report version has been prepared for this reporting year yet.</p>
+  const newest = Math.max(...versions.map(item => item.revision))
   return <div className="nv-report__scroll" role="region" aria-label="Report versions table" tabIndex={0}><table><thead><tr><th>Revision</th><th>Prepared</th><th>Why</th><th>{APPROVAL_HEADING}</th><th>Report SHA-256</th><th /></tr></thead><tbody>
     {[...versions].reverse().map(v => <tr key={v.id}>
       <td>{v.revision}</td>
       <td title={v.createdBy}>by {who(v.createdBy, actorId)} · {when(v.createdAt)}</td>
       <td>{v.reason ?? "First version"}</td>
-      <td title={v.approval?.approvedBy}>{v.approval ? <>Approved by {who(v.approval.approvedBy, actorId)} · {when(v.approval.approvedAt)}{v.approval.selfApproved ? <span className="nv-chip nv-chip--warn" style={{ marginLeft: 6 }} title={SCOPE3_READINESS_TEXT.controlException}>{SCOPE3_READINESS_TEXT.controlExceptionChip}</span> : null}{(approvalOf(v)?.acknowledgedOpenIssues?.length ?? 0) > 0 ? <span className="nv-chip nv-chip--warn" style={{ marginLeft: 6 }}>{SCOPE3_READINESS_TEXT.acknowledged(approvalOf(v)!.acknowledgedOpenIssues!.length).replace(/:$/, "")}</span> : null}</> : "Not approved"}</td>
+      <td title={v.approval?.approvedBy}>{v.approval ? <>Approved by {who(v.approval.approvedBy, actorId)} · {when(v.approval.approvedAt)}{v.approval.selfApproved ? <span className="nv-chip nv-chip--warn" style={{ marginLeft: 6 }} title={SCOPE3_READINESS_TEXT.controlException}>{SCOPE3_READINESS_TEXT.controlExceptionChip}</span> : null}{(approvalOf(v)?.acknowledgedOpenIssues?.length ?? 0) > 0 ? <span className="nv-chip nv-chip--warn" style={{ marginLeft: 6 }}>{SCOPE3_READINESS_TEXT.acknowledged(approvalOf(v)!.acknowledgedOpenIssues!.length).replace(/:$/, "")}</span> : null}</> : "Not approved"}{v.revision < newest ? <span className="nv-chip" style={{ marginLeft: 6 }} title={supersededLine(newest)}>Superseded by revision {newest}</span> : null}</td>
       <td className="worksheet-fingerprint" title={v.reportSha256}>{v.reportSha256.slice(0, 12)}…</td>
       <td><button type="button" className="nv-btn nv-btn--sm" onClick={() => onOpen(v.id)} aria-label={`Open revision ${v.revision}`}>Open</button></td>
     </tr>)}
@@ -43,8 +50,11 @@ export function Scope3ReportHistory({ versions, actorId, onOpen }: { versions: S
 }
 
 /** Preserve the stored CSV prefix and append the separately recorded approval and control exceptions. */
-function downloadFrozenCsv(report: Scope3FrozenReport) {
-  const url = URL.createObjectURL(new Blob([scope3ReportExportCsv(report.csvText, report.version)], { type: "text/csv" }))
+function downloadFrozenCsv(report: Scope3FrozenReport, newest: number) {
+  // BF-05: a superseded revision's export says so in one more `#` line after the approval lines (the stored bytes and the
+  // lines before it are exactly what they were).
+  const exported = scope3ReportExportCsv(report.csvText, report.version) + (report.version.revision < newest ? `${scope3CsvEscape(`# Superseded: ${supersededLine(newest)}`)}\n` : "")
+  const url = URL.createObjectURL(new Blob([exported], { type: "text/csv" }))
   const link = document.createElement("a"); link.href = url; link.download = scope3ReportCsvName(report.version); link.click()
   window.setTimeout(() => URL.revokeObjectURL(url), 30_000)
 }
@@ -56,7 +66,7 @@ function printFrozenReport() {
 }
 
 /** One stored version, read-only, rendered from its stored report text. */
-export function Scope3FrozenReportView({ report, previous, actorId, canManage, busy, onApprove, onClose }: { report: Scope3FrozenReport; previous?: Scope3FrozenReport["document"] | null; actorId: string; canManage: boolean; busy: boolean; onApprove: (confirmations: Scope3ApprovalConfirmations) => void; onClose: () => void }) {
+export function Scope3FrozenReportView({ report, previous, newestRevision, actorId, canManage, busy, onApprove, onClose }: { report: Scope3FrozenReport; previous?: Scope3FrozenReport["document"] | null; newestRevision?: number; actorId: string; canManage: boolean; busy: boolean; onApprove: (confirmations: Scope3ApprovalConfirmations) => void; onClose: () => void }) {
   const { version, document: d } = report, a = d.assertion
   // Round 2 lane D (decision 7): approving needs the frozen open issues acknowledged and a self-approval confirmed.
   const confirmationKey = `${version.id}:${version.reportSha256}:${actorId}`
@@ -70,7 +80,11 @@ export function Scope3FrozenReportView({ report, previous, actorId, canManage, b
   const issues = scope3FrozenOpenIssues(report), self = version.createdBy === actorId, approval = approvalOf(version)
   // Bug hunt D: a v1 document predates the readiness gate (its stored open issues are empty, not "ready").
   const readinessRecorded = d.profile !== SCOPE3_REPORT_PROFILE_V1
-  const canApprove = canManage && !version.approval
+  // BF-05: only the year's newest revision can be approved (the server refuses a superseded one). Without the year's
+  // newest revision the version is treated as the newest, so a caller that does not know it changes nothing.
+  const newest = newestRevision ?? version.revision
+  const superseded = version.revision < newest
+  const canApprove = canManage && !version.approval && version.revision === newest
   const approveReady = (!issues.length || acknowledged) && (!self || selfConfirmed)
   const approveLabel = self ? SCOPE3_READINESS_TEXT.approveSelf : issues.length ? SCOPE3_READINESS_TEXT.approveWithIssues : SCOPE3_READINESS_TEXT.approve
   // Round 2 polish (lane D, UX-7): the change log names records by activity, source ID and description, and methods by
@@ -78,9 +92,9 @@ export function Scope3FrozenReportView({ report, previous, actorId, canManage, b
   const changes = scope3ChangeLogLines(d, previous ?? null)
   return <div className="nv-card nv-card--flat" style={{ marginTop: 12 }}>
     <div className="nv-notice nv-notice--info" role="status"><Icon name="info" /><p><strong>Frozen report version {version.revision} ({version.reportingYear}), read-only.</strong> Prepared by {who(version.createdBy, actorId)} on {when(version.createdAt)}{version.reason ? ` — ${version.reason}` : ""}. Later record changes never alter it. Report SHA-256 <span className="worksheet-fingerprint">{version.reportSha256}</span>.
-      {" "}{version.approval ? `Approved by ${who(version.approval.approvedBy, actorId)} on ${when(version.approval.approvedAt)}${version.approval.selfApproved ? " (self-approved: the preparer approved their own version)" : ""}.` : "Not approved yet."}</p></div>
+      {" "}{version.approval ? `Approved by ${who(version.approval.approvedBy, actorId)} on ${when(version.approval.approvedAt)}${version.approval.selfApproved ? " (self-approved: the preparer approved their own version)" : ""}.` : "Not approved yet."}{superseded ? ` ${supersededNotice(newest, Boolean(version.approval), canManage)}` : ""}</p></div>
     <div className="nv-actions" style={{ margin: "10px 0" }}>
-      <button type="button" className="nv-btn nv-btn--sm" onClick={() => downloadFrozenCsv(report)}><Icon name="download" size={16} />Download this version’s CSV</button>
+      <button type="button" className="nv-btn nv-btn--sm" onClick={() => downloadFrozenCsv(report, newest)}><Icon name="download" size={16} />Download this version’s CSV</button>
       <button type="button" className="nv-btn nv-btn--sm" onClick={printFrozenReport}><Icon name="print" size={16} />Print this version</button>
       {canApprove && <button type="button" className="nv-btn nv-btn--sm nv-btn--primary" disabled={busy || !approveReady} aria-describedby="scope3-approval-gate" onClick={() => onApprove({ acknowledgeOpenIssues: issues.length > 0 && acknowledged, confirmSelfApproval: self && selfConfirmed })}>{approveLabel}</button>}
       <button type="button" className="nv-btn nv-btn--sm nv-btn--ghost" onClick={onClose}>Close</button>
@@ -93,6 +107,7 @@ export function Scope3FrozenReportView({ report, previous, actorId, canManage, b
     <article className="nv-report nv-report--frozen" aria-label={`Frozen Scope 3 report version ${version.revision}`}>
       <h3>Scope 3 report · reporting year {d.reportingYear} · revision {d.revision} (frozen)</h3>
       <p className="nv-report__small">Report SHA-256 {version.reportSha256} · CSV SHA-256 {version.csvSha256}. {version.approval ? `Approved by ${who(version.approval.approvedBy, actorId)} on ${when(version.approval.approvedAt)}${version.approval.selfApproved ? " (self-approved)" : ""}.` : "Not approved."}</p>
+      {superseded && <p className="nv-report__small"><strong>Superseded.</strong> {supersededLine(newest)}{version.approval ? " This approval remains on record." : " It cannot be approved."}</p>}
       <h4>Assertion</h4>
       {/* Round 3 lane D (PR-9): each stored part ends with one period ("… Inc." never "… Inc.."); the stored values are shown as stored. */}
       <p className="nv-report__small">{[scope3Sentence(a.statement), scope3Sentence(`Criteria: ${a.criteria}`), scope3Sentence(`Company: ${a.legalName || "not set"}`), scope3Sentence(`Consolidation approach: ${a.consolidationApproach?.replace(/_/g, " ") ?? "not set"}`), `Reporting period: ${periodLabel(a.reportingPeriod.start, a.reportingPeriod.endExclusive)} (reporting year ${a.reportingYear}).`, `Prepared by ${who(a.preparedBy, actorId)} at ${when(a.preparedAt)}.`].join(" ")}</p>
@@ -163,7 +178,12 @@ export function Scope3ReportVersions({ companyId, actor, results }: { companyId:
   const approve = (confirmations: Scope3ApprovalConfirmations) => run(async () => {
     if (!open) return
     const request = ++openRequest.current
-    await approveScope3Report(companyId, open.version.id, open.version.reportSha256, actorRef.current, confirmations)
+    try { await approveScope3Report(companyId, open.version.id, open.version.reportSha256, actorRef.current, confirmations) }
+    catch (cause) {
+      // BF-05 F6: a newer revision exists, so read the list again; the open version then stops offering Approve.
+      if ((cause as { code?: string } | null)?.code === "version_superseded") await load()
+      throw cause
+    }
     await load()
     await setOpen(() => loadScope3ReportVersion(companyId, open.version.id, actorRef.current), request)
   })
@@ -183,6 +203,6 @@ export function Scope3ReportVersions({ companyId, actor, results }: { companyId:
       <button type="button" className="nv-btn nv-btn--sm nv-btn--primary" disabled={busy} onClick={() => void prepare()}>{busy ? "Working…" : "Prepare report version"}</button>
     </div>}
     {view && <Scope3ReportHistory versions={versions} actorId={view.actorId} onOpen={id => void openVersion(id)} />}
-    {open && view && <Scope3FrozenReportView report={open} previous={previous} actorId={view.actorId} canManage={view.canManage} busy={busy} onApprove={confirmations => void approve(confirmations)} onClose={() => void setOpen(async () => null)} />}
+    {open && view && <Scope3FrozenReportView report={open} previous={previous} actorId={view.actorId} canManage={view.canManage} busy={busy} newestRevision={Math.max(0, ...versions.map(item => item.revision))} onApprove={confirmations => void approve(confirmations)} onClose={() => void setOpen(async () => null)} />}
   </section>
 }
