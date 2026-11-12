@@ -10,6 +10,10 @@ import { TODO_SPEND_TEXT_R3C } from "@/lib/scope3-text-r3c"
 
 function plural(count: number, one: string, many = `${one}s`) { return `${count} ${count === 1 ? one : many}` }
 
+// WO-04a (decision O-4): site-web's own save copy replaces the database package's Scope 3 home lead (QA-B02), which is
+// Codex-owned and can retire later.
+const homeLead = (scope3: boolean) => `Three steps take you from company details to a draft Scope 1 and Scope 2 report${scope3 ? ", with Scope 3 reported separately" : ""}. Company setup is saved when you press Save setup in 07 Review; each activity record is saved on its own.`
+
 export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRetry, onFix }: {
   status: JourneyStatus | null; error: string | null; headingRef: RefObject<HTMLHeadingElement | null>
   onNavigate: (view: JourneyView) => void; onAsk: () => void; onRetry: () => void; onFix: (recordId: string) => void
@@ -22,9 +26,11 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
   </section>
   const { setup, collection, evidence, next, progress, gaps, canManage } = status
   const name = setup.legalName || "Your company"
+  // WO-04a (PROD-B01 interim, O-7): while Scope 3 is on, its open items aren't checked on this page, so no step is "done".
+  const scope3 = Boolean(status.scope3)
   const stepState = (key: "setup" | "collection" | "results") => {
     if (key === "results") return next.panel === "results" ? "current" : "todo"
-    if (progress[key] === "done") return "done"
+    if (!scope3 && progress[key] === "done") return "done"
     return next.panel === key ? "current" : "todo"
   }
   const allMustFix = collection.records.filter(row => row.state === "input_needed" || row.state === "review_required")
@@ -44,7 +50,7 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
     <h1 ref={headingRef} tabIndex={-1}>{setup.saved ? name : "Welcome to Neuvetra"}</h1>
     <p className="nv-lead">{setup.saved
       ? `${periodLabel(setup.period.start, setup.period.endExclusive)} · ${BOUNDARY_LABELS[setup.boundary] ?? setup.boundary} · ${setup.sites.included} of ${plural(setup.sites.total, "site")} included`
-      : status.scope3 ? COPY_TEXT_R2E.journeyHomeScope3 : "Three steps take you from company details to a draft Scope 1 and Scope 2 report. Your progress saves as you go."}</p>
+      : homeLead(scope3)}</p>
 
     <div className="nv-card nv-card--accent">
       <p className="nv-eyebrow" style={{ marginBottom: 4 }}>Next step</p>
@@ -62,7 +68,7 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
       <button type="button" className="nv-journey__step" data-state={stepState("setup")} onClick={() => onNavigate("setup")}>
         <span className="nv-journey__num" aria-hidden="true">{stepState("setup") === "done" ? <Icon name="check" size={16} /> : 1}</span>
         <span className="nv-journey__title">Company setup</span>
-        <span className="nv-journey__meta">{!setup.saved ? "Not started — about 10 minutes" : setup.missing.length ? `Saved · ${plural(setup.missing.length, "open answer")}` : `Complete · version ${setup.revision}`}</span>
+        <span className="nv-journey__meta">{!setup.saved ? "Not started — about 10 minutes" : setup.missing.length ? `Saved · ${plural(setup.missing.length, "open answer")}` : scope3 ? `Saved · v${setup.revision} · no open Scope 1 and 2 answers` : `All setup questions answered · v${setup.revision}`}</span>
       </button>
       <button type="button" className="nv-journey__step" data-state={stepState("collection")} onClick={() => onNavigate("collection")}>
         <span className="nv-journey__num" aria-hidden="true">{stepState("collection") === "done" ? <Icon name="check" size={16} /> : 2}</span>
@@ -79,7 +85,7 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
     <div className="nv-grid-2" style={{ marginTop: 18 }}>
       <div className="nv-card nv-card--flat" style={{ margin: 0 }}>
         <h2 className="nv-h3">What needs attention</h2>
-        {nothingFlagged ? <p className="nv-muted">{collection.active ? "Nothing is flagged. Review your draft results." : "No records yet — start with the next step above."}</p> : <>
+        {nothingFlagged ? <p className="nv-muted">{!collection.active ? "No records yet — start with the next step above." : scope3 ? "Nothing waiting on you for Scope 1 and 2. Scope 3 to-do: see Results." : "Nothing is waiting on you. Figures are drafts from beta methods and are not externally assured."}</p> : <>
           {(setup.missing.length > 0 || allMustFix.length > 0) && <p className="nv-attn-label nv-attn-label--warn">Input needed</p>}
           <ul className="nv-list">
             {setup.missing.slice(0, 6).map(item => <li key={item.id}><span className="nv-list__main"><span className="nv-list__title">{item.title}</span><br /><span className="nv-subtle">Company setup · {item.detail}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${canManage ? "Open" : "View"} company setup: ${item.title}`} onClick={() => onNavigate("setup")}>{canManage ? "Open" : "View"}</button></li>)}
@@ -101,6 +107,13 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
             {evidence.checking > 0 && <li><span className="nv-list__main"><span className="nv-list__title">{plural(evidence.checking, "file")} waiting for quarantine review</span><br /><span className="nv-subtle">You can keep working; files can be downloaded once cleared.</span></span></li>}
           </ul></>}
         </>}
+        {/* WO-04a: Scope 3's open items are listed on Results until the Overview counts them (WO-04b). */}
+        <p className="nv-attn-label">Scope 3</p>
+        <ul className="nv-list">
+          {scope3
+            ? <li key="scope3-todo"><span className="nv-list__main"><span className="nv-list__title">Scope 3 to-do: see Results</span><br /><span className="nv-subtle">Scope 3 decisions, assessments and records are checked on the Results page.</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label="Open Results: Scope 3 to-do" onClick={() => onNavigate("results")}>Open Results</button></li>
+            : <li key="scope3-off"><span className="nv-list__main"><span className="nv-list__title">Scope 3 isn’t switched on in this workspace</span></span></li>}
+        </ul>
       </div>
       <div className="nv-card nv-card--flat" style={{ margin: 0 }}>
         <h2 className="nv-h3">Your records</h2>
