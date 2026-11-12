@@ -244,7 +244,7 @@ async function request(actor: HostedWorkspaceActor, path: string, init: { method
   // Round 3 lane C (PR-3): GETs shared across screens and retried once on 429; writes clear them.
   const response = await sharedFetch(actor, path, { method: init.method ?? "GET", cache: "no-store", signal: actor.signal, body: init.body, headers: { authorization: `Bearer ${actor.accessToken}`, ...(init.type ? { "content-type": init.type } : {}) } })
   actor.signal?.throwIfAborted()
-  if (response.status === 401 || response.status === 403) actor.onUnauthorized?.()
+  if (response.status === 401 || response.status === 403) actor.onUnauthorized?.(response.status)
   const value: unknown = await response.json().catch(() => null)
   if (!response.ok) {
     const problems = object(value) && Array.isArray(value.problems) ? (value.problems as unknown[]).filter((p): p is Scope3SpendImportProblem => object(p) && typeof p.message === "string") : []

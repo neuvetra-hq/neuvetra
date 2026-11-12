@@ -151,7 +151,7 @@ export async function loadResults(companyId: string, actor: HostedWorkspaceActor
   if (!UUID.test(companyId)) throw new Error("Invalid company reference.")
   if (!actor.accessToken || /[\r\n]/.test(actor.accessToken)) throw new Error("Sign in again to continue.")
   const response = await fetch(`/workspace-api/workspace/${companyId}/results`, { headers: { authorization: `Bearer ${actor.accessToken}` }, cache: "no-store", signal: actor.signal })
-  if (response.status === 401 || response.status === 403) actor.onUnauthorized?.()
+  if (response.status === 401 || response.status === 403) actor.onUnauthorized?.(response.status)
   if (!response.ok) {
     const body: unknown = await response.json().catch(() => null)
     throw new ResultsApiError(record(body) && typeof body.error === "string" ? body.error : "Results are unavailable right now.", response.status)

@@ -59,7 +59,7 @@ async function request(actor: HostedWorkspaceActor, path: string, init?: Request
     signal: actor.signal,
   }, { kind })
   actor.signal?.throwIfAborted()
-  if (response.status === 401 || response.status === 403) actor.onUnauthorized?.()
+  if (response.status === 401 || response.status === 403) actor.onUnauthorized?.(response.status)
   if (!response.ok) {
     const value: unknown = await response.json().catch(() => null)
     const error = value && typeof value === "object" && "error" in value && typeof value.error === "string" ? value.error : "Collection is unavailable."

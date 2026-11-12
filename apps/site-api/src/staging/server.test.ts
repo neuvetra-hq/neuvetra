@@ -1,6 +1,6 @@
-import { afterEach, describe, expect, test } from "bun:test"
+import { afterEach, describe, expect, setSystemTime, test } from "bun:test"
 import { DevelopmentWorkspaceDatabase } from "@neuvetra/database"
-import { createStagingServer, type StagingDatabase, type StagingLog } from "./server"
+import { createStagingServer, type StagingAddressWarning, type StagingDatabase, type StagingLog } from "./server"
 import { readStagingConfig, STAGING_PROFILE } from "./config"
 import { serveStagingAsset, verifyStagingAssets } from "./assets"
 import { mkdtemp, writeFile, mkdir, rm } from "node:fs/promises"
@@ -31,6 +31,7 @@ async function fixture() {
   const users: Record<string, string> = { "test-owner-session": OWNER, "test-admin-session": ADMIN, "test-member-session": MEMBER, "test-outsider-session": OUTSIDER, "test-spare-session": SPARE }
   let validations = 0
   const logs: StagingLog[] = []
+  const warnings: StagingAddressWarning[] = []
   let healthy = true
   let evidenceId: string | null = null
   const database = Object.assign(db, {
@@ -50,11 +51,11 @@ async function fixture() {
   const app = await createStagingServer(readStagingConfig(environment), {
     database, validateUser: async (token) => (validations++, token === "broken-session") ? Promise.reject(new Error("sensitive-auth-value")) : users[token] ? { id: users[token]!, phone: null, email: "private@example.invalid", fullName: "Private fixture" } : null,
     verifyAssets: async () => {}, serveAsset: async (name) => name === "/" ? new Response("Private staging sign-in") : null,
-    log: (event) => logs.push(event),
+    log: (event) => logs.push(event), warn: (event) => warnings.push(event),
   })
   cleanup = app.close
   const request = (pathname: string, token?: string, options: RequestInit = {}) => app.fetch(new Request(`${ORIGIN}${pathname}`, { ...options, headers: { origin: ORIGIN, ...(token ? { authorization: `Bearer ${token}` } : {}), ...options.headers } }))
-  return { app, db, workspace, invited, logs, request, validations: () => validations, unhealthy: () => { healthy = false }, evidence: (id: string) => { evidenceId = id } }
+  return { app, db, workspace, invited, logs, warnings, request, validations: () => validations, unhealthy: () => { healthy = false }, evidence: (id: string) => { evidenceId = id } }
 }
 
 describe("M63 private staging boundary", () => {
@@ -152,7 +153,7 @@ describe("M63 private staging boundary", () => {
     const config = readStagingConfig({ ...environment, NEUVETRA_STAGING_PROJECT_REF: "icockcoguyadhryzydvl", NEUVETRA_STAGING_REUSE_EXISTING: "confirmed", SUPABASE_URL: "https://icockcoguyadhryzydvl.supabase.co", DATABASE_URL: environment.DATABASE_URL.replace(REF, "icockcoguyadhryzydvl") })
     let schemaVersion = 28
     const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion, legacyContainmentVerified: true }), close: async () => {} } as unknown as StagingDatabase
-    const app = await createStagingServer(config, { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {} })
+    const app = await createStagingServer(config, { database, validateUser: async token => token === "ok" ? { id: OWNER, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, log: () => {} })
     cleanup = app.close
     expect((await app.fetch(new Request(`${ORIGIN}/ready`))).status).toBe(200)
     for (const version of [27, 31]) {
@@ -161,6 +162,8 @@ describe("M63 private staging boundary", () => {
       expect((await app.fetch(new Request(`${ORIGIN}/ready`))).status).toBe(503)
       expect((await app.fetch(new Request(`${ORIGIN}/workspace-api/config`))).status).toBe(503)
       expect((await app.fetch(new Request(`${ORIGIN}/workspace-api/workspace/80000000-0000-4000-8000-000000000901/collection`, { headers: { authorization: "Bearer ok" } }))).status).toBe(503)
+      // API-02: an invalid token is refused before the readiness query, so it gets 401, not the database's 503.
+      expect((await app.fetch(new Request(`${ORIGIN}/workspace-api/workspace/80000000-0000-4000-8000-000000000901/collection`, { headers: { authorization: "Bearer junk" } }))).status).toBe(401)
     }
   })
   test("configuration refuses demo mode, privileged key/login and mismatched targets without displaying secrets", () => {
@@ -187,12 +190,14 @@ describe("M63 private staging boundary", () => {
     expect(closed).toBe(true)
     let contained = true
     database.checkReadiness = async () => ({ profile: STAGING_PROFILE, schemaVersion: 28, legacyContainmentVerified: contained })
-    const app = await createStagingServer(config, { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {} })
+    const app = await createStagingServer(config, { database, validateUser: async token => token === "any-token" ? { id: OWNER, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, log: () => {} })
     cleanup = app.close
     expect((await app.fetch(new Request(`${ORIGIN}/workspace-api/config`))).status).toBe(200)
     contained = false
     expect((await app.fetch(new Request(`${ORIGIN}/workspace-api/config`))).status).toBe(503)
     expect((await app.fetch(new Request(`${ORIGIN}/workspace-api/session`, { headers: { authorization: "Bearer any-token" } }))).status).toBe(503)
+    // API-02: an invalid token never reaches the readiness query (401, no SQL).
+    expect((await app.fetch(new Request(`${ORIGIN}/workspace-api/session`, { headers: { authorization: "Bearer other-token" } }))).status).toBe(401)
     expect((await app.fetch(new Request(`${ORIGIN}/ready`))).status).toBe(503)
   })
 
@@ -466,5 +471,137 @@ describe("round 3 EN-7: long request limits only after authentication", () => {
     expect(await extended(results, "GET", "test-member-session")).toEqual([90])
     expect(await extended(prepare, "GET", "test-owner-session")).toEqual([])
     expect(await extended(`/workspace-api/workspace/${workspace.id}/scope3/spend-imports`, "GET", "test-owner-session")).toEqual([])
+  })
+})
+
+// API-02 (PR #36 QA F1, F2, F3): cheap token pre-check before the Supabase call, readiness SQL after validation, one
+// validation per admitted request, and a rate-limited warning when the client address falls back to "unknown".
+describe("API-02: token pre-check, readiness after validation, address observability", () => {
+  const EXISTING = "icockcoguyadhryzydvl"
+  const existingConfig = () => readStagingConfig({ ...environment, NEUVETRA_STAGING_PROJECT_REF: EXISTING, NEUVETRA_STAGING_REUSE_EXISTING: "confirmed", SUPABASE_URL: `https://${EXISTING}.supabase.co`, DATABASE_URL: environment.DATABASE_URL.replace(REF, EXISTING) })
+  const segment = (value: unknown) => Buffer.from(JSON.stringify(value)).toString("base64url")
+  const jwt = (payload: Record<string, unknown>) => `${segment({ alg: "ES256", typ: "JWT", kid: "synthetic" })}.${segment(payload)}.c3ludGhldGljLXNpZ25hdHVyZQ`
+  const nowSeconds = () => Math.floor(Date.now() / 1000)
+  const from = (address: string) => ({ "x-real-ip": address })
+
+  /** The real (non-injected) Supabase validator, with Supabase's HTTP API replaced by a counting stub. */
+  async function realValidatorServer() {
+    const live = jwt({ sub: OWNER, exp: nowSeconds() + 3600 })
+    let supabaseCalls = 0, readinessQueries = 0, accessQueries = 0
+    const original = globalThis.fetch
+    globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input instanceof Request ? input.url : input)
+      if (!url.startsWith(`https://${EXISTING}.supabase.co/`)) return original(input as RequestInfo, init)
+      supabaseCalls++
+      const authorization = new Headers(input instanceof Request ? input.headers : init?.headers).get("authorization")
+      if (url.endsWith("/auth/v1/user") && authorization === `Bearer ${live}`) return Response.json({ id: OWNER, aud: "authenticated", email: null, phone: "", user_metadata: {}, app_metadata: {} })
+      return Response.json({ code: 403, error_code: "bad_jwt", msg: "invalid JWT" }, { status: 403 })
+    }) as typeof fetch
+    const database = {
+      checkReadiness: async () => { readinessQueries++; return { profile: STAGING_PROFILE, schemaVersion: 30, legacyContainmentVerified: true } },
+      close: async () => {},
+      hasStagingAccess: async (userId: string) => { accessQueries++; return userId === OWNER },
+      findStagingMembershipForUser: async () => ({ companyId: "80000000-0000-4000-8000-000000000901", role: "owner" as const, evidenceId: null }),
+    } as unknown as StagingDatabase
+    const app = await createStagingServer(existingConfig(), { database, verifyAssets: async () => {}, log: () => {}, warn: () => {} })
+    cleanup = async () => { globalThis.fetch = original; await app.close() }
+    const session = (token: string, address = "198.51.100.70") => app.fetch(new Request(`${ORIGIN}/workspace-api/session`, { headers: { origin: ORIGIN, authorization: `Bearer ${token}`, ...from(address) } }))
+    return { live, session, counts: () => ({ supabaseCalls, readinessQueries, accessQueries }) }
+  }
+
+  test("a random string and a structurally valid but expired token make no Supabase call, no SQL and spend no budget", async () => {
+    const s = await realValidatorServer()
+    const start = s.counts()
+    const refused = [
+      "not-a-token", "a.b.c", "x".repeat(400), `${segment({ alg: "ES256" })}.${segment([1])}.sig`, `${segment({ alg: "ES256" })}.${segment({ exp: "soon" })}.sig`,
+      `${segment({ alg: "ES256" })}.${segment({ exp: nowSeconds() + 3600 })}`, `${segment({ alg: "ES256" })}.${segment({ exp: nowSeconds() + 3600 })}.`,
+      jwt({ sub: OWNER, exp: nowSeconds() - 3600 }), jwt({ sub: OWNER, exp: nowSeconds() - 61 }),
+    ]
+    for (const token of refused) {
+      const response = await s.session(token)
+      expect([token, response.status, await response.json()]).toEqual([token, 401, { error: "Authentication required." }])
+    }
+    expect(s.counts()).toEqual(start)
+    // 500 expired tokens from one address (over its 120 unverified allowance) never spend that allowance.
+    for (let i = 0; i < 500; i++) expect((await s.session(jwt({ sub: `junk-${i}`, exp: nowSeconds() - 3600 }))).status).toBe(401)
+    expect(s.counts()).toEqual(start)
+    expect((await s.session(s.live)).status).toBe(200)
+    for (let i = 0; i < 120; i++) expect((await s.session(jwt({ sub: `forged-${i}`, exp: nowSeconds() + 3600 }))).status).toBe(401)
+    expect((await s.session(jwt({ sub: "forged-over", exp: nowSeconds() + 3600 }))).status).toBe(429)
+  })
+
+  test("a valid-shaped unexpired token (or one inside the clock skew, or without exp) still reaches Supabase", async () => {
+    const s = await realValidatorServer()
+    const start = s.counts()
+    const live = await s.session(s.live)
+    expect(live.status).toBe(200)
+    expect((await live.json()).user).toEqual({ id: OWNER })
+    expect(s.counts()).toEqual({ supabaseCalls: start.supabaseCalls + 1, readinessQueries: start.readinessQueries + 1, accessQueries: start.accessQueries + 1 })
+    // Forged but plausible tokens are not authentic: Supabase refuses them (401), and they never reach readiness SQL.
+    for (const token of [jwt({ sub: OWNER, exp: nowSeconds() + 7200 }), jwt({ sub: OWNER, exp: nowSeconds() - 30 }), jwt({ sub: OWNER })]) expect((await s.session(token)).status).toBe(401)
+    expect(s.counts()).toEqual({ supabaseCalls: start.supabaseCalls + 4, readinessQueries: start.readinessQueries + 1, accessQueries: start.accessQueries + 1 })
+  })
+
+  test("existing project: readiness SQL runs only after a token is validated, once per admitted request", async () => {
+    let readinessQueries = 0, validations = 0
+    const database = {
+      checkReadiness: async () => { readinessQueries++; return { profile: STAGING_PROFILE, schemaVersion: 30, legacyContainmentVerified: true } },
+      close: async () => {}, hasStagingAccess: async () => true,
+      findStagingMembershipForUser: async () => ({ companyId: "80000000-0000-4000-8000-000000000901", role: "owner" as const, evidenceId: null }),
+    } as unknown as StagingDatabase
+    const app = await createStagingServer(existingConfig(), { database, validateUser: async token => (validations++, token === "ok" ? { id: OWNER, email: null, phone: null, fullName: null } : null), verifyAssets: async () => {}, log: () => {}, warn: () => {} })
+    cleanup = app.close
+    const afterStartup = readinessQueries
+    const session = (token: string) => app.fetch(new Request(`${ORIGIN}/workspace-api/session`, { headers: { authorization: `Bearer ${token}`, ...from("198.51.100.80") } }))
+    for (let i = 0; i < 50; i++) expect((await session(`junk-${i}`)).status).toBe(401)
+    expect([validations, readinessQueries - afterStartup]).toEqual([50, 0])
+    expect((await session("ok")).status).toBe(200)
+    expect(readinessQueries - afterStartup).toBe(1)
+  })
+
+  test("an admitted workspace request validates its token once, and routes keep their own per-user authorization", async () => {
+    const f = await fixture()
+    const before = f.validations()
+    expect((await f.request(`/workspace-api/workspace/${f.workspace.id}`, "test-owner-session")).status).toBe(200)
+    expect(f.validations()).toBe(before + 1)
+    // The route still authorizes the verified user: an invited outsider is refused the owner's workspace.
+    expect((await f.request(`/workspace-api/workspace/${f.workspace.id}`, "test-outsider-session")).status).toBe(404)
+    expect((await f.request(`/workspace-api/workspace/${f.workspace.id}/electricity-worksheet`, "test-outsider-session")).status).toBe(404)
+    expect(f.validations()).toBe(before + 3)
+    // Staging access withdrawn: refused by the dispatcher, before any route.
+    f.invited.delete(OWNER)
+    expect((await f.request(`/workspace-api/workspace/${f.workspace.id}`, "test-owner-session")).status).toBe(403)
+  })
+
+  test("falling back to the shared 'unknown' address logs one warning a minute, naming the missing headers only", async () => {
+    const f = await fixture()
+    try {
+      setSystemTime(new Date("2026-11-11T12:00:00Z"))
+      for (let i = 0; i < 200; i++) await f.request("/workspace-api/session", "test-owner-session")
+      await f.request("/workspace-api/config", undefined, { headers: { "x-real-ip": "", "x-forwarded-for": " , " } })
+      expect(f.warnings).toEqual([{ event: "client_address_unknown", headers: { "x-real-ip": "absent", "x-forwarded-for": "absent" }, occurrences: 1 }])
+      // A request with an address never warns.
+      await f.request("/workspace-api/session", "test-owner-session", { headers: from("203.0.113.90") })
+      setSystemTime(new Date("2026-11-11T12:01:00.500Z"))
+      await f.request("/workspace-api/config", undefined, { headers: { "x-forwarded-for": " " } })
+      expect(f.warnings).toHaveLength(2)
+      expect(f.warnings[1]).toEqual({ event: "client_address_unknown", headers: { "x-real-ip": "absent", "x-forwarded-for": "empty" }, occurrences: 201 })
+      expect(JSON.stringify(f.warnings)).not.toContain("test-owner-session")
+    } finally { setSystemTime() }
+  })
+
+  test("the default warning sink writes one JSON line without token or authorization contents", async () => {
+    const original = console.warn
+    const lines: string[] = []
+    console.warn = (...args: unknown[]) => { lines.push(args.map(String).join(" ")) }
+    try {
+      const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion: 30 }), close: async () => {}, hasStagingAccess: async () => false } as unknown as StagingDatabase
+      const app = await createStagingServer(readStagingConfig(environment), { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {} })
+      cleanup = app.close
+      for (let i = 0; i < 5; i++) await app.fetch(new Request(`${ORIGIN}/workspace-api/session`, { headers: { authorization: "Bearer secret-token-value" } }))
+    } finally { console.warn = original }
+    expect(lines).toHaveLength(1)
+    expect(JSON.parse(lines[0]!)).toEqual({ event: "client_address_unknown", headers: { "x-real-ip": "absent", "x-forwarded-for": "absent" }, occurrences: 1 })
+    expect(lines[0]).not.toContain("secret-token-value")
   })
 })

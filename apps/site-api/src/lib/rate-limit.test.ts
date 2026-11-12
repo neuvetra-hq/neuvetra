@@ -68,19 +68,21 @@ describe("createRateLimiter()", () => {
 describe("extractClientIp()", () => {
   const make = (init: Record<string, string>) => new Headers(init)
 
-  test("returns the leftmost x-forwarded-for hop", () => {
-    const headers = make({ "x-forwarded-for": "203.0.113.1, 10.0.0.1, 10.0.0.2" })
+  // API-02 (QA F3): /chat uses the same trusted order as the staging server; the caller-controlled leftmost hop is ignored.
+  test("never uses the caller-controlled leftmost x-forwarded-for hop; takes the rightmost (edge-written) one", () => {
+    const headers = make({ "x-forwarded-for": "8.8.8.8, 10.0.0.1, 203.0.113.1" })
+    expect(extractClientIp(headers, undefined)).toBe("203.0.113.1")
+    expect(extractClientIp(make({ "x-forwarded-for": "1.2.3.4, 203.0.113.1" }), undefined)).toBe(extractClientIp(make({ "x-forwarded-for": "5.6.7.8, 203.0.113.1" }), undefined))
+  })
+
+  test("trims whitespace around the rightmost hop", () => {
+    const headers = make({ "x-forwarded-for": "10.0.0.1,  203.0.113.1  " })
     expect(extractClientIp(headers, undefined)).toBe("203.0.113.1")
   })
 
-  test("trims whitespace around the leftmost hop", () => {
-    const headers = make({ "x-forwarded-for": "  203.0.113.1  , 10.0.0.1" })
-    expect(extractClientIp(headers, undefined)).toBe("203.0.113.1")
-  })
-
-  test("falls back to x-real-ip when x-forwarded-for is absent", () => {
-    const headers = make({ "x-real-ip": "203.0.113.5" })
-    expect(extractClientIp(headers, undefined)).toBe("203.0.113.5")
+  test("prefers x-real-ip over x-forwarded-for", () => {
+    expect(extractClientIp(make({ "x-real-ip": "203.0.113.5" }), undefined)).toBe("203.0.113.5")
+    expect(extractClientIp(make({ "x-real-ip": "203.0.113.5", "x-forwarded-for": "198.51.100.1" }), "198.51.100.7")).toBe("203.0.113.5")
   })
 
   test("falls back to the supplied direct address when no forwarded header is present", () => {

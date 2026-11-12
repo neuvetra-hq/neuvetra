@@ -86,7 +86,7 @@ async function request(actor: HostedWorkspaceActor, path: string, body?: unknown
       headers: { authorization: `Bearer ${actor.accessToken}`, ...(body === undefined ? {} : { "content-type": "application/json" }) },
     })
     actor.signal?.throwIfAborted()
-    if (response.status === 401 || response.status === 403) actor.onUnauthorized?.()
+    if (response.status === 401 || response.status === 403) actor.onUnauthorized?.(response.status)
     const value: unknown = await response.json().catch(() => null)
     return { response, value }
   })

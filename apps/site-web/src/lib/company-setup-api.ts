@@ -71,7 +71,7 @@ async function request<T>(actor: HostedWorkspaceActor, path: string, input?: Com
     signal: actor.signal,
   })
   actor.signal?.throwIfAborted()
-  if (response.status === 401 || response.status === 403) actor.onUnauthorized?.()
+  if (response.status === 401 || response.status === 403) actor.onUnauthorized?.(response.status)
   const value: unknown = await response.json().catch(() => null)
   actor.signal?.throwIfAborted()
   if (!response.ok) throw new CompanySetupApiError(value && typeof value === "object" && "error" in value && typeof value.error === "string" ? value.error : "Company setup is unavailable.", response.status)
