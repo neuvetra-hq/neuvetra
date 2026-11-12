@@ -1,0 +1,32 @@
+/* WO-06: the record view and the Activity list's rows as links. Unlayered on purpose (see the developer brief):
+   a layered rule would lose to the unlayered journey.css and staging.css rules. */
+
+/* A saved-record row: its title is a link to #/activity/<id>; the link's hit area covers the whole card. */
+.nv-app .collection-row { position: relative; }
+.nv-app .collection-row-link { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; color: var(--text); text-decoration: none; }
+.nv-app .collection-row-link__title { text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 4px; overflow-wrap: anywhere; }
+.nv-app .collection-row-link:hover .collection-row-link__title { text-decoration-color: currentColor; color: var(--accent-hi); }
+.nv-app .collection-row-link__chevron { flex: none; font-size: 1.6rem; line-height: 1; color: var(--accent); }
+.nv-app .collection-row-link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.nv-app .collection-row:hover { border-color: var(--accent); }
+.nv-app .collection-row:has(.collection-row-link:focus-visible) { outline: var(--nv-focus-width) solid var(--nv-color-focus); outline-offset: 3px; }
+.nv-app .collection-row button { position: relative; z-index: 1; }
+.nv-app .collection-row > p { margin: 6px 0; }
+
+/* The record view. */
+.nv-app .collection-back { margin: 0 0 6px; }
+.nv-app .collection-back .nv-link { display: inline-flex; align-items: center; min-height: 44px; }
+.nv-app .collection-record-view > h1 { margin-top: 0; overflow-wrap: anywhere; }
+.nv-app .collection-record-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 4px 0 16px; color: var(--muted); }
+.nv-app .collection-state-chip { display: inline-block; padding: 3px 10px; border-radius: var(--nv-radius-pill); border: 1px solid var(--line-2); background: var(--surface-3); color: var(--text); font-size: .9rem; }
+.nv-app .collection-state-chip--attention { border-color: var(--warn-line); background: var(--warn-bg); color: var(--warn); }
+.nv-app .collection-state-chip--ready { border-color: var(--ok-line); background: var(--ok-bg); color: var(--ok); }
+.nv-app .collection-record-facts { display: grid; grid-template-columns: minmax(8rem, max-content) minmax(0, 1fr); gap: 8px 18px; margin: 0 0 12px; }
+.nv-app .collection-record-facts dt { color: var(--muted); }
+.nv-app .collection-record-facts dd { margin: 0; overflow-wrap: anywhere; }
+.nv-app .collection-record-facts ul { margin: 0; padding-left: 18px; }
+.nv-app .collection-fixed-type { margin: 18px 0 6px; font-weight: 600; }
+@media (max-width: 480px) {
+  .nv-app .collection-record-facts { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .nv-app .collection-record-facts dd { margin-bottom: 8px; }
+}
