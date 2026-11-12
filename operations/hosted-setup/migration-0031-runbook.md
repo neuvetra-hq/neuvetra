@@ -61,10 +61,11 @@ A3. Open the staging site's `/ready` address (the one you check after every depl
 `"schemaVersion":30`. If it says anything else, stop.
 
 A4. Make two folders outside the repository, for example `C:\neuvetra-0031\before` and `C:\neuvetra-0031\after`.
-Sign in to staging. For each of the two test companies (Synthetic Cedar and Synthetic Redwood), on its Results page:
+Sign in to staging. For each of the two test companies (Synthetic Cedar and Synthetic Redwood):
 
-- press **Download CSV** (the Scope 1 and 2 Results CSV);
-- press **Download Scope 3 CSV** (the plain CSV). Do **not** use "Download as ZIP (one CSV per section)": the ZIP's bytes
+- on its Results page, press **Download CSV** (the Scope 1 and 2 Results CSV);
+- in its Scope 3 results (*location: unconfirmed, check on your screen*; the code places it lower on the same Results page,
+  but it may appear as a separate tab or view), press **Download Scope 3 CSV** (the plain CSV). Do **not** use "Download as ZIP (one CSV per section)": the ZIP's bytes
   contain a timestamp and always differ.
 
 Both companies' files download with the same names (`neuvetra-draft-results-<date>.csv` and
@@ -155,8 +156,16 @@ $p = Read-Host -AsSecureString 'Database password'; [uri]::EscapeDataString([Net
 ```
 
 It asks for the password (what you type or paste is shown as `*` and is not saved in the PowerShell history), and prints the
-encoded form. Put that printed text in place of `<database-password>` in the export file, then type `Clear-Host` to clear the
-screen and close PowerShell when you are done. Do not put the password anywhere else (no chat, no other file, no website).
+encoded form. (If you use `Start-Transcript`, stop it first with `Stop-Transcript`; otherwise nothing records the screen.)
+Put that printed text in place of `<database-password>` in the export file, then:
+
+- type `Clear-Host` to clear the screen, and close that PowerShell window when you are done;
+- clear the clipboard with `Set-Clipboard -Value ' '`;
+- if Windows clipboard history is on (press **Win+V**; if it lists entries), delete the password and encoded-password
+  entries there too (or choose "Clear all").
+
+Do the same clipboard clean-up (`Set-Clipboard -Value ' '` and Win+V) after you paste the connection string into the export
+file, even if the password needed no encoding. Do not put the password anywhere else (no chat, no other file, no website).
 A password of only letters and digits needs no encoding; resetting it to such a password in Supabase is an alternative.
 
 B6. Choose a work folder **outside** the repository for the output files, for example `C:\neuvetra-0031`. Each tool refuses
@@ -221,13 +230,14 @@ backup anyway, run it **before C1**. It needs:
 - a Windows `pg_dump.exe` whose major version is at least the staging server's. *Staging's PostgreSQL major version
   (we expect 17, as CI uses): unconfirmed, check on your screen.* Check it first: in the Supabase SQL editor run
   `show server_version;` and compare the number before the first dot with the one printed by
-  `& <path to pg_dump.exe> --version`. If pg_dump's is lower, get a newer pg_dump or skip the backup.
+  `& "<path to pg_dump.exe>" --version` (keep the double quotes: the usual path, such as
+  `C:\Program Files\PostgreSQL\17\bin\pg_dump.exe`, contains a space). If pg_dump's is lower, get a newer pg_dump or skip the backup.
 - the operator export file (B5) and the certificate `tools\cloud\fixtures\supabase-prod-ca-2021.crt`;
 - `-RecoveryDirectory` set to **exactly** the recovery folder written on **line 27** of the script, inside
   `GetFullPath('…')` (it refuses any other folder).
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File tools/staging/backup-existing.ps1 -ExportPath <your operator export file> -PgDumpPath <path to pg_dump.exe> -CertificatePath tools/cloud/fixtures/supabase-prod-ca-2021.crt -RecoveryDirectory <the folder on line 27 of the script> -ApplicationOnly
+powershell -ExecutionPolicy Bypass -File tools/staging/backup-existing.ps1 -ExportPath <your operator export file> -PgDumpPath "<path to pg_dump.exe>" -CertificatePath tools/cloud/fixtures/supabase-prod-ca-2021.crt -RecoveryDirectory <the folder on line 27 of the script> -ApplicationOnly
 ```
 
 `-ExecutionPolicy Bypass` lets Windows run this one unsigned script file (the default Windows policy refuses with "running
@@ -245,8 +255,10 @@ Paste this once into PowerShell (it defines a small helper; nothing is changed):
 
 ```powershell
 function Compare-Csv($name) {
-  $b = @(Get-Content -LiteralPath "C:\neuvetra-0031\before\$name" | Where-Object { $_ -notlike '# Generated:*' })
-  $a = @(Get-Content -LiteralPath "C:\neuvetra-0031\after\$name"  | Where-Object { $_ -notlike '# Generated:*' })
+  $bp = "C:\neuvetra-0031\before\$name"; $ap = "C:\neuvetra-0031\after\$name"
+  if (-not (Test-Path -LiteralPath $bp) -or -not (Test-Path -LiteralPath $ap)) { "$name MISSING"; return }
+  $b = @(Get-Content -LiteralPath $bp | Where-Object { $_ -notlike '# Generated:*' })
+  $a = @(Get-Content -LiteralPath $ap | Where-Object { $_ -notlike '# Generated:*' })
   if (($b -join "`n") -ceq ($a -join "`n")) { "$name SAME" } else { "$name DIFFERENT"; Compare-Object $b $a -CaseSensitive }
 }
 'cedar-results.csv','cedar-scope3.csv','redwood-results.csv','redwood-scope3.csv' | ForEach-Object { Compare-Csv $_ }
@@ -254,8 +266,9 @@ function Compare-Csv($name) {
 
 Every file must print `SAME` (the only line allowed to differ is `# Generated: …`, which the helper ignores). If one prints
 `DIFFERENT`, the lines below it show what changed (`<=` before, `=>` after): do not retry anything and do not roll Railway
-back (rule 2); send the CTO both files. Leave out the name of any Results CSV you skipped in A4 (more than 400 active
-records).
+back (rule 2); send the CTO both files. A file that is absent from either folder prints `MISSING` (never `SAME`): check
+its name and folder. Leave out the name of any Results CSV you skipped in A4 (more than 400 active records); any other
+`MISSING` means a download is missing, so fix that before continuing.
 
 E3. Open `0031-apply.json`: `migration.schemaVersion` must be `31`, and the last entry of `migration.migrations` must be
 `0031_integrity_guards.sql` with sha256 `3513b5da55e41133d94faaf3a8b610e1fb66f415a95393272d3f8b1c49246cd7`.
@@ -292,15 +305,16 @@ Use this only on the CTO's instruction. It restores the three functions exactly 
 0031 receipt, the TRUNCATE guards and the access grants; the new image keeps serving (at schema 31); and 0031's drift guard
 accepts the restored functions later. No backup restore is needed, because 0031 writes no rows.
 
-F0. *Whether the SQL editor's role owns these functions: unconfirmed, check on your screen.* Run this read-only query in the
-Supabase SQL editor first:
+F0. *Whether the SQL editor's role owns these functions and may create in schema `neuvetra`: unconfirmed, check on your
+screen.* Replacing a function needs both. Run this read-only query in the Supabase SQL editor first:
 
 ```sql
-select proname, pg_get_userbyid(proowner) as owner, pg_has_role(proowner,'USAGE') as can_replace from pg_proc where pronamespace='neuvetra'::regnamespace and proname in ('collection_assert_activity','save_collection_activity','approve_scope3_report') order by 1;
+select proname, pg_get_userbyid(proowner) as owner, pg_has_role(proowner,'USAGE') as can_replace, has_schema_privilege('neuvetra','CREATE') as can_create from pg_proc where pronamespace='neuvetra'::regnamespace and proname in ('collection_assert_activity','save_collection_activity','approve_scope3_report') order by 1;
 ```
 
-All three rows must show `can_replace` = `true`. If any shows `false`, stop and ask the CTO. (If you ran F anyway, the
-transaction would stop with `must be owner of function …` and change nothing.)
+All three rows must show `can_replace` = `true` **and** `can_create` = `true`. If any value is `false`, stop and ask the CTO.
+(If you ran F anyway, the transaction would stop with `permission denied for schema neuvetra` when `can_create` is false, or
+with `must be owner of function …` when only `can_replace` is false, and in either case change nothing.)
 
 F1. Copy these three blocks from `packages/neuvetra-database/src/migrations/0030_scope3_completion.sql`, **from GitHub's Raw
 view** (open the file on GitHub on the `main` branch and press **Raw**):
@@ -322,7 +336,8 @@ begin;
 commit;
 ```
 
-If it stops with `must be owner of function …`, nothing was changed: stop and ask the CTO.
+If it stops with `must be owner of function …` or `permission denied for schema neuvetra`, nothing was changed: stop and
+ask the CTO.
 
 F2. Run the function-text query above. All three values must match the **"after F"** column.
 
@@ -336,8 +351,8 @@ F2. Run the function-text query above. All three values must match the **"after 
 
 Use this only if the CTO tells you the tools in section C cannot be used. It skips the tools' safety checks (target check,
 containment check, runner lock), so three mistakes are easy to make and each one breaks staging. Rules 1 and 2 apply in full,
-and the ownership check F0 applies too (0031 replaces the same three functions; without ownership it stops with
-`must be owner …` and changes nothing).
+and the check F0 applies too (0031 replaces the same three functions; without ownership or CREATE on the schema it
+stops with `must be owner of function …` or `permission denied for schema neuvetra` and changes nothing).
 
 G1. **Wrap everything in one transaction.** Paste `begin;`, then the whole of `0031_integrity_guards.sql`, then the receipt
 line, then `commit;`, and run it as one query. Without `begin; … commit;` the file's `set local lock_timeout` is ignored and a
@@ -358,3 +373,11 @@ G4. Run the function-text query above. All three values must match the **"after 
 - **Any differs:** the paste changed the text. Staging keeps working (the image checks the receipt, not the function text),
   but the next migration's drift guard would stop with 55000. **Do not run G again**: a second run stops (at 0031's drift guard,
   or on the receipt that is already there) and changes nothing. Send the CTO the query result and the time; the CTO decides the repair.
+
+## When you are finished
+
+B3 left your repository folder on a detached commit. Put it back on the main branch (from the repository root):
+
+```powershell
+git checkout main
+```
