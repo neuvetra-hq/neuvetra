@@ -64,6 +64,9 @@ describe("PR-8, PR-9, PR-10: words and numbers", () => {
     const rows = [{ category: 15, status: "screening_conflict" as const, subtotal: { display: "102000.0000", unrounded: "102000", unit: "kg CO2e" } }, { category: 8, status: "screening_conflict" as const, subtotal: { display: "4.0049", unrounded: "4.0049", unit: "kg CO2e" } }, { category: 1, status: "calculated" as const, subtotal: { display: "5.0000", unrounded: "5", unit: "kg CO2e" } }]
     expect(scope3ConflictInHeadline(rows as never)).toEqual({ tonnes: "102.00", categories: [15, 8] })
     expect(scope3ConflictInHeadline(fixture.coverage.categories)).toBeNull()
+    // BF-07: the sum of the unrounded figures is rounded once; the displays (each already rounded to 4 dp) are not summed.
+    const halves = [15, 8].map(category => ({ category, status: "screening_conflict" as const, subtotal: { display: "2507.5000", unrounded: "2507.49998", unit: "kg CO2e" } }))
+    expect(scope3ConflictInHeadline(halves as never)).toEqual({ tonnes: "5.01", categories: [15, 8] })
   })
   test("a dated spend line shows its invoice date; other records their period", () => {
     expect(scope3SavedRecordWhen({ kind: "purchase_spend", period: { start: "2025-01-01" }, payload: { lineDate: "2025-06-30" } }, "2025-12-31")).toBe("Invoice date 2025-06-30")
