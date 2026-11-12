@@ -116,10 +116,11 @@ describe("Scope3ScreeningEditor (I-04)", () => {
     expect(blocked.app.nodes().find(node => node.type === "button")!.props.disabled).toBe(true)
     expect(blocked.app.text()).toContain("Save or discard the setup changes first.")
     expect(blocked.app.text()).toContain(texts.SCOPE3_DISCLOSURE_TEXT.selective_downstream_exclusion!)
+    // WO-12: a member sees the saved assessment as text: no control at all (enabled or disabled), and every answer shown.
     const member = await editor({ canManage: false, saved: savedRecord() })
-    expect(member.app.nodes().some(node => node.type === "button")).toBe(false)
-    await member.type("Justification", "x")
-    expect(member.control("Justification")!.props.value).toBe("Below 1% of the estimated total.")
+    expect(member.app.nodes().filter(node => ["button", "input", "select", "textarea"].includes(node.type as string))).toEqual([])
+    expect(member.app.text()).toContain("Below 1% of the estimated total.")
+    expect(member.app.text()).toContain("View only: an owner or admin of your company can change it.")
   })
 })
 
@@ -154,6 +155,13 @@ describe("company setup with Scope 3 assessments (I-04)", () => {
     expect(panel.props.saved.category).toBe(6)
     await panel.props.onSave({ assessment: { category: 2 } }); await app.settle()
     expect(app.text()).toContain("Assessment for 2025: revision 2 · Immaterial, with an estimate")
+  })
+
+  test("WO-12: a member is offered no Add or Review button; a saved assessment is shown open, as text", async () => {
+    const { app } = await mount(async () => ({ ...year([savedRecord({ category: 6, reasonCode: "data_unavailable", setupVersionId: setupId })]), canManage: false }))
+    expect(app.nodes().filter(node => node.type === "button" && /assessment/i.test(node.children.flat(Infinity).join("")))).toEqual([])
+    const shown = app.nodes().filter(node => typeof node.type === "function" && (node.type as { name?: string }).name === "Scope3ScreeningEditor")
+    expect(shown.map(node => [node.props.category, node.props.canManage])).toEqual([[6, false]])
   })
 
   test("below schema 30 the decisions work as before and the screen says why there are no assessments", async () => {
