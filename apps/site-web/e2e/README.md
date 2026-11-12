@@ -86,6 +86,7 @@ It covers, through the real server and database:
 - the Python engines behind Results;
 - how the browser handles 401 (session ended), 503 (transient) and the session check;
 - readiness (WO-04b): the Overview, the side navigation, the Menu sheet, Ask and the Results Scope 3 to-do agree, Scope 3 results are requested once per visit, and each kind of next-step action opens its view with focus on the page heading.
+- members (WO-12): Activity, the spend import, the record view, Results and Scope 3 assessments offer a view-only member reading controls only;
 - readiness follow-ups (WO-04c, the last journey): a Scope 3 possible duplicate reads the same on the Overview ("to confirm (counted)") and in the Results to-do, Ask's Try again after a failed Scope 3 check makes exactly one request, a spend import (two writes) shows "Checking…" at once and rechecks Scope 3 once, and no Overview action button wraps past two lines at 390 px. It adds a business-travel record repeating `T-1` and a two-line spend import to company 1, so it runs last.
 
 It does **not** cover:
@@ -98,17 +99,13 @@ It does **not** cover:
 
 Those are covered, where they are covered at all, by the site-api and database unit and native suites and by the staging image smoke.
 
-## Tolerated check: member write controls (WO-12, still open)
+## Member checks (WO-12)
 
-On `main`, a member still sees some write controls enabled. The server refuses those writes. The member journey lists, by accessible name, every enabled control in the main region, then the WO-08 shell's (the top bar and the context bar at 1360 px and at 390 px, and the Menu sheet). It allows two lists and fails on anything else:
+A view-only member is checked by real state, with no tolerance list: every control the page shows a member, enabled or disabled, by accessible name, must be a reading control. `MEMBER_READING_CONTROLS` lists them: navigation, filters and search, reload, a record's earlier versions, downloading a cleared original, the spend review's tabs, "Show lines"/"Hide lines" and "Open" a line, and the WO-08 shell's ≡ Menu, Close menu, Details, the sheet's navigation items and Ask, and Sign out. Results adds its own reading controls (filters, search, downloads and print, "Show all", "View …", "Close the assessment", "Recalculate").
 
-- `MEMBER_READING_CONTROLS`: navigation, list filters and search, reload, the spend review's tabs, and the shell's ≡ Menu, Close menu, Details, the sheet's navigation items and Ask, and Sign out.
-- `WO12_OPEN_MEMBER_CONTROLS`: exactly the known WO-12 controls:
-  - the new-record form's 22 type buttons, fields and evidence checkbox;
-  - the file pickers;
-  - the spend import's setup location;
-  - the spend mapping's "Map".
+- The Activity journey checks the list (no new-record form), each spend review tab with a group's lines shown, the record view (no "Correct this record") and the shell at 1360 px and 390 px.
+- The Results journey (1360 px and 390 px) opens a Scope 3 assessment with "View the assessment" and checks it is text (no field, no button), and that no "Add" or "Edit the assessment" is offered. It then checks company setup's assessments.
 
-A control's name is its `aria-label`, otherwise its label's first `span` (the field name in both the current markup and WO-10's), otherwise its text. When WO-12 lands, delete `WO12_OPEN_MEMBER_CONTROLS` so the check becomes "no write control at all". If a later PR renames one of those fields, update its entry.
+A control's name is its `aria-label`, otherwise its label's field name (`.setup-field__name`, without the "Required" / "Needed for results" / "Optional" label after it), otherwise its text. Company setup's own form is still shown to a member as a disabled form (outside WO-12); the suite does not check it.
 
 The record-view journeys (WO-06) were written while PR #39 was open and ran only when the bundle contained the record view. PR #39 merged before this suite did, so they now run unconditionally. A regression that removes the record view fails them; it does not skip them.

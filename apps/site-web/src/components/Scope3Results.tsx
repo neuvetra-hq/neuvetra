@@ -12,6 +12,8 @@ import { requestRecordFieldFocus } from "@/lib/scope3-fix-target"
 // Round 3 lane C (PR-3): imported spend holds open the spend import's grouped review.
 import { requestSpendImportFocus } from "@/lib/spend-import-target"
 import { SCOPE3_ACTION_TEXT, SCOPE3_DISCLOSURE_GROUP_TEXT, SCOPE3_EMPTY_TEXT, SCOPE3_RECORD_FILTER_TEXT, SCOPE3_SCREENING_CONFLICT_TEXT, SCOPE3_TODO_TEXT, SCOPE3_UNIT_TEXT } from "@/lib/scope3-results-text"
+// WO-12: a view-only member views the assessment (read-only), never "Add" or "Edit".
+import { SCREENING_READ_ONLY_TEXT } from "@/lib/wo12-text"
 import { scope3ClosedLines, scope3LineState } from "../../../../packages/neuvetra-database/src/scope3-trace"
 import { scope3LineMemoText, scope3MemoText, SCOPE3_SUPERSEDED_MEMO_TEXT_R3A } from "@/lib/scope3-results-api"
 import { scope3CategoryDq, scope3ConflictInHeadline, scope3DqScoresText, scope3ProvenanceText, scope3QuantityText, scope3ScreeningWord } from "@/lib/scope3-display-r3d"
@@ -179,7 +181,10 @@ export function Scope3Panel({ state, canManage, onFix, onRetry, reports, onNavig
   const actionButton = (action: PanelAction, context: string, key: string) => {
     if ((action.type === "setup" || action.type === "collection" || action.type === "spend") && !onNavigate) return null
     if (action.type === "collection" && !canManage) return null
-    const label = action.type === "fix" && !canManage ? SCOPE3_ACTION_TEXT.view : action.type === "assessment" && inline && ui!.assessment === action.category ? SCOPE3_ACTION_TEXT.closeAssessment : action.label
+    // WO-12: a member is offered views, not changes: "View the assessment" (shown as text), "View company setup" and "View the
+    // spend import" (the same navigation; both are read-only for a member).
+    const label = action.type === "fix" && !canManage ? SCOPE3_ACTION_TEXT.view : action.type === "assessment" && inline && ui!.assessment === action.category ? SCOPE3_ACTION_TEXT.closeAssessment : action.type === "assessment" && !canManage ? SCREENING_READ_ONLY_TEXT.viewAssessment
+      : action.type === "setup" && !canManage ? SCREENING_READ_ONLY_TEXT.viewSetup : action.type === "spend" && !canManage ? SCREENING_READ_ONLY_TEXT.viewSpendImport : action.label
     return <button key={key} type="button" className="nv-btn nv-btn--sm" aria-label={`${label}: ${context}`} aria-expanded={action.type === "assessment" && inline ? ui!.assessment === action.category : undefined} onClick={() => act(action)}>{label}</button>
   }
   const shownTodos = ui?.todosOpen || todos.length <= TODO_PAGE ? todos : todos.slice(0, TODO_PAGE)
@@ -203,7 +208,7 @@ export function Scope3Panel({ state, canManage, onFix, onRetry, reports, onNavig
     {results.warnings.map(warning => <div key={warning} className="nv-notice nv-notice--error" role="alert"><Icon name="alert" /><p>{warning}</p></div>)}
     {results.unmatchedScreening.length > 0 && <UnmatchedScreening names={results.unmatchedScreening} />}
     {empty ? <div className="nv-notice nv-notice--info s3-empty"><Icon name="info" /><div><p><strong>{SCOPE3_EMPTY_TEXT.heading}</strong></p><p>{SCOPE3_EMPTY_TEXT.body}</p>
-      {onNavigate && <div className="nv-actions" style={{ marginTop: 10 }}><button type="button" className="nv-btn nv-btn--sm nv-btn--primary" onClick={() => onNavigate("setup")}>{SCOPE3_EMPTY_TEXT.screen}</button>{canManage && <button type="button" className="nv-btn nv-btn--sm" onClick={() => onNavigate("collection")}>{SCOPE3_EMPTY_TEXT.addRecord}</button>}</div>}</div></div> : <>
+      {onNavigate && <div className="nv-actions" style={{ marginTop: 10 }}><button type="button" className="nv-btn nv-btn--sm nv-btn--primary" onClick={() => onNavigate("setup")}>{canManage ? SCOPE3_EMPTY_TEXT.screen : SCREENING_READ_ONLY_TEXT.viewSetup}</button>{canManage && <button type="button" className="nv-btn nv-btn--sm" onClick={() => onNavigate("collection")}>{SCOPE3_EMPTY_TEXT.addRecord}</button>}</div>}</div></div> : <>
       <div className="nv-grid-3" style={{ marginTop: 12 }}>
         <div className="nv-stat"><span className="nv-stat__label">Scope 3 · known sources</span>
           <span className="nv-stat__value" title={total ? SCOPE3_UNIT_TEXT.hoverKg(groupDigits(total.display)) : undefined}>{total ? kgToTonnes(total.unrounded) : "—"}<span className="nv-stat__unit">t CO2e</span></span>

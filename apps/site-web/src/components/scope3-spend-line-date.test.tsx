@@ -111,14 +111,11 @@ describe("B1: the Activity screen's edit applies each change to the current draf
     expect(screen.app.button("Save activity")!.props["aria-describedby"]).not.toBe("collection-save-unchanged") // marked changed
   })
 
-  test("a member's edits still change nothing", async () => {
+  test("a member is offered no record form at all (WO-12), so there is nothing to edit", async () => {
     const screen = await workspace({ role: "member" })
-    screen.app.button(`${kindLabel("purchase_spend")} (Scope 3)`)!.props.onClick(); await screen.app.settle()
-    const before = structuredClone(screen.recordForm()!.props.activity)
-    screen.recordForm()!.props.onEdit((next: CollectionActivity) => { (next.payload as any).description = "Parcels" })
-    screen.recordForm()!.props.onEdit((next: CollectionActivity) => { (next.payload as any).lineDate = "2025-06-30" })
-    await screen.app.settle()
-    expect(screen.recordForm()!.props.activity).toEqual(before)
+    expect(screen.app.button(`${kindLabel("purchase_spend")} (Scope 3)`)).toBeUndefined()
+    expect(screen.recordForm()).toBeUndefined()
+    expect(screen.app.button("Save activity")).toBeUndefined()
   })
 
   test("electricity: a new ZIP still clears the earlier lookup and the utility chosen from it", async () => {

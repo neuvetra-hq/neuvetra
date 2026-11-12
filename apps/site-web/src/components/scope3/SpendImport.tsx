@@ -10,6 +10,8 @@ import { SPEND_BASIS_TEXT_R2C } from "@/lib/scope3-text-r2c"
 // Round 3 lane C (decisions 8 and 9, PR-11): suggestion confidence, withdraw suggestions, category from the account.
 import { SPEND_TEXT_R3C } from "@/lib/scope3-text-r3c"
 import { SPEND_IMPORT_ANCHOR, takeSpendImportFocus } from "@/lib/spend-import-target"
+// WO-12: a view-only member sees the imports and their lines, never the upload, mapping or withdrawal controls.
+import { SPEND_IMPORT_READ_ONLY_TEXT } from "@/lib/wo12-text"
 import {
   convertScope3SpendCurrency, importScope3SpendFile, loadScope3SpendImports, saveScope3SpendMapping, scope3SpendDuplicatePairs, scope3SpendMappingBody, withdrawScope3SpendImport,
   Scope3SpendImportApiError, SCOPE3_SPEND_TEMPLATE_PATH, type Scope3SpendImportResult, type Scope3SpendImportsView, type Scope3SpendLineView, type Scope3SpendMappingView,
@@ -225,6 +227,8 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
   const visibleGroups = groups.filter(group => matches(query, group.vendor, group.glAccount, ...group.descriptions, ...group.glDescriptions))
   const chosen = groups.filter(group => selected.includes(group.keyInput))
   const canManage = view?.canManage !== false
+  // WO-12: a member (by role, before the view has loaded too, or as the server says) is shown no write control at all.
+  const readOnly = actor.role === "member" || !canManage
   const otherCount = other.reduce((n, entry) => n + entry.lines.length, 0)
   // Round 3 lane C (PR-11): the currencies of active imported lines still held for their currency, with counts and totals.
   const foreign = view ? [...new Set(view.lines.filter(line => line.state === "active" && line.supersededBy === null && line.plan.reasons.includes("currency_not_supported")).map(line => line.currency))].sort().map(currency => {
@@ -264,12 +268,12 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
 
       <div className="spend-import__step" aria-label="Upload">
         <h4 className="spend-import__step-title"><span className="spend-import__num">1</span> Choose a file and check it</h4>
-        <div className="spend-import__upload">
+        {readOnly ? <p className="nv-subtle spend-import__read-only">{SPEND_IMPORT_READ_ONLY_TEXT.upload}</p> : <div className="spend-import__upload">
           <label className="nv-field"><span>Spend file (CSV)</span><input key={fileInputKey} aria-label="Spend file" type="file" accept=".csv,text/csv" onChange={event => void choose(event.target.files?.[0])} /></label>
           {view && <label className="nv-field"><span>Setup location</span><select aria-label="Setup location" value={locationId} onChange={event => setLocationId(event.target.value)}>{view.locations.map(location => <option key={location.id} value={location.id}>{location.name}</option>)}</select></label>}
           {/* WO-10: focusable while it can't act (aria-disabled), so pressing it never leaves focus on the page body; runImport checks the same. */}
-          <button type="button" className="nv-btn nv-btn--primary" disabled={!canManage} aria-disabled={!preview?.ok || !locationId || busy || undefined} onClick={() => void runImport()}>Import spend lines</button>
-        </div>
+          <button type="button" className="nv-btn nv-btn--primary" aria-disabled={!preview?.ok || !locationId || busy || undefined} onClick={() => void runImport()}>Import spend lines</button>
+        </div>}
         {preview && !preview.ok && <div className="nv-notice nv-notice--error" role="alert"><div><p>This file can’t be imported until these are fixed (nothing was saved):</p><ul>{preview.errors.map((p, i) => <li key={i}>{p.line ? `Line ${p.line}: ` : ""}{p.message}</li>)}</ul></div></div>}
         {problems.length > 0 && <div className="nv-notice nv-notice--error" role="alert"><ul>{problems.map((p, i) => <li key={i}>{p}</li>)}</ul></div>}
         {preview?.ok && <div aria-label="Preview" className="spend-import__preview">
@@ -306,12 +310,12 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
             const active = view.lines.filter(line => line.importId === imported.id && line.state === "active").length
             return <li key={imported.id}>
               <strong>{imported.fileName}</strong> — {active} active line(s) of {imported.rowCount}.
-              <button type="button" className="nv-btn nv-btn--sm" disabled={busy || !canManage || active === 0} onClick={() => setWithdrawal({ importId: imported.id, reason: "" })}>Withdraw this import</button>
-              {withdrawal?.importId === imported.id && <div className="nv-notice spend-import__withdraw" aria-label={`Withdraw ${imported.fileName}`}>
+              {!readOnly && <button type="button" className="nv-btn nv-btn--sm" disabled={busy || active === 0} onClick={() => setWithdrawal({ importId: imported.id, reason: "" })}>Withdraw this import</button>}
+              {!readOnly && withdrawal?.importId === imported.id && <div className="nv-notice spend-import__withdraw" aria-label={`Withdraw ${imported.fileName}`}>
                 <p>Withdraw all active lines from this file. They stay in the history and no longer count in the report.</p>
                 <label className="nv-field"><span>Reason for withdrawing {imported.fileName}</span><textarea aria-label={`Reason for withdrawing ${imported.fileName}`} maxLength={2000} value={withdrawal.reason} disabled={busy} onChange={event => setWithdrawal({ importId: imported.id, reason: event.target.value })} /></label>
                 <div className="nv-actions">
-                  <button type="button" className="nv-btn" disabled={busy || !canManage || withdrawal.reason.trim().length < 3} onClick={withdrawImport}>Confirm withdrawal</button>
+                  <button type="button" className="nv-btn" disabled={busy || withdrawal.reason.trim().length < 3} onClick={withdrawImport}>Confirm withdrawal</button>
                   <button type="button" className="nv-btn nv-btn--ghost" disabled={busy} onClick={() => setWithdrawal(null)}>Cancel withdrawal</button>
                 </div>
               </div>}
@@ -335,13 +339,13 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
           {groups.length === 0 ? <p className="nv-notice nv-notice--ok">Every imported line that needed a code has one.</p> : <>
             <p className="nv-subtle">Lines grouped by vendor and GL account. One mapping covers the group and is remembered for later files; a line can be mapped differently on its own. Lines held for anything else are under “Other holds”.</p>
             <label className="nv-field spend-import__search"><span>Find a vendor, account or description</span><input aria-label="Find lines" value={query} onChange={event => { setQuery(event.target.value); setShown(PAGE) }} /></label>
-            {chosen.length > 0 && <div className="spend-import__bulk" aria-label="Map selected groups">
+            {!readOnly && chosen.length > 0 && <div className="spend-import__bulk" aria-label="Map selected groups">
               <SpendMappingForm key={chosen.map(group => group.keyInput).join("|")} dirtyKey="bulk" onDirty={formDirty} title={`Map ${chosen.length} selected group(s): ${chosen.reduce((n, g) => n + g.lines.length, 0)} line(s)`} texts={{ vendor: chosen.length === 1 ? chosen[0]!.vendor : "", glAccount: chosen.length === 1 ? chosen[0]!.glAccount : "", glDescriptions: chosen.flatMap(g => g.glDescriptions), descriptions: chosen.flatMap(g => g.descriptions) }}
-                initial={null} view={view} disabled={busy || !canManage} lines={chosen.reduce((n, g) => n + g.lines.length - g.overrides.size, 0)}
+                initial={null} view={view} disabled={busy} lines={chosen.reduce((n, g) => n + g.lines.length - g.overrides.size, 0)}
                 onSave={choice => saveMappings(chosen.map(target), choice)} onCancel={() => setSelected([])} />
             </div>}
             <ul className="spend-import__groups">{visibleGroups.slice(0, shown).map(group => <li key={group.keyInput}>
-              <SpendGroupRow group={group} view={view} selected={selected.includes(group.keyInput)} disabled={busy || !canManage} onOpenRecord={onOpenRecord} onFormDirty={formDirty}
+              <SpendGroupRow group={group} view={view} selected={selected.includes(group.keyInput)} disabled={busy} readOnly={readOnly} onOpenRecord={onOpenRecord} onFormDirty={formDirty}
                 onWithdraw={reason => correct(group.lines.map(line => line.recordId), "withdraw", reason)}
                 onSelect={on => setSelected(current => on ? [...current.filter(key => key !== group.keyInput), group.keyInput] : current.filter(key => key !== group.keyInput))}
                 onSave={choice => saveMappings([target(group)], choice)} onSaveLine={(line, choice) => saveMappings([lineTarget(line, group.overrides.get(line.recordId) ?? null)], choice)} />
@@ -352,7 +356,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
         </div>}
 
         {tab === "other" && <div aria-label="Other holds" className="spend-import__panel">
-          {foreign.length > 0 && <div className="spend-import__convert" aria-label="Convert to US dollars">
+          {!readOnly && foreign.length > 0 && <div className="spend-import__convert" aria-label="Convert to US dollars">
             <h5 className="spend-import__convert-title">{SPEND_TEXT_R3C.convertTitle}</h5>
             <p className="nv-subtle">{SPEND_TEXT_R3C.convertIntro}</p>
             {foreign.map(({ currency, lines: count, total }) => {
@@ -366,7 +370,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
                   <label className="nv-field"><span>{SPEND_TEXT_R3C.sourceLabel}</span><input aria-label={`${currency} rate source`} value={typed.rateSource} placeholder={SPEND_TEXT_R3C.sourcePlaceholder} onChange={event => set("rateSource", event.target.value)} /></label>
                   <label className="nv-field"><span>{SPEND_TEXT_R3C.dateLabel}</span><input aria-label={`${currency} rate date`} type="date" value={typed.rateDate} onChange={event => set("rateDate", event.target.value)} /></label>
                 </div>
-                <div className="nv-actions"><button type="button" className="nv-btn nv-btn--primary nv-btn--sm" disabled={busy || !canManage || !ready} onClick={() => void convert(currency)}>{SPEND_TEXT_R3C.convertButton(count, currency)}</button></div>
+                <div className="nv-actions"><button type="button" className="nv-btn nv-btn--primary nv-btn--sm" disabled={busy || !ready} onClick={() => void convert(currency)}>{SPEND_TEXT_R3C.convertButton(count, currency)}</button></div>
               </fieldset>
             })}
           </div>}
@@ -379,7 +383,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
                 <tbody>{entry.lines.map(line => <tr key={line.recordId}><td data-label="Line">{line.sourceId}</td><td data-label="Vendor">{line.vendor || "—"}</td><td data-label="Description">{line.description}</td><td data-label="Date">{line.lineDate ?? "—"}</td>
                   <td data-label="Amount" className="nv-right nv-num">{spendMoney(line.amount, line.currency)}</td>
                   <td data-label=""><div className="nv-actions">{onOpenRecord && <button type="button" className="nv-btn nv-btn--sm" onClick={() => onOpenRecord(line.recordId)}>Open the line</button>}
-                    {fix.withdraw && <button type="button" className="nv-btn nv-btn--sm nv-btn--danger" disabled={busy || !canManage} onClick={() => void correct([line.recordId], "withdraw", reasonText(entry.reason).split(". ")[0]!.slice(0, 200))}>Withdraw</button>}</div></td></tr>)}</tbody></table></div>
+                    {fix.withdraw && !readOnly && <button type="button" className="nv-btn nv-btn--sm nv-btn--danger" disabled={busy} onClick={() => void correct([line.recordId], "withdraw", reasonText(entry.reason).split(". ")[0]!.slice(0, 200))}>Withdraw</button>}</div></td></tr>)}</tbody></table></div>
             </div>
           })}
         </div>}
@@ -387,8 +391,8 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
         {tab === "duplicates" && <div aria-label="Possible duplicates" className="spend-import__panel">
           {duplicates.length === 0 ? <p className="nv-notice nv-notice--ok">No possible duplicates are waiting.</p> : <ul className="spend-import__pairs">{duplicates.map(pair => <li key={pair.line.recordId} className="spend-import__pair">
             <p>{pair.line.sourceId} {pair.line.vendor} {spendMoney(pair.line.amount, pair.line.currency)} repeats {pair.earlierFile ?? "an earlier file"} line {pair.line.possibleDuplicateOf!.row}{pair.earlier ? ` (${pair.earlier.sourceId}, ${pair.earlier.vendor}, ${spendMoney(pair.earlier.amount, pair.earlier.currency)})` : ""}.</p>
-            <div className="nv-actions"><button type="button" className="nv-btn nv-btn--sm" disabled={busy || !canManage} onClick={() => void correct([pair.line.recordId], "distinct")}>Not a duplicate</button>
-              <button type="button" className="nv-btn nv-btn--sm nv-btn--danger" disabled={busy || !canManage} onClick={() => void correct([pair.line.recordId], "withdraw")}>Duplicate: withdraw</button></div>
+            {!readOnly && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--sm" disabled={busy} onClick={() => void correct([pair.line.recordId], "distinct")}>Not a duplicate</button>
+              <button type="button" className="nv-btn nv-btn--sm nv-btn--danger" disabled={busy} onClick={() => void correct([pair.line.recordId], "withdraw")}>Duplicate: withdraw</button></div>}
           </li>)}</ul>}
         </div>}
 
@@ -437,7 +441,7 @@ function PreviewStatus({ line, period }: { line: Scope3SpendImportLine; period: 
 }
 
 /** One group of lines that need a code: header, suggestions and mapping form when open, its lines with per-line overrides. */
-function SpendGroupRow({ group, view, selected, disabled, onSelect, onSave, onSaveLine, onOpenRecord, onWithdraw, onFormDirty }: { onFormDirty?: (key: string, dirty: boolean) => void; group: Scope3SpendReviewGroup; view: Scope3SpendImportsView; selected: boolean; disabled: boolean; onSelect: (on: boolean) => void
+function SpendGroupRow({ group, view, selected, disabled, readOnly = false, onSelect, onSave, onSaveLine, onOpenRecord, onWithdraw, onFormDirty }: { onFormDirty?: (key: string, dirty: boolean) => void; group: Scope3SpendReviewGroup; view: Scope3SpendImportsView; selected: boolean; disabled: boolean; readOnly?: boolean; onSelect: (on: boolean) => void
   onSave: (choice: MappingChoice) => Promise<void>; onSaveLine: (line: Scope3SpendLineView, choice: MappingChoice) => Promise<void>; onOpenRecord?: (recordId: string) => void; onWithdraw: (reason: string) => Promise<void> }) {
   const [open, setOpen] = useState(false)
   const [lineOpen, setLineOpen] = useState<string | null>(null)
@@ -454,12 +458,12 @@ function SpendGroupRow({ group, view, selected, disabled, onSelect, onSave, onSa
   return (
     <div className={`spend-import__group${selected ? " is-selected" : ""}`} aria-label={`Mapping for ${label}`}>
       <div className="spend-import__group-head">
-        <label className="nv-check spend-import__select"><input type="checkbox" aria-label={`Select ${label}`} checked={selected} disabled={disabled} onChange={event => onSelect(event.target.checked)} /><span className="nv-sr">Select</span></label>
+        {!readOnly && <label className="nv-check spend-import__select"><input type="checkbox" aria-label={`Select ${label}`} checked={selected} disabled={disabled} onChange={event => onSelect(event.target.checked)} /><span className="nv-sr">Select</span></label>}
         <div className="spend-import__group-main">
           <p className="spend-import__group-title"><strong>{group.vendor || "(no vendor)"}</strong> <span className="nv-subtle">{group.glAccount ? `· account ${group.glAccount}` : "· no account"}{group.glDescriptions.length ? ` ${group.glDescriptions.join(", ")}` : ""}</span></p>
           <p className="nv-subtle spend-import__group-desc">{group.descriptions.slice(0, 4).join(" · ")}{group.descriptions.length > 4 ? ` · and ${group.descriptions.length - 4} more` : ""}</p>
           {suggested.withdraw && !open && <div className="spend-import__suggest-line spend-import__withdraw-suggest"><span className="nv-chip nv-chip--warn nv-chip--plain">{SPEND_TEXT_R3C.withdrawChip(suggested.withdraw.kind)}</span> <span>{SPEND_TEXT_R3C.withdrawWhy(suggested.withdraw.kind, suggested.withdraw.why)}</span>
-            <button type="button" className="nv-btn nv-btn--sm nv-btn--danger" disabled={disabled} onClick={() => void onWithdraw(SPEND_TEXT_R3C.withdrawReason(suggested.withdraw!.kind, suggested.withdraw!.why))}>{SPEND_TEXT_R3C.withdrawButton(group.lines.length)}</button></div>}
+            {!readOnly && <button type="button" className="nv-btn nv-btn--sm nv-btn--danger" disabled={disabled} onClick={() => void onWithdraw(SPEND_TEXT_R3C.withdrawReason(suggested.withdraw!.kind, suggested.withdraw!.why))}>{SPEND_TEXT_R3C.withdrawButton(group.lines.length)}</button>}</div>}
           {!suggested.withdraw && confident && !open && <p className="spend-import__suggest-line"><span className="nv-chip nv-chip--info nv-chip--plain">Suggested</span> {confident.code} {confident.title}{suggested.category.value !== 1 ? ` · ${CATEGORY_WORDS[suggested.category.value]}` : ""} <span className="nv-subtle">· {confident.why}</span></p>}
           {!suggested.withdraw && !confident && !group.mapping && !open && <p className="nv-subtle spend-import__suggest-line">{SPEND_TEXT_R3C.noConfident}</p>}
           {group.mapping && <p className="nv-subtle">Remembered: {group.mapping.naicsCode} {scope3NaicsTitle(group.mapping.naicsCode)}</p>}
@@ -467,22 +471,22 @@ function SpendGroupRow({ group, view, selected, disabled, onSelect, onSave, onSa
         <div className="spend-import__group-side">
           <span className="nv-num spend-import__amount">{group.usdTotal === "0" && group.lines.some(line => line.currency !== "USD") ? "—" : spendMoney(group.usdTotal)}</span>
           <span className="nv-subtle">{group.lines.length} line{group.lines.length === 1 ? "" : "s"}</span>
-          <button type="button" className={`nv-btn nv-btn--sm${open ? "" : " nv-btn--primary"}`} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? "Close" : "Map"}</button>
+          <button type="button" className={`nv-btn nv-btn--sm${open ? "" : " nv-btn--primary"}`} aria-expanded={open} onClick={() => setOpen(!open)}>{readOnly ? open ? "Hide lines" : "Show lines" : open ? "Close" : "Map"}</button>
         </div>
       </div>
       {open && <div className="spend-import__group-body">
-        <SpendMappingForm dirtyKey={`group:${group.keyInput}`} onDirty={onFormDirty} title={`Map ${group.lines.length - group.overrides.size} line(s) of ${group.vendor || "this account"}`} texts={group} view={view} disabled={disabled} lines={group.lines.length - group.overrides.size}
+        {!readOnly && <SpendMappingForm dirtyKey={`group:${group.keyInput}`} onDirty={onFormDirty} title={`Map ${group.lines.length - group.overrides.size} line(s) of ${group.vendor || "this account"}`} texts={group} view={view} disabled={disabled} lines={group.lines.length - group.overrides.size}
           initial={group.mapping ? { category: group.mapping.category, naicsCode: group.mapping.naicsCode, marginChoice: group.mapping.marginChoice } : { category: initialCategory, naicsCode: "", marginChoice: "with_margins" }}
           categoryWhy={group.mapping ? null : fileCategory ? null : suggested.category.why}
-          onSave={async choice => { await onSave(choice); setOpen(false) }} onCancel={() => setOpen(false)} />
+          onSave={async choice => { await onSave(choice); setOpen(false) }} onCancel={() => setOpen(false)} />}
         <div className="nv-table-wrap spend-import__table-wrap"><table className="nv-table spend-import__table" aria-label={`Lines of ${label}`}>
           <thead><tr><th scope="col">Line</th><th scope="col">Date</th><th scope="col">Description</th><th scope="col" className="nv-right">Amount</th><th scope="col"><span className="nv-sr">Actions</span></th></tr></thead>
           <tbody>{group.lines.map(line => <tr key={line.recordId}><td data-label="Line">{line.sourceId}</td><td data-label="Date">{line.lineDate ?? "—"}</td><td data-label="Description">{line.description}{group.overrides.has(line.recordId) ? <span className="nv-subtle"> · mapped on its own: {group.overrides.get(line.recordId)!.naicsCode}</span> : null}</td>
             <td data-label="Amount" className="nv-right nv-num">{spendMoney(line.amount, line.currency)}{conversionNote(line)}</td>
-            <td data-label=""><div className="nv-actions"><button type="button" className="nv-btn nv-btn--ghost nv-btn--sm" disabled={disabled} onClick={() => setLineOpen(lineOpen === line.recordId ? null : line.recordId)}>{lineOpen === line.recordId ? "Cancel" : "Map this line differently"}</button>
+            <td data-label=""><div className="nv-actions">{!readOnly && <button type="button" className="nv-btn nv-btn--ghost nv-btn--sm" disabled={disabled} onClick={() => setLineOpen(lineOpen === line.recordId ? null : line.recordId)}>{lineOpen === line.recordId ? "Cancel" : "Map this line differently"}</button>}
               {onOpenRecord && <button type="button" className="nv-btn nv-btn--ghost nv-btn--sm" onClick={() => onOpenRecord(line.recordId)}>Open</button>}</div></td></tr>)}</tbody>
         </table></div>
-        {lineOpen && (() => { const line = group.lines.find(item => item.recordId === lineOpen); return line ? <SpendMappingForm key={line.recordId} dirtyKey={`line:${line.recordId}`} onDirty={onFormDirty} title={`Map only ${line.sourceId}: ${line.description}`} texts={{ vendor: line.vendor, glAccount: line.glAccount, glDescriptions: line.glDescription ? [line.glDescription] : [], descriptions: [line.description] }}
+        {!readOnly && lineOpen && (() => { const line = group.lines.find(item => item.recordId === lineOpen); return line ? <SpendMappingForm key={line.recordId} dirtyKey={`line:${line.recordId}`} onDirty={onFormDirty} title={`Map only ${line.sourceId}: ${line.description}`} texts={{ vendor: line.vendor, glAccount: line.glAccount, glDescriptions: line.glDescription ? [line.glDescription] : [], descriptions: [line.description] }}
           view={view} disabled={disabled} lines={1} initial={null} onSave={async choice => { await onSaveLine(line, choice); setLineOpen(null) }} onCancel={() => setLineOpen(null)} /> : null })()}
       </div>}
     </div>

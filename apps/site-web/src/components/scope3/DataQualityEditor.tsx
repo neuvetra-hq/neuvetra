@@ -5,6 +5,7 @@ import { SCOPE3_DQ_INDICATOR_DESCRIPTION_I08 } from "../../../../../packages/neu
 import { scope3FormDataQualityDefaults, scope3Payload } from "@/lib/scope3-form-defaults"
 import { scope3TokenLabel, scope3TokenOptions } from "@/lib/scope3-forms"
 import { SelectField, TextField } from "./Scope3Fields"
+import { activityFieldNeed } from "@/lib/field-needs-wo12"
 
 type Payload = Record<string, unknown> & { dataQuality?: Scope3DataQuality | null }
 const EMPTY: Scope3DataQuality = { indicators: { technological: null, temporal: null, geographical: null, completeness: null, reliability: null }, activityDataOrigin: null, basis: null }
@@ -35,13 +36,13 @@ export function DataQualityEditor({ activity, onEdit, lead }: { activity: Collec
     <p className="nv-subtle">{defaults.title ? `Method: ${defaults.title}.` : "The method for this record is chosen from the answers above."} Each indicator uses the method’s default unless the company rates it (Scope 3 Standard Table 7.6). Results show the ratings used and who set them.</p>
     <div className="setup-grid">
       {lead}
-      {SCOPE3_DQ_INDICATORS.map(name => <SelectField key={name} label={SCOPE3_DQ_INDICATOR_DESCRIPTION_I08[name].label} value={dq.indicators[name] ?? ""} hint={SCOPE3_DQ_INDICATOR_DESCRIPTION_I08[name].description}
+      {SCOPE3_DQ_INDICATORS.map(name => <SelectField key={name} need={activityFieldNeed("dataQuality", `dq-${name}`)} label={SCOPE3_DQ_INDICATOR_DESCRIPTION_I08[name].label} value={dq.indicators[name] ?? ""} hint={SCOPE3_DQ_INDICATOR_DESCRIPTION_I08[name].description}
         options={[["", defaultWords(defaults.indicators?.[name])] as const, ...scope3TokenOptions("dqRating", SCOPE3_DQ_RATINGS)]} onChange={value => change(next => { next.indicators[name] = (value || null) as Scope3DataQuality["indicators"][typeof name] })} />)}
       {defaults.originSettable
-        ? <SelectField label="Activity data origin" value={dq.activityDataOrigin ?? ""} options={[["", defaults.origin ? `Method default: ${scope3TokenLabel("dqOrigin", defaults.origin).toLowerCase()}` : "Method default"] as const, ...scope3TokenOptions("dqOrigin", SCOPE3_ACTIVITY_DATA_ORIGINS)]}
+        ? <SelectField need={activityFieldNeed("dataQuality", "dq-origin")} label="Activity data origin" value={dq.activityDataOrigin ?? ""} options={[["", defaults.origin ? `Method default: ${scope3TokenLabel("dqOrigin", defaults.origin).toLowerCase()}` : "Method default"] as const, ...scope3TokenOptions("dqOrigin", SCOPE3_ACTIVITY_DATA_ORIGINS)]}
           onChange={value => change(next => { next.activityDataOrigin = (value || null) as Scope3DataQuality["activityDataOrigin"] })} hint="Where the activity data come from: the company’s own records, a supplier or other partner, or an estimate." />
         : <p className="nv-subtle">Activity data origin: {defaults.origin ? scope3TokenLabel("dqOrigin", defaults.origin).toLowerCase() : "set by the method"}, fixed by the method type.{dq.activityDataOrigin !== null ? ` The origin saved on this record (${scope3TokenLabel("dqOrigin", dq.activityDataOrigin).toLowerCase()}) is ignored.` : ""}</p>}
-      <TextField label="Why these ratings differ from the method defaults" value={dq.basis ?? ""} onChange={value => change(next => { next.basis = value })} multiline
+      <TextField need={activityFieldNeed("dataQuality", overridden ? "dq-basis" : "dq-basis-default")} label="Why these ratings differ from the method defaults" value={dq.basis ?? ""} onChange={value => change(next => { next.basis = value })} multiline
         hint={overridden ? "Required when the company sets a rating or origin (3 to 500 characters)." : "Only needed when the company sets a rating or origin."} />
     </div>
   </div>

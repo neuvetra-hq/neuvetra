@@ -7,6 +7,8 @@ import { SCOPE3_ASSESSMENT_REASON_TEXT, SCOPE3_DISCLOSURE_TEXT, SCOPE3_ENERGY_RE
 import { blankScope3Assessment } from "@/lib/scope3-assessment-api"
 import { scope3ExcludableNotesFor } from "@/lib/scope3-checklist"
 import { SCOPE3_PREFILL_TEXT } from "@/lib/scope3-results-text"
+// WO-12: a view-only member sees the saved assessment as text.
+import { SAVE_OUTCOME_TEXT_WO12, SCREENING_READ_ONLY_TEXT } from "@/lib/wo12-text"
 
 /**
  * The structured screening record behind one Scope 3 category's setup decision (Scope 3 completion I-04; Claude,
@@ -48,6 +50,39 @@ function assessmentOf(saved: Scope3AssessmentRecord): Scope3Assessment {
   const copy = structuredClone(saved) as unknown as Record<string, unknown>
   for (const key of SCOPE3_ASSESSMENT_RECORD_META) delete copy[key]
   return copy as unknown as Scope3Assessment
+}
+
+/**
+ * WO-12 (§4 Roles, §7.3): what a view-only member sees of an assessment. A permission limit is never shown as a disabled
+ * control: the saved answers are read-only text, with the warnings that are disclosed with the results.
+ */
+function assessmentReadOnly(props: Scope3ScreeningEditorProps) {
+  const { category, decision, saved } = props
+  const shown = (value: string | null | undefined) => value && value.trim() ? value : SCREENING_READ_ONLY_TEXT.notStated
+  const head = <><h4>Assessment · {props.reportingYear} reporting year</h4>
+    <p className="nv-subtle">{saved ? `Revision ${saved.revision}, saved ${formatTimeR2E(saved.createdAt)}${saved.correctionReason ? ` · ${saved.correctionReason}` : ""}.` : `No assessment saved for ${props.reportingYear} yet.`} {SCREENING_READ_ONLY_TEXT.viewOnly}</p></>
+  if (!saved) return <div className="setup-subcard scope3-assessment scope3-assessment--read-only" aria-label={`Assessment for category ${category}`}>{head}</div>
+  const a = assessmentOf(saved)
+  const criteria = SCOPE3_RELEVANCE_CRITERIA.filter(name => a.criteria[name]).map(name => name === "other" && a.criteria.otherText ? `${SCOPE3_RELEVANCE_CRITERIA_TEXT[name].label}: ${a.criteria.otherText}` : SCOPE3_RELEVANCE_CRITERIA_TEXT[name].label)
+  const magnitude = a.magnitudeKind === "estimated" ? `${shown(a.magnitudeTCo2e)} t CO2e${a.magnitudeBasis ? ` · ${a.magnitudeBasis}` : ""}` : a.magnitudeKind === "not_quantifiable" ? `Can’t be quantified${a.notQuantifiableReason ? ` · ${a.notQuantifiableReason}` : ""}` : SCREENING_READ_ONLY_TEXT.notStated
+  const files = a.evidenceIds.map(id => props.evidence.find(file => file.id === id)?.name ?? SCREENING_READ_ONLY_TEXT.unavailableFile)
+  const warnings = [...scope3AssessmentDisclosures(decision, a).map(code => SCOPE3_DISCLOSURE_TEXT[code] ?? code), ...props.extraWarnings]
+  const resale = RESALE.find(([value]) => value === (a.energyResale ?? ""))?.[1]
+  return <div className="setup-subcard scope3-assessment scope3-assessment--read-only" aria-label={`Assessment for category ${category}`}>
+    {head}
+    <dl className="scope3-assessment__facts">
+      <dt>Reason</dt><dd>{a.reasonCode ? SCOPE3_ASSESSMENT_REASON_TEXT[a.reasonCode] ?? a.reasonCode : SCREENING_READ_ONLY_TEXT.notStated}</dd>
+      <dt>{decision === "included" ? "Activities included" : "Activities in this category"}</dt><dd>{shown(a.activitiesIncluded)}</dd>
+      <dt>Justification</dt><dd>{shown(a.justification)}</dd>
+      <dt>Relevance criteria (Scope 3 Standard, Table 6.1)</dt><dd>{criteria.length ? criteria.join("; ") : SCREENING_READ_ONLY_TEXT.none}</dd>
+      <dt>Estimated magnitude</dt><dd>{magnitude}</dd>
+      {category === 3 && <><dt>{SCOPE3_ENERGY_RESALE_QUESTION}</dt><dd>{resale ?? SCREENING_READ_ONLY_TEXT.notStated}</dd></>}
+      <dt>Method types planned</dt><dd>{a.plannedMethodTypes.length ? a.plannedMethodTypes.map(type => SCOPE3_METHOD_TYPE_TEXT[type]).join("; ") : SCREENING_READ_ONLY_TEXT.none}</dd>
+      <dt>Evidence</dt><dd>{files.length ? files.join("; ") : SCREENING_READ_ONLY_TEXT.none}</dd>
+      <dt>Documented exclusions within this category</dt><dd>{a.withinCategoryExclusions.length ? <ul>{a.withinCategoryExclusions.map(item => <li key={item.noteCode}>{SCOPE3_EXCLUDABLE_NOTE_TEXT[item.noteCode] ?? item.noteCode}: {shown(item.justification)} · {item.magnitudeKind === "estimated" ? `${shown(item.magnitudeTCo2e)} t CO2e` : "can’t be quantified"}{item.basis ? ` · ${item.basis}` : ""}</li>)}</ul> : SCREENING_READ_ONLY_TEXT.none}</dd>
+    </dl>
+    {warnings.length > 0 && <div className="nv-notice nv-notice--warn" role="status"><div><p>Disclosed with the results (these never block a save or a result):</p><ul>{warnings.map(warning => <li key={warning}>{warning}</li>)}</ul></div></div>}
+  </div>
 }
 
 export function Scope3ScreeningEditor(props: Scope3ScreeningEditorProps) {
@@ -93,8 +128,12 @@ export function Scope3ScreeningEditor(props: Scope3ScreeningEditorProps) {
       setPending(null); setCorrection(""); setMessage({ text: saved ? "Saved. The previous revision remains in the assessment history." : "Saved.", error: false })
     } catch (cause) {
       const conflict = typeof cause === "object" && cause !== null && (cause as { conflict?: boolean }).conflict === true
-      if (conflict) setPending(null)
-      setMessage({ text: `${cause instanceof Error ? cause.message : "The assessment could not be saved."}${conflict ? "" : " Retry keeps the same save request."}`, error: true })
+      // BF-08: a refusal (422) or a permission answer (403) is definite: the request is retired, so no "Retry exact save".
+      const status = typeof cause === "object" && cause !== null ? (cause as { status?: unknown }).status : undefined
+      const definite = status === 422 || status === 403
+      if (conflict || definite) setPending(null)
+      const words = cause instanceof Error ? cause.message : "The assessment could not be saved."
+      setMessage({ text: definite ? status === 422 ? SAVE_OUTCOME_TEXT_WO12.refused(words) : SAVE_OUTCOME_TEXT_WO12.readOnly(words) : `${words}${conflict ? "" : " Retry keeps the same save request."}`, error: true })
     } finally { setBusy(false) }
   }
 
@@ -106,6 +145,8 @@ export function Scope3ScreeningEditor(props: Scope3ScreeningEditorProps) {
   const check = (label: string, checked: boolean, onChange: (checked: boolean) => void, hint?: string) => <label key={label} className="setup-check"><input type="checkbox" aria-label={label} aria-describedby={hint ? `${idBase}-${label.replace(/\W+/g, "-")}` : undefined} checked={checked} disabled={disabled} onChange={event => onChange(event.target.checked)} /> <span>{label}{hint && <small className="setup-check__hint" id={`${idBase}-${label.replace(/\W+/g, "-")}`}>{hint}</small>}</span></label>
 
   const idBase = `scope3-assessment-${category}`
+  // WO-12: a member is shown the saved assessment as text, never a form with disabled controls.
+  if (!props.canManage) return assessmentReadOnly(props)
   return <div className="setup-subcard scope3-assessment" aria-label={`Assessment for category ${category}`}>
     <h4>Assessment · {props.reportingYear} reporting year</h4>
     <p className="nv-subtle">{saved ? `Revision ${saved.revision}, saved ${formatTimeR2E(saved.createdAt)}${saved.correctionReason ? ` · ${saved.correctionReason}` : ""}.` : `No assessment saved for ${props.reportingYear} yet.`} {props.decisionNote ?? "The decision itself is the answer above, saved with company setup."}</p>
