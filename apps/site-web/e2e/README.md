@@ -61,7 +61,8 @@ Setup, records and the import go through the HTTP API as the owner, so they pass
 5. Journeys share one seeded database and run in file order. A journey that changes data changes a record that no other journey reads for that value.
 6. Run the suite five times in a row before you push. A journey that fails even once gets fixed or removed, never retried.
 
-## Feature-gated and tolerated checks
+## Tolerated check: member write controls (WO-12, still open)
 
-- **Record view (WO-06, PR #39).** The journey "a click and the keyboard open a record at its own address" runs only when the bundle under test contains the record view. The suite detects it from the record heading's ID in the built JavaScript. Until PR #39 is merged, the journey shows as skipped; after that, it runs without any change here. The member journey also checks for "no Correct this record" when the record view is present.
-- **Member write controls (WO-12, still open).** On `main`, a member still sees the new-record form fields, the file pickers and the spend mapping's "Map" button enabled. The server refuses those writes. The member journey requires that no save, import, withdraw or correct button is enabled. It tolerates only those known WO-12 controls. When WO-12 lands, delete the `tolerated` rule so the check becomes "no write control at all".
+On `main`, a member still sees the new-record form fields, the file pickers and the spend mapping's "Map" button enabled. The server refuses those writes. The member journey requires that no save, import, withdraw or correct button is enabled. It tolerates only those known WO-12 controls. When WO-12 lands, delete the `tolerated` rule so the check becomes "no write control at all".
+
+The record-view journeys (WO-06) were written while PR #39 was open and ran only when the bundle contained the record view. PR #39 merged before this suite did, so they now run unconditionally. A regression that removes the record view fails them; it does not skip them.

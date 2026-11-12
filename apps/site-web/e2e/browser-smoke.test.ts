@@ -11,28 +11,14 @@
  * workspace, write controls shown to a view-only member, page overflow on Results, and stale claims on the landing page.
  */
 import { afterAll, beforeAll, describe, expect, test } from "bun:test"
-import { readdirSync, readFileSync } from "node:fs"
-import path from "node:path"
 import type { Browser, Page } from "playwright-core"
 import { addressesSeen, closeJourney, focusReport, horizontalOverflow, launchBrowser, openJourney, pageHeading, type Journey, type JourneyOptions } from "./harness/browser"
 import { COMPANIES, RECORDS } from "./harness/seed"
-import { startStack, WEB_ROOT, type Stack } from "./harness/stack"
+import { startStack, type Stack } from "./harness/stack"
 
 const DATABASE_URL = process.env.E2E_DATABASE_URL
 const suite = DATABASE_URL ? describe : describe.skip
 
-/**
- * WO-06 (PR #39) gives every record its own record view. Until it is merged, the record-view journeys are skipped by
- * detecting the feature in the built bundle (its record heading's ID), not by a hard skip: they start running on their
- * own as soon as the bundle under test contains the record view.
- */
-function bundleHasRecordView(): boolean {
-  try {
-    const assets = path.join(WEB_ROOT, "assets")
-    return readdirSync(assets).some(file => file.endsWith(".js") && readFileSync(path.join(assets, file), "utf8").includes("collection-record-heading"))
-  } catch { return false }
-}
-const RECORD_VIEW = bundleHasRecordView()
 
 const ACTIVITY_LIST_HEADING = "Collect Scope 1, 2 and 3 activity"
 const DISCARD_ACTIVITY = "confirm: Discard unsaved activity changes?"
@@ -87,12 +73,9 @@ async function activityListLoaded(page: Page) {
 async function openRecordByAddress(page: Page, recordId: string) {
   await page.evaluate(id => { window.location.hash = `#/activity/${id}` }, recordId)
   await page.waitForFunction(id => window.location.hash === `#/activity/${id}`, recordId)
-  // Main: the record loads into the correction form. With WO-06: the record view, then "Correct this record".
-  const correct = page.getByRole("button", { name: "Correct this record" })
-  const form = page.locator("label.setup-field", { hasText: "Reason for this correction" })
-  await correct.or(form).first().waitFor()
-  if (await correct.isVisible()) await correct.click()
-  await form.waitFor()
+  // The record view (WO-06): "Correct this record" reveals the correction form.
+  await page.getByRole("button", { name: "Correct this record" }).click()
+  await page.locator("label.setup-field", { hasText: "Reason for this correction" }).waitFor()
 }
 
 function quantityInput(page: Page) {
@@ -147,7 +130,7 @@ suite("site-web browser smoke (E2E-01)", () => {
     for (const banned of ["(done)", "Draft ready", "Nothing is flagged", "Complete ·"]) expect(text).not.toContain(banned)
   })
 
-  test.skipIf(!RECORD_VIEW)("record view (WO-06): a click and the keyboard open a record at its own address, and Back returns to the list", async () => {
+  test("record view (WO-06): a click and the keyboard open a record at its own address, and Back returns to the list", async () => {
     for (const [mode, width, height] of [["click", 1360, 900], ["keyboard", 390, 844]] as const) {
       const opened = await openJourney(browser, stack, { signedInAs: "owner", width, height })
       let failed = true
@@ -239,11 +222,10 @@ suite("site-web browser smoke (E2E-01)", () => {
     const unexpected = enabled.filter(control => !tolerated(control) && !(control.tag === "button" && navigationAndReading.test(control.name))
       && !(control.tag === "select") && !(control.tag === "input" && ["", "text", "search"].includes(control.type)))
     expect(unexpected).toEqual([])
-    if (RECORD_VIEW) {
-      await page.evaluate(id => { window.location.hash = `#/activity/${id}` }, RECORDS.gasReady)
-      await headingIs(page, "GAS-1", true)
-      expect(await page.getByRole("button", { name: "Correct this record" }).count()).toBe(0)
-    }
+    // The record view (WO-06) offers a member no "Correct this record".
+    await page.evaluate(id => { window.location.hash = `#/activity/${id}` }, RECORDS.gasReady)
+    await headingIs(page, "GAS-1", true)
+    expect(await page.getByRole("button", { name: "Correct this record" }).count()).toBe(0)
     expect(opened.writes).toEqual([])
   })
 
