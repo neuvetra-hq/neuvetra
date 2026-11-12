@@ -773,3 +773,11 @@ export const SCOPE3_METHODOLOGY_TEXT_R3A = {
   taxTreatment: (n: { includes_sales_tax: number; excludes_sales_tax: number; unknown: number }) => `Spend amounts are used as recorded with EPA Supply Chain factors per dollar of purchaser price (with margins) or producer price (without margins); sales tax is never removed. Tax treatment recorded on the spend lines: includes sales tax ${n.includes_sales_tax}, excludes sales tax ${n.excludes_sales_tax}, not known ${n.unknown}.`,
 } as const
 // --- end R3-A ---
+
+// --- BF-02 --- (S3C-01; 12 November 2026). New codes only; no shipped text is edited.
+/** The hold of a spend line whose replacing supplier or partner record isn't counted (reasonText reads it through the disclosure texts, as `superseded_by_supplier_record`). */
+export const SCOPE3_REASON_TEXT_BF02: Readonly<Record<string, string>> = {
+  replacing_record_not_counted: 'The supplier or partner record that replaces this spend line isn’t counted yet (it needs input or review), so this purchase would otherwise be missing. Finish that record, or remove this supplier from its ‘replaces spend’ list. This line isn’t counted until then.',
+}
+Object.assign(SCOPE3_DISCLOSURE_TEXT, SCOPE3_REASON_TEXT_BF02)
+// --- end BF-02 ---
