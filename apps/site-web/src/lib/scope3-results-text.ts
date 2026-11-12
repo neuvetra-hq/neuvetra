@@ -9,7 +9,10 @@ export const SCOPE3_TODO_TEXT = {
   heading: "Scope 3 to-do",
   intro: "Every Scope 3 line that isn’t counted yet and every category step still open, with the action that resolves it. Items marked “Blocks approval” must be resolved, or acknowledged, before a report version is approved.",
   none: "Nothing to do: every Scope 3 line is counted or documented, and every relevant category has an assessment.",
-  count: (total: number, blocking: number) => `${total} to do${blocking ? ` · ${blocking} block${blocking === 1 ? "s" : ""} approval` : ""}`,
+  /** WO-04c: counted possible duplicates (`confirm` of the `total`) are "to confirm (counted)", not "to do". */
+  count: (total: number, blocking: number, confirm = 0) => `${total - confirm || !confirm ? `${total - confirm} to do` : ""}${confirm ? `${total - confirm ? " · " : ""}${confirm} ${SCOPE3_TO_CONFIRM}` : ""}${blocking ? ` · ${blocking} block${blocking === 1 ? "s" : ""} approval` : ""}`,
+  /** WO-04c: the chip on a counted possible duplicate (both records are in the total; nothing to do if they differ). */
+  toConfirm: "To confirm (counted)",
   blocks: "Blocks approval",
   optional: "Not blocking",
   showAll: (n: number) => `Show all ${n}`,
@@ -33,6 +36,9 @@ export const SCOPE3_TODO_TEXT = {
   conflict: (category: number, n: number) => `Category ${category} is screened as not relevant or excluded, but ${n} active record${n === 1 ? "" : "s"} exist. Change the screening or withdraw the records.`,
 } as const
 
+/** WO-04c: how Results labels a counted possible duplicate in its counts (the Overview's note uses the same words). */
+export const SCOPE3_TO_CONFIRM = "to confirm (counted)"
+
 /** The buttons of the to-do list and the category rows. */
 export const SCOPE3_ACTION_TEXT = {
   fix: "Fix",
@@ -50,7 +56,7 @@ export const SCOPE3_ACTION_TEXT = {
   addRecord: (category: number) => `Add a record for category ${category}`,
   fixRecords: (n: number) => `Fix ${n} record${n === 1 ? "" : "s"}`,
   review: (n: number) => `Review ${n} record${n === 1 ? "" : "s"}`,
-  todo: (n: number) => `${n} to do`,
+  todo: (n: number, confirm = 0) => SCOPE3_TODO_TEXT.count(n, 0, confirm),
 } as const
 
 /** Inline assessment editing from the to-do list (UX-5). */
@@ -153,7 +159,7 @@ export const SCOPE3_EMPTY_TEXT = {
 
 /** The Scope 1 and 2 “Needs attention” area points to the Scope 3 list (UX-2). */
 export const SCOPE3_ATTENTION_LINK_TEXT = {
-  line: (n: number, blocking: number) => `Scope 3: ${n} item${n === 1 ? "" : "s"} to do${blocking ? `, ${blocking} blocking approval` : ""}.`,
+  line: (n: number, blocking: number, confirm = 0) => `Scope 3: ${n - confirm || !confirm ? `${n - confirm} item${n - confirm === 1 ? "" : "s"} to do` : ""}${confirm ? `${n - confirm ? " · " : ""}${confirm} item${confirm === 1 ? "" : "s"} ${SCOPE3_TO_CONFIRM}` : ""}${blocking ? `, ${blocking} blocking approval` : ""}.`,
   go: "Go to the Scope 3 to-do list",
 } as const
 

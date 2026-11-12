@@ -34,9 +34,11 @@ async function scope3Defaults(injected: Record<string, unknown>): Promise<Record
   const drafts = await import("@/lib/draft-store")
   // WO-04b: completed writes recheck Scope 3 readiness (the real subscription; nothing writes in these tests unless they do).
   const { subscribeWrites } = await import("@/lib/shared-get")
+  // WO-04c: the Overview's "Add the assessment" asks Results to open that category.
+  const assessmentTarget = await import("@/lib/scope3-assessment-target")
   const loadContext = injected.loadCollectionContext as ((...args: unknown[]) => Promise<unknown>) | undefined
   return {
-    ...drafts, ...readiness, subscribeWrites, ...textsR2e, ...textsR2c, ...textsWo10, ...textsR3c, ...spendTarget, ...displayR3d, ...textsR3d, ...collection, CARB_PROPOSED_MANDATORY_CATEGORIES: coverage.CARB_PROPOSED_MANDATORY_CATEGORIES, SCOPE3_ENGINE_CATEGORIES: coverage.SCOPE3_ENGINE_CATEGORIES, SCOPE3_SETUP_CATEGORY_TOKENS: coverage.SCOPE3_SETUP_CATEGORY_TOKENS,
+    ...drafts, ...readiness, ...assessmentTarget, subscribeWrites, ...textsR2e, ...textsR2c, ...textsWo10, ...textsR3c, ...spendTarget, ...displayR3d, ...textsR3d, ...collection, CARB_PROPOSED_MANDATORY_CATEGORIES: coverage.CARB_PROPOSED_MANDATORY_CATEGORIES, SCOPE3_ENGINE_CATEGORIES: coverage.SCOPE3_ENGINE_CATEGORIES, SCOPE3_SETUP_CATEGORY_TOKENS: coverage.SCOPE3_SETUP_CATEGORY_TOKENS,
     validateCollectionActivity: contract.validateCollectionActivity, instrumentEvidenceClaims: adapter.instrumentEvidenceClaims, M71_CATEGORIES: m71.M71_CATEGORIES, SCOPE3_ACTIVITY_KINDS: language.SCOPE3_ACTIVITY_KINDS, unitLabel: language.unitLabel, sourceCategoryLabel: language.sourceCategoryLabel,
     Scope3ResultsApiError: results.Scope3ResultsApiError, loadScope3Results: async () => { throw new results.Scope3ResultsApiError("Scope 3 results are not available yet.", 503, "scope3_unavailable") },
     INITIAL_SCOPE3_STATE: results.INITIAL_SCOPE3_STATE, Scope3Panel: panel.Scope3Panel, Scope3ReportSection: panel.Scope3ReportSection,

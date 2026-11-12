@@ -3,12 +3,12 @@
  * doesn't grow. Every Scope 3 item comes only from the Results screen's to-do list (`scope3Todos`) over the existing
  * `/results/scope3` response, in the same number: one readiness item per to-do item, with the same blocking flag.
  */
-import { scope3CountedDuplicate, scope3LineNeedsAttention, scope3Todos, type Scope3TodoAction, type Scope3TodoItem } from "./scope3-checklist"
+import { scope3Todos, type Scope3TodoAction, type Scope3TodoItem } from "./scope3-checklist"
 import { loadScope3Results, type Scope3ResultsResponse } from "./scope3-results-api"
 import { scope3ClosedLines, scope3LineState } from "../../../../packages/neuvetra-database/src/scope3-trace"
 import { possibleDuplicateOf, possibleDuplicateOfText } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { kindLabel, periodLabel } from "./plain-language"
-import { DUPLICATE_ACTION } from "./readiness"
+import { DUPLICATE_ACTION, duplicatePairTitle } from "./readiness"
 import type { ReadinessGroup, ReadinessItem, ReadinessTarget } from "./readiness"
 import type { Scope3Row } from "./scope3-results-api"
 import type { HostedWorkspaceActor } from "./workspace-api"
@@ -26,8 +26,8 @@ function targetOf(action: Scope3TodoAction | undefined): ReadinessTarget {
     case "spend": return { type: "spend", tab: action.tab }
     case "setup": return { type: "view", view: "setup" }
     case "collection": return { type: "view", view: "collection" }
-    // Assessments are written inline on Results, next to the to-do item.
-    case "assessment": return { type: "view", view: "results" }
+    // Assessments are written inline on Results, next to the to-do item; WO-04c: the action opens that category's.
+    case "assessment": return { type: "assessment", category: action.category }
   }
 }
 
@@ -36,7 +36,6 @@ export function scope3ReadinessItems(results: Scope3ResultsResponse, canManage: 
   const todos: Scope3TodoItem[] = scope3Todos(results)
   const closed = scope3ClosedLines(results.records)
   const titles = new Map(results.coverage.categories.map(row => [row.category, row.title]))
-  const categories = new Map(results.coverage.categories.map(row => [row.category, row]))
   return todos.map(item => {
     let group: ReadinessGroup = "input"
     let row: Scope3Row | undefined
@@ -47,15 +46,16 @@ export function scope3ReadinessItems(results: Scope3ResultsResponse, canManage: 
       const state = row ? scope3LineState(row, closed.has(row)) : "inputNeeded"
       group = state === "outsidePeriod" ? "held" : state === "methodPending" || state === "optionalPending" ? "method" : "input"
       // CEO ruling: a counted possible duplicate with nothing else open is listed to confirm, not as an open item (it never
-      // blocks: the to-do's blocking flag needs input or a screening conflict).
-      if (row && scope3CountedDuplicate(row) && !scope3LineNeedsAttention(state, categories.get(row.category)) && !item.blocking) group = "duplicate"
+      // blocks). WO-04c: the to-do marks exactly those items ("to confirm (counted)"), so Results and the Overview agree.
+      if (row && item.toConfirm) group = "duplicate"
     }
     const action = item.actions[0]
     const category = `Category ${item.category}${titles.get(item.category) ? ` (${titles.get(item.category)})` : ""}`
     if (group === "duplicate" && row) {
       const otherId = possibleDuplicateOf(row.plan.notes ?? [])
       const other = otherId ? results.records.find(line => line.recordId === otherId) : undefined
-      return { key: `scope3:${item.key}`, group, scope: "3" as const, title: `${category}: ${kindLabel(row.kind)} · ${row.sourceId} and ${other ? `${kindLabel(other.kind)} · ${other.sourceId}` : "an earlier record"}`,
+      const side = (line: Scope3Row) => ({ id: line.recordId, label: kindLabel(line.kind), sourceId: line.sourceId, site: line.locationName ?? null, period: periodLabel(line.period.start, line.period.endExclusive) })
+      return { key: `scope3:${item.key}`, group, scope: "3" as const, title: `${category}: ${duplicatePairTitle(side(row), other ? side(other) : null)}`,
         detail: `${possibleDuplicateOfText(otherId ?? "unknown", other ? { sourceId: other.sourceId, locationName: other.locationName, period: periodLabel(other.period.start, other.period.endExclusive) } : null)} ${item.reasons.join(" ")}`,
         target: targetOf(action), action: canManage ? DUPLICATE_ACTION : "View", blocking: false }
     }

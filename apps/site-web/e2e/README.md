@@ -86,6 +86,7 @@ It covers, through the real server and database:
 - the Python engines behind Results;
 - how the browser handles 401 (session ended), 503 (transient) and the session check;
 - readiness (WO-04b): the Overview, the side navigation, the Menu sheet, Ask and the Results Scope 3 to-do agree, Scope 3 results are requested once per visit, and each kind of next-step action opens its view with focus on the page heading.
+- readiness follow-ups (WO-04c, the last journey): a Scope 3 possible duplicate reads the same on the Overview ("to confirm (counted)") and in the Results to-do, Ask's Try again after a failed Scope 3 check makes exactly one request, a spend import (two writes) shows "Checking…" at once and rechecks Scope 3 once, and no Overview action button wraps past two lines at 390 px. It adds a business-travel record repeating `T-1` and a two-line spend import to company 1, so it runs last.
 
 It does **not** cover:
 

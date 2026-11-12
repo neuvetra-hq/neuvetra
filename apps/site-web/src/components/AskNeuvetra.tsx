@@ -3,11 +3,12 @@ import { Icon } from "./Icon"
 import type { JourneyView } from "./JourneyNav"
 import { HELP_REVIEWED_ON, isProgressQuestion, matchQuestion, scope3Mode, suggestedQuestions, type HelpLink, type HelpPanel } from "@/lib/help-content"
 import type { JourneyStatus } from "@/lib/journey-status"
-import { improveLines, progressAnswer, targetView, type Readiness } from "@/lib/readiness"
+import { improveLines, progressAnswer, READINESS_TEXT, targetView, type Readiness } from "@/lib/readiness"
 
-interface Message { id: number; from: "user" | "bot"; text: string[]; matched?: string; source?: string; reviewedOn?: string; link?: HelpLink; followUps?: string[] }
+/** WO-04c: `retryScope3` marks the progress answer's Try again, which checks Scope 3 again instead of opening a view. */
+interface Message { id: number; from: "user" | "bot"; text: string[]; matched?: string; source?: string; reviewedOn?: string; link?: HelpLink & { retryScope3?: true }; retryScope3?: true; followUps?: string[] }
 
-export function AskNeuvetra({ open, onClose, panel, status, readiness, statusFailed = false, onNavigate }: { open: boolean; onClose: () => void; panel: HelpPanel; status: JourneyStatus | null; readiness: Readiness; statusFailed?: boolean; onNavigate: (view: JourneyView) => void }) {
+export function AskNeuvetra({ open, onClose, panel, status, readiness, statusFailed = false, onNavigate, onRetryScope3 }: { open: boolean; onClose: () => void; panel: HelpPanel; status: JourneyStatus | null; readiness: Readiness; statusFailed?: boolean; onNavigate: (view: JourneyView) => void; onRetryScope3?: () => void }) {
   const [messages, setMessages] = useState<Message[]>([])
   const [query, setQuery] = useState("")
   const inputRef = useRef<HTMLInputElement>(null)
@@ -43,7 +44,9 @@ export function AskNeuvetra({ open, onClose, panel, status, readiness, statusFai
     if (!question) return
     const user: Message = { id: ++counter.current, from: "user", text: [question] }
     let reply: Message
-    if (isProgressQuestion(question) || /left for me/i.test(question)) reply = { id: ++counter.current, from: "bot", text: progressAnswer(readiness, status ? improveLines(status) : []), source: "Your saved company setup and records", link: readiness.state === "ready" ? { label: readiness.next.action, panel: targetView(readiness.next.target) as HelpPanel } : undefined }
+    if (isProgressQuestion(question) || /left for me/i.test(question)) reply = { id: ++counter.current, from: "bot", text: progressAnswer(readiness, status ? improveLines(status) : []), source: "Your saved company setup and records", link: readiness.state === "ready" ? { label: readiness.next.action, panel: targetView(readiness.next.target) as HelpPanel, ...(readiness.next.target.type === "retryScope3" && onRetryScope3 ? { retryScope3: true as const } : {}) } : undefined,
+      // WO-04c: when Scope 3 couldn't be checked and the next step is something else, Try again is offered beside it.
+      ...(readiness.state === "ready" && readiness.scope3 === "failed" && readiness.next.target.type !== "retryScope3" && onRetryScope3 ? { retryScope3: true as const } : {}) }
     else {
       const match = matchQuestion(question, panel, mode)
       reply = match
@@ -69,7 +72,8 @@ export function AskNeuvetra({ open, onClose, panel, status, readiness, statusFai
         {messages.map(message => <div key={message.id} className={`nv-msg nv-msg--${message.from}`}>
           {message.matched && <p className="nv-msg__matched">Closest reviewed answer: {message.matched}</p>}
           {message.text.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
-          {message.link && <p><button type="button" className="nv-link" onClick={() => { onNavigate(message.link!.panel); onClose() }}>{message.link.label} →</button></p>}
+          {message.link && <p><button type="button" className="nv-link" onClick={() => { if (message.link!.retryScope3) onRetryScope3?.(); else onNavigate(message.link!.panel); onClose() }}>{message.link.label} →</button></p>}
+          {message.retryScope3 && <p><button type="button" className="nv-link" onClick={() => { onRetryScope3?.(); onClose() }}>{READINESS_TEXT.failedNext.action} →</button></p>}
           {message.source && <p className="nv-msg__source">Source: {message.source}</p>}
           {message.reviewedOn && <p className="nv-msg__source">Reviewed {message.reviewedOn}</p>}
           {message.followUps && <div className="nv-suggestions" style={{ margin: "10px 0 0" }}>{message.followUps.map(item => <button type="button" key={item} onClick={() => ask(item)}>{item}</button>)}</div>}

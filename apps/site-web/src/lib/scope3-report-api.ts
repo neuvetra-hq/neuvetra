@@ -1,4 +1,5 @@
 import type { HostedWorkspaceActor } from "./workspace-api"
+import { notifyWrite } from "./shared-get"
 import { serverErrorText, withRequestTimeout, type RequestKind } from "./request-timeout"
 import { SCOPE3_REPORT_PROFILE_V1, validateScope3ReportDocument, validateScope3ReportVersionSummary, type Scope3ReportDocument, type Scope3ReportVersionSummary, type Scope3StoredReportDocument } from "../../../../packages/neuvetra-database/src/scope3-report-document"
 // Round 2 (owner decisions 7 and 11): the readiness and approval lines and the exported CSV (stored bytes + approval lines) for the screen and print.
@@ -91,6 +92,8 @@ async function request(actor: HostedWorkspaceActor, path: string, body?: unknown
     return { response, value }
   })
   actor.signal?.throwIfAborted()
+  // WO-04c: a prepared or approved version is a completed write like any other (the workspace checks Scope 3 again).
+  if (response.ok && body !== undefined) notifyWrite({ userId: actor.userId, path })
   if (!response.ok) {
     const code = object(value) && typeof value.code === "string" ? value.code : null
     throw new Scope3ReportApiError(serverErrorText(response.status, code, object(value) && typeof value.error === "string" ? value.error : "Scope 3 report versions are unavailable right now."), response.status, code)

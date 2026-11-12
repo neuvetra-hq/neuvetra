@@ -87,9 +87,10 @@ describe("the Scope 3 part comes only from the Results to-do", () => {
     expect(items.filter(item => item.group === "scope3-decision").length).toBe(11)
     expect(items.filter(item => item.group === "input").map(item => item.key)).toEqual(["scope3:line:93000000-0000-4000-8000-000000001004:waste", "scope3:line:93000000-0000-4000-8000-000000001010:transport"])
   })
-  test("each action goes where the to-do's first action goes (assessments are written on Results)", () => {
+  test("each action goes where the to-do's first action goes (assessments are written on Results; WO-04c: at their category)", () => {
     const items = scope3ReadinessItems(scope3Results, true)
-    expect(items.find(item => item.key.endsWith(":assessment_missing"))!.target).toEqual({ type: "view", view: "results" })
+    const assessment = items.find(item => item.key.endsWith(":assessment_missing"))!
+    expect(assessment.target).toEqual({ type: "assessment", category: Number(assessment.key.split(":")[2]) })
     expect(items.find(item => item.key.endsWith(":not_screened"))!.target).toEqual({ type: "view", view: "setup" })
     expect(items.find(item => item.key.includes(":waste"))!.target).toEqual({ type: "record", recordId: "93000000-0000-4000-8000-000000001004" })
     expect(scope3ReadinessItems(scope3Results, false).every(item => item.action === "View")).toBe(true)
@@ -223,7 +224,8 @@ describe("R0: while anything is loading or failed, “Checking…” or “Could
       const r = ready(computeReadiness({ status: c1(), statusFailed: false, scope3: part as Scope3Part }))
       const overview = await home(c1(), r)
       const summary = overview.app.nodes().find(node => node.props["data-readiness-summary"] !== undefined)!.children.flat(Infinity).join("")
-      expect(summary).toBe(`${words} 1 possible duplicate to confirm (both records are counted; not counted as open).`)
+      // WO-04c (QA follow-up 3): the parts are joined with " · ".
+      expect(summary).toBe(`${words} · 1 possible duplicate to confirm (both records are counted; not counted as open).`)
       expect(progressAnswer(r)[1]).toBe(`${words}, in the Overview’s order:`)
     }
   })

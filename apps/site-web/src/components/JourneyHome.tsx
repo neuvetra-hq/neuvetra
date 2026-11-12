@@ -6,7 +6,9 @@ import { ACTIVITY_KINDS, BOUNDARY_LABELS, kindIcon, periodLabel, RECORD_STATE_LA
 import { COPY_TEXT_R2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
 // Round 3 lane C (PR-3): imported spend lines are one item that opens the spend import's grouped review.
 import { requestSpendImportFocus } from "@/lib/spend-import-target"
-import { READINESS_GROUP_TEXT, READINESS_GROUPS, READINESS_TEXT, OVERVIEW_SCOPE3_TEXT, type Readiness, type ReadinessTarget } from "@/lib/readiness"
+import { READINESS_GROUP_TEXT, READINESS_GROUPS, OVERVIEW_SCOPE3_TEXT, overviewSummary, targetView, type Readiness, type ReadinessTarget } from "@/lib/readiness"
+// WO-04c: "Add the assessment" opens that category's assessment on Results.
+import { requestScope3AssessmentFocus } from "@/lib/scope3-assessment-target"
 
 function plural(count: number, one: string, many = `${one}s`) { return `${count} ${count === 1 ? one : many}` }
 
@@ -29,12 +31,13 @@ export function JourneyHome({ status, readiness, error, headingRef, onNavigate, 
   const name = setup.legalName || "Your company"
   const scope3 = Boolean(status.scope3)
   // WO-04b: a step is "done" only by its §8 definition (S3 never); the step the next action opens is "current".
-  const nextView = next.target.type === "view" ? next.target.view : "collection"
+  const nextView = targetView(next.target)
   const stepState = (key: "setup" | "collection" | "results", done: boolean) => done ? "done" : nextView === key ? "current" : "todo"
   const act = (target: ReadinessTarget) => {
     if (target.type === "record") onFix(target.recordId)
     else if (target.type === "spend") { requestSpendImportFocus(target.tab); onNavigate("collection") }
     else if (target.type === "retryScope3") onRetryScope3()
+    else if (target.type === "assessment") { requestScope3AssessmentFocus(target.category); onNavigate("results") }
     else onNavigate(target.view)
   }
   const improve: Array<{ key: string; title: string; detail: string }> = []
@@ -43,7 +46,6 @@ export function JourneyHome({ status, readiness, error, headingRef, onNavigate, 
   if (collection.olderSetup && canManage) improve.push({ key: "older-setup", title: `${plural(collection.olderSetup, "record was", "records were")} saved before your latest company-setup change`, detail: "When you next edit one, choose its site again before saving — the form asks for a current site." })
   if (collection.qualityUnknown) improve.push({ key: "quality", title: `${plural(collection.qualityUnknown, "record has", "records have")} data quality “Unknown”`, detail: "Mark each record as actual or estimated." })
   const groups = READINESS_GROUPS.map(group => ({ group, rows: items.filter(item => item.group === group) })).filter(entry => entry.rows.length)
-  const resolved = readiness.scope3 === "off" || readiness.scope3 === "ready"
   return <section>
     <p className="nv-eyebrow">Overview</p>
     <h1 ref={headingRef} tabIndex={-1}>{setup.saved ? name : "Welcome to Neuvetra"}</h1>
@@ -86,9 +88,7 @@ export function JourneyHome({ status, readiness, error, headingRef, onNavigate, 
       <div className="nv-card nv-card--flat" style={{ margin: 0 }} id="overview-open-items">
         <h2 className="nv-h3">What needs attention</h2>
         {/* WO-04b: one list across all scopes, in the next-step order; its length is the "N open" of the navigation. */}
-        <p className="nv-subtle" data-readiness-summary="">{!resolved ? READINESS_TEXT.openSummaryPartial(open.scope12, readiness.scope3 === "failed")
-          : items.length ? READINESS_TEXT.openSummary(open.total, open.scope12, open.scope3, open.blocking, open.scope3Duplicates)
-          : !collection.active ? "No records yet — start with the next step above." : duplicates.length ? "Nothing is waiting on you." : OVERVIEW_SCOPE3_TEXT.nothingOpen}{duplicates.length ? ` ${READINESS_TEXT.duplicatesSummary(duplicates.length)}.` : ""}</p>
+        <p className="nv-subtle" data-readiness-summary="">{overviewSummary(readiness, collection.active > 0)}</p>
         {groups.map(({ group, rows }) => <div key={group}>
           <p className={`nv-attn-label nv-attn-label--${group === "gap" || group === "method" ? "info" : "warn"}`}>{READINESS_GROUP_TEXT[group]}</p>
           <ul className="nv-list">

@@ -20,8 +20,11 @@ export interface JourneyRecord { id: string; kind: string; label: string; source
    * duplicate of GAS-1 at Office, …"). The same rule and records as the Scope 1 and 2 results route, so Results flags it too.
    */
   possibleDuplicate?: string
-  /** WO-04b: the other record of the pair (its kind label and source ID), so the Overview names both records. */
-  possibleDuplicateOther?: { id: string; label: string; sourceId: string } }
+  /** WO-04b: the other record of the pair (its kind label and source ID), so the Overview names both records. WO-04c: and
+   * its site and period, so a pair with the same name can be told apart. */
+  possibleDuplicateOther?: { id: string; label: string; sourceId: string; site?: string; period?: string }
+  /** WO-04c: the record's own period, in words. */
+  period?: string }
 /** A company-setup answer that is still open. `scopes` lists the totals it can leave incomplete (empty: it doesn't affect totals). */
 export interface SetupOpenItem { id: string; title: string; detail: string; scopes: Array<1 | 2> }
 /** A possible coverage gap: missing records, an unsupported source or an unresolved legacy source family. */
@@ -154,7 +157,7 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
       state = "held_period"
     }
     const imported = row.kind === "purchase_spend" && typeof (activity.payload as { importId?: unknown }).importId === "string"
-    return { id: row.id, kind: row.kind, label: kindLabel(row.kind), sourceId: activity.sourceId, locationId: activity.locationId, site: siteName(activity.locationId), state, reasons, evidenceCount: activity.evidenceIds.length, quality: activity.quality, ...(imported ? { importedSpend: true as const } : {}) }
+    return { id: row.id, kind: row.kind, label: kindLabel(row.kind), sourceId: activity.sourceId, locationId: activity.locationId, site: siteName(activity.locationId), state, reasons, evidenceCount: activity.evidenceIds.length, quality: activity.quality, period: periodLabel(activity.period.start, activity.period.endExclusive), ...(imported ? { importedSpend: true as const } : {}) }
   })
   // WO-04b (BF-01A): Scope 1 and 2 possible duplicates, by the results route's own rule over the same records (Scope 3
   // duplicates come from the Scope 3 results). Withdrawn, excluded and held records keep their precedence, as there.
@@ -165,7 +168,7 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
     if (otherId === undefined || row.state === "withdrawn" || row.state === "excluded" || row.state === "held_period") continue
     const other = scope12.find(item => item.id === otherId)?.currentVersion.activity
     const otherRecord = scope12.find(item => item.id === otherId)
-    if (otherRecord) row.possibleDuplicateOther = { id: otherId, label: kindLabel(otherRecord.kind), sourceId: otherRecord.currentVersion.activity.sourceId }
+    if (otherRecord) row.possibleDuplicateOther = { id: otherId, label: kindLabel(otherRecord.kind), sourceId: otherRecord.currentVersion.activity.sourceId, site: siteName(otherRecord.currentVersion.activity.locationId), period: periodLabel(otherRecord.currentVersion.activity.period.start, otherRecord.currentVersion.activity.period.endExclusive) }
     row.possibleDuplicate = possibleDuplicateOfText(otherId, other ? { sourceId: other.sourceId, locationName: input.context?.locations.find(location => location.id === other.locationId)?.name ?? null, period: periodLabel(other.period.start, other.period.endExclusive) } : null)
   }
   const byKind: Record<string, number> = {}
