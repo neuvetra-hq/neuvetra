@@ -240,8 +240,26 @@ describe("draft results (Claude UX journey)", () => {
     // 401 Scope 1 and 2 records are still refused.
     const many = Array.from({ length: 401 }, (_, i) => ({ ...gas, id: `22222222-0000-4000-8000-${String(i).padStart(12, "0")}` }))
     const capped = createCollectionResultsRoutes({ database: { ...database, findCollectionActivities: async () => many }, engines, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }) })
-    expect((await capped(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } }))).status).toBe(422)
+    const refused = await capped(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } }))
+    expect(refused.status).toBe(422)
+    expect(await refused.json()).toEqual({ code: "record_limit_reached", error: "More than 400 active Scope 1 and 2 records. Withdraw records you no longer need to see results." })
   }, 60_000)
+
+  // BF-03 (BL-02): withdrawn records are not calculated, so they must not count toward the cap; withdrawing always recovers.
+  test("the 400-record cap counts active records only: withdrawing records brings Results back", async () => {
+    const gas = record({ kind: "natural_gas", sourceId: "GAS-1", quantity: q("10", "therm"), payload: { heatContent: null } })
+    const retire = (r: CollectionActivityRecord): CollectionActivityRecord => ({ ...r, currentVersion: { ...r.currentVersion, activity: { ...r.currentVersion.activity, state: "withdrawn", withdrawalReason: "Entered twice." } } as never })
+    const many = Array.from({ length: 401 }, (_, i) => ({ ...gas, id: `22222222-0000-4000-8000-${String(i).padStart(12, "0")}` }))
+    const serve = (records: CollectionActivityRecord[]) => createCollectionResultsRoutes({ database: { findCollectionContext: async () => context, findCollectionActivities: async () => records, findCollectionEvidence: async () => [], findCompanySetup: async () => setupView, findCurrentMethodReleases: async () => [] }, engines, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }) })
+    const get = (records: CollectionActivityRecord[]) => serve(records)(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } }))
+    expect((await get(many)).status).toBe(422)
+    // 401 saved, two withdrawn: 399 active.
+    expect((await get([retire(many[0]!), retire(many[1]!), ...many.slice(2)])).status).toBe(200)
+    // 400 active plus 100 withdrawn is exactly at the cap: allowed. 401 active is not.
+    const withdrawnMany = Array.from({ length: 100 }, (_, i) => retire({ ...gas, id: `33333333-0000-4000-8000-${String(i).padStart(12, "0")}` }))
+    expect((await get([...many.slice(0, 400), ...withdrawnMany])).status).toBe(200)
+    expect((await get([...many, ...withdrawnMany])).status).toBe(422)
+  }, 120_000)
 
   test("a record from another company is never calculated", async () => {
     const foreign = record({ kind: "natural_gas", sourceId: "GAS-X", quantity: q("10", "therm"), payload: { heatContent: null } }, other)

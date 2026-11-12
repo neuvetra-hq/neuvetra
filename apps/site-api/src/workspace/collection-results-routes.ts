@@ -43,7 +43,12 @@ export const REVIEWED_SCOPE2_ENGINE_SHA256 = "56f1245df2e5eac10adbbd7f553f2fa63b
 
 const UUID_SOURCE = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 const ROUTE = new RegExp(`^/workspace/(${UUID_SOURCE})/results$`, "i")
-const MAX_RECORDS = 400
+/** The most active Scope 1 and 2 records one draft calculates. Withdrawn records and Scope 3 records do not count (BF-03). */
+export const MAX_ACTIVE_SCOPE12_RECORDS = 400
+export const RECORD_LIMIT_RESULTS_TEXT = `More than ${MAX_ACTIVE_SCOPE12_RECORDS} active Scope 1 and 2 records. Withdraw records you no longer need to see results.`
+export const RECORD_LIMIT_SAVE_TEXT = `This company already has ${MAX_ACTIVE_SCOPE12_RECORDS} active Scope 1 and 2 records, the most one draft can calculate. Withdraw records you no longer need, then save again.`
+/** The records this route calculates: Scope 1 and 2 records that are not withdrawn. */
+export const isActiveScope12Record = (record: CollectionActivityRecord) => !isScope3CollectionKind(record.kind) && record.currentVersion.activity.state !== "withdrawn"
 
 export interface CollectionResultsDatabase {
   findCollectionContext(userId: string, companyId: string): Promise<CollectionContext | null>
@@ -369,7 +374,7 @@ export function createCollectionResultsRoutes(deps: {
           deps.database.findCurrentMethodReleases(actor.id).catch(report("release_lookup")),
         ])
         // Round 3 lane C: the cap counts the records this route calculates (Scope 1 and 2); Scope 3 lines have their own route and cap.
-        if (records.filter(record => !isScope3CollectionKind(record.kind)).length > MAX_RECORDS) throw Object.assign(new Error("Too many records."), { code: "54000" })
+        if (records.filter(isActiveScope12Record).length > MAX_ACTIVE_SCOPE12_RECORDS) throw Object.assign(new Error("Too many records."), { code: "54000" })
         if (records.some(record => record.companyId.toLowerCase() !== companyId)) throw Object.assign(new Error("Company mismatch."), { code: "42501" })
         const facts = current && current.length ? await describeEngines().catch(report("engine_description")) : new Map<string, EngineMethodFacts>()
         return buildCollectionResults({ companyId, context, records, evidence, setup, engines: deps.engines, releases: { current, engines: facts } })
@@ -378,7 +383,7 @@ export function createCollectionResultsRoutes(deps: {
     } catch (error) {
       const code = (error as { code?: string }).code
       if (code === "42501") return respond(404, { error: "Results not found." })
-      if (code === "54000") return respond(422, { error: "Too many records to calculate in one draft." })
+      if (code === "54000") return respond(422, { code: "record_limit_reached", error: RECORD_LIMIT_RESULTS_TEXT })
       if (code === "SETUP_CHANGED") return respond(503, { error: "Company setup changed while preparing results. Reload and try again." })
       return respond(503, { error: "Results could not be prepared. Try again shortly." })
     }
