@@ -95,26 +95,28 @@ export function createRateLimiter(config: RateLimitConfig): ReleasableRateLimite
 }
 
 /**
- * Best-effort client IP. Trusts the leftmost `x-forwarded-for` hop; Railway's
- * proxy populates this. Falls back to `x-real-ip`, then the direct address
- * passed by the caller, then a sentinel string so untraceable callers still
- * share a bucket (rather than each getting their own fresh allowance).
+ * Client address for the `/chat` limiter. Uses the same trusted order as `extractProxiedClientAddress` (`x-real-ip`,
+ * else the rightmost `x-forwarded-for` hop; never the caller-controlled leftmost hop), then the direct socket address
+ * (local development, no proxy), then a sentinel so untraceable callers share one bucket rather than each getting a
+ * fresh allowance.
  */
 export function extractClientIp(
   headers: Headers,
   directAddress: string | undefined,
 ): string {
-  const xff = headers.get("x-forwarded-for")
-  if (xff) {
-    const first = xff.split(",")[0]?.trim()
-    if (first) return first
+  return proxiedClientAddress(headers) ?? directAddress ?? "unknown"
+}
+
+/** Headers read for the client address, in order of trust. */
+export const CLIENT_ADDRESS_HEADERS = ["x-real-ip", "x-forwarded-for"] as const
+
+/** The edge-written client address, or null when neither header carries a usable value. */
+export function proxiedClientAddress(headers: Headers): string | null {
+  for (const name of CLIENT_ADDRESS_HEADERS) {
+    const last = headers.get(name)?.split(",").pop()?.trim()
+    if (last) return last.slice(0, 64)
   }
-  const real = headers.get("x-real-ip")
-  if (real) {
-    const trimmed = real.trim()
-    if (trimmed) return trimmed
-  }
-  return directAddress ?? "unknown"
+  return null
 }
 
 /**
@@ -132,9 +134,5 @@ export function extractClientIp(
  * one key), never a caller choosing its own key from the leftmost hop.
  */
 export function extractProxiedClientAddress(headers: Headers): string {
-  for (const name of ["x-real-ip", "x-forwarded-for"]) {
-    const last = headers.get(name)?.split(",").pop()?.trim()
-    if (last) return last.slice(0, 64)
-  }
-  return "unknown"
+  return proxiedClientAddress(headers) ?? "unknown"
 }
