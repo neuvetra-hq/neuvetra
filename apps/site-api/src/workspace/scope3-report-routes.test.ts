@@ -205,6 +205,47 @@ describe("Scope 3 report version routes (I-10)", () => {
     expect(history.map((v: any) => [v.revision, v.createdBy, v.reason, v.approval?.selfApproved ?? null])).toEqual([[1, owner, null, true], [2, admin, "Category 2 corrected.", null]])
   })
 
+  test("BF-05: only the newest revision of the year can be approved; an earlier approval stays recorded", async () => {
+    const a = app()
+    const prepare = async (expectedRevision: number, reason: string | null) => (await a.json(await a.call("POST", base, owner, { idempotencyKey: crypto.randomUUID(), expectedRevision, reason }))).body.version
+    const one = await prepare(0, null), two = await prepare(1, "Miles corrected.")
+    const flags = { acknowledgeOpenIssues: true, confirmSelfApproval: true }
+    // The superseded revision 1 is refused before the hash, open-issue and self-approval checks, and nothing is stored.
+    for (const body of [{ reportSha256: one.reportSha256, ...flags }, { reportSha256: sha256("wrong"), ...flags }, { reportSha256: one.reportSha256, acknowledgeOpenIssues: false, confirmSelfApproval: false }]) {
+      const refused = await a.json(await a.call("POST", `${base}/${one.id}/approval`, admin, body))
+      expect([refused.status, refused.body.code, refused.body.error]).toEqual([409, "version_superseded", "A newer version of this report exists. Review and approve the newest version."])
+    }
+    expect(a.rows.map(row => row.version.approval)).toEqual([null, null])
+    expect(a.calls).not.toContain("approve")
+    // The newest revision is approved as before.
+    const approved = await a.json(await a.call("POST", `${base}/${two.id}/approval`, owner, { reportSha256: two.reportSha256, ...flags }))
+    expect([approved.status, approved.body.version.revision]).toEqual([201, 2])
+    // A later revision supersedes revision 2, but its recorded approval is untouched and a repeat of it is still a replay.
+    const three = await prepare(2, "Third.")
+    const replay = await a.json(await a.call("POST", `${base}/${two.id}/approval`, admin, { reportSha256: two.reportSha256, acknowledgeOpenIssues: true, confirmSelfApproval: false }))
+    expect([replay.status, replay.body.replayed, replay.body.version.approval.approvedBy]).toEqual([200, true, owner])
+    expect(a.rows.map(row => Boolean(row.version.approval))).toEqual([false, true, false])
+    expect((await a.json(await a.call("POST", `${base}/${three.id}/approval`, owner, { reportSha256: three.reportSha256, ...flags }))).status).toBe(201)
+  })
+
+  test("BF-05 F1: the rule also applies to a version of another reporting year than the current setup's, and an unknown version is never approved", async () => {
+    const a = app()
+    const prepare = async (expectedRevision: number, reason: string | null) => (await a.json(await a.call("POST", base, owner, { idempotencyKey: crypto.randomUUID(), expectedRevision, reason }))).body.version
+    const one = await prepare(0, null), two = await prepare(1, "Second.")
+    // The setup's period is 2025; move these two versions to 2024 (as if the reporting period were changed later).
+    for (const row of a.rows) row.version = { ...row.version, reportingYear: 2024 }
+    const flags = { acknowledgeOpenIssues: true, confirmSelfApproval: true }
+    const refused = await a.json(await a.call("POST", `${base}/${one.id}/approval`, admin, { reportSha256: one.reportSha256, ...flags }))
+    expect([refused.status, refused.body.code]).toEqual([409, "version_superseded"])
+    expect(a.calls).not.toContain("approve")
+    expect(a.rows.map(row => row.version.approval)).toEqual([null, null])
+    expect((await a.json(await a.call("POST", `${base}/${two.id}/approval`, owner, { reportSha256: two.reportSha256, ...flags }))).status).toBe(201)
+    // A repeat for the approved other-year version is still a replay; an unknown version is refused, not approved.
+    expect((await a.json(await a.call("POST", `${base}/${two.id}/approval`, admin, { reportSha256: two.reportSha256, acknowledgeOpenIssues: true, confirmSelfApproval: false }))).body.replayed).toBe(true)
+    const unknown = await a.json(await a.call("POST", `${base}/${crypto.randomUUID()}/approval`, owner, { reportSha256: two.reportSha256, ...flags }))
+    expect(unknown.status).toBe(404)
+  })
+
   test("results that are not complete right now are never frozen", async () => {
     const unavailable = liveResults(); unavailable.records[0] = { ...unavailable.records[0]!, outcome: "unavailable", result: null, methodType: null, effectiveDataQuality: null }
     const budget = liveResults(); budget.warnings = [SCOPE3_BUDGET_WARNING]

@@ -20,6 +20,7 @@ import { createWorksheetRoutes } from "../workspace/m64-routes"
 import { COLLECTION_EVIDENCE_MAX_BYTES, EXISTING_PROJECT_REF, HostedWorkspaceDatabase, STAGING_COLLECTION_SCHEMA_VERSION, STAGING_SCHEMA_BRIDGE_VERSION, STAGING_SCHEMA_VERSION, STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION, STAGING_SCOPE3_SCHEMA_VERSION, STAGING_SERVED_SCHEMA_VERSIONS, loadStagingDatabaseCa, SCOPE3_CSV_LABELS, type WorkspaceDatabase, type CompanyWorkspaceRecord } from "@neuvetra/database"
 import { createClient } from "@supabase/supabase-js"
 import { AsyncLocalStorage } from "node:async_hooks"
+import { createHash } from "node:crypto"
 import { extractBearerToken, isPlausibleUnexpiredJwt, validateUserFromToken, type AuthenticatedUser } from "../lib/auth"
 import { CLIENT_ADDRESS_HEADERS, createRateLimiter, proxiedClientAddress } from "../lib/rate-limit"
 import { createWorkspaceRoutes } from "../workspace/routes"
@@ -152,15 +153,42 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   // Spend review can make several authenticated reads per correction. Allow a sustained review session
   // (300/user/minute), while bounding the instance to 1,200/minute of staging users' requests.
   // API-01 (CTO audit risk 3): nothing a caller can send before proving who they are spends a budget other people
-  // depend on. Order per request: `unverified` (per client address, before any token check or SQL) -> token validation
-  // -> `actors` (per user) -> staging access -> `admission` (instance ceiling). `unverified` bounds validation calls per
-  // address; a request is given back to it once its user is admitted, so it only stays spent by invalid tokens, users
-  // without staging access, users over their own limit and requests still in flight. Public config is limited per
-  // address too, so no single address can refuse the app's configuration to everyone else.
+  // depend on. Order per request, after the local token pre-check: `overLimitTokens` (a token already refused by its
+  // user's limit this window is refused again before anything else) -> `unverified` (per client address, before any
+  // token validation or SQL) -> token validation -> readiness -> staging access -> `actors` (per user) -> release of
+  // `unverified`, only for a staging user within their own limit -> `admission` (instance ceiling).
+  // `unverified` is the only bound on validation calls and SQL per address for callers who are not staging users, so
+  // it stays spent by invalid and expired tokens, by validated accounts without staging access (the shared Supabase
+  // project has self-service sign-up elsewhere, so such accounts can be minted) and by requests still in flight.
+  // BF-04 (BL-04): a staging user within their own limit gives the count back, so their traffic never spends their
+  // address's budget. When `actors` refuses one, the count stays spent and the token is remembered until the user's
+  // window resets: repeating that token is refused before the address budget, validation or SQL, so an over-limit user
+  // never refuses a colleague behind the same address, and each new token they bring costs that address one count (so
+  // cycling fresh tokens is still bounded at 120 validations per address per minute).
+  // `actors` tracks up to 10,000 users so count eviction cannot reset a user's limit (worst case a few MB; see BF-04).
+  // Public config is limited per address too, so no single address can refuse the app's configuration to everyone else.
   const admission = createRateLimiter({ max: 1200, windowMs: 60_000, maxBuckets: 1 })
   const configAdmission = createRateLimiter({ max: 1200, windowMs: 60_000, maxBuckets: 10_000 })
   const unverified = createRateLimiter({ max: 120, windowMs: 60_000, maxBuckets: 10_000 })
-  const actors = createRateLimiter({ max: 300, windowMs: 60_000, maxBuckets: 100 })
+  const actors = createRateLimiter({ max: 300, windowMs: 60_000, maxBuckets: 10_000 })
+  // BF-04: SHA-256 of a staging user's validated token that `actors` refused -> when that user's window resets. Only ever
+  // refuses (never admits), holds only tokens that validated, and is bounded; an evicted entry's next request spends
+  // the address budget again, as any new token does.
+  const overLimitTokens = new Map<string, number>()
+  const tokenKey = (token: string) => createHash("sha256").update(token).digest("hex")
+  const overLimitUntil = (token: string) => {
+    const key = tokenKey(token), resetAt = overLimitTokens.get(key)
+    if (resetAt === undefined) return null
+    if (Date.now() < resetAt) return resetAt
+    overLimitTokens.delete(key)
+    return null
+  }
+  const rememberOverLimit = (token: string, resetAt: number) => {
+    const key = tokenKey(token)
+    overLimitTokens.delete(key)
+    overLimitTokens.set(key, resetAt)
+    if (overLimitTokens.size > 1_000) overLimitTokens.delete(overLimitTokens.keys().next().value!)
+  }
   // API-02 (QA F1): the dispatcher has already validated this request's token and checked staging access before any
   // route runs. It records the result in this per-request async context (set only by server code, never derived from
   // anything the client sends), so a route validating the same token in the same request reuses it instead of calling
@@ -321,6 +349,9 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       // A request that cannot authenticate never spends any budget. API-02: neither does a token that cannot be a live
       // Supabase JWT (wrong shape, or `exp` in the past); it is refused here without a network call or any SQL.
       if (!publicConfig && (!token || token.length > 8192 || (precheck && !precheck(token)))) return json(401, { error: "Authentication required." })
+      // BF-04: a token already found over its user's limit this window spends nothing and makes no validation call.
+      const overLimitResetAt = !publicConfig && token ? overLimitUntil(token) : null
+      if (overLimitResetAt !== null) return rateLimited(overLimitResetAt)
       const proxied = proxiedClientAddress(request.headers)
       if (!proxied) noteUnknownAddress(request.headers)
       const client = proxied ?? "unknown"
@@ -335,14 +366,16 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       let user: AuthenticatedUser | null
       try { user = await auth(token) } catch { return json(503, { error: "Authentication is unavailable." }) }
       if (!user) return json(401, { error: "Authentication required." })
-      const allowance = actors.check(user.id)
-      if (!allowance.allowed) return rateLimited(allowance.resetAt)
-      // API-02 (QA F1): the existing project's per-request readiness SQL runs only for a validated user within their own
-      // limit, and still before this request's first other SQL (staging access), as before.
+      // API-02 (QA F1): the existing project's per-request readiness SQL runs only for a validated user, and still before
+      // this request's first other SQL (staging access).
       const requestReadiness = existingProject ? await databaseReadiness() : undefined
       if (requestReadiness && !served(requestReadiness.schemaVersion)) return json(503, { error: "Staging database is upgrading." })
+      // Without staging access the address count stays spent, so such accounts stay bounded per address.
       if (!await database.hasStagingAccess(user.id)) return json(403, { error: "Private staging access required." })
-      // A staging user within their own limit: the request leaves the per-address budget and spends the instance one.
+      const allowance = actors.check(user.id)
+      // BF-04: over their own limit, the count stays spent and the token is remembered (see `overLimitTokens`).
+      if (!allowance.allowed) { rememberOverLimit(token, allowance.resetAt); return rateLimited(allowance.resetAt) }
+      // BF-04 (BL-04): a staging user within their own limit leaves the per-address budget and spends the instance one.
       unverified.release(client, provisional)
       const admitted = admission.check("staging")
       if (!admitted.allowed) return rateLimited(admitted.resetAt)
