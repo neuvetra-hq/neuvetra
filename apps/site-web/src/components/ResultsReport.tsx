@@ -13,6 +13,16 @@ import { scope3Todos } from "@/lib/scope3-checklist"
 import { SCOPE3_ATTENTION_LINK_TEXT } from "@/lib/scope3-results-text"
 import { SCOPE3_FOOTER_TEXT_R3D } from "@/lib/scope3-text-r3d"
 
+/** WO-11: what the footer says about Scope 3 when there are no Scope 3 results. A failed load is never "not calculated". */
+const SCOPE3_FOOTER_NOTE = {
+  off: "Scope 3 isn’t switched on in this workspace",
+  failed: "Scope 3 results couldn’t be loaded — use Try again in the Scope 3 section",
+  loading: "Scope 3 results are loading",
+} as const
+const scope3FooterNote = (state: Scope3State) => state.unavailable ? SCOPE3_FOOTER_NOTE.off : state.message ? SCOPE3_FOOTER_NOTE.failed : SCOPE3_FOOTER_NOTE.loading
+/** WO-11: shown beside Print and CSV on screen only (never in the printed report or the CSV bytes). */
+const LIVE_DRAFT_LABEL = "Live draft — not a frozen version"
+
 const rowKg = (row: ResultRow) => row.scope1?.total?.display ?? row.scope2?.locationBased.total?.display ?? null
 const QUALITY = QUALITY_LABELS
 // Every file names its scan state, including "cleared" (MR3): the screen, print and CSV use the same wording.
@@ -102,7 +112,7 @@ function Report({ results, coverage, scope3, onScope3Ready }: { results: Results
       <div><small>Prepared</small>{formatTimeR2E(results.generatedAt)}</div>
     </div>
     <h3>Summary</h3>
-    <div className="nv-report__scroll"><table><thead><tr><th>Scope</th><th>Basis</th><th className="nv-right">kg CO2e</th><th className="nv-right">t CO2e</th><th>Completeness</th></tr></thead><tbody>
+    <div className="nv-report__scroll" role="region" aria-label="Draft report: Summary table" tabIndex={0}><table><thead><tr><th>Scope</th><th>Basis</th><th className="nv-right">kg CO2e</th><th className="nv-right">t CO2e</th><th>Completeness</th></tr></thead><tbody>
       <tr><td>Scope 1</td><td>Direct emissions</td><td className="nv-right">{results.scope1?.includedResults.length ? groupDigits(results.scope1.knownSourceSubtotal.display) : "—"}</td><td className="nv-right">{results.scope1?.includedResults.length ? kgToTonnes(results.scope1.knownSourceSubtotal.display) : "—"}</td><td>{notes.scope1}</td></tr>
       <tr><td>Scope 2</td><td>Location-based</td><td className="nv-right">{results.scope2?.locationBasedIncluded.length ? groupDigits(results.scope2.locationBasedSubtotal.display) : "—"}</td><td className="nv-right">{results.scope2?.locationBasedIncluded.length ? kgToTonnes(results.scope2.locationBasedSubtotal.display) : "—"}</td><td>{notes.scope2Location}</td></tr>
       <tr><td>Scope 2</td><td>Market-based</td><td className="nv-right">{results.scope2?.marketBasedIncluded.length ? groupDigits(results.scope2.marketBasedSubtotal.display) : "—"}</td><td className="nv-right">{results.scope2?.marketBasedIncluded.length ? kgToTonnes(results.scope2.marketBasedSubtotal.display) : "—"}</td><td>{notes.scope2Market}</td></tr>
@@ -110,9 +120,9 @@ function Report({ results, coverage, scope3, onScope3Ready }: { results: Results
     <p className="nv-report__small">Scope 1 and Scope 2 are reported separately. Each subtotal is the calculation engine’s own aggregate of the calculated records below. Records that are held, excluded or withdrawn, and sources with no records, are listed separately and are not included.</p>
     {results.scope1?.reportedOutsideScopes.length ? <p className="nv-report__small">Reported outside the Scope 1 total: {results.scope1.reportedOutsideScopes.map(item => `${item.gas} ${groupDigits(item.massKg)} kg`).join("; ")}.</p> : null}
     <h3>Scope 1 sources</h3>
-    {scope1Rows.length ? <div className="nv-report__scroll"><table><thead><tr><th>Activity</th><th>Site</th><th>Source</th><th>Period</th><th className="nv-right">Quantity</th><th>Data quality</th><th>Evidence</th><th>Status</th><th className="nv-right">kg CO2e</th></tr></thead><tbody>{scope1Rows.map(line)}</tbody></table></div> : <p>No Scope 1 records.</p>}
+    {scope1Rows.length ? <div className="nv-report__scroll" role="region" aria-label="Draft report: Scope 1 sources table" tabIndex={0}><table><thead><tr><th>Activity</th><th>Site</th><th>Source</th><th>Period</th><th className="nv-right">Quantity</th><th>Data quality</th><th>Evidence</th><th>Status</th><th className="nv-right">kg CO2e</th></tr></thead><tbody>{scope1Rows.map(line)}</tbody></table></div> : <p>No Scope 1 records.</p>}
     <h3>Scope 2 purchased electricity</h3>
-    {scope2Rows.length ? <div className="nv-report__scroll"><table><thead><tr><th>Activity</th><th>Site</th><th>Meter</th><th>Period</th><th className="nv-right">Quantity</th><th>Data quality</th><th>Evidence</th><th>Status</th><th className="nv-right">Location-based kg</th><th className="nv-right">Market-based kg</th></tr></thead><tbody>{scope2Rows.map(line)}</tbody></table></div> : <p>No Scope 2 records.</p>}
+    {scope2Rows.length ? <div className="nv-report__scroll" role="region" aria-label="Draft report: Scope 2 sources table" tabIndex={0}><table><thead><tr><th>Activity</th><th>Site</th><th>Meter</th><th>Period</th><th className="nv-right">Quantity</th><th>Data quality</th><th>Evidence</th><th>Status</th><th className="nv-right">Location-based kg</th><th className="nv-right">Market-based kg</th></tr></thead><tbody>{scope2Rows.map(line)}</tbody></table></div> : <p>No Scope 2 records.</p>}
     {uncounted && <p className="nv-report__small">† Calculated, but not in that subtotal. The engine includes a figure in a subtotal only when that basis is complete for the record.</p>}
     <h3>Not counted, incomplete and possible gaps</h3>
     {incomplete.length || coverage.state !== "ready" || coverage.setupOpen.length || coverage.gaps.length ? <ul>
@@ -126,9 +136,9 @@ function Report({ results, coverage, scope3, onScope3Ready }: { results: Results
     {unstated > 0 && <p>{plural(unstated, "calculated record has", "calculated records have")} data quality “Unknown”.</p>}
     <h3>Methods and emission factors</h3>
     <p>{methodsText.summary} Global warming potentials: IPCC AR5, 100-year (CH4 28, N2O 265). Emission factors: EPA GHG Emission Factors Hub (2025); EPA eGRID2023 rev2; Green-e 2025 residual mix. Figures are rounded once, half-even, to 4 decimal places of kg CO2e.</p>
-    {results.methods.length > 0 ? <div className="nv-report__scroll"><table><thead><tr><th>Method version</th><th>Scope</th><th>Release status</th><th>Engine (SHA-256)</th><th>Factor register (SHA-256)</th></tr></thead><tbody>{results.methods.map(item => <tr key={`${item.methodVersionId}-${item.engineSha256}`}><td>{item.methodVersionId}</td><td>{item.scope}</td><td>{item.releaseStatus === "released_beta" ? "Released beta" : "Unreleased beta (not released)"}</td><td className="nv-subtle" style={{ fontFamily: "monospace" }}>{item.engineSha256.slice(0, 12)}…</td><td className="nv-subtle" style={{ fontFamily: "monospace" }}>{item.registerSha256.slice(0, 12)}…</td></tr>)}</tbody></table></div> : <p>No method calculated a figure.</p>}
+    {results.methods.length > 0 ? <div className="nv-report__scroll" role="region" aria-label="Draft report: Methods table" tabIndex={0}><table><thead><tr><th>Method version</th><th>Scope</th><th>Release status</th><th>Engine (SHA-256)</th><th>Factor register (SHA-256)</th></tr></thead><tbody>{results.methods.map(item => <tr key={`${item.methodVersionId}-${item.engineSha256}`}><td>{item.methodVersionId}</td><td>{item.scope}</td><td>{item.releaseStatus === "released_beta" ? "Released beta" : "Unreleased beta (not released)"}</td><td className="nv-subtle" style={{ fontFamily: "monospace" }}>{item.engineSha256.slice(0, 12)}…</td><td className="nv-subtle" style={{ fontFamily: "monospace" }}>{item.registerSha256.slice(0, 12)}…</td></tr>)}</tbody></table></div> : <p>No method calculated a figure.</p>}
     {residual && <p>Market-based electricity not covered by certificates or contracts uses the residual mix: {residual.method}. Sources: {residual.sources.join("; ")}.</p>}
-    {factorRows.size > 0 && <div className="nv-report__scroll"><table><thead><tr><th>Factor</th><th className="nv-right">Value</th><th>Unit</th><th>Source (cell)</th></tr></thead><tbody>{[...factorRows.entries()].map(([key, factor]) => <tr key={key}><td>{factor.label}</td><td className="nv-right">{groupDigits(factor.value)}</td><td>{factor.unit}</td><td>{factorSource(key)} ({factor.cell})</td></tr>)}</tbody></table></div>}
+    {factorRows.size > 0 && <div className="nv-report__scroll" role="region" aria-label="Draft report: Emission factors table" tabIndex={0}><table><thead><tr><th>Factor</th><th className="nv-right">Value</th><th>Unit</th><th>Source (cell)</th></tr></thead><tbody>{[...factorRows.entries()].map(([key, factor]) => <tr key={key}><td>{factor.label}</td><td className="nv-right">{groupDigits(factor.value)}</td><td>{factor.unit}</td><td>{factorSource(key)} ({factor.cell})</td></tr>)}</tbody></table></div>}
     {scope3 && <Scope3ReportSection results={scope3} onReady={onScope3Ready} />}
     <p className="nv-report__small" style={{ marginTop: 24 }}>{methodsText.closing} It has not been reviewed by an independent assurance provider and must not be filed or published as a final inventory.</p>
   </article>
@@ -319,13 +329,14 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
       <div className="nv-card__head"><div><h2 className="nv-h2">Draft report</h2><p className="nv-muted">A print-ready summary: totals, every source with its evidence, what isn’t counted, estimates, and the factors used.</p></div></div>
       <div className="nv-actions">
         <button type="button" className="nv-btn nv-btn--primary" onClick={() => setShowReport(value => !value)} aria-expanded={showReport} aria-controls="draft-report"><Icon name="file" size={18} />{showReport ? "Hide draft report" : "View draft report"}</button>
-        <button type="button" className="nv-btn" disabled={printPending} onClick={printReport}><Icon name="print" size={18} />Print or save as PDF</button>
-        <button type="button" className="nv-btn" onClick={downloadCsv}><Icon name="download" size={18} />Download CSV</button>
+        <button type="button" className="nv-btn" disabled={printPending} onClick={printReport} aria-describedby="live-draft-label"><Icon name="print" size={18} />Print or save as PDF</button>
+        <button type="button" className="nv-btn" onClick={downloadCsv} aria-describedby="live-draft-label"><Icon name="download" size={18} />Download CSV</button>
+        <span className="nv-live-draft" id="live-draft-label">{LIVE_DRAFT_LABEL}</span>
         <button type="button" className="nv-btn nv-btn--ghost" disabled={busy || scope3.busy} onClick={() => { void load(); void loadScope3() }}>{busy || scope3.busy ? "Recalculating…" : "Recalculate"}</button>
       </div>
     </div>
     {/* Always rendered so printing from the browser menu prints the report; shown on screen only when opened. */}
     <div id="draft-report" className={showReport ? undefined : "nv-print-only"}><Report results={results} coverage={coverage} scope3={scope3.data} onScope3Ready={setRenderedScope3} /></div>
-    <p className="nv-subtle">Activity types covered: {ACTIVITY_KINDS.map(kind => kind.label).join(", ")}{scope3.data ? SCOPE3_FOOTER_TEXT_R3D.scope3 : ". Scope 3 is not calculated in this environment yet"}.</p>
+    <p className="nv-subtle">Activity types covered: {ACTIVITY_KINDS.map(kind => kind.label).join(", ")}{scope3.data ? SCOPE3_FOOTER_TEXT_R3D.scope3 : `. ${scope3FooterNote(scope3)}`}.</p>
   </section>
 }

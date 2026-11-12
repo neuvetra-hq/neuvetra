@@ -30,7 +30,7 @@ const READY: Coverage = { state: "ready", setupOpen: [], gaps: [] }
 const csvLines = (csv: string) => csv.split("\n").map(line => /^"[^\n]*"$/.test(line) ? line.slice(1, -1).replace(/""/g, '"') : line)
 
 /** Renders the Results screen once for these results, clicks Download CSV, and returns what each surface says. */
-function render(results: ResultsResponse, coverage: Coverage = READY) {
+function render(results: ResultsResponse, coverage: Coverage = READY, scope3Override?: Partial<scope3ResultsApi.Scope3State>) {
   let csv = ""
   const env: Record<string, unknown> = {
     ...journeyStatus, ...plainLanguage, ...resultsApi, ...resultsView, ...scope3ResultsApi, ...scope3Results, ...scope3Checklist, ...scope3ResultsText, ...scope3DisplayR3d, ...scope3TextR3d, formatTimeR2E,
@@ -38,7 +38,7 @@ function render(results: ResultsResponse, coverage: Coverage = READY) {
     Scope3ResultsPanel: scope3Results.Scope3Panel,
     h: (type: any, props: any, ...children: any[]) => typeof type === "function" ? type({ ...props, children }) : { type, props: props ?? {}, children },
     React: { Fragment: "fragment" }, Icon: () => null,
-    useReducer: () => [{ results, error: null, busy: false }, () => {}], useState: (initial: any) => [initial, () => {}], useRef: (current: any) => ({ current }),
+    useReducer: () => [{ results, error: null, busy: false }, () => {}], useState: (initial: any) => [initial === scope3ResultsApi.INITIAL_SCOPE3_STATE && scope3Override ? { ...initial, ...scope3Override } : initial, () => {}], useRef: (current: any) => ({ current }),
     useEffect: () => {}, useCallback: (fn: any) => fn, useMemo: (fn: any) => fn(),
     Blob: class { constructor(parts: string[]) { csv = parts.join("") } },
     URL: { createObjectURL: () => "blob:results", revokeObjectURL: () => {} },
@@ -59,6 +59,10 @@ function render(results: ResultsResponse, coverage: Coverage = READY) {
     totals: nodes.filter(node => node.props.className === "nv-stat__value").map(text),
     totalNotes: nodes.filter(node => node.props.className === "nv-stat__foot").map(text),
     lead: text(nodes.find(node => node.props.className === "nv-lead")),
+    footer: text(nodes.find(node => node.props.className === "nv-subtle" && text(node).startsWith("Activity types covered"))),
+    liveLabel: nodes.filter(node => node.props.className === "nv-live-draft").map(text),
+    actionsLabelled: nodes.filter(node => node.type === "button" && /Print or save|Download CSV/.test(text(node))).map(node => node.props["aria-describedby"]),
+    tableRegions: nodes.filter(node => typeof node.props.className === "string" && node.props.className.startsWith("nv-report__scroll")).map(node => ({ role: node.props.role, label: node.props["aria-label"], tabIndex: node.props.tabIndex })),
     warnings: nodes.filter(node => node.props.className === "nv-stat__warn").map(text),
     banner: nodes.filter(node => node.props.className === "nv-notice nv-notice--warn").map(text).find(line => / counted yet| partly calculated/.test(line)) ?? null,
     csv,
@@ -245,5 +249,26 @@ describe("round 2 polish: one time format on Results", () => {
     const view = render({ ...synthetic, generatedAt: "2026-10-15T21:07:09.000Z" } as ResultsResponse)
     expect(view.lead).toContain("calculated 2026-10-15 21:07 UTC")
     expect(view.printed).toContain("Prepared2026-10-15 21:07 UTC")
+  })
+})
+
+describe("WO-11: honest Scope 3 footer, live-draft label and focusable table regions", () => {
+  const footerFor = (scope3: Partial<scope3ResultsApi.Scope3State> | undefined) => render(synthetic as unknown as ResultsResponse, READY, scope3).footer
+  test("Scope 3 switched off says so; a failed load says it could not be loaded; neither says 'not calculated'", () => {
+    expect(footerFor({ unavailable: true })).toContain("Scope 3 isn’t switched on in this workspace")
+    expect(footerFor({ message: "Server error" })).toContain("Scope 3 results couldn’t be loaded — use Try again in the Scope 3 section")
+    for (const state of [{ unavailable: true }, { message: "Server error" }, undefined]) expect(footerFor(state as any)).not.toMatch(/not calculated/i)
+  })
+  test("the live-draft label sits next to Print and CSV on screen, and is not in the CSV or the printed report", () => {
+    const out = render(synthetic as unknown as ResultsResponse)
+    expect(out.liveLabel).toEqual(["Live draft — not a frozen version"])
+    expect(out.actionsLabelled).toEqual(["live-draft-label", "live-draft-label"])
+    expect(out.csv).not.toContain("Live draft")
+    expect(out.printed).not.toContain("Live draft")
+  })
+  test("every wide table is a labelled, focusable region", () => {
+    const regions = render(synthetic as unknown as ResultsResponse).tableRegions
+    expect(regions.length).toBeGreaterThan(0)
+    for (const region of regions) { expect(region.role).toBe("region"); expect(region.tabIndex).toBe(0); expect(region.label).toMatch(/table$/) }
   })
 })

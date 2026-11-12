@@ -20,6 +20,8 @@ import type { HostedWorkspaceActor } from "@/lib/workspace-api"
  * from the stored report text. The CSV download and print of an opened version serve the stored bytes. Approve sends the
  * report SHA-256 shown on the opened version.
  */
+/** WO-11: approval here is internal to the company, not external assurance. */
+export const APPROVAL_HEADING = "Internal approval (by your company — not external assurance)"
 const who = (id: string, actorId: string) => id === actorId ? "you" : `user ${id.slice(0, 8)}`
 // Round 2 polish (lane D): one time format with the Activity and setup screens, `YYYY-MM-DD HH:MM UTC` (lane E's helper).
 const when = (iso: string) => formatTimeR2E(iso)
@@ -28,7 +30,7 @@ const approvalOf = (version: Scope3ReportVersionSummary) => version.approval as 
 /** The version history table: who prepared each version, when and why, and who approved it when. */
 export function Scope3ReportHistory({ versions, actorId, onOpen }: { versions: Scope3ReportVersionSummary[]; actorId: string; onOpen: (id: string) => void }) {
   if (versions.length === 0) return <p className="nv-muted">No report version has been prepared for this reporting year yet.</p>
-  return <div className="nv-report__scroll"><table><thead><tr><th>Revision</th><th>Prepared</th><th>Why</th><th>Approval</th><th>Report SHA-256</th><th /></tr></thead><tbody>
+  return <div className="nv-report__scroll" role="region" aria-label="Report versions table" tabIndex={0}><table><thead><tr><th>Revision</th><th>Prepared</th><th>Why</th><th>{APPROVAL_HEADING}</th><th>Report SHA-256</th><th /></tr></thead><tbody>
     {[...versions].reverse().map(v => <tr key={v.id}>
       <td>{v.revision}</td>
       <td title={v.createdBy}>by {who(v.createdBy, actorId)} · {when(v.createdAt)}</td>
@@ -95,7 +97,7 @@ export function Scope3FrozenReportView({ report, previous, actorId, canManage, b
       {/* Round 3 lane D (PR-9): each stored part ends with one period ("… Inc." never "… Inc.."); the stored values are shown as stored. */}
       <p className="nv-report__small">{[scope3Sentence(a.statement), scope3Sentence(`Criteria: ${a.criteria}`), scope3Sentence(`Company: ${a.legalName || "not set"}`), scope3Sentence(`Consolidation approach: ${a.consolidationApproach?.replace(/_/g, " ") ?? "not set"}`), `Reporting period: ${periodLabel(a.reportingPeriod.start, a.reportingPeriod.endExclusive)} (reporting year ${a.reportingYear}).`, `Prepared by ${who(a.preparedBy, actorId)} at ${when(a.preparedAt)}.`].join(" ")}</p>
       {/* Round 3 lane D (PR-9, EN-4): t to 2 decimals as on the live screen, from the stored exact kg (shown beside it). */}
-      <div className="nv-report__scroll"><table><thead><tr><th>Category</th><th>Status</th><th className="nv-right">{SCOPE3_FROZEN_TEXT_R3D.tonnesHeading}</th><th className="nv-right">{SCOPE3_FROZEN_TEXT_R3D.kgHeading}</th></tr></thead><tbody>
+      <div className="nv-report__scroll" role="region" aria-label={`Version ${version.revision}: Scope 3 totals by category table`} tabIndex={0}><table><thead><tr><th>Category</th><th>Status</th><th className="nv-right">{SCOPE3_FROZEN_TEXT_R3D.tonnesHeading}</th><th className="nv-right">{SCOPE3_FROZEN_TEXT_R3D.kgHeading}</th></tr></thead><tbody>
         {a.totals.map(row => <tr key={row.category}><td>{row.category}. {row.title}</td><td>{SCOPE3_STATUS_TEXT_R3D[row.status] ?? (SCOPE3_STATUS_TEXT as Readonly<Record<string, string>>)[row.status] ?? row.status.replace(/_/g, " ")}</td><td className="nv-right">{row.subtotalKg ? scope3Tonnes(row.subtotalKg) : "—"}</td><td className="nv-right">{row.subtotalKg ? groupDigits(row.subtotalKg) : "—"}</td></tr>)}
       </tbody></table></div>
       <p className="nv-report__small">Known-source subtotal ({a.totalLabel}): {a.knownSourceSubtotal ? `${scope3Tonnes(a.knownSourceSubtotal.kg)} t CO2e (${groupDigits(a.knownSourceSubtotal.kg)} kg CO2e)` : "nothing calculated"}.</p>
