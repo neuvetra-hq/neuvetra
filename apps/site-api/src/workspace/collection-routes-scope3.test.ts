@@ -25,6 +25,7 @@ function harness(schema: number | undefined) {
   const calls: string[] = []
   const database = {
     async findCollectionContext() { calls.push("context"); return { companyId: COMPANY, setupVersionId: SETUP, setupRevision: 1, sameContentSetupVersionIds: [SETUP], boundaryApproach: "operational_control", reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, locations: [{ id: LOCATION, name: "Office", inclusion: "included", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" }] } },
+    async findCollectionActivities() { return [] }, // BF-03: a new Scope 1/2 save reads the company's records first
     async saveCollectionActivity(...args: unknown[]) { calls.push("save"); const input = args[3] as { activity: { kind: string } }; return { record: { id: RECORD, kind: input.activity.kind }, version: {}, replayed: false } },
   } as unknown as CollectionRouteDatabase
   const route = createCollectionRoutes({ database, evidenceStorage: { put: async () => {}, get: async () => new Uint8Array() }, origin: ORIGIN, validateUser: async token => token === "valid" ? { id: ACTOR, email: null, phone: null, fullName: null } : null,
