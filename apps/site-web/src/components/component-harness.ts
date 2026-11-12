@@ -47,6 +47,8 @@ async function scope3Defaults(injected: Record<string, unknown>): Promise<Record
     scope3AssessmentPrefill: checklist.scope3AssessmentPrefill, SCOPE3_PREFILL_TEXT: resultsText.SCOPE3_PREFILL_TEXT, scope3ExcludableNotesFor: checklist.scope3ExcludableNotesFor,
     // Round 2 lane D (UX-3): the record editor focuses the field a Fix names once it shows the record.
     focusRecordEditor: () => null,
+    // WO-06: whether a Fix named fields of the record the record view opens (none in these tests).
+    hasRecordFieldFocus: () => false,
     saveScope3Assessment: async () => { throw new assessmentApi.Scope3AssessmentApiError("Scope 3 assessments are unavailable right now.", 503, "scope3_schema_30_required") },
     ...(loadContext ? { loadCollectionOverview: async (...args: unknown[]) => ({ context: await loadContext(...args), scope3: false, scope3Kinds: [], scope3Completion: false }) } : {}),
   }

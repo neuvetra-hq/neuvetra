@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { parseScope3SpendCsv, scope3DecimalSum, scope3SpendImportTemplate, type Scope3SpendImportLine, type Scope3SpendParse } from "../../../../../packages/neuvetra-database/src/scope3-spend-import"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { reasonText } from "@/lib/plain-language"
@@ -40,7 +40,12 @@ type MappingTarget = { scope: "group" | "line"; glAccount: string; vendor: strin
 const share = (part: string, whole: string) => Number(whole) > 0 ? Math.min(100, Math.round(Number(part) / Number(whole) * 1000) / 10) : 0
 const matches = (query: string, ...texts: string[]) => !query.trim() || query.trim().toLowerCase().split(/\s+/).every(word => texts.some(text => text.toLowerCase().includes(word)))
 
-export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { companyId: string; actor: HostedWorkspaceActor; onChanged?: () => void; onOpenRecord?: (recordId: string) => void }) {
+/**
+ * WO-06 (QA B1): `onDirtyChange` reports unsaved input held here (a mapping form with changes, a chosen file not yet
+ * imported, typed exchange rates for currencies still held, a withdrawal reason), so the Activity screen's leave guard
+ * asks before anything that would discard it ("Open", Back, a filter address, the sidebar).
+ */
+export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirtyChange }: { companyId: string; actor: HostedWorkspaceActor; onChanged?: () => void; onOpenRecord?: (recordId: string) => void; onDirtyChange?: (dirty: boolean) => void }) {
   const [view, setView] = useState<Scope3SpendImportsView | null>(null)
   const [message, setMessage] = useState<string | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
@@ -59,6 +64,14 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
   const [withdrawal, setWithdrawal] = useState<{ importId: string; reason: string } | null>(null)
   // Round 3 lane C (PR-11): one rate per currency (US dollars per unit), its source and date, as typed.
   const [rates, setRates] = useState<Record<string, { rate: string; rateSource: string; rateDate: string }>>({})
+  // WO-06 (B1): the mapping forms that hold changes, by form key.
+  const [dirtyForms, setDirtyForms] = useState<ReadonlySet<string>>(() => new Set())
+  const formDirty = useCallback((key: string, dirty: boolean) => setDirtyForms(current => {
+    if (current.has(key) === dirty) return current
+    const next = new Set(current)
+    if (dirty) next.add(key); else next.delete(key)
+    return next
+  }), [])
   // Bug hunt C (C-06): set when the guided path asked for the review; the effect below focuses it once it has rendered.
   const focusReview = useRef(false)
 
@@ -207,6 +220,10 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
   const target = (group: Scope3SpendReviewGroup): MappingTarget => ({ scope: group.scope, glAccount: group.glAccount, vendor: group.vendor, description: group.scope === "group" ? "" : group.lines[0]!.description, mapping: group.mapping, lines: group.lines.length - group.overrides.size })
   const lineTarget = (line: Scope3SpendLineView, mapping: Scope3SpendMappingView | null): MappingTarget => ({ scope: "line", glAccount: line.glAccount, vendor: line.vendor, description: line.description, mapping, lines: 1 })
   const previewLines = preview?.lines ?? []
+  const ratesTyped = foreign.some(({ currency }) => Object.values(rates[currency] ?? {}).some(value => value.trim() !== ""))
+  const unsaved = dirtyForms.size > 0 || (file !== null && result === null) || (withdrawal?.reason.trim() ?? "") !== "" || ratesTyped
+  useEffect(() => { onDirtyChange?.(unsaved) }, [unsaved, onDirtyChange])
+  useEffect(() => () => onDirtyChange?.(false), [onDirtyChange])
 
   return (
     <section aria-label="Spend import" className="spend-import" id={SPEND_IMPORT_ANCHOR} tabIndex={-1}>
@@ -293,12 +310,12 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
             <p className="nv-subtle">Lines grouped by vendor and GL account. One mapping covers the group and is remembered for later files; a line can be mapped differently on its own. Lines held for anything else are under “Other holds”.</p>
             <label className="nv-field spend-import__search"><span>Find a vendor, account or description</span><input aria-label="Find lines" value={query} onChange={event => { setQuery(event.target.value); setShown(PAGE) }} /></label>
             {chosen.length > 0 && <div className="spend-import__bulk" aria-label="Map selected groups">
-              <SpendMappingForm key={chosen.map(group => group.keyInput).join("|")} title={`Map ${chosen.length} selected group(s): ${chosen.reduce((n, g) => n + g.lines.length, 0)} line(s)`} texts={{ vendor: chosen.length === 1 ? chosen[0]!.vendor : "", glAccount: chosen.length === 1 ? chosen[0]!.glAccount : "", glDescriptions: chosen.flatMap(g => g.glDescriptions), descriptions: chosen.flatMap(g => g.descriptions) }}
+              <SpendMappingForm key={chosen.map(group => group.keyInput).join("|")} dirtyKey="bulk" onDirty={formDirty} title={`Map ${chosen.length} selected group(s): ${chosen.reduce((n, g) => n + g.lines.length, 0)} line(s)`} texts={{ vendor: chosen.length === 1 ? chosen[0]!.vendor : "", glAccount: chosen.length === 1 ? chosen[0]!.glAccount : "", glDescriptions: chosen.flatMap(g => g.glDescriptions), descriptions: chosen.flatMap(g => g.descriptions) }}
                 initial={null} view={view} disabled={busy || !canManage} lines={chosen.reduce((n, g) => n + g.lines.length - g.overrides.size, 0)}
                 onSave={choice => saveMappings(chosen.map(target), choice)} onCancel={() => setSelected([])} />
             </div>}
             <ul className="spend-import__groups">{visibleGroups.slice(0, shown).map(group => <li key={group.keyInput}>
-              <SpendGroupRow group={group} view={view} selected={selected.includes(group.keyInput)} disabled={busy || !canManage} onOpenRecord={onOpenRecord}
+              <SpendGroupRow group={group} view={view} selected={selected.includes(group.keyInput)} disabled={busy || !canManage} onOpenRecord={onOpenRecord} onFormDirty={formDirty}
                 onWithdraw={reason => correct(group.lines.map(line => line.recordId), "withdraw", reason)}
                 onSelect={on => setSelected(current => on ? [...current.filter(key => key !== group.keyInput), group.keyInput] : current.filter(key => key !== group.keyInput))}
                 onSave={choice => saveMappings([target(group)], choice)} onSaveLine={(line, choice) => saveMappings([lineTarget(line, group.overrides.get(line.recordId) ?? null)], choice)} />
@@ -394,7 +411,7 @@ function PreviewStatus({ line, period }: { line: Scope3SpendImportLine; period: 
 }
 
 /** One group of lines that need a code: header, suggestions and mapping form when open, its lines with per-line overrides. */
-function SpendGroupRow({ group, view, selected, disabled, onSelect, onSave, onSaveLine, onOpenRecord, onWithdraw }: { group: Scope3SpendReviewGroup; view: Scope3SpendImportsView; selected: boolean; disabled: boolean; onSelect: (on: boolean) => void
+function SpendGroupRow({ group, view, selected, disabled, onSelect, onSave, onSaveLine, onOpenRecord, onWithdraw, onFormDirty }: { onFormDirty?: (key: string, dirty: boolean) => void; group: Scope3SpendReviewGroup; view: Scope3SpendImportsView; selected: boolean; disabled: boolean; onSelect: (on: boolean) => void
   onSave: (choice: MappingChoice) => Promise<void>; onSaveLine: (line: Scope3SpendLineView, choice: MappingChoice) => Promise<void>; onOpenRecord?: (recordId: string) => void; onWithdraw: (reason: string) => Promise<void> }) {
   const [open, setOpen] = useState(false)
   const [lineOpen, setLineOpen] = useState<string | null>(null)
@@ -428,7 +445,7 @@ function SpendGroupRow({ group, view, selected, disabled, onSelect, onSave, onSa
         </div>
       </div>
       {open && <div className="spend-import__group-body">
-        <SpendMappingForm title={`Map ${group.lines.length - group.overrides.size} line(s) of ${group.vendor || "this account"}`} texts={group} view={view} disabled={disabled} lines={group.lines.length - group.overrides.size}
+        <SpendMappingForm dirtyKey={`group:${group.keyInput}`} onDirty={onFormDirty} title={`Map ${group.lines.length - group.overrides.size} line(s) of ${group.vendor || "this account"}`} texts={group} view={view} disabled={disabled} lines={group.lines.length - group.overrides.size}
           initial={group.mapping ? { category: group.mapping.category, naicsCode: group.mapping.naicsCode, marginChoice: group.mapping.marginChoice } : { category: initialCategory, naicsCode: "", marginChoice: "with_margins" }}
           categoryWhy={group.mapping ? null : fileCategory ? null : suggested.category.why}
           onSave={async choice => { await onSave(choice); setOpen(false) }} onCancel={() => setOpen(false)} />
@@ -439,7 +456,7 @@ function SpendGroupRow({ group, view, selected, disabled, onSelect, onSave, onSa
             <td data-label=""><div className="nv-actions"><button type="button" className="nv-btn nv-btn--ghost nv-btn--sm" disabled={disabled} onClick={() => setLineOpen(lineOpen === line.recordId ? null : line.recordId)}>{lineOpen === line.recordId ? "Cancel" : "Map this line differently"}</button>
               {onOpenRecord && <button type="button" className="nv-btn nv-btn--ghost nv-btn--sm" onClick={() => onOpenRecord(line.recordId)}>Open</button>}</div></td></tr>)}</tbody>
         </table></div>
-        {lineOpen && (() => { const line = group.lines.find(item => item.recordId === lineOpen); return line ? <SpendMappingForm key={line.recordId} title={`Map only ${line.sourceId}: ${line.description}`} texts={{ vendor: line.vendor, glAccount: line.glAccount, glDescriptions: line.glDescription ? [line.glDescription] : [], descriptions: [line.description] }}
+        {lineOpen && (() => { const line = group.lines.find(item => item.recordId === lineOpen); return line ? <SpendMappingForm key={line.recordId} dirtyKey={`line:${line.recordId}`} onDirty={onFormDirty} title={`Map only ${line.sourceId}: ${line.description}`} texts={{ vendor: line.vendor, glAccount: line.glAccount, glDescriptions: line.glDescription ? [line.glDescription] : [], descriptions: [line.description] }}
           view={view} disabled={disabled} lines={1} initial={null} onSave={async choice => { await onSaveLine(line, choice); setLineOpen(null) }} onCancel={() => setLineOpen(null)} /> : null })()}
       </div>}
     </div>
@@ -447,7 +464,7 @@ function SpendGroupRow({ group, view, selected, disabled, onSelect, onSave, onSa
 }
 
 /** Category, suggested or searched NAICS code, margins and the confirmations a code needs; one save for the target lines. */
-function SpendMappingForm({ title, texts, view, initial, lines, disabled, onSave, onCancel, categoryWhy }: { title: string; texts: { vendor: string; glAccount: string; glDescriptions: readonly string[]; descriptions: readonly string[] }; view: Scope3SpendImportsView
+function SpendMappingForm({ title, texts, view, initial, lines, disabled, onSave, onCancel, categoryWhy, dirtyKey, onDirty }: { dirtyKey?: string; onDirty?: (key: string, dirty: boolean) => void; title: string; texts: { vendor: string; glAccount: string; glDescriptions: readonly string[]; descriptions: readonly string[] }; view: Scope3SpendImportsView
   initial: { category: number; naicsCode: string; marginChoice: "with_margins" | "without_margins" } | null; lines: number; disabled: boolean; onSave: (choice: MappingChoice) => Promise<void>; onCancel: () => void; categoryWhy?: string | null }) {
   // Round 3 lane C (decision 8): with no saved mapping, the form starts in the category the account or code suggests.
   const inferred = initial ? null : scope3SpendSuggest(texts, view).category
@@ -457,6 +474,11 @@ function SpendMappingForm({ title, texts, view, initial, lines, disabled, onSave
   const [margin, setMargin] = useState<"with_margins" | "without_margins">(initial?.marginChoice ?? "with_margins")
   const [confirmed, setConfirmed] = useState(false)
   const [overlap, setOverlap] = useState(false)
+  // WO-06 (B1): any change from how the form opened is unsaved input; closing or saving the form clears it.
+  const [start] = useState(() => ({ category, naicsCode, margin }))
+  const changed = category !== start.category || naicsCode !== start.naicsCode || margin !== start.margin || confirmed || overlap || query.trim() !== ""
+  useEffect(() => { if (dirtyKey) onDirty?.(dirtyKey, changed) }, [dirtyKey, onDirty, changed])
+  useEffect(() => () => { if (dirtyKey) onDirty?.(dirtyKey, false) }, [dirtyKey, onDirty])
   const suggestions: Scope3NaicsSuggestion[] = scope3SpendNaicsSuggestions(texts, category, view, 5)
   const choices = scope3NaicsChoices(category, query, 40)
   const guard = scope3NaicsGuard(category, naicsCode || null)
