@@ -186,7 +186,7 @@ export function planCollectionCalculation(version: CollectionActivityVersion, co
     if (VOLUME_UNITS.includes(q.originalUnit)) { // the bill's unit, so a quantity still held keeps its heat content checked
       if (heat) {
         need(FACTOR_TEXT.test(heat.value) && Number(heat.value) !== 0, 'heat_content_not_numeric')
-        if (FACTOR_TEXT.test(heat.value) && Number(heat.value) !== 0 && HEAT_CONTENT_UNITS_PER_MMBTU_PER_SCF[heat.unit] !== undefined) need(heatContentPlausible(heat, q.originalUnit), 'heat_content_outside_plausible_range')
+        if (FACTOR_TEXT.test(heat.value) && Number(heat.value) !== 0 && HEAT_CONTENT_UNITS_PER_MMBTU_PER_SCF[heat.unit] !== undefined) need(heatContentPlausible(heat, q.originalUnit), q.originalUnit === 'scf' ? 'heat_content_outside_scf_range' : 'heat_content_outside_plausible_range')
         input.heatContent = { value: heat.value, unit: heat.unit }
       } // without it the engine returns input_needed: heat_content_required_for_volume
     } else if (heat) notes.push('heat_content_not_used_for_energy_unit')

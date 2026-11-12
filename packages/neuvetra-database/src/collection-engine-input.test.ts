@@ -325,9 +325,9 @@ describe('BF1 adapter fixes', () => {
       expect([value, unit, plan(gas('850', unit === 'MMBtu per mcf' ? 'mcf' : 'ccf', { value, unit })).action]).toEqual([value, unit, 'calculate'])
     // A tenfold slip is held in every heat-content unit, for every volume unit.
     for (const q of ['scf', 'ccf', 'mcf']) for (const [value, unit] of [['0.00830', 'MMBtu per scf'], ['0.000083', 'MMBtu per scf'], ['0.83', 'MMBtu per ccf'], ['0.0083', 'MMBtu per ccf'], ['8.3', 'therm per ccf'], ['0.083', 'therm per ccf'], ['8.3', 'MMBtu per mcf'], ['0.083', 'MMBtu per mcf']] as const)
-      expect([q, value, unit, plan(gas('850', q, { value, unit })).reasons]).toEqual([q, value, unit, ['heat_content_outside_plausible_range']])
+      expect([q, value, unit, plan(gas('850', q, { value, unit })).reasons]).toEqual([q, value, unit, [q === 'scf' ? 'heat_content_outside_scf_range' : 'heat_content_outside_plausible_range']])
     // A standard-cubic-foot quantity keeps the tight band whatever unit the heat content is written in: 0.083 MMBtu per ccf is 0.00083 per scf.
-    expect(plan(gas('850', 'scf', { value: '0.083', unit: 'MMBtu per ccf' })).reasons).toEqual(['heat_content_outside_plausible_range'])
+    expect(plan(gas('850', 'scf', { value: '0.083', unit: 'MMBtu per ccf' })).reasons).toEqual(['heat_content_outside_scf_range'])
     expect(plan(gas('850', 'scf', { value: '0.1026', unit: 'MMBtu per ccf' })).action).toBe('calculate')
     expect(plan(gas('850', 'scf', { value: '1.026', unit: 'therm per ccf' })).action).toBe('calculate')
     // Inclusive at the converted edges.
@@ -351,4 +351,14 @@ describe('BF1 adapter fixes', () => {
     expect(() => vehicle({ vehicleCount: Number.MAX_SAFE_INTEGER + 1 })).toThrow()
     expect(vehicle({ vehicleCount: 12 }).activity.kind).toBe('vehicle')
   })
+})
+
+// BF-06 QA F4: an scf quantity's held message must not call a value normal and then hold it.
+test('BF-06: the scf held message says the unit does not fit a quantity in scf and what to enter', async () => {
+  const { reasonText } = await import('./plain-language-labels')
+  const text = reasonText('heat_content_outside_scf_range')
+  expect(text).toContain('doesn’t fit a quantity in standard cubic feet')
+  expect(text).toContain('0.872 to 1.180 therms per ccf')
+  expect(text).toContain('enter it in that unit instead')
+  expect(reasonText('heat_content_outside_plausible_range')).toContain('high elevation')
 })
