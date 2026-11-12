@@ -1,4 +1,5 @@
 import { evidencePackZip } from "./evidence-upload-type"
+import { withRequestTimeout } from "./request-timeout"
 
 export interface CompanyWorkspace {
   id: string
@@ -192,7 +193,8 @@ function workspaceFetch(actor: WorkspaceActor): typeof fetch {
   if (typeof actor !== "object") return fetch
   return (async (input: RequestInfo | URL, init?: RequestInit) => {
     actor.signal?.throwIfAborted()
-    const response = await fetch(input, { ...init, signal: actor.signal })
+    // WO-09: limited to 35 s and reported when slow.
+    const response = await withRequestTimeout("default", actor.signal, signal => fetch(input, { ...init, signal }))
     actor.signal?.throwIfAborted()
     if (response.status === 401 || response.status === 403) actor.onUnauthorized?.()
     return response

@@ -7,6 +7,8 @@
  * server's Retry-After (at most 5 s); writes are never retried. Only successful answers are shared.
  */
 /** How long a finished GET is reused: 0 (only while it runs) unless the app configures it (staging.tsx: 2 s). */
+import { withRequestTimeout, type RequestKind } from "./request-timeout"
+
 let ttlMs = 0
 const MAX_RETRY_WAIT_MS = 5_000
 export function configureSharedGets(options: { ttlMs: number }) { ttlMs = Math.max(0, options.ttlMs) }
@@ -28,14 +30,17 @@ async function withRetry(path: string, init: RequestInit, retry: boolean): Promi
 }
 
 /** fetch for one signed-in user: GETs shared and retried once on 429; writes clear the shared GETs. */
-export async function sharedFetch(actor: { userId: string; signal?: AbortSignal }, path: string, init: RequestInit): Promise<Response> {
+/** WO-09: each request (a write, or the one shared GET) is limited by its kind's timeout and reported when slow. */
+export async function sharedFetch(actor: { userId: string; signal?: AbortSignal }, path: string, init: RequestInit, options: { kind?: RequestKind } = {}): Promise<Response> {
   const method = (init.method ?? "GET").toUpperCase()
-  if (method !== "GET") { clearSharedGets(actor.userId); try { return await withRetry(path, init, false) } finally { clearSharedGets(actor.userId) } }
+  const kind = options.kind ?? "default"
+  if (method !== "GET") { clearSharedGets(actor.userId); try { return await withRequestTimeout(kind, init.signal, signal => withRetry(path, { ...init, signal }, false)) } finally { clearSharedGets(actor.userId) } }
   const key = `${actor.userId}\u0000${path}`
   const now = Date.now(), hit = shared.get(key)
   if (hit && (now - hit.at < ttlMs || !hit.done)) { const response = await hit.response; actor.signal?.throwIfAborted(); return response.clone() }
   // The shared request is not tied to one caller's signal (another screen may still want it); each caller checks its own.
-  const response = withRetry(path, { ...init, signal: undefined }, true)
+  // WO-09: it has its own time limit, so a GET that never answers can't keep later callers waiting on it.
+  const response = withRequestTimeout(kind, undefined, signal => withRetry(path, { ...init, signal }, true))
   const entry: Entry = { at: now, response, done: false }
   shared.set(key, entry)
   try {

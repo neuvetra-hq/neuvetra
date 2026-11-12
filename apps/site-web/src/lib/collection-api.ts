@@ -1,5 +1,6 @@
 import { evidenceUploadType } from "./evidence-upload-type"
 import { sharedFetch } from "./shared-get"
+import { serverErrorText, type RequestKind } from "./request-timeout"
 import type {
   CollectionActivityRecord,
   CollectionActivitySaveInput,
@@ -46,7 +47,7 @@ const idPath = (id: string) => {
   return id
 }
 
-async function request(actor: HostedWorkspaceActor, path: string, init?: RequestInit): Promise<Response> {
+async function request(actor: HostedWorkspaceActor, path: string, init?: RequestInit, kind: RequestKind = "default"): Promise<Response> {
   if (!actor.accessToken || /[\r\n]/.test(actor.accessToken)) throw new Error("Sign in again to continue.")
   actor.signal?.throwIfAborted()
   // Round 3 lane C (PR-3): GETs shared across screens and retried once on 429; writes clear them.
@@ -55,14 +56,15 @@ async function request(actor: HostedWorkspaceActor, path: string, init?: Request
     headers: { authorization: `Bearer ${actor.accessToken}`, ...init?.headers },
     cache: "no-store",
     signal: actor.signal,
-  })
+  }, { kind })
   actor.signal?.throwIfAborted()
   if (response.status === 401 || response.status === 403) actor.onUnauthorized?.()
   if (!response.ok) {
     const value: unknown = await response.json().catch(() => null)
     const error = value && typeof value === "object" && "error" in value && typeof value.error === "string" ? value.error : "Collection is unavailable."
     const code = value && typeof value === "object" && "code" in value && typeof value.code === "string" ? value.code : null
-    throw new CollectionApiError(error, response.status, code)
+    // WO-09: a 503 without a specific code reads "Neuvetra is busy — try again in a moment"; status and code are kept.
+    throw new CollectionApiError(serverErrorText(response.status, code, error), response.status, code)
   }
   return response
 }
@@ -155,7 +157,7 @@ export async function uploadCollectionEvidence(companyId: string, file: File, up
     method: "POST",
     headers: { "content-type": evidenceUploadType(file.name, file.type) || "application/octet-stream", "x-neuvetra-original-name": encodeURIComponent(file.name), "x-neuvetra-upload-id": uploadId },
     body: file,
-  })
+  }, "upload")
   return json<{ receipt: CollectionEvidenceReceipt }>(response)
 }
 
