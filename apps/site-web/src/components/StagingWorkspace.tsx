@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type RefObject } from "react"
+import { useCallback, useEffect, useRef, useState, type ReactNode, type RefObject } from "react"
 import { CompanySetup } from "./CompanySetup"
 import { CollectionWorkspace } from "./CollectionWorkspace"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
@@ -9,6 +9,8 @@ import { AskNeuvetra } from "./AskNeuvetra"
 import { EarlierViews } from "./EarlierViews"
 import { PanelGuide } from "./PanelGuide"
 import { Icon } from "./Icon"
+import { ContextBar } from "./ContextBar"
+import { MENU_SHEET_ID, MENU_TEXT, MenuSheet } from "./MenuSheet"
 import { loadJourneyStatus, type Coverage, type JourneyStatus } from "@/lib/journey-status"
 import { activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery, parseViewHash, viewHash, type ActivityListQuery, type WorkspaceView } from "@/lib/view-route"
 
@@ -42,7 +44,10 @@ function focusPageHeading(main: HTMLElement | null) {
   heading.focus({ preventScroll: true })
 }
 
-export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObject<HTMLHeadingElement | null>; staging: { actor: HostedWorkspaceActor; workspaceId: string | null; evidenceId: string | null } }) {
+/** WO-08: the signed-in person and PrivateStaging's deliberate sign-out, shown in the top bar and in the Menu sheet. */
+export interface WorkspaceAccount { email: string | null; signingOut: boolean; onSignOut: () => void }
+
+export function StagingWorkspace({ headingRef, staging, account, notice = null }: { headingRef: RefObject<HTMLHeadingElement | null>; staging: { actor: HostedWorkspaceActor; workspaceId: string | null; evidenceId: string | null }; account: WorkspaceAccount; notice?: ReactNode }) {
   const [panel, setPanel] = useState<WorkspaceView>(() => parseViewHash(window.location.hash).panel)
   const [collectionDirty, setCollectionDirty] = useState(false)
   const [setupDirty, setSetupDirty] = useState(false)
@@ -50,6 +55,9 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
   const [statusError, setStatusError] = useState<string | null>(null)
   const [statusVersion, setStatusVersion] = useState(0)
   const [askOpen, setAskOpen] = useState(false)
+  // WO-08: the Menu sheet (below 1080 px). It and the Ask drawer never stack: each opens only with the other closed.
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuButton = useRef<HTMLButtonElement>(null)
   const [openRecordId, setOpenRecordId] = useState<string | null>(() => parseViewHash(window.location.hash).recordId)
   const [missingRecordNotice, setMissingRecordNotice] = useState(false)
   const [listRoute, setListRoute] = useState<ListRoute>(() => ({ query: parseActivityListQuery(window.location.hash), returnTo: openedFromState(window.history.state), from: listHashFromState(window.history.state), version: 0 }))
@@ -136,6 +144,13 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
     return () => window.removeEventListener("popstate", onPop)
   }, [])
   const closeAsk = useCallback(() => setAskOpen(false), [])
+  const closeMenu = useCallback(() => setMenuOpen(false), [])
+  function openAsk() { setMenuOpen(false); setAskOpen(true) }
+  /** A Menu sheet item goes through the same guarded navigate (one unsaved-change prompt); a declined prompt keeps the sheet open. */
+  function navigateFromMenu(view: WorkspaceView) {
+    const same = view === panel && openRecordId === null
+    if (same || navigate(view)) setMenuOpen(false)
+  }
   const onCollectionDirty = useCallback((dirty: boolean) => { setCollectionDirty(dirty); if (!dirty) { setStatus(null); setStatusError(null); setStatusVersion(value => value + 1) } }, [])
   const onSetupDirty = useCallback((dirty: boolean) => { setSetupDirty(dirty); if (!dirty) { setStatus(null); setStatusError(null); setStatusVersion(value => value + 1) } }, [])
   useEffect(() => {
@@ -200,11 +215,25 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
     return () => { stop(); window.clearTimeout(timer); window.removeEventListener("pointerdown", stop); window.removeEventListener("keydown", stop) }
   }, [panel])
   const helpPanel = panel === "setup" || panel === "collection" || panel === "results" ? panel : "home"
+  const company = status?.setup.legalName.trim() ?? ""
   return <>
-  <div className="nv-layout" inert={askOpen || undefined}>
-    <JourneyNav current={panel} onNavigate={view => navigate(view)} status={status} onAsk={() => setAskOpen(true)} />
+  {/* WO-08: at 1080 px and wider, the brand, the beta badge, the email and a direct Sign out; below, the mark, the
+      company name and ≡ Menu. Sign out is PrivateStaging's deliberate sign-out in both places. */}
+  <header className="nv-topbar" inert={menuOpen || undefined}>
+    <a className="nv-brand" href="/" aria-label="Neuvetra workspace home"><span className="nv-brand__mark" aria-hidden="true" /><span className="nv-brand__word">Neuvetra</span></a>
+    <span className="nv-badge nv-topbar__wide">Private beta · synthetic data</span>
+    {company && <span className="nv-topbar__company nv-topbar__narrow" title={company}>{company}</span>}
+    <div className="nv-topbar__actions">
+      <span className="nv-topbar__user nv-topbar__wide" title={account.email ?? undefined}>{account.email}</span>
+      <button type="button" className="nv-btn nv-btn--ghost nv-btn--sm nv-topbar__wide" disabled={account.signingOut} onClick={account.onSignOut}>Sign out</button>
+      <button type="button" ref={menuButton} className="nv-btn nv-btn--sm nv-topbar__menu nv-topbar__narrow" aria-haspopup="dialog" aria-expanded={menuOpen} aria-controls={MENU_SHEET_ID}
+        onClick={() => { if (!askOpen) setMenuOpen(true) }}><Icon name="menu" size={18} />{MENU_TEXT.open}</button>
+    </div>
+  </header>
+  <ContextBar status={status} failed={Boolean(statusError) && !status} canManage={canManage} inert={askOpen || menuOpen} notice={notice} />
+  <div className="nv-layout" inert={askOpen || menuOpen || undefined}>
+    <JourneyNav current={panel} onNavigate={view => navigate(view)} status={status} onAsk={openAsk} />
     <main id="workspace-main" className="nv-main" tabIndex={-1} ref={mainRef}><div className="nv-page">
-    {!canManage && <div className="nv-notice nv-notice--info" style={{ marginTop: 0 }}><Icon name="info" /><p>You have view access. An owner or admin of your company can make changes.</p></div>}
     {panel === "home" && <JourneyHome status={status} error={statusError} headingRef={headingRef} onNavigate={view => navigate(view)} onAsk={() => setAskOpen(true)} onRetry={refreshStatus} onFix={openRecord} />}
     {panel === "results" && <ResultsReport key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} coverage={coverage} onRetryCoverage={refreshStatus} canManage={canManage} onNavigate={view => navigate(view)} onFix={openRecord} />}
     {panel === "archive" && <EarlierViews headingRef={headingRef} onNavigate={view => navigate(view)} />}
@@ -221,6 +250,9 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
       </>} />}
     </div></main>
   </div>
+  <MenuSheet open={menuOpen && !askOpen} onClose={closeMenu} trigger={menuButton} email={account.email} signingOut={account.signingOut} onSignOut={account.onSignOut}>
+    <JourneyNav variant="sheet" current={panel} onNavigate={navigateFromMenu} status={status} onAsk={openAsk} />
+  </MenuSheet>
   <AskNeuvetra open={askOpen} onClose={closeAsk} panel={helpPanel} status={status} statusFailed={Boolean(statusError) && !status} onNavigate={view => navigate(view)} />
   </>
 }

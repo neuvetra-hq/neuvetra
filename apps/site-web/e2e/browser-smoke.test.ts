@@ -25,11 +25,19 @@ const suite = DATABASE_URL ? describe : describe.skip
 const ACTIVITY_LIST_HEADING = "Collect Scope 1, 2 and 3 activity"
 const DISCARD_ACTIVITY = "confirm: Discard unsaved activity changes?"
 
-/** Controls a view-only member may use on Activity: navigation, list filters and search, reloading, review tabs. */
+/**
+ * Controls a view-only member may use on Activity: navigation, list filters and search, reloading, review tabs; and the
+ * WO-08 shell's: ≡ Menu, the sheet's Close menu, the context bar's Details toggle (its name ends in the ▸/▾ chevron), the
+ * sheet's navigation items and Ask (a step's text starts with its aria-hidden number, and each item's title is followed by
+ * its status line), and Sign out.
+ */
 const MEMBER_READING_CONTROLS = [
   /^button Results & report$/, /^button Reload saved records$/, /^button Ask about a field$/,
   /^select (Status|Activity type)$/, /^input Find a source, vendor or description$/, /^input Find lines$/,
   /^button (Needs a code|Other holds|Possible duplicates|Counted) \(\d+\)$/,
+  /^button Menu$/, /^button Close menu$/, /^button Details[▸▾]$/,
+  /^button (Overview|1Step 1: Company setup|2Step 2: Activity & evidence|3Step 3: Results & report|Ask Neuvetra)/,
+  /^button Sign out$/,
 ]
 /**
  * WO-12 (P1, open on main eeb944b): write controls a member is still shown enabled; the server refuses their writes.
@@ -124,6 +132,27 @@ async function dialogsReach(journey: Journey, count: number) {
   while (journey.dialogs.length < count && Date.now() < deadline) await journey.page.waitForTimeout(50)
   expect(journey.dialogs.length).toBeGreaterThanOrEqual(count)
   await journey.page.waitForTimeout(300)
+}
+
+/**
+ * Every enabled control under `roots`, by accessible name: aria-label, else the label's name (its first span, in both the
+ * current field markup and WO-10's, where "Required"/"Optional" and hints follow it), else text.
+ */
+async function enabledControls(page: Page, roots: string) {
+  return page.evaluate(selector => [...document.querySelectorAll<HTMLElement>(selector)]
+    .flatMap(root => [...root.querySelectorAll<HTMLElement>("button, input, select, textarea")])
+    .filter(element => element.getClientRects().length > 0 && !(element as HTMLButtonElement).disabled && element.getAttribute("aria-disabled") !== "true")
+    .map(element => {
+      const label = (element as HTMLInputElement).labels?.[0] ?? null
+      const name = element.getAttribute("aria-label") ?? label?.querySelector("span")?.textContent ?? label?.textContent ?? element.textContent ?? ""
+      const type = element.tagName === "INPUT" && element.getAttribute("type") ? `[${element.getAttribute("type")}]` : ""
+      return `${element.tagName.toLowerCase()}${type} ${name.replace(/\s+/g, " ").trim()}`
+    }), roots)
+}
+
+/** The controls a view-only member may not be offered: on neither the reading list nor the known WO-12 list. */
+function notAllowed(controls: string[]) {
+  return controls.filter(control => !MEMBER_READING_CONTROLS.some(rule => rule.test(control)) && !WO12_OPEN_MEMBER_CONTROLS.some(rule => rule.test(control)))
 }
 
 type ActivityRecord = { id: string; currentVersion: { id: string; revision: number }; history: Array<{ id: string; revision: number }> }
@@ -254,24 +283,33 @@ suite("site-web browser smoke (E2E-01)", () => {
     const { page } = opened
     await page.goto("/#/activity")
     await activityListLoaded(page)
-    await page.getByText("You have view access.").waitFor()
+    // WO-08: the view-access notice became the context bar's "View only"; its sentence is under Details.
+    const context = page.getByRole("region", { name: "Reporting context" })
+    await context.getByText("View only", { exact: true }).waitFor()
+    await context.getByRole("button", { name: "Details" }).click()
+    await context.getByText("View only. You have view access. An owner or admin of your company can make changes.").waitFor()
+    await page.keyboard.press("Escape")
     await page.getByRole("button", { name: /^Counted \(/ }).waitFor()
-    // Every enabled control in the page's main region, by accessible name: aria-label, else the label's name (its first
-    // span, in both the current field markup and WO-10's, where "Required"/"Optional" and hints follow it), else text.
-    const enabled = await page.evaluate(() => [...document.querySelectorAll<HTMLElement>("main button, main input, main select, main textarea")]
-      .filter(element => element.getClientRects().length > 0 && !(element as HTMLButtonElement).disabled && element.getAttribute("aria-disabled") !== "true")
-      .map(element => {
-        const label = (element as HTMLInputElement).labels?.[0] ?? null
-        const name = element.getAttribute("aria-label") ?? label?.querySelector("span")?.textContent ?? label?.textContent ?? element.textContent ?? ""
-        const type = element.tagName === "INPUT" && element.getAttribute("type") ? `[${element.getAttribute("type")}]` : ""
-        return `${element.tagName.toLowerCase()}${type} ${name.replace(/\s+/g, " ").trim()}`
-      }))
-    const unexpected = enabled.filter(control => !MEMBER_READING_CONTROLS.some(rule => rule.test(control)) && !WO12_OPEN_MEMBER_CONTROLS.some(rule => rule.test(control)))
-    expect(unexpected).toEqual([])
+    expect(notAllowed(await enabledControls(page, "main"))).toEqual([])
     // The record view (WO-06) offers a member no "Correct this record".
     await page.evaluate(id => { window.location.hash = `#/activity/${id}` }, RECORDS.gasReady)
     await headingIs(page, "GAS-1", true)
     expect(await page.getByRole("button", { name: "Correct this record" }).count()).toBe(0)
+    // WO-08: the shell's controls are a member's too, outside the main region. At 1360 px the top bar has Sign out and
+    // the context bar Details; below 1080 px the top bar has ≡ Menu, and the sheet holds the navigation, Ask and Sign out.
+    const shellWide = await enabledControls(page, "header.nv-topbar, [role=region][aria-label='Reporting context']")
+    expect(shellWide).toEqual(["button Sign out", "button Details▸"])
+    await page.setViewportSize({ width: 390, height: 844 })
+    const shellNarrow = await enabledControls(page, "header.nv-topbar, [role=region][aria-label='Reporting context']")
+    expect(shellNarrow).toEqual(["button Menu", "button Details▸"])
+    await page.getByRole("button", { name: "Menu", exact: true }).click()
+    const sheet = page.getByRole("dialog", { name: "Menu" })
+    await sheet.waitFor()
+    const inSheet = await enabledControls(page, "[role=dialog][aria-modal=true]")
+    expect(notAllowed(inSheet)).toEqual([])
+    expect(inSheet.filter(control => /^button (Close menu|Overview|[123]Step [123]: |Ask Neuvetra|Sign out)/.test(control))).toHaveLength(7)
+    await page.keyboard.press("Escape")
+    await sheet.waitFor({ state: "detached" })
     expect(opened.writes).toEqual([])
   })
 
@@ -305,7 +343,8 @@ suite("site-web browser smoke (E2E-01)", () => {
     expect(afterSignIn.state).not.toContain(leaked)
     expect(await pageHeading(page).textContent()).not.toContain("GAS-2")
     expect((await addressesSeen(page)).slice(before).filter(address => address.includes(leaked))).toEqual([])
-    // B is in the workspace as themselves.
+    // B is in the workspace as themselves: at the suite's 1360 px the WO-08 top bar shows the email.
+    expect(await page.locator(".nv-topbar__user").isVisible()).toBe(true)
     expect(await page.locator(".nv-topbar__user").textContent()).toBe("admin@example.test")
   })
 

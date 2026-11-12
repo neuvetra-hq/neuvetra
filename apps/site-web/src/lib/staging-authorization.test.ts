@@ -58,7 +58,8 @@ function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;
  render();runEffects()
  return {clock,scheduled,flush,render,workspace,message,heading,text,nodes,requests,listeners,location,storage,otp,focused,emit:(s:any,event="SIGNED_IN")=>authCallback!(event,s),setVerification(fn:typeof verification){verification=fn},
   button:(label:string)=>nodes().find(n=>n.type==="button"&&text(n).includes(label)),
-  clickSignOut:()=>nodes().find(n=>n.type==="button"&&n.children[0]==="Sign out")!.props.onClick(),cleanup(){for(const e of effects)if(e&&typeof e.cleanup==="function")e.cleanup()},closed:()=>unsubscribed&&stopped}
+  // WO-08: with the workspace open, its top bar and Menu sheet call the account's onSignOut (this component's own signOut).
+  clickSignOut:()=>{const ws=nodes().find(n=>n.type===Workspace);if(ws)return ws.props.account.onSignOut();return nodes().find(n=>n.type==="button"&&n.children[0]==="Sign out")!.props.onClick()},cleanup(){for(const e of effects)if(e&&typeof e.cleanup==="function")e.cleanup()},closed:()=>unsubscribed&&stopped}
 }
 
 test("actual SIGNED_IN subscription and focus preserve the mounted workspace key, actor and unsaved-form lifetime",async()=>{
@@ -222,7 +223,7 @@ for(const [name,fail] of TRANSIENT){
   for(let i=0;i<4;i++){await h.flush();await wait(4)}
   await h.flush()
   expect(h.workspace()!.props.key).toBe(before.props.key);expect(h.workspace()!.props.staging.actor).toBe(actor);expect(actor.signal.aborted).toBe(false)
-  expect(h.message()).toBe(ACCESS_TEXT.retrying);expect(h.nodes().some(n=>n.props.className==="nv-reconnecting-wrap")).toBe(true)
+  expect(h.message()).toBe(ACCESS_TEXT.retrying);expect(h.workspace()!.props.notice?.props?.className==="nv-reconnecting-wrap").toBe(true)
   expect(h.scheduled.filter(s=>!s.cancelled).map(s=>s.ms)).toEqual([2000])
   // The scheduled retry fails again: the next wait is longer.
   h.scheduled.at(-1)!.run();for(let i=0;i<4;i++){await h.flush();await wait(4)}
@@ -230,7 +231,7 @@ for(const [name,fail] of TRANSIENT){
   // Neuvetra answers again: the notice goes, the same workspace stays, and no retry is left pending.
   const timers=h.scheduled.length;h.setVerification(async()=>Response.json(access()));h.scheduled.at(-1)!.run();await h.flush()
   expect(h.workspace()!.props.key).toBe(before.props.key);expect(h.workspace()!.props.staging.actor).toBe(actor);expect(actor.signal.aborted).toBe(false)
-  expect(h.nodes().some(n=>n.props.className==="nv-reconnecting-wrap")).toBe(false);expect(h.message()).toBe(ACCESS_TEXT.reconnected)
+  expect(h.workspace()!.props.notice?.props?.className==="nv-reconnecting-wrap").toBe(false);expect(h.message()).toBe(ACCESS_TEXT.reconnected)
   expect(h.scheduled.length).toBe(timers);expect(h.location.hash).toBe("#/results");h.cleanup()
  })
 }
@@ -428,4 +429,14 @@ test("several workspace 403s at once share one /session re-check",async()=>{
  const h=harness();await h.flush();const actor=h.workspace()!.props.staging.actor,checks=h.requests.length
  for(let i=0;i<4;i++)actor.onUnauthorized(403)
  await h.flush();expect(h.requests.length).toBe(checks+1);expect(h.workspace()).toBeDefined();h.cleanup()
+})
+
+test("WO-08: the open workspace gets the signed-in email and this component's deliberate sign-out for its top bar and Menu sheet",async()=>{
+ const h=harness({hash:"#/results"});await h.flush()
+ const account=h.workspace()!.props.account
+ expect({email:account.email,signingOut:account.signingOut,type:typeof account.onSignOut}).toEqual({email:"owner@synthetic.invalid",signingOut:false,type:"function"})
+ // PrivateStaging no longer draws its own top bar while the workspace is open.
+ expect(h.nodes().some(n=>n.type==="header")).toBe(false)
+ account.onSignOut();await h.flush()
+ expect(h.workspace()).toBeUndefined();expect(h.location.hash).toBe("");expect(h.message()).toBe("Signed out on this browser.");h.cleanup()
 })

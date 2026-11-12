@@ -27,8 +27,11 @@ function openScope12(status: JourneyStatus): number {
     + status.gaps.length
 }
 
-/** The app's primary navigation: the overview, the three-step journey and Ask Neuvetra. */
-export function JourneyNav({ current, onNavigate, status, onAsk }: { current: JourneyView; onNavigate: (view: JourneyView) => void; status: JourneyStatus | null; onAsk: () => void }) {
+/**
+ * The app's primary navigation: the overview, the three-step journey and Ask Neuvetra. WO-08: the side navigation at
+ * 1080 px and wider ("side"), and the same items inside the Menu sheet below that ("sheet").
+ */
+export function JourneyNav({ current, onNavigate, status, onAsk, variant = "side" }: { current: JourneyView; onNavigate: (view: JourneyView) => void; status: JourneyStatus | null; onAsk: () => void; variant?: "side" | "sheet" }) {
   const setupMeta = !status ? "" : !status.setup.saved ? "Not started" : status.setup.missing.length ? `${plural(status.setup.missing.length, "open answer")}` : `Saved · version ${status.setup.revision}`
   const collectionMeta = !status ? "" : !status.collection.active ? "No records yet" : status.collection.attention ? `${plural(status.collection.active, "record")} · ${status.collection.attention} input needed` : status.collection.held ? `${plural(status.collection.active, "record")} · ${status.collection.held} held` : status.gaps.length ? `${plural(status.collection.active, "record")} · ${plural(status.gaps.length, "possible gap")}` : plural(status.collection.active, "record")
   const resultsMeta = !status ? "" : status.collection.ready ? `Draft results available · ${openScope12(status)} open` : status.collection.active ? "Nothing to calculate yet" : "Add records first"
@@ -40,7 +43,7 @@ export function JourneyNav({ current, onNavigate, status, onAsk }: { current: Jo
     { view: "collection", step: "2", title: "Activity & evidence", meta: collectionMeta, done: !scope3 && status?.progress.collection === "done" },
     { view: "results", step: "3", title: "Results & report", meta: resultsMeta, done: false },
   ]
-  return <nav className="nv-sidenav" aria-label="Workspace">
+  return <nav className={variant === "sheet" ? "nv-sheetnav" : "nv-sidenav"} aria-label="Workspace">
     <p className="nv-sidenav__label">Your inventory</p>
     {items.map(item => <button type="button" key={item.view} className="nv-navitem" aria-current={current === item.view ? "page" : undefined} onClick={() => onNavigate(item.view)}>
       <span className={`nv-navitem__icon${item.done && current !== item.view ? " nv-navitem__icon--done" : ""}`} aria-hidden="true">{item.step === null ? <Icon name="home" size={16} /> : item.done ? <Icon name="check" size={16} /> : item.step}</span>

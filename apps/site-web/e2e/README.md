@@ -98,9 +98,9 @@ Those are covered, where they are covered at all, by the site-api and database u
 
 ## Tolerated check: member write controls (WO-12, still open)
 
-On `main`, a member still sees some write controls enabled. The server refuses those writes. The member journey lists, by accessible name, every enabled control in the main region. It allows two lists and fails on anything else:
+On `main`, a member still sees some write controls enabled. The server refuses those writes. The member journey lists, by accessible name, every enabled control in the main region, then the WO-08 shell's (the top bar and the context bar at 1360 px and at 390 px, and the Menu sheet). It allows two lists and fails on anything else:
 
-- `MEMBER_READING_CONTROLS`: navigation, list filters and search, reload, and the spend review's tabs.
+- `MEMBER_READING_CONTROLS`: navigation, list filters and search, reload, the spend review's tabs, and the shell's ≡ Menu, Close menu, Details, the sheet's navigation items and Ask, and Sign out.
 - `WO12_OPEN_MEMBER_CONTROLS`: exactly the known WO-12 controls:
   - the new-record form's 22 type buttons, fields and evidence checkbox;
   - the file pickers;
