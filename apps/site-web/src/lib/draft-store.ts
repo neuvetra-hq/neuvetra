@@ -32,33 +32,10 @@ export const DRAFT_TEXT = {
   discard: "Discard",
   restored: "Unsaved changes restored. They aren’t saved yet: save them when you’re ready.",
   discarded: "Unsaved changes discarded.",
-  /**
-   * The second sentence of the "Your session ended" screen (WO-05a left it to this order). WO-13 (WO-05b follow-up): it
-   * says how long the changes stay on this device and how to remove them now.
-   */
-  sessionEnded: "Unsaved changes are kept on this device, in this browser tab, until the next sign-in here (you’re offered them back if it’s you), until the tab is closed, or for up to 24 hours. Signing out or discarding removes them now.",
-  /** WO-13: the session-ended screen's controls and the in-page confirmation. */
-  discardOnDevice: "Discard unsaved changes on this device",
-  discardConfirmTitle: "Discard unsaved changes on this device?",
-  /** WO-13 (QA F4 of PR #56): the drafts of every open tab of this browser go, not only this tab's. */
-  discardConfirmBody: "Your unsaved changes in every open tab of this browser on this device, and this browser’s stored sign-in, are removed. This can’t be undone.",
-  discardConfirm: "Discard changes and sign-in",
-  discardCancel: "Keep them",
-  discardDone: "Unsaved changes discarded. Signed out on this browser.",
-  signOut: "Sign out",
-  /** WO-13 (QA F4): Sign out also removes the drafts, so while this tab holds some the button says so. */
-  signOutAndDiscard: "Sign out and discard unsaved changes",
+  /** The second sentence of the "Your session ended" screen (WO-05a left it to this order). */
+  sessionEnded: "Unsaved changes are kept on this browser tab until you sign out.",
   /** Landing, "Shared computer?". */
   sharedComputer: "Sign out when you finish — it clears this browser’s session and any unsaved changes kept in this tab.",
-} as const
-
-/**
- * WO-13 (QA B1 of PR #56): a sign-out removes everything on this device first; when the server then can't be told (no
- * answer within 5 s, or a failure), the message says so plainly.
- */
-export const SIGN_OUT_SERVER_NOT_TOLD = {
-  plain: "Signed out: the sign-in was removed from this device. The server could not be told, so the sign-in may stay valid elsewhere until it expires.",
-  discard: "Unsaved changes discarded and the sign-in removed from this device. The server could not be told, so the sign-in may stay valid elsewhere until it expires.",
 } as const
 
 export type DraftView = "activity" | "setup"

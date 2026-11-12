@@ -152,47 +152,6 @@ describe("WO-05b follow-up: a “new record” draft carrying an existing record
   })
 })
 
-// WO-13 (QA F9 and F10 of PR #56): telling Supabase Auth that the session ended, directly, without the client.
-describe("revokeSession: F9 (already gone counts as told) and F10 (an expired access token revokes through a refresh)", () => {
-  const URL_ = "https://abcdefghijklmnopqrst.supabase.co"
-  const run = async (stored: { accessToken: string | null; refreshToken: string | null; expiresAt: number | null }, answer: (path: string, init: RequestInit) => Promise<Response>, timeoutMs = 50) => {
-    const calls: string[] = []
-    const { revokeSession } = await import("@/lib/device-sign-out")
-    const told = await revokeSession({ url: URL_, anonKey: "anon", fetch: async (path, init) => { const u = new URL(path); calls.push(`${u.pathname}${u.search} ${new Headers(init.headers).get("authorization")}`); return answer(path, init) } }, stored, { now: 1_000_000_000_000, timeoutMs })
-    return { told, calls }
-  }
-  const fresh = { accessToken: "a1", refreshToken: "r1", expiresAt: 1_000_000_000 + 3600 }
-  const expired = { ...fresh, expiresAt: 1_000_000_000 - 10 }
-  const json = (status: number, body: unknown) => new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } })
-  test("a live access token logs out once; 204 and 404 are told", async () => {
-    expect(await run(fresh, async () => new Response(null, { status: 204 }))).toEqual({ told: true, calls: ["/auth/v1/logout?scope=local Bearer a1"] })
-    expect((await run(fresh, async () => json(404, { error_code: "user_not_found" }))).told).toBe(true)
-  })
-  test("F9: session_not_found (already revoked) is told", async () => {
-    expect((await run(fresh, async () => json(403, { code: 403, error_code: "session_not_found", msg: "Session not found" }))).told).toBe(true)
-    expect((await run(fresh, async () => json(401, { code: 401, error_code: "session_not_found" }))).calls).toHaveLength(1)
-  })
-  test("F10: an expired access token refreshes first, never stores it, and logs out with the new token", async () => {
-    const out = await run(expired, async path => path.includes("/token") ? json(200, { access_token: "a2", refresh_token: "r2" }) : new Response(null, { status: 204 }))
-    expect(out).toEqual({ told: true, calls: ["/auth/v1/token?grant_type=refresh_token Bearer anon", "/auth/v1/logout?scope=local Bearer a2"] })
-  })
-  test("F10: a 401 for a live-looking token is not told while a refresh token exists: the refresh path decides", async () => {
-    let first = true
-    const out = await run(fresh, async path => { if (path.includes("/token")) return json(200, { access_token: "a2" }); if (first) { first = false; return json(401, { error_code: "bad_jwt" }) } return new Response(null, { status: 204 }) })
-    expect(out).toEqual({ told: true, calls: ["/auth/v1/logout?scope=local Bearer a1", "/auth/v1/token?grant_type=refresh_token Bearer anon", "/auth/v1/logout?scope=local Bearer a2"] })
-    // A refresh token the server already refuses: nothing is left to revoke. Any other refresh failure: not told.
-    expect((await run(expired, async () => json(400, { error: "invalid_grant", error_code: "refresh_token_not_found" }))).told).toBe(true)
-    expect((await run(expired, async () => json(500, { msg: "boom" }))).told).toBe(false)
-    expect((await run({ ...fresh, refreshToken: null }, async () => json(401, { error_code: "bad_jwt" }))).told).toBe(true)
-  })
-  test("no answer within the limit, a network failure or a 500 is not told", async () => {
-    expect((await run(fresh, () => new Promise(() => {}), 20)).told).toBe(false)
-    expect((await run(fresh, async () => { throw new TypeError("network") })).told).toBe(false)
-    expect((await run(fresh, async () => json(500, {}))).told).toBe(false)
-    expect((await run({ accessToken: null, refreshToken: null, expiresAt: null }, async () => { throw new Error("not called") })).told).toBe(true)
-  })
-})
-
 describe("QA F8 of PR #56: a gateway's 502, 503 or 504 is not definite (the write may have landed)", () => {
   const original = globalThis.fetch
   afterEach(() => { globalThis.fetch = original })

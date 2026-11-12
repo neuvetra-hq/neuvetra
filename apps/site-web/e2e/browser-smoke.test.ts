@@ -12,7 +12,7 @@
  */
 import { afterAll, beforeAll, describe, expect, test } from "bun:test"
 import type { Browser, Page } from "playwright-core"
-import { AUTH_STORAGE_KEY, addressesSeen, closeJourney, focusReport, horizontalOverflow, launchBrowser, openJourney, pageHeading, type Journey, type JourneyOptions } from "./harness/browser"
+import { addressesSeen, closeJourney, focusReport, horizontalOverflow, launchBrowser, openJourney, pageHeading, type Journey, type JourneyOptions } from "./harness/browser"
 import { COMPANIES, RECORDS } from "./harness/seed"
 import { fixtureAssessment } from "../../../packages/neuvetra-database/src/scope3-payload-fixtures"
 import { startStack, type Stack } from "./harness/stack"
@@ -531,7 +531,7 @@ suite("site-web browser smoke (E2E-01)", () => {
     await page.waitForFunction(() => Object.keys(sessionStorage).some(key => key.startsWith("nv:draft:v1:")))
     stack.tokens.revokeUser("owner")
     await focusUntil(page, page.getByRole("heading", { name: "Your session ended" }).waitFor({ timeout: 25_000 }))
-    await page.getByText("Unsaved changes are kept on this device, in this browser tab, until the next sign-in here", { exact: false }).waitFor()
+    await page.getByText("Unsaved changes are kept on this browser tab until you sign out.").waitFor()
     const form = page.locator("form", { has: page.locator("input[type=email]") }).first()
     await form.locator("input[type=email]").fill("owner@example.test")
     await form.locator("input[type=password]").fill("synthetic-password")
@@ -693,111 +693,5 @@ suite("site-web browser smoke (E2E-01)", () => {
       return [button.textContent, new Set([...range.getClientRects()].map(rect => Math.round(rect.top))).size] as const
     }))
     expect(lines.filter(([, count]) => count > 2)).toEqual([])
-  }, 150_000)
-
-  // WO-13 (WO-05b follow-up, before any pilot on a shared machine): after A's session ends with a draft, the session-ended
-  // screen discards it and the stored sign-in on this device, after a confirmation inside the page (no browser dialog).
-  journey("the session-ended screen discards unsaved changes and the stored sign-in on this device after an in-page confirmation, at 390 and 1360 px", { signedInAs: "owner" }, async opened => {
-    const { page } = opened
-    await page.goto("/#/activity")
-    await activityListLoaded(page)
-    await openRecordByAddress(page, RECORDS.gasReady)
-    await reasonInput(page).fill("E2E: A's reason left on a shared computer")
-    await page.waitForFunction(() => Object.keys(sessionStorage).some(key => key.startsWith("nv:draft:v1:")))
-    stack.tokens.revokeUser("owner")
-    await focusUntil(page, page.getByRole("heading", { name: "Your session ended" }).waitFor({ timeout: 25_000 }))
-    await page.getByText("or for up to 24 hours. Signing out or discarding removes them now.", { exact: false }).waitFor()
-    const discard = page.getByRole("button", { name: "Discard unsaved changes on this device" })
-    // WO-13 (QA F4 of PR #56): while drafts are held, Sign out says it discards them.
-    expect(await page.getByRole("button", { name: "Sign out and discard unsaved changes", exact: true }).isVisible()).toBe(true)
-    for (const width of [390, 1360]) {
-      await page.setViewportSize({ width, height: 844 })
-      // Keyboard: the button opens the confirmation, which takes focus; "Keep them" closes it and returns focus.
-      await discard.focus()
-      await page.keyboard.press("Enter")
-      const confirm = page.getByRole("group", { name: "Discard unsaved changes on this device?" })
-      await confirm.waitFor()
-      await page.waitForFunction(() => document.activeElement?.id === "wo13-discard-title")
-      expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0)
-      // "Keep them" at one width, Escape at the other (QA F4): either closes it.
-      if (width === 390) await page.keyboard.press("Escape")
-      else await confirm.getByRole("button", { name: "Keep them" }).click()
-      await page.waitForFunction(() => document.activeElement?.textContent === "Discard unsaved changes on this device")
-      expect(await page.evaluate(() => Object.keys(sessionStorage).filter(key => key.startsWith("nv:draft:v1:")).length)).toBeGreaterThan(0)
-    }
-    expect(await page.evaluate(key => window.localStorage.getItem(key), AUTH_STORAGE_KEY)).not.toBeNull()
-    // WO-13 (QA B1 of PR #56): the logout request gets no answer (a stalled connection). The stored sign-in still goes from
-    // this device at once, and the page says the server couldn't be told.
-    let logoutCalls = 0
-    await page.route(/\/auth\/v1\/logout/, () => { logoutCalls++; return new Promise<void>(() => {}) })
-    await discard.click()
-    await page.getByRole("group", { name: "Discard unsaved changes on this device?" }).getByRole("button", { name: "Discard changes and sign-in" }).click()
-    await page.waitForFunction(key => !Object.keys(window.localStorage).some(item => item === key || item.startsWith(`${key}-`)), AUTH_STORAGE_KEY, { timeout: 1_000 })
-    await page.getByText("Unsaved changes discarded and the sign-in removed from this device. The server could not be told, so the sign-in may stay valid elsewhere until it expires.").first().waitFor({ timeout: 10_000 })
-    expect(logoutCalls).toBe(1)
-    expect(opened.dialogs).toEqual([])
-    expect(await page.evaluate(() => Object.keys(sessionStorage).filter(key => key.startsWith("nv:draft:v1:")))).toEqual([])
-    expect(await page.evaluate(key => Object.keys(window.localStorage).filter(item => item === key || item.startsWith(`${key}-`)), AUTH_STORAGE_KEY)).toEqual([])
-    expect(await page.getByRole("heading", { name: "Your session ended" }).count()).toBe(0)
-    // A reload finds no one signed in and nothing to offer.
-    await page.reload()
-    await page.locator("input[type=email]").first().waitFor()
-    expect(await page.locator(".nv-app").count()).toBe(0)
-    expect(await page.locator("body").innerText()).not.toContain("E2E: A's reason left on a shared computer")
-  })
-
-  // WO-13 (QA N1 and N2 of PR #56): a token refresh still on its way when the person signs out must not bring the sign-in
-  // back, and every other open tab closes its workspace at once and can't send a write.
-  journey("Sign out survives a late token refresh and closes the other tab at once, which sends no write", { signedInAs: "owner" }, async opened => {
-    const { page, context } = opened
-    await page.goto("/#/overview")
-    await page.locator("[data-readiness-summary]").waitFor({ timeout: 30_000 })
-    // Tab 2, on a record with a correction typed and ready to save. (It opens first: Supabase's client lock is shared by the
-    // tabs, and a tab starting up while a refresh holds it would take the lock over after a while.)
-    const tab2 = await context.newPage()
-    const tab2Writes: Array<{ at: number; url: string }> = []
-    tab2.on("request", request => { if (request.method() !== "GET" && new URL(request.url()).pathname.startsWith("/workspace-api/")) tab2Writes.push({ at: Date.now(), url: request.url() }) })
-    await tab2.goto(`/#/activity/${RECORDS.gasReady}`)
-    await tab2.getByRole("button", { name: "Correct this record" }).click({ timeout: 30_000 })
-    await reasonInput(tab2).fill("E2E: tab 2 after the other tab signed out")
-    await quantityInput(tab2).fill("12345")
-    // The stored session is made close to expiry, so a tab's Supabase client refreshes it at its next tick (every 30 s);
-    // that refresh is held until after the sign-out.
-    let release: () => void = () => {}
-    const gate = new Promise<void>(resolve => { release = resolve })
-    let refreshes = 0
-    await context.route(/\/auth\/v1\/token\?grant_type=refresh_token/, async route => { refreshes++; await gate; await route.fallback() })
-    await page.evaluate(key => {
-      const value = JSON.parse(localStorage.getItem(key) ?? "null")
-      value.expires_in = 125; value.expires_at = Math.floor(Date.now() / 1000) + 125
-      localStorage.setItem(key, JSON.stringify(value))
-    }, AUTH_STORAGE_KEY)
-    await page.reload()
-    await page.locator("[data-readiness-summary]").waitFor({ timeout: 30_000 })
-    for (let i = 0; i < 450 && refreshes === 0; i++) await page.waitForTimeout(100)
-    expect(refreshes).toBeGreaterThanOrEqual(1)
-    // Sign out in tab 1, then tab 2 tries to save at once.
-    const clickedAt = Date.now()
-    await page.locator("button.nv-topbar__wide", { hasText: "Sign out" }).click()
-    await tab2.getByRole("button", { name: "Save correction" }).click({ timeout: 300 }).catch(() => {})
-    await page.waitForFunction(key => !Object.keys(window.localStorage).some(item => item === key || item.startsWith(`${key}-`)), AUTH_STORAGE_KEY, { timeout: 1_000 })
-    await tab2.waitForFunction(() => document.querySelectorAll(".nv-app").length === 0, undefined, { timeout: 2_000 })
-    expect(Date.now() - clickedAt).toBeLessThan(5_000)
-    // The held refresh (from either tab's client) is answered now, with a valid new session: it must not come back.
-    const answered = context.waitForEvent("response", { predicate: response => response.url().includes("grant_type=refresh_token"), timeout: 10_000 })
-    release()
-    await answered
-    await page.waitForTimeout(150)
-    await page.waitForFunction(key => !Object.keys(window.localStorage).some(item => item === key || item.startsWith(`${key}-`)), AUTH_STORAGE_KEY, { timeout: 1_000 })
-    await page.waitForTimeout(1_000)
-    expect(await page.evaluate(key => Object.keys(window.localStorage).filter(item => item === key || item.startsWith(`${key}-`)), AUTH_STORAGE_KEY)).toEqual([])
-    expect(tab2Writes.filter(write => write.at >= clickedAt)).toEqual([])
-    // A reload of either tab finds no one signed in.
-    for (const tab of [page, tab2]) {
-      await tab.reload()
-      await tab.locator("input[type=email]").first().waitFor()
-      expect(await tab.locator(".nv-app").count()).toBe(0)
-    }
-    await tab2.close()
   }, 150_000)
 })
