@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- The injected hook/JSX harness executes transpiled component values with heterogeneous runtime shapes. */
 import { expect, test } from "bun:test"
-import { ACCESS_TEXT, AccessCheckError, accessCheckFailure, createStagingAuthorization } from "./staging-authorization"
-import { acceptedViewHash, forgetReturnView, rememberReturnView, takeReturnView } from "./view-route"
+import { ACCESS_TEXT, AccessCheckError, accessCheckFailure, createStagingAuthorization, MAX_RETRY_AFTER_MS, retryAfterMs } from "./staging-authorization"
+import { acceptedViewHash, forgetReturnView, markDeliberateSignOut, parseViewHash, peekReturnView, recentlySignedOut, rememberReturnView, takeReturnView, viewHash } from "./view-route"
 import { signInNoticeTone } from "./sign-in-notice"
 import { decodeStagingAccess, decodeStagingConfig, STAGING_PROFILE } from "./staging-session"
 
@@ -10,20 +10,26 @@ import { decodeStagingAccess, decodeStagingConfig, STAGING_PROFILE } from "./sta
 const source=await Bun.file(new URL("../components/PrivateStaging.tsx",import.meta.url)).text()
 const script=new Bun.Transpiler({loader:"tsx",tsconfig:{compilerOptions:{jsx:"react",jsxFactory:"h"}}}).transformSync(source.replace(/^import .*\n/gm,"").replace("export function PrivateStaging","function PrivateStaging"))+"\nreturn PrivateStaging"
 const owner="11111111-1111-4111-8111-111111111111",other="22222222-2222-4222-8222-222222222222",company="33333333-3333-4333-8333-333333333333"
-const session=(id=owner,token="original-token")=>({user:{id},access_token:token})
+const emailOf=(id:string)=>id===owner?"owner@synthetic.invalid":"other@synthetic.invalid"
+const session=(id=owner,token="original-token")=>({user:{id,email:emailOf(id)},access_token:token})
 const access=(id=owner,role="owner",workspaceId=company,evidenceId:string|null=null)=>({profile:STAGING_PROFILE,user:{id},access:{role,workspaceId,evidenceId}})
 const deferred=()=>{let resolve!:(r:Response)=>void;const promise=new Promise<Response>(r=>{resolve=r});return {promise,resolve}}
 type Node={type:unknown;props:Record<string,any>;children:any[]}
-function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any}={}){
+function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;search?:string}={}){
+ // The lifecycle clock: each read moves 10 s on (no throttling) unless a test fixes it.
+ const clock={fixed:null as number|null,t:1_000_000}
  const scheduled:Array<{run:()=>void;ms:number;cancelled:boolean}>=[]
  const slots:any[]=[],effects:Array<{deps?:unknown[];cleanup?:void|(()=>void)}>=[],pendingEffects:Array<()=>void>=[],listeners=new Map<string,()=>void>(),requests:Array<{token:string;signal:AbortSignal}>=[]
  let cursor=0,tree:Node,authCallback:((_event:string,s:any)=>void)|null=null,verification:(token:string)=>Promise<Response>=async()=>Response.json(access()),unsubscribed=false,stopped=false
  const otp:any[]=[],focused:string[]=[]
  const Workspace=()=>null
  const h=(type:unknown,props:Record<string,any>|null,...children:any[]):Node=>({type,props:props??{},children})
- const client={auth:{onAuthStateChange(callback:typeof authCallback){authCallback=callback;return {data:{subscription:{unsubscribe(){unsubscribed=true}}}}},getSession:async()=>({data:{session:options.initial===undefined?session():options.initial}}),signOut:async()=>({error:null}),signInWithPassword:async()=>({error:null}),signInWithOtp:async(args:any)=>{otp.push(args);return {error:null}},stopAutoRefresh(){stopped=true}}}
+ const client={auth:{onAuthStateChange(callback:typeof authCallback){authCallback=callback;return {data:{subscription:{unsubscribe(){unsubscribed=true}}}}},getSession:async()=>({data:{session:initialSession}}),signOut:async()=>({error:null}),signInWithPassword:async()=>({error:null}),signInWithOtp:async(args:any)=>{otp.push(args);return {error:null}},stopAutoRefresh(){stopped=true}}}
  const storage=options.storage??new Map<string,string>()
- const location={origin:"https://synthetic.invalid",pathname:"/",search:"",hash:options.hash??""}
+ // The Supabase session this browser holds at load (what supabase-js keeps under its storage key).
+ const initialSession=options.initial===undefined?session():options.initial
+ if(initialSession&&!storage.has("neuvetra:m63:abcdefghijklmnopqrst:auth"))storage.set("neuvetra:m63:abcdefghijklmnopqrst:auth",JSON.stringify(initialSession))
+ const location={origin:"https://synthetic.invalid",pathname:"/",search:options.search??"",hash:options.hash??""}
  const window={setInterval(fn:()=>void){listeners.set("interval",fn);return 1},clearInterval(){listeners.delete("interval")},addEventListener(name:string,fn:()=>void){listeners.set(name,fn)},removeEventListener(name:string){listeners.delete(name)},location,
   history:{replaceState(_s:unknown,_t:string,url:string){const at=url.indexOf("#");location.hash=at<0?"":url.slice(at)}},
   localStorage:{getItem:(k:string)=>storage.get(k)??null,setItem:(k:string,v:string)=>{storage.set(k,v)},removeItem:(k:string)=>{storage.delete(k)}}}
@@ -31,9 +37,9 @@ function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any}
  const names={useEffect,useRef:(value:unknown)=>{const i=cursor++;return slots[i]??(slots[i]={current:value})},useState:(value:unknown)=>{const i=cursor++;if(!(i in slots))slots[i]=value;return [slots[i],(next:any)=>{slots[i]=typeof next==="function"?next(slots[i]):next}]},
   createClient:()=>client,StagingWorkspace:Workspace,decodeStagingAccess,decodeStagingConfig,
   // Retries are scheduled on a fake clock the test advances; jitter is fixed at its midpoint (×1.0).
-  createStagingAuthorization:(deps:any)=>createStagingAuthorization({...deps,random:()=>0.5,schedule:(run:()=>void,ms:number)=>{const item={run,ms,cancelled:false};scheduled.push(item);return ()=>{item.cancelled=true}}}),
+  createStagingAuthorization:(deps:any)=>createStagingAuthorization({...deps,random:()=>0.5,now:()=>clock.fixed??(clock.t+=10_000),schedule:(run:()=>void,ms:number)=>{const item={run,ms,cancelled:false};scheduled.push(item);return ()=>{item.cancelled=true}}}),
   // The session check's 15 s limit runs in 5 ms here.
-  setTimeout:(fn:()=>void,ms:number)=>globalThis.setTimeout(fn,ms===15_000?5:ms),clearTimeout:(id:any)=>globalThis.clearTimeout(id),ACCESS_TEXT,AccessCheckError,accessCheckFailure,acceptedViewHash,forgetReturnView,rememberReturnView,takeReturnView,
+  setTimeout:(fn:()=>void,ms:number)=>globalThis.setTimeout(fn,ms===15_000?5:ms),clearTimeout:(id:any)=>globalThis.clearTimeout(id),ACCESS_TEXT,AccessCheckError,accessCheckFailure,acceptedViewHash,forgetReturnView,rememberReturnView,takeReturnView,markDeliberateSignOut,parseViewHash,peekReturnView,recentlySignedOut,viewHash,
   fetch:async(path:string,init:RequestInit)=>{
   if(path.endsWith("/config"))return Response.json({profile:STAGING_PROFILE,supabaseUrl:"https://abcdefghijklmnopqrst.supabase.co",anonKey:"sb_publishable_abcdefghijklmnopqrst"})
   const token=new Headers(init.headers).get("authorization")!;requests.push({token,signal:init.signal as AbortSignal});return verification(token)
@@ -50,7 +56,7 @@ function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any}
  const runEffects=()=>{while(pendingEffects.length)pendingEffects.shift()!()}
  async function flush(){for(let i=0;i<20;i++){await Promise.resolve();render();runEffects()}}
  render();runEffects()
- return {scheduled,flush,render,workspace,message,heading,text,nodes,requests,listeners,location,storage,otp,focused,emit:(s:any,event="SIGNED_IN")=>authCallback!(event,s),setVerification(fn:typeof verification){verification=fn},
+ return {clock,scheduled,flush,render,workspace,message,heading,text,nodes,requests,listeners,location,storage,otp,focused,emit:(s:any,event="SIGNED_IN")=>authCallback!(event,s),setVerification(fn:typeof verification){verification=fn},
   button:(label:string)=>nodes().find(n=>n.type==="button"&&text(n).includes(label)),
   clickSignOut:()=>nodes().find(n=>n.type==="button"&&n.children[0]==="Sign out")!.props.onClick(),cleanup(){for(const e of effects)if(e&&typeof e.cleanup==="function")e.cleanup()},closed:()=>unsubscribed&&stopped}
 }
@@ -136,10 +142,11 @@ test("accessCheckFailure: 401 ends the session, 403 is no access, 408/425/429/5x
 
 test("at load, 401 shows “Your session ended”, the sign-in form and focus on the h1",async()=>{
  const h=harness({hash:`#/activity/${record}`});h.setVerification(status(401));await h.flush();await h.flush()
+ expect(h.storage.has("nv:return-view:v1")).toBe(true)
  expect(h.workspace()).toBeUndefined();expect(h.text(h.heading()!)).toBe("Your session ended");expect(h.focused).toEqual(["Your session ended"])
  expect(h.nodes().some(n=>n.type==="p"&&h.text(n)==="Sign in again to continue.")).toBe(true)
  expect(h.nodes().filter(n=>n.type==="input").map(n=>n.props.type)).toEqual(["email","password"]);expect(h.button("Sign in")).toBeDefined();expect(h.button("Email me a sign-in link")).toBeDefined()
- expect(h.message()).toBe(ACCESS_TEXT.sessionEnded);expect(h.location.hash).toBe(`#/activity/${record}`);h.cleanup()
+ expect(h.message()).toBe(ACCESS_TEXT.sessionEnded);expect(h.location.hash).toBe("");h.cleanup()
 })
 
 test("at load, 403 shows the no-access state with its own text and focus on its h1, and no Try again",async()=>{
@@ -161,16 +168,24 @@ for(const [name,fail] of TRANSIENT){
  })
 }
 
-test("a malformed 200 answer at load fails closed (unreachable, no workspace)",async()=>{
+test("a 200 answer naming another person shows the session-ended state, at load and during a session",async()=>{
  const h=harness();h.setVerification(async()=>Response.json(access(other)));await h.flush();await h.flush()
+ expect(h.workspace()).toBeUndefined();expect(h.text(h.heading()!)).toBe("Your session ended");h.cleanup()
+ const g=harness();await g.flush();const actor=g.workspace()!.props.staging.actor
+ g.setVerification(async()=>Response.json(access(other)));g.listeners.get("focus")!();await g.flush()
+ expect(g.workspace()).toBeUndefined();expect(actor.signal.aborted).toBe(true);expect(g.text(g.heading()!)).toBe("Your session ended");g.cleanup()
+})
+
+test("any other unrecognized 200 answer fails closed as unreachable",async()=>{
+ const h=harness();h.setVerification(async()=>Response.json({profile:"something-else",user:{id:owner},access:{}}));await h.flush();await h.flush()
  expect(h.workspace()).toBeUndefined();expect(h.text(h.heading()!)).toBe("We couldn’t reach Neuvetra");h.cleanup()
 })
 
-test("during a session, 401 from the re-check closes workspace data access at once and keeps the view to return to",async()=>{
+test("during a session, 401 from the re-check closes workspace data access at once; the view leaves the URL for the user-bound store",async()=>{
  const h=harness({hash:`#/activity/${record}`});await h.flush();const before=h.workspace()!
  h.setVerification(status(401));h.listeners.get("interval")!();await h.flush()
  expect(h.workspace()).toBeUndefined();expect(before.props.staging.actor.signal.aborted).toBe(true);expect(h.text(h.heading()!)).toBe("Your session ended")
- expect(h.location.hash).toBe(`#/activity/${record}`);expect(JSON.parse(h.storage.get("nv:return-view:v1")!)).toMatchObject({hash:`#/activity/${record}`,userId:owner});h.cleanup()
+ expect(h.location.hash).toBe("");expect(JSON.parse(h.storage.get("nv:return-view:v1")!)).toMatchObject({hash:`#/activity/${record}`,userId:owner});h.cleanup()
 })
 
 test("during a session, 403 from the re-check closes the workspace and shows the no-access state",async()=>{
@@ -179,12 +194,24 @@ test("during a session, 403 from the re-check closes the workspace and shows the
  expect(h.workspace()).toBeUndefined();expect(before.props.staging.actor.signal.aborted).toBe(true);expect(h.text(h.heading()!)).toBe("We couldn’t open your workspace");h.cleanup()
 })
 
-test("a workspace call answered 401 or 403 shows its own state (the status is passed to onUnauthorized)",async()=>{
- for(const [code,title] of [[401,"Your session ended"],[403,"We couldn’t open your workspace"]] as const){
-  const h=harness();await h.flush();const actor=h.workspace()!.props.staging.actor
-  actor.onUnauthorized(code);await h.flush()
-  expect(h.workspace()).toBeUndefined();expect(actor.signal.aborted).toBe(true);expect(h.text(h.heading()!)).toBe(title);h.cleanup()
+test("a workspace call answered 401 closes at once; a 403 re-checks /session and closes only as that check says",async()=>{
+ const h=harness();await h.flush();const actor=h.workspace()!.props.staging.actor
+ actor.onUnauthorized(401);await h.flush()
+ expect(h.workspace()).toBeUndefined();expect(actor.signal.aborted).toBe(true);expect(h.text(h.heading()!)).toBe("Your session ended");h.cleanup()
+ for(const [code,title] of [[403,"We couldn’t open your workspace"],[401,"Your session ended"]] as const){
+  const g=harness();await g.flush();const a=g.workspace()!.props.staging.actor,checks=g.requests.length
+  g.setVerification(status(code));a.onUnauthorized(403);await g.flush()
+  expect(g.requests.length).toBe(checks+1);expect(g.workspace()).toBeUndefined();expect(a.signal.aborted).toBe(true);expect(g.text(g.heading()!)).toBe(title);g.cleanup()
  }
+})
+
+test("a role-forbidden or origin-refused write (403) keeps the workspace, its actor and so its unsaved input, when /session still grants access",async()=>{
+ const h=harness({hash:"#/setup"});await h.flush();const before=h.workspace()!,actor=before.props.staging.actor,checks=h.requests.length
+ // Even with a check already in flight for the same token, the 403 asks again.
+ const slow=deferred();h.setVerification(()=>slow.promise);h.listeners.get("focus")!()
+ h.setVerification(async()=>Response.json(access()));actor.onUnauthorized(403);slow.resolve(Response.json(access()));await h.flush()
+ expect(h.requests.length).toBe(checks+2);expect(h.workspace()!.props.key).toBe(before.props.key);expect(h.workspace()!.props.staging.actor).toBe(actor)
+ expect(actor.signal.aborted).toBe(false);expect(h.heading()).toBeUndefined();expect(h.location.hash).toBe("#/setup");h.cleanup()
 })
 
 for(const [name,fail] of TRANSIENT){
@@ -223,10 +250,11 @@ test("the retry wait grows to 60 s and stays there",async()=>{
  expect(h.scheduled.map(s=>s.ms)).toEqual([2000,5000,10000,20000,30000,60000,60000,60000]);expect(h.workspace()).toBeDefined();h.cleanup()
 })
 
-test("a Supabase SIGNED_OUT on its own is a session end, not a deliberate sign-out: the address is kept",async()=>{
+test("a Supabase SIGNED_OUT on its own is a session end, not a deliberate sign-out: the view is kept for the same user only",async()=>{
  const h=harness({hash:`#/activity/${record}`});await h.flush();const actor=h.workspace()!.props.staging.actor
  h.emit(null,"SIGNED_OUT");await h.flush()
- expect(h.workspace()).toBeUndefined();expect(actor.signal.aborted).toBe(true);expect(h.text(h.heading()!)).toBe("Your session ended");expect(h.location.hash).toBe(`#/activity/${record}`);h.cleanup()
+ expect(h.workspace()).toBeUndefined();expect(actor.signal.aborted).toBe(true);expect(h.text(h.heading()!)).toBe("Your session ended")
+ expect(h.location.hash).toBe("");expect(JSON.parse(h.storage.get("nv:return-view:v1")!)).toMatchObject({hash:`#/activity/${record}`,userId:owner});h.cleanup()
 })
 
 test("no session at load shows the landing page, not a session end",async()=>{
@@ -236,18 +264,17 @@ test("no session at load shows the landing page, not a session end",async()=>{
 
 test("after a 401, signing in again opens the same record view (same address, new workspace lifetime)",async()=>{
  const h=harness({hash:`#/activity/${record}`});await h.flush();const before=h.workspace()!
- before.props.staging.actor.onUnauthorized(401);await h.flush();expect(h.text(h.heading()!)).toBe("Your session ended")
+ before.props.staging.actor.onUnauthorized(401);await h.flush();expect(h.text(h.heading()!)).toBe("Your session ended");expect(h.location.hash).toBe("")
  h.emit(session(owner,"new-sign-in"));await h.flush()
- expect(h.workspace()).toBeDefined();expect(h.workspace()!.props.key).not.toBe(before.props.key);expect(h.location.hash).toBe(`#/activity/${record}`)
- expect(h.storage.has("nv:return-view:v1")).toBe(false);h.cleanup()
+ expect(h.workspace()).toBeDefined();expect(h.workspace()!.props.key).not.toBe(before.props.key);expect(h.location.hash).toBe(`#/activity/${record}`);h.cleanup()
 })
 
 test("the stored view opens when the URL lost it (an email link in a new tab), only for the same person",async()=>{
  const storage=new Map<string,string>()
  rememberReturnView({getItem:k=>storage.get(k)??null,setItem:(k,v)=>{storage.set(k,v)},removeItem:k=>{storage.delete(k)}},owner,"#/results")
- const same=harness({storage});await same.flush();expect(same.location.hash).toBe("#/results");expect(storage.size).toBe(0);same.cleanup()
+ const same=harness({storage});await same.flush();expect(same.location.hash).toBe("#/results");same.cleanup()
  rememberReturnView({getItem:k=>storage.get(k)??null,setItem:(k,v)=>{storage.set(k,v)},removeItem:k=>{storage.delete(k)}},other,"#/results")
- const different=harness({storage});await different.flush();expect(different.location.hash).toBe("");expect(storage.size).toBe(0);different.cleanup()
+ const different=harness({storage});await different.flush();expect(different.location.hash).toBe("");expect(storage.has("nv:return-view:v1")).toBe(false);different.cleanup()
 })
 
 test("a different person signing in after a session end does not inherit the last view",async()=>{
@@ -265,18 +292,140 @@ test("a deliberate sign-out clears the address and the stored view",async()=>{
  expect(h.workspace()).toBeUndefined();expect(h.location.hash).toBe("");expect(h.storage.has("nv:return-view:v1")).toBe(false);expect(h.message()).toBe("Signed out on this browser.");h.cleanup()
 })
 
-test("the email link from the session-ended state returns to the validated view; a tampered address is dropped",async()=>{
+test("the email link from the session-ended state returns the same person to the validated view; a tampered address is dropped",async()=>{
  for(const [hash,redirect] of [[`#/activity/${record}`,`https://synthetic.invalid/#/activity/${record}`],["#/results","https://synthetic.invalid/#/results"],["#javascript:alert(1)","https://synthetic.invalid/"],["#//evil.example/x","https://synthetic.invalid/"]] as const){
   const h=harness({hash});h.setVerification(status(401));await h.flush();await h.flush()
-  h.nodes().find(n=>n.type==="input"&&n.props.type==="email")!.props.onChange({target:{value:"owner@synthetic.invalid"}});h.render()
+  h.nodes().find(n=>n.type==="input"&&n.props.type==="email")!.props.onChange({target:{value:" Owner@Synthetic.invalid "}});h.render()
   h.button("Email me a sign-in link")!.props.onClick();await h.flush()
   expect(h.otp.at(-1).options.emailRedirectTo).toBe(redirect);h.cleanup()
  }
 })
 
-test("the session-ended card never prefills an email other than the ended session's own",async()=>{
- const h=harness();await h.flush()
+test("the session-ended form is not prefilled with the previous user's email (shared computers)",async()=>{
+ const h=harness({initial:null});await h.flush()
+ // The person types their email on the landing page and signs in.
+ h.nodes().find(n=>typeof n.props.onEmail==="function")!.props.onEmail("owner@synthetic.invalid");h.render()
+ h.emit(session());await h.flush();expect(h.workspace()).toBeDefined()
  h.workspace()!.props.staging.actor.onUnauthorized(401);await h.flush()
- // The fake session has no email; the field stays as typed (empty) rather than taking anyone else's.
  expect(h.nodes().find(n=>n.type==="input"&&n.props.type==="email")!.props.value).toBe("");h.cleanup()
+})
+
+// ---------------------------------------------------------------------------------------------------------------------
+// QA fix round (PR #37 review, B1 and follow-ups).
+test("QA B1 repro 1: A’s session ends, the page reloads, B signs in: B never opens at A’s record address",async()=>{
+ const storage=new Map<string,string>()
+ const a=harness({hash:`#/activity/${record}`,storage});await a.flush()
+ a.setVerification(status(401));a.listeners.get("interval")!();await a.flush()
+ expect(a.location.hash).toBe("");a.cleanup()
+ // The reload (even one that somehow still carries A's record address): A's stale session is rejected, then B signs in.
+ for(const hash of ["",`#/activity/${record}`]){
+  const b=harness({hash,storage:new Map(storage)});b.setVerification(status(401));await b.flush();await b.flush()
+  expect(b.text(b.heading()!)).toBe("Your session ended");expect(b.location.hash).toBe("")
+  b.setVerification(async()=>Response.json(access(other)));b.emit(session(other,"b-token"));await b.flush()
+  expect(b.workspace()).toBeDefined();expect(b.location.hash).not.toContain(record);b.cleanup()
+ }
+})
+
+test("QA B1 repro 2: SIGNED_OUT, reload to the landing page, B signs in: no record address of A’s",async()=>{
+ const storage=new Map<string,string>()
+ const a=harness({hash:`#/activity/${record}`,storage});await a.flush()
+ a.emit(null,"SIGNED_OUT");await a.flush();expect(a.location.hash).toBe("");a.cleanup()
+ for(const hash of ["",`#/activity/${record}`]){
+  const b=harness({hash,storage:new Map(storage),initial:null});await b.flush();expect(b.workspace()).toBeUndefined()
+  b.setVerification(async()=>Response.json(access(other)));b.emit(session(other,"b-token"));await b.flush()
+  expect(b.workspace()).toBeDefined();expect(b.location.hash).not.toContain(record);b.cleanup()
+ }
+})
+
+test("the tab the session ended in and the sign-in link’s new tab both return to the stored view (same person)",async()=>{
+ const storage=new Map<string,string>()
+ const a=harness({hash:`#/activity/${record}`,storage});await a.flush();a.workspace()!.props.staging.actor.onUnauthorized(401);await a.flush()
+ // The link's tab signs in first; the first tab then hears the new session too.
+ const link=harness({hash:`#/activity/${record}`,search:"?code=abc",storage});await link.flush();expect(link.location.hash).toBe(`#/activity/${record}`)
+ a.emit(session(owner,"new"));await a.flush();expect(a.location.hash).toBe(`#/activity/${record}`);a.cleanup();link.cleanup()
+})
+
+test("QA B1 repro 3: on A’s session-ended screen, B’s sign-in link goes to the bare origin; A’s own carries A’s view",async()=>{
+ const h=harness({hash:`#/activity/${record}`});await h.flush();h.workspace()!.props.staging.actor.onUnauthorized(401);await h.flush()
+ const type=(value:string)=>{h.nodes().find(n=>n.type==="input"&&n.props.type==="email")!.props.onChange({target:{value}});h.render()}
+ type("other@synthetic.invalid");h.button("Email me a sign-in link")!.props.onClick();await h.flush()
+ expect(h.otp.at(-1).options.emailRedirectTo).toBe("https://synthetic.invalid/")
+ type("OWNER@synthetic.invalid");h.button("Email me a sign-in link")!.props.onClick();await h.flush()
+ expect(h.otp.at(-1).options.emailRedirectTo).toBe(`https://synthetic.invalid/#/activity/${record}`)
+ // The link is sent; the stored view is still there for the new tab to read.
+ expect(h.storage.has("nv:return-view:v1")).toBe(true);h.cleanup()
+})
+
+test("the landing page’s sign-in link (no ended session) goes to the bare origin",async()=>{
+ const h=harness({hash:`#/activity/${record}`,initial:null});await h.flush()
+ h.nodes().find(n=>typeof n.props.onEmail==="function")!.props.onEmail("owner@synthetic.invalid");h.render()
+ h.nodes().find(n=>typeof n.props.onSendLink==="function")!.props.onSendLink();await h.flush()
+ expect(h.otp.at(-1).options.emailRedirectTo).toBe("https://synthetic.invalid/");h.cleanup()
+})
+
+test("a fresh page honours a record address for the session already here at load (refresh), and for a new sign-in only if the stored view confirms it",async()=>{
+ const refresh=harness({hash:`#/activity/${record}`});await refresh.flush();expect(refresh.location.hash).toBe(`#/activity/${record}`);refresh.cleanup()
+ const fresh=harness({hash:`#/activity/${record}`,initial:null});await fresh.flush();fresh.emit(session());await fresh.flush()
+ expect(fresh.location.hash).toBe("#/activity");fresh.cleanup()
+ const storage=new Map<string,string>([["nv:return-view:v1",JSON.stringify({hash:`#/activity/${record}`,userId:owner,savedAt:Date.now()})]])
+ const confirmed=harness({hash:`#/activity/${record}`,initial:null,storage});await confirmed.flush();confirmed.emit(session());await confirmed.flush()
+ expect(confirmed.location.hash).toBe(`#/activity/${record}`);confirmed.cleanup()
+ // A sign-in link's code in the URL is a new sign-in: the record address needs the stored view too.
+ const link=harness({hash:`#/activity/${record}`,search:"?code=abc"});await link.flush();expect(link.location.hash).toBe("#/activity");link.cleanup()
+ // Non-record addresses carry nothing of anyone's and are kept.
+ const plain=harness({hash:"#/results",initial:null});await plain.flush();plain.emit(session());await plain.flush();expect(plain.location.hash).toBe("#/results");plain.cleanup()
+})
+
+test("Retry-After on a 429 is honoured (seconds or a date) and capped",async()=>{
+ expect(retryAfterMs("30")).toBe(30_000);expect(retryAfterMs("99999")).toBe(MAX_RETRY_AFTER_MS);expect(retryAfterMs("soon")).toBeNull();expect(retryAfterMs(null)).toBeNull()
+ expect(retryAfterMs(new Date(1_000_000+45_000).toUTCString(),1_000_000)).toBe(45_000)
+ expect(accessCheckFailure(429,"30").retryAfterMs).toBe(30_000);expect(accessCheckFailure(401,"30").retryAfterMs).toBeNull()
+ for(const [header,wait] of [["30",30_000],["99999",MAX_RETRY_AFTER_MS],[null,2_000]] as const){
+  const h=harness();await h.flush()
+  h.setVerification(async()=>new Response("",{status:429,headers:header?{"retry-after":header}:{}}));h.listeners.get("interval")!();await h.flush()
+  expect(h.scheduled.at(-1)!.ms).toBe(wait);expect(h.workspace()).toBeDefined();h.cleanup()
+ }
+})
+
+test("focus, online and the timer respect the backoff and check at most once per 10 s; Try again always checks",async()=>{
+ const h=harness();await h.flush();h.clock.fixed=5_000_000
+ // Healthy: 20 focus events in a burst of separate turns give at most one check.
+ let checks=h.requests.length
+ for(let i=0;i<20;i++){h.listeners.get("focus")!();await h.flush()}
+ expect(h.requests.length-checks).toBeLessThanOrEqual(1)
+ // Reconnecting: while a retry is scheduled, focus/online/timer don't check at all.
+ h.clock.fixed=9_000_000;h.setVerification(status(503));h.listeners.get("interval")!();await h.flush();expect(h.scheduled.length).toBe(1)
+ checks=h.requests.length;h.clock.fixed=99_000_000
+ for(let i=0;i<20;i++){h.listeners.get(i%2?"focus":"online")!();await h.flush()}
+ h.listeners.get("interval")!();await h.flush()
+ expect(h.requests.length).toBe(checks);h.cleanup()
+ // At load, Try again checks even right after the failed check.
+ const g=harness();g.clock.fixed=1;g.setVerification(status(503));await g.flush();await g.flush();const before=g.requests.length
+ g.button("Try again")!.props.onClick();await g.flush();expect(g.requests.length).toBe(before+1);g.cleanup()
+})
+
+test("a SIGNED_OUT caused by a deliberate sign-out in another tab doesn’t write the return view back; any other SIGNED_OUT does",async()=>{
+ const storage=new Map<string,string>()
+ const mem={getItem:(k:string)=>storage.get(k)??null,setItem:(k:string,v:string)=>{storage.set(k,v)},removeItem:(k:string)=>{storage.delete(k)}}
+ markDeliberateSignOut(mem)
+ const h=harness({hash:`#/activity/${record}`,storage});await h.flush()
+ h.emit(null,"SIGNED_OUT");await h.flush()
+ expect(h.text(h.heading()!)).toBe("Your session ended");expect(storage.has("nv:return-view:v1")).toBe(false);expect(h.location.hash).toBe("");h.cleanup()
+ storage.clear()
+ const g=harness({hash:`#/activity/${record}`,storage});await g.flush();g.emit(null,"SIGNED_OUT");await g.flush()
+ expect(storage.has("nv:return-view:v1")).toBe(true);g.cleanup()
+ expect(recentlySignedOut(mem,Date.now()+61_000)).toBe(false)
+})
+
+test("a deliberate sign-out leaves the sign-out mark for other tabs",async()=>{
+ const h=harness({hash:"#/results"});await h.flush();h.clickSignOut();await h.flush()
+ expect(h.storage.has("nv:signed-out:v1")).toBe(true);expect(h.location.hash).toBe("");h.cleanup()
+ // (peekReturnView reads without removing; parseViewHash/viewHash are used by the fresh-page rule.)
+ expect(typeof peekReturnView).toBe("function");expect(viewHash(parseViewHash("#/results").panel)).toBe("#/results")
+})
+
+test("several workspace 403s at once share one /session re-check",async()=>{
+ const h=harness();await h.flush();const actor=h.workspace()!.props.staging.actor,checks=h.requests.length
+ for(let i=0;i<4;i++)actor.onUnauthorized(403)
+ await h.flush();expect(h.requests.length).toBe(checks+1);expect(h.workspace()).toBeDefined();h.cleanup()
 })

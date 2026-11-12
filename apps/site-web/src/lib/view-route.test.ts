@@ -1,7 +1,7 @@
 // WO-07: viewHash and parseViewHash moved here from StagingWorkspace.tsx unchanged, except that every #/earlier/<x> is now the
 // static list (#/earlier). These tests pin the behaviour WO-05a (session return) and WO-06 (record view) rely on.
 import { expect, test } from "bun:test"
-import { acceptedViewHash, forgetReturnView, parseViewHash, rememberReturnView, RETURN_VIEW_KEY, takeReturnView, viewHash, type WorkspaceView } from "./view-route"
+import { acceptedViewHash, forgetReturnView, parseViewHash, peekReturnView, rememberReturnView, RETURN_VIEW_KEY, takeReturnView, viewHash, type WorkspaceView } from "./view-route"
 
 const id = "29500000-0000-4000-8000-000000000001"
 
@@ -66,17 +66,17 @@ function memory() {
 }
 const user = "11111111-1111-4111-8111-111111111111", other = "22222222-2222-4222-8222-222222222222"
 
-test("a stored return view is read once, by the same person, within 24 hours", () => {
+test("a stored return view is read by the same person within 24 hours, and removed when anyone else reads it", () => {
   const { map, storage } = memory()
   rememberReturnView(storage, user, `#/activity/${id}`, 1_000)
   expect(takeReturnView(storage, user, 2_000)).toBe(`#/activity/${id}`)
-  expect(map.size).toBe(0)
-  expect(takeReturnView(storage, user, 3_000)).toBeNull()
-  rememberReturnView(storage, user, "#/results", 1_000)
-  expect(takeReturnView(storage, other, 2_000)).toBeNull()
+  // The tab the session ended in and the sign-in link's new tab may both read it.
+  expect(takeReturnView(storage, user, 3_000)).toBe(`#/activity/${id}`)
+  expect(takeReturnView(storage, other, 4_000)).toBeNull()
   expect(map.size).toBe(0)
   rememberReturnView(storage, user, "#/results", 1_000)
   expect(takeReturnView(storage, user, 1_000 + 24 * 60 * 60 * 1000 + 1)).toBeNull()
+  expect(map.size).toBe(0)
   rememberReturnView(storage, user, "#/results", 5_000)
   expect(takeReturnView(storage, user, 4_000)).toBeNull()
 })
@@ -104,4 +104,14 @@ test("storage that throws never breaks the session flow", () => {
   expect(takeReturnView(broken, user)).toBeNull()
   expect(() => forgetReturnView(broken)).not.toThrow()
   expect(takeReturnView(null, user)).toBeNull()
+})
+
+test("peekReturnView reads the stored view without removing it, under the same rules", () => {
+  const { map, storage } = memory()
+  rememberReturnView(storage, user, "#/results", 1_000)
+  expect(peekReturnView(storage, user, 2_000)).toBe("#/results")
+  expect(peekReturnView(storage, other, 2_000)).toBeNull()
+  expect(map.has(RETURN_VIEW_KEY)).toBe(true)
+  expect(peekReturnView(storage, other, 2_000)).toBeNull()
+  expect(map.has(RETURN_VIEW_KEY)).toBe(true)
 })

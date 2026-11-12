@@ -35,14 +35,30 @@ export const ACCESS_TEXT = {
  */
 export class AccessCheckError extends Error {
   override readonly name = "AccessCheckError"
-  constructor(readonly problem: AccessProblem, readonly transient: boolean) { super(problem) }
+  /** `retryAfterMs`: the server's Retry-After on a 429/503, already capped (see retryAfterMs). */
+  constructor(readonly problem: AccessProblem, readonly transient: boolean, readonly retryAfterMs: number | null = null) { super(problem) }
 }
 
+/** The longest Retry-After honoured: a larger value (or a far-future date) waits this long instead. */
+export const MAX_RETRY_AFTER_MS = 120_000
+/** Reads a Retry-After header (seconds or an HTTP date) into a wait in milliseconds, capped; null if absent or unreadable. */
+export function retryAfterMs(header: string | null, now = Date.now()): number | null {
+  if (!header) return null
+  const value = header.trim()
+  const ms = /^\d+$/.test(value) ? Number(value) * 1000 : Date.parse(value) - now
+  if (!Number.isFinite(ms)) return null
+  return Math.min(Math.max(ms, 0), MAX_RETRY_AFTER_MS)
+}
+
+/** Focus, back-online and the 60 s timer check at most once in this period; Try again and new sessions always check. */
+export const MIN_CHECK_GAP_MS = 10_000
+
 /** How the session check reads an HTTP status that isn't 2xx. Fails closed: an unexpected status is final. */
-export function accessCheckFailure(status: number): AccessCheckError {
+export function accessCheckFailure(status: number, retryAfter: string | null = null): AccessCheckError {
   if (status === 401) return new AccessCheckError("session_ended", false)
   if (status === 403) return new AccessCheckError("no_access", false)
-  return new AccessCheckError("unreachable", status === 408 || status === 425 || status === 429 || status >= 500)
+  const transient = status === 408 || status === 425 || status === 429 || status >= 500
+  return new AccessCheckError("unreachable", transient, transient ? retryAfterMs(retryAfter) : null)
 }
 
 /** Retry delays while a mounted workspace can't reach Neuvetra; the last one repeats. Each is jittered by ±20 %. */
@@ -58,13 +74,19 @@ export function createStagingAuthorization(deps: {
   onProblem?: (value: AccessProblem | null) => void
   /** True while a mounted workspace is kept open through a transient failure and the check is being retried. */
   onReconnecting?: (value: boolean) => void
-  /** A workspace closed because the session ended (not a deliberate sign-out), so its address can be offered back. */
-  onSessionEnded?: (userId: string) => void
+  /**
+   * A workspace closed because the session ended (not a deliberate sign-out), so its address can be offered back to the
+   * same person. `cause` is "signed_out" for a Supabase SIGNED_OUT (which may be another tab's deliberate sign-out).
+   */
+  onSessionEnded?: (ended: { userId: string; email: string | null; cause: "rejected" | "signed_out" }) => void
   schedule?: (run: () => void, ms: number) => () => void
   random?: () => number
+  now?: () => number
 }) {
   const schedule = deps.schedule ?? ((run, ms) => { const id = setTimeout(run, ms); return () => clearTimeout(id) })
   const random = deps.random ?? Math.random
+  const now = deps.now ?? Date.now
+  let lastCheckAt = -Infinity
   let active: ActiveStagingSession | null = null
   let latest: Session | null = null
   let generation = 0
@@ -77,9 +99,11 @@ export function createStagingAuthorization(deps: {
   let ended = false
   let problem: AccessProblem | null = null
   let reconnecting = false
+  // Set by a workspace 403: the next check must not reuse one already in flight.
+  let forced = false
   let retryStep = 0
   let cancelRetry: (() => void) | null = null
-  let pending: { token: string; userId: string; controller: AbortController; promise: Promise<void> } | null = null
+  let pending: { token: string; userId: string; controller: AbortController; promise: Promise<void>; forced: boolean } | null = null
 
   function cancelCheck() { generation++; pending?.controller.abort(); pending = null }
   function stopRetrying() {
@@ -88,18 +112,23 @@ export function createStagingAuthorization(deps: {
   }
   function closeWorkspace() { stopRetrying(); active?.controller.abort(); active = null; deps.onActive(null) }
   function setProblem(value: AccessProblem | null) { if (problem !== value) { problem = value; deps.onProblem?.(value) } }
-  function endSession() {
-    const userId = active?.actor.userId ?? latest?.user.id ?? null
+  function endSession(cause: "rejected" | "signed_out" = "rejected") {
+    const user = active?.session.user ?? latest?.user ?? null
     ended = true
     cancelCheck(); closeWorkspace()
     setProblem("session_ended")
     deps.onMessage(ACCESS_TEXT.sessionEnded)
-    if (userId) deps.onSessionEnded?.(userId)
+    if (user) deps.onSessionEnded?.({ userId: user.id, email: user.email ?? null, cause })
   }
-  /** A workspace request was refused: 401 ends the session, 403 means no access. Either closes workspace data access now. */
+  /**
+   * A workspace request was refused. 401 ends the session and closes workspace data access now. A 403 can also be a
+   * role-forbidden write or an origin refusal, so it re-checks /session first: the workspace stays open (the action shows
+   * its own error) unless that check answers 403 (no access) or 401 (session ended).
+   */
   function invalidate(status?: number) {
     if (disposed) return
     if (status === 403) {
+      if (active && latest && active.actor.userId === latest.user.id) { forced = true; void authorize(latest); return }
       cancelCheck(); closeWorkspace()
       setProblem("no_access")
       deps.onMessage(ACCESS_TEXT.noAccess)
@@ -107,11 +136,12 @@ export function createStagingAuthorization(deps: {
     }
     endSession()
   }
-  function retryLater() {
+  function retryLater(retryAfter: number | null) {
     cancelRetry?.()
     const base = RETRY_DELAYS_MS[Math.min(retryStep, RETRY_DELAYS_MS.length - 1)]!
     retryStep++
-    const delay = Math.round(base * (0.8 + 0.4 * random()))
+    // The server's Retry-After (capped) wins when it asks for a longer wait than the backoff.
+    const delay = Math.max(Math.round(base * (0.8 + 0.4 * random())), retryAfter ?? 0)
     cancelRetry = schedule(() => { cancelRetry = null; if (latest && active) void authorize(latest) }, delay)
   }
   async function authorize(session: Session | null): Promise<void> {
@@ -119,7 +149,7 @@ export function createStagingAuthorization(deps: {
     if (!session) {
       deps.onSignedIn(false)
       // A Supabase SIGNED_OUT on its own is not a deliberate sign-out: if a session was open here, it ended.
-      if (hadSession && !signedOut) { endSession(); latest = null; return }
+      if (hadSession && !signedOut) { endSession("signed_out"); latest = null; return }
       latest = null
       cancelCheck(); closeWorkspace()
       setProblem(null)
@@ -132,8 +162,12 @@ export function createStagingAuthorization(deps: {
     hadSession = true
     deps.onSignedIn(true)
     if (active && active.actor.userId !== session.user.id) closeWorkspace()
-    if (pending?.token === session.access_token && pending.userId === session.user.id) return pending.promise
+    // A check already running for this token answers this request too, unless a workspace 403 needs a fresh answer.
+    if (pending?.token === session.access_token && pending.userId === session.user.id && (!forced || pending.forced)) { forced = false; return pending.promise }
+    const fresh = forced
+    forced = false
     cancelCheck()
+    lastCheckAt = now()
     const current = generation, controller = new AbortController()
     if (!active && !problem) deps.onMessage(ACCESS_TEXT.checking)
     const promise = (async () => {
@@ -171,7 +205,7 @@ export function createStagingAuthorization(deps: {
           active.actor.accessToken = session.access_token
           if (!reconnecting) { reconnecting = true; deps.onReconnecting?.(true) }
           deps.onMessage(ACCESS_TEXT.retrying)
-          retryLater()
+          retryLater(failure.retryAfterMs)
           return
         }
         if (failure.problem === "session_ended") { endSession(); return }
@@ -180,13 +214,20 @@ export function createStagingAuthorization(deps: {
         deps.onMessage(failure.problem === "no_access" ? ACCESS_TEXT.noAccess : ACCESS_TEXT.unreachable)
       } finally { if (current === generation) pending = null }
     })()
-    if (current === generation) pending = { token: session.access_token, userId: session.user.id, controller, promise }
+    if (current === generation) pending = { token: session.access_token, userId: session.user.id, controller, promise, forced: fresh }
     return promise
   }
   return {
     authorize,
-    /** Checks the current session again (every 60 s, on focus, when back online, and from Try again). */
-    refresh: () => latest && !ended ? authorize(latest) : Promise.resolve(),
+    /**
+     * Checks the current session again. Try again passes `force`. The 60 s timer, focus and back-online don't: they wait
+     * while a retry is scheduled (the backoff and any Retry-After stand) and check at most once per MIN_CHECK_GAP_MS.
+     */
+    refresh: (options: { force?: boolean } = {}) => {
+      if (!latest || ended) return Promise.resolve()
+      if (!options.force && (cancelRetry || now() - lastCheckAt < MIN_CHECK_GAP_MS)) return pending?.promise ?? Promise.resolve()
+      return authorize(latest)
+    },
     invalidate,
     allowSignIn: () => { signedOut = false },
     signOut: () => { signedOut = true; hadSession = false; ended = false; latest = null; cancelCheck(); closeWorkspace(); setProblem(null); deps.onSignedIn(false) },

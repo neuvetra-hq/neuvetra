@@ -57,8 +57,10 @@ export function acceptedViewHash(raw: unknown): string | null {
 
 /**
  * WO-05a: the view to return to after the session ends and the same person signs in again, possibly from an email link
- * opened in another tab. Kept for 24 hours in this browser, bound to the user, and removed when it is read and on a
- * deliberate sign-out. It holds only a view address (never a token or any workspace data).
+ * opened in another tab. Kept for 24 hours in this browser and bound to the user. Reading it for another person (or
+ * finding it expired or invalid) removes it; the same person may read it again (the tab the session ended in and the
+ * sign-in link's new tab both return to it). A deliberate sign-out or the next session end replaces or removes it.
+ * It holds only a view address (never a token or any workspace data).
  */
 export const RETURN_VIEW_KEY = "nv:return-view:v1"
 const RETURN_VIEW_TTL_MS = 24 * 60 * 60 * 1000
@@ -73,21 +75,50 @@ export function rememberReturnView(storage: ViewStorage | null, userId: string, 
   } catch { /* storage may be unavailable; the address in the URL still works */ }
 }
 
-/** Reads and removes the stored view. Returns it only if it belongs to `userId`, is unexpired and is a valid address. */
+/** Reads the stored view for `userId`: returns it only if it is theirs, unexpired and valid; otherwise removes it. */
 export function takeReturnView(storage: ViewStorage | null, userId: string, now = Date.now()): string | null {
+  return readReturnView(storage, userId, now, true)
+}
+
+/** Reads the stored view without removing it (for the sign-in link), under the same rules as takeReturnView. */
+export function peekReturnView(storage: ViewStorage | null, userId: string, now = Date.now()): string | null {
+  return readReturnView(storage, userId, now, false)
+}
+
+function readReturnView(storage: ViewStorage | null, userId: string, now: number, remove: boolean): string | null {
   try {
     if (!storage) return null
     const raw = storage.getItem(RETURN_VIEW_KEY)
-    storage.removeItem(RETURN_VIEW_KEY)
     if (!raw) return null
-    const value: unknown = JSON.parse(raw)
-    if (!value || typeof value !== "object") return null
-    const { hash, userId: owner, savedAt } = value as Record<string, unknown>
-    if (owner !== userId || typeof savedAt !== "number" || !(now - savedAt >= 0 && now - savedAt <= RETURN_VIEW_TTL_MS)) return null
-    return acceptedViewHash(hash)
+    let found: string | null = null
+    try {
+      const value: unknown = JSON.parse(raw)
+      if (value && typeof value === "object") {
+        const { hash, userId: owner, savedAt } = value as Record<string, unknown>
+        if (owner === userId && typeof savedAt === "number" && now - savedAt >= 0 && now - savedAt <= RETURN_VIEW_TTL_MS) found = acceptedViewHash(hash)
+      }
+    } catch { found = null }
+    if (remove && !found) storage.removeItem(RETURN_VIEW_KEY)
+    return found
   } catch { return null }
 }
 
 export function forgetReturnView(storage: ViewStorage | null): void {
   try { storage?.removeItem(RETURN_VIEW_KEY) } catch { /* nothing stored */ }
+}
+
+/**
+ * WO-05a QA fix: a deliberate sign-out leaves a short-lived mark, so another tab that sees the resulting SIGNED_OUT does
+ * not write its view back as a return view (WO-05b's BroadcastChannel will clear the rest). Holds only a time.
+ */
+export const SIGNED_OUT_MARK_KEY = "nv:signed-out:v1"
+const SIGNED_OUT_MARK_MS = 60_000
+export function markDeliberateSignOut(storage: ViewStorage | null, now = Date.now()): void {
+  try { storage?.setItem(SIGNED_OUT_MARK_KEY, String(now)) } catch { /* best effort */ }
+}
+export function recentlySignedOut(storage: ViewStorage | null, now = Date.now()): boolean {
+  try {
+    const at = Number(storage?.getItem(SIGNED_OUT_MARK_KEY))
+    return Number.isFinite(at) && at > 0 && now - at >= 0 && now - at <= SIGNED_OUT_MARK_MS
+  } catch { return false }
 }

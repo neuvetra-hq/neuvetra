@@ -5,7 +5,7 @@ import { Landing } from "./Landing"
 import { signInNoticeTone } from "@/lib/sign-in-notice"
 import { Icon } from "./Icon"
 import { decodeStagingAccess, decodeStagingConfig } from "@/lib/staging-session"
-import { acceptedViewHash, forgetReturnView, rememberReturnView, takeReturnView } from "@/lib/view-route"
+import { acceptedViewHash, forgetReturnView, markDeliberateSignOut, parseViewHash, peekReturnView, recentlySignedOut, rememberReturnView, takeReturnView, viewHash } from "@/lib/view-route"
 
 import { ACCESS_TEXT, AccessCheckError, accessCheckFailure, createStagingAuthorization, type AccessProblem, type ActiveStagingSession } from "@/lib/staging-authorization"
 
@@ -13,6 +13,13 @@ import { ACCESS_TEXT, AccessCheckError, accessCheckFailure, createStagingAuthori
 const SESSION_CHECK_TIMEOUT_MS = 15_000
 
 function viewStorage(): Storage | null { try { return window.localStorage } catch { return null } }
+function storedSessionUser(key: string): string | null {
+  try {
+    const value: unknown = JSON.parse(window.localStorage.getItem(key) ?? "null")
+    const id = value && typeof value === "object" ? (value as { user?: { id?: unknown } }).user?.id : null
+    return typeof id === "string" ? id : null
+  } catch { return null }
+}
 function clearViewHash() { if (window.location.hash) window.history.replaceState(null, "", window.location.pathname + window.location.search) }
 
 export function PrivateStaging() {
@@ -29,7 +36,13 @@ export function PrivateStaging() {
   const authorization = useRef<ReturnType<typeof createStagingAuthorization> | null>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
   const accessHeadingRef = useRef<HTMLHeadingElement>(null)
-  const opened = useRef<{ userId: string; epoch: number; email: string } | null>(null)
+  const opened = useRef<{ userId: string; epoch: number } | null>(null)
+  // The user whose session was already in this browser when the page loaded (a refresh), unless it came from a sign-in
+  // link's code in this URL. Only that user's record address in the URL is trusted on a freshly loaded page.
+  const loadUser = useRef<string | null>(null)
+  const signInFromUrl = useRef(typeof window !== "undefined" && /[?&]code=/.test(window.location.search))
+  // Whose session ended here: the sign-in link carries their view only if they are the one signing in again.
+  const endedUser = useRef<{ userId: string; email: string | null } | null>(null)
 
   useEffect(() => {
     let alive = true
@@ -48,27 +61,44 @@ export function PrivateStaging() {
         try { response = await fetch("/workspace-api/session", { headers: { authorization: `Bearer ${session.access_token}` }, cache: "no-store", signal: request.signal }) }
         catch (cause) { if (signal.aborted) throw cause; throw new AccessCheckError("unreachable", true) }
         finally { clearTimeout(timer); signal.removeEventListener("abort", stop) }
-        if (!response.ok) throw accessCheckFailure(response.status)
+        if (!response.ok) throw accessCheckFailure(response.status, response.headers.get("retry-after"))
         let body: unknown
         try { body = await response.json() } catch { throw new AccessCheckError("unreachable", true) }
+        // An answer for another person means this session isn't the one the server knows: treat it as ended.
+        const named = body && typeof body === "object" ? (body as { user?: { id?: unknown } }).user?.id : undefined
+        if (named !== undefined && named !== session.user.id) throw new AccessCheckError("session_ended", false)
         return decodeStagingAccess(body, session.user.id)
       },
       onActive: value => {
         if (value && (opened.current?.userId !== value.actor.userId || opened.current.epoch !== value.epoch)) {
-          // A new workspace lifetime opens at the right address: another person never inherits the last view, and the
-          // same person returning after a session end gets the stored view if the URL no longer carries one.
-          const returnView = takeReturnView(viewStorage(), value.actor.userId)
-          if (opened.current && opened.current.userId !== value.actor.userId) clearViewHash()
-          if (returnView && !acceptedViewHash(window.location.hash)) window.history.replaceState(null, "", returnView)
-          opened.current = { userId: value.actor.userId, epoch: value.epoch, email: value.session.user.email ?? "" }
+          // A new workspace lifetime opens at the right address (QA B1): another person never inherits the last view.
+          // The view a session ended on lives only in the user-bound stored return view and comes back through it.
+          const userId = value.actor.userId
+          const returnView = takeReturnView(viewStorage(), userId)
+          const otherUser = opened.current !== null && opened.current.userId !== userId
+          if (otherUser) clearViewHash()
+          // A record address in the URL of a freshly loaded page is trusted only for the session that was already here at
+          // load (a refresh), or when the same user's stored return view confirms it.
+          const trusted = !otherUser && (opened.current !== null || (loadUser.current === userId && !signInFromUrl.current))
+          const shown = acceptedViewHash(window.location.hash)
+          let target = shown
+          if (shown && !trusted && parseViewHash(shown).recordId && returnView !== shown) target = returnView ?? viewHash(parseViewHash(shown).panel, null)
+          if (!target && returnView) target = returnView
+          if (target && target !== window.location.hash) window.history.replaceState(null, "", target)
+          opened.current = { userId, epoch: value.epoch }
+          endedUser.current = null
         }
         setActive(value)
       },
       onSignedIn: setSignedIn, onMessage: setMessage, onProblem: setProblem, onReconnecting: setReconnecting,
-      onSessionEnded: userId => {
-        rememberReturnView(viewStorage(), userId, window.location.hash)
-        const known = opened.current?.userId === userId ? opened.current.email : ""
-        setEmail(current => current || known); setPassword("")
+      onSessionEnded: ({ userId, email: endedEmail, cause }) => {
+        // QA B1 / CEO ruling: the view is kept only in the stored return view (bound to this user) and leaves the URL.
+        // A SIGNED_OUT caused by a deliberate sign-out in another tab doesn't write it back.
+        if (!(cause === "signed_out" && recentlySignedOut(viewStorage()))) rememberReturnView(viewStorage(), userId, window.location.hash)
+        clearViewHash()
+        endedUser.current = { userId, email: endedEmail }
+        // The next person at a shared computer doesn't see the previous email.
+        setEmail(""); setPassword("")
       },
     })
     authorization.current = lifecycle
@@ -78,7 +108,10 @@ export function PrivateStaging() {
         if (!response.ok) throw new Error()
         const config = decodeStagingConfig(await response.json())
         if (!alive) return
-        authClient = createClient(config.supabaseUrl, config.anonKey, { auth: { storageKey: `neuvetra:m63:${config.projectRef}:auth`, persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: "pkce" } })
+        // Whose session this browser already held when the page loaded (read before Supabase can change it).
+        const storageKey = `neuvetra:m63:${config.projectRef}:auth`
+        if (opened.current === null && !signInFromUrl.current) loadUser.current = storedSessionUser(storageKey)
+        authClient = createClient(config.supabaseUrl, config.anonKey, { auth: { storageKey, persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: "pkce" } })
         setClient(authClient)
         const { data } = authClient.auth.onAuthStateChange((_event, session) => { authEvents++; void lifecycle.authorize(session) })
         unsubscribe = () => data.subscription.unsubscribe()
@@ -112,7 +145,8 @@ export function PrivateStaging() {
   async function signOut() {
     // A deliberate sign-out is the only thing that forgets the view address.
     authorization.current?.signOut(); setBusy(true)
-    clearViewHash(); forgetReturnView(viewStorage()); opened.current = null
+    clearViewHash(); forgetReturnView(viewStorage()); markDeliberateSignOut(viewStorage())
+    opened.current = null; loadUser.current = null; endedUser.current = null
     try {
       if (!client) throw new Error("Authentication unavailable")
       const { error } = await client.auth.signOut({ scope: "local" })
@@ -126,8 +160,11 @@ export function PrivateStaging() {
     if (!client || busy || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { setMessage("Enter your invited email address first."); return }
     authorization.current?.allowSignIn(); setBusy(true)
     try {
-      // The link opens the requested view, also in a new tab (QA-146); only a valid view address is passed on.
-      const { error } = await client.auth.signInWithOtp({ email: email.trim(), options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + "/" + (acceptedViewHash(window.location.hash) ?? "") } })
+      // The link opens the view the session ended on (QA-146), but only for the person whose session ended: anyone else's
+      // link goes to the bare origin (QA B1). The view comes from the user-bound stored return view, already validated.
+      const ended = endedUser.current
+      const view = ended?.email && ended.email.toLowerCase() === email.trim().toLowerCase() ? peekReturnView(viewStorage(), ended.userId) : null
+      const { error } = await client.auth.signInWithOtp({ email: email.trim(), options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + "/" + (view ?? "") } })
       if (error) throw error
       setMessage("If this email has an approved account, a sign-in link is on its way. Open it in this browser.")
     } catch { setMessage("The sign-in link could not be sent. Please try again later.") }
@@ -136,7 +173,7 @@ export function PrivateStaging() {
   async function tryAgain() {
     if (retrying) return
     setRetrying(true)
-    try { await authorization.current?.refresh() } finally { setRetrying(false) }
+    try { await authorization.current?.refresh({ force: true }) } finally { setRetrying(false) }
   }
 
   const tone = signInNoticeTone(message)
