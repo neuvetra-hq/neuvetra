@@ -46,7 +46,7 @@ function notStarted(scope3: boolean) {
  */
 function c1() {
   const status = finished(true, [record("gas-1", "natural_gas", "ready"), record("gas-2", "natural_gas", "input_needed"), record("gas-dec", "natural_gas", "held_period"),
-    record("m-1", "electricity", "ready", { possibleDuplicate: "Possible duplicate of M-0 at Office, Jan 1 – Jan 31, 2025 (record m-0)." }), record("s-1", "purchase_spend", "input_needed", { importedSpend: true }), record("w-1", "waste", "input_needed")], {
+    record("m-1", "electricity", "ready", { possibleDuplicate: "Possible duplicate of M-0 at Office, Jan 1 – Jan 31, 2025 (record m-0).", possibleDuplicateOther: { id: "m-0", label: "Purchased electricity", sourceId: "M-0" } }), record("s-1", "purchase_spend", "input_needed", { importedSpend: true }), record("w-1", "waste", "input_needed")], {
     gaps: [{ id: "g1", scope: 1, title: "Setup says you have vehicles, but there are no vehicle records yet", detail: "Add a record.", note: null, noteFrom: "source" }],
   })
   status.setup.missing = [{ id: "boundary", title: "Choose a boundary approach", detail: "03 Entities & boundary.", scopes: [1, 2] }]
@@ -101,28 +101,56 @@ describe("C1 at schema 30 (Scope 3 on)", () => {
   test("S1 is open: 1 Scope 1 and 2 answer + 11 Scope 3 decisions and assessments, no ✓", () => {
     expect(r.s1).toEqual({ text: "Saved v4 · 12 open answers (1 Scope 1 and 2 · 11 Scope 3)", done: false })
   })
-  test("S2 is not ✓: input needed (2 Scope 1 and 2, 2 Scope 3 lines from the to-do), 1 held, 1 possible gap", () => {
+  test("S2 is not ✓: input needed (1 Scope 1 and 2, 2 Scope 3 lines from the to-do), 1 held, 1 possible gap, plus the possible duplicate to confirm", () => {
     expect(r.s2.done).toBe(false)
-    // gas-2 + m-1 (possible duplicate) + 2 Scope 3 input lines + gas-dec held + 1 gap = 6 waiting.
-    expect(r.s2.text).toBe("6 records · 6 waiting on you")
+    // gas-2 + 2 Scope 3 input lines + gas-dec held + 1 gap = 5 waiting; m-1's possible duplicate is listed apart (CEO ruling).
+    expect(r.s2.text).toBe("6 records · 5 waiting on you · 1 possible duplicate to confirm")
   })
   test("S3: “Draft results available · N open · M block internal approval”, N = the list length, M = the to-do's blocking count", () => {
-    expect(r.open).toEqual({ total: 18, scope12: 5, scope3: 13, blocking: 7 })
-    expect(r.items.length).toBe(18)
-    expect(r.s3).toEqual({ text: "Draft results available · 18 open · 7 block internal approval", done: false })
+    expect(r.open).toEqual({ total: 17, scope12: 4, scope3: 13, blocking: 7, duplicates: 1, scope3Duplicates: 0 })
+    expect(r.items.length).toBe(17)
+    expect(r.s3).toEqual({ text: "Draft results available · 17 open · 7 block internal approval · 1 possible duplicate to confirm", done: false })
   })
   test("the list follows the next-step order and never takes Scope 3 items from the Activity records", () => {
     expect(r.items.map(item => item.group)).toEqual([...r.items.map(item => item.group)].sort((a, b) => READINESS_GROUPS.indexOf(a) - READINESS_GROUPS.indexOf(b)))
-    expect(r.items.slice(0, 4).map(item => item.key)).toEqual(["record:gas-2", "duplicate:m-1", "scope3:line:93000000-0000-4000-8000-000000001004:waste", "scope3:line:93000000-0000-4000-8000-000000001010:transport"])
+    expect(r.items.slice(0, 4).map(item => item.key)).toEqual(["record:gas-2", "scope3:line:93000000-0000-4000-8000-000000001004:waste", "scope3:line:93000000-0000-4000-8000-000000001010:transport", "held:gas-dec"])
     expect(r.items.some(item => item.key.includes("s-1") || item.key.includes("w-1"))).toBe(false)
     expect(r.next.title).toBe("Add what’s missing: Natural gas · GAS-2")
     expect(r.next.target).toEqual({ type: "record", recordId: "gas-2" })
   })
-  test("the BF-01A possible duplicate is an open item, so nothing is called finished while it is there", () => {
-    const only = finished(false, [record("gas-1", "natural_gas", "ready"), record("m-1", "electricity", "ready", { possibleDuplicate: "Possible duplicate of M-0." })])
+  test("CEO ruling: a possible duplicate is listed to confirm (naming both records), not counted as open, never the next step, and step 2 gets no ✓", async () => {
+    const only = finished(false, [record("gas-1", "natural_gas", "ready"), record("m-1", "electricity", "ready", { possibleDuplicate: "Possible duplicate of M-0.", possibleDuplicateOther: { id: "m-0", label: "Purchased electricity", sourceId: "M-0" } })])
     const off = ready(computeReadiness({ status: only, statusFailed: false, scope3: { state: "off" } }))
-    expect(off.items.map(item => item.key)).toEqual(["duplicate:m-1"])
-    expect([off.s1.done, off.s2.done, off.s3.text]).toEqual([true, false, "Draft results available · 1 open"])
+    expect(off.items).toEqual([])
+    expect(off.duplicates.map(item => [item.key, item.group, item.title, item.action])).toEqual([["duplicate:m-1", "duplicate", "Purchased electricity · M-1 and Purchased electricity · M-0", "Check a possible duplicate"]])
+    expect([off.s1.done, off.s2, off.s3.text]).toEqual([true, { text: "Nothing waiting on you · 1 possible duplicate to confirm", done: false }, "Draft results available · nothing open · 1 possible duplicate to confirm"])
+    expect(off.next.title).toBe("Review your draft results")
+    expect(off.next.body).toContain("1 possible duplicate to confirm")
+    const overview = await home(only, off)
+    expect(overview.items()).toEqual([])
+    expect(overview.app.nodes().filter(node => node.type === "li" && node.props["data-readiness-duplicate"]).length).toBe(1)
+    expect(overview.app.text()).toContain("To confirm: possible duplicates (both are counted)")
+    expect(overview.checked("Activity & evidence")).toBe(false)
+    const sidebar = await nav(off)
+    expect(sidebar.meta("Activity & evidence")).toBe("Nothing waiting on you · 1 possible duplicate to confirm")
+    const answer = progressAnswer(off)
+    expect(answer.some(line => /^\d+\. /.test(line))).toBe(false)
+    expect(answer).toContain("• Purchased electricity · M-1 and Purchased electricity · M-0.")
+    expect(answer.join(" ")).not.toContain("Nothing is waiting on you. Open Results")
+  })
+  test("a Scope 3 counted possible duplicate goes to the same group; the Results to-do count is the open Scope 3 part plus it", () => {
+    const results = structuredClone(scope3Results) as any
+    const line = results.records.find((row: any) => row.outcome === "calculated" && row.derivedFrom === null && row.result?.status === "complete")
+    const other = results.records.find((row: any) => row !== line && row.kind === line.kind) ?? results.records.find((row: any) => row !== line)
+    line.plan.notes = [...line.plan.notes, `possible_duplicate_of:${other.recordId}`]
+    const todos = scope3Todos(results), items = scope3ReadinessItems(results, true)
+    const dup = items.find(item => item.group === "duplicate")!
+    expect(dup.key).toBe(`scope3:line:${line.recordId}:${line.kind}`)
+    expect(dup.action).toBe("Check a possible duplicate")
+    expect(dup.blocking).toBe(false)
+    const r = ready(computeReadiness({ status: finished(true), statusFailed: false, scope3: { state: "ready", items } }))
+    expect(r.open.scope3! + r.open.scope3Duplicates).toBe(todos.length)
+    expect(r.open.blocking).toBe(todos.filter(item => item.blocking).length)
   })
   test("Overview, navigation, Menu sheet and Ask agree", async () => {
     const overview = await home(c1(), r)
@@ -174,10 +202,35 @@ describe("R0: while anything is loading or failed, “Checking…” or “Could
     expect(overview.app.text()).not.toContain("Nothing is waiting on you")
     expect(progressAnswer(r).join(" ")).not.toContain("Nothing is waiting on you")
   })
+  test("B2: Scope 3 failed with nothing open in Scope 1 and 2: the next step says Couldn't check, with Try again, everywhere", async () => {
+    const r = ready(computeReadiness({ status: finished(true), statusFailed: false, scope3: { state: "failed", message: null } }))
+    expect(r.next).toMatchObject({ title: "Couldn’t check Scope 3", action: "Try again", target: { type: "retryScope3" } })
+    expect(r.next.body).not.toMatch(/still being checked/)
+    expect((await nav(r)).meta("Overview")).toBe("Couldn’t check Scope 3")
+    expect(progressAnswer(r)[0]).toMatch(/^Next step: Couldn’t check Scope 3\./)
+    expect(progressAnswer(r).join(" ")).not.toMatch(/still being checked/)
+    let retried = 0
+    const make = await loadComponent("./JourneyHome.tsx", "JourneyHome", { ...plain, Icon })
+    const app = harness(make, () => ({ status: finished(true), readiness: r, error: null, headingRef: { current: null }, onNavigate() {}, onAsk() {}, onRetry() {}, onRetryScope3: () => { retried++ }, onFix() {} }))
+    await app.settle()
+    app.nodes().find(node => node.props["data-readiness-action"] === "next")!.props.onClick()
+    expect(retried).toBe(1)
+    const checking = ready(computeReadiness({ status: finished(true), statusFailed: false, scope3: { state: "checking" } }))
+    expect(checking.next.title).toBe("Checking Scope 3")
+  })
+  test("QA follow-up 1: while Scope 3 is checking, the Overview summary says the count covers Scope 1 and 2 so far", async () => {
+    for (const [part, words] of [[{ state: "checking" }, "4 open items in Scope 1 and 2 so far · Scope 3 is still being checked"], [{ state: "failed", message: null }, "4 open items in Scope 1 and 2 so far · Scope 3 couldn’t be checked, so its items aren’t counted"]] as const) {
+      const r = ready(computeReadiness({ status: c1(), statusFailed: false, scope3: part as Scope3Part }))
+      const overview = await home(c1(), r)
+      const summary = overview.app.nodes().find(node => node.props["data-readiness-summary"] !== undefined)!.children.flat(Infinity).join("")
+      expect(summary).toBe(`${words} 1 possible duplicate to confirm (both records are counted; not counted as open).`)
+      expect(progressAnswer(r)[1]).toBe(`${words}, in the Overview’s order:`)
+    }
+  })
   test("Scope 1 and 2 items stay listed (and counted) while Scope 3 is checking", () => {
     const r = ready(computeReadiness({ status: c1(), statusFailed: false, scope3: { state: "checking" } }))
     expect(r.items.every(item => item.scope === "1-2")).toBe(true)
-    expect(r.s3.text).toBe("Draft results available · 5 open in Scope 1 and 2 · Scope 3: Checking…")
+    expect(r.s3.text).toBe("Draft results available · 4 open in Scope 1 and 2 · 1 possible duplicate to confirm · Scope 3: Checking…")
     expect(r.s1.text).toBe("Saved v4 · 1 open answer · Scope 3: Checking…")
   })
 })
@@ -196,7 +249,7 @@ describe("Scope 3 off (C1 with Scope 3 intercepted off)", () => {
     const status = c1(); delete status.scope3
     const r = ready(computeReadiness({ status, statusFailed: false, scope3: { state: "checking" } }))
     expect(r.scope3).toBe("off")
-    expect(r.s3.text).toBe("Draft results available · 5 open")
+    expect(r.s3.text).toBe("Draft results available · 4 open · 1 possible duplicate to confirm")
     expect(r.s1.text).toBe("Saved v4 · 1 open answer")
   })
 })

@@ -19,7 +19,9 @@ export interface JourneyRecord { id: string; kind: string; label: string; source
    * WO-04b (BF-01A, count mode): a counted Scope 1 or 2 record that may repeat an earlier record, named in words ("Possible
    * duplicate of GAS-1 at Office, …"). The same rule and records as the Scope 1 and 2 results route, so Results flags it too.
    */
-  possibleDuplicate?: string }
+  possibleDuplicate?: string
+  /** WO-04b: the other record of the pair (its kind label and source ID), so the Overview names both records. */
+  possibleDuplicateOther?: { id: string; label: string; sourceId: string } }
 /** A company-setup answer that is still open. `scopes` lists the totals it can leave incomplete (empty: it doesn't affect totals). */
 export interface SetupOpenItem { id: string; title: string; detail: string; scopes: Array<1 | 2> }
 /** A possible coverage gap: missing records, an unsupported source or an unresolved legacy source family. */
@@ -162,6 +164,8 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
     const otherId = duplicates.get(row.id)
     if (otherId === undefined || row.state === "withdrawn" || row.state === "excluded" || row.state === "held_period") continue
     const other = scope12.find(item => item.id === otherId)?.currentVersion.activity
+    const otherRecord = scope12.find(item => item.id === otherId)
+    if (otherRecord) row.possibleDuplicateOther = { id: otherId, label: kindLabel(otherRecord.kind), sourceId: otherRecord.currentVersion.activity.sourceId }
     row.possibleDuplicate = possibleDuplicateOfText(otherId, other ? { sourceId: other.sourceId, locationName: input.context?.locations.find(location => location.id === other.locationId)?.name ?? null, period: periodLabel(other.period.start, other.period.endExclusive) } : null)
   }
   const byKind: Record<string, number> = {}

@@ -340,6 +340,13 @@ suite("site-web browser smoke (E2E-01)", () => {
   journey("saving a correction, even by double-click, creates exactly one new version", { signedInAs: "owner" }, async opened => {
     const { page } = opened
     const before = await savedRecord(RECORDS.gasReady)
+    // WO-04b B1: every Scope 3 results request, with the time it was sent.
+    let scope3Sent = 0, beforeSave = -1
+    page.on("request", request => {
+      const path = new URL(request.url()).pathname
+      if (path.endsWith("/results/scope3")) scope3Sent++
+      if (request.method() === "POST" && path.endsWith(`/collection/activities/${RECORDS.gasReady}`) && beforeSave < 0) beforeSave = scope3Sent
+    })
     await page.goto("/#/activity")
     await activityListLoaded(page)
     await openRecordByAddress(page, RECORDS.gasReady)
@@ -360,6 +367,11 @@ suite("site-web browser smoke (E2E-01)", () => {
     const versions = await stack.operator.query<{ count: string }>("select count(*)::text as count from neuvetra.collection_activity_versions where record_id = $1", [RECORDS.gasReady])
     expect(Number(versions.rows[0]?.count)).toBe(before.history.length + 1)
     expect(opened.writes.filter(write => write.endsWith(`/collection/activities/${RECORDS.gasReady}`))).toHaveLength(1)
+    // WO-04b B1 (QA of PR #51): the completed save checks Scope 3 again in the same visit (one request), so the
+    // navigation's Scope 3 part is never the answer from before the save; it settles on a checked state, not "Checking…".
+    expect(scope3Sent - beforeSave).toBe(1)
+    await page.waitForFunction(() => !(document.querySelectorAll("nav.nv-sidenav .nv-navitem__meta")[3]?.textContent ?? "Checking").includes("Checking"), undefined, { timeout: 30_000 })
+    expect(await page.locator("nav.nv-sidenav .nv-navitem__meta").nth(3).innerText()).toMatch(/^Draft results available · (\d+ open|nothing open)/)
   })
 
   journey("a view-only member is offered no write action on Activity", { signedInAs: "member" }, async opened => {

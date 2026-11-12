@@ -25,7 +25,7 @@ export function JourneyHome({ status, readiness, error, headingRef, onNavigate, 
       : <p className="nv-lead" role="status">Checking your progress…</p>}
   </section>
   const { setup, collection, evidence, canManage } = status
-  const { next, items, s1, s2, s3, open } = readiness
+  const { next, items, duplicates, s1, s2, s3, open } = readiness
   const name = setup.legalName || "Your company"
   const scope3 = Boolean(status.scope3)
   // WO-04b: a step is "done" only by its §8 definition (S3 never); the step the next action opens is "current".
@@ -34,6 +34,7 @@ export function JourneyHome({ status, readiness, error, headingRef, onNavigate, 
   const act = (target: ReadinessTarget) => {
     if (target.type === "record") onFix(target.recordId)
     else if (target.type === "spend") { requestSpendImportFocus(target.tab); onNavigate("collection") }
+    else if (target.type === "retryScope3") onRetryScope3()
     else onNavigate(target.view)
   }
   const improve: Array<{ key: string; title: string; detail: string }> = []
@@ -85,8 +86,9 @@ export function JourneyHome({ status, readiness, error, headingRef, onNavigate, 
       <div className="nv-card nv-card--flat" style={{ margin: 0 }} id="overview-open-items">
         <h2 className="nv-h3">What needs attention</h2>
         {/* WO-04b: one list across all scopes, in the next-step order; its length is the "N open" of the navigation. */}
-        <p className="nv-subtle" data-readiness-summary="">{items.length ? READINESS_TEXT.openSummary(open.total, open.scope12, open.scope3, open.blocking)
-          : !collection.active ? "No records yet — start with the next step above." : resolved ? OVERVIEW_SCOPE3_TEXT.nothingOpen : "Nothing waiting on you in Scope 1 and 2."}</p>
+        <p className="nv-subtle" data-readiness-summary="">{!resolved ? READINESS_TEXT.openSummaryPartial(open.scope12, readiness.scope3 === "failed")
+          : items.length ? READINESS_TEXT.openSummary(open.total, open.scope12, open.scope3, open.blocking, open.scope3Duplicates)
+          : !collection.active ? "No records yet — start with the next step above." : duplicates.length ? "Nothing is waiting on you." : OVERVIEW_SCOPE3_TEXT.nothingOpen}{duplicates.length ? ` ${READINESS_TEXT.duplicatesSummary(duplicates.length)}.` : ""}</p>
         {groups.map(({ group, rows }) => <div key={group}>
           <p className={`nv-attn-label nv-attn-label--${group === "gap" || group === "method" ? "info" : "warn"}`}>{READINESS_GROUP_TEXT[group]}</p>
           <ul className="nv-list">
@@ -94,6 +96,14 @@ export function JourneyHome({ status, readiness, error, headingRef, onNavigate, 
               <button type="button" className="nv-btn nv-btn--sm" data-readiness-action={item.key} data-readiness-target={item.target.type === "view" ? item.target.view : item.target.type} aria-label={`${item.action}: ${item.title}`} onClick={() => act(item.target)}>{item.action}</button></li>)}
           </ul>
         </div>)}
+        {/* CEO ruling: possible duplicates are listed to confirm, apart from the open items (not in "N open"). */}
+        {duplicates.length > 0 && <div>
+          <p className="nv-attn-label nv-attn-label--info">{READINESS_GROUP_TEXT.duplicate}</p>
+          <ul className="nv-list">
+            {duplicates.map(item => <li key={item.key} data-readiness-duplicate={item.key}><span className="nv-list__main"><span className="nv-list__title">{item.title}</span><br /><span className="nv-subtle">{item.detail}</span></span>
+              <button type="button" className="nv-btn nv-btn--sm" data-readiness-target={item.target.type === "view" ? item.target.view : item.target.type} aria-label={`${item.action}: ${item.title}`} onClick={() => act(item.target)}>{item.action}</button></li>)}
+          </ul>
+        </div>}
         <p className="nv-attn-label">Scope 3</p>
         <ul className="nv-list">
           {readiness.scope3 === "off" && <li key="scope3-off"><span className="nv-list__main"><span className="nv-list__title">{OVERVIEW_SCOPE3_TEXT.off}</span></span></li>}

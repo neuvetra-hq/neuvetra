@@ -18,10 +18,19 @@
  */
 import type { JourneyPanel, JourneyRecord, JourneyStatus } from "./journey-status"
 import type { SpendImportTab } from "./spend-import-target"
+import type { HostedWorkspaceActor } from "./workspace-api"
+import type { Scope3ResultsResponse } from "./scope3-results-api"
 
 /** Where an item's action goes: a view, one record (its own address) or the spend import's grouped review at a tab. */
 export type ReadinessTarget = { type: "view"; view: Exclude<JourneyPanel, "home"> } | { type: "record"; recordId: string } | { type: "spend"; tab: SpendImportTab }
-export type ReadinessGroup = "input" | "held" | "setup" | "scope3-decision" | "scope3-no-records" | "gap" | "method"
+  /** Checks Scope 3 again (the Overview's Try again), when its check failed. */
+  | { type: "retryScope3" }
+/**
+ * "duplicate" (CEO ruling, 12 November 2026) is not an open group: a possible duplicate is counted and warned about, and when
+ * the two records are really different there is nothing to do yet. It is listed to confirm, never counted in "N open" and
+ * never the next step, but while any is listed step 2 shows no ✓.
+ */
+export type ReadinessGroup = "input" | "held" | "setup" | "scope3-decision" | "scope3-no-records" | "gap" | "method" | "duplicate"
 /** The next-step order (§8); "method" (Scope 3 lines waiting on a method) is a non-blocking count after the six groups. */
 export const READINESS_GROUPS: readonly ReadinessGroup[] = ["input", "held", "setup", "scope3-decision", "scope3-no-records", "gap", "method"]
 export const READINESS_GROUP_TEXT: Readonly<Record<ReadinessGroup, string>> = {
@@ -32,7 +41,10 @@ export const READINESS_GROUP_TEXT: Readonly<Record<ReadinessGroup, string>> = {
   "scope3-no-records": "Scope 3 categories included without records",
   gap: "Possible gaps in Scope 1 and 2",
   method: "Scope 3 lines waiting on a method (not blocking)",
+  duplicate: "To confirm: possible duplicates (both are counted)",
 }
+/** The action of a possible duplicate (CEO ruling): never "Add what's missing". */
+export const DUPLICATE_ACTION = "Check a possible duplicate"
 export interface ReadinessItem {
   key: string
   group: ReadinessGroup
@@ -59,8 +71,14 @@ export type Readiness =
     scope3: Scope3Part["state"]
     /** Every open item, in the next-step order (the Overview's list; Ask lists the same, in the same order). */
     items: ReadinessItem[]
-    /** `total` is `items.length`. While Scope 3 is checking or failed, `scope3` and `blocking` are null (never 0). */
-    open: { total: number; scope12: number; scope3: number | null; blocking: number | null }
+    /** Possible duplicates to confirm (both records are counted): listed apart, not open items, never the next step. */
+    duplicates: ReadinessItem[]
+    /**
+     * `total` is `items.length` (possible duplicates excluded). While Scope 3 is checking or failed, `scope3` and `blocking`
+     * are null (never 0). `scope3Duplicates`: the Scope 3 to-do's counted possible duplicates, listed apart here, so the
+     * Results to-do count is `scope3 + scope3Duplicates`.
+     */
+    open: { total: number; scope12: number; scope3: number | null; blocking: number | null; duplicates: number; scope3Duplicates: number }
     s1: StepLabel; s2: StepLabel; s3: StepLabel
     /** The S2 hint, shown with the Activity step. */
     s2Hint: string
@@ -79,6 +97,8 @@ export const READINESS_TEXT = {
   s2Done: "Nothing waiting on you in Activity",
   s2Hint: "This checks that each source type and included site has a record — not that records cover the whole year.",
   s2Open: (records: number, open: number) => `${plural(records, "record")} · ${open} waiting on you`,
+  s2NothingWaiting: "Nothing waiting on you",
+  duplicatesSuffix: (count: number) => ` · ${plural(count, "possible duplicate")} to confirm`,
   s2Records: (records: number) => plural(records, "record"),
   s3Open: (open: number, blocking: number | null) => `Draft results available · ${open} open${blocking === null ? "" : ` · ${blocking === 0 ? "none block" : blocking === 1 ? "1 blocks" : `${blocking} block`} internal approval`}`,
   s3Nothing: "Draft results available · nothing open",
@@ -86,7 +106,11 @@ export const READINESS_TEXT = {
   s3NothingToCalculate: "Nothing to calculate yet",
   review: { title: "Review your draft results", action: "View results" },
   reviewBody: (scope3On: boolean) => `Nothing is waiting on you${scope3On ? " in Scope 1, 2 or 3" : ""}. Review the draft figures, then print or download the draft report. Figures are drafts from beta methods and have not been reviewed by an independent assurance provider.`,
-  openSummary: (total: number, scope12: number, scope3: number | null, blocking: number | null) => `${plural(total, "open item")}${scope3 === null ? "" : ` · ${scope12} in Scope 1 and 2 · ${scope3} in Scope 3 (Results lists the same ${scope3} in its Scope 3 to-do)`}${blocking ? ` · ${blocking} block${blocking === 1 ? "s" : ""} internal approval` : ""}`,
+  openSummary: (total: number, scope12: number, scope3: number | null, blocking: number | null, scope3Duplicates = 0) => `${plural(total, "open item")}${scope3 === null ? "" : ` · ${scope12} in Scope 1 and 2 · ${scope3} in Scope 3 (${scope3Duplicates ? `Results’ Scope 3 to-do shows ${scope3 + scope3Duplicates}: these and ${plural(scope3Duplicates, "possible duplicate")} listed below to confirm` : `Results lists the same ${scope3} in its Scope 3 to-do`})`}${blocking ? ` · ${blocking} block${blocking === 1 ? "s" : ""} internal approval` : ""}`,
+  /** While Scope 3 is checking or failed: the count covers Scope 1 and 2 so far (QA follow-up 1). */
+  openSummaryPartial: (scope12: number, failed: boolean) => `${scope12 ? `${plural(scope12, "open item")} in Scope 1 and 2 so far` : "Nothing open in Scope 1 and 2"} · Scope 3 ${failed ? "couldn’t be checked, so its items aren’t counted" : "is still being checked"}`,
+  duplicatesSummary: (count: number) => `${plural(count, "possible duplicate")} to confirm (both records are counted; not counted as open)`,
+  failedNext: { title: "Couldn’t check Scope 3", body: "Scope 1 and 2 have nothing waiting on you. Scope 3’s open items couldn’t be loaded, so none are listed or counted. Try again, or open Results & report to see them.", action: "Try again" },
   more: (others: number) => others ? ` ${plural(others, "more open item")} ${others === 1 ? "is" : "are"} listed under “What needs attention” on the Overview.` : "",
 } as const
 
@@ -114,7 +138,7 @@ export function scope12Items(status: JourneyStatus): ReadinessItem[] {
   const items: ReadinessItem[] = []
   for (const row of records) {
     if (row.state === "input_needed" || row.state === "review_required") items.push({ key: `record:${row.id}`, group: "input", scope: "1-2", title: `${row.label} · ${row.sourceId}`, detail: row.reasons[0] ?? "More information is needed.", target: { type: "record", recordId: row.id }, action: manage ? "Fix" : "View", blocking: false })
-    else if (row.possibleDuplicate) items.push({ key: `duplicate:${row.id}`, group: "input", scope: "1-2", title: `${row.label} · ${row.sourceId}: possible duplicate`, detail: `${row.possibleDuplicate} Both records are counted. If they are the same record, withdraw or correct one of them.`, target: { type: "record", recordId: row.id }, action: manage ? "Review" : "View", blocking: false })
+    else if (row.possibleDuplicate) items.push({ key: `duplicate:${row.id}`, group: "duplicate", scope: "1-2", title: `${row.label} · ${row.sourceId} and ${row.possibleDuplicateOther ? `${row.possibleDuplicateOther.label} · ${row.possibleDuplicateOther.sourceId}` : "an earlier record"}`, detail: `${row.possibleDuplicate} Both records are counted. If they are the same record, withdraw or correct one of them; if they are different records, nothing needs doing.`, target: { type: "record", recordId: row.id }, action: manage ? DUPLICATE_ACTION : "View", blocking: false })
   }
   for (const row of records) if (row.state === "held_period") items.push({ key: `held:${row.id}`, group: "held", scope: "1-2", title: `${row.label} · ${row.sourceId}`, detail: row.reasons[0] ?? "Outside the reporting period, so it isn’t counted.", target: view("setup"), action: manage ? "Open setup" : "View setup", blocking: false })
   for (const item of status.setup.missing) items.push({ key: `setup:${item.id}`, group: "setup", scope: "1-2", title: item.title, detail: `Company setup · ${item.detail}`, target: view("setup"), action: manage ? "Open" : "View", blocking: false })
@@ -133,11 +157,13 @@ export function computeReadiness(input: { status: JourneyStatus | null; statusFa
   const scope3Items = scope3.state === "ready" ? scope3.items : []
   const all = [...scope12Items(status), ...scope3Items]
   const items = READINESS_GROUPS.flatMap(group => all.filter(item => item.group === group))
+  const duplicates = all.filter(item => item.group === "duplicate")
   const resolved = scope3.state === "off" || scope3.state === "ready"
   const scope12Count = items.filter(item => item.scope === "1-2").length
-  const scope3Count = scope3.state === "ready" ? scope3Items.length : scope3.state === "off" ? 0 : null
+  const scope3Count = scope3.state === "ready" ? scope3Items.filter(item => item.group !== "duplicate").length : scope3.state === "off" ? 0 : null
   const blocking = scope3.state === "ready" ? scope3Items.filter(item => item.blocking).length : null
-  const open = { total: items.length, scope12: scope12Count, scope3: scope3.state === "off" ? null : scope3Count, blocking }
+  const open = { total: items.length, scope12: scope12Count, scope3: scope3.state === "off" ? null : scope3Count, blocking, duplicates: duplicates.length, scope3Duplicates: duplicates.filter(item => item.scope === "3").length }
+  const dupSuffix = duplicates.length ? READINESS_TEXT.duplicatesSuffix(duplicates.length) : ""
   const pending = scope3.state === "checking" ? READINESS_TEXT.scope3Checking : scope3.state === "failed" ? READINESS_TEXT.scope3Failed : ""
   const withPending = (text: string) => pending ? `${text} · ${pending}` : text
 
@@ -155,18 +181,20 @@ export function computeReadiness(input: { status: JourneyStatus | null; statusFa
   const activityOpen = items.filter(item => item.group === "input" || item.group === "held" || item.group === "scope3-no-records" || item.group === "gap").length
   let s2: StepLabel
   if (!collection.active) s2 = { text: READINESS_TEXT.notStarted, done: false }
-  else if (!resolved) s2 = { text: withPending(activityOpen ? READINESS_TEXT.s2Open(collection.active, activityOpen) : READINESS_TEXT.s2Records(collection.active)), done: false }
-  else if (activityOpen) s2 = { text: READINESS_TEXT.s2Open(collection.active, activityOpen), done: false }
+  else if (!resolved) s2 = { text: withPending(`${activityOpen ? READINESS_TEXT.s2Open(collection.active, activityOpen) : READINESS_TEXT.s2Records(collection.active)}${dupSuffix}`), done: false }
+  else if (activityOpen) s2 = { text: `${READINESS_TEXT.s2Open(collection.active, activityOpen)}${dupSuffix}`, done: false }
+  // CEO ruling: a possible duplicate to confirm keeps the ✓ off, though nothing is waiting on the user.
+  else if (duplicates.length) s2 = { text: `${READINESS_TEXT.s2NothingWaiting}${dupSuffix}`, done: false }
   else s2 = { text: READINESS_TEXT.s2Done, done: true }
 
   // S3: never a ✓.
   let s3: StepLabel
   if (!collection.active) s3 = { text: READINESS_TEXT.notStarted, done: false }
   else if (!collection.ready) s3 = { text: withPending(READINESS_TEXT.s3NothingToCalculate), done: false }
-  else if (!resolved) s3 = { text: withPending(READINESS_TEXT.s3Partial(scope12Count)), done: false }
-  else s3 = { text: items.length ? READINESS_TEXT.s3Open(items.length, scope3.state === "ready" ? blocking : null) : READINESS_TEXT.s3Nothing, done: false }
+  else if (!resolved) s3 = { text: withPending(`${READINESS_TEXT.s3Partial(scope12Count)}${dupSuffix}`), done: false }
+  else s3 = { text: `${items.length ? READINESS_TEXT.s3Open(items.length, scope3.state === "ready" ? blocking : null) : READINESS_TEXT.s3Nothing}${dupSuffix}`, done: false }
 
-  return { state: "ready", canManage: status.canManage, scope3: scope3.state, items, open, s1, s2, s3, s2Hint: READINESS_TEXT.s2Hint, next: nextStep(status, items, resolved, scope3.state !== "off") }
+  return { state: "ready", canManage: status.canManage, scope3: scope3.state, items, duplicates, open, s1, s2, s3, s2Hint: READINESS_TEXT.s2Hint, next: nextStep(status, items, duplicates, scope3.state) }
 }
 
 const NEXT_PREFIX: Readonly<Record<ReadinessGroup, (title: string) => string>> = {
@@ -177,24 +205,29 @@ const NEXT_PREFIX: Readonly<Record<ReadinessGroup, (title: string) => string>> =
   "scope3-no-records": title => `Add Scope 3 records: ${title}`,
   gap: title => `Check a possible gap: ${title}`,
   method: title => title,
+  duplicate: title => title,
 }
 /**
  * The Overview's "Next step": the journey's first steps (setup, a site, a first record) while those are missing, else the
  * first item of the list (Scope 3 lines waiting on a method are never a next step), else "Review your draft results".
  */
-function nextStep(status: JourneyStatus, items: ReadinessItem[], resolved: boolean, scope3On: boolean): NextStep {
+function nextStep(status: JourneyStatus, items: ReadinessItem[], duplicates: ReadinessItem[], scope3State: Scope3Part["state"]): NextStep {
+  const scope3On = scope3State !== "off"
   const early = !status.setup.saved || !status.setup.sites.included || !status.collection.active
   if (early) return { title: status.next.title, body: status.next.body, action: status.next.action, target: status.next.spendImport ? { type: "spend", tab: "code" } : status.next.recordId ? { type: "record", recordId: status.next.recordId } : view(status.next.panel === "home" ? "setup" : status.next.panel) }
   const actionable = items.filter(item => item.group !== "method")
   const first = actionable[0]
   const results = status.collection.ready ? { action: "View draft results", target: view("results") } : undefined
   if (first) return { title: NEXT_PREFIX[first.group](first.title), body: `${first.detail}${READINESS_TEXT.more(items.length - 1)}`, action: first.action, target: first.target, ...(first.target.type === "view" && first.target.view === "results" ? {} : results ? { secondary: results } : {}) }
-  if (!resolved) return { title: scope3On ? "Checking Scope 3" : READINESS_TEXT.checking, body: "Scope 1 and 2 have nothing waiting on you. Scope 3 is still being checked; its open items appear here when the check finishes, and on Results.", action: READINESS_TEXT.review.action, target: view("results") }
-  return { title: READINESS_TEXT.review.title, body: `${READINESS_TEXT.reviewBody(scope3On)}${items.length ? READINESS_TEXT.more(items.length) : ""}`, action: READINESS_TEXT.review.action, target: view("results") }
+  // B2 (QA of PR #51): a failed Scope 3 check says so, with Try again, as every other line does.
+  if (scope3State === "failed") return { title: READINESS_TEXT.failedNext.title, body: READINESS_TEXT.failedNext.body, action: READINESS_TEXT.failedNext.action, target: { type: "retryScope3" }, secondary: { action: "Open Results", target: view("results") } }
+  if (scope3State === "checking") return { title: "Checking Scope 3", body: "Scope 1 and 2 have nothing waiting on you. Scope 3 is still being checked; its open items appear here when the check finishes, and on Results.", action: READINESS_TEXT.review.action, target: view("results") }
+  const confirm = duplicates.length ? ` ${READINESS_TEXT.duplicatesSummary(duplicates.length)} are listed under “What needs attention”.` : ""
+  return { title: READINESS_TEXT.review.title, body: `${READINESS_TEXT.reviewBody(scope3On)}${items.length ? READINESS_TEXT.more(items.length) : ""}${confirm}`, action: READINESS_TEXT.review.action, target: view("results") }
 }
 
 /** The view an item's or the next step's action opens (the spend import and a record open on Activity). */
-export const targetView = (target: ReadinessTarget): Exclude<JourneyPanel, "home"> => target.type === "view" ? target.view : "collection"
+export const targetView = (target: ReadinessTarget): JourneyPanel => target.type === "view" ? target.view : target.type === "retryScope3" ? "home" : "collection"
 
 /** Answers the user's progress question from the same readiness as the Overview: the same items, in the same order. */
 export function progressAnswer(readiness: Readiness, improve: string[] = []): string[] {
@@ -202,13 +235,17 @@ export function progressAnswer(readiness: Readiness, improve: string[] = []): st
   if (readiness.state === "failed") return ["Your progress couldn’t be checked, so I can’t answer from your records right now. Try again from the Overview."]
   const lines = [`Next step: ${readiness.next.title}. ${readiness.next.body}`]
   if (readiness.items.length) {
-    lines.push(`${READINESS_TEXT.openSummary(readiness.open.total, readiness.open.scope12, readiness.open.scope3, readiness.open.blocking)}, in the Overview’s order:`)
+    lines.push(`${readiness.scope3 === "checking" || readiness.scope3 === "failed" ? READINESS_TEXT.openSummaryPartial(readiness.open.scope12, readiness.scope3 === "failed") : READINESS_TEXT.openSummary(readiness.open.total, readiness.open.scope12, readiness.open.scope3, readiness.open.blocking, readiness.open.scope3Duplicates)}, in the Overview’s order:`)
     readiness.items.forEach((item, index) => lines.push(`${index + 1}. ${READINESS_GROUP_TEXT[item.group]} — ${item.title}${item.blocking ? " (blocks internal approval)" : ""}.`))
+  }
+  if (readiness.duplicates.length) {
+    lines.push(`${READINESS_GROUP_TEXT.duplicate} — ${READINESS_TEXT.duplicatesSummary(readiness.duplicates.length)}:`)
+    readiness.duplicates.forEach(item => lines.push(`• ${item.title}.`))
   }
   if (readiness.scope3 === "checking") lines.push("Scope 3 is still being checked, so its open items aren’t listed yet. Ask again in a moment, or open Results & report.")
   if (readiness.scope3 === "failed") lines.push("Scope 3 couldn’t be checked just now, so its open items aren’t listed. Open Results & report to see them, or try again from the Overview.")
   if (improve.length) lines.push(`Can be improved (not counted as open): ${improve.join("; ")}.`)
-  if (!readiness.items.length && (readiness.scope3 === "off" || readiness.scope3 === "ready")) lines.push("Nothing is waiting on you. Open Results & report to review the draft — it stays a draft until an independent reviewer checks it.")
+  if (!readiness.items.length && !readiness.duplicates.length && (readiness.scope3 === "off" || readiness.scope3 === "ready")) lines.push("Nothing is waiting on you. Open Results & report to review the draft — it stays a draft until an independent reviewer checks it.")
   return lines
 }
 
@@ -220,4 +257,13 @@ export function improveLines(status: JourneyStatus): string[] {
   if (collection.noEvidence) out.push(`${plural(collection.noEvidence, "record has", "records have")} no evidence linked`)
   if (collection.qualityUnknown) out.push(`${plural(collection.qualityUnknown, "record has", "records have")} data quality “Unknown”`)
   return out
+}
+
+/** The Scope 3 part's one request (the lazy chunk, so the entry chunk doesn't carry the Scope 3 checklist). */
+export async function loadScope3ReadinessLazy(workspaceId: string, actor: HostedWorkspaceActor, canManage: boolean): Promise<ReadinessItem[]> {
+  return (await import("./readiness-scope3")).loadScope3Readiness(workspaceId, actor, canManage)
+}
+/** Results' own Scope 3 answer as readiness items (the same lazy chunk). */
+export async function scope3ItemsLazy(results: Scope3ResultsResponse, canManage: boolean): Promise<ReadinessItem[]> {
+  return (await import("./readiness-scope3")).scope3ReadinessItems(results, canManage)
 }

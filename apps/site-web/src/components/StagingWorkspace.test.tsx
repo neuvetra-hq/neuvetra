@@ -26,6 +26,9 @@ const recordId = "29500000-0000-4000-8000-000000000001"
 function harness(initialHash: string, initialState: unknown = null, role = "owner") {
   const slots: any[] = [], pending: Array<() => void> = [], loads: Array<{ resolve: (value: ReturnType<typeof status>) => void; reject: (error: Error) => void; signal: AbortSignal }> = []
   const listeners = new Map<string, () => void>()
+  // WO-04b: the Scope 3 part's requests and the completed-write listeners (shared-get's subscribeWrites).
+  const scope3Loads: Array<{ resolve: (items: unknown[]) => void; reject: (error: Error) => void; signal: AbortSignal }> = []
+  const writeListeners = new Set<(write: { userId: string; path: string }) => void>()
   let cursor = 0, changed = false, tree: Node
   const same = (a?: unknown[], b?: unknown[]) => a?.length === b?.length && a?.every((value, index) => Object.is(value, b?.[index]))
   function useState(initial: any) {
@@ -62,9 +65,12 @@ function harness(initialHash: string, initialState: unknown = null, role = "owne
   const window = { location, history, confirm: (text: string) => { confirms.push(text); return confirmAnswer }, scrollTo() {}, setTimeout: () => 1, clearTimeout() {}, addEventListener(name: string, fn: () => void) { listeners.set(name, fn) }, removeEventListener(name: string) { listeners.delete(name) } }
   const body = {}, document = { title: "", body, activeElement: body }
   const h = (type: unknown, props: Record<string, any> | null, ...children: any[]): Node => ({ type, props: props ?? {}, children })
-  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "activityListHash", "canonicalViewHash", "DEFAULT_ACTIVITY_LIST_QUERY", "parseActivityListQuery", "loadJourneyStatus", "MENU_SHEET_ID", "MENU_TEXT", "computeReadiness", ...componentNames, script)
+  const factory = new Function("useCallback", "useEffect", "useRef", "useState", "window", "document", "React", "h", "parseViewHash", "viewHash", "activityListHash", "canonicalViewHash", "DEFAULT_ACTIVITY_LIST_QUERY", "parseActivityListQuery", "loadJourneyStatus", "MENU_SHEET_ID", "MENU_TEXT", "computeReadiness", "subscribeWrites", "loadScope3ReadinessLazy", "scope3ItemsLazy", ...componentNames, script)
   const Workspace = factory(useCallback, useEffect, useRef, useState, window, document, { Fragment: "fragment" }, h, parseViewHash, viewHash, activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery,
     (_workspaceId: string, actor: { signal: AbortSignal }) => new Promise((resolve, reject) => loads.push({ resolve, reject, signal: actor.signal })), MENU_SHEET_ID, MENU_TEXT, computeReadiness,
+    (listener: (write: { userId: string; path: string }) => void) => { writeListeners.add(listener); return () => writeListeners.delete(listener) },
+    (_workspaceId: string, actor: { signal: AbortSignal }) => new Promise((resolve, reject) => scope3Loads.push({ resolve, reject, signal: actor.signal })),
+    async () => [],
     ...componentNames.map(name => components[name])) as (props: unknown) => Node
   const actor = { userId: "11111111-1111-4111-8111-111111111111", role }
   let signOuts = 0
@@ -86,7 +92,8 @@ function harness(initialHash: string, initialState: unknown = null, role = "owne
   const nodes = () => flatten(tree)
   /** A Back or Forward to an entry with this address and state. */
   async function pop(hash: string, state: unknown = null) { location.hash = hash; history.state = state; listeners.get("popstate")!(); await settle() }
-  return { signOuts: () => signOuts, settle, child, text, nodes, loads, location, listeners, render, history, entries, pop, confirms, answer: (value: boolean) => { confirmAnswer = value } }
+  const write = async (path: string) => { for (const listener of [...writeListeners]) listener({ userId: actor.userId, path }); await settle() }
+  return { scope3Loads, write, signOuts: () => signOuts, settle, child, text, nodes, loads, location, listeners, render, history, entries, pop, confirms, answer: (value: boolean) => { confirmAnswer = value } }
 }
 
 test("a failed progress refresh hides prior status from Overview, navigation and Ask", async () => {
@@ -394,4 +401,39 @@ test("a member sees View only in the context bar and no duplicate view-access no
   const owner = harness("#/overview")
   await owner.settle()
   expect(owner.child("ContextBar").props.canManage).toBe(true)
+})
+
+// B1 (QA of PR #51): a completed save or withdrawal checks Scope 3 again, so the sidebar never keeps a ✓ from before it.
+test("a completed write in the workspace drops the visit's Scope 3 answer, shows Checking… and requests Scope 3 once more", async () => {
+  const workspace = "33333333-3333-4333-8333-333333333333"
+  const app = harness("#/activity")
+  await app.settle()
+  const loaded = computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true, scope3: true })
+  app.loads[0]!.resolve(loaded)
+  await app.settle()
+  expect(app.scope3Loads).toHaveLength(1)
+  app.scope3Loads[0]!.resolve([])
+  await app.settle()
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("ready")
+  // Another user's write, or a write outside this workspace, changes nothing.
+  await app.write("/workspace-api/workspace/44444444-4444-4444-8444-444444444444/collection/activities/x")
+  expect(app.scope3Loads).toHaveLength(1)
+  await app.write(`/workspace-api/workspace/${workspace}/collection/activities/29500000-0000-4000-8000-000000000001`)
+  expect(app.scope3Loads).toHaveLength(2)
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
+  const item = { key: "scope3:category:6:screening_conflict", group: "scope3-decision", scope: "3", title: "Category 6: Screening conflict", detail: "", target: { type: "view", view: "setup" }, action: "Change the screening", blocking: true }
+  app.scope3Loads[1]!.resolve([item])
+  await app.settle()
+  const readiness = app.child("JourneyNav").props.readiness
+  expect([readiness.scope3, readiness.open.scope3, readiness.open.blocking]).toEqual(["ready", 1, 1])
+  // A save on setup does the same; while the new answer is pending, an older one arriving late is ignored.
+  await app.write(`/workspace-api/workspace/${workspace}/setup`)
+  expect(app.scope3Loads).toHaveLength(3)
+  expect(app.scope3Loads[2]!.signal.aborted).toBe(false)
+  await app.write(`/workspace-api/workspace/${workspace}/setup`)
+  expect(app.scope3Loads).toHaveLength(4)
+  expect(app.scope3Loads[2]!.signal.aborted).toBe(true)
+  app.scope3Loads[2]!.resolve([])
+  await app.settle()
+  expect(app.child("JourneyNav").props.readiness.scope3).toBe("checking")
 })

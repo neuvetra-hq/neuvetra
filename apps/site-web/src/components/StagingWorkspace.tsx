@@ -12,7 +12,8 @@ import { Icon } from "./Icon"
 import { ContextBar } from "./ContextBar"
 import { MENU_SHEET_ID, MENU_TEXT, MenuSheet } from "./MenuSheet"
 import { loadJourneyStatus, type Coverage, type JourneyStatus } from "@/lib/journey-status"
-import { computeReadiness, type Scope3Part } from "@/lib/readiness"
+import { computeReadiness, loadScope3ReadinessLazy, scope3ItemsLazy, type Scope3Part } from "@/lib/readiness"
+import { subscribeWrites } from "@/lib/shared-get"
 import type { Scope3State } from "@/lib/scope3-results-api"
 import { activityListHash, canonicalViewHash, DEFAULT_ACTIVITY_LIST_QUERY, parseActivityListQuery, parseViewHash, viewHash, type ActivityListQuery, type WorkspaceView } from "@/lib/view-route"
 
@@ -204,13 +205,23 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
     const controller = new AbortController()
     scope3Request.current?.abort(); scope3Request.current = controller
     const workspaceId = staging.workspaceId, actor = { ...staging.actor, signal: controller.signal }
-    import("@/lib/readiness-scope3").then(module => module.loadScope3Readiness(workspaceId, actor, canManage)).then(items => {
+    loadScope3ReadinessLazy(workspaceId, actor, canManage).then(items => {
       if (!controller.signal.aborted) setScope3Part({ state: "ready", items })
     }, cause => {
       if (!controller.signal.aborted) setScope3Part({ state: "failed", message: cause instanceof Error ? cause.message : null })
     })
   }, [scope3On, panel, visit, scope3Retry, staging.workspaceId, staging.actor, canManage])
   useEffect(() => () => scope3Request.current?.abort(), [])
+  // B1 (QA of PR #51): a completed save or withdrawal in this workspace can open or close Scope 3 items (a record in a
+  // screened-out category, a category's only record withdrawn, a setup screening change), so the Scope 3 part is checked
+  // again: the old request is dropped, the part says "Checking…" and one new request is made. On Results, the screen
+  // reloads its own Scope 3 answer, which it reports here.
+  useEffect(() => subscribeWrites(write => {
+    if (write.userId !== staging.actor.userId || !staging.workspaceId || !write.path.includes(`/workspace/${staging.workspaceId}/`)) return
+    if (current.current.panel === "results") return
+    scope3Request.current?.abort(); scope3Request.current = null
+    setScope3Part({ state: "checking" }); setScope3Retry(value => value + 1)
+  }), [staging.actor.userId, staging.workspaceId])
   /** Results' own Scope 3 request (busy, answered, failed or not switched on) is the Scope 3 part while Results is shown. */
   const onResultsScope3 = useCallback((state: Scope3State) => {
     if (current.current.panel !== "results") return
@@ -220,10 +231,11 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
     if (state.unavailable) { setScope3Part({ state: "failed", message: null }); return }
     if (!state.data) { setScope3Part({ state: "failed", message: state.message }); return }
     const data = state.data
-    import("@/lib/readiness-scope3").then(module => {
-      if (current.current.panel === "results") setScope3Part({ state: "ready", items: module.scope3ReadinessItems(data, canManage) })
+    scope3ItemsLazy(data, canManage).then(items => {
+      if (current.current.panel === "results") setScope3Part({ state: "ready", items })
     }, () => setScope3Part({ state: "failed", message: null }))
   }, [canManage])
+  function retryScope3() { scope3Request.current?.abort(); scope3Request.current = null; setScope3Part({ state: "checking" }); setScope3Retry(value => value + 1) }
   const readiness = computeReadiness({ status, statusFailed: Boolean(statusError) && !status, statusError, scope3: scope3Part })
   // The first screen after sign-in renders before progress loads. Once it has loaded, put focus on the page heading if
   // nothing else has it, so keyboard and screen-reader users start at the top of the view.
@@ -281,7 +293,7 @@ export function StagingWorkspace({ headingRef, staging, account, notice = null }
   <div className="nv-layout" inert={askOpen || menuOpen || undefined}>
     <JourneyNav current={panel} onNavigate={view => navigate(view)} readiness={readiness} onAsk={openAsk} />
     <main id="workspace-main" className="nv-main" tabIndex={-1} ref={mainRef}><div className="nv-page">
-    {panel === "home" && <JourneyHome status={status} readiness={readiness} onRetryScope3={() => { setScope3Part({ state: "checking" }); setScope3Retry(value => value + 1) }} error={statusError} headingRef={headingRef} onNavigate={view => navigate(view)} onAsk={() => setAskOpen(true)} onRetry={refreshStatus} onFix={openRecord} />}
+    {panel === "home" && <JourneyHome status={status} readiness={readiness} onRetryScope3={retryScope3} error={statusError} headingRef={headingRef} onNavigate={view => navigate(view)} onAsk={() => setAskOpen(true)} onRetry={refreshStatus} onFix={openRecord} />}
     {panel === "results" && <ResultsReport key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} coverage={coverage} onRetryCoverage={refreshStatus} canManage={canManage} onNavigate={view => navigate(view)} onFix={openRecord} onScope3Change={onResultsScope3} />}
     {panel === "archive" && <EarlierViews headingRef={headingRef} onNavigate={view => navigate(view)} />}
     {panel === "collection" && missingRecordNotice && <div className="nv-notice nv-notice--warn" role="status" style={{ marginTop: 0 }}><Icon name="alert" /><p>That record wasn’t found. It may have been withdrawn or belong to another company, so the activity page is shown instead.</p></div>}
