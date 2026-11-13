@@ -11,7 +11,7 @@ import type { Scope3Request } from "../calculation/scope3-authority"
 import { checkPeriod, classifyMethodRelease, DRAFT_RESULTS_ENVIRONMENT, DRAFT_RESULTS_LABEL, RELEASED_DRAFT_RESULTS_LABEL, type EngineDescription, type EngineMethodFacts, type EvidenceStatus, type MethodReleaseStatus, type PeriodCheck, type ReleaseEvidence } from "./collection-results-routes"
 import { createResultsScheduler } from "./results-scheduler"
 // BF-01: the shared, browser-safe duplicate rule (the same module the Scope 1 and 2 results use).
-import { applyDuplicatePolicy, COLLECTION_DUPLICATE_POLICY, possibleDuplicateCounts, possibleDuplicateRecords, possibleDuplicatesCountedWarning, type CollectionDuplicatePolicy } from "../../../../packages/neuvetra-database/src/collection-duplicates"
+import { applyDuplicatePolicy, COLLECTION_DUPLICATE_POLICY, possibleDuplicateCounts, possibleDuplicateNotes, possibleDuplicatePairs, possibleDuplicateRecords, possibleDuplicatesCountedWarning, type CollectionDuplicatePolicy } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 
 /**
  * Draft Scope 3 results (Scope 3 package 2; Claude, 26 October 2026). A separate route and response from the Scope 1 and
@@ -294,7 +294,9 @@ export async function buildScope3Results(input: {
   // --- end I-03 ---
   // BF-01: possible duplicates among the saved records (Scope 1 and 2 records too, for the lines derived from them).
   const duplicatePolicy = input.duplicatePolicy ?? COLLECTION_DUPLICATE_POLICY
-  const duplicates = possibleDuplicateRecords(records), keeperCounts = possibleDuplicateCounts(duplicates)
+  // Hold mode decides before the engine (a held duplicate is never sent); count mode decides after it (BF-01e).
+  const holdMode = duplicatePolicy === "hold"
+  const duplicates = holdMode ? possibleDuplicateRecords(records) : new Map<string, string>(), keeperCounts = possibleDuplicateCounts(duplicates)
   const duplicatesCounted = new Set<string>()
   // Lines the engine will calculate, in line order: their row, coverage entry and annotation are completed after the batch.
   const pending: Array<{ row: Scope3ResultRow; coverage: Scope3CoverageRecord; request: Scope3Request; annotation: Scope3Annotation }> = []
@@ -364,8 +366,6 @@ export async function buildScope3Results(input: {
     }
     rows.push(row)
   }
-  // BF-01 (count mode): the totals include records that may repeat others, and the response says so.
-  if (duplicatesCounted.size) warnings.push(possibleDuplicatesCountedWarning(duplicatesCounted.size))
   const annotations: Scope3Annotation[] = []
   const unavailable = (line: (typeof pending)[number]) => {
     line.row.outcome = "unavailable"; line.row.result = null; line.row.methodType = null; line.row.effectiveDataQuality = null; line.coverage.result = { outcome: "unavailable" }
@@ -466,6 +466,24 @@ export async function buildScope3Results(input: {
     line.memo.reviewFlags = reviewFlags
   }
   for (const line of superseded) line.row.supersededSpendMemo = line.memo
+  // BF-01e (count mode, CEO ruling of 13 November 2026): pairs of source records. A saved Scope 3 record is counted when its
+  // line is calculated; a Scope 1 or 2 record when a line derived from it (3A-3D) is. A pair is a counted possible duplicate
+  // only when both records are counted; a derived line carries its source record's mark and is never a duplicate of its own.
+  // A record that isn't counted but could be once completed, and matches a counted one, gets the caution note instead.
+  if (!holdMode) {
+    const countedIds = new Set(rows.filter(row => row.outcome === "calculated").map(row => row.recordId))
+    const completable = new Set(rows.filter(row => row.outcome !== "outside_period" && row.outcome !== "unavailable" && row.plan.status !== "excluded" && row.plan.status !== "withdrawn"
+      // A spend line held for its replacing record (BF-02) is replaced, not counted, once that record is finished.
+      && !row.plan.reasons.includes("replacing_record_not_counted")).map(row => row.recordId))
+    const pairs = possibleDuplicatePairs(records, id => countedIds.has(id), id => completable.has(id))
+    for (const row of rows) {
+      const notes = possibleDuplicateNotes(pairs, row.recordId)
+      if (notes.length) row.plan = { ...row.plan, notes: [...row.plan.notes, ...notes] }
+      if (pairs.counted.has(row.recordId)) duplicatesCounted.add(row.recordId)
+    }
+  }
+  // BF-01 (count mode): the totals include records that may repeat others, and the response says so.
+  if (duplicatesCounted.size) warnings.push(possibleDuplicatesCountedWarning(duplicatesCounted.size))
   const categories = coverage.categories.map(row => ({ ...row, methodology: scope3MethodologyStatement(row, rows, coverage.categories) }))
   return {
     profile: SCOPE3_RESULTS_PROFILE, label: allReleased ? RELEASED_DRAFT_RESULTS_LABEL : DRAFT_RESULTS_LABEL, syntheticOnly: true, environment: DRAFT_RESULTS_ENVIRONMENT,

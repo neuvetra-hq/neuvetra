@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import { Icon } from "./Icon"
 import { groupDigits, kgToTonnes, kindIcon, kindLabel, periodLabel, QUALITY_LABELS, reasonText, shortUnit } from "@/lib/plain-language"
-import { SCOPE3_ASSESSMENT_REASON_TEXT, SCOPE3_DQ_INDICATOR_TEXT, SCOPE3_DQ_RATING_TEXT, SCOPE3_EXCLUDABLE_NOTE_TEXT, SCOPE3_METHOD_TYPE_TEXT, SCOPE3_ORIGIN_TEXT, SCOPE3_REVIEW_FLAG_TEXT, SCOPE3_SET_BY_TEXT, SCOPE3_STATUS_TEXT, SCOPE3_TRACE_TEXT, scope3ConstantSourceOf, scope3ConstantText, scope3ConversionText, scope3Csv, scope3ExclusionRegister, scope3FactorSourceOfKey, scope3GasTexts, scope3KgToTonnesExact, scope3LineReasonCodes, scope3LineStatusText, scope3ReplacingRecordOf, scope3StatementLines, scope3SupersededBy, scope3TotalStatement, type Scope3ResultsResponse, type Scope3Row, type Scope3State } from "@/lib/scope3-results-api"
+import { SCOPE3_ASSESSMENT_REASON_TEXT, SCOPE3_DQ_INDICATOR_TEXT, SCOPE3_DQ_RATING_TEXT, SCOPE3_EXCLUDABLE_NOTE_TEXT, SCOPE3_METHOD_TYPE_TEXT, SCOPE3_ORIGIN_TEXT, SCOPE3_REVIEW_FLAG_TEXT, SCOPE3_SET_BY_TEXT, SCOPE3_STATUS_TEXT, SCOPE3_TRACE_TEXT, scope3ConstantSourceOf, scope3ConstantText, scope3ConversionText, scope3Csv, scope3ExclusionRegister, scope3FactorSourceOfKey, scope3GasTexts, scope3KgToTonnesExact, scope3LineReasonCodes, scope3LineStatusText, possibleDuplicateOfText, wouldRepeatCountedText, scope3ReplacingRecordOf, scope3StatementLines, scope3SupersededBy, scope3TotalStatement, type Scope3ResultsResponse, type Scope3Row, type Scope3State } from "@/lib/scope3-results-api"
 import { EVIDENCE_STATUS_TEXT } from "@/lib/results-api"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { Scope3ReportVersions } from "./scope3/lazy-forms"
@@ -316,12 +316,15 @@ function replacingRecordName(recordId: string, records: readonly Scope3Row[]): s
  * record ID. The record's lines share its record ID; its own (not derived) line is preferred.
  */
 function scope3PossibleDuplicateText(row: Scope3Row, records: readonly Scope3Row[]): string | null {
-  // The note is `possible_duplicate_of:<record ID>`, and the words are possibleDuplicateOfText's (collection-duplicates.ts);
-  // both are read here without an import, as the tests render this file alone with only its usual helpers.
-  const otherId = row.plan.notes.find(note => note.startsWith("possible_duplicate_of:"))?.slice("possible_duplicate_of:".length) ?? null
+  // The notes are `possible_duplicate_of:<record ID>` (both records counted) and, BF-01e, `would_repeat_counted:<record ID>`
+  // (this one isn't counted; completing it would repeat a counted record); the words are the shared module's.
+  const of = row.plan.notes.find(note => note.startsWith("possible_duplicate_of:"))?.slice("possible_duplicate_of:".length) ?? null
+  const caution = of === null ? row.plan.notes.find(note => note.startsWith("would_repeat_counted:"))?.slice("would_repeat_counted:".length) ?? null : null
+  const otherId = of ?? caution
   if (otherId === null) return null
   const other = records.find(item => item.recordId === otherId && item.derivedFrom === null) ?? records.find(item => item.recordId === otherId)
-  return other ? `Possible duplicate of ${other.sourceId} at ${other.locationName ?? "an unknown site"}, ${periodLabel(other.period.start, other.period.endExclusive)} (record ${otherId}).` : `Possible duplicate of record ${otherId}.`
+  const facts = other ? { sourceId: other.sourceId, locationName: other.locationName, period: periodLabel(other.period.start, other.period.endExclusive) } : null
+  return of !== null ? possibleDuplicateOfText(otherId, facts) : wouldRepeatCountedText(otherId, facts)
 }
 
 /**

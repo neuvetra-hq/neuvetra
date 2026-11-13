@@ -300,6 +300,8 @@ const SCREEN_EXPLAINS: Readonly<Record<string, RegExp>> = {
   zip_not_valid: /^A five-digit ZIP is required/, subregion_not_an_egrid_subregion: /^A verified eGRID subregion is required/,
 }
 const BLOCKING: ReadonlySet<CollectionReadinessFinding["status"]> = new Set(["input_needed", "excluded", "withdrawn"])
+/** B1 (QA of PR #65): readiness statuses that keep a record out of every figure (a partial calculation still counts in one). */
+const NOT_COUNTED: ReadonlySet<CollectionReadinessFinding["status"]> = new Set(["input_needed", "review_required", "excluded", "withdrawn", "method_pending", "memo_only"])
 const DRAFT_ID = "00000000-0000-4000-8000-000000000000"
 
 /**
@@ -320,8 +322,12 @@ const DRAFT_ID = "00000000-0000-4000-8000-000000000000"
  * distance commuting periods, supersession keyed by record ID) and the record's own ID, so the screen shows the holds
  * Results will apply; without it a Scope 3 record is planned on its own, as before.
  */
-export function recordReadiness(activity: CollectionActivity, context: CollectionContext | null, evidence: CollectionEvidenceMetadata[] = [], claims?: InstrumentEvidenceClaims, scope3?: { options: Scope3PlanOptions; recordId: string }): CollectionReadinessFinding[] {
-  return recordReadinessAndCount(activity, context, evidence, claims, scope3).findings
+export function recordReadiness(activity: CollectionActivity, context: CollectionContext | null, evidence: CollectionEvidenceMetadata[] = [], claims?: InstrumentEvidenceClaims, scope3?: { options: Scope3PlanOptions; recordId: string },
+  /** BF-01e: when given, receives whether the results routes count the record and whether it is placed outside every total. */
+  outcome?: { counted?: boolean; placedOutside?: boolean }): CollectionReadinessFinding[] {
+  const { findings, counted, placedOutside } = recordReadinessAndCount(activity, context, evidence, claims, scope3)
+  if (outcome) { outcome.counted = counted; outcome.placedOutside = placedOutside }
+  return findings
 }
 /**
  * B1 (QA of PR #63): the readiness findings and whether the results routes count the record, from the same plan: the adapter
@@ -345,7 +351,11 @@ function recordReadinessAndCount(activity: CollectionActivity, context: Collecti
   } catch { return { findings: screen, counted: false, placedOutside: false } }
   const period = context.reportingPeriod
   const inside = !period?.start || !period.endExclusive || (activity.period.start >= period.start && activity.period.endExclusive <= period.endExclusive)
-  const counted = activity.state === "active" && plan.action === "calculate" && inside
+  // B1 (QA of PR #65): the plan alone can count a record the engine then holds (purchases-only generator fuel, refrigerant
+  // stock or unknown answers). The screens show those holds in the readiness panel, so a record is counted only when the
+  // plan calculates it AND its own readiness shows no hold of any kind: never "counted" next to its own "Input needed".
+  const planCounts = activity.state === "active" && plan.action === "calculate" && inside
+  const counting = (findings: CollectionReadinessFinding[]) => planCounts && !findings.some(finding => NOT_COUNTED.has(finding.status))
   // Not counted because of where or when it is (excluded, superseded, withdrawn or outside the period), not for missing input.
   const placedOutside = activity.state !== "active" || plan.status === "excluded" || plan.status === "withdrawn" || !inside
   const unique = (items: CollectionReadinessFinding[]) => items.filter((item, index) => items.findIndex(other => other.status === item.status && other.reason === item.reason) === index)
@@ -354,17 +364,19 @@ function recordReadinessAndCount(activity: CollectionActivity, context: Collecti
     const kept = screen.filter(finding => finding.status !== "partial")
     const explained = (code: string) => { const pattern = SCREEN_EXPLAINS[code]; return !!pattern && kept.some(finding => BLOCKING.has(finding.status) && pattern.test(finding.reason)) }
     const optional = plan.status === "method_pending" && plan.optional ? [{ status, reason: SCOPE3_DISCLOSURE_TEXT.optional_activity_not_yet_quantified! }] : []
-    return { findings: unique([...kept, ...plan.reasons.filter(code => !explained(code)).map(code => ({ status, reason: reasonText(code) })), ...optional]), counted, placedOutside }
+    const findings = unique([...kept, ...plan.reasons.filter(code => !explained(code)).map(code => ({ status, reason: reasonText(code) })), ...optional])
+    return { findings, counted: counting(findings), placedOutside }
   }
   const shared = (plan.notes ?? []).filter(note => /^instrument_\d+_evidence_shared$/.test(note)).map((note): CollectionReadinessFinding => ({ status: "partial", reason: `Market-based result held — ${reasonText(note)}` }))
-  return { counted, placedOutside, findings: unique([...screen.map((finding): CollectionReadinessFinding => {
+  const findings = unique([...screen.map((finding): CollectionReadinessFinding => {
     if (finding.status === "partial") return finding
     // The engines calculate these; the finding is something to check, not a hold.
     if (finding.reason.startsWith("Linked evidence “")) return { status: "review_required", reason: finding.reason }
     if (!finding.reason.startsWith("Market-based instrument")) return finding
     if (finding.reason.endsWith(" evidence is waiting for quarantine review.")) return { status: "partial", reason: `Market-based result held — ${finding.reason.slice(0, -1)}; it counts once the review clears the file.`, waitingOnEvidence: true }
     return { status: "partial", reason: `Market-based result held — ${finding.reason}` }
-  }), ...shared]) }
+  }), ...shared])
+  return { findings, counted: counting(findings), placedOutside }
 }
 
 /** A saved vehicle record whose fuel or vehicle type is a legacy value (not blank, not a FIELDS token, or not a pair). A new record's blank choices are not legacy (N7). */
@@ -1135,9 +1147,9 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   // Round 3 lane C (PR-3): each saved record's readiness once; the list shows one page of the records the filter keeps.
   const listed = records.map(row => {
     const activity = row.currentVersion.activity as CollectionDraft
-    const { findings: readiness, counted } = recordReadinessAndCount(activity, context, evidence, savedClaims, savedScope3Options ? { options: savedScope3Options, recordId: row.id } : undefined)
+    const { findings: readiness, counted, placedOutside } = recordReadinessAndCount(activity, context, evidence, savedClaims, savedScope3Options ? { options: savedScope3Options, recordId: row.id } : undefined)
     const status: "attention" | "ready" | "withdrawn" = activity.state === "withdrawn" ? "withdrawn" : readiness.some(finding => finding.status === "input_needed" || finding.status === "review_required") ? "attention" : "ready"
-    return { row, activity, readiness, status, counted }
+    return { row, activity, readiness, status, counted, placedOutside }
   })
   // B1 (QA of PR #63): which saved records the results routes count, from the plans the readiness panel computes, so a
   // possible-duplicate notice or alert is shown, and says "counted", only for a pair whose records are both counted.
@@ -1149,10 +1161,12 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     return <p className={`nv-subtle ${className}`}>{REPLACING_RECORD_TEXT.held(name)} <a className="nv-link" href={`#/activity/${id}`} onClick={event => { if (!plainClick(event) || !onOpenRecord) return; event.preventDefault(); onOpenRecord(id) }}>{REPLACING_RECORD_TEXT.todoAction(name)}</a></p>
   }
   const countedIds = new Set(listed.filter(item => item.counted).map(item => item.row.id))
+  // BF-01e: records that could be counted once completed (held or needing input; not withdrawn, excluded, replaced or outside the period).
+  const completableIds = new Set(listed.filter(item => !item.counted && !item.placedOutside && !item.readiness.some(finding => finding.status === "method_pending")).map(item => item.row.id))
   // BF-01c: the form's alert uses the results routes' own rule (possibleDuplicateRecords), so the form, the record view, the
   // Overview and Results agree; only against a counted record, and not while the draft's site, entity, replacement or dates
   // keep it out of every total (a draft still missing an answer is warned about, as it will be counted once complete).
-  const duplicateRows = draft.state === "withdrawn" || !draft.sourceId.trim() || draftPlacedOutside ? [] : draftDuplicateMatches(records, draft as CollectionActivity, recordId).filter(row => countedIds.has(row.id))
+  const duplicateRows = draft.state === "withdrawn" || !draft.sourceId.trim() || draftPlacedOutside ? [] : draftDuplicateMatches(records, draft as CollectionActivity, recordId, id => countedIds.has(id))
   const presentKinds = [...new Set(records.map(row => row.kind))].sort((a, b) => kindName(a).localeCompare(kindName(b)))
   // WO-06: a type from the address that no saved record has is ignored once the records have loaded.
   const kindFilter = loaded && listFilter.kind && !presentKinds.includes(listFilter.kind as CollectionActivityKind) ? "" : listFilter.kind
@@ -1388,7 +1402,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   if (recordMode) {
     const activity = selected ? selected.currentVersion.activity as CollectionDraft : null
     // BF-01c: the possible-duplicate state (the results routes' rule; the Overview's "To confirm" group).
-    const duplicateState = selected ? recordDuplicateState(records, selected.id, context, id => countedIds.has(id)) : null
+    const duplicateState = selected ? recordDuplicateState(records, selected.id, context, id => countedIds.has(id), id => completableIds.has(id)) : null
     const openLinked = (event: ReactMouseEvent<HTMLAnchorElement>, id: string) => { if (!plainClick(event) || !onOpenRecord) return; event.preventDefault(); onOpenRecord(id) }
     const linked = activity ? evidence.filter(file => activity.evidenceIds.includes(file.id)) : []
     return <section className="worksheet collection-workspace collection-record-view" aria-busy={busy} onFocus={keepClearOfStickyBars}>
@@ -1411,7 +1425,11 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
         <h3>Readiness</h3>
         {openedItem.readiness.length ? <ReadinessPanel findings={openedItem.readiness} /> : <p>No findings.</p>}
         {savedHeldFor && waitingFor(savedHeldFor, "collection-record-waiting")}
-        {duplicateState && <div className="nv-notice nv-notice--warn collection-record-duplicate" role="note" aria-labelledby="collection-record-duplicate-heading">
+        {duplicateState?.caution && <div className="nv-notice nv-notice--warn collection-record-caution" role="note" aria-labelledby="collection-record-caution-heading">
+          <div><h3 id="collection-record-caution-heading">{RECORD_DUPLICATE_TEXT.cautionHeading}</h3>
+            <p>{duplicateState.caution.text} <a className="nv-link" href={`#/activity/${duplicateState.caution.id}`} onClick={event => openLinked(event, duplicateState.caution!.id)}>{RECORD_DUPLICATE_TEXT.open(duplicateState.caution.name)}</a></p></div>
+        </div>}
+        {duplicateState && !duplicateState.caution && <div className="nv-notice nv-notice--warn collection-record-duplicate" role="note" aria-labelledby="collection-record-duplicate-heading">
           <div><h3 id="collection-record-duplicate-heading">{RECORD_DUPLICATE_TEXT.heading}</h3>
             {duplicateState.of && <p>{RECORD_DUPLICATE_TEXT.isDuplicate(duplicateState.of.text)} <a className="nv-link" href={`#/activity/${duplicateState.of.id}`} onClick={event => openLinked(event, duplicateState.of!.id)}>{RECORD_DUPLICATE_TEXT.open(duplicateState.of.name)}</a></p>}
             {duplicateState.repeatedBy.length > 0 && <><p>{RECORD_DUPLICATE_TEXT.repeatedBy(duplicateState.repeatedBy.length)}</p>

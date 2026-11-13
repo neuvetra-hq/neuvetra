@@ -44,6 +44,12 @@ export const POSSIBLE_DUPLICATE_COUNTED_REASON = 'possible_duplicate_counted' as
  */
 export const POSSIBLE_DUPLICATE_OF_NOTE = 'possible_duplicate_of:' as const
 export const HAS_POSSIBLE_DUPLICATES_NOTE = 'has_possible_duplicates:' as const
+/**
+ * BF-01e (CEO ruling, 13 November 2026): `would_repeat_counted:<record ID>` on a record that is NOT counted (held, or it needs
+ * input) and matches a record that is counted. Nothing is overstated today, but completing it would count the activity twice:
+ * a caution on its own readiness and to-do text, never "counted" and never "may be overstated".
+ */
+export const WOULD_REPEAT_COUNTED_NOTE = 'would_repeat_counted:' as const
 
 /** The parts of a saved record the rule reads (a `CollectionActivityRecord` fits). */
 export interface DuplicateCheckRecord {
@@ -144,6 +150,61 @@ export function possibleDuplicateRecords(records: readonly DuplicateCheckRecord[
     }
   }
   return out
+}
+
+/**
+ * BF-01e (CEO ruling, 13 November 2026): the one rule every surface follows. `counted` says whether a record is counted (the
+ * results routes: in a figure after the engines ran; the screens: the adapter's plan, as the readiness panel shows it).
+ * - `counted`: later record ID → the earliest-saved record it overlaps, among counted records only. Only these are "counted
+ *   possible duplicates": both records are counted, so the figure may be overstated.
+ * - `cautions`: a record that is not counted but could be once completed (`completable`: held or needing input, not
+ *   excluded, superseded, withdrawn or outside the period) → the earliest-saved counted record it matches (either order):
+ *   completing it would repeat that record. Never called counted or overstated.
+ * Pairs where neither record is counted are in neither map. The same matching as `possibleDuplicateRecords`.
+ */
+export function possibleDuplicatePairs(records: readonly DuplicateCheckRecord[], counted: (recordId: string) => boolean, completable: (recordId: string) => boolean = () => true): { counted: Map<string, string>; cautions: Map<string, string> } {
+  const pairs = possibleDuplicateRecords(records.filter(record => counted(record.id)))
+  const cautions = new Map<string, string>()
+  const buckets = new Map<string, DuplicateCheckRecord[]>()
+  for (const record of records) {
+    const key = groupKey(record)
+    if (key === null) continue
+    const bucket = buckets.get(key)
+    if (bucket) bucket.push(record); else buckets.set(key, [record])
+  }
+  for (const bucket of buckets.values()) {
+    if (bucket.length < 2) continue
+    const sorted = [...bucket].sort((a, b) => firstSavedAt(a).localeCompare(firstSavedAt(b)) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
+    for (const held of sorted) {
+      if (counted(held.id) || !completable(held.id)) continue
+      const other = sorted.find(item => item !== held && counted(item.id) && periodsOverlapAsDuplicates(item.currentVersion.activity.period, held.currentVersion.activity.period))
+      if (other) cautions.set(held.id, other.id)
+    }
+  }
+  return { counted: pairs, cautions }
+}
+/** BF-01e: the counted record a record that isn't counted would repeat, from its notes, or null. */
+export function wouldRepeatCountedOf(notes: readonly string[]): string | null {
+  const note = notes.find(item => item.startsWith(WOULD_REPEAT_COUNTED_NOTE))
+  return note ? note.slice(WOULD_REPEAT_COUNTED_NOTE.length) : null
+}
+/**
+ * BF-01e: the caution on a record that isn't counted and matches a counted one. "Completing this record would repeat M-1 at
+ * Office, Jan 1 – Jan 31, 2025 (record <id>), which is already counted; withdraw it if it is the same activity."
+ */
+export function wouldRepeatCountedText(recordId: string, other: { sourceId: string; locationName: string | null; period: string } | null): string {
+  return `Completing this record would repeat ${other ? `${other.sourceId} at ${other.locationName ?? 'an unknown site'}, ${other.period} (record ${recordId})` : `record ${recordId}`}, which is already counted; withdraw it if it is the same activity.`
+}
+/**
+ * BF-01e: the count-mode notes of the records of one response, from the pairs: `possible_duplicate_of:` on the later record
+ * of a counted pair, `has_possible_duplicates:<n>` on the earlier, `would_repeat_counted:` on a record that isn't counted.
+ */
+export function possibleDuplicateNotes(pairs: { counted: ReadonlyMap<string, string>; cautions: ReadonlyMap<string, string> }, recordId: string): string[] {
+  const of = pairs.counted.get(recordId)
+  let later = 0
+  for (const earlier of pairs.counted.values()) if (earlier === recordId) later++
+  const caution = pairs.cautions.get(recordId)
+  return [...(of !== undefined ? [`${POSSIBLE_DUPLICATE_OF_NOTE}${of}`] : []), ...(later > 0 ? [`${HAS_POSSIBLE_DUPLICATES_NOTE}${later}`] : []), ...(caution !== undefined ? [`${WOULD_REPEAT_COUNTED_NOTE}${caution}`] : [])]
 }
 
 /** How many later records name each record as the one they may repeat (record ID → count). */

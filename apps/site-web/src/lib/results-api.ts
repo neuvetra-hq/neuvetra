@@ -1,5 +1,5 @@
 import type { HostedWorkspaceActor } from "./workspace-api"
-import { POSSIBLE_DUPLICATE_COUNTED_REASON, possibleDuplicateCounted, possibleDuplicateOf, possibleDuplicateOfText, possibleDuplicatesOverstatedText } from "../../../../packages/neuvetra-database/src/collection-duplicates"
+import { POSSIBLE_DUPLICATE_COUNTED_REASON, possibleDuplicateCounted, possibleDuplicateOf, possibleDuplicateOfText, possibleDuplicatesOverstatedText, wouldRepeatCountedOf, wouldRepeatCountedText } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { periodLabel } from "../../../../packages/neuvetra-database/src/plain-language-labels"
 
 export const RESULTS_PROFILE = "neuvetra.collection-results.v2"
@@ -105,13 +105,19 @@ export class NotSyntheticResultsError extends Error { constructor() { super("Dra
  */
 export function possibleDuplicateText(row: Pick<ResultRow, "plan">, records: ReadonlyArray<Pick<ResultRow, "recordId" | "sourceId" | "locationName" | "period">>): string | null {
   const otherId = possibleDuplicateOf(row.plan.notes ?? [])
-  if (otherId === null) return null
-  const other = records.find(item => item.recordId === otherId)
-  return possibleDuplicateOfText(otherId, other ? { sourceId: other.sourceId, locationName: other.locationName, period: periodLabel(other.period.start, other.period.endExclusive) } : null)
+  // BF-01e: a record that isn't counted but matches a counted one carries the caution instead (never "possible duplicate").
+  const cautionId = otherId === null ? wouldRepeatCountedOf(row.plan.notes ?? []) : null
+  const named = otherId ?? cautionId
+  if (named === null) return null
+  const other = records.find(item => item.recordId === named)
+  const facts = other ? { sourceId: other.sourceId, locationName: other.locationName, period: periodLabel(other.period.start, other.period.endExclusive) } : null
+  return otherId !== null ? possibleDuplicateOfText(otherId, facts) : wouldRepeatCountedText(named, facts)
 }
 /** BF-01 (count mode): how many counted possible duplicates are in one subtotal (rows marked in that subtotal only). */
 export function countedDuplicatesIn(results: Pick<ResultsResponse, "records">, basis: "scope1" | "scope2LocationBased" | "scope2MarketBased"): number {
-  return results.records.filter(row => row.outcome === "calculated" && row.inSubtotal[basis] && possibleDuplicateCounted({ reasons: row.plan.reasons, notes: row.plan.notes ?? [] })).length
+  // BF-01e: "counted in that figure" for both records: the record it may repeat is in the same subtotal too.
+  const inBasis = new Set(results.records.filter(row => row.inSubtotal[basis]).map(row => row.recordId))
+  return results.records.filter(row => row.outcome === "calculated" && row.inSubtotal[basis] && possibleDuplicateCounted({ reasons: row.plan.reasons, notes: row.plan.notes ?? [] }) && inBasis.has(possibleDuplicateOf(row.plan.notes ?? [])!)).length
 }
 /** BF-01 (count mode): the flag on a subtotal that includes possible duplicates (screen, draft report, print and CSV). */
 export const possibleDuplicateTotalText = possibleDuplicatesOverstatedText
