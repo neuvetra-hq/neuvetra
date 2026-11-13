@@ -719,12 +719,17 @@ export function planScope3SupersessionClaimants(versions: readonly Scope3Collect
   const out = new Map<string, string[]>()
   if (superseders.length === 0) return out
   const anyKeys = superseders.some(s => s.keys.size > 0)
+  // Indexed by name and by mapping key (QA of PR #63, F2: the screens run this on every keystroke), in record ID order.
+  const byName = new Map<string, number[]>(), byKey = new Map<string, number[]>()
+  superseders.forEach((s, i) => { byName.set(s.name, [...(byName.get(s.name) ?? []), i]); for (const key of s.keys) byKey.set(key, [...(byKey.get(key) ?? []), i]) })
+  const categories = new Set(superseders.flatMap(s => [...s.categories]))
   for (const v of versions) {
     const a = v.activity
-    if (a.kind !== 'purchase_spend' || !superseders.some(s => s.categories.has(a.payload.category)) || !counts(v)) continue
+    if (a.kind !== 'purchase_spend' || !categories.has(a.payload.category) || !counts(v)) continue
     const name = comparableName(a.payload.supplierName)
     const key = anyKeys ? options.sha256(scope3SpendMappingKeyInput(a.payload)) : null
-    const by = superseders.filter(s => s.categories.has(a.payload.category) && sameYear(s.version, v) && ((name !== '' && s.name === name) || (key !== null && s.keys.has(key))))
+    const candidates = [...new Set([...(name !== '' ? byName.get(name) ?? [] : []), ...(key !== null ? byKey.get(key) ?? [] : [])])].sort((x, y) => x - y)
+    const by = candidates.map(i => superseders[i]!).filter(s => s.categories.has(a.payload.category) && sameYear(s.version, v))
     if (by.length) out.set(v.recordId, by.map(s => s.version.recordId))
   }
   return out

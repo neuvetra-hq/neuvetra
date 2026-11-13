@@ -27,9 +27,9 @@ import { ACTIVITY_FORM_TEXT_WO10 } from "@/lib/activity-form-text-wo10"
 // WO-12: members see read-only Activity; every field is labelled "Required", "Needed for results" or "Optional" (CEO
 // ruling, derived from the save checks and the readiness rules in field-needs-wo12.ts); BF-08's definite answers.
 import { ACTIVITY_READ_ONLY_TEXT, FIELD_NEED_TEXT, SAVE_OUTCOME_TEXT_WO12, type FieldNeed } from "@/lib/wo12-text"
-import { activityFieldFacts, activityFieldNeed, fieldLabel, type FieldNeedFacts } from "@/lib/field-needs-wo12"
+import { activityFieldFacts, activityFieldNeed, fieldLabel, replacingRecordName, type FieldNeedFacts } from "@/lib/field-needs-wo12"
 import { RecordHoldNotice } from "./RecordHoldNotice"
-import { RECORD_DUPLICATE_TEXT, RECORD_LIMIT_LINK_TEXT } from "@/lib/bf-followups-text"
+import { RECORD_DUPLICATE_TEXT, RECORD_LIMIT_LINK_TEXT, REPLACING_RECORD_TEXT } from "@/lib/bf-followups-text"
 import { draftDuplicateMatches, recordDuplicateState } from "@/lib/record-duplicates-bf01c"
 import { recordHold } from "@/lib/record-holds-wo12b"
 import { activityPresaveProblems, activitySaveProblems, CONTRACT_FIELDS, DECIMAL, prepareActivityForSave, SUPPORTED_UNITS, VOLUMETRIC_GAS_UNITS, type FormProblem } from "@/lib/activity-save-checks"
@@ -321,8 +321,16 @@ const DRAFT_ID = "00000000-0000-4000-8000-000000000000"
  * Results will apply; without it a Scope 3 record is planned on its own, as before.
  */
 export function recordReadiness(activity: CollectionActivity, context: CollectionContext | null, evidence: CollectionEvidenceMetadata[] = [], claims?: InstrumentEvidenceClaims, scope3?: { options: Scope3PlanOptions; recordId: string }): CollectionReadinessFinding[] {
+  return recordReadinessAndCount(activity, context, evidence, claims, scope3).findings
+}
+/**
+ * B1 (QA of PR #63): the readiness findings and whether the results routes count the record, from the same plan: the adapter
+ * calculates it (not withdrawn, excluded, held or waiting) and it lies wholly inside the reporting period (the routes' period
+ * hold comes first). Engine findings (a review the engine returns) are not known here, as for the readiness itself.
+ */
+function recordReadinessAndCount(activity: CollectionActivity, context: CollectionContext | null, evidence: CollectionEvidenceMetadata[] = [], claims?: InstrumentEvidenceClaims, scope3?: { options: Scope3PlanOptions; recordId: string }): { findings: CollectionReadinessFinding[]; counted: boolean; placedOutside: boolean } {
   const screen = [...collectionReadinessFindings(activity, evidence), ...locationReadinessFindings(activity, context)]
-  if (!context) return screen
+  if (!context) return { findings: screen, counted: false, placedOutside: false }
   let plan: Pick<ReturnType<typeof planCollectionCalculation>, "action" | "reasons" | "notes"> & { status: ReturnType<typeof planCollectionCalculation>["status"] | "method_pending"; optional?: true }
   try {
     const version = { id: DRAFT_ID, recordId: DRAFT_ID, companyId: context.companyId, revision: 0, previousVersionId: null, correctionReason: null, activity, payloadSha256: "0".repeat(64), createdBy: DRAFT_ID, createdAt: "1970-01-01T00:00:00.000Z" }
@@ -334,24 +342,29 @@ export function recordReadiness(activity: CollectionActivity, context: Collectio
     // BF-02b (b): a spend line whose every replacing record the adapter holds is held by Results (BF-02), never shown as replaced.
     const heldFor = scope3 ? (scope3.options as Scope3ReadinessPlanOptions).replacementHeld?.get(scope3.recordId) : undefined
     if (heldFor !== undefined && activity.state === "active" && plan.status !== "excluded") plan = { action: "hold", status: "input_needed", reasons: ["replacing_record_not_counted"], notes: [`replacing_record:${heldFor}`] }
-  } catch { return screen }
+  } catch { return { findings: screen, counted: false, placedOutside: false } }
+  const period = context.reportingPeriod
+  const inside = !period?.start || !period.endExclusive || (activity.period.start >= period.start && activity.period.endExclusive <= period.endExclusive)
+  const counted = activity.state === "active" && plan.action === "calculate" && inside
+  // Not counted because of where or when it is (excluded, superseded, withdrawn or outside the period), not for missing input.
+  const placedOutside = activity.state !== "active" || plan.status === "excluded" || plan.status === "withdrawn" || !inside
   const unique = (items: CollectionReadinessFinding[]) => items.filter((item, index) => items.findIndex(other => other.status === item.status && other.reason === item.reason) === index)
   if (plan.action === "hold") {
     const status = (plan.status ?? "input_needed") as CollectionReadinessFinding["status"]
     const kept = screen.filter(finding => finding.status !== "partial")
     const explained = (code: string) => { const pattern = SCREEN_EXPLAINS[code]; return !!pattern && kept.some(finding => BLOCKING.has(finding.status) && pattern.test(finding.reason)) }
     const optional = plan.status === "method_pending" && plan.optional ? [{ status, reason: SCOPE3_DISCLOSURE_TEXT.optional_activity_not_yet_quantified! }] : []
-    return unique([...kept, ...plan.reasons.filter(code => !explained(code)).map(code => ({ status, reason: reasonText(code) })), ...optional])
+    return { findings: unique([...kept, ...plan.reasons.filter(code => !explained(code)).map(code => ({ status, reason: reasonText(code) })), ...optional]), counted, placedOutside }
   }
   const shared = (plan.notes ?? []).filter(note => /^instrument_\d+_evidence_shared$/.test(note)).map((note): CollectionReadinessFinding => ({ status: "partial", reason: `Market-based result held — ${reasonText(note)}` }))
-  return unique([...screen.map((finding): CollectionReadinessFinding => {
+  return { counted, placedOutside, findings: unique([...screen.map((finding): CollectionReadinessFinding => {
     if (finding.status === "partial") return finding
     // The engines calculate these; the finding is something to check, not a hold.
     if (finding.reason.startsWith("Linked evidence “")) return { status: "review_required", reason: finding.reason }
     if (!finding.reason.startsWith("Market-based instrument")) return finding
     if (finding.reason.endsWith(" evidence is waiting for quarantine review.")) return { status: "partial", reason: `Market-based result held — ${finding.reason.slice(0, -1)}; it counts once the review clears the file.`, waitingOnEvidence: true }
     return { status: "partial", reason: `Market-based result held — ${finding.reason}` }
-  }), ...shared])
+  }), ...shared]) }
 }
 
 /** A saved vehicle record whose fuel or vehicle type is a legacy value (not blank, not a FIELDS token, or not a pair). A new record's blank choices are not legacy (N7). */
@@ -1070,7 +1083,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   const mappingKeys = new Map(spendLines.map(line => [line.mappingKeyInput, line.mappingKey]))
   const savedScope3Options = context ? scope3ReadinessOptions({ setup: setupFacts, context, records, draft: null, mappingKeys, evidence }) : null
   const draftScope3Options = context && scope3Draft ? scope3ReadinessOptions({ setup: setupFacts, context, records, draft: { recordId, activity: readinessDraft }, mappingKeys, evidence }) : null
-  const draftFindings = recordReadiness(readinessDraft, context, evidence, draftClaims, draftScope3Options ? { options: draftScope3Options, recordId } : undefined)
+  const { findings: draftFindings, placedOutside: draftPlacedOutside } = recordReadinessAndCount(readinessDraft, context, evidence, draftClaims, draftScope3Options ? { options: draftScope3Options, recordId } : undefined)
   const scope3Problem = scope3Draft ? scope3PayloadProblem(draft.kind as Scope3CollectionKind, readinessDraft.payload) ?? scope3DataQualityProblem(readinessDraft.payload) : null
   const separatorSuggestion = thousandsSeparatorSuggestion(draft.quantity.originalValue)
   // Round 2 lane E (UX-4): every problem that would stop a save, listed next to Save. The same checks as save() and the
@@ -1100,9 +1113,6 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     if (!dirty) { setAttempted(true); setSaveProblem({ text: ACTIVITY_FORM_TEXT_WO10.unchanged }); focusNext.current = "collection-save-problems"; return }
     void save()
   }
-  // BF-01c: the form's alert uses the results routes' own rule (possibleDuplicateRecords), so the form, the record view, the
-  // Overview and Results agree. Both records are counted (count mode); the alert asks the person to check before saving.
-  const duplicateRows = draft.state === "withdrawn" || !draft.sourceId.trim() ? [] : draftDuplicateMatches(records, draft as CollectionActivity, recordId)
   const sourceLabel = draft.kind === "natural_gas" ? "Gas account or meter ID"
     : draft.kind === "distillate_no2" ? "Generator or equipment ID"
     : draft.kind === "vehicle" ? "Vehicle or group ID"
@@ -1125,10 +1135,24 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   // Round 3 lane C (PR-3): each saved record's readiness once; the list shows one page of the records the filter keeps.
   const listed = records.map(row => {
     const activity = row.currentVersion.activity as CollectionDraft
-    const readiness = recordReadiness(activity, context, evidence, savedClaims, savedScope3Options ? { options: savedScope3Options, recordId: row.id } : undefined)
+    const { findings: readiness, counted } = recordReadinessAndCount(activity, context, evidence, savedClaims, savedScope3Options ? { options: savedScope3Options, recordId: row.id } : undefined)
     const status: "attention" | "ready" | "withdrawn" = activity.state === "withdrawn" ? "withdrawn" : readiness.some(finding => finding.status === "input_needed" || finding.status === "review_required") ? "attention" : "ready"
-    return { row, activity, readiness, status }
+    return { row, activity, readiness, status, counted }
   })
+  // B1 (QA of PR #63): which saved records the results routes count, from the plans the readiness panel computes, so a
+  // possible-duplicate notice or alert is shown, and says "counted", only for a pair whose records are both counted.
+  // F5 (QA of PR #63): a spend line held because every record replacing it is held: name that record and link to it.
+  const savedHeldFor = selected && selected.currentVersion.activity.state === "active" ? (savedScope3Options as Scope3ReadinessPlanOptions | null)?.replacementHeld?.get(selected.id) ?? null : null
+  const draftHeldFor = draft.state === "active" ? (draftScope3Options as Scope3ReadinessPlanOptions | null)?.replacementHeld?.get(recordId) ?? null : null
+  const waitingFor = (id: string, className: string) => {
+    const name = replacingRecordName(id, records)
+    return <p className={`nv-subtle ${className}`}>{REPLACING_RECORD_TEXT.held(name)} <a className="nv-link" href={`#/activity/${id}`} onClick={event => { if (!plainClick(event) || !onOpenRecord) return; event.preventDefault(); onOpenRecord(id) }}>{REPLACING_RECORD_TEXT.todoAction(name)}</a></p>
+  }
+  const countedIds = new Set(listed.filter(item => item.counted).map(item => item.row.id))
+  // BF-01c: the form's alert uses the results routes' own rule (possibleDuplicateRecords), so the form, the record view, the
+  // Overview and Results agree; only against a counted record, and not while the draft's site, entity, replacement or dates
+  // keep it out of every total (a draft still missing an answer is warned about, as it will be counted once complete).
+  const duplicateRows = draft.state === "withdrawn" || !draft.sourceId.trim() || draftPlacedOutside ? [] : draftDuplicateMatches(records, draft as CollectionActivity, recordId).filter(row => countedIds.has(row.id))
   const presentKinds = [...new Set(records.map(row => row.kind))].sort((a, b) => kindName(a).localeCompare(kindName(b)))
   // WO-06: a type from the address that no saved record has is ignored once the records have loaded.
   const kindFilter = loaded && listFilter.kind && !presentKinds.includes(listFilter.kind as CollectionActivityKind) ? "" : listFilter.kind
@@ -1222,6 +1246,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       </>}
       {selected && !recordMode && <p>Activity type is fixed while correcting this record. Use “Start a new record” to collect another activity.</p>}
       <RecordHoldNotice hold={hold} canManage={canManage} />
+      {draftHeldFor && waitingFor(draftHeldFor, "collection-form-waiting")}
       <fieldset className="setup-inputs" disabled={busy || !canManage || offer !== null}>
         <div className="setup-grid">
           <Select {...anatomy("location")} label="Company-setup location" value={draft.locationId} options={[["", context?.setupVersionId ? "Choose a saved location" : "Save company setup locations first"], ...(context?.locations ?? []).map(location => [location.id, `${location.name || "Unnamed location"} · ${LOCATION_INCLUSION_TEXT_R2E[location.inclusion] ?? location.inclusion} · ${LOCATION_CONTROL_TEXT_R2E[location.control] ?? location.control}`] as const)]} onChange={value => edit(next => { next.locationId = value; next.setupVersionId = context?.setupVersionId ?? ""; if (next.kind === "electricity") next.payload.site = context?.locations.find(location => location.id === value)?.name ?? "" })} hint={context?.setupRevision ? `Linked to company setup version ${context.setupRevision}. Excluded and unknown locations remain visible.` : "A saved company setup version is required."} />
@@ -1363,7 +1388,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   if (recordMode) {
     const activity = selected ? selected.currentVersion.activity as CollectionDraft : null
     // BF-01c: the possible-duplicate state (the results routes' rule; the Overview's "To confirm" group).
-    const duplicateState = selected ? recordDuplicateState(records, selected.id, context) : null
+    const duplicateState = selected ? recordDuplicateState(records, selected.id, context, id => countedIds.has(id)) : null
     const openLinked = (event: ReactMouseEvent<HTMLAnchorElement>, id: string) => { if (!plainClick(event) || !onOpenRecord) return; event.preventDefault(); onOpenRecord(id) }
     const linked = activity ? evidence.filter(file => activity.evidenceIds.includes(file.id)) : []
     return <section className="worksheet collection-workspace collection-record-view" aria-busy={busy} onFocus={keepClearOfStickyBars}>
@@ -1385,6 +1410,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
         </dl>
         <h3>Readiness</h3>
         {openedItem.readiness.length ? <ReadinessPanel findings={openedItem.readiness} /> : <p>No findings.</p>}
+        {savedHeldFor && waitingFor(savedHeldFor, "collection-record-waiting")}
         {duplicateState && <div className="nv-notice nv-notice--warn collection-record-duplicate" role="note" aria-labelledby="collection-record-duplicate-heading">
           <div><h3 id="collection-record-duplicate-heading">{RECORD_DUPLICATE_TEXT.heading}</h3>
             {duplicateState.of && <p>{RECORD_DUPLICATE_TEXT.isDuplicate(duplicateState.of.text)} <a className="nv-link" href={`#/activity/${duplicateState.of.id}`} onClick={event => openLinked(event, duplicateState.of!.id)}>{RECORD_DUPLICATE_TEXT.open(duplicateState.of.name)}</a></p>}

@@ -802,5 +802,5 @@ export const SCOPE3_REASON_TEXT_BF02: Readonly<Record<string, string>> = {
 }
 Object.assign(SCOPE3_DISCLOSURE_TEXT, SCOPE3_REASON_TEXT_BF02)
 /** BF-02b (a): the CSV "Superseded by" cell of a line held because its replacing record isn't counted (newly written CSVs only). */
-export const SCOPE3_REPLACING_RECORD_CSV_TEXT = (recordId: string, sourceId: string | null) => `${sourceId === null ? 'record' : `${sourceId}, record`} ${recordId} (not counted yet; this line is held until it is)`
+export const SCOPE3_REPLACING_RECORD_CSV_TEXT = (recordId: string, sourceId: string | null) => `${sourceId === null ? 'record' : `${sourceId}, record`} ${recordId} (not counted right now; this line is held until it is)`
 // --- end BF-02 ---

@@ -619,8 +619,8 @@ describe("BF-02b: a spend line held for its replacing record, on screen", () => 
     const fixes: string[] = []
     const screen = flatten(Scope3Panel({ state: { data: results, message: null, unavailable: false, busy: false }, canManage: true, onFix: (id: string) => fixes.push(id), onRetry() {} }))
     const card = cardOf(screen, { kind: "purchase_spend", sourceId: "AP-2025-0042", category: 2 })!
-    expect(text(card)).toContain("Waiting for Supplier-specific purchases · SUP-7, the record that replaces this spend line: it isn’t counted yet, so this line is held.")
-    expect(text(card)).toContain(`Replacing record (not counted yet)Supplier-specific purchases · SUP-7 (record ${SUPPLIER})`)
+    expect(text(card)).toContain("Waiting for Supplier-specific purchases · SUP-7, the record that replaces this spend line: it isn’t counted right now, so this line is held.")
+    expect(text(card)).toContain(`Replacing record (not counted right now)Supplier-specific purchases · SUP-7 (record ${SUPPLIER})`)
     const open = flatten(card).find(node => node.type === "button" && text(node) === "Open Supplier-specific purchases · SUP-7")!
     open.props.onClick()
     expect(fixes).toEqual([SUPPLIER])

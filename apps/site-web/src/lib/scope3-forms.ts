@@ -260,7 +260,20 @@ const asVersion = (recordId: string, companyId: string, activity: CollectionActi
  * Those lines are not in `supersession`, which keeps, for every other line, the first claimant that can calculate.
  */
 export type Scope3ReadinessPlanOptions = Scope3PlanOptions & { replacementHeld?: ReadonlyMap<string, string> }
-export function scope3ReadinessOptions(input: { setup: Scope3SetupFacts | undefined; context: CollectionContext; records: readonly CollectionActivityRecord[]; draft?: { recordId: string; activity: CollectionActivity } | null; mappingKeys: ReadonlyMap<string, string>; evidence?: CollectionEvidenceMetadata[] }): Scope3ReadinessPlanOptions {
+const NO_EVIDENCE: CollectionEvidenceMetadata[] = []
+type ReadinessOptionsInput = { setup: Scope3SetupFacts | undefined; context: CollectionContext; records: readonly CollectionActivityRecord[]; draft?: { recordId: string; activity: CollectionActivity } | null; mappingKeys: ReadonlyMap<string, string>; evidence?: CollectionEvidenceMetadata[] }
+/** F2 (QA of PR #63): the last saved-records (no draft) answer, reused while every input is the same object. */
+let lastSaved: { input: ReadinessOptionsInput; setupKey: string; output: Scope3ReadinessPlanOptions } | null = null
+const setupKey = (setup: Scope3SetupFacts | undefined) => setup ? JSON.stringify([setup.reportingPeriod, setup.consolidationApproach, [...(setup.locationCountries ?? new Map()).entries()]]) : ""
+export function scope3ReadinessOptions(input: ReadinessOptionsInput): Scope3ReadinessPlanOptions {
+  if (input.draft) return readinessOptions(input)
+  const key = setupKey(input.setup), last = lastSaved
+  if (last && last.setupKey === key && last.input.context === input.context && last.input.records === input.records && last.input.mappingKeys === input.mappingKeys && last.input.evidence === input.evidence) return last.output
+  const output = readinessOptions(input)
+  lastSaved = { input, setupKey: key, output }
+  return output
+}
+function readinessOptions(input: ReadinessOptionsInput): Scope3ReadinessPlanOptions {
   const reportingPeriod = input.setup?.reportingPeriod ?? null
   const versions = [
     ...input.records.filter(record => record.id !== input.draft?.recordId && isScope3CollectionKind(record.kind)).map(record => asVersion(record.id, input.context.companyId, record.currentVersion.activity)),
@@ -271,12 +284,24 @@ export function scope3ReadinessOptions(input: { setup: Scope3SetupFacts | undefi
     ...(input.setup ? { consolidationApproach: input.setup.consolidationApproach } : {}),
     ...(input.setup?.locationCountries ? { locationCountries: input.setup.locationCountries } : {}),
     distanceCommutingPeriods: scope3DistanceCommutingPeriods(versions, input.context, { reportingPeriod }),
-    ...replacements(versions, input.context, input.evidence ?? [], reportingPeriod, text => input.mappingKeys.get(text) ?? ""),
+    ...replacements(versions, input.context, input.evidence ?? NO_EVIDENCE, reportingPeriod, text => input.mappingKeys.get(text) ?? ""),
   }
 }
 
+/**
+ * F2 (QA of PR #63): whether the adapter holds a replacing record, remembered per saved activity object (saved records keep
+ * their objects between renders, so each keystroke plans only a draft that is itself a replacing record).
+ */
+const heldCache = new WeakMap<object, { context: CollectionContext; evidence: CollectionEvidenceMetadata[]; period: string; held: boolean }>()
+function adapterHolds(v: Scope3CollectionVersion, context: CollectionContext, evidence: CollectionEvidenceMetadata[], reportingPeriod: Scope3SetupFacts["reportingPeriod"]): boolean {
+  const period = JSON.stringify(reportingPeriod), cached = heldCache.get(v.activity)
+  if (cached && cached.context === context && cached.evidence === evidence && cached.period === period) return cached.held
+  const held = planScope3Calculation(v, context, evidence, { reportingPeriod }).action === "hold"
+  heldCache.set(v.activity, { context, evidence, period, held })
+  return held
+}
 function replacements(versions: Scope3CollectionVersion[], context: CollectionContext, evidence: CollectionEvidenceMetadata[], reportingPeriod: Scope3SetupFacts["reportingPeriod"], sha256: (text: string) => string) {
-  const held = new Set(versions.filter(v => (v.activity.kind === "purchase_supplier" || v.activity.kind === "partner_reported") && planScope3Calculation(v, context, evidence, { reportingPeriod }).action === "hold").map(v => v.recordId))
+  const held = new Set(versions.filter(v => (v.activity.kind === "purchase_supplier" || v.activity.kind === "partner_reported") && adapterHolds(v, context, evidence, reportingPeriod)).map(v => v.recordId))
   const supersession = new Map<string, string>(), replacementHeld = new Map<string, string>()
   for (const [line, ids] of planScope3SupersessionClaimants(versions, context, { reportingPeriod, sha256 })) {
     const counted = ids.find(id => !held.has(id))

@@ -257,7 +257,10 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
           const saved = existing.find(record => record.id.toLowerCase() === resourceId)
           // A replay of an already-saved first version is not a new record; a correction of a record that is active now is not
           // a new active record either (an exact replay of a reactivation finds the record active and is not counted twice).
-          const activates = validated.expectedRevision === 0 ? saved === undefined : saved !== undefined && saved.currentVersion.activity.state === "withdrawn"
+          // F6 (QA of PR #63): a correction based on a version that is no longer current is a revision conflict, not a new
+          // active record: it is left to the database, which answers 409 (refresh), whatever the count.
+          const activates = validated.expectedRevision === 0 ? saved === undefined
+            : saved !== undefined && saved.currentVersion.activity.state === "withdrawn" && saved.currentVersion.id.toLowerCase() === validated.expectedVersionId?.toLowerCase() && saved.currentVersion.revision === validated.expectedRevision
           if (activates && existing.filter(isActiveScope12Record).length >= MAX_ACTIVE_SCOPE12_RECORDS) throw new RequestProblem(422, RECORD_LIMIT_SAVE_TEXT, "record_limit_reached")
         }
         let saved: Awaited<ReturnType<typeof deps.database.saveCollectionActivity>>

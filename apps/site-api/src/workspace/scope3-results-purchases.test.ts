@@ -337,10 +337,10 @@ describe("BF-02: a spend line whose replacing record isn't counted is held, neve
     const held = allocated("145000", "kg CO2e", { supplierName: "Acme Metals", allocationNumerator: "200", allocationDenominator: "100", ...replaces })
     const heldCsv = scope3Csv(await build([line, held]), labels)
     const heldRow = heldCsv.split("\n").find(text => text.startsWith("Record,") && text.includes(line.id))!
-    expect(heldRow).toContain(`,"${held.currentVersion.activity.sourceId}, record ${held.id} (not counted yet; this line is held until it is)",`)
+    expect(heldRow).toContain(`,"${held.currentVersion.activity.sourceId}, record ${held.id} (not counted right now; this line is held until it is)",`)
     const complete = supplier("120", "metric_ton", { supplierName: "Acme Metals", ...replaces })
     const excludedRow = scope3Csv(await build([line, complete]), labels).split("\n").find(text => text.startsWith("Record,") && text.includes(line.id))!
-    expect([excludedRow.includes(`,${complete.id},`), excludedRow.includes("not counted yet")]).toEqual([true, false])
+    expect([excludedRow.includes(`,${complete.id},`), excludedRow.includes("not counted right now")]).toEqual([true, false])
   }, TIMEOUT)
 
   // BF-02b (d, QA follow-up 4 of PR #45): with several claimants, the line stays excluded whenever ANY claimant is complete,

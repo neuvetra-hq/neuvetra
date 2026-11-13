@@ -324,7 +324,7 @@ describe("BF-02b: a spend line held for its replacing record", () => {
     const item = scope3Todos(held()).find(todo => todo.key.startsWith("replacing:"))!
     expect(item).toMatchObject({ kind: "line", category: 2, recordId: SUPPLIER, title: "1 spend line waits for Supplier-specific purchases · SUP-7",
       actions: [{ type: "fix", recordId: SUPPLIER, fields: [], label: "Open Supplier-specific purchases · SUP-7" }] })
-    expect(item.reasons).toEqual([reasonText("replacing_record_not_counted"), "Waiting for Supplier-specific purchases · SUP-7, the record that replaces this spend line: it isn’t counted yet, so this line is held."])
+    expect(item.reasons).toEqual([reasonText("replacing_record_not_counted"), "Waiting for Supplier-specific purchases · SUP-7, the record that replaces this spend line: it isn’t counted right now, so this line is held."])
     // The line itself is not a separate to-do with a Fix that opens the spend line.
     expect(scope3Todos(held()).some(todo => todo.actions.some(action => action.type === "fix" && action.recordId === SPEND))).toBe(false)
   })

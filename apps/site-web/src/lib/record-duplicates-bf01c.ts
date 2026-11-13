@@ -1,9 +1,10 @@
 /**
  * BF-01c: the possible-duplicate state of one saved record, for the record view. The same rule and records as both results
  * routes (`possibleDuplicateRecords` over the company's saved records) and the Overview's "To confirm" group, so the record
- * view, the Overview and Results agree on which records may repeat which. Withdrawn records, records at a site setup
- * excludes and records not wholly inside the reporting period keep their precedence, as there: they show no duplicate state.
- * In count mode (the shipped policy) both records of a pair are counted; nothing here changes what is counted.
+ * view, the Overview and Results agree on which records may repeat which. B1 (QA of PR #63): whether a record is counted is
+ * the caller's (`counted`), decided from the same plan the readiness panel shows (withdrawn, excluded, superseded, held or
+ * outside the period: not counted), and a pair is shown, and called counted, only when both of its records are counted.
+ * Nothing here changes what is counted.
  */
 import { possibleDuplicateOfText, possibleDuplicateRecords } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import type { CollectionActivityRecord, CollectionContext } from "./collection-api"
@@ -17,21 +18,10 @@ export interface RecordDuplicateState {
   repeatedBy: RecordDuplicateLink[]
 }
 
-type Period = { start: string; endExclusive: string }
-const insidePeriod = (record: Period, period: { start?: string | null; endExclusive?: string | null } | null | undefined) =>
-  !period?.start || !period.endExclusive || (record.start >= period.start && record.endExclusive <= period.endExclusive)
-/** True when the results routes would apply the duplicate policy to this record (precedence of withdrawn, excluded, period). */
-function eligible(record: CollectionActivityRecord, context: CollectionContext | null): boolean {
-  const activity = record.currentVersion.activity
-  if (activity.state !== "active") return false
-  if (context?.locations.find(location => location.id === activity.locationId)?.inclusion === "excluded") return false
-  return insidePeriod(activity.period, context?.reportingPeriod)
-}
-
 /** The record's possible-duplicate state, or null when it has none (the usual case: no notice is shown). */
-export function recordDuplicateState(records: readonly CollectionActivityRecord[], recordId: string, context: CollectionContext | null): RecordDuplicateState | null {
+export function recordDuplicateState(records: readonly CollectionActivityRecord[], recordId: string, context: CollectionContext | null, counted: (recordId: string) => boolean): RecordDuplicateState | null {
   const self = records.find(record => record.id === recordId)
-  if (!self || !eligible(self, context)) return null
+  if (!self || self.currentVersion.activity.state !== "active" || !counted(recordId)) return null
   const duplicates = possibleDuplicateRecords(records)
   const link = (id: string, sentenceFor: string): RecordDuplicateLink => {
     const other = records.find(record => record.id === id)
@@ -43,9 +33,9 @@ export function recordDuplicateState(records: readonly CollectionActivityRecord[
     }
   }
   const earlier = duplicates.get(recordId)
-  const of = earlier !== undefined ? link(earlier, earlier) : null
+  const of = earlier !== undefined && counted(earlier) ? link(earlier, earlier) : null
   // A later record names this one; its sentence says which record it may repeat (this one), so it is described by its own facts.
-  const repeatedBy = [...duplicates.entries()].filter(([later, named]) => named === recordId && records.some(record => record.id === later && eligible(record, context)))
+  const repeatedBy = [...duplicates.entries()].filter(([later, named]) => named === recordId && counted(later))
     .map(([later]) => { const item = link(later, later); return { ...item, text: `${item.name}${laterFacts(records, later, context)}.` } })
   return of || repeatedBy.length ? { of, repeatedBy } : null
 }

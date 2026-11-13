@@ -134,7 +134,7 @@ describe("collection routes", () => {
     // BF-03b: at both schemas the route check also refuses a withdrawn record corrected back to active at 400, before any SQL
     // (0031's 54N31 repeats it under the lock at 31). The same correction is accepted below the cap, and a correction of a
     // record that is active now (or a withdrawal) is never refused.
-    const withdrawn = { id: RECORD, companyId: COMPANY, kind: "fugitive", currentVersion: { activity: { state: "withdrawn" } }, history: [] }
+    const withdrawn = { id: RECORD, companyId: COMPANY, kind: "fugitive", currentVersion: { id: VERSION, revision: 2, activity: { state: "withdrawn" } }, history: [] }
     const restore = () => ({ ...fresh(), expectedRevision: 2, expectedVersionId: VERSION, correctionReason: "Reactivated" })
     h.setRecord(withdrawn); h.setOthers(Array.from({ length: 400 }, (_, i) => gas(i)))
     const savesBefore = saves()
@@ -144,6 +144,13 @@ describe("collection routes", () => {
     expect([(await post(RECORD, restore())).status, saves() - savesBefore]).toEqual([201, 1])
     h.setRecord(null); h.setOthers(Array.from({ length: 400 }, (_, i) => gas(i)))
     expect((await post(RECORD, restore())).status).toBe(201)
+    // F6 (QA of PR #63): a reactivation based on a version that is no longer current is a revision conflict (the database's
+    // 23505, 409 "refresh"), never the cap message, at the cap too.
+    h.setRecord({ ...withdrawn, currentVersion: { ...withdrawn.currentVersion, id: "00000000-0000-4000-8000-0000000000c4", revision: 3 } }); h.setOthers(Array.from({ length: 400 }, (_, i) => gas(i)))
+    h.failSavesWith("23505")
+    const stale = await post(RECORD, restore())
+    expect([stale.status, (await stale.json() as any).code]).toEqual([409, "revision_conflict"])
+    h.setRecord(null)
     // 0031's refusal (raised only at 31, mapped at every schema): a save that raced past the route check.
     h.setOthers([])
     h.failSavesWith("54N31")

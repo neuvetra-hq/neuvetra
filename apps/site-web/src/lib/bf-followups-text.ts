@@ -12,9 +12,9 @@ export const RECORD_LIMIT_LINK_TEXT = {
 /** BF-02b (a): the record that replaces a spend line, named where the line is shown. */
 export const REPLACING_RECORD_TEXT = {
   /** A held line (its replacing record isn't counted): the record to finish, by name. */
-  held: (name: string) => `Waiting for ${name}, the record that replaces this spend line: it isn’t counted yet, so this line is held.`,
+  held: (name: string) => `Waiting for ${name}, the record that replaces this spend line: it isn’t counted right now, so this line is held.`,
   /** The calculation details' term for a held line's replacing record. */
-  heldTerm: "Replacing record (not counted yet)",
+  heldTerm: "Replacing record (not counted right now)",
   /** The record's words when it isn't listed in these results. */
   unlisted: (recordId: string) => `record ${recordId}`,
   /** The to-do's title for the lines that wait for one replacing record. */
