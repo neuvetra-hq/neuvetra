@@ -176,7 +176,7 @@ describe("B02: records the engine held are counted and explained everywhere", ()
     // Four records are not yet counted: one held before the engine, two input needed and one review required by it.
     expect(view.completeness).toEqual({
       scope1: "Incomplete — 4 records not yet counted; some results only partly calculated",
-      scope2Location: "No known gaps — each source type and included site in company setup has at least one record",
+      scope2Location: journeyStatus.COVERAGE_TEXT.resultsNoGaps,
       scope2Market: "Incomplete — some results only partly calculated",
     })
     expect(view.warnings[0]).toBe("4 records not counted yet · some results partly calculated")
@@ -249,7 +249,7 @@ describe("B02 on the actual Request B captures", () => {
     const view = render(results)
     expect(view.completeness).toEqual({
       scope1: "Incomplete — 4 records not yet counted; some results only partly calculated",
-      scope2Location: "No known gaps — each source type and included site in company setup has at least one record",
+      scope2Location: journeyStatus.COVERAGE_TEXT.resultsNoGaps,
       scope2Market: "Incomplete — some results only partly calculated",
     })
     expect(view.warnings[0]).toBe("4 records not counted yet · some results partly calculated")
@@ -319,7 +319,7 @@ describe("BF-01: possible duplicate records", () => {
     expect(view.warnings.some(text => text.includes("possible duplicate"))).toBe(false)
     expect(view.printed).not.toContain("‡")
   })
-  test("count mode: the counted duplicate is never \"No known gaps\", and the CSV says it is counted", () => {
+  test("count mode: the counted duplicate is never reported as free of gaps, and the CSV says it is counted", () => {
     const dup = row("GAS-1", "natural_gas", 1, { inSubtotal: { scope1: true, scope2LocationBased: false, scope2MarketBased: false }, plan: { action: "calculate", status: null, reasons: [], notes: [`possible_duplicate_of:${keeper.recordId}`] }, scope1: s1(GAS, "complete", { total: kg("5311.4500") }) })
     const results = base([keeper, dup], { warnings: ["These totals include 1 possible duplicate: a record that matches another active record for overlapping dates. Both records are counted. If they are the same record, withdraw or correct one of them; if they are different records, no action is needed."],
       scope1: { knownSourceSubtotal: kg("10622.9000"), includedResults: [keeper.scope1!.resultSha256, dup.scope1!.resultSha256], incompleteResults: [], notCalculated: [], reportedOutsideScopes: [], resultCount: 2, complete: true } })
@@ -397,5 +397,36 @@ describe("BF-01: possible duplicate records", () => {
     const plain = row("GAS-1", "natural_gas", 1, { inSubtotal: { scope1: true, scope2LocationBased: false, scope2MarketBased: false }, scope1: s1(GAS, "complete", { total: kg("5311.4500") }) })
     expect(render(base([plain])).completeness.scope1).toBe(render(base([keeper])).completeness.scope1)
     expect(resultsView.rowStatus(keeper)).toEqual({ label: "Calculated", tone: "ready" })
+  })
+})
+
+// BF-13 (B-3): the completeness column, the printed list and the live CSV read the same period-coverage gaps, so they agree;
+// none of them claims full coverage beyond what the checks looked at.
+describe("BF-13: truthful coverage statement on Results, in print and in the CSV", () => {
+  const office = "29400000-0000-4000-8000-000000000001"
+  const setupView = { currentVersion: { revision: 1, setup: { company: { legalName: "Acme" }, reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, boundary: { approach: "operational_control" }, screening: [], locations: [{ id: office, name: "Office", inclusion: "included", operatorDetails: "" }] } } } as never
+  const bill = (start: string, endExclusive: string) => ({ id: start, kind: "electricity", label: "Purchased electricity", sourceId: "M-1", locationId: office, site: "Office", state: "ready" as const, reasons: [], evidenceCount: 1, quality: "actual", periodStart: start, periodEndExclusive: endExclusive })
+  const coverageFor = (records: ReturnType<typeof bill>[]): Coverage => ({ state: "ready", setupOpen: journeyStatus.setupMissing(setupView), gaps: journeyStatus.coverageGaps(setupView, records) })
+  const retired = [["No known", "gaps"].join(" "), ["No open setup answers or", "possible gaps"].join(" ")]
+  test("one January bill: Scope 2 is incomplete with 1 possible coverage gap, named on screen, in print and in the CSV", () => {
+    const view = render(synthetic, coverageFor([bill("2025-01-01", "2025-02-01")]))
+    const gap = "Records for purchased electricity at Office don't cover Feb 1 – Dec 31, 2025 (334 of 365 days uncovered)"
+    expect(view.completeness.scope2Location).toBe("Incomplete — 1 possible coverage gap")
+    expect(view.completeness.scope2Market).toBe("Incomplete — 1 possible coverage gap; some results only partly calculated")
+    expect(view.notCounted).toContain(`Possible gap (Scope 2) — ${gap}.`)
+    expect(view.warnings).toContain("1 possible gap")
+    const csv = csvLines(view.csv)
+    expect(csv).toContain("# Completeness, Scope 2 location-based: Incomplete — 1 possible coverage gap")
+    expect(csv).toContain(`# Possible gap (Scope 2): ${gap}.`)
+    for (const phrase of retired) { expect(view.csv).not.toContain(phrase); expect(view.printed).not.toContain(phrase) }
+  })
+  test("twelve monthly bills: the new statements, with what was not checked", () => {
+    const months = Array.from({ length: 12 }, (_, index) => bill(`2025-${String(index + 1).padStart(2, "0")}-01`, index === 11 ? "2026-01-01" : `2025-${String(index + 2).padStart(2, "0")}-01`))
+    const view = render(synthetic, coverageFor(months))
+    expect(view.completeness.scope2Location).toBe(journeyStatus.COVERAGE_TEXT.resultsNoGaps)
+    expect(view.completeness.scope2Location).toContain("Not checked: whether every meter, vehicle and piece of equipment has its own record.")
+    expect(csvLines(view.csv)).toContain(`# Completeness, Scope 2 location-based: ${journeyStatus.COVERAGE_TEXT.resultsNoGaps}`)
+    expect(csvLines(view.csv)).toContain(`# ${journeyStatus.COVERAGE_TEXT.csvNoGaps}`)
+    for (const phrase of retired) { expect(view.csv).not.toContain(phrase); expect(view.printed).not.toContain(phrase) }
   })
 })

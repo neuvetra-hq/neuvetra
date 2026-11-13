@@ -97,7 +97,7 @@ export const READINESS_TEXT = {
   s1Open: (revision: number | null, open: number, scope12: number, scope3: number | null) => `Saved v${revision} · ${plural(open, "open answer")}${scope3 && scope12 ? ` (${scope12} Scope 1 and 2 · ${scope3} Scope 3)` : scope3 ? " (all Scope 3)" : ""}`,
   s1Saved: (revision: number | null) => `Saved v${revision}`,
   s2Done: "Nothing waiting on you in Activity",
-  s2Hint: "This checks that each source type and included site has a record — not that records cover the whole year.",
+  s2Hint: "This checks that each source type and included site has records covering every day of the reporting period — not that every meter, vehicle and piece of equipment has its own record.",
   s2Open: (records: number, open: number) => `${plural(records, "record")} · ${open} waiting on you`,
   s2NothingWaiting: "Nothing waiting on you",
   duplicatesSuffix: (count: number) => ` · ${plural(count, "possible duplicate")} to confirm`,

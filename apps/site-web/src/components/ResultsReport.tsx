@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useReducer, useRef, useState, type Ref
 import { Icon } from "./Icon"
 import type { JourneyView } from "./JourneyNav"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
-import { coverageIssues, coverageLines, noteLabel, type Coverage } from "@/lib/journey-status"
+import { COVERAGE_TEXT, coverageIssues, coverageLines, noteLabel, type Coverage } from "@/lib/journey-status"
 import { countedDuplicatesIn, EVIDENCE_STATUS_TEXT, loadResults, methodLabel, NotSyntheticResultsError, possibleDuplicateText, possibleDuplicateTotalText, releaseState, ResultsApiError, resultsCsv, unclearedEvidence, type EngineGas, type MethodUsed, type ResultRow, type ResultsResponse } from "@/lib/results-api"
 import { ACTIVITY_KINDS, BOUNDARY_LABELS, groupDigits, kgToTonnes, kindIcon, kindLabel, periodLabel, QUALITY_LABELS, reasonText, shortUnit } from "@/lib/plain-language"
 import { attentionBannerText, attentionCounts, countedDuplicate, engineHold, factorSource, GAS_LABELS, INITIAL_RESULTS_STATE, KIND_COLORS, needsWork, notYetCounted, resultsReducer, rowReasons, rowStatus } from "@/lib/results-view"
@@ -61,7 +61,7 @@ function completeness(results: ResultsResponse, coverage: Coverage) {
     // BF-01 (count mode): a possible duplicate counted in the subtotal is a known gap too.
     const duplicates = results.records.filter(row => row.scope === scope && countedDuplicate(row)).length
     const parts = [count ? `${plural(count, "record")} not yet counted` : "", duplicates ? `${plural(duplicates, "possible duplicate")} counted` : "", issues.open ? `${plural(issues.open, "setup answer")} still open` : "", issues.gaps ? plural(issues.gaps, "possible coverage gap") : "", !complete ? "some results only partly calculated" : "", issues.unchecked ? "coverage not checked against company setup" : ""].filter(Boolean)
-    return parts.length ? `Incomplete — ${parts.join("; ")}` : "No known gaps — each source type and included site in company setup has at least one record"
+    return parts.length ? `Incomplete — ${parts.join("; ")}` : COVERAGE_TEXT.resultsNoGaps
   }
   // BF1: no subtotal while a record was calculated means the engine's subtotal couldn't be verified, not that there are no records.
   const unverified = "Incomplete — the subtotal could not be verified; per-record results are listed"
@@ -138,7 +138,7 @@ function Report({ results, coverage, scope3, onScope3Ready }: { results: Results
       {coverage.state !== "ready" && <li><strong>Coverage not checked</strong> — these records could not be compared with company setup when this draft was prepared, so expected sources may be missing.</li>}
       {coverage.state === "ready" && coverage.setupOpen.map(item => <li key={item.id}><strong>Open in company setup</strong> — {item.title}. {item.detail}</li>)}
       {coverage.state === "ready" && coverage.gaps.map(gap => <li key={gap.id}><strong>Possible gap (Scope {gap.scope})</strong> — {gap.title}.{gap.note ? <> {noteLabel(gap)}: “{gap.note}”</> : null}</li>)}
-    </ul> : <p>None found: every record is counted, company setup has no open answers, and each source type and included site it lists has at least one record. This checks coverage by type and site, not that each bill covers the whole year.</p>}
+    </ul> : <p>{COVERAGE_TEXT.reportNoneFound}</p>}
     <h3>Estimates, partial calculations and data quality</h3>
     {estimated.length ? <ul>{estimated.map(row => <li key={row.recordId}><strong>{kindLabel(row.kind)} · {row.sourceId}</strong> — {[row.quality === "estimated" ? `Activity data marked Estimated${row.estimateBasis ? ` (${row.estimateBasis})` : ""}.` : "", ...(row.scope1?.estimates ?? []).map(reasonText), ...(row.scope2?.estimates ?? []).map(reasonText)].filter(Boolean).join(" ")}</li>)}</ul> : <p>No records are marked Estimated and no method estimates were applied.</p>}
     {unstated > 0 && <p>{plural(unstated, "calculated record has", "calculated records have")} data quality “Unknown”.</p>}
