@@ -99,6 +99,9 @@ function authServer(options: { honourAbort?: boolean; refresh?: "hold" | "fail" 
       const { email } = JSON.parse(String(init?.body ?? "{}")) as { email: string }
       return respond({ status: 200, body: sessionBody(email.startsWith("b0b0") ? UB : UA, `signed-in-${calls.length}`) })
     }
+    // WO-14c: the email-link exchange (PKCE) and the sign-in-link request.
+    if (grant === "pkce") return respond({ status: 200, body: sessionBody(UB, `link-${calls.length}`) })
+    if (url.pathname.endsWith("/otp")) return respond({ status: 200, body: {} })
     if (grant === "refresh_token") {
       if (options.refresh === "fail") return respond("network-error")
       return new Promise<Response>((resolve, reject) => {
@@ -721,4 +724,130 @@ test("the generation's own subscriptions stop at retire()", async () => {
   seen.length = 0
   await sleep(20)
   expect(seen).toEqual([])
+})
+
+// ---------- WO-14c: Addendum C follow-ups ----------
+
+test("F-A: on a retired generation, code-verifier operations are silent: a sign-in-link request and an exchange return {error}, never reject", async () => {
+  const key = freshKey(), storage = recordingStorage(), server = authServer()
+  const { made } = generation(storage, server, key, null)
+  await made.client.auth.initialize()
+  made.retire()
+  const callsBefore = server.calls.length
+  const realNow = Date.now
+  Date.now = () => realNow() + 60_000
+  try {
+    // signInWithOtp (PKCE) writes the verifier first; on a retired generation that write is a no-op, and the request 503s.
+    const link = await made.client.auth.signInWithOtp({ email: `${UB}@example.test`, options: { shouldCreateUser: false } })
+    expect(link.error).toMatchObject({ name: "AuthRetryableFetchError", status: 503 })
+    // The exchange finds no verifier (a retired generation reads none) and says so; its removals are no-ops.
+    storage.entries.set(`${key}-code-verifier`, "\"verifier-of-another-generation\"")
+    const exchange = await made.client.auth.exchangeCodeForSession("one-time-code")
+    expect(exchange.error).toMatchObject({ name: "AuthPKCECodeVerifierMissingError" })
+  } finally { Date.now = realNow }
+  expect(server.calls.length).toBe(callsBefore)
+  expect(storage.entries.get(`${key}-code-verifier`)).toBe("\"verifier-of-another-generation\"")
+  expect(storage.ops.filter(op => op.key !== `${key}-code-verifier` || op.op === "set")).toEqual([])
+})
+
+test("F-A: an exchange refused by the pre-check on a live, non-deliberate generation returns {error} and leaves the verifier", async () => {
+  const key = freshKey(), storage = recordingStorage(), server = authServer()
+  storage.entries.set(key, stampLineage(JSON.stringify(sessionBody(UA, "a-live")), LA)!)
+  storage.entries.set(`${key}-code-verifier`, "\"v\"")
+  const { made, events } = generation(storage, server, key, LA)
+  await made.client.auth.initialize()
+  await sleep(5)
+  const eventsBefore = events.length
+  const realNow = Date.now
+  Date.now = () => realNow() + 60_000
+  let result: Awaited<ReturnType<typeof made.client.auth.exchangeCodeForSession>>
+  try { result = await made.client.auth.exchangeCodeForSession("one-time-code") } finally { Date.now = realNow }
+  expect(result.error).toMatchObject({ name: "AuthRetryableFetchError", status: 503 })
+  expect(JSON.parse(storage.entries.get(key)!).access_token).toBe("a-live")
+  expect(storage.entries.get(`${key}-code-verifier`)).toBe("\"v\"")
+  expect(events.slice(eventsBefore)).toEqual([])
+  made.retire()
+})
+
+test("F-C: one sign-in per generation: a second sign-in on the same generation is refused before anything is written", async () => {
+  const key = freshKey(), storage = recordingStorage(), server = authServer()
+  const { made, events } = generation(storage, server, key, LB, true)
+  expect((await made.client.auth.signInWithPassword({ email: `${UB}@example.test`, password: "x" })).error).toBeNull()
+  const first = storage.entries.get(key)!
+  expect(JSON.parse(first).user.id).toBe(UB)
+  const opsBefore = storage.ops.length
+  const realNow = Date.now
+  Date.now = () => realNow() + 60_000
+  try {
+    const second = await made.client.auth.signInWithPassword({ email: `${UA}@example.test`, password: "x" })
+    expect(second.error).toMatchObject({ name: "AuthRetryableFetchError", status: 503 })
+  } finally { Date.now = realNow }
+  expect(storage.entries.get(key)).toBe(first)
+  expect(storage.ops.slice(opsBefore)).toEqual([])
+  expect(events.filter(event => event === "SIGNED_IN")).toHaveLength(1)
+  // The generation keeps serving its own session: it isn't retired by the refusal.
+  expect(made.retired).toBe(false)
+  made.retire()
+})
+
+test("F-C: a non-deliberate generation never takes a sign-in answer (nothing stored over its own or any lineage)", async () => {
+  for (const stored of [null, stampLineage(JSON.stringify(sessionBody(UA, "a-live")), LA)!]) {
+    const key = freshKey(), storage = recordingStorage(), server = authServer()
+    if (stored) storage.entries.set(key, stored)
+    const { made } = generation(storage, server, key, LA)
+    await made.client.auth.initialize()
+    const realNow = Date.now
+    Date.now = () => realNow() + 60_000
+    try { expect((await made.client.auth.signInWithPassword({ email: `${UB}@example.test`, password: "x" })).error).toMatchObject({ status: 503 }) } finally { Date.now = realNow }
+    expect(storage.entries.get(key) ?? null).toBe(stored)
+    made.retire()
+  }
+})
+
+test("F-E: a refresh answered 200 with a JSON body that isn't an object (null, 5) is refused as 503: no TypeError, nothing stored", async () => {
+  for (const body of [null, 5, "text"]) {
+    const key = freshKey(), storage = recordingStorage(), server = authServer()
+    const before = expiringSession(UA, LA)
+    storage.entries.set(key, before)
+    const { made, events } = generation(storage, server, key, LA)
+    await server.waitForRefresh()
+    const opsBefore = storage.ops.length
+    const outcome = refreshOutcome(made)
+    // Without the guard auth-js reads `null.access_token`: a TypeError rejects its deferred, unhandled (bun fails the test).
+    expect(await settledNow(() => server.answerRefresh({ status: 200, body }), outcome)).toEqual(refused)
+    expect(storage.ops.slice(opsBefore)).toEqual([])
+    expect(storage.entries.get(key)).toBe(before)
+    expect(events).not.toContain("TOKEN_REFRESHED")
+    expect(events).not.toContain("SIGNED_OUT")
+    made.retire()
+  }
+})
+
+test("onRetire is called on a later task, also when the generation retires itself", async () => {
+  const key = freshKey(), storage = recordingStorage(), server = authServer()
+  storage.entries.set(key, expiringSession(UA, LA))
+  const seen: number[] = []
+  let inside = false
+  const made = createGeneration({ url: URL_BASE, anonKey: "k", storageKey: key, lineage: LA, deliberate: false, storage, fetch: server.fetch, lock, onRetire: retired => { seen.push(retired.id); expect(inside).toBe(false) } })
+  await server.waitForRefresh()
+  addEnded(storage, { lineage: LA, userId: UA }, Date.now())
+  const outcome = refreshOutcome(made)
+  inside = true
+  const settling = settledNow(() => server.answerRefresh({ status: 200, body: sessionBody(UA, "a-late") }), outcome)
+  inside = false
+  expect(await settling).toEqual(refused)
+  expect(made.retired).toBe(true)
+  await sleep(5)
+  expect(seen).toEqual([made.id])
+})
+
+test("WO-14c (D14): a generation's client is auth-js's own, sending the headers createClient gave it, and no realtime client", async () => {
+  const key = freshKey(), storage = recordingStorage()
+  const seen: Array<Record<string, string>> = []
+  const fetch = async (_input: RequestInfo | URL, init?: RequestInit) => { seen.push(Object.fromEntries(new Headers(init?.headers).entries())); return new Response(JSON.stringify({ error_code: "invalid_credentials", msg: "no" }), { status: 400, headers: { "content-type": "application/json" } }) }
+  const made = createGeneration({ url: URL_BASE, anonKey: "sb_publishable_test", storageKey: key, lineage: LB, deliberate: true, storage, fetch, lock })
+  await made.client.auth.signInWithPassword({ email: `${UB}@example.test`, password: "x" })
+  expect(seen.at(-1)).toMatchObject({ apikey: "sb_publishable_test", authorization: "Bearer sb_publishable_test", "x-client-info": "supabase-js-web/2.105.1" })
+  expect(Object.keys(made.client)).toEqual(["auth"])
+  made.retire()
 })

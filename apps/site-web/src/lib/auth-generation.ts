@@ -26,7 +26,7 @@
  *   that work.
  * - **`retire()` (A4)** stops auto-refresh again on the next macrotask after a pending initialize settles.
  */
-import { createClient, navigatorLock, type SupabaseClient, type AuthChangeEvent, type Session } from "@supabase/supabase-js"
+import { AuthClient, navigatorLock, type AuthChangeEvent, type Session } from "@supabase/supabase-js"
 import { decideGet, decideRemove, decideSet, isLineage, readEnded, readStored, wouldRefuseRemove, wouldRefuseSet, type GenerationState, type RefusalReason } from "./auth-lineage"
 
 /** Thrown by a generation's storage when it refuses a read-write it must never make (the backstop). Not an AuthError. */
@@ -52,6 +52,11 @@ export interface GenerationOptions {
   deliberate: boolean
   /** Only the boot generation reads a sign-in from the address. */
   detectSessionInUrl?: boolean
+  /**
+   * Called (on a later task, never inside auth-js's own call) whenever the generation retires, including when it retires
+   * itself because the fetch or the storage refused an answer. WO-14c: the app then re-reads the stored session.
+   */
+  onRetire?: (generation: Generation) => void
   /** Defaults: localStorage, the global fetch, navigatorLock, Date.now. Tests inject their own. */
   storage?: SyncStorage
   fetch?: Fetch
@@ -61,7 +66,8 @@ export interface GenerationOptions {
 
 export interface Generation {
   readonly id: number
-  readonly client: SupabaseClient
+  /** The generation's auth client: auth-js's own client, made with the options `createClient` gives it (only auth is used). */
+  readonly client: { readonly auth: InstanceType<typeof AuthClient> }
   readonly lineage: string | null
   /** True until the sign-in's own session is written (L1). */
   readonly deliberate: boolean
@@ -92,6 +98,17 @@ function sessionBody(value: unknown): boolean {
 
 let nextId = 0
 
+/** The X-Client-Info supabase-js 2.105.1 sends from a browser (its DEFAULT_HEADERS); auth-generation.test.ts pins the version. */
+const CLIENT_INFO = "supabase-js-web/2.105.1"
+
+/**
+ * WO-14c (QA D14): the reason every generation's fetch is aborted with, made once. `abort()` without a reason creates a
+ * DOMException whose captured stack keeps the frames it was created in alive: retire() runs inside the sign-in's submit
+ * handler, so that stack held the submit event, and through it the whole page as it was. A retired client stays
+ * reachable from its own BroadcastChannel (auth-js gives no public way to close it), so each sign-in kept one old page.
+ */
+const RETIRED_ABORT = new DOMException("The auth generation was retired.", "AbortError")
+
 export function createGeneration(options: GenerationOptions): Generation {
   // F3: a lineage is a UUID; anything else would write a session that can never be recognised or ended.
   if (options.lineage !== null && !isLineage(options.lineage)) throw new TypeError("A generation's lineage must be a UUID.")
@@ -121,6 +138,7 @@ export function createGeneration(options: GenerationOptions): Generation {
   const genStorage: SyncStorage = {
     getItem(key) {
       if (key !== sessionKey) return state.retired ? null : storage.getItem(key)
+      // (A retired generation reads no code verifier either: the line above.)
       const stored = storage.getItem(key)
       const decision = decideGet(state, stored, readEnded(storage, now()))
       switch (decision.kind) {
@@ -136,6 +154,9 @@ export function createGeneration(options: GenerationOptions): Generation {
       }
     },
     setItem(key, value) {
+      // F-A: a retired generation's code-verifier writes are silent no-ops (auth-js would otherwise reject a sign-in-link
+      // request or an exchange with our error instead of returning its own {error}).
+      if (key === verifierKey) { if (!state.retired) storage.setItem(key, value); return }
       if (key !== sessionKey) { if (state.retired) refuse("retired"); storage.setItem(key, value); return }
       const judged = writing()
       signInAnswer = false
@@ -152,10 +173,9 @@ export function createGeneration(options: GenerationOptions): Generation {
     },
     removeItem(key) {
       if (key === verifierKey) {
-        if (state.retired) refuse("retired")
         // R2: only a sign-in removes the verifier (auth-js does so before saving the sign-in's session); a refresh never
-        // does, silently: a throw here would reject `_saveSession`.
-        if (writing().deliberate) storage.removeItem(key)
+        // does, silently: a throw here would reject `_saveSession`. F-A: on a retired generation, silently too.
+        if (!state.retired && writing().deliberate) storage.removeItem(key)
         return
       }
       if (key !== sessionKey) { if (state.retired) refuse("retired"); storage.removeItem(key); return }
@@ -188,6 +208,10 @@ export function createGeneration(options: GenerationOptions): Generation {
     const stored = storage.getItem(sessionKey)
     const refresh = new URL(url).searchParams.get("grant_type") === "refresh_token"
     signInAnswer = false
+    // F-C: one sign-in per generation. A sign-in answer is taken only by a deliberate generation that hasn't stored one:
+    // a second sign-in (or one on a refreshing, adopted generation) is refused here, before auth-js writes anything; the
+    // app makes a new deliberate generation for every sign-in.
+    if (response.ok && sessionBody(body) && !refresh && !state.deliberate) return unavailable()
     if (response.ok && sessionBody(body)) {
       // A refresh is never deliberate (L1); a sign-in's answer is, while the generation still is.
       const refusal = wouldRefuseSet(refresh ? { ...state, deliberate: false } : state, stored, readEnded(storage, now()))
@@ -229,10 +253,18 @@ export function createGeneration(options: GenerationOptions): Generation {
     })
   }
 
-  const client = createClient(options.url, options.anonKey, {
-    global: { fetch: genFetch as typeof fetch },
-    auth: { storageKey: sessionKey, storage: genStorage, lock: genLock, persistSession: true, autoRefreshToken: true, flowType: "pkce", detectSessionInUrl: options.detectSessionInUrl ?? false },
-  })
+  // WO-14c (QA D14): auth-js's client alone, with exactly what supabase-js's createClient passes to it (headers included).
+  // createClient also builds a realtime client whose socket adds window pagehide, pageshow and visibilitychange listeners
+  // it never removes, and REST and storage clients the app doesn't use here; one of each per generation stayed alive.
+  const client = {
+    auth: new AuthClient({
+      url: `${options.url.replace(/\/+$/, "")}/auth/v1`,
+      headers: { Authorization: `Bearer ${options.anonKey}`, apikey: options.anonKey, "X-Client-Info": CLIENT_INFO },
+      storageKey: sessionKey, storage: genStorage, lock: genLock, fetch: genFetch as typeof fetch,
+      persistSession: true, autoRefreshToken: true, flowType: "pkce", detectSessionInUrl: options.detectSessionInUrl ?? false,
+      hasCustomAuthorizationHeader: false,
+    }),
+  }
 
   const generation: Generation = {
     id,
@@ -251,7 +283,7 @@ export function createGeneration(options: GenerationOptions): Generation {
     retire() {
       if (state.retired) return
       state.retired = true
-      abort.abort()
+      abort.abort(RETIRED_ABORT)
       markRetired()
       void client.auth.stopAutoRefresh().catch(() => {})
       // A4: an initialize still in flight restarts the ticker and the visibility listener in its `finally`; once it has
@@ -260,6 +292,7 @@ export function createGeneration(options: GenerationOptions): Generation {
         .then(() => new Promise<void>(resolve => { setTimeout(resolve, 0) }))
         .then(() => client.auth.stopAutoRefresh()).catch(() => {})
       for (const unsubscribe of [...subscriptions]) unsubscribe()
+      if (options.onRetire) { const notify = options.onRetire; setTimeout(() => notify(generation), 0) }
     },
   }
   return generation

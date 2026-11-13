@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from "react"
-import { createClient, type SupabaseClient } from "@supabase/supabase-js"
+// WO-14c (design step 4): sessions through auth generations (boot, adoption, sign-in); sign-out unchanged.
+import { createAuthSessions } from "@/lib/auth-sessions"
 import { StagingWorkspace } from "./StagingWorkspace"
 import { Landing } from "./Landing"
 import { signInNoticeTone } from "@/lib/sign-in-notice"
@@ -25,7 +26,9 @@ function storedSessionUser(key: string): string | null {
 function clearViewHash() { if (window.location.hash) window.history.replaceState(null, "", window.location.pathname + window.location.search) }
 
 export function PrivateStaging() {
-  const [client, setClient] = useState<SupabaseClient | null>(null)
+  // WO-14c: the page's Supabase sessions (one auth generation at a time); ready once the configuration has loaded.
+  const sessions = useRef<ReturnType<typeof createAuthSessions> | null>(null)
+  const [ready, setReady] = useState(false)
   const [active, setActive] = useState<ActiveStagingSession | null>(null)
   const [message, setMessage] = useState<string>(ACCESS_TEXT.checking)
   const [email, setEmail] = useState("")
@@ -54,9 +57,7 @@ export function PrivateStaging() {
 
   useEffect(() => {
     let alive = true
-    let authClient: SupabaseClient | null = null
-    let unsubscribe = () => {}
-    let authEvents = 0
+    let storageKey: string | null = null
     const configuration = new AbortController()
     const lifecycle = createStagingAuthorization({
       // 401 ends the session, 403 is no access; no answer, a timeout, 408/425/429 or 5xx is transient. Anything else fails closed.
@@ -134,28 +135,39 @@ export function PrivateStaging() {
         const config = decodeStagingConfig(await response.json())
         if (!alive) return
         // Whose session this browser already held when the page loaded (read before Supabase can change it).
-        const storageKey = `neuvetra:m63:${config.projectRef}:auth`
-        if (opened.current === null && !signInFromUrl.current) loadUser.current = storedSessionUser(storageKey)
-        authClient = createClient(config.supabaseUrl, config.anonKey, { auth: { storageKey, persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: "pkce" } })
-        setClient(authClient)
-        const { data } = authClient.auth.onAuthStateChange((_event, session) => { authEvents++; void lifecycle.authorize(session) })
-        unsubscribe = () => data.subscription.unsubscribe()
-        const initialAuthEvents = authEvents
-        const result = await authClient.auth.getSession()
-        if (alive && authEvents === initialAuthEvents) await lifecycle.authorize(result.data.session)
+        const key = `neuvetra:m63:${config.projectRef}:auth`
+        storageKey = key
+        if (opened.current === null && !signInFromUrl.current) loadUser.current = storedSessionUser(key)
+        // WO-14c: the stored session is read by the page itself and reported here; a session another tab signed in (or a
+        // tab still on old code refreshed) is adopted. The email link's ?code= is exchanged by the boot generation.
+        const created = createAuthSessions({
+          url: config.supabaseUrl, anonKey: config.anonKey, storageKey: key, search: window.location.search,
+          onSession: session => { if (alive) void lifecycle.authorize(session) },
+          // Another tab's new sign-in opens this tab too (design §1). D12: whatever was being typed into this tab's sign-in
+          // form is cleared, so it can't reappear in the form later. (Never called for a sign-out's own read, D11, or for
+          // the session just signed out here, D10: see auth-sessions.)
+          onAdopt: () => { lifecycle.allowSignIn(); setEmail(""); setPassword("") },
+        })
+        sessions.current = created
+        setReady(true)
+        await created.boot()
       } catch { if (alive) setMessage("Neuvetra is unavailable right now. Please try again later.") }
     }
     // WO-05b (QA-141): a deliberate sign-out in another tab removes every draft here, by BroadcastChannel or by the
     // sign-out mark it leaves in localStorage (whichever arrives first), and no draft is written until a workspace opens.
     const stopDraftClear = listenForDraftClear(() => clearAllDrafts(draftStorage()))
-    const onStorage = (event: StorageEvent) => { if (event.key === SIGNED_OUT_MARK_KEY && event.newValue) clearAllDrafts(draftStorage()) }
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === SIGNED_OUT_MARK_KEY && event.newValue) clearAllDrafts(draftStorage())
+      // WO-14c: another tab wrote or removed the stored session (or cleared storage): read it again.
+      if (storageKey && (event.key === storageKey || event.key === null)) sessions.current?.sync()
+    }
     window.addEventListener("storage", onStorage)
     const onFocus = () => { void lifecycle.refresh() }
     const interval = window.setInterval(onFocus, 60_000)
     window.addEventListener("focus", onFocus)
     window.addEventListener("online", onFocus)
     void initialize()
-    return () => { alive = false; lifecycle.dispose(); configuration.abort(); unsubscribe(); authClient?.auth.stopAutoRefresh(); window.clearInterval(interval); window.removeEventListener("focus", onFocus); window.removeEventListener("online", onFocus); window.removeEventListener("storage", onStorage); stopDraftClear() }
+    return () => { alive = false; lifecycle.dispose(); configuration.abort(); sessions.current?.dispose(); sessions.current = null; window.clearInterval(interval); window.removeEventListener("focus", onFocus); window.removeEventListener("online", onFocus); window.removeEventListener("storage", onStorage); stopDraftClear() }
   }, [])
 
   // Each access state puts focus on its own heading when it appears (WO-05a).
@@ -164,12 +176,14 @@ export function PrivateStaging() {
 
   async function signIn(event: FormEvent) {
     event.preventDefault()
-    if (!client || busy) return
+    const current = sessions.current
+    if (!current || busy) return
     authorization.current?.allowSignIn(); setBusy(true); setMessage("Signing in…")
     if (opened.current === null) loadTrusted.current = false
     try {
-      const { error } = await client.auth.signInWithPassword({ email: email.trim(), password })
-      if (error) setMessage("Sign-in failed. Check your invited account details.")
+      // WO-14c: each sign-in runs on a new generation; an answer that arrives after it was retired is discarded.
+      const outcome = await current.signIn(email.trim(), password)
+      if (outcome === "failed") setMessage("Sign-in failed. Check your invited account details.")
     } catch { setMessage("Sign-in is unavailable. Please try again.") }
     finally { setPassword(""); setBusy(false) }
   }
@@ -181,8 +195,9 @@ export function PrivateStaging() {
     clearViewHash(); forgetReturnView(viewStorage())
     opened.current = null; loadUser.current = null; endedUser.current = null; lastRole.current = null
     try {
-      if (!client) throw new Error("Authentication unavailable")
-      const { error } = await client.auth.signOut({ scope: "local" })
+      if (!sessions.current) throw new Error("Authentication unavailable")
+      // Unchanged in WO-14c: `client.auth.signOut({ scope: "local" })`, on the generation serving the stored session.
+      const { error } = await sessions.current.signOut()
       if (error) throw error
       setMessage("Signed out on this browser.")
     }
@@ -190,7 +205,7 @@ export function PrivateStaging() {
     finally { setBusy(false) }
   }
   async function sendSignInLink() {
-    if (!client || busy || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { setMessage("Enter your invited email address first."); return }
+    if (!sessions.current || busy || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { setMessage("Enter your invited email address first."); return }
     authorization.current?.allowSignIn(); setBusy(true)
     if (opened.current === null) loadTrusted.current = false
     try {
@@ -198,7 +213,7 @@ export function PrivateStaging() {
       // link goes to the bare origin (QA B1). The view comes from the user-bound stored return view, already validated.
       const ended = endedUser.current
       const view = ended?.email && ended.email.toLowerCase() === email.trim().toLowerCase() ? peekReturnView(viewStorage(), ended.userId) : null
-      const { error } = await client.auth.signInWithOtp({ email: email.trim(), options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + "/" + (view ?? "") } })
+      const { error } = await sessions.current.sendSignInLink(email.trim(), window.location.origin + "/" + (view ?? ""))
       if (error) throw error
       setMessage("If this email has an approved account, a sign-in link is on its way. Open it in this browser.")
     } catch { setMessage("The sign-in link could not be sent. Please try again later.") }
@@ -231,9 +246,9 @@ export function PrivateStaging() {
       <label className="nv-field"><span>Email</span><input type="email" autoComplete="username" required value={email} onChange={event => setEmail(event.target.value)} /></label>
       <label className="nv-field"><span>Password</span><input type="password" autoComplete="current-password" required value={password} onChange={event => setPassword(event.target.value)} /></label>
       {tone && <div key={tone} className={`nv-notice ${tone === "error" ? "nv-notice--error" : "nv-notice--ok"}`} style={{ margin: 0 }} role={tone === "error" ? "alert" : undefined}><Icon name={tone === "error" ? "alert" : "check"} /><p>{message}</p></div>}
-      <button type="submit" className="nv-btn nv-btn--primary nv-btn--block" disabled={!client} aria-disabled={busy || undefined}>{busy ? "Signing in…" : "Sign in"}</button>
+      <button type="submit" className="nv-btn nv-btn--primary nv-btn--block" disabled={!ready} aria-disabled={busy || undefined}>{busy ? "Signing in…" : "Sign in"}</button>
       <div className="nv-or">or</div>
-      <button type="button" className="nv-btn nv-btn--block" disabled={!client} aria-disabled={busy || undefined} onClick={() => { if (!busy) void sendSignInLink() }}>Email me a sign-in link</button>
+      <button type="button" className="nv-btn nv-btn--block" disabled={!ready} aria-disabled={busy || undefined} onClick={() => { if (!busy) void sendSignInLink() }}>Email me a sign-in link</button>
     </form>
   </div></div>
   if (problem) return <div className="nv-access">{live}<div className="nv-access__card">
@@ -252,5 +267,5 @@ export function PrivateStaging() {
     <button type="button" className="nv-btn" disabled={busy} onClick={() => void signOut()}>Sign out</button>
   </div></div>
   // On the landing page an error is announced once, by the sign-in card's role="alert" (WO-02), so the polite region stays empty for it.
-  return <div>{tone === "error" ? <p className="nv-sr" role="status" aria-live="polite" /> : live}<Landing ready={Boolean(client)} busy={busy} message={message} email={email} password={password} onEmail={setEmail} onPassword={setPassword} onSignIn={event => void signIn(event)} onSendLink={() => void sendSignInLink()} /></div>
+  return <div>{tone === "error" ? <p className="nv-sr" role="status" aria-live="polite" /> : live}<Landing ready={ready} busy={busy} message={message} email={email} password={password} onEmail={setEmail} onPassword={setPassword} onSignIn={event => void signIn(event)} onSendLink={() => void sendSignInLink()} /></div>
 }
