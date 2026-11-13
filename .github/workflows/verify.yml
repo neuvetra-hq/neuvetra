@@ -588,7 +588,7 @@ jobs:
     env:
       E2E_DATABASE_URL: postgres://e2e_admin@127.0.0.1:55480/neuvetra_e2e
       # The journeys in apps/site-web/e2e/browser-smoke.test.ts; raise it with every journey added.
-      E2E_EXPECTED_PASS: "19"
+      E2E_EXPECTED_PASS: "25"
       # playwright-core 1.59.1 drives Chrome for Testing 147.0.7727.15 (its browsers.json, chromium revision 1217).
       E2E_CHROME_VERSION: "147.0.7727.15"
     steps:

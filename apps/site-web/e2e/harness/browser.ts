@@ -214,6 +214,11 @@ export interface JourneyOptions {
   height?: number
   /** Start already signed in as this user (the session is in localStorage before the app loads). */
   signedInAs?: UserKey
+  /**
+   * WO-14c: the lifetime of that session's access token in seconds (default 24 h). Under 90 s the app refreshes it as it
+   * loads (auth-js's margin); a little more lets a journey watch the 30 s auto-refresh tick do it.
+   */
+  sessionLifeSeconds?: number
 }
 
 export async function openJourney(browser: Browser, stack: Stack, options: JourneyOptions = {}): Promise<Journey> {
@@ -223,7 +228,8 @@ export async function openJourney(browser: Browser, stack: Stack, options: Journ
   await context.route(SUPABASE, route => auth.handle(route))
   if (options.signedInAs) {
     // Only on the first document of this context: a later reload must see whatever the app itself left in storage.
-    const session = JSON.stringify(auth.newSession(options.signedInAs))
+    // Stored as main's code (before WO-14) stores it: without nv_lineage. The app adopts it as it loads.
+    const session = JSON.stringify(auth.newSession(options.signedInAs, options.sessionLifeSeconds))
     await context.addInitScript(([key, value]) => {
       if (window.sessionStorage.getItem("e2e:seeded")) return
       window.sessionStorage.setItem("e2e:seeded", "1")
@@ -241,9 +247,22 @@ export async function openJourney(browser: Browser, stack: Stack, options: Journ
     window.addEventListener("hashchange", note)
     note()
   })
+  // WO-14c (I11): every unhandled promise rejection in any page of the journey is recorded too (pageerror also reports it).
+  await context.addInitScript(() => {
+    window.addEventListener("unhandledrejection", event => {
+      const reason = event.reason as { message?: unknown } | undefined
+      const store = window as unknown as { __nvUnhandled?: string[] }
+      ;(store.__nvUnhandled ??= []).push(String(reason?.message ?? reason))
+    })
+  })
+  const journey: Journey = { context, page: null as unknown as Page, errors: [], dialogs: [], answerDialogs: false, writes: [], auth }
   const page = await context.newPage()
-  const journey: Journey = { context, page, errors: [], dialogs: [], answerDialogs: false, writes: [], auth }
+  journey.page = page
   page.on("pageerror", error => journey.errors.push(error.message))
+  // Every later page of the context (a journey may open a second tab) reports its uncaught errors too, except from its
+  // initial about:blank document, where the init scripts can't use sessionStorage (the first page's listener is attached
+  // after that document, as before).
+  context.on("page", opened => { if (opened !== page) opened.on("pageerror", error => { if (opened.url() !== "about:blank") journey.errors.push(error.message) }) })
   page.on("dialog", dialog => {
     journey.dialogs.push(`${dialog.type()}: ${dialog.message()}`)
     void (journey.answerDialogs ? dialog.accept() : dialog.dismiss())
@@ -253,6 +272,16 @@ export async function openJourney(browser: Browser, stack: Stack, options: Journ
     if (request.method() !== "GET" && url.pathname.startsWith("/workspace-api/")) journey.writes.push(`${request.method()} ${url.pathname}`)
   })
   return journey
+}
+
+/** WO-14c (I11): the unhandled promise rejections each open page has recorded since it loaded. */
+export async function unhandledRejections(journey: Journey): Promise<string[]> {
+  const found: string[] = []
+  for (const page of journey.context.pages()) {
+    if (page.isClosed()) continue
+    found.push(...await page.evaluate(() => (window as unknown as { __nvUnhandled?: string[] }).__nvUnhandled ?? []).catch(() => []))
+  }
+  return found
 }
 
 /** Every address the page has shown in this tab, oldest first. */

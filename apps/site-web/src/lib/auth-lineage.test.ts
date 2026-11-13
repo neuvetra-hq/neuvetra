@@ -378,3 +378,26 @@ test("adoptLegacy: two tabs adopting at once converge on the stamp written last"
   const late = memoryStorage({ [KEY]: shared.getItem(KEY)! })
   expect(adoptLegacy(late, KEY, [], { lineage: () => LC })).toEqual({ kind: "existing", lineage: LB })
 })
+
+test("F-D: adoptLegacy refuses a session without a lineage whose user signed out here after it was issued", () => {
+  const issued = (at: number, life = 3600) => JSON.stringify({ access_token: "a", refresh_token: "r", token_type: "bearer", expires_in: life, expires_at: Math.floor(at / 1000) + life, user: { id: UA } })
+  const signedOut = (at: number, userId: string | null = UA) => [{ lineage: LD, userId, at }]
+  // Issued before the sign-out (an old-code tab's late refresh of the ended session): refused, nothing written.
+  const late = memoryStorage({ [KEY]: issued(NOW - 60_000) })
+  expect(adoptLegacy(late, KEY, signedOut(NOW), { lineage: () => LC })).toEqual({ kind: "ended-user", userId: UA })
+  expect(late.getItem(KEY)).toBe(issued(NOW - 60_000))
+  // Issued after the sign-out (the same user signed in again in an old-code tab): adopted.
+  const again = memoryStorage({ [KEY]: issued(NOW + 60_000) })
+  expect(adoptLegacy(again, KEY, signedOut(NOW), { lineage: () => LC })).toEqual({ kind: "stamped", lineage: LC })
+  // Another user's sign-out, or an E entry without a user, doesn't touch this user.
+  for (const list of [signedOut(NOW, UB), signedOut(NOW, null), []]) expect(adoptLegacy(memoryStorage({ [KEY]: issued(NOW - 60_000) }), KEY, list, { lineage: () => LC }).kind).toBe("stamped")
+  // The issue time can't be read and the user is in E: refused; not in E: adopted.
+  const unknown = JSON.stringify({ access_token: "a", refresh_token: "r", expires_at: Math.floor(NOW / 1000) + 3600, user: { id: UA } })
+  expect(adoptLegacy(memoryStorage({ [KEY]: unknown }), KEY, signedOut(NOW), { lineage: () => LC })).toEqual({ kind: "ended-user", userId: UA })
+  expect(adoptLegacy(memoryStorage({ [KEY]: unknown }), KEY, [], { lineage: () => LC }).kind).toBe("stamped")
+  // User IDs compare in lower case (E stores them so): an upper-case user ID in the session is the same user.
+  const upper = JSON.stringify({ ...JSON.parse(issued(NOW - 60_000)), user: { id: UA.toUpperCase() } })
+  expect(adoptLegacy(memoryStorage({ [KEY]: upper }), KEY, signedOut(NOW), { lineage: () => LC })).toEqual({ kind: "ended-user", userId: UA })
+  // A session that already has a live lineage is unaffected by F-D (it is adopted as it is).
+  expect(adoptLegacy(memoryStorage({ [KEY]: stampLineage(issued(NOW - 60_000), LA)! }), KEY, signedOut(NOW), { lineage: () => LC })).toEqual({ kind: "existing", lineage: LA })
+})
