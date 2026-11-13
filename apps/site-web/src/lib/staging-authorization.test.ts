@@ -43,7 +43,16 @@ function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;
   localStorage:{getItem:(k:string)=>storage.get(k)??null,setItem:(k:string,v:string)=>{storage.set(k,v)},removeItem:(k:string)=>{storage.delete(k)}}}
  const useEffect=(effect:()=>void|(()=>void),deps?:unknown[])=>{const i=cursor++,prev=effects[i];if(!prev||!deps||!prev.deps||deps.some((d,k)=>!Object.is(d,prev.deps![k])))pendingEffects.push(()=>{if(prev&&typeof prev.cleanup==="function")prev.cleanup();effects[i]={deps,cleanup:effect()}})}
  const names={useEffect,useRef:(value:unknown)=>{const i=cursor++;return slots[i]??(slots[i]={current:value})},useState:(value:unknown)=>{const i=cursor++;if(!(i in slots))slots[i]=value;return [slots[i],(next:any)=>{slots[i]=typeof next==="function"?next(slots[i]):next}]},
-  createClient:()=>client,StagingWorkspace:Workspace,decodeStagingAccess,decodeStagingConfig,
+  // WO-14c: the component takes its sessions from createAuthSessions (tested against the real auth-js in
+  // auth-sessions.test.ts). Here it is a thin stand-in over the same fake client: boot reports the session held at load,
+  // an emitted auth event reports its session, and sign-in, the link and sign-out go to the fake client as before.
+  createAuthSessions:(opts:any)=>{
+   client.auth.onAuthStateChange((_event:string,s:any)=>opts.onSession(s))
+   return {boot:async()=>{const result=await client.auth.getSession();opts.onSession(result.data.session)},sync(){},
+    signIn:async(email:string,password:string)=>{const {error}=await client.auth.signInWithPassword({email,password});return error?"failed":"signed-in"},
+    sendSignInLink:(email:string,emailRedirectTo:string)=>client.auth.signInWithOtp({email,options:{shouldCreateUser:false,emailRedirectTo}}),
+    signOut:()=>client.auth.signOut({scope:"local"}),dispose(){unsubscribed=true;stopped=true}}
+  },StagingWorkspace:Workspace,decodeStagingAccess,decodeStagingConfig,
   // Retries are scheduled on a fake clock the test advances; jitter is fixed at its midpoint (×1.0).
   createStagingAuthorization:(deps:any)=>createStagingAuthorization({...deps,random:()=>0.5,now:()=>clock.fixed??(clock.t+=10_000),schedule:(run:()=>void,ms:number)=>{const item={run,ms,cancelled:false};scheduled.push(item);return ()=>{item.cancelled=true}}}),
   // The session check's 15 s limit runs in 5 ms here.

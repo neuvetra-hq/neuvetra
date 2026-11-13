@@ -52,6 +52,11 @@ export interface GenerationOptions {
   deliberate: boolean
   /** Only the boot generation reads a sign-in from the address. */
   detectSessionInUrl?: boolean
+  /**
+   * Called (on a later task, never inside auth-js's own call) whenever the generation retires, including when it retires
+   * itself because the fetch or the storage refused an answer. WO-14c: the app then re-reads the stored session.
+   */
+  onRetire?: (generation: Generation) => void
   /** Defaults: localStorage, the global fetch, navigatorLock, Date.now. Tests inject their own. */
   storage?: SyncStorage
   fetch?: Fetch
@@ -121,6 +126,7 @@ export function createGeneration(options: GenerationOptions): Generation {
   const genStorage: SyncStorage = {
     getItem(key) {
       if (key !== sessionKey) return state.retired ? null : storage.getItem(key)
+      // (A retired generation reads no code verifier either: the line above.)
       const stored = storage.getItem(key)
       const decision = decideGet(state, stored, readEnded(storage, now()))
       switch (decision.kind) {
@@ -136,6 +142,9 @@ export function createGeneration(options: GenerationOptions): Generation {
       }
     },
     setItem(key, value) {
+      // F-A: a retired generation's code-verifier writes are silent no-ops (auth-js would otherwise reject a sign-in-link
+      // request or an exchange with our error instead of returning its own {error}).
+      if (key === verifierKey) { if (!state.retired) storage.setItem(key, value); return }
       if (key !== sessionKey) { if (state.retired) refuse("retired"); storage.setItem(key, value); return }
       const judged = writing()
       signInAnswer = false
@@ -152,10 +161,9 @@ export function createGeneration(options: GenerationOptions): Generation {
     },
     removeItem(key) {
       if (key === verifierKey) {
-        if (state.retired) refuse("retired")
         // R2: only a sign-in removes the verifier (auth-js does so before saving the sign-in's session); a refresh never
-        // does, silently: a throw here would reject `_saveSession`.
-        if (writing().deliberate) storage.removeItem(key)
+        // does, silently: a throw here would reject `_saveSession`. F-A: on a retired generation, silently too.
+        if (!state.retired && writing().deliberate) storage.removeItem(key)
         return
       }
       if (key !== sessionKey) { if (state.retired) refuse("retired"); storage.removeItem(key); return }
@@ -188,6 +196,10 @@ export function createGeneration(options: GenerationOptions): Generation {
     const stored = storage.getItem(sessionKey)
     const refresh = new URL(url).searchParams.get("grant_type") === "refresh_token"
     signInAnswer = false
+    // F-C: one sign-in per generation. A sign-in answer is taken only by a deliberate generation that hasn't stored one:
+    // a second sign-in (or one on a refreshing, adopted generation) is refused here, before auth-js writes anything; the
+    // app makes a new deliberate generation for every sign-in.
+    if (response.ok && sessionBody(body) && !refresh && !state.deliberate) return unavailable()
     if (response.ok && sessionBody(body)) {
       // A refresh is never deliberate (L1); a sign-in's answer is, while the generation still is.
       const refusal = wouldRefuseSet(refresh ? { ...state, deliberate: false } : state, stored, readEnded(storage, now()))
@@ -260,6 +272,7 @@ export function createGeneration(options: GenerationOptions): Generation {
         .then(() => new Promise<void>(resolve => { setTimeout(resolve, 0) }))
         .then(() => client.auth.stopAutoRefresh()).catch(() => {})
       for (const unsubscribe of [...subscriptions]) unsubscribe()
+      if (options.onRetire) { const notify = options.onRetire; setTimeout(() => notify(generation), 0) }
     },
   }
   return generation
