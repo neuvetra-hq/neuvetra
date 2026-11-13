@@ -804,3 +804,12 @@ Object.assign(SCOPE3_DISCLOSURE_TEXT, SCOPE3_REASON_TEXT_BF02)
 /** BF-02b (a): the CSV "Superseded by" cell of a line held because its replacing record isn't counted (newly written CSVs only). */
 export const SCOPE3_REPLACING_RECORD_CSV_TEXT = (recordId: string, sourceId: string | null) => `${sourceId === null ? 'record' : `${sourceId}, record`} ${recordId} (not counted right now; this line is held until it is)`
 // --- end BF-02 ---
+
+// --- BF-12 --- (accounting audit B-2; 13 November 2026). New text only; no shipped text is edited.
+/**
+ * The words for the plan note `superseded_by_vendor_key_match:<supplier named on the record>`: a spend line replaced only
+ * because its supplier name and the replacing record's named supplier are the same vendor once punctuation and legal endings
+ * are ignored (`scope3SpendVendorKey`), and not under the earlier rule (capitals and spacing only).
+ */
+export const SCOPE3_VENDOR_KEY_MATCH_TEXT = 'matched as the same supplier ignoring punctuation and legal suffixes'
+// --- end BF-12 ---

@@ -377,3 +377,50 @@ describe("BF-02: a spend line whose replacing record isn't counted is held, neve
     expectHeld(result, line, figure)
   }, TIMEOUT)
 })
+
+// BF-12 (accounting audit B-2): supersession compares supplier names by the spend import's vendor key, so a ledger that
+// spells the replaced supplier two ways ("Acme Metals Inc", "Acme Metals, Inc.") is replaced once, as one vendor.
+describe("BF-12: one supplier-name rule for vendor grouping and supersession, through the route", () => {
+  const line = (name: string, description: string) => spend("100000", { supplierName: name, naicsCode: "331110", glAccount: "5100", description })  // 73,961.8448 kg if counted
+  const replaces = { supersedesSpend: { supplierName: "Acme Metals Inc", mappingKeys: [] } }
+
+  test("the auditor's repro: both spellings are excluded; category 1 falls by 73,961.8448 kg to the supplier figure, 3,625.0000", async () => {
+    const a = line("Acme Metals Inc", "Coil Q1"), b = line("Acme Metals, Inc.", "Coil Q2")
+    const figure = allocated("145000", "kg CO2e", { supplierName: "Acme Metals", ...replaces })
+    const result = await build([a, b, figure])
+    const row = (r: CollectionActivityRecord) => result.records.find(item => item.recordId === r.id)!
+    expect([row(a).plan.status, row(a).plan.reasons, row(a).plan.notes]).toEqual(["excluded", ["superseded_by_supplier_record"], ["spend_tax_treatment_excludes_sales_tax", `superseded_by:${figure.id}`]])
+    expect([row(b).plan.status, row(b).plan.reasons, row(b).plan.notes]).toEqual(["excluded", ["superseded_by_supplier_record"], ["spend_tax_treatment_excludes_sales_tax", `superseded_by:${figure.id}`, "superseded_by_vendor_key_match:Acme Metals Inc"]])
+    expect(row(figure).result?.total?.display).toBe("3625.0000")
+    expect(result.coverage.categories[0]!).toMatchObject({ status: "calculated", counts: { records: 3, calculated: 1, excluded: 2 }, subtotal: { display: "3625.0000" } })
+    // Each excluded line keeps its memo (what it would have been), outside every total.
+    expect(row(b).supersededSpendMemo).toMatchObject({ supersededBy: figure.id, wouldBe: { display: "73961.8448" } })
+    // The web's strict decoder accepts the note.
+    expect(decodeScope3Results(JSON.parse(JSON.stringify(result)), company).records.find(item => item.recordId === b.id)!.plan.notes).toContain("superseded_by_vendor_key_match:Acme Metals Inc")
+    // Before BF-12 the second spelling was counted: 3,625.0000 + 73,961.8448 = 77,586.8448 kg (the same lines without B's replacement).
+    const unreplaced = await build([a, line("Acme Metals Ltd. (other vendor)", "Coil Q2"), figure])
+    expect(unreplaced.coverage.categories[0]!.subtotal!.display).toBe("77586.8448")
+  }, TIMEOUT)
+
+  test("an incomplete replacing record: both spellings are held replacing_record_not_counted, never dropped", async () => {
+    const a = line("Acme Metals Inc", "Coil Q1"), b = line("ACME METALS, INC", "Coil Q2")
+    const figure = allocated("145000", "kg CO2e", { supplierName: "Acme Metals", allocationNumerator: "200", allocationDenominator: "100", ...replaces })
+    const result = await build([a, b, figure])
+    for (const [r, extra] of [[a, []], [b, ["superseded_by_vendor_key_match:Acme Metals Inc"]]] as const) {
+      const row = result.records.find(item => item.recordId === r.id)!
+      expect([row.outcome, row.plan.status, row.plan.reasons, row.plan.notes, row.result]).toEqual(["held", "input_needed", ["replacing_record_not_counted"], ["spend_tax_treatment_excludes_sales_tax", ...extra, `replacing_record:${figure.id}`], null])
+    }
+    expect(result.coverage.categories[0]!).toMatchObject({ counts: { excluded: 0, inputNeeded: 3 }, subtotal: null })
+    expect(result.coverage.categories[0]!.reasons).toContain("replacing_record_not_counted")
+  }, TIMEOUT)
+
+  test("without variant spellings nothing changes: the results equal those built with the earlier exact rule", async () => {
+    const a = line("Acme Metals Inc", "Coil Q1"), other = line("Another Supplier LLC", "Bolts")
+    const figure = allocated("145000", "kg CO2e", { supplierName: "Acme Metals", ...replaces })
+    const result = await build([a, other, figure])
+    expect(result.records.map(item => [item.recordId, item.plan.status, item.plan.notes, item.result?.total?.display ?? null])).toEqual([
+      [a.id, "excluded", ["spend_tax_treatment_excludes_sales_tax", `superseded_by:${figure.id}`], null],
+      [other.id, null, ["spend_tax_treatment_excludes_sales_tax"], "73961.8448"],
+      [figure.id, null, [], "3625.0000"]])
+  }, TIMEOUT)
+})

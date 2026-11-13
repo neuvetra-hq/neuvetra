@@ -10,14 +10,15 @@ import { fileURLToPath } from 'node:url'
 import type { CollectionContext } from './collection-contract'
 import { SCOPE3_REGISTER_2025_SHA256, SCOPE3_SPEND_REGISTER_SHA256, SCOPE3_SUPPLEMENT_REGISTER_SHA256, SCOPE3_US_UPSTREAM_REGISTER_SHA256, SCOPE3_BUILDING_HOTEL_REGISTER_SHA256 } from './method-reference'
 import {
-  planScope3Calculation, planScope3Supersession, SCOPE3_ACTIVITY_OVERLAP, SCOPE3_FACTOR_ORIGINS, SCOPE3_GWP_BASES, SCOPE3_HYBRID_UPSTREAM_COVERAGE, SCOPE3_SPEND_CATEGORIES,
+  planScope3Calculation, planScope3Supersession, planScope3SupersessionClaimants, SCOPE3_ACTIVITY_OVERLAP, SCOPE3_FACTOR_ORIGINS, SCOPE3_GWP_BASES, SCOPE3_HYBRID_UPSTREAM_COVERAGE, SCOPE3_SPEND_CATEGORIES,
   SCOPE3_SPEND_IMPORT_CATEGORIES, SCOPE3_SPEND_NAICS_SETS, SCOPE3_SUPPLIER_BOUNDARIES, SCOPE3_UNIT_FAMILIES, SCOPE3_VERIFICATION, scope3SpendMappingKeyInput, scope3SpendNaicsAllowed,
   validateScope3Payload, type Scope3CalculationPlan, type Scope3CollectionActivity, type Scope3CollectionKind, type Scope3CollectionVersion, type Scope3PlanOptions,
 } from './scope3-collection'
 import type { Scope3Annotation, Scope3CoverageRecord, Scope3EngineAggregate, Scope3EngineResult } from './scope3-coverage'
 import { scope3Coverage, type Scope3AggregateEngine } from './scope3-engine-output'
 import { SCOPE3_PAYLOAD_FIXTURES } from './scope3-payload-fixtures'
-import { SCOPE3_DISCLOSURE_TEXT, SCOPE3_REASON_TEXT_I03 } from './scope3-text'
+import { scope3SpendVendorKey } from './scope3-spend-grouping'
+import { SCOPE3_DISCLOSURE_TEXT, SCOPE3_REASON_TEXT_I03, SCOPE3_VENDOR_KEY_MATCH_TEXT } from './scope3-text'
 
 const ENGINE = fileURLToPath(new URL('../../../apps/site-api/src/calculation/scope3_engine.py', import.meta.url))
 const env = { ...process.env, PYTHONIOENCODING: 'utf-8', PYTHONUTF8: '1' }
@@ -359,7 +360,7 @@ describe('I-03: supersession (DESIGN §5.1, A22, B5a)', () => {
   test('a supplier record supersedes its supplier\'s category 1 and 2 lines by name or by mapping key, and nothing else', () => {
     const steel = (edits: Record<string, unknown> = {}, extra: Record<string, unknown> = {}) => spend({ supplierName: 'Synthetic  Steel co ', naicsCode: '331110', glAccount: '5100', description: 'Coil', ...edits }, q('50000', 'USD'), extra)
     const byName = steel(), capital = steel({ category: 2, naicsCode: '333120', capitalFullCost: true }), keyed = spend({ supplierName: 'Steel distributor', glAccount: '5200', description: 'Coil via distributor', naicsCode: '331110' })
-    const freight = steel({ category: 4, naicsCode: '484121', activityOverlap: 'none_confirmed' }), other = spend({ supplierName: 'Synthetic Steel Company' }), withdrawn = steel({}, { state: 'withdrawn', withdrawalReason: 'Entered twice.' })
+    const freight = steel({ category: 4, naicsCode: '484121', activityOverlap: 'none_confirmed' }), other = spend({ supplierName: 'Synthetic Steels' }), withdrawn = steel({}, { state: 'withdrawn', withdrawalReason: 'Entered twice.' })
     const outside = steel({}, { period: { start: '2024-01-01', endExclusive: '2025-01-01' } }), elsewhere = steel({}, { locationId: warehouse })
     const figure = supplier({ supersedesSpend: { supplierName: 'synthetic steel CO', mappingKeys: [mappingKey({ glAccount: '5200', supplierName: 'Steel distributor', description: 'Coil via distributor' })] } })
     const all = [byName, capital, keyed, freight, other, withdrawn, outside, elsewhere, figure]
@@ -369,6 +370,9 @@ describe('I-03: supersession (DESIGN §5.1, A22, B5a)', () => {
     const p = plan(byName, { supersession: map })
     expect([p.action, p.status, p.reasons, p.notes, p.call]).toEqual(['hold', 'excluded', ['superseded_by_supplier_record'], ['spend_tax_treatment_excludes_sales_tax', `superseded_by:${figure.recordId}`], null])
     expect(plan(other, { supersession: map }).action).toBe('calculate')
+    // BF-12 (B-2): "Synthetic Steel Company" is the same vendor as "synthetic steel CO" (legal suffixes ignored), so it is replaced too.
+    const company = spend({ supplierName: 'Synthetic Steel Company' })
+    expect(supersede([company, figure]).get(company.recordId)).toBe(figure.recordId)
     // The supplier record itself is calculated as usual.
     expect(plan(figure, { supersession: map }).action).toBe('calculate')
   })
@@ -416,4 +420,79 @@ describe('I-03: the boundary applies A19 and A20 exactly as the engine (DESIGN 4
 
 test('I-03: the adapter stays browser-safe (the collection screen plans records with it); hashing is passed in', () => {
   for (const file of ['./scope3-collection.ts', './scope3-collection-contract.ts', './scope3-assessment-contract.ts']) expect(readFileSync(new URL(file, import.meta.url), 'utf8')).not.toMatch(/from ['"]node:/)
+})
+
+// BF-12 (accounting audit B-2, auditor repro /tmp/acct/zz-acct-lead1.test.ts made permanent): supersession compares supplier
+// names as the spend import groups vendors (`scope3SpendVendorKey`: NFKC, case, `&`, punctuation, spacing and legal suffixes
+// ignored), so a ledger that spells a replaced supplier two ways no longer counts the second spelling a second time. A line
+// that matched under the old rule (trimmed, lower-cased, spaces collapsed) still matches; a line matched only by the vendor
+// key carries the note `superseded_by_vendor_key_match:<supplier named on the record>`.
+describe('BF-12 (B-2): one supplier-name rule for vendor grouping and supersession', () => {
+  const supersede = (versions: Scope3CollectionVersion[]) => planScope3Supersession(versions, context, { reportingPeriod: year, sha256 })
+  const VENDOR_KEY_NOTE = 'superseded_by_vendor_key_match:'
+
+  test('the auditor\'s repro: "Acme Metals Inc" and "Acme Metals, Inc." are both replaced; category 1 spend falls by 73,961.8448 kg, the supplier figure stays 3,625.0000', () => {
+    const a = spend({ supplierName: 'Acme Metals Inc', naicsCode: '331110', glAccount: '5100', description: 'Coil Q1' }, q('100000', 'USD'))
+    const b = spend({ supplierName: 'Acme Metals, Inc.', naicsCode: '331110', glAccount: '5100', description: 'Coil Q2' }, q('100000', 'USD'))
+    const figure = allocated({ supplierName: 'Acme Metals', supersedesSpend: { supplierName: 'Acme Metals Inc', mappingKeys: [] } }, q('145000', 'kg CO2e'))
+    expect(scope3SpendVendorKey('Acme Metals Inc')).toBe(scope3SpendVendorKey('Acme Metals, Inc.'))
+    // Before BF-12 (no supersession of B): A excluded, B calculated at 73,961.8448 kg, the supplier figure 3,625.0000 kg.
+    const before = new Map([[a.recordId, figure.recordId]])
+    const beforePlans = [a, b, figure].map(v => plan(v, { supersession: before, reportingPeriod: year }))
+    expect(beforePlans.map(p => p.action)).toEqual(['hold', 'calculate', 'calculate'])
+    expect(runAll(beforePlans.filter(p => p.action === 'calculate')).map(r => r.result!.total!.display)).toEqual(['73961.8448', '3625.0000'])
+    // After: both lines are replaced; only the supplier figure is calculated, unchanged.
+    const map = supersede([a, b, figure])
+    expect(Object.fromEntries(map)).toEqual({ [a.recordId]: figure.recordId, [b.recordId]: figure.recordId })
+    const plans = [a, b, figure].map(v => plan(v, { supersession: map, reportingPeriod: year }))
+    expect(plans.map(p => [p.action, p.status, p.reasons])).toEqual([['hold', 'excluded', ['superseded_by_supplier_record']], ['hold', 'excluded', ['superseded_by_supplier_record']], ['calculate', null, []]])
+    // A matched under the old rule too: no new note. B matched only by the vendor key: named.
+    expect(plans[0]!.notes).toEqual(['spend_tax_treatment_excludes_sales_tax', `superseded_by:${figure.recordId}`])
+    expect(plans[1]!.notes).toEqual(['spend_tax_treatment_excludes_sales_tax', `superseded_by:${figure.recordId}`, `${VENDOR_KEY_NOTE}Acme Metals Inc`])
+    expect(runAll(plans.filter(p => p.action === 'calculate')).map(r => r.result!.total!.display)).toEqual(['3625.0000'])
+    // The note has reviewed words.
+    expect(SCOPE3_VENDOR_KEY_MATCH_TEXT).toBe('matched as the same supplier ignoring punctuation and legal suffixes')
+  }, TIMEOUT)
+
+  test('"ACME METALS, INC" and "The Acme Metals Co." match "Acme Metals Inc"; "Acme Metal" (singular) and "Acme Metals Steel" do not', () => {
+    const figure = supplier({ supersedesSpend: { supplierName: 'Acme Metals Inc', mappingKeys: [] } })
+    const caps = spend({ supplierName: 'ACME METALS, INC' }), the = spend({ supplierName: 'The Acme Metals Co.' }), amp = spend({ supplierName: 'Acme  Metals &  Co' })
+    const singular = spend({ supplierName: 'Acme Metal' }), longer = spend({ supplierName: 'Acme Metals Steel' }), punctuation = spend({ supplierName: '...' })
+    const map = supersede([caps, the, amp, singular, longer, punctuation, figure])
+    expect(Object.fromEntries(map)).toEqual({ [caps.recordId]: figure.recordId, [the.recordId]: figure.recordId, [amp.recordId]: figure.recordId })
+    // The empty-name guard stays: a name that is only punctuation (vendor key '') never matches another such name by the key.
+    expect(supersede([spend({ supplierName: '...' }), supplier({ supersedesSpend: { supplierName: '-', mappingKeys: [] } })]).size).toBe(0)
+    expect(supersede([spend({ supplierName: '' }), supplier({ supersedesSpend: { supplierName: 'Inc', mappingKeys: [] } })]).size).toBe(0)
+  })
+
+  test('every line the old rule replaced is still replaced, with no new note (ASCII: case, spaces, punctuation-only names)', () => {
+    const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,&-()/\'"!?#@*+;:_'
+    let seed = 12
+    const random = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648
+    const pick = (text: string) => text[Math.floor(random() * text.length)]!
+    for (let i = 0; i < 400; i++) {
+      const base = Array.from({ length: 1 + Math.floor(random() * 24) }, () => pick(alphabet)).join('')
+      if (base.trim() === '') continue
+      // A spelling equal under the old rule: other capitals, padded, internal spaces widened.
+      const variant = `${' '.repeat(Math.floor(random() * 3))}${[...base].map(c => random() < 0.5 ? c.toUpperCase() : c.toLowerCase()).join('').replace(/ +/g, m => m + ' '.repeat(Math.floor(random() * 2)))}${' '.repeat(Math.floor(random() * 3))}`
+      expect(variant.trim().toLowerCase().replace(/\s+/g, ' ')).toBe(base.trim().toLowerCase().replace(/\s+/g, ' '))
+      const line = spend({ supplierName: variant.slice(0, 200) })
+      const figure = supplier({ supersedesSpend: { supplierName: base, mappingKeys: [] } })
+      const map = supersede([line, figure])
+      expect([base, map.get(line.recordId)]).toEqual([base, figure.recordId])
+      expect(plan(line, { supersession: map }).notes.some(note => note.startsWith(VENDOR_KEY_NOTE))).toBe(false)
+    }
+  })
+
+  test('no vendor-key note when the line is also matched by its mapping key, or exactly by another claimant', () => {
+    const keyed = { glAccount: '5200', supplierName: 'Acme Metals, Inc.', description: 'Coil via distributor' }
+    const key = sha256(scope3SpendMappingKeyInput(keyed))
+    const line = spend({ ...keyed, naicsCode: '331110' })
+    const both = supersede([line, supplier({ supersedesSpend: { supplierName: 'Acme Metals Inc', mappingKeys: [key] } })])
+    expect(plan(line, { supersession: both }).notes.some(note => note.startsWith(VENDOR_KEY_NOTE))).toBe(false)
+    const exact = supplier({ supersedesSpend: { supplierName: 'acme metals, inc.', mappingKeys: [] } }), loose = supplier({ supersedesSpend: { supplierName: 'Acme Metals', mappingKeys: [] } })
+    const two = supersede([line, loose, exact])
+    expect(planScope3SupersessionClaimants([line, loose, exact], context, { reportingPeriod: year, sha256 }).get(line.recordId)).toEqual([loose.recordId, exact.recordId].sort())
+    expect(plan(line, { supersession: two }).notes.some(note => note.startsWith(VENDOR_KEY_NOTE))).toBe(false)
+  })
 })

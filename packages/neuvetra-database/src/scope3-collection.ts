@@ -57,6 +57,7 @@ import {
 } from './scope3-collection-contract'
 
 import { scope3TaxTreatmentNote } from './scope3-r3a'
+import { scope3SpendVendorKey } from './scope3-spend-grouping'
 
 export const SCOPE3_COLLECTION_INPUT_PROFILE = 'neuvetra.scope3-collection-input.v1' as const
 export * from './scope3-collection-contract'
@@ -139,7 +140,10 @@ export interface Scope3ReportingPeriod { start: string; endExclusive: string }
 export interface Scope3PlanOptions {
   /** The setup reporting period (null when setup has none). */
   reportingPeriod?: Scope3ReportingPeriod | null
-  /** `planScope3Supersession`: spend record ID -> ID of the record that supersedes it. */
+  /**
+   * `planScope3Supersession`: spend record ID -> ID of the record that supersedes it. BF-12: when it is the map
+   * `planScope3Supersession` returns, a line matched only by the vendor key also gets its `superseded_by_vendor_key_match:` note.
+   */
   supersession?: ReadonlyMap<string, string>
   /**
    * I-05 (A15): the company's consolidation approach from company setup. Absent: not known to the caller (a single record
@@ -279,7 +283,8 @@ export function planScope3Calculation(version: Scope3CollectionVersion, context:
   const supersededBy = a.kind === 'purchase_spend' ? options.supersession?.get(version.recordId) : undefined
   if (supersededBy !== undefined && a.kind === 'purchase_spend') {
     notes.push(scope3TaxTreatmentNote(a.payload.taxTreatment))
-    return hold('excluded', ['superseded_by_supplier_record'], [...notes, `superseded_by:${supersededBy}`])
+    const vendorKeyMatch = options.supersession instanceof Scope3SupersessionMap ? options.supersession.vendorKeyMatches.get(version.recordId) : undefined
+    return hold('excluded', ['superseded_by_supplier_record'], [...notes, `superseded_by:${supersededBy}`, ...(vendorKeyMatch !== undefined ? [`${SCOPE3_VENDOR_KEY_MATCH_NOTE}${vendorKeyMatch}`] : [])])
   }
   // The record is saved and counted; its calculation method arrives in a later increment. Nothing is sent or guessed.
   if (METHOD_NOT_BUILT.has(a.kind)) return hold('input_needed', ['method_not_built_yet'], notes)
@@ -663,13 +668,38 @@ export function planGridLossCalculation(electricity: CollectionActivityVersion, 
 export function scope3SpendMappingKeyInput(line: { glAccount: string; supplierName: string; description: string }): string {
   return [line.glAccount, line.supplierName, line.description].map(text => text.trim().toLowerCase()).join('\u001f')
 }
-/** A supplier name as supersession compares it: trimmed, lower case, internal whitespace collapsed. */
+/** A product label as the category 11/12 overlap compares it (and supersession did before BF-12): trimmed, lower case, internal whitespace collapsed. */
 const comparableName = (name: string) => name.trim().toLowerCase().replace(/\s+/g, ' ')
+/**
+ * BF-12 (accounting audit B-2): how supersession compares a spend line's supplier with the supplier a record names. They
+ * match when their vendor keys are equal (`scope3SpendVendorKey`, the rule the spend import groups vendors by: NFKC, case,
+ * `&`, punctuation, spacing and legal suffixes ignored), so a ledger that spells one supplier two ways is replaced once,
+ * as one vendor. A pair equal under the earlier rule (trimmed, lower case, whitespace collapsed) still matches, so no line
+ * replaced before is counted again. Blank names never match (the vendor key of a name of punctuation only is empty too, so
+ * such a name matches only the same text). No fuzzy matching: "Acme Metal" is not "Acme Metals".
+ * Returns 'exact' (the earlier rule), 'vendor_key' (only the vendor key) or null.
+ */
+export function scope3SupersessionNameMatch(lineSupplier: string, namedSupplier: string): 'exact' | 'vendor_key' | null {
+  const exact = comparableName(lineSupplier)
+  if (exact !== '' && exact === comparableName(namedSupplier)) return 'exact'
+  const key = scope3SpendVendorKey(lineSupplier)
+  return key !== '' && key === scope3SpendVendorKey(namedSupplier) ? 'vendor_key' : null
+}
+/** BF-12: the plan note of a spend line replaced only by the vendor key, followed by the supplier text the record names. */
+export const SCOPE3_VENDOR_KEY_MATCH_NOTE = 'superseded_by_vendor_key_match:'
+/**
+ * BF-12: what `planScope3Supersession` returns, a map spend record ID -> superseding record ID as before, which also knows
+ * the lines matched only by the vendor key (spend record ID -> the supplier text the named record gives). Passed to
+ * `planScope3Calculation` as `supersession`, those lines get the note `superseded_by_vendor_key_match:<text>`.
+ */
+export class Scope3SupersessionMap extends Map<string, string> {
+  constructor(entries: Iterable<readonly [string, string]>, readonly vendorKeyMatches: ReadonlyMap<string, string>) { super(entries) }
+}
 /**
  * The supersession pre-pass (DESIGN §5.1, A22): which spend lines a supplier's own figure replaces, so the same purchase
  * is never counted twice (the commonest Scope 3 double count). An active category 1 or 2 spend line is superseded by an
- * active supplier record whose `supersedesSpend` names the line's supplier (compared trimmed, lower-cased, whitespace
- * collapsed) or lists the line's mapping key. Both must count in the same reporting period: inside the setup reporting
+ * active supplier record whose `supersedesSpend` names the line's supplier (BF-12: compared by `scope3SupersessionNameMatch`,
+ * the spend import's vendor key or the earlier trimmed, lower-cased, whitespace-collapsed rule) or lists the line's mapping key. Both must count in the same reporting period: inside the setup reporting
  * period when there is one (a record outside it is held, so it can replace nothing and is replaced by nothing), else in
  * the same reporting year; and both must be at a location setup includes. When several supplier records match a line,
  * the one with the smallest record ID is named. Returns spend record ID -> superseding record ID; the results route
@@ -693,8 +723,10 @@ const comparableName = (name: string) => name.trim().toLowerCase().replace(/\s+/
  * lines of that category (the spend-based fallback for the same purchase).
  */
 export function planScope3Supersession(versions: readonly Scope3CollectionVersion[], context: CollectionContext,
-  options: { reportingPeriod?: Scope3ReportingPeriod | null; sha256: (text: string) => string }): Map<string, string> {
-  return new Map([...planScope3SupersessionClaimants(versions, context, options)].map(([line, claimants]) => [line, claimants[0]!]))
+  options: { reportingPeriod?: Scope3ReportingPeriod | null; sha256: (text: string) => string }): Scope3SupersessionMap {
+  const vendorKeyMatches = new Map<string, string>()
+  const claimants = supersessionClaimants(versions, context, options, (line, named) => vendorKeyMatches.set(line, named))
+  return new Scope3SupersessionMap([...claimants].map(([line, ids]) => [line, ids[0]!] as const), vendorKeyMatches)
 }
 /**
  * BF-02b (d): every record that claims each superseded spend line, smallest record ID first (the first is the one
@@ -703,6 +735,14 @@ export function planScope3Supersession(versions: readonly Scope3CollectionVersio
  */
 export function planScope3SupersessionClaimants(versions: readonly Scope3CollectionVersion[], context: CollectionContext,
   options: { reportingPeriod?: Scope3ReportingPeriod | null; sha256: (text: string) => string }): Map<string, string[]> {
+  return supersessionClaimants(versions, context, options, () => {})
+}
+/**
+ * The claimants of each superseded spend line. BF-12: `vendorKeyOnly(line, text)` is called for a line no claimant matches
+ * by the earlier name rule or by mapping key, only by the vendor key; `text` is the supplier named by its first claimant.
+ */
+function supersessionClaimants(versions: readonly Scope3CollectionVersion[], context: CollectionContext,
+  options: { reportingPeriod?: Scope3ReportingPeriod | null; sha256: (text: string) => string }, vendorKeyOnly: (line: string, named: string) => void): Map<string, string[]> {
   const reportingPeriod = usableReportingPeriod(options.reportingPeriod !== undefined ? options.reportingPeriod : context.reportingPeriod)
   if (versions.some(v => v.companyId !== context.companyId)) throw new Error('Collection context belongs to another company.')
   const counts = (v: Scope3CollectionVersion) => v.activity.state === 'active' && !scope3EligibilityHold(v.activity, context, options)
@@ -713,7 +753,9 @@ export function planScope3SupersessionClaimants(versions: readonly Scope3Collect
       if ((a.kind !== 'purchase_supplier' && a.kind !== 'partner_reported') || a.payload.supersedesSpend === null || !counts(v)) return []
       // I-05: the spend categories a record can replace (supplier figures: 1 and 2; partner figures: also their own spend category).
       const categories = new Set<number>([1, 2, ...(a.kind === 'partner_reported' && [4, 5, 9].includes(a.payload.category) ? [a.payload.category] : [])])
-      return [{ version: v, name: comparableName(a.payload.supersedesSpend.supplierName), keys: new Set(a.payload.supersedesSpend.mappingKeys), categories }]
+      // BF-12: the named text, its vendor key and its form under the earlier rule (`scope3SupersessionNameMatch`).
+      const named = a.payload.supersedesSpend.supplierName
+      return [{ version: v, named, name: scope3SpendVendorKey(named), exact: comparableName(named), keys: new Set(a.payload.supersedesSpend.mappingKeys), categories }]
     })
     .sort((x, y) => x.version.recordId < y.version.recordId ? -1 : x.version.recordId > y.version.recordId ? 1 : 0)
   const out = new Map<string, string[]>()
@@ -721,16 +763,22 @@ export function planScope3SupersessionClaimants(versions: readonly Scope3Collect
   const anyKeys = superseders.some(s => s.keys.size > 0)
   // Indexed by name and by mapping key (QA of PR #63, F2: the screens run this on every keystroke), in record ID order.
   const byName = new Map<string, number[]>(), byKey = new Map<string, number[]>()
-  superseders.forEach((s, i) => { byName.set(s.name, [...(byName.get(s.name) ?? []), i]); for (const key of s.keys) byKey.set(key, [...(byKey.get(key) ?? []), i]) })
+  // BF-12 (`scope3SupersessionNameMatch`): each record is indexed by its vendor key and by its name under the earlier rule
+  // (prefixes keep the two apart), so a pair equal under either rule is found; blank names are never indexed.
+  const nameIndexes = (s: { name: string; exact: string }) => [...(s.name !== '' ? [`k:${s.name}`] : []), ...(s.exact !== '' ? [`e:${s.exact}`] : [])]
+  superseders.forEach((s, i) => { for (const name of nameIndexes(s)) byName.set(name, [...(byName.get(name) ?? []), i]); for (const key of s.keys) byKey.set(key, [...(byKey.get(key) ?? []), i]) })
   const categories = new Set(superseders.flatMap(s => [...s.categories]))
   for (const v of versions) {
     const a = v.activity
     if (a.kind !== 'purchase_spend' || !categories.has(a.payload.category) || !counts(v)) continue
-    const name = comparableName(a.payload.supplierName)
+    const names = nameIndexes({ name: scope3SpendVendorKey(a.payload.supplierName), exact: comparableName(a.payload.supplierName) })
     const key = anyKeys ? options.sha256(scope3SpendMappingKeyInput(a.payload)) : null
-    const candidates = [...new Set([...(name !== '' ? byName.get(name) ?? [] : []), ...(key !== null ? byKey.get(key) ?? [] : [])])].sort((x, y) => x - y)
+    const candidates = [...new Set([...names.flatMap(name => byName.get(name) ?? []), ...(key !== null ? byKey.get(key) ?? [] : [])])].sort((x, y) => x - y)
     const by = candidates.map(i => superseders[i]!).filter(s => s.categories.has(a.payload.category) && sameYear(s.version, v))
-    if (by.length) out.set(v.recordId, by.map(s => s.version.recordId))
+    if (by.length) {
+      out.set(v.recordId, by.map(s => s.version.recordId))
+      if (!by.some(s => (key !== null && s.keys.has(key)) || scope3SupersessionNameMatch(a.payload.supplierName, s.named) === 'exact')) vendorKeyOnly(v.recordId, by[0]!.named)
+    }
   }
   return out
 }

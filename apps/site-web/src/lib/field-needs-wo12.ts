@@ -16,7 +16,7 @@ import type { Scope3SetupFacts } from "./scope3-forms"
 import { FIELD_NEED_NOTES, type FieldNeed } from "./wo12-text"
 import type { CollectionContext } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { recordBoundaryHold, recordHold, type RecordBoundaryHold, type RecordSupersession } from "./record-holds-wo12b"
-import { scope3SpendMappingKeyInput } from "../../../../packages/neuvetra-database/src/scope3-collection"
+import { scope3SpendMappingKeyInput, scope3SupersessionNameMatch } from "../../../../packages/neuvetra-database/src/scope3-collection"
 import { kindLabel } from "./plain-language"
 import type { CollectionActivityRecord } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { RECORD_HOLD_TEXT } from "./wo12b-text"
@@ -166,11 +166,10 @@ export function activityFieldFacts(input: { setup: Scope3SetupFacts | undefined;
   }
 }
 
-/** A supplier name as the supersession compares it (scope3-collection.ts comparableName). */
-const comparable = (name: string) => name.trim().toLowerCase().replace(/\s+/g, " ")
 /**
  * WO-12b QA round 2: the record that replaces this spend line, and what it matches the line on, by the server's rule
- * (planScope3Supersession): the line's supplier name equals the record's named supplier, or the line's mapping key (its
+ * (planScope3Supersession): the line's supplier name matches the record's named supplier (BF-12: scope3SupersessionNameMatch,
+ * the same rule as the server: vendor key or the earlier exact rule), or the line's mapping key (its
  * GL account, supplier and description) is one the record lists. The key is the one the screen's spend lines carry for
  * that text; an edited line has none, as on the server until it is saved.
  */
@@ -184,7 +183,7 @@ function supersessionOf(id: string, activity: Pick<CollectionActivity, "payload"
   const name = replacingRecordName(id, records)
   const line = activity.payload as unknown as { supplierName: string; glAccount: string; description: string }
   const named = (replacer?.currentVersion.activity.payload as { supersedesSpend?: { supplierName: string; mappingKeys: string[] } | null } | undefined)?.supersedesSpend ?? null
-  const byName = named !== null && comparable(line.supplierName) !== "" && comparable(line.supplierName) === comparable(named.supplierName)
+  const byName = named !== null && scope3SupersessionNameMatch(line.supplierName, named.supplierName) !== null
   const key = mappingKeys?.get(scope3SpendMappingKeyInput(line))
   const byKey = named !== null && key !== undefined && key !== "" && named.mappingKeys.includes(key)
   const match = byName && byKey ? "both" : byKey ? "key" : "name"

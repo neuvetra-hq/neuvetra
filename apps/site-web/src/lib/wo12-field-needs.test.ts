@@ -603,6 +603,24 @@ describe("WO-12b: record holds (one answer holds the record whatever else is fil
     expect(outcome).toEqual(REPLACED_WORLDS.flatMap(world => [`${world.name} → category 4: engine complete`, `${world.name} → category 2: superseded_by_supplier_record [notice superseded_by_supplier_record]`]))
   })
 
+  // BF-12 (B-2): the screen uses the server's supplier-name rule (scope3SupersessionNameMatch), so a record naming another
+  // spelling of the same vendor ("SYNTHETIC SOFTWARE, L.L.C." for "Synthetic Software LLC") replaces the line by name, as
+  // Results does; "Synthetic Softwares" (another name) does not.
+  test("BF-12: a record naming another spelling of the line's supplier replaces it by name, as on the server", () => {
+    const world = (name: string) => ({ ...EVERY_COMPANY[0]!, name: `BF-12 ${name}`, records: [supplierRecordBy(name, [])], mappingKeys: new Map([[LINE_KEY_TEXT, LINE_KEY]]) })
+    const at = (name: string) => { const draft = replacedLine(); return recordHold(draft, factsFor(draft, world(name))) }
+    expect(replacedLine().payload.supplierName).toBe("Synthetic Software LLC")
+    const variant = at("SYNTHETIC SOFTWARE, L.L.C.")!
+    expect([variant.code, variant.fields]).toEqual(["superseded_by_supplier_record", ["supplier", "category"]])
+    expect(plan(replacedLine(), world("SYNTHETIC SOFTWARE, L.L.C.")).reasons).toEqual(["superseded_by_supplier_record"])
+    // Named and keyed: matched by both, so only Supplier (and Category) frees it, as for an exact spelling (QA round 2).
+    const keyed = { ...world("SYNTHETIC SOFTWARE, L.L.C."), records: [supplierRecordBy("SYNTHETIC SOFTWARE, L.L.C.", [LINE_KEY])] }
+    const both = (() => { const draft = replacedLine(); return recordHold(draft, factsFor(draft, keyed))! })()
+    expect([both.code, both.fields]).toEqual(["superseded_by_supplier_record", ["supplier", "category"]])
+    expect(at("Synthetic Softwares")?.code ?? null).not.toBe("superseded_by_supplier_record")
+    expect(plan(replacedLine(), world("Synthetic Softwares")).reasons).not.toContain("superseded_by_supplier_record")
+  })
+
   test("while it holds: every other result field is Optional, the answer that holds it says so, and the save still needs what it needs", () => {
     const held = holdRows.filter(row => row.holdsBefore.length > 0)
     expect(held.length).toBeGreaterThan(150)
