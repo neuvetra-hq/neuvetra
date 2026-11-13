@@ -12,7 +12,7 @@ CI runs it as the job **Browser smoke (site-web end to end)** in `.github/workfl
   - the token validator, which reads the suite's `TokenDirectory`;
   - an in-memory evidence store.
 - `harness/browser.ts` drives Chrome with `playwright-core`. CI downloads (from the official Chrome for Testing bucket, cached by version) the Chrome for Testing build that playwright-core 1.59.1 is made for (147.0.7727.15) and refuses any other (`E2E_CHROME_VERSION`); locally, any installed Chrome is used. Each journey gets a new browser context. In that context the Supabase Auth API (`https://<ref>.supabase.co/auth/v1/...`) is answered by a stub at the network level, so nothing hosted is contacted. A password sign-in returns a session whose token the server's injected validator accepts. To end a session, a test revokes its token, and the server then answers 401.
-- `browser-smoke.test.ts` holds the journeys. Each one asserts that the page raised no uncaught error.
+- `browser-smoke.test.ts` holds the journeys. Each one asserts that no page of the journey raised an uncaught error or left a promise rejection unhandled (WO-14c, invariant I11).
 
 ## Run it locally
 
@@ -62,7 +62,7 @@ Setup, records and the import go through the HTTP API as the owner, so they pass
 
 ## Add a journey
 
-1. Use `journey(name, options, body)` in `browser-smoke.test.ts`. `options.signedInAs` starts the page already signed in, with the session placed in localStorage before the app loads. Without it, the page starts signed out.
+1. Use `journey(name, options, body)` in `browser-smoke.test.ts`. `options.signedInAs` starts the page already signed in, with the session placed in localStorage before the app loads, as code before WO-14 stored it (without `nv_lineage`; the app adopts it). `options.sessionLifeSeconds` sets that session's access-token lifetime: under 90 s the app refreshes it as it loads, about 125 s lets the 30 s auto-refresh tick do it. The seed is written once per tab (each tab has its own sessionStorage guard), so a second page of a `signedInAs` journey writes it again. Without it, the page starts signed out.
 2. Wait for state, never for time. Use `headingIs`, `activityListLoaded`, `locator.waitFor()` or `page.waitForFunction`. A fixed `waitForTimeout` is allowed only to show that nothing more happens, as with "exactly one prompt".
 3. Check what the server stored through `stack.api(...)` or `stack.operator`, not only what the screen shows.
 4. The `Journey` object records the dialogs the page opened (`dialogs`; they are declined unless `answerDialogs` is set), the workspace API writes it sent (`writes`), and every address the tab showed (`addressesSeen`).
