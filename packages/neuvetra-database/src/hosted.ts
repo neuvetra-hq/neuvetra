@@ -227,6 +227,15 @@ function requireSubject(userId: string) {
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId)) throw new Error("Verified authentication subject required.")
 }
 
+/** What readiness reports. The two BF-10 fields appear only while a reviewed Storage guard grant is missing. */
+export interface StagingReadinessReceipt {
+  profile: typeof STAGING_PROFILE
+  schemaVersion: number
+  legacyContainmentVerified?: true
+  storageGuardGrantsMissing?: true
+  missingStorageGuardGrants?: Array<{ signature: string; role: string }>
+}
+
 export class HostedWorkspaceDatabase extends WorkspaceDatabase {
   // Readiness runs on every staging API request. The image's migration files
   // never change while the process runs, so read and hash them once (0028
@@ -241,9 +250,14 @@ export class HostedWorkspaceDatabase extends WorkspaceDatabase {
     try { await workspace.checkReadiness(); return workspace } catch { await db.close(); throw new Error("Staging database readiness validation failed.") }
   }
 
-  async checkReadiness(): Promise<{ profile: typeof STAGING_PROFILE; schemaVersion: number; legacyContainmentVerified?: true }> {
+  async checkReadiness(): Promise<StagingReadinessReceipt> {
+    // BF-10 (CEO ruling): readiness requires the legacy containment only. A lost Storage guard grant breaks Storage, not
+    // the workspace, so it is reported (and only then: the healthy receipt keeps its exact shape) instead of failing.
+    let missingStorageGuardGrants: Array<{ signature: string; role: string }> = []
     if (this.expectedProjectRef === EXISTING_PROJECT_REF) {
-      if (!this.reuseExistingProject || !(await auditLegacyStagingExposure(this.db)).legacyContainmentVerified) throw new Error("Legacy project containment is not verified.")
+      const audit = this.reuseExistingProject ? await auditLegacyStagingExposure(this.db) : null
+      if (!audit?.legacyContainmentVerified) throw new Error("Legacy project containment is not verified.")
+      missingStorageGuardGrants = audit.missingStorageGuardGrants
     }
     const manifest = await (this.migrationManifest ??= readMigrationManifest().catch(error => { this.migrationManifest = undefined; throw error }))
     const schemaVersion = await this.db.transaction(async tx => {
@@ -264,7 +278,8 @@ export class HostedWorkspaceDatabase extends WorkspaceDatabase {
       const receipts = await tx.query<{ name: string; sha256: string }>("select name,sha256 from neuvetra.schema_migrations order by name")
       return validateHostedSchemaReceipts(receipts.rows, manifest, { expectedProjectRef: this.expectedProjectRef, reuseExistingProject: this.reuseExistingProject })
     })
-    return { profile: STAGING_PROFILE, schemaVersion, ...(this.expectedProjectRef === EXISTING_PROJECT_REF ? {legacyContainmentVerified:true as const} : {}) }
+    return { profile: STAGING_PROFILE, schemaVersion, ...(this.expectedProjectRef === EXISTING_PROJECT_REF ? {legacyContainmentVerified:true as const} : {}),
+      ...(missingStorageGuardGrants.length > 0 ? { storageGuardGrantsMissing: true as const, missingStorageGuardGrants } : {}) }
   }
 
   protected override async asUser<T>(userId: string, operation: (tx: WorkspaceSql) => Promise<T>): Promise<T> {

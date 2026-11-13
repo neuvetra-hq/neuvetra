@@ -1,7 +1,7 @@
 import { extractDatabaseUrl } from "../cloud/database-inventory"
 import { createPostgresConnection } from "../../packages/neuvetra-database/src/hosted"
 import { loadStagingDatabaseCa } from "../../packages/neuvetra-database/src/staging-tls"
-import { auditLegacyStagingExposure, planLegacyStagingContainment } from "../../packages/neuvetra-database/src/staging-audit"
+import { auditLegacyStagingExposure, containmentAndStorageGuardsVerified, planLegacyStagingContainment } from "../../packages/neuvetra-database/src/staging-audit"
 const [source, reviewedPlan] = process.argv.slice(2)
 let db: ReturnType<typeof createPostgresConnection> | undefined
 let stage = "validate", statementIndex = -1
@@ -20,7 +20,7 @@ try {
     const current = await planLegacyStagingContainment(tx)
     if (JSON.stringify(current.statements) !== JSON.stringify(plan.statements)) throw new Error("plan drift")
     for (const statement of current.statements) { statementIndex++; await tx.exec(statement) }
-    verified = (await auditLegacyStagingExposure(tx)).legacyContainmentVerified
+    verified = containmentAndStorageGuardsVerified(await auditLegacyStagingExposure(tx))
     throw rollback
   })
 } catch (error) {
