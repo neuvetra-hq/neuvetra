@@ -5,6 +5,13 @@ File fingerprint (sha256): `3513b5da55e41133d94faaf3a8b610e1fb66f415a95393272d3f
 PR #52's merge commit on `main`: `687ed3f185c8e00b038e46ef5a24dac593722437`
 (message `Merge pull request #52 from neuvetra-hq/claude/bf-09-migration-0031`).
 
+> **BF-10 (12 Nov 2026): the tools changed; read this first.** The containment step that `apply-existing.ts` runs before
+> migrating used to remove the deliberate PUBLIC EXECUTE grant on the two Storage policy guards from 0027, which would have
+> broken every Storage upload and download on staging (see `bf10-containment-storage-guards.md` in this folder). Nothing was
+> changed on staging. The fixed tools add exactly two `GRANT EXECUTE` lines to the plan. So: the deployed commit, and your
+> local folder (B3), must contain BF-10's merge commit `<BF-10 merge commit>` as well as PR #52's (A2, B3); any plan file
+> made before that commit is void (make a new one in C1); and C2 below is the new check.
+
 Written for the owner on a Windows PC. Every command below is typed in **PowerShell**. Do this in a quiet period, when nobody is
 using staging. The whole job takes about 15 minutes; the database change itself takes under a second.
 
@@ -51,6 +58,8 @@ The active deployment must be **commit `687ed3f` or a later commit on `main`** (
 
 - Commit `687ed3f` itself shows the message `Merge pull request #52 from neuvetra-hq/claude/bf-09-migration-0031`.
 - A later main commit shows some other message; B3 checks with git that it contains PR #52.
+- **BF-10:** the active deployment must also be BF-10's merge commit `<BF-10 merge commit>` or a later commit on `main`. B3
+  checks that with git too. If it is older, stop and wait for the newer deployment to become active.
 
 If the active deployment is older than `687ed3f`, or the newest deployment is still building or failed, **stop and wait**
 (or ask the CTO). Do not continue on `/ready` alone.
@@ -101,12 +110,15 @@ git fetch origin
 git checkout --detach <full commit code from A2>
 git log -1 --format=%H
 git merge-base --is-ancestor 687ed3f185c8e00b038e46ef5a24dac593722437 HEAD; $LASTEXITCODE
+git merge-base --is-ancestor <BF-10 merge commit> HEAD; $LASTEXITCODE
 git branch -r --contains HEAD
 ```
 
 - `git status` must show no changed files before you start (if it does, stop and ask the CTO).
 - `git log` must print the same commit code as A2.
-- The `merge-base` line must print `0` (the deployed commit contains PR #52). `1` means it does not: stop (rule 1).
+- The first `merge-base` line must print `0` (the deployed commit contains PR #52). `1` means it does not: stop (rule 1).
+- The second `merge-base` line must print `0` (the deployed commit contains BF-10's fix to the containment plan). `1` means
+  it does not: stop. Do not run C1 or C4 from a folder without BF-10: its plan would strip the Storage guards' grants.
 - The last line must list `origin/main`.
 
 Then check the migrations folder:
@@ -178,7 +190,8 @@ to overwrite a file that already exists: every run needs output names that do no
 what is missing (0031) in one transaction, writes the receipt row with the image's own fingerprint in that same transaction,
 takes the migration runner's lock, and checks the access-grant containment first. This is the supported path.
 
-C1. Read-only plan:
+C1. Read-only plan. **A plan file made before BF-10 (29 statements) is void: do not reuse it, or its fingerprint.** C4 would
+refuse it anyway ("plan drift"). Make a new one, with a new file name if the old one is still in the folder:
 
 ```powershell
 bun tools/staging/plan-existing.ts <your operator export file> C:\neuvetra-0031\0031-plan.json
@@ -188,8 +201,47 @@ It must print `{"status":"read_only_plan_saved",...}`. If it prints `Existing ta
 the usual causes are: you are not in the repository root (B2), the output file already exists (B6), the export file is not
 exactly as in B5 (including an un-encoded special character in the password), or the network/password is wrong.
 
-C2. Open `0031-plan.json` in Notepad. Both `"statements"` and `"providerAdminStatements"` must be empty lists `[]`. If either is
-not empty, **stop and send the file to the CTO** (the tool would change access grants before migrating).
+C2. Check the plan. `"statements"` is **never** empty: it is the access-grant containment that C4 runs, in this order, in
+one transaction, before the migration. On today's staging it must contain exactly these and nothing else:
+
+- one `REVOKE CREATE ON DATABASE "postgres" FROM PUBLIC, anon, authenticated;`
+- for each of the seven application schemas (`drizzle`, `frontdesk`, `neuvetra`, `neuvetra_research_dev`, `public`, `site`,
+  `terrascope`), four lines: `REVOKE ALL ON SCHEMA "<schema>" …`, `REVOKE ALL ON ALL TABLES IN SCHEMA "<schema>" …`,
+  `REVOKE ALL ON ALL SEQUENCES IN SCHEMA "<schema>" …` and `REVOKE ALL ON ALL FUNCTIONS IN SCHEMA "<schema>" …`, each ending
+  `FROM PUBLIC, anon, authenticated;`
+- exactly two `GRANT` lines, **directly after** `REVOKE ALL ON ALL FUNCTIONS IN SCHEMA "neuvetra" …`:
+  `GRANT EXECUTE ON FUNCTION neuvetra.collection_storage_can_read(text,text) TO PUBLIC;` then
+  `GRANT EXECUTE ON FUNCTION neuvetra.collection_storage_can_upload(text,text) TO PUBLIC;`
+
+That is 31 statements. **Stop and send the file to the CTO** if you see anything else: any other `GRANT`, any statement that
+names another role (only `PUBLIC, anon, authenticated` may appear), any column-level revoke (a column name in brackets),
+any `ALTER DEFAULT PRIVILEGES` inside `"statements"`, another schema, or a different count.
+
+`"providerAdminStatements"` are **not** run by the tool (C4 only checks that they have not changed since the plan). They are
+expected to be exactly three lines, for `FUNCTIONS`, `TABLES` and `SEQUENCES`, each
+`ALTER DEFAULT PRIVILEGES FOR ROLE "supabase_admin" IN SCHEMA "public" REVOKE ALL ON <kind> FROM PUBLIC, anon, authenticated;`.
+Anything else there: stop and ask.
+
+Paste this into PowerShell (it only reads the file). It prints the count, then any statement that does not match the
+expected patterns, then the two lines after the `neuvetra` function revoke, then the provider lines:
+
+```powershell
+$p = Get-Content C:\neuvetra-0031\0031-plan.json -Raw | ConvertFrom-Json; "statements: $($p.statements.Count)"; $p.statements | Where-Object { $_ -cnotmatch '^REVOKE ALL ON (SCHEMA|ALL TABLES IN SCHEMA|ALL SEQUENCES IN SCHEMA|ALL FUNCTIONS IN SCHEMA) "(drizzle|frontdesk|neuvetra|neuvetra_research_dev|public|site|terrascope)" FROM PUBLIC, anon, authenticated;$' -and $_ -cnotmatch '^REVOKE CREATE ON DATABASE "postgres" FROM PUBLIC, anon, authenticated;$' -and $_ -cnotmatch '^GRANT EXECUTE ON FUNCTION neuvetra\.collection_storage_can_(read|upload)\(text,text\) TO PUBLIC;$' } | ForEach-Object { "UNEXPECTED: $_" }; $i = [array]::IndexOf($p.statements, 'REVOKE ALL ON ALL FUNCTIONS IN SCHEMA "neuvetra" FROM PUBLIC, anon, authenticated;'); "after neuvetra function revoke:"; $p.statements[$i+1]; $p.statements[$i+2]; "provider (not executed): $($p.providerAdminStatements.Count)"; $p.providerAdminStatements
+```
+
+It must print `statements: 31`, **no** `UNEXPECTED:` line, the two `GRANT EXECUTE … collection_storage_can_read …` and
+`… collection_storage_can_upload …` lines under `after neuvetra function revoke:`, and `provider (not executed): 3` with the
+three `supabase_admin` lines. Anything else: stop and send the file to the CTO.
+
+C2b. Before C4, in the Supabase SQL editor, run this **read-only** query (it changes nothing):
+
+```sql
+select s.sig, has_function_privilege('anon', s.sig, 'EXECUTE') as anon, has_function_privilege('authenticated', s.sig, 'EXECUTE') as authenticated
+from unnest(array['neuvetra.collection_storage_can_read(text,text)', 'neuvetra.collection_storage_can_upload(text,text)']) as s(sig) order by 1;
+```
+
+It must show two rows, both with `true` and `true`. If either shows `false`, stop and ask the CTO (Storage is already
+broken; do not apply anything).
 
 C3. Get the plan's fingerprint:
 
@@ -205,6 +257,10 @@ bun tools/staging/apply-existing.ts <your operator export file> C:\neuvetra-0031
 
 It must print `{"status":"containment_and_migrations_committed",...}`. **From this moment rule 2 applies: never roll Railway
 back past commit `687ed3f`.**
+
+C5. Straight after C4, run the C2b query again. Both rows must still show `true` and `true`. If either shows `false`, every
+Storage upload and download is failing: tell the CTO at once (do not retry C4). The repair is the two `GRANT` lines from C2
+run in the SQL editor, but only on the CTO's instruction.
 
 ### If C4 prints `apply_failed`
 
@@ -270,7 +326,19 @@ back (rule 2); send the CTO both files. A file that is absent from either folder
 its name and folder. Leave out the name of any Results CSV you skipped in A4 (more than 400 active records); any other
 `MISSING` means a download is missing, so fix that before continuing.
 
-E3. Open `0031-apply.json`: `migration.schemaVersion` must be `31`, and the last entry of `migration.migrations` must be
+E2b. Functional check (Storage and the import path), with a synthetic test account on staging (*screen labels: unconfirmed,
+check on your screen*):
+
+- upload one small synthetic evidence file (for example a one-page PDF) to a record of one test company;
+- open an evidence file (one that already opened before the apply; a new upload stays "pending" until it is scanned and
+  cannot be opened until then, which is expected); it must open, not fail;
+- run one small Scope 3 spend import (a CSV of one or two synthetic lines) and check the rows appear.
+
+Any of these failing with an error (for example "permission denied" or a failed upload): do not retry and do not roll Railway
+back (rule 2); tell the CTO with the time.
+
+E3. Open `0031-apply.json`: `audit.legacyContainmentVerified` must be `true` and `audit.missingStorageGuardGrants` must be
+`[]`. `migration.schemaVersion` must be `31`, and the last entry of `migration.migrations` must be
 `0031_integrity_guards.sql` with sha256 `3513b5da55e41133d94faaf3a8b610e1fb66f415a95393272d3f8b1c49246cd7`.
 
 E4. Tell the CTO the apply time and the `/ready` result. A **separate follow-up PR** then changes

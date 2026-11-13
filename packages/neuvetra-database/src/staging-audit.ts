@@ -13,10 +13,15 @@ const isContainedProviderDefault = (row:DefaultGrant) => row.owner==="supabase_a
 // EXECUTE grant is deliberately PUBLIC so the restrictive policies can run for
 // every Storage role. The separate schema-usage check must still deny direct
 // access to neuvetra for anon and authenticated, and all other functions block.
-const reviewedStoragePolicyGuards = new Set([
-  "neuvetra.collection_storage_can_read(text,text)",
-  "neuvetra.collection_storage_can_upload(text,text)",
-])
+// BF-10: the blanket function revoke in the containment plan would also strip that PUBLIC
+// grant, and every Storage insert/select would then fail with 42501. The plan re-grants
+// each existing guard right after its schema's function revoke, and the audit is not
+// verified while an existing guard is not executable by anon and authenticated.
+const REVIEWED_STORAGE_POLICY_GUARDS = [
+  { schema: "neuvetra", name: "collection_storage_can_read", signature: "neuvetra.collection_storage_can_read(text,text)" },
+  { schema: "neuvetra", name: "collection_storage_can_upload", signature: "neuvetra.collection_storage_can_upload(text,text)" },
+] as const
+const reviewedStoragePolicyGuards = new Set<string>(REVIEWED_STORAGE_POLICY_GUARDS.map(guard => guard.signature))
 const isReviewedStoragePolicyGuard = (row:LegacyExposureAudit["callableFunctions"][number]) =>
   row.schema_name === "neuvetra" && row.security_definer && reviewedStoragePolicyGuards.has(row.signature)
 interface SchemaInventory { schema_name: string; owner: string }
@@ -36,6 +41,10 @@ export interface LegacyExposureAudit {
   columnGrants: Array<{ schema_name: string; role: string; table_name: string; column_name: string; privilege: string }>
   sequenceGrants: Array<{ schema_name: string; role: string; sequence_name: string; privilege: string }>
   callableFunctions: Array<{ schema_name: string; role: string; signature: string; security_definer: boolean }>
+  /** Reviewed Storage policy guards present in this database (none before 0027). */
+  storagePolicyGuards: Array<{ schema_name: string; signature: string }>
+  /** BF-10: present guards that anon or authenticated cannot execute; Storage policies then fail with 42501. */
+  missingStorageGuardGrants: Array<{ signature: string; role: string }>
   defaultGrants: DefaultGrant[]
 }
 
@@ -70,6 +79,14 @@ export async function auditLegacyStagingExposure(db: WorkspaceSql): Promise<Lega
     from pg_proc p join pg_namespace n on n.oid=p.pronamespace cross join pg_roles r
     where n.nspname=any($1::text[]) and r.rolname in ('anon','authenticated') and has_function_privilege(r.oid,p.oid,'EXECUTE') order by n.nspname,role,signature`,[applicationSchemas])
   const blockingCallableFunctions = functions.rows.filter(row => !isReviewedStoragePolicyGuard(row))
+  // Matched by schema, name and exact (text,text) arguments, independent of the caller's search_path.
+  const guards = await db.query<{ schema_name: string; signature: string; role: string | null; allowed: boolean | null }>(`select g.schema_name,g.signature,r.rolname role,
+    case when r.oid is null then null else has_function_privilege(r.oid,p.oid,'EXECUTE') end allowed
+    from jsonb_to_recordset($1::jsonb) g(schema_name text,name text,signature text)
+    join pg_namespace n on n.nspname=g.schema_name join pg_proc p on p.pronamespace=n.oid and p.proname=g.name and p.pronargs=2 and p.proargtypes[0]='text'::regtype and p.proargtypes[1]='text'::regtype
+    left join pg_roles r on r.rolname in('anon','authenticated') order by g.signature,r.rolname`,[JSON.stringify(REVIEWED_STORAGE_POLICY_GUARDS.map(({schema,name,signature})=>({schema_name:schema,name,signature})))])
+  const storagePolicyGuards = [...new Map(guards.rows.map(row => [row.signature,{schema_name:row.schema_name,signature:row.signature}])).values()]
+  const missingStorageGuardGrants = guards.rows.filter(row => row.role !== null && row.allowed !== true).map(row => ({signature:row.signature,role:row.role!}))
   const defaults = await db.query<LegacyExposureAudit["defaultGrants"][number]>(`select n.nspname schema_name,pg_get_userbyid(d.defaclrole) owner,d.defaclobjtype::text object_type,
     case when a.grantee=0 then 'PUBLIC' else pg_get_userbyid(a.grantee) end role,a.privilege_type privilege
     from pg_default_acl d left join pg_namespace n on n.oid=d.defaclnamespace cross join lateral aclexplode(d.defaclacl) a
@@ -80,11 +97,12 @@ export async function auditLegacyStagingExposure(db: WorkspaceSql): Promise<Lega
   const blockingDefaultGrants=defaults.rows.filter(row=>!isContainedProviderDefault(row))
   return {
     legacyContainmentVerified: unreviewedApplicationSchemas.length===0 && roles.rows.length===2 && roles.rows.every(r=>!r.allowed) && schemas.rows.every(r=>!r.allowed&&!r.create_allowed)
-      && tables.rows.length===0 && columns.rows.length===0 && sequences.rows.length===0 && blockingCallableFunctions.length===0 && blockingDefaultGrants.length===0,
+      && tables.rows.length===0 && columns.rows.length===0 && sequences.rows.length===0 && blockingCallableFunctions.length===0 && blockingDefaultGrants.length===0
+      && missingStorageGuardGrants.length===0,
     scope:"all-application-schemas",applicationSchemas,unreviewedApplicationSchemas,managedSchemas,
     providerDefaultPolicy:"supabase-admin-public-defaults-behind-denied-schema-v1",deferredProviderDefaultGrants,blockingDefaultGrants,endpointRolesPresent:roles.rows.length===2,
     databaseCreate:roles.rows,schemaUsage:schemas.rows,tableGrants:tables.rows,columnGrants:columns.rows,sequenceGrants:sequences.rows,
-    callableFunctions:functions.rows,defaultGrants:defaults.rows,
+    callableFunctions:functions.rows,storagePolicyGuards,missingStorageGuardGrants,defaultGrants:defaults.rows,
   }
 }
 
@@ -101,6 +119,8 @@ export async function planLegacyStagingContainment(db: WorkspaceSql): Promise<{ 
       `REVOKE ALL ON ALL TABLES IN SCHEMA ${quote(schema)} FROM PUBLIC, anon, authenticated;`,
       `REVOKE ALL ON ALL SEQUENCES IN SCHEMA ${quote(schema)} FROM PUBLIC, anon, authenticated;`,
       `REVOKE ALL ON ALL FUNCTIONS IN SCHEMA ${quote(schema)} FROM PUBLIC, anon, authenticated;`)
+    // BF-10: restore 0027's deliberate PUBLIC EXECUTE on the reviewed Storage policy guards, in the same transaction.
+    for(const guard of audit.storagePolicyGuards) if(guard.schema_name===schema) statements.push(`GRANT EXECUTE ON FUNCTION ${guard.signature} TO PUBLIC;`)
   }
   // Table-level REVOKE does not clear column-level grants. Include every observed column privilege.
   for(const row of audit.columnGrants) statements.push(`REVOKE ${row.privilege} (${quote(row.column_name)}) ON TABLE ${quote(row.schema_name)}.${quote(row.table_name)} FROM PUBLIC, anon, authenticated;`)
