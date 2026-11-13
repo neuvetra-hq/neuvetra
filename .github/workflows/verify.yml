@@ -379,7 +379,7 @@ jobs:
       # actually applied by hand through tools/staging (never before). Until it is bumped, no merged build may raise
       # STAGING_SCHEMA_BRIDGE_VERSION above it, because the deploy of that build would fail /ready and block every later deploy.
       # Must be a positive integer; the guard fails closed otherwise.
-      LIVE_STAGING_SCHEMA: '30'
+      LIVE_STAGING_SCHEMA: '31'
       EVENT_NAME: ${{ github.event_name }}
       PUSH_BEFORE_SHA: ${{ github.event.before }}
     steps:

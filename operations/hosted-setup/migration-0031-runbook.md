@@ -5,6 +5,11 @@ File fingerprint (sha256): `3513b5da55e41133d94faaf3a8b610e1fb66f415a95393272d3f
 PR #52's merge commit on `main`: `687ed3f185c8e00b038e46ef5a24dac593722437`
 (message `Merge pull request #52 from neuvetra-hq/claude/bf-09-migration-0031`).
 
+> **Applied to staging on 12 Nov 2026 (22:34 PST; 13 Nov 06:34 UTC)** from commit `e2db7e1` with plan sha256
+> `3ac3573cf89427da9d8f0afc7da2d00636abaf02af4a146447dc6e632ed16969`; `/ready` reports 31; both storage guards still
+> executable; function text matches the "after G (0031)" values. **Rule 2 is now in force: never roll Railway back to an
+> image older than PR #52.** The steps below are kept as the record of how it was applied.
+
 > **BF-10 (12 Nov 2026): the tools changed; read this first.** The containment step that `apply-existing.ts` runs before
 > migrating used to remove the deliberate PUBLIC EXECUTE grant on the two Storage policy guards from 0027, which would have
 > broken every Storage upload and download on staging (see `bf10-containment-storage-guards.md` in this folder). Nothing was
@@ -31,13 +36,15 @@ PR #52's merge commit on `main`: `687ed3f185c8e00b038e46ef5a24dac593722437`
 > git merge-base --is-ancestor 687ed3f185c8e00b038e46ef5a24dac593722437 HEAD; $LASTEXITCODE
 > $m = git log --format=%H --merges --grep='^Merge pull request #61 from ' origin/main | Select-Object -First 1; if ($m) { git merge-base --is-ancestor $m HEAD; $LASTEXITCODE } else { 'PR #61 is not merged on origin/main' }
 > git branch -r --contains HEAD
+> Get-ChildItem packages\neuvetra-database\src\migrations\*.sql | Select-Object -Last 1 -ExpandProperty Name
 > bun install --frozen-lockfile
 > git status
 > bun tools/staging/plan-existing.ts <your operator export file> C:\neuvetra-0031\0031-plan-2.json
 > ```
 >
-> Check each output exactly as B3, B4 and C1 say (both ancestor lines print `0`). Then run C2 with
-> `$plan = 'C:\neuvetra-0031\0031-plan-2.json'`, then C2b and C3b in the SQL editor, then C3 and C4 on the new file:
+> Check each output exactly as B3, B4 and C1 say (both ancestor lines print `0`; the migrations line prints
+> `0031_integrity_guards.sql`). Then run C2, but **change its first line** to
+> `$plan = 'C:\neuvetra-0031\0031-plan-2.json'` (as written, C2 reads `0031-plan.json`), then C2b and C3b in the SQL editor, then C3 and C4 on the new file:
 >
 > ```powershell
 > (Get-FileHash C:\neuvetra-0031\0031-plan-2.json -Algorithm SHA256).Hash.ToLower()
