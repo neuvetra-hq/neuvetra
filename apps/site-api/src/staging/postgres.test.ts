@@ -343,11 +343,15 @@ integration("BF-09: the same server at schema 30, then after 0031 is applied at 
     // ... and the flag is refused before any SQL, exactly as any unknown key was before this PR.
     const flagged = await call("POST", `${root}/collection/activities/${saves[5]!.id}`, request(1, saves[5]!.version, { ...electricity("M-5"), payload: { ...electricity("M-5").payload, duplicateConfirmedDistinct: true } }, "Confirmed a different meter"))
     expect([flagged.status, flagged.body]).toEqual([422, { error: "Invalid or unsupported collection record." }])
-    // ... but a withdrawn record made active again is not caught at 30 (the gap 0031 closes): 401 active.
+    // BF-03b: ... and so is a withdrawn record made active again at 400 (the route's check, as 0031's 54N31 will), with
+    // nothing saved. Only a save past the route (here the RPC directly; on staging, saves racing the route's read) still
+    // reaches 401 active at 30: the gap 0031 closes under the company lock.
     const withdrawn = (await call("POST", `${root}/collection/activities/${saves[0]!.id}`, request(1, saves[0]!.version, electricity("M-0", "withdrawn"), "Withdrawn: entered twice"))).body.version.id as string
     expect((await call("POST", `${root}/collection/activities/${crypto.randomUUID()}`, request(0, null, electricity("M-401")))).status).toBe(201)
-    const back = await call("POST", `${root}/collection/activities/${saves[0]!.id}`, request(2, withdrawn, electricity("M-0"), "Reactivated"))
-    expect(back.status).toBe(201)
+    const restored = await call("POST", `${root}/collection/activities/${saves[0]!.id}`, request(2, withdrawn, electricity("M-0"), "Reactivated"))
+    expect([restored.status, restored.body.code]).toEqual([422, "record_limit_reached"])
+    expect((await database.findCollectionActivities(owner, company)).find(record => record.id === saves[0]!.id)!.currentVersion.activity.state).toBe("withdrawn")
+    const back = { body: await database.saveCollectionActivity(owner, company, saves[0]!.id, request(2, withdrawn, electricity("M-0"), "Reactivated")) }
     // BF-03 S10: more than 400 active records refuse Results; withdrawing 2 brings them back (399 active).
     const over = await call("GET", `${root}/results`)
     expect([over.status, over.body.code]).toEqual([422, "record_limit_reached"])
@@ -370,6 +374,8 @@ integration("BF-09: the same server at schema 30, then after 0031 is applied at 
     const current0 = recordsAt30.find(record => record.id === saves[0]!.id)!.currentVersion
     const closed = await call("POST", `${root}/collection/activities/${saves[0]!.id}`, request(current0.revision, current0.id, electricity("M-0"), "Reactivated"))
     expect([closed.status, closed.body.code]).toEqual([422, "record_limit_reached"])
+    // Past the route (the RPC directly), 0031 itself refuses the reactivation.
+    expect(await database.saveCollectionActivity(owner, company, saves[0]!.id, request(current0.revision, current0.id, electricity("M-0"), "Reactivated")).then(() => "saved", (error: { code?: string }) => error.code)).toBe("54N31")
     expect((await call("GET", `${root}/collection`)).body.capabilities.duplicateConfirmation).toBe(true)
     const stored = await call("POST", `${root}/collection/activities/${saves[5]!.id}`, request(1, saves[5]!.version, { ...electricity("M-5"), payload: { ...electricity("M-5").payload, duplicateConfirmedDistinct: true } }, "Confirmed a different meter"))
     expect(stored.status).toBe(201)
