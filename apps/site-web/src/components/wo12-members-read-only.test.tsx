@@ -342,3 +342,56 @@ describe("WO-12 QA round 1: labels follow the live form and the company", () => 
     expect((await render({}))[1]).toBe("(only under operational control in company setup)")
   })
 })
+
+// BF-03b (d) and BF-01c: the refused save at the Scope 1 and 2 record cap links to the records list; the record view shows a
+// record's possible-duplicate state; the form's alert uses the results routes' own duplicate rule.
+describe("BF-03b and BF-01c on the Activity screen", () => {
+  const sameMeter = (n: number, sourceId: string, extra: Record<string, unknown> = {}) => { const r = meter(n); return { ...r, currentVersion: { ...r.currentVersion, activity: { ...r.currentVersion.activity, sourceId, ...extra } } } }
+  const linkTo = (app: { nodes: () => any[] }, label: string) => app.nodes().find(node => node.type === "a" && node.children.flat(Infinity).join("").includes(label))
+  test("BF-03b (d): a save refused at the record cap says so once, without the retry sentence, and links to the saved activities list", async () => {
+    const limit = "This company already has 400 active Scope 1 and 2 records, the most one draft can calculate. Withdraw records you no longer need, then save again."
+    const app = await workspace({ save: async () => { throw new CollectionApiError(limit, 422, "record_limit_reached") } })
+    for (const [label, value] of [["Company-setup location", SITE], ["Gas account or meter ID", "GAS-9"], ["Original quantity from source", "120"]]) { app.byLabel(label)!.props.onChange(value); await app.settle() }
+    app.button("Save activity")!.props.onClick(); await app.settle(); await new Promise(r => setTimeout(r, 5)); await app.settle()
+    expect(app.text()).toContain(`Nothing was saved. ${limit}`)
+    expect(app.text()).not.toContain("Retry keeps the same save request.")
+    const link = linkTo(app, "Open the saved activities list to withdraw records")
+    expect(link?.props.href).toBe("#saved-activities")
+    expect(app.nodes().find(node => node.props.id === "saved-activities")?.props.tabIndex).toBe(-1)
+    // Any other definite refusal has no such link.
+    const other = await workspace({ save: async () => { throw new CollectionApiError("Invalid or unsupported collection record.", 422, null) } })
+    for (const [label, value] of [["Company-setup location", SITE], ["Gas account or meter ID", "GAS-9"], ["Original quantity from source", "120"]]) { other.byLabel(label)!.props.onChange(value); await other.settle() }
+    other.button("Save activity")!.props.onClick(); await other.settle(); await new Promise(r => setTimeout(r, 5)); await other.settle()
+    expect(linkTo(other, "Open the saved activities list")).toBeUndefined()
+  })
+
+  test("BF-01c: the record view names the record it may repeat (both counted), and the earlier record names the later one", async () => {
+    const records = [meter(1), sameMeter(2, "M-1")]
+    const later = await workspace({ records, openRecordId: idOf(2) })
+    expect(later.text()).toContain("To confirm: possible duplicate (both are counted)")
+    expect(later.text()).toContain(`Possible duplicate of M-1 at Plant, Jan 1 – Dec 31, 2025 (record ${idOf(1)}). Both records are counted in the totals.`)
+    expect(later.text()).toContain("If they are the same record, withdraw or correct one of them; if they are different records, no action is needed.")
+    expect(linkTo(later, "Open Purchased electricity · M-1")?.props.href).toBe(`#/activity/${idOf(1)}`)
+    const earlier = await workspace({ records, openRecordId: idOf(1) })
+    expect(earlier.text()).toContain("Another active record may repeat this one; both records are counted in the totals:")
+    expect(linkTo(earlier, "Open Purchased electricity · M-1")?.props.href).toBe(`#/activity/${idOf(2)}`)
+    // A view-only member is told who can act. Withdrawn or different records show no state.
+    expect((await workspace({ actor: member, records, openRecordId: idOf(2) })).text()).toContain("an owner or admin can withdraw one of them")
+    expect((await workspace({ records: [meter(1), sameMeter(2, "M-1", { state: "withdrawn", withdrawalReason: "Entered twice" })], openRecordId: idOf(2) })).text()).not.toContain("To confirm: possible duplicate")
+    expect((await workspace({ records: [meter(1), meter(2)], openRecordId: idOf(2) })).text()).not.toContain("To confirm: possible duplicate")
+  })
+
+  test("BF-01c: the form's alert follows the shared rule: a consecutive bill (shared read day) is not a duplicate; an overlapping one is", async () => {
+    const draftFor = async (start: string, end: string) => {
+      const app = await workspace({ records: [sameMeter(1, "GAS-9", { kind: "natural_gas", period: { start: "2025-01-01", endExclusive: "2025-02-01" }, quantity: { originalValue: "10", originalUnit: "therm", normalizedValue: "10", normalizedUnit: "therm" }, payload: { heatContent: null } })].map(r => ({ ...r, kind: "natural_gas" })) })
+      for (const [label, value] of [["Company-setup location", SITE], ["Gas account or meter ID", "GAS-9"], ["Period start", start], ["Last day covered", end]]) { app.byLabel(label)?.props.onChange(value); await app.settle() }
+      return app.text()
+    }
+    const overlapping = await draftFor("2025-01-15", "2025-02-14")
+    expect(overlapping).toContain("Possible duplicate")
+    expect(overlapping).toContain("This record matches an active record (Natural gas · GAS-9) for overlapping dates")
+    expect(overlapping).not.toContain("Probable duplicate")
+    // Jan 31 → Feb 28 shares only the read day Jan 31 with the January bill: the shared rule does not flag it.
+    expect(await draftFor("2025-01-31", "2025-02-28")).not.toContain("This record matches an active record")
+  })
+})

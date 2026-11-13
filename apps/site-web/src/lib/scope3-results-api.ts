@@ -9,7 +9,7 @@ export { scope3ExclusionRegister, scope3TotalStatement } from "../../../../packa
 export { scope3LineMemoText } from "../../../../packages/neuvetra-database/src/scope3-report-csv"
 export { scope3MemoText } from "../../../../packages/neuvetra-database/src/scope3-r3a"
 export { SCOPE3_SUPERSEDED_MEMO_TEXT_R3A } from "../../../../packages/neuvetra-database/src/scope3-text"
-export { scope3ConstantSourceOf, scope3ConstantText, scope3ConversionText, scope3FactorSourceOfKey, scope3FactorText, scope3GasTexts, scope3KgToTonnesExact, scope3SupersededBy } from "../../../../packages/neuvetra-database/src/scope3-trace"
+export { scope3ConstantSourceOf, scope3ConstantText, scope3ConversionText, scope3FactorSourceOfKey, scope3FactorText, scope3GasTexts, scope3KgToTonnesExact, scope3ReplacingRecordOf, scope3SupersededBy } from "../../../../packages/neuvetra-database/src/scope3-trace"
 export { SCOPE3_DQ_INDICATOR_TEXT, SCOPE3_DQ_RATING_TEXT, SCOPE3_METHOD_TYPE_TEXT, SCOPE3_ORIGIN_TEXT, SCOPE3_REVIEW_FLAG_TEXT, SCOPE3_SET_BY_TEXT, SCOPE3_STATUS_TEXT, SCOPE3_TOTAL_TEXT, SCOPE3_TRACE_TEXT, SCOPE3_ASSESSMENT_REASON_TEXT, SCOPE3_EXCLUDABLE_NOTE_TEXT } from "../../../../packages/neuvetra-database/src/scope3-text"
 
 /**

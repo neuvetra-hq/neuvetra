@@ -20,12 +20,13 @@ import {
   SCOPE3_METHOD_TYPE_TEXT, SCOPE3_ORIGIN_TEXT, SCOPE3_STATUS_TEXT, SCOPE3_TOTAL_TEXT, SCOPE3_UNCERTAINTY_TEXT, SCOPE3_DQ_CAP_REASON_TEXT,
 } from './scope3-text'
 import { scope3MemoText } from './scope3-r3a'
-import { SCOPE3_SUPERSEDED_MEMO_TEXT_R3A } from './scope3-text'
+import { SCOPE3_REPLACING_RECORD_CSV_TEXT, SCOPE3_SUPERSEDED_MEMO_TEXT_R3A } from './scope3-text'
 import { SCOPE3_REPORT_TEXT_V3 } from './scope3-text-v3'
 import { scope3SpendConversionNote } from './scope3-spend-currency'
 import { scope3VisibleReviewFlags } from './scope3-trace'
+import { possibleDuplicateCounted, possibleDuplicatesOverstatedText } from './collection-duplicates'
 import {
-  scope3CanonicalJson, scope3ClosedLines, scope3ConstantSourceOf, scope3ConstantText, scope3ConversionText, scope3FactorSourceOfKey, scope3GasTexts, scope3KgToTonnesExact, scope3LineEvidenceLinked, scope3SupersededBy, type Scope3ResultsDocument, type Scope3ResultsLine,
+  scope3CanonicalJson, scope3ClosedLines, scope3ConstantSourceOf, scope3ConstantText, scope3ConversionText, scope3FactorSourceOfKey, scope3GasTexts, scope3KgToTonnesExact, scope3LineEvidenceLinked, scope3ReplacingRecordOf, scope3SupersededBy, type Scope3ResultsDocument, type Scope3ResultsLine,
 } from './scope3-trace'
 
 /** Labels the caller supplies (the web's plain-language words); the API must pass the same functions to write the same bytes. */
@@ -61,6 +62,16 @@ export function scope3LineStatusText(row: Pick<Scope3ResultsLine, 'outcome' | 'r
   return row.outcome === 'calculated' ? row.result?.status === 'complete' ? (row.result.boundary.minimumBoundary === 'met' ? 'Calculated' : closed ? 'Calculated — closed by its upstream line' : 'Calculated, partial boundary') : 'Needs input'
     : row.outcome === 'outside_period' ? 'Outside reporting period' : row.plan.status === 'withdrawn' ? 'Withdrawn' : row.plan.status === 'excluded' ? 'Excluded' : row.outcome === 'unavailable' ? 'Couldn’t calculate'
       : row.plan.status === 'method_pending' ? (row.plan.optional ? 'Optional, not yet quantified' : 'Awaiting factor source') : 'Needs input'
+}
+/**
+ * BF-02b (a): the "Superseded by" cell of a spend line held because the record replacing it isn't counted: that record by
+ * source ID and record ID. Empty for every other line (an excluded superseded line keeps its bare record ID, as before).
+ */
+export function scope3HeldReplacementText(row: Pick<Scope3ResultsLine, 'plan'>, lines: ReadonlyArray<Pick<Scope3ResultsLine, 'recordId' | 'derivedFrom' | 'sourceId'>>): string {
+  const id = scope3ReplacingRecordOf(row)
+  if (id === null) return ''
+  const by = lines.find(line => line.recordId === id && line.derivedFrom === null)
+  return SCOPE3_REPLACING_RECORD_CSV_TEXT(id, by?.sourceId ?? null)
 }
 /** Every reason code of a line, in the order the screen shows them. */
 export function scope3LineReasonCodes(row: Pick<Scope3ResultsLine, 'outcome' | 'periodCheck' | 'plan' | 'result'>): string[] {
@@ -204,6 +215,10 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
     }
   }
 
+  // BF-01c (count mode): counted possible duplicates per category; their figures are in the category subtotal and the total.
+  const countedDuplicates = new Map<number, number>()
+  for (const line of results.records) if (line.outcome === 'calculated' && possibleDuplicateCounted({ reasons: line.plan.reasons, notes: line.plan.notes })) countedDuplicates.set(line.category, (countedDuplicates.get(line.category) ?? 0) + 1)
+  const overstated = (count: number) => count ? [`${possibleDuplicatesOverstatedText(count)}.`] : []
   // 1. Category.
   section('Category', coverage.categories.map(row => {
     const p = row.profile, a = row.assessment
@@ -216,7 +231,7 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
       p?.biogenicCo2?.display ?? '', p ? Object.entries(p.memoItems).map(([code, kg]) => `${code} ${kg.display} kg`).join('; ') : '', p?.deflationEffect?.display ?? '',
       a?.reasonCode ?? '', a ? scope3CriteriaLabels(a.criteria).join('; ') : '', a?.activitiesIncluded ?? '',
       a?.magnitudeKind === 'estimated' ? a.magnitudeTCo2e ?? '' : '', a?.magnitudeKind === 'estimated' ? a.magnitudeBasis : a?.magnitudeKind === 'not_quantifiable' ? a.notQuantifiableReason : '',
-      (a?.withinCategoryExclusions ?? []).map(x => `${x.noteCode}: ${x.magnitudeKind === 'estimated' ? `${x.magnitudeTCo2e} t CO2e` : 'not quantifiable'}`).join('; '), scope3VisibleReviewFlags(row, results.coverage.categories).join('; '),
+      (a?.withinCategoryExclusions ?? []).map(x => `${x.noteCode}: ${x.magnitudeKind === 'estimated' ? `${x.magnitudeTCo2e} t CO2e` : 'not quantifiable'}`).join('; '), [...scope3VisibleReviewFlags(row, results.coverage.categories), ...overstated(row.subtotal ? countedDuplicates.get(row.category) ?? 0 : 0)].join('; '),
       String(row.counts.methodPending), String(row.counts.optionalPending),
       String(row.linesWithoutEvidence), row.dataQualityLabel.label ? `${SCOPE3_DQ_RATING_TEXT[row.dataQualityLabel.label]}${row.dataQualityLabel.capped ? ` (capped: ${row.dataQualityLabel.reasons.map(code => SCOPE3_DQ_CAP_REASON_TEXT[code]).join('; ')})` : ''}` : '']
   }))
@@ -232,7 +247,7 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
       row.recordId, row.versionId, String(row.revision), row.derivedFrom ? `${row.derivedFrom.kind} ${row.derivedFrom.recordId}` : '', row.reference, row.estimateBasis ?? '',
       row.methodType ? SCOPE3_METHOD_TYPE_TEXT[row.methodType] : '', origin ? `${SCOPE3_ORIGIN_TEXT[origin.origin] ?? origin.origin} (${origin.setBy === 'user' ? 'set by the company' : origin.setBy === 'method_type' ? 'fixed by the method type' : 'method default'})` : '',
       scope3DataQualityText(row), (r?.factorsUsed ?? []).map(f => (f as { key: string }).key).join('; '), (r?.factorsUsed ?? []).map(f => (f as { value: string }).value).join('; '),
-      (r?.conversions ?? []).map(scope3ConversionText).join('; '), r?.biogenicCo2?.mass ?? '', scope3SupersededBy(row) ?? '', r?.inputSha256 ?? '', r?.resultSha256 ?? '',
+      (r?.conversions ?? []).map(scope3ConversionText).join('; '), r?.biogenicCo2?.mass ?? '', scope3SupersededBy(row) ?? scope3HeldReplacementText(row, lines), r?.inputSha256 ?? '', r?.resultSha256 ?? '',
       row.kind, r?.total?.unrounded ?? '', r ? scope3GasTexts(r).join('; ') : '', (r?.constantsUsed ?? []).map(scope3ConstantText).join('; '),
       r ? scope3CanonicalJson(r.input) : '', r ? scope3CanonicalJson(r.activity) : '', scope3LineEvidenceLinked(row) ? 'yes' : 'no',
       scope3LineMemoText(row), TAX_TEXT[row.plan.notes.find(note => note in TAX_TEXT) ?? ''] ?? '', row.currencyConversion ? scope3SpendConversionNote(row.currencyConversion) : '']
@@ -296,7 +311,9 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
 
   // 8. Total.
   const total = scope3TotalStatement(coverage.categories)
-  section('Total', [['Total', `Known-source Scope 3 subtotal (${total.label})`, coverage.knownSourceSubtotal?.display ?? '', coverage.knownSourceSubtotal ? scope3KgToTonnesExact(coverage.knownSourceSubtotal.display) : '',
+  // BF-01c: the Total row's label carries the same sentence when its figure includes counted possible duplicates.
+  const totalDuplicates = coverage.knownSourceSubtotal ? coverage.categories.reduce((n, row) => n + (row.subtotal ? countedDuplicates.get(row.category) ?? 0 : 0), 0) : 0
+  section('Total', [['Total', `Known-source Scope 3 subtotal (${total.label})${totalDuplicates ? `. ${possibleDuplicatesOverstatedText(totalDuplicates)}.` : ''}`, coverage.knownSourceSubtotal?.display ?? '', coverage.knownSourceSubtotal ? scope3KgToTonnesExact(coverage.knownSourceSubtotal.display) : '',
     total.includes.join('; '), total.excludes.map(item => `${item.category} (${(SCOPE3_REPORT_TEXT_V3.status[item.status] ?? SCOPE3_STATUS_TEXT[item.status]).toLowerCase()})`).join('; '), total.label]])
 
   rows.push('')

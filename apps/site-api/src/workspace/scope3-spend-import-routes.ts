@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto"
 import {
   type CollectionActivityRecord, type CollectionContext, type CollectionEvidenceMetadata, type CompanySetupView,
-  scope3ReportingYearOf, planScope3Calculation, planScope3Supersession, scope3SpendMappingKeyInput, type Scope3CollectionVersion,
+  scope3ReportingYearOf, planScope3Calculation, planScope3SupersessionClaimants, scope3SpendMappingKeyInput, type Scope3CollectionVersion,
   type PurchaseSpendCollectionPayload, type Scope3SpendLineRef, parseScope3SpendCsv, SCOPE3_SPEND_IMPORT_MAX_BYTES,
   type Scope3SpendImportProblem, type Scope3SpendParse, scope3SpendConversionOf, scope3SpendNotesWithoutConversion,
   type Scope3SpendConversion, type Scope3SpendImportRecord, type Scope3SpendMappingRecord, SCOPE3_CAPACITY_TEXT,
@@ -116,7 +116,18 @@ export function scope3SpendLineViews(records: readonly CollectionActivityRecord[
   const reportingPeriod = period?.start && period.endExclusive ? { start: period.start, endExclusive: period.endExclusive } : null
   const scope3 = records.filter(record => record.kind === "purchase_spend" || record.kind === "purchase_supplier" || record.kind === "partner_reported")
   const versions = scope3.map(record => record.currentVersion as unknown as Scope3CollectionVersion)
-  const supersession = planScope3Supersession(versions, context, { reportingPeriod, sha256 })
+  // BF-02b (b): the pre-pass map is provisional (BF-02). A claimant the adapter itself holds is certainly not counted, so a
+  // line whose every claimant is held is shown as Results shows it (held, `replacing_record_not_counted`), never as replaced;
+  // a line with a claimant that can calculate is shown as replaced by it (Results confirms it after the engine run). Display only.
+  const claimants = planScope3SupersessionClaimants(versions, context, { reportingPeriod, sha256 })
+  const adapterHeld = new Set(versions.filter(v => (v.activity.kind === "purchase_supplier" || v.activity.kind === "partner_reported")
+    && planScope3Calculation(v, context, evidence, { reportingPeriod }).action === "hold").map(v => v.recordId))
+  const supersession = new Map<string, string>(), heldFor = new Map<string, string>()
+  for (const [line, ids] of claimants) {
+    const counted = ids.find(id => !adapterHeld.has(id))
+    if (counted !== undefined) supersession.set(line, counted)
+    else heldFor.set(line, ids[0]!)
+  }
   const byId = new Map(records.map(record => [record.id, record]))
   const lines: Scope3SpendLineView[] = []
   for (const record of scope3) {
@@ -124,7 +135,8 @@ export function scope3SpendLineViews(records: readonly CollectionActivityRecord[
     if (a.kind !== "purchase_spend") continue
     const p = a.payload as PurchaseSpendCollectionPayload
     if (p.importId === null || p.importRow === null) continue
-    const plan = planScope3Calculation(version as unknown as Scope3CollectionVersion, context, evidence, { reportingPeriod, supersession })
+    const planned = planScope3Calculation(version as unknown as Scope3CollectionVersion, context, evidence, { reportingPeriod, supersession })
+    const plan = heldFor.has(record.id) && planned.status !== "withdrawn" && planned.status !== "excluded" ? { ...planned, action: "hold" as const, status: "input_needed" as const, reasons: ["replacing_record_not_counted"] } : planned
     lines.push({
       recordId: record.id, versionId: version.id, revision: version.revision, importId: p.importId, importRow: p.importRow, sourceId: a.sourceId, state: a.state,
       amount: a.quantity.originalValue, currency: a.quantity.originalUnit, category: p.category, naicsCode: p.naicsCode, marginChoice: p.marginChoice, mappingSource: p.mappingSource,

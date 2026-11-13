@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { SPEND_REPLACED_STEP_TEXT } from "@/lib/bf-followups-text"
 import { parseScope3SpendCsv, scope3DecimalSum, scope3SpendImportTemplate, type Scope3SpendImportLine, type Scope3SpendParse } from "../../../../../packages/neuvetra-database/src/scope3-spend-import"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { reasonText } from "@/lib/plain-language"
@@ -411,7 +412,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
 
       {supersession.length > 0 && <div className="spend-import__step" aria-label="Superseded lines">
         <h4 className="spend-import__step-title"><span className="spend-import__num">3</span> Spend replaced by supplier or partner figures</h4>
-        <p className="nv-subtle">These spend lines are never counted: the record beside them is counted instead. Check that its figure covers the same purchases.</p>
+        <p className="nv-subtle">{SPEND_REPLACED_STEP_TEXT.intro}</p>
         <ul className="spend-import__supersession">{supersession.map(row => <li key={row.recordId} className="spend-import__replace">
           <div className="spend-import__replace-head"><p><strong>{row.name || "Supplier"}</strong> · {row.kind === "partner_reported" ? "partner record" : "supplier record"} {row.sourceId} · category {row.category}</p></div>
           <dl className="spend-import__compare">

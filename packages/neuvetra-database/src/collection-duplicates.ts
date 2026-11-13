@@ -190,6 +190,12 @@ export function applyDuplicatePolicy<P extends { action: 'calculate' | 'hold'; s
 }
 
 /**
+ * BF-01 (count mode): the flag on a subtotal that includes possible duplicates. Scope 1 and 2: screen, draft report, print and
+ * CSV Subtotal rows; Scope 3 (BF-01c): the CSV's Category and Total rows (newly written CSVs and newly prepared versions).
+ */
+export const possibleDuplicatesOverstatedText = (count: number) => `Includes ${count} possible duplicate${count === 1 ? '' : 's'}: this figure may be overstated`
+
+/**
  * The response warning in count mode (`counted`: records counted while they may repeat another record). Record-neutral
  * (bills, trips, waste lines), and it says plainly that both records are in the totals and what to do.
  */

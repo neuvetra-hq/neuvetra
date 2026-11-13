@@ -174,9 +174,14 @@ const comparable = (name: string) => name.trim().toLowerCase().replace(/\s+/g, "
  * GL account, supplier and description) is one the record lists. The key is the one the screen's spend lines carry for
  * that text; an edited line has none, as on the server until it is saved.
  */
+/** The words for the record that replaces a spend line (its kind and source ID), as this notice names it; F5 (QA of PR #63) reuses it. */
+export function replacingRecordName(id: string, records: readonly CollectionActivityRecord[] | undefined): string {
+  const replacer = records?.find(record => record.id === id)
+  return replacer ? `${kindLabel(replacer.kind)} · ${(replacer.currentVersion.activity as { sourceId: string }).sourceId}` : "another record"
+}
 function supersessionOf(id: string, activity: Pick<CollectionActivity, "payload">, records: readonly CollectionActivityRecord[] | undefined, mappingKeys: ReadonlyMap<string, string> | undefined): RecordSupersession {
   const replacer = records?.find(record => record.id === id)
-  const name = replacer ? `${kindLabel(replacer.kind)} · ${(replacer.currentVersion.activity as { sourceId: string }).sourceId}` : "another record"
+  const name = replacingRecordName(id, records)
   const line = activity.payload as unknown as { supplierName: string; glAccount: string; description: string }
   const named = (replacer?.currentVersion.activity.payload as { supersedesSpend?: { supplierName: string; mappingKeys: string[] } | null } | undefined)?.supersedesSpend ?? null
   const byName = named !== null && comparable(line.supplierName) !== "" && comparable(line.supplierName) === comparable(named.supplierName)

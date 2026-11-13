@@ -676,6 +676,17 @@ export const SCOPE3_READINESS_TEXT: Readonly<Record<'input_needed' | 'screening_
   assessment_missing: 'No assessment for a category included in the screening',
   included_category_has_no_records: 'No records for an included category; add activity data or document a category-wide exclusion in screening',
 }
+/**
+ * BF-01c: why a category's lines need review, in a newly prepared version's frozen readiness lines (stored versions keep
+ * theirs). Only when counted possible duplicates are among them: without one the words stay exactly "Lines need review", so
+ * versions prepared from data without duplicates are byte-identical to before.
+ */
+export const SCOPE3_READINESS_WHY_TEXT = {
+  needsReview: (review: number, duplicates: number) => duplicates === 0 ? SCOPE3_READINESS_TEXT.needs_review : `${SCOPE3_READINESS_TEXT.needs_review}: ${[
+    ...(review ? [`${review} line${review === 1 ? '' : 's'} returned for review by the calculation (not counted)`] : []),
+    `${duplicates} counted line${duplicates === 1 ? '' : 's'} may repeat another record (possible duplicate${duplicates === 1 ? '' : 's'}, counted; confirm or withdraw)`,
+  ].join('; ')}`,
+} as const
 /** Report versions: the frozen readiness lines, the approval and the control exception (owner decision 7, ACC-10). */
 export const SCOPE3_REPORT_APPROVAL_TEXT = {
   ready: 'Readiness when prepared: ready (no open issues).',
@@ -782,10 +793,14 @@ export const SCOPE3_METHODOLOGY_TEXT_R3A = {
 } as const
 // --- end R3-A ---
 
-// --- BF-02 --- (S3C-01; 12 November 2026). New codes only; no shipped text is edited.
+// --- BF-02 --- (S3C-01; 12 November 2026). New codes only; no shipped text is edited. BF-02b (12 November 2026) rewords its own text.
 /** The hold of a spend line whose replacing supplier or partner record isn't counted (reasonText reads it through the disclosure texts, as `superseded_by_supplier_record`). */
 export const SCOPE3_REASON_TEXT_BF02: Readonly<Record<string, string>> = {
-  replacing_record_not_counted: 'The supplier or partner record that replaces this spend line isn’t counted yet (it needs input or review), so this purchase would otherwise be missing. Finish that record, or remove this supplier from its ‘replaces spend’ list. This line isn’t counted until then.',
+  // BF-02b (c): the record may also be only momentarily uncounted (this run couldn't calculate it); the form heading is
+  // “Spend lines this record replaces”; a line matched by its mapping key is freed by unticking it there, by name by the supplier.
+  replacing_record_not_counted: 'The supplier or partner record that replaces this spend line isn’t counted right now: it needs input or review, or this run couldn’t calculate it. So that this purchase isn’t missing, this line is held and isn’t counted until that record is. Finish that record; or, if this line isn’t one of its purchases, open that record and untick this line under “Spend lines this record replaces” (or change the supplier named there).',
 }
 Object.assign(SCOPE3_DISCLOSURE_TEXT, SCOPE3_REASON_TEXT_BF02)
+/** BF-02b (a): the CSV "Superseded by" cell of a line held because its replacing record isn't counted (newly written CSVs only). */
+export const SCOPE3_REPLACING_RECORD_CSV_TEXT = (recordId: string, sourceId: string | null) => `${sourceId === null ? 'record' : `${sourceId}, record`} ${recordId} (not counted right now; this line is held until it is)`
 // --- end BF-02 ---

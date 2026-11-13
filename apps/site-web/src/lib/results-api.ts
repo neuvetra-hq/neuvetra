@@ -1,5 +1,5 @@
 import type { HostedWorkspaceActor } from "./workspace-api"
-import { POSSIBLE_DUPLICATE_COUNTED_REASON, possibleDuplicateCounted, possibleDuplicateOf, possibleDuplicateOfText } from "../../../../packages/neuvetra-database/src/collection-duplicates"
+import { POSSIBLE_DUPLICATE_COUNTED_REASON, possibleDuplicateCounted, possibleDuplicateOf, possibleDuplicateOfText, possibleDuplicatesOverstatedText } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { periodLabel } from "../../../../packages/neuvetra-database/src/plain-language-labels"
 
 export const RESULTS_PROFILE = "neuvetra.collection-results.v2"
@@ -114,7 +114,7 @@ export function countedDuplicatesIn(results: Pick<ResultsResponse, "records">, b
   return results.records.filter(row => row.outcome === "calculated" && row.inSubtotal[basis] && possibleDuplicateCounted({ reasons: row.plan.reasons, notes: row.plan.notes ?? [] })).length
 }
 /** BF-01 (count mode): the flag on a subtotal that includes possible duplicates (screen, draft report, print and CSV). */
-export const possibleDuplicateTotalText = (count: number) => `Includes ${count} possible duplicate${count === 1 ? "" : "s"}: this figure may be overstated`
+export const possibleDuplicateTotalText = possibleDuplicatesOverstatedText
 /** BF-01: the reason codes a row shows, with `possible_duplicate_counted` for a possible duplicate the policy counted (count mode) and that is in a subtotal. */
 export const duplicateReasonCodes = (row: Pick<ResultRow, "plan" | "outcome" | "inSubtotal">): string[] => row.outcome === "calculated" && (row.inSubtotal.scope1 || row.inSubtotal.scope2LocationBased || row.inSubtotal.scope2MarketBased)
   && possibleDuplicateCounted({ reasons: row.plan.reasons, notes: row.plan.notes ?? [] }) ? [POSSIBLE_DUPLICATE_COUNTED_REASON] : []

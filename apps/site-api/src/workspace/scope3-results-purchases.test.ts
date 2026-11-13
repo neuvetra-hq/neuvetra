@@ -10,7 +10,8 @@ import { createScope3Engine } from "../calculation/scope3-authority"
 import { SCOPE3_SETUP_CATEGORY_TOKENS } from "../../../../packages/neuvetra-database/src/scope3-coverage"
 import { scope3SpendMappingKeyInput } from "../../../../packages/neuvetra-database/src/scope3-collection"
 import { buildScope3Results, REVIEWED_SCOPE3_ENGINE_SHA256, scope3AnnotationOf, type Scope3ResultsEngine } from "./scope3-results-routes"
-import { reasonText, reasonTextKnown } from "../../../../packages/neuvetra-database/src/plain-language-labels"
+import { kindLabel, periodLabel, reasonText, reasonTextKnown } from "../../../../packages/neuvetra-database/src/plain-language-labels"
+import { scope3Csv } from "../../../../packages/neuvetra-database/src/scope3-report-csv"
 import { decodeScope3Results } from "../../../site-web/src/lib/scope3-results-decode"
 
 const python = process.env.NEUVETRA_PYTHON ?? "python3"
@@ -285,7 +286,8 @@ describe("BF-02: a spend line whose replacing record isn't counted is held, neve
     // The web's strict decoder accepts the held line (no memo on a line that isn't excluded), and the reason has reviewed words.
     expect(decodeScope3Results(JSON.parse(JSON.stringify(result)), company).records.find(item => item.recordId === line.id)!.plan.reasons).toEqual(["replacing_record_not_counted"])
     expect(reasonTextKnown("replacing_record_not_counted")).toBe(true)
-    expect(reasonText("replacing_record_not_counted")).toStartWith("The supplier or partner record that replaces this spend line isn’t counted yet")
+    // BF-02b (c): not "yet (it needs input or review)" (also a run that couldn't calculate it), and the form's own heading.
+    expect(reasonText("replacing_record_not_counted")).toBe("The supplier or partner record that replaces this spend line isn’t counted right now: it needs input or review, or this run couldn’t calculate it. So that this purchase isn’t missing, this line is held and isn’t counted until that record is. Finish that record; or, if this line isn’t one of its purchases, open that record and untick this line under “Spend lines this record replaces” (or change the supplier named there).")
   }
 
   test("the auditor's repro: a supplier share over 100% (review_required) no longer makes the $100,000 line vanish; removing it gives 73,961.8448 kg", async () => {
@@ -325,6 +327,40 @@ describe("BF-02: a spend line whose replacing record isn't counted is held, neve
     expect([row.plan.status, row.plan.reasons, row.plan.notes]).toEqual(["excluded", ["superseded_by_supplier_record"], ["spend_tax_treatment_excludes_sales_tax", `superseded_by:${figure.id}`]])
     expect(row.supersededSpendMemo).toMatchObject({ supersededBy: figure.id, status: "calculated", wouldBe: { display: "73961.8448" }, replacing: { co2e: { display: "222.0150" }, spendLines: 1 } })
     expect(result.coverage.categories[0]!).toMatchObject({ status: "calculated", counts: { excluded: 1, calculated: 1 }, subtotal: { display: "222.0150" } })
+  }, TIMEOUT)
+
+  // BF-02b (a, QA follow-up 1 of PR #45): the CSV's "Superseded by" column names the record a held line waits for (by source
+  // ID and record ID); an excluded superseded line keeps its bare record ID, so CSVs without held replacements are unchanged.
+  test("the CSV names the replacing record of a held line; an excluded line's cell is unchanged", async () => {
+    const labels = { kind: kindLabel, reason: reasonText, period: periodLabel }
+    const line = acme()
+    const held = allocated("145000", "kg CO2e", { supplierName: "Acme Metals", allocationNumerator: "200", allocationDenominator: "100", ...replaces })
+    const heldCsv = scope3Csv(await build([line, held]), labels)
+    const heldRow = heldCsv.split("\n").find(text => text.startsWith("Record,") && text.includes(line.id))!
+    expect(heldRow).toContain(`,"${held.currentVersion.activity.sourceId}, record ${held.id} (not counted right now; this line is held until it is)",`)
+    const complete = supplier("120", "metric_ton", { supplierName: "Acme Metals", ...replaces })
+    const excludedRow = scope3Csv(await build([line, complete]), labels).split("\n").find(text => text.startsWith("Record,") && text.includes(line.id))!
+    expect([excludedRow.includes(`,${complete.id},`), excludedRow.includes("not counted right now")]).toEqual([true, false])
+  }, TIMEOUT)
+
+  // BF-02b (d, QA follow-up 4 of PR #45): with several claimants, the line stays excluded whenever ANY claimant is complete,
+  // not only the smallest ID the pre-pass names; it names the complete one. No total changes: the line is outside every
+  // total either way, and only the complete figure is counted.
+  test("several claimants: the line stays excluded (naming the complete one) when the smallest-ID claimant isn't counted", async () => {
+    const line = acme()
+    const held = allocated("145000", "kg CO2e", { supplierName: "Acme Metals", allocationNumerator: "200", allocationDenominator: "100", ...replaces })
+    const complete = supplier("120", "metric_ton", { supplierName: "Acme Metals", ...replaces })
+    expect(held.id < complete.id).toBe(true)
+    const result = await build([line, held, complete])
+    const row = result.records.find(item => item.recordId === line.id)!
+    expect([row.outcome, row.plan.status, row.plan.reasons, row.plan.notes]).toEqual(["held", "excluded", ["superseded_by_supplier_record"], ["spend_tax_treatment_excludes_sales_tax", `superseded_by:${complete.id}`]])
+    expect(row.supersededSpendMemo).toMatchObject({ supersededBy: complete.id, status: "calculated", wouldBe: { display: "73961.8448" }, replacing: { co2e: { display: "222.0150" }, spendLines: 1 } })
+    expect(result.coverage.categories[0]!).toMatchObject({ counts: { excluded: 1, calculated: 1 }, subtotal: { display: "222.0150" } })
+    expect(result.coverage.categories[0]!.reasons).not.toContain("replacing_record_not_counted")
+    expect(decodeScope3Results(JSON.parse(JSON.stringify(result)), company).records.find(item => item.recordId === line.id)!.supersededSpendMemo?.supersededBy).toBe(complete.id)
+    // Neither claimant complete: held, naming the pre-pass's (smallest-ID) claimant, as before.
+    const other = allocated("1", "kg CO2e", { supplierName: "Acme Metals", allocationNumerator: "1", allocationDenominator: "0", ...replaces })
+    expectHeld(await build([line, held, other]), line, held)
   }, TIMEOUT)
 
   test("budget fallback: when the replacing figure becomes unavailable after the batch, its spend line is held too", async () => {

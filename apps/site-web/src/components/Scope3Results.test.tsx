@@ -607,3 +607,22 @@ describe("WO-12: a view-only member's Scope 3 section offers views, never change
     expect(member.filter(label => label === "View the assessment").length).toBe(owner.filter(label => /^(Add|Edit) the assessment|^Document in the assessment/.test(label)).length)
   })
 })
+
+// BF-02b (a): the record card and the calculation details name the record a held spend line waits for; its button opens it.
+describe("BF-02b: a spend line held for its replacing record, on screen", () => {
+  test("the card names the replacing record and its button opens that record; the details list it", () => {
+    const SPEND = "93000000-0000-4000-8000-000000001011", SUPPLIER = "93000000-0000-4000-8000-000000001012"
+    const results = structuredClone(fixture) as any
+    Object.assign(results.records.find((row: any) => row.recordId === SPEND), { outcome: "held", result: null, methodType: null, effectiveDataQuality: null,
+      plan: { action: "hold", status: "input_needed", reasons: ["replacing_record_not_counted"], notes: ["spend_tax_treatment_excludes_sales_tax", `replacing_record:${SUPPLIER}`] } })
+    const { Scope3Panel } = load()
+    const fixes: string[] = []
+    const screen = flatten(Scope3Panel({ state: { data: results, message: null, unavailable: false, busy: false }, canManage: true, onFix: (id: string) => fixes.push(id), onRetry() {} }))
+    const card = cardOf(screen, { kind: "purchase_spend", sourceId: "AP-2025-0042", category: 2 })!
+    expect(text(card)).toContain("Waiting for Supplier-specific purchases · SUP-7, the record that replaces this spend line: it isn’t counted right now, so this line is held.")
+    expect(text(card)).toContain(`Replacing record (not counted right now)Supplier-specific purchases · SUP-7 (record ${SUPPLIER})`)
+    const open = flatten(card).find(node => node.type === "button" && text(node) === "Open Supplier-specific purchases · SUP-7")!
+    open.props.onClick()
+    expect(fixes).toEqual([SUPPLIER])
+  })
+})

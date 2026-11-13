@@ -145,7 +145,7 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
   // Overview and Ask use Activity's same saved setup and cross-record Scope 3 rules.
   const scope3Options = input.scope3 && input.context ? scope3ReadinessOptions({
     setup: scope3SetupFacts(input.setup ?? { currentVersion: null }), context: input.context, records: input.records,
-    mappingKeys: input.scope3MappingKeys ?? new Map(),
+    mappingKeys: input.scope3MappingKeys ?? new Map(), evidence: input.evidence,
   }) : undefined
   const records: JourneyRecord[] = input.records.map(row => {
     const activity = row.currentVersion.activity
