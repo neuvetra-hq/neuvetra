@@ -9,8 +9,42 @@ PR #52's merge commit on `main`: `687ed3f185c8e00b038e46ef5a24dac593722437`
 > migrating used to remove the deliberate PUBLIC EXECUTE grant on the two Storage policy guards from 0027, which would have
 > broken every Storage upload and download on staging (see `bf10-containment-storage-guards.md` in this folder). Nothing was
 > changed on staging. The fixed tools add exactly two `GRANT EXECUTE` lines to the plan. So: the deployed commit, and your
-> local folder (B3), must contain BF-10's merge commit `<BF-10 merge commit>` as well as PR #52's (A2, B3); any plan file
-> made before that commit is void (make a new one in C1); and C2 below is the new check.
+> local folder (B3), must be a commit on `main` that contains PR #61 (BF-10) as well as PR #52 (A2, B3); any plan file
+> made before PR #61 is void (make a new one in C1); C2, C2b, C3b and C5 below are the new checks. From PR #61 on, `/ready`
+> also reports a lost Storage guard grant: it stays `"status":"ready"` but adds `"storageGuardGrantsMissing":true` and a
+> `"missingStorageGuardGrants"` list (the workspace keeps working; uploads and downloads fail). A healthy `/ready` has
+> neither field.
+
+> **Resuming after the 12 Nov pause (your exact state).** You stopped before C4: the clone is at `C:\neuvetra-repo`,
+> dependencies are installed, your operator export file works, `C:\neuvetra-0031\0031-plan.json` is a **void** pre-BF-10
+> plan, and the four "before" CSVs are in `C:\neuvetra-0031\before`. Those CSVs stay valid unless someone changed staging
+> data since (the comparison ignores the `# Generated:` line); if in doubt, download them again (A4). Do A2 and A3 first
+> (the active deployment must now contain PR #61; `/ready` at 30 with no `storageGuardGrantsMissing`). Then, in PowerShell:
+>
+> ```powershell
+> cd C:\neuvetra-repo
+> Rename-Item C:\neuvetra-0031\0031-plan.json 0031-plan-VOID-pre-BF10.json
+> git status
+> git fetch origin
+> git checkout --detach <full commit code from A2>
+> git log -1 --format=%H
+> git merge-base --is-ancestor 687ed3f185c8e00b038e46ef5a24dac593722437 HEAD; $LASTEXITCODE
+> $m = git log --format=%H --merges --grep='^Merge pull request #61 from ' origin/main | Select-Object -First 1; if ($m) { git merge-base --is-ancestor $m HEAD; $LASTEXITCODE } else { 'PR #61 is not merged on origin/main' }
+> git branch -r --contains HEAD
+> bun install --frozen-lockfile
+> git status
+> bun tools/staging/plan-existing.ts <your operator export file> C:\neuvetra-0031\0031-plan-2.json
+> ```
+>
+> Check each output exactly as B3, B4 and C1 say (both ancestor lines print `0`). Then run C2 with
+> `$plan = 'C:\neuvetra-0031\0031-plan-2.json'`, then C2b and C3b in the SQL editor, then C3 and C4 on the new file:
+>
+> ```powershell
+> (Get-FileHash C:\neuvetra-0031\0031-plan-2.json -Algorithm SHA256).Hash.ToLower()
+> bun tools/staging/apply-existing.ts <your operator export file> C:\neuvetra-0031\0031-plan-2.json <fingerprint from the line above> C:\neuvetra-0031\0031-apply.json
+> ```
+>
+> then C5 and E1 to E4. Everything else in this runbook applies unchanged.
 
 Written for the owner on a Windows PC. Every command below is typed in **PowerShell**. Do this in a quiet period, when nobody is
 using staging. The whole job takes about 15 minutes; the database change itself takes under a second.
@@ -58,8 +92,9 @@ The active deployment must be **commit `687ed3f` or a later commit on `main`** (
 
 - Commit `687ed3f` itself shows the message `Merge pull request #52 from neuvetra-hq/claude/bf-09-migration-0031`.
 - A later main commit shows some other message; B3 checks with git that it contains PR #52.
-- **BF-10:** the active deployment must also be BF-10's merge commit `<BF-10 merge commit>` or a later commit on `main`. B3
-  checks that with git too. If it is older, stop and wait for the newer deployment to become active.
+- **BF-10:** the active deployment must also be a commit on `main` that contains PR #61 (its merge commit, message
+  `Merge pull request #61 from neuvetra-hq/claude/bf-10-containment-keeps-storage-guards`, or any later `main` commit). B3
+  checks that with git. If it is older, stop and wait for the newer deployment to become active.
 
 If the active deployment is older than `687ed3f`, or the newest deployment is still building or failed, **stop and wait**
 (or ask the CTO). Do not continue on `/ready` alone.
@@ -67,7 +102,7 @@ Write down the full 40-character commit code of the active deployment (click it 
 the address bar or the commit page). You need it in B3.
 
 A3. Open the staging site's `/ready` address (the one you check after every deploy). It must say `"status":"ready"` and
-`"schemaVersion":30`. If it says anything else, stop.
+`"schemaVersion":30`, and must **not** contain `storageGuardGrantsMissing`. If it says anything else, stop.
 
 A4. Make two folders outside the repository, for example `C:\neuvetra-0031\before` and `C:\neuvetra-0031\after`.
 Sign in to staging. For each of the two test companies (Synthetic Cedar and Synthetic Redwood):
@@ -110,15 +145,16 @@ git fetch origin
 git checkout --detach <full commit code from A2>
 git log -1 --format=%H
 git merge-base --is-ancestor 687ed3f185c8e00b038e46ef5a24dac593722437 HEAD; $LASTEXITCODE
-git merge-base --is-ancestor <BF-10 merge commit> HEAD; $LASTEXITCODE
+$m = git log --format=%H --merges --grep='^Merge pull request #61 from ' origin/main | Select-Object -First 1; if ($m) { git merge-base --is-ancestor $m HEAD; $LASTEXITCODE } else { 'PR #61 is not merged on origin/main' }
 git branch -r --contains HEAD
 ```
 
 - `git status` must show no changed files before you start (if it does, stop and ask the CTO).
 - `git log` must print the same commit code as A2.
 - The first `merge-base` line must print `0` (the deployed commit contains PR #52). `1` means it does not: stop (rule 1).
-- The second `merge-base` line must print `0` (the deployed commit contains BF-10's fix to the containment plan). `1` means
-  it does not: stop. Do not run C1 or C4 from a folder without BF-10: its plan would strip the Storage guards' grants.
+- The PR #61 line must print `0` (it finds PR #61's merge commit on `origin/main` by its message, then checks that the
+  deployed commit contains it). `1`, or `PR #61 is not merged on origin/main`, means it does not: stop. Do not run C1 or C4
+  from a folder without PR #61: its plan would strip the Storage guards' grants.
 - The last line must list `origin/main`.
 
 Then check the migrations folder:
@@ -222,11 +258,12 @@ expected to be exactly three lines, for `FUNCTIONS`, `TABLES` and `SEQUENCES`, e
 `ALTER DEFAULT PRIVILEGES FOR ROLE "supabase_admin" IN SCHEMA "public" REVOKE ALL ON <kind> FROM PUBLIC, anon, authenticated;`.
 Anything else there: stop and ask.
 
-Paste this into PowerShell (it only reads the file). It prints the count, then any statement that does not match the
+Paste these two lines into PowerShell (they only read the file; set `$plan` to your plan file). It prints the count, then any statement that does not match the
 expected patterns, then the two lines after the `neuvetra` function revoke, then the provider lines:
 
 ```powershell
-$p = Get-Content C:\neuvetra-0031\0031-plan.json -Raw | ConvertFrom-Json; "statements: $($p.statements.Count)"; $p.statements | Where-Object { $_ -cnotmatch '^REVOKE ALL ON (SCHEMA|ALL TABLES IN SCHEMA|ALL SEQUENCES IN SCHEMA|ALL FUNCTIONS IN SCHEMA) "(drizzle|frontdesk|neuvetra|neuvetra_research_dev|public|site|terrascope)" FROM PUBLIC, anon, authenticated;$' -and $_ -cnotmatch '^REVOKE CREATE ON DATABASE "postgres" FROM PUBLIC, anon, authenticated;$' -and $_ -cnotmatch '^GRANT EXECUTE ON FUNCTION neuvetra\.collection_storage_can_(read|upload)\(text,text\) TO PUBLIC;$' } | ForEach-Object { "UNEXPECTED: $_" }; $i = [array]::IndexOf($p.statements, 'REVOKE ALL ON ALL FUNCTIONS IN SCHEMA "neuvetra" FROM PUBLIC, anon, authenticated;'); "after neuvetra function revoke:"; $p.statements[$i+1]; $p.statements[$i+2]; "provider (not executed): $($p.providerAdminStatements.Count)"; $p.providerAdminStatements
+$plan = 'C:\neuvetra-0031\0031-plan.json'
+$p = Get-Content $plan -Raw | ConvertFrom-Json; "statements: $($p.statements.Count)"; $p.statements | Where-Object { $_ -cnotmatch '^REVOKE ALL ON (SCHEMA|ALL TABLES IN SCHEMA|ALL SEQUENCES IN SCHEMA|ALL FUNCTIONS IN SCHEMA) "(drizzle|frontdesk|neuvetra|neuvetra_research_dev|public|site|terrascope)" FROM PUBLIC, anon, authenticated;$' -and $_ -cnotmatch '^REVOKE CREATE ON DATABASE "postgres" FROM PUBLIC, anon, authenticated;$' -and $_ -cnotmatch '^GRANT EXECUTE ON FUNCTION neuvetra\.collection_storage_can_(read|upload)\(text,text\) TO PUBLIC;$' } | ForEach-Object { "UNEXPECTED: $_" }; $i = [array]::IndexOf($p.statements, 'REVOKE ALL ON ALL FUNCTIONS IN SCHEMA "neuvetra" FROM PUBLIC, anon, authenticated;'); "after neuvetra function revoke:"; $p.statements[$i+1]; $p.statements[$i+2]; "provider (not executed): $($p.providerAdminStatements.Count)"; $p.providerAdminStatements
 ```
 
 It must print `statements: 31`, **no** `UNEXPECTED:` line, the two `GRANT EXECUTE … collection_storage_can_read …` and
@@ -249,6 +286,57 @@ C3. Get the plan's fingerprint:
 (Get-FileHash C:\neuvetra-0031\0031-plan.json -Algorithm SHA256).Hash.ToLower()
 ```
 
+C3b. Immediately before C4, in the Supabase SQL editor, run this **read-only** query (QA's; it changes nothing). It lists
+every grant in the seven application schemas, and the database's CREATE, that C4's revokes could remove: anything granted
+to PUBLIC, anon or authenticated, including implicit defaults and column grants. The `running_as` column shows who you are
+(C4 runs as the same `postgres` role).
+
+```sql
+with s(n) as (values ('drizzle'),('frontdesk'),('neuvetra'),('neuvetra_research_dev'),('public'),('site'),('terrascope')),
+objs as (
+  select 'database'::text as kind, null::text as schema_name, datname::text as object_name, datacl as acl, datdba as owner, 'd'::"char" as t
+    from pg_database where datname = current_database()
+  union all
+  select 'schema', nspname::text, nspname::text, nspacl, nspowner, 'n'::"char" from pg_namespace where nspname in (select n from s)
+  union all
+  select case c.relkind when 'S' then 'sequence' else 'table' end, n.nspname::text, c.relname::text, c.relacl, c.relowner,
+         case c.relkind when 'S' then 's'::"char" else 'r'::"char" end
+    from pg_class c join pg_namespace n on n.oid = c.relnamespace
+   where n.nspname in (select n from s) and c.relkind in ('r','p','v','m','f','S')
+  union all
+  select 'function', n.nspname::text, p.oid::regprocedure::text, p.proacl, p.proowner, 'f'::"char"
+    from pg_proc p join pg_namespace n on n.oid = p.pronamespace where n.nspname in (select n from s)
+),
+cols as (
+  select 'column'::text as kind, n.nspname::text as schema_name, c.relname || '.' || a.attname as object_name, c.relowner as owner, x.grantee, x.privilege_type, x.grantor, false as implicit_default
+    from pg_attribute a join pg_class c on c.oid = a.attrelid join pg_namespace n on n.oid = c.relnamespace
+    cross join lateral aclexplode(a.attacl) x
+   where n.nspname in (select n from s) and a.attnum > 0 and not a.attisdropped and a.attacl is not null
+)
+select kind, schema_name, object_name, pg_get_userbyid(owner) as owner, current_user as running_as,
+       case when grantee = 0 then 'PUBLIC' else pg_get_userbyid(grantee) end as grantee,
+       privilege_type, pg_get_userbyid(grantor) as grantor, implicit_default
+from (
+  select o.kind, o.schema_name, o.object_name, o.owner, a.grantee, a.privilege_type, a.grantor, (o.acl is null) as implicit_default
+    from objs o cross join lateral aclexplode(coalesce(o.acl, acldefault(o.t, o.owner))) a
+   where not (o.kind = 'database' and a.privilege_type <> 'CREATE')
+  union all select * from cols
+) g
+where grantee = 0 or pg_get_userbyid(grantee) in ('anon', 'authenticated')
+order by kind, schema_name, object_name, grantee, privilege_type;
+```
+
+It must return **exactly two rows**, the two guards: kind `function`, schema `neuvetra`, object
+`neuvetra.collection_storage_can_read(text,text)` and `neuvetra.collection_storage_can_upload(text,text)`, grantee `PUBLIC`,
+privilege `EXECUTE`. **Anything else (a third row, a missing guard, another grantee): stop and ask the CTO.**
+
+Then compare `owner` with `running_as` on the two rows. If they are the same (expected), continue. If they differ, you are
+not the guards' owner: tell the CTO before C4. *What C4 would then do is reasoned, not tested on staging:* PostgreSQL treats
+a REVOKE or GRANT by a role that is neither the owner nor holds a grant option as a no-op with a warning (checked locally on
+PostgreSQL 16 with a plain non-owner role), so the guards' grant would be left as it is, and C4's own check runs after the
+statements in the same transaction: if any guard were then not executable it stops with `apply_failed` at stage
+`containment` and the whole transaction rolls back, changing nothing.
+
 C4. Apply:
 
 ```powershell
@@ -258,7 +346,8 @@ bun tools/staging/apply-existing.ts <your operator export file> C:\neuvetra-0031
 It must print `{"status":"containment_and_migrations_committed",...}`. **From this moment rule 2 applies: never roll Railway
 back past commit `687ed3f`.**
 
-C5. Straight after C4, run the C2b query again. Both rows must still show `true` and `true`. If either shows `false`, every
+C5. Straight after C4, run the C2b query again, and open `/ready`: it must **not** contain `storageGuardGrantsMissing`.
+Both query rows must still show `true` and `true`. If either shows `false`, every
 Storage upload and download is failing: tell the CTO at once (do not retry C4). The repair is the two `GRANT` lines from C2
 run in the SQL editor, but only on the CTO's instruction.
 
@@ -304,7 +393,8 @@ can open it) and a restore from it has never been tested, so treat it as a safet
 
 ## E. Verify afterwards
 
-E1. Open `/ready` again (no redeploy or restart needed): it must say `"schemaVersion":31`.
+E1. Open `/ready` again (no redeploy or restart needed): it must say `"schemaVersion":31`, and must **not** contain
+`storageGuardGrantsMissing`.
 
 E2. Download the same CSVs again, exactly as in A4, into the `after` folder with the same four names. Then compare each pair.
 Paste this once into PowerShell (it defines a small helper; nothing is changed):
@@ -337,8 +427,8 @@ check on your screen*):
 Any of these failing with an error (for example "permission denied" or a failed upload): do not retry and do not roll Railway
 back (rule 2); tell the CTO with the time.
 
-E3. Open `0031-apply.json`: `audit.legacyContainmentVerified` must be `true` and `audit.missingStorageGuardGrants` must be
-`[]`. `migration.schemaVersion` must be `31`, and the last entry of `migration.migrations` must be
+E3. Open `0031-apply.json`: `audit.legacyContainmentVerified` and `audit.storageGuardGrantsVerified` must be `true`, and
+`audit.missingStorageGuardGrants` must be `[]`. `migration.schemaVersion` must be `31`, and the last entry of `migration.migrations` must be
 `0031_integrity_guards.sql` with sha256 `3513b5da55e41133d94faaf3a8b610e1fb66f415a95393272d3f8b1c49246cd7`.
 
 E4. Tell the CTO the apply time and the `/ready` result. A **separate follow-up PR** then changes

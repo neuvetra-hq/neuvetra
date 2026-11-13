@@ -587,7 +587,7 @@ pg("BF-10 the legacy containment plan keeps the Storage policy guards callable",
       // On 8d15de7 both guards lost every EXECUTE grant here and each Storage probe failed with 42501.
       expect(await privileges()).toEqual(callable)
       expect(await probes()).toEqual(before)
-      expect([audit.legacyContainmentVerified, audit.missingStorageGuardGrants, audit.storagePolicyGuards.map(g => g.signature)]).toEqual([true, [], BF10_GUARDS])
+      expect([audit.legacyContainmentVerified, audit.storageGuardGrantsVerified, audit.missingStorageGuardGrants, audit.storagePolicyGuards.map(g => g.signature)]).toEqual([true, true, [], BF10_GUARDS])
       const revoke = plan.statements.indexOf('REVOKE ALL ON ALL FUNCTIONS IN SCHEMA "neuvetra" FROM PUBLIC, anon, authenticated;')
       expect(revoke).toBeGreaterThan(0)
       expect(plan.statements.slice(revoke + 1, revoke + 3)).toEqual(BF10_GRANTS)
@@ -600,25 +600,27 @@ pg("BF-10 the legacy containment plan keeps the Storage policy guards callable",
       // A second plan on the contained database is the same list, and running it again changes nothing.
       expect((await planLegacyStagingContainment(operator)).statements).toEqual(plan.statements)
 
-      // A guard revoked by hand: the audit is not verified, names the missing grants, and every audit caller refuses.
+      // A guard revoked by hand: the separate Storage verdict fails and names the missing grants. Operator paths that apply
+      // something refuse; readiness (the serving path) keeps serving and reports it (CEO ruling, QA F1). Storage fails as before.
       await operator.exec("revoke execute on function neuvetra.collection_storage_can_read(text,text) from public")
       const revoked = await auditLegacyStagingExposure(operator)
-      expect(revoked.legacyContainmentVerified).toBe(false)
-      expect(revoked.missingStorageGuardGrants).toEqual([
+      const missingRead = [
         { signature: "neuvetra.collection_storage_can_read(text,text)", role: "anon" },
         { signature: "neuvetra.collection_storage_can_read(text,text)", role: "authenticated" },
-      ])
+      ]
+      expect([revoked.legacyContainmentVerified, revoked.storageGuardGrantsVerified, revoked.missingStorageGuardGrants]).toEqual([true, false, missingRead])
       expect((await probes()).readEvidence).toStartWith("error 42501 permission denied for function collection_storage_can_read")
-      expect(await rejectionMessage(database.checkReadiness())).toBe("Legacy project containment is not verified.")
+      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 31, legacyContainmentVerified: true, storageGuardGrantsMissing: true, missingStorageGuardGrants: missingRead })
       expect(await rejectionMessage(migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true }))).toBe("Confirmed existing project reuse and verified legacy containment required.")
       // Granted to authenticated only: anon still missing, still not verified.
       await operator.exec("grant execute on function neuvetra.collection_storage_can_read(text,text) to authenticated")
       expect((await auditLegacyStagingExposure(operator)).missingStorageGuardGrants).toEqual([{ signature: "neuvetra.collection_storage_can_read(text,text)", role: "anon" }])
-      // The plan restores it.
+      // The plan restores it, and readiness is back to its exact healthy shape.
       for (const statement of (await planLegacyStagingContainment(operator)).statements) await operator.exec(statement)
       expect(await privileges()).toEqual(callable)
-      expect((await auditLegacyStagingExposure(operator)).legacyContainmentVerified).toBe(true)
-      expect((await database.checkReadiness()).schemaVersion).toBe(31)
+      const restored = await auditLegacyStagingExposure(operator)
+      expect([restored.legacyContainmentVerified, restored.storageGuardGrantsVerified]).toEqual([true, true])
+      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 31, legacyContainmentVerified: true })
       expect(await probes()).toEqual(before)
     } finally { await database.close(); await fixture.close() }
   }, 120_000)
@@ -627,7 +629,7 @@ pg("BF-10 the legacy containment plan keeps the Storage policy guards callable",
     const fixture = await createStagingSchemaFixture(testUrl!, "m63_bf10_pre0027", 26, EXISTING_PROJECT_REF)
     try {
       const plan = await planLegacyStagingContainment(fixture.operator)
-      expect([plan.audit.storagePolicyGuards, plan.audit.missingStorageGuardGrants, plan.audit.legacyContainmentVerified]).toEqual([[], [], true])
+      expect([plan.audit.storagePolicyGuards, plan.audit.missingStorageGuardGrants, plan.audit.legacyContainmentVerified, plan.audit.storageGuardGrantsVerified]).toEqual([[], [], true, true])
       expect(plan.statements.some(sql => sql.startsWith("GRANT"))).toBe(false)
     } finally { await fixture.close() }
   }, 120_000)

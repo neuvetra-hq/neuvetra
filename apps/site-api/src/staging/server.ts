@@ -52,7 +52,16 @@ export type StagingDatabase = WorkspaceDatabase & {
   hasStagingAccess(userId: string): Promise<boolean>
   findStagingWorkspaceForUser(userId: string): Promise<Access | null>
   findStagingMembershipForUser(userId: string): Promise<{ companyId: string; role: "owner" | "admin" | "member"; evidenceId: string | null } | null>
-  checkReadiness(): Promise<{ profile: string; schemaVersion: number; legacyContainmentVerified?: boolean }>
+  checkReadiness(): Promise<{ profile: string; schemaVersion: number; legacyContainmentVerified?: boolean; storageGuardGrantsMissing?: boolean; missingStorageGuardGrants?: Array<{ signature: string; role: string }> }>
+}
+
+/**
+ * BF-10: emitted at boot and then at most once a minute while readiness reports a reviewed Storage policy guard that anon
+ * or authenticated cannot execute (Storage uploads and reads then fail with 42501). The workspace keeps serving.
+ */
+export interface StagingStorageGuardWarning {
+  event: "storage_guard_grants_missing"
+  missing: Array<{ signature: string; role: string }>
 }
 
 export interface StagingLog {
@@ -87,6 +96,8 @@ export interface StagingOverrides {
   log?: (event: StagingLog) => void
   /** API-02: sink for `StagingAddressWarning`; defaults to one JSON line on stderr. */
   warn?: (event: StagingAddressWarning) => void
+  /** BF-10: sink for `StagingStorageGuardWarning`; defaults to one JSON line on stderr. */
+  storageGuardWarn?: (event: StagingStorageGuardWarning) => void
 }
 
 function json(status: number, value: unknown) { return Response.json(value, { status }) }
@@ -137,6 +148,15 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   })
   const log = overrides.log ?? ((event: StagingLog) => console.info(JSON.stringify(event)))
   const warn = overrides.warn ?? ((event: StagingAddressWarning) => console.warn(JSON.stringify(event)))
+  const storageGuardWarn = overrides.storageGuardWarn ?? ((event: StagingStorageGuardWarning) => console.warn(JSON.stringify(event)))
+  let storageGuardWarnedAt = -Infinity
+  const noteStorageGuards = (missing: Array<{ signature: string; role: string }> | undefined) => {
+    if (!missing?.length) return
+    const now = Date.now()
+    if (now - storageGuardWarnedAt < 60_000) return
+    storageGuardWarnedAt = now
+    try { storageGuardWarn({ event: "storage_guard_grants_missing", missing: missing.map(({ signature, role }) => ({ signature, role })) }) } catch { /* A log failure never changes the response. */ }
+  }
   // API-02 (QA F2): Railway is assumed to send a per-client address. If a request ever falls back to the shared "unknown"
   // key, say so, at most once a minute, so the assumption can be checked from the logs without flooding them.
   let unknownAddressWarnedAt = -Infinity, unknownAddressOccurrences = 0
@@ -246,6 +266,8 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const worksheetRoutes = createWorksheetRoutes({ database, validateUser, origin: config.origin })
   const databaseReadiness = async () => {
     const receipt = await database.checkReadiness()
+    // BF-10 (CEO ruling): reported and logged, never a reason to stop serving.
+    if (receipt.storageGuardGrantsMissing) noteStorageGuards(receipt.missingStorageGuardGrants)
     const existingProject = config.projectRef === EXISTING_PROJECT_REF
     const current = receipt.schemaVersion === STAGING_SCHEMA_VERSION
     const upgrading = existingProject && config.reuseExistingProject && receipt.legacyContainmentVerified === true

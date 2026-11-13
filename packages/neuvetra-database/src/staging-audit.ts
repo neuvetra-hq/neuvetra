@@ -15,8 +15,9 @@ const isContainedProviderDefault = (row:DefaultGrant) => row.owner==="supabase_a
 // access to neuvetra for anon and authenticated, and all other functions block.
 // BF-10: the blanket function revoke in the containment plan would also strip that PUBLIC
 // grant, and every Storage insert/select would then fail with 42501. The plan re-grants
-// each existing guard right after its schema's function revoke, and the audit is not
-// verified while an existing guard is not executable by anon and authenticated.
+// each existing guard right after its schema's function revoke. The audit reports a lost
+// grant as a separate verdict, storageGuardGrantsVerified: operator tools that apply
+// something require it too; the serving path reports it but keeps serving (CEO ruling).
 const REVIEWED_STORAGE_POLICY_GUARDS = [
   { schema: "neuvetra", name: "collection_storage_can_read", signature: "neuvetra.collection_storage_can_read(text,text)" },
   { schema: "neuvetra", name: "collection_storage_can_upload", signature: "neuvetra.collection_storage_can_upload(text,text)" },
@@ -26,7 +27,10 @@ const isReviewedStoragePolicyGuard = (row:LegacyExposureAudit["callableFunctions
   row.schema_name === "neuvetra" && row.security_definer && reviewedStoragePolicyGuards.has(row.signature)
 interface SchemaInventory { schema_name: string; owner: string }
 export interface LegacyExposureAudit {
+  /** No application exposure to anon/authenticated (meaning unchanged by BF-10). */
   legacyContainmentVerified: boolean
+  /** BF-10: every reviewed Storage policy guard that exists is executable by anon and authenticated. */
+  storageGuardGrantsVerified: boolean
   scope: "all-application-schemas"
   applicationSchemas: string[]
   unreviewedApplicationSchemas: string[]
@@ -97,8 +101,8 @@ export async function auditLegacyStagingExposure(db: WorkspaceSql): Promise<Lega
   const blockingDefaultGrants=defaults.rows.filter(row=>!isContainedProviderDefault(row))
   return {
     legacyContainmentVerified: unreviewedApplicationSchemas.length===0 && roles.rows.length===2 && roles.rows.every(r=>!r.allowed) && schemas.rows.every(r=>!r.allowed&&!r.create_allowed)
-      && tables.rows.length===0 && columns.rows.length===0 && sequences.rows.length===0 && blockingCallableFunctions.length===0 && blockingDefaultGrants.length===0
-      && missingStorageGuardGrants.length===0,
+      && tables.rows.length===0 && columns.rows.length===0 && sequences.rows.length===0 && blockingCallableFunctions.length===0 && blockingDefaultGrants.length===0,
+    storageGuardGrantsVerified: missingStorageGuardGrants.length===0,
     scope:"all-application-schemas",applicationSchemas,unreviewedApplicationSchemas,managedSchemas,
     providerDefaultPolicy:"supabase-admin-public-defaults-behind-denied-schema-v1",deferredProviderDefaultGrants,blockingDefaultGrants,endpointRolesPresent:roles.rows.length===2,
     databaseCreate:roles.rows,schemaUsage:schemas.rows,tableGrants:tables.rows,columnGrants:columns.rows,sequenceGrants:sequences.rows,
@@ -132,3 +136,7 @@ export async function planLegacyStagingContainment(db: WorkspaceSql): Promise<{ 
   }
   return {audit,statements:[...new Set(statements)],providerAdminStatements:[...new Set(providerAdminStatements)],deferredProviderDefaultGrants:audit.deferredProviderDefaultGrants,globalDefaultPrivilegeOwners:[...new Set(audit.defaultGrants.filter(row=>row.schema_name===null).map(row=>row.owner))].sort()}
 }
+
+/** BF-10: what an operator tool that applies containment or migrations requires: both verdicts. */
+export const containmentAndStorageGuardsVerified = (audit: Pick<LegacyExposureAudit, "legacyContainmentVerified" | "storageGuardGrantsVerified">) =>
+  audit.legacyContainmentVerified && audit.storageGuardGrantsVerified

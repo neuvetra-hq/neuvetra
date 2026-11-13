@@ -1,7 +1,7 @@
 # BF-10: the containment plan would have broken Storage on staging (12 Nov 2026)
 
-**Status:** found before the 0031 apply; **nothing was changed on staging**. Fixed in the BF-10 pull request
-(`<BF-10 merge commit>` once merged).
+**Status:** found before the 0031 apply; **nothing was changed on staging**. Fixed in PR #61 (BF-10); the deployed commit
+and the owner's folder must be a commit on `main` that contains PR #61.
 
 ## What was found
 
@@ -29,10 +29,15 @@ audit lists the two guards as callable by anon and authenticated).
 - `planLegacyStagingContainment` now adds `GRANT EXECUTE ON FUNCTION <guard> TO PUBLIC;` for each reviewed guard that exists,
   directly after its schema's function revoke, in the same transaction. On staging's shape the plan is the previous 29
   statements plus exactly those two lines (31). Before 0027 (no guards) the plan is unchanged.
-- `auditLegacyStagingExposure` reports `storagePolicyGuards` and `missingStorageGuardGrants`, and is not verified while a
-  reviewed guard exists that anon or authenticated cannot execute. Every audit caller (image readiness, the operator
-  migration, the apply tools) then refuses instead of passing a broken database.
+- `auditLegacyStagingExposure` reports `storagePolicyGuards`, `missingStorageGuardGrants` and a separate verdict,
+  `storageGuardGrantsVerified` (`legacyContainmentVerified` keeps its earlier meaning). Tools that apply something
+  (`apply-existing.ts`, `check-containment.ts`, the operator migration) require both verdicts and refuse otherwise.
+- CEO ruling: the serving path (image boot, per-request readiness, `/ready`) requires only `legacyContainmentVerified`. A
+  missing guard grant breaks Storage, not the workspace, so the server keeps serving; `/ready` stays ready and adds
+  `storageGuardGrantsMissing: true` with the `missingStorageGuardGrants` list (a healthy `/ready` is unchanged); the server
+  logs `storage_guard_grants_missing` naming function and role, at boot and at most once a minute.
 - Native PostgreSQL tests: running the plan leaves both guards executable and Storage inserts/selects in the evidence bucket
-  and another bucket exactly as before; a guard revoked by hand makes the audit, readiness and the migration refuse.
-- The 0031 runbook: new C2 check, a read-only guard query before and after C4, a functional check, and the deployed commit
-  must contain BF-10. Any plan file made before BF-10 is void (C4 refuses it as plan drift).
+  and another bucket exactly as before; with a guard revoked by hand a running server and a fresh boot keep serving and
+  report it on `/ready`, Storage fails, and the migration refuses.
+- The 0031 runbook: new C2 check, read-only guard queries before (C2b, C3b) and after (C5) C4, a functional check, a
+  "resuming" box for the owner's paused state, and the deployed commit must contain PR #61. Any plan file made before BF-10 is void (C4 refuses it as plan drift).
