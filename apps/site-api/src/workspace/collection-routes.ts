@@ -248,12 +248,20 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
           const lookup = await (deps.lookupZip ?? lookupCollectionZip)(validated.activity.payload.zip)
           validateElectricityLookup(validated.activity, lookup)
         }
-        // BF-03: a new active Scope 1 or 2 record is refused once 400 are active (Results refuses to calculate more). Corrections and
-        // withdrawals of existing records are always allowed. A concurrent-save race can overshoot by a few; BF-09 closes it in SQL.
-        if (!isScope3CollectionKind(validated.activity.kind) && validated.expectedRevision === 0 && validated.activity.state === "active") {
+        // BF-03: a save that makes a Scope 1 or 2 record active is refused once 400 are active (Results refuses to calculate more):
+        // a new record, and (BF-03b, the same rule as 0031's 54N31) a withdrawn record corrected back to active. Corrections that
+        // keep a record active and withdrawals are always allowed. At schema 30 this is the only check; at 31 the database
+        // repeats it under the company lock, which also closes the concurrent-save race this read cannot see.
+        if (!isScope3CollectionKind(validated.activity.kind) && validated.activity.state === "active") {
           const existing = await deps.database.findCollectionActivities(actor.id, companyId)
-          // A replay of an already-saved first version is not a new record.
-          if (!existing.some(record => record.id.toLowerCase() === resourceId) && existing.filter(isActiveScope12Record).length >= MAX_ACTIVE_SCOPE12_RECORDS) throw new RequestProblem(422, RECORD_LIMIT_SAVE_TEXT, "record_limit_reached")
+          const saved = existing.find(record => record.id.toLowerCase() === resourceId)
+          // A replay of an already-saved first version is not a new record; a correction of a record that is active now is not
+          // a new active record either (an exact replay of a reactivation finds the record active and is not counted twice).
+          // F6 (QA of PR #63): a correction based on a version that is no longer current is a revision conflict, not a new
+          // active record: it is left to the database, which answers 409 (refresh), whatever the count.
+          const activates = validated.expectedRevision === 0 ? saved === undefined
+            : saved !== undefined && saved.currentVersion.activity.state === "withdrawn" && saved.currentVersion.id.toLowerCase() === validated.expectedVersionId?.toLowerCase() && saved.currentVersion.revision === validated.expectedRevision
+          if (activates && existing.filter(isActiveScope12Record).length >= MAX_ACTIVE_SCOPE12_RECORDS) throw new RequestProblem(422, RECORD_LIMIT_SAVE_TEXT, "record_limit_reached")
         }
         let saved: Awaited<ReturnType<typeof deps.database.saveCollectionActivity>>
         try { saved = await deps.database.saveCollectionActivity(actor.id, companyId, resourceId, input) }

@@ -159,6 +159,29 @@ describe("Scope 3 spend import route (I-09)", () => {
     expect(listed.lines.filter(line => line.supersededBy === supplierId).map(line => line.sourceId)).toEqual(["L1", "L2"])
   })
 
+  // BF-02b (b, QA follow-up 2 of PR #45): a line whose replacing record the adapter holds (so Results holds the line with
+  // replacing_record_not_counted) is shown as held for that reason, never as replaced. Display only.
+  test("BF-02b: a line whose replacing record isn't counted is listed as held (replacing_record_not_counted), not as replaced", async () => {
+    const h = harness()
+    await h.send(importPath(), csv(`${HEADER}\nL1,2025-03-01,Acme Metals,6100,,Steel,240000,USD,2025,1,331110,,\nL3,2025-03-03,Other,6100,,Pens,30,USD,2025,1,339940,,\n`))
+    const supplier = (id: string, quantity: string) => {
+      const activity = { kind: "purchase_supplier", locationId: location, setupVersionId: setupId, sourceId: `SUP-${id.slice(-1)}`, state: "active", withdrawalReason: null, quantity: { originalValue: quantity, originalUnit: "metric_ton CO2e", normalizedValue: quantity || null, normalizedUnit: quantity ? "metric_ton CO2e" : null },
+        quality: "actual", estimateBasis: null, period: { start: "2025-01-01", endExclusive: "2026-01-01" }, reference: "", notes: "", evidenceIds: [],
+        payload: { category: 1, supplierName: "Acme Metals", product: "Steel", basis: "allocated_total", factorValue: null, factorUnit: null, allocationBasis: "supplier_allocated", allocationNumerator: null, allocationDenominator: null, supersedesSpend: { supplierName: "Acme Metals", mappingKeys: [] } } }
+      return { id, companyId: company, kind: "purchase_supplier", history: [], currentVersion: { id: crypto.randomUUID(), recordId: id, companyId: company, revision: 1, previousVersionId: null, correctionReason: null, activity, payloadSha256: "e".repeat(64), createdBy: owner, createdAt: "2025-06-01T00:00:00.000Z" } } as unknown as CollectionActivityRecord
+    }
+    // The only claimant has no quantity yet: the adapter holds it, so it can't be counted.
+    h.records.push(supplier("93900000-0000-4000-8000-0000000000f1", ""))
+    const held = await (await h.send(root, { origin: null })).json() as Scope3SpendImportsResponse
+    expect(held.lines.map(line => [line.sourceId, line.supersededBy, line.plan.action, line.plan.status, line.plan.reasons])).toEqual([["L1", null, "hold", "input_needed", ["replacing_record_not_counted"]], ["L3", null, "calculate", null, []]])
+    expect([held.superseded, held.superseders]).toEqual([[], []])
+    // A second claimant that can calculate: the line is shown as replaced by that one (as Results names it once it is counted).
+    h.records.push(supplier("93900000-0000-4000-8000-0000000000f2", "12.4"))
+    const replaced = await (await h.send(root, { origin: null })).json() as Scope3SpendImportsResponse
+    expect(replaced.lines.find(line => line.sourceId === "L1")).toMatchObject({ supersededBy: "93900000-0000-4000-8000-0000000000f2", plan: { status: "excluded", reasons: ["superseded_by_supplier_record"] } })
+    expect(replaced.superseders.map(item => item.recordId)).toEqual(["93900000-0000-4000-8000-0000000000f2"])
+  })
+
   test("round 2b (ENG-14): the spend routes use the shared Scope 3 helpers: one 415 at the same step as every Scope 3 write, strict JSON", async () => {
     // A wrong media type is refused once the actor and the setup are checked, as in the assessment and report writes:
     // without a saved setup the import answers setup_required (409) whatever its media type.

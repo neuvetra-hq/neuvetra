@@ -28,7 +28,8 @@
 import { SCOPE3_METHODS } from './scope3-method-catalog'
 import { scope3TotalStatement } from './scope3-methodology'
 import { scope3Csv, scope3CsvEscape, type Scope3CsvLabels } from './scope3-report-csv'
-import { SCOPE3_BASE_YEAR_TEXT, SCOPE3_READINESS_TEXT, SCOPE3_REPORT_APPROVAL_TEXT, SCOPE3_STATUS_TEXT } from './scope3-text'
+import { SCOPE3_BASE_YEAR_TEXT, SCOPE3_READINESS_TEXT, SCOPE3_READINESS_WHY_TEXT, SCOPE3_REPORT_APPROVAL_TEXT, SCOPE3_STATUS_TEXT } from './scope3-text'
+import { possibleDuplicateCounted } from './collection-duplicates'
 import { scope3CanonicalJson, scope3CanonicalJsonText, scope3KgToTonnesExact, SCOPE3_READINESS_CODES, type Scope3ReadinessCode, type Scope3ResultsDocument, type Scope3ResultsLine } from './scope3-trace'
 import { SCOPE3_REPORT_PROFILE_V1, validateScope3ReportDocumentV1 } from './scope3-report-v1'
 import { SCOPE3_REPORT_PROFILE_V2, validateScope3ReportDocumentV2 } from './scope3-report-v2'
@@ -292,6 +293,21 @@ export function scope3ReportReadinessLines(openIssues: readonly Scope3ReportOpen
     : [SCOPE3_REPORT_APPROVAL_TEXT.openIssues(openIssues.length), ...openIssues.map(issue => SCOPE3_REPORT_APPROVAL_TEXT.issue(issue.category, SCOPE3_READINESS_TEXT[issue.code]))]
 }
 /**
+ * BF-01c (QA follow-up of PR #48): a newly prepared version's frozen readiness lines say why a category's lines need review,
+ * from its own results: lines the calculation returned for review, and counted lines that may repeat another record. The
+ * other open issues keep their words, as do `scope3ReportReadinessLines` (approval lines) and every stored version.
+ */
+export function scope3ReportFrozenReadinessLines(openIssues: readonly Scope3ReportOpenIssue[], lines: ReadonlyArray<Pick<Scope3ResultsLine, 'category' | 'result' | 'plan' | 'outcome'>>): string[] {
+  if (openIssues.length === 0) return scope3ReportReadinessLines(openIssues)
+  const why = (category: number) => {
+    const open = lines.filter(line => line.category === category && line.plan.status !== 'withdrawn' && line.plan.status !== 'excluded' && line.outcome !== 'outside_period')
+    const review = open.filter(line => line.result?.status === 'review_required').length
+    const duplicates = open.filter(line => line.outcome === 'calculated' && possibleDuplicateCounted({ reasons: line.plan.reasons ?? [], notes: line.plan.notes ?? [] })).length
+    return SCOPE3_READINESS_WHY_TEXT.needsReview(review, duplicates)
+  }
+  return [SCOPE3_REPORT_APPROVAL_TEXT.openIssues(openIssues.length), ...openIssues.map(issue => SCOPE3_REPORT_APPROVAL_TEXT.issue(issue.category, issue.code === 'needs_review' ? why(issue.category) : SCOPE3_READINESS_TEXT[issue.code]))]
+}
+/**
  * Round 2 (owner decision 7, ACC-10): the approval lines of a stored version, printed with it and appended (as `#` lines)
  * to its exported CSV after the stored bytes: who approved and when, the open issues acknowledged, and a self-approval as a
  * control exception. The stored CSV itself never changes (an approval is a separate row).
@@ -319,7 +335,7 @@ export function scope3ReportFrozenLines(document: Scope3ReportDocument, labels: 
     ...a.totals.map(row => `# Assertion total, category ${row.category} ${row.title}: ${statusText(row.status)}; ${row.subtotalKg === null ? 'no figure' : `${row.subtotalKg} kg CO2e (${row.subtotalTonnes} t CO2e)`}`),
     `# Assertion known-source subtotal (${a.totalLabel}): ${a.knownSourceSubtotal ? `${a.knownSourceSubtotal.kg} kg CO2e (${a.knownSourceSubtotal.tonnes} t CO2e)` : 'no figure'}`,
     `# Base year: ${document.baseYear.statement}`,
-    ...scope3ReportReadinessLines(document.results.readiness!.openIssues).map(line => `# ${line}`),
+    ...scope3ReportFrozenReadinessLines(document.results.readiness!.openIssues, document.results.records).map(line => `# ${line}`),
   ]
   if (log.basis === 'first_version') return [...lines, `# Change log: first version (no earlier approved version for reporting year ${document.reportingYear}).`]
   const p = log.previous!

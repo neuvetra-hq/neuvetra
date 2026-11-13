@@ -9,8 +9,9 @@ import { buildScope3Results, REVIEWED_SCOPE3_ENGINE_SHA256 } from "./scope3-resu
 import { COLLECTION_DUPLICATE_POLICY, normalizedSourceId, periodsOverlapAsDuplicates, possibleDuplicateRecords, possibleDuplicatesCountedWarning } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { COLLECTION_SCOPE12_KINDS } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { SCOPE3_SETUP_CATEGORY_TOKENS } from "../../../../packages/neuvetra-database/src/scope3-coverage"
-import { buildScope3ReportDocument, scope3ReportCsv, scope3ReportText, validateScope3ReportDocument, type Scope3ReportDocument } from "../../../../packages/neuvetra-database/src/scope3-report-document"
+import { buildScope3ReportDocument, scope3ReportApprovalLines, scope3ReportCsv, scope3ReportText, validateScope3ReportDocument, type Scope3ReportDocument } from "../../../../packages/neuvetra-database/src/scope3-report-document"
 import { scope3Csv } from "../../../../packages/neuvetra-database/src/scope3-report-csv"
+import { SCOPE3_READINESS_WHY_TEXT } from "../../../../packages/neuvetra-database/src/scope3-text"
 import { kindLabel, periodLabel, reasonText } from "../../../../packages/neuvetra-database/src/plain-language-labels"
 
 const python = process.env.NEUVETRA_PYTHON ?? "python3"
@@ -296,5 +297,42 @@ describe("BF-01 count mode: readiness, naming and QA scenarios", () => {
       const r = await buildCollectionResults({ companyId: company, context: twoSites, records: [a, b], evidence, setup: twoSetup, engines, duplicatePolicy: policy })
       expect([policy, r.counts.calculated, r.warnings, r.records.every(row => row.plan.notes.length === 0)]).toEqual([policy, 2, [], true])
     }
+  }, TIMEOUT)
+})
+
+// BF-01c (QA follow-ups of PR #48): the Scope 3 CSV's Category and Total rows carry the Scope 1 and 2 Subtotal sentence when
+// counted possible duplicates are in their figures, and a newly prepared version's frozen "Lines need review" says why.
+// Stored versions keep their stored bytes (the CSV is written once, at prepare; see the PR for the byte comparison).
+describe("BF-01c: the Scope 3 CSV and frozen readiness name counted possible duplicates", () => {
+  const labels = { kind: kindLabel, reason: reasonText, period: periodLabel }
+  const rowsOf = (csv: string, section: string) => csv.split("\n").filter(text => text.startsWith(`${section},`))
+  test("count mode: category 6 and the Total row say the figure may be overstated; without duplicates neither does", async () => {
+    const a = trip(), b = trip()
+    const counted = await build3([a, b])
+    const csv = scope3Csv(counted, labels)
+    const cat6 = rowsOf(csv, "Category").find(text => text.startsWith("Category,6,"))!
+    expect(cat6).toContain("Includes 1 possible duplicate: this figure may be overstated.")
+    expect(rowsOf(csv, "Category").filter(text => text.includes("may be overstated"))).toHaveLength(1)
+    expect(rowsOf(csv, "Total")[0]).toStartWith("Total,Known-source Scope 3 subtotal (known sources only). Includes 1 possible duplicate: this figure may be overstated.,3156.3802,")
+    const single = scope3Csv(await build3([a]), labels)
+    expect(single).not.toContain("may be overstated")
+    expect(rowsOf(single, "Total")[0]).toStartWith("Total,Known-source Scope 3 subtotal (known sources only),1578.1901,")
+    // Hold mode: the held duplicate is in no figure, so nothing is said to be overstated.
+    expect(scope3Csv(await build3([a, b], "hold"), labels)).not.toContain("may be overstated")
+  }, TIMEOUT)
+  test("a newly prepared version's frozen open issue says why lines need review; the approval lines keep their words", async () => {
+    const a = trip(), b = trip()
+    const r = await build3([a, b])
+    const document = buildScope3ReportDocument({ results: r, reportingYear: 2025, revision: 1, setupVersionId: setup, consolidationApproach: "operational_control", preparedBy: owner, preparedAt: "2026-11-12T00:00:00.000Z", previous: null })
+    const stored = validateScope3ReportDocument(JSON.parse(scope3ReportText(document)), company) as Scope3ReportDocument
+    const csv = scope3ReportCsv(stored, labels)
+    expect(csv).toContain("# Open issue, category 6: Lines need review: 1 counted line may repeat another record (possible duplicate, counted; confirm or withdraw).")
+    expect(csv).not.toContain("# Open issue, category 6: Lines need review.")
+    expect(scope3ReportApprovalLines({ approval: { approvedBy: owner, approvedAt: "2026-11-12T00:00:00.000Z", acknowledgedOpenIssues: [{ category: 6, code: "needs_review" }], selfApproved: false, selfApprovalConfirmed: false } as never }))
+      .toContain("Open issue, category 6: Lines need review.")
+    // Without a counted possible duplicate the frozen words stay exactly as before (engine review only), so versions prepared
+    // from data without duplicates are byte-identical; with both, both reasons are named.
+    expect(SCOPE3_READINESS_WHY_TEXT.needsReview(2, 0)).toBe("Lines need review")
+    expect(SCOPE3_READINESS_WHY_TEXT.needsReview(1, 2)).toBe("Lines need review: 1 line returned for review by the calculation (not counted); 2 counted lines may repeat another record (possible duplicates, counted; confirm or withdraw)")
   }, TIMEOUT)
 })

@@ -207,3 +207,6 @@ export const SCOPE3_CHANGE_LOG_TEXT = {
   derived: (kind: string, sourceKind: string, sourceId: string) => `${kind} · from ${sourceKind.toLowerCase()} ${sourceId}`,
   registers: { main: "main Scope 3 factors", spend: "spend-based factors (EPA supply chain)", supplement: "fuel and supplementary factors", us_upstream: "U.S. upstream fuel and electricity factors", building_hotel: "building and hotel factors" } as Readonly<Record<string, string>>,
 } as const
+
+/** BF-02b (a): re-exported here so the Scope 3 panel reads it with its usual helpers. */
+export { REPLACING_RECORD_TEXT } from "./bf-followups-text"

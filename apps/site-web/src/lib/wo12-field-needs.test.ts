@@ -28,6 +28,7 @@ import { ACTIVITY_FIELD_NEEDS, activityFieldFacts, activityFieldNeed, fieldLabel
 import { FIELD_NEED_NOTES, FIELD_NEED_TEXT, type FieldNeed } from "./wo12-text"
 import { RECORD_HOLD_CODES, recordHold } from "./record-holds-wo12b"
 import { RECORD_HOLD_TEXT } from "./wo12b-text"
+import { reasonText } from "./plain-language"
 
 const C = "94120000-0000-4000-8000-000000000001", SETUP = "94120000-0000-4000-8000-0000000000aa", SITE = "94120000-0000-4000-8000-0000000000bb", FILE = "94120000-0000-4000-8000-0000000000e1"
 const DRAFT = "94120000-0000-4000-8000-0000000000d1", COMMUTER = "94120000-0000-4000-8000-0000000000c7"
@@ -398,7 +399,8 @@ for (const [world, expect] of COMPANY_WORLDS) for (const [kind, base, fields] of
 // (GL account, supplier and description together), or both. The fields the match is made on keep their labels.
 const replacedLine = () => fixture("purchase_spend: manual line")
 const LINE_KEY_TEXT = scope3SpendMappingKeyInput(replacedLine().payload), LINE_KEY = "b".repeat(64)
-const supplierRecordBy = (supplierName: string, mappingKeys: string[]) => savedRecord(SUPPLIER, (() => { const a = fixture("purchase_supplier: product factor"); a.payload.category = 1; a.payload.supersedesSpend = { supplierName, mappingKeys }; return a })())
+// BF-02b: saved, as a real save stores it (its quantity normalized), so the adapter can calculate it and it replaces the line.
+const supplierRecordBy = (supplierName: string, mappingKeys: string[]) => savedRecord(SUPPLIER, (() => { const a = fixture("purchase_supplier: product factor"); a.payload.category = 1; a.payload.supersedesSpend = { supplierName, mappingKeys }; a.quantity = { ...a.quantity, normalizedValue: a.quantity.originalValue, normalizedUnit: a.quantity.originalUnit }; return a })())
 const MATCHES = [["name", supplierRecordBy("Synthetic Software LLC", [])], ["key", supplierRecordBy("A different supplier", [LINE_KEY])], ["both", supplierRecordBy("synthetic  software llc", [LINE_KEY])]] as const
 const REPLACED_WORLDS: World[] = MATCHES.flatMap(([match, record]) => EVERY_COMPANY.map(world => ({ ...world, name: `${world.name}, a supplier record replacing the line by ${match}`, records: [record], mappingKeys: new Map([[LINE_KEY_TEXT, LINE_KEY]]) })))
 const replacedFields = { quantity: set("quantity.originalValue", ""), currency: set("quantity.originalUnit", ""), naicsCode: S("purchase_spend", "naicsCode"), dollarYear: S("purchase_spend", "dollarYear"),
@@ -670,5 +672,19 @@ describe("QA round 2: the Scope 1 and 2 engines' holds behind the labels", () =>
     expect(results.filter(key => !pinned.has(key))).toEqual([])
     const bases = [gasBill(), volumetric(), generator(), tanks(), van()(), refrigerant(), meter()(), meter([instrument()])(), coal()].map(base => planScope12(base).call!)
     expect(runScope12(bases).map(outcome)).toEqual(["complete: ", "complete: ", "complete: ", "complete: ", "complete: ", "complete: ", "complete: ", "complete: ", "complete: "])
+  })
+})
+
+// BF-02b (b, QA follow-up 2 of PR #45): a spend line whose every replacing record the adapter holds is shown on the record
+// form as Results holds it (replacing_record_not_counted, needing input), never as replaced, and gets no replacement notice.
+describe("BF-02b: the record form shows a replaced line as held while its replacing record can't be counted", () => {
+  const heldSupplier = () => savedRecord(SUPPLIER, (() => { const a = fixture("purchase_supplier: product factor"); a.payload.category = 1; a.payload.supersedesSpend = { supplierName: "Synthetic Software LLC", mappingKeys: [] }; return a })())
+  test("an unsaved-quantity supplier record (held by the adapter) leaves the line held, not excluded; a calculable one still replaces it", () => {
+    const world = { ...WORLDS.usOperational, name: "a held supplier record", records: [heldSupplier()] }
+    expect(readiness(replacedLine(), world)).toEqual([`input_needed: ${reasonText("replacing_record_not_counted")}`])
+    const draft = replacedLine()
+    expect(recordHold(draft, factsFor(draft, world))).toBeNull()
+    const counted = { ...WORLDS.usOperational, name: "a calculable supplier record", records: [MATCHES[0][1]] }
+    expect(readiness(replacedLine(), counted)).toEqual([`excluded: ${reasonText("superseded_by_supplier_record")}`])
   })
 })

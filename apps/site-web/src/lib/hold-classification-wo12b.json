@@ -705,7 +705,7 @@
  },
  "replacing_record_not_counted": {
   "level": "results",
-  "why": "Decided by the results route after the engine run (the replacing record didn't calculate in full); the form shows the replacement notice, and the fix is on the replacing record."
+  "why": "Decided by the results route after the engine run (the replacing record didn't calculate in full); the form and the spend import show it as soon as the adapter itself holds every replacing record (BF-02b), and the fix is on the replacing record."
  },
  "reporting_period_required_outside_2025": {
   "level": "field",
