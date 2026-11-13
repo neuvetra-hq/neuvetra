@@ -26,7 +26,7 @@
  *   that work.
  * - **`retire()` (A4)** stops auto-refresh again on the next macrotask after a pending initialize settles.
  */
-import { createClient, navigatorLock, type SupabaseClient, type AuthChangeEvent, type Session } from "@supabase/supabase-js"
+import { AuthClient, navigatorLock, type AuthChangeEvent, type Session } from "@supabase/supabase-js"
 import { decideGet, decideRemove, decideSet, isLineage, readEnded, readStored, wouldRefuseRemove, wouldRefuseSet, type GenerationState, type RefusalReason } from "./auth-lineage"
 
 /** Thrown by a generation's storage when it refuses a read-write it must never make (the backstop). Not an AuthError. */
@@ -66,7 +66,8 @@ export interface GenerationOptions {
 
 export interface Generation {
   readonly id: number
-  readonly client: SupabaseClient
+  /** The generation's auth client: auth-js's own client, made with the options `createClient` gives it (only auth is used). */
+  readonly client: { readonly auth: InstanceType<typeof AuthClient> }
   readonly lineage: string | null
   /** True until the sign-in's own session is written (L1). */
   readonly deliberate: boolean
@@ -96,6 +97,17 @@ function sessionBody(value: unknown): boolean {
 }
 
 let nextId = 0
+
+/** The X-Client-Info supabase-js 2.105.1 sends from a browser (its DEFAULT_HEADERS); auth-generation.test.ts pins the version. */
+const CLIENT_INFO = "supabase-js-web/2.105.1"
+
+/**
+ * WO-14c (QA D14): the reason every generation's fetch is aborted with, made once. `abort()` without a reason creates a
+ * DOMException whose captured stack keeps the frames it was created in alive: retire() runs inside the sign-in's submit
+ * handler, so that stack held the submit event, and through it the whole page as it was. A retired client stays
+ * reachable from its own BroadcastChannel (auth-js gives no public way to close it), so each sign-in kept one old page.
+ */
+const RETIRED_ABORT = new DOMException("The auth generation was retired.", "AbortError")
 
 export function createGeneration(options: GenerationOptions): Generation {
   // F3: a lineage is a UUID; anything else would write a session that can never be recognised or ended.
@@ -241,10 +253,18 @@ export function createGeneration(options: GenerationOptions): Generation {
     })
   }
 
-  const client = createClient(options.url, options.anonKey, {
-    global: { fetch: genFetch as typeof fetch },
-    auth: { storageKey: sessionKey, storage: genStorage, lock: genLock, persistSession: true, autoRefreshToken: true, flowType: "pkce", detectSessionInUrl: options.detectSessionInUrl ?? false },
-  })
+  // WO-14c (QA D14): auth-js's client alone, with exactly what supabase-js's createClient passes to it (headers included).
+  // createClient also builds a realtime client whose socket adds window pagehide, pageshow and visibilitychange listeners
+  // it never removes, and REST and storage clients the app doesn't use here; one of each per generation stayed alive.
+  const client = {
+    auth: new AuthClient({
+      url: `${options.url.replace(/\/+$/, "")}/auth/v1`,
+      headers: { Authorization: `Bearer ${options.anonKey}`, apikey: options.anonKey, "X-Client-Info": CLIENT_INFO },
+      storageKey: sessionKey, storage: genStorage, lock: genLock, fetch: genFetch as typeof fetch,
+      persistSession: true, autoRefreshToken: true, flowType: "pkce", detectSessionInUrl: options.detectSessionInUrl ?? false,
+      hasCustomAuthorizationHeader: false,
+    }),
+  }
 
   const generation: Generation = {
     id,
@@ -263,7 +283,7 @@ export function createGeneration(options: GenerationOptions): Generation {
     retire() {
       if (state.retired) return
       state.retired = true
-      abort.abort()
+      abort.abort(RETIRED_ABORT)
       markRetired()
       void client.auth.stopAutoRefresh().catch(() => {})
       // A4: an initialize still in flight restarts the ticker and the visibility listener in its `finally`; once it has

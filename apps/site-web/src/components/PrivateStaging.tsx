@@ -143,7 +143,10 @@ export function PrivateStaging() {
         const created = createAuthSessions({
           url: config.supabaseUrl, anonKey: config.anonKey, storageKey: key, search: window.location.search,
           onSession: session => { if (alive) void lifecycle.authorize(session) },
-          onAdopt: () => lifecycle.allowSignIn(),
+          // Another tab's new sign-in opens this tab too (design §1). D12: whatever was being typed into this tab's sign-in
+          // form is cleared, so it can't reappear in the form later. (Never called for a sign-out's own read, D11, or for
+          // the session just signed out here, D10: see auth-sessions.)
+          onAdopt: () => { lifecycle.allowSignIn(); setEmail(""); setPassword("") },
         })
         sessions.current = created
         setReady(true)

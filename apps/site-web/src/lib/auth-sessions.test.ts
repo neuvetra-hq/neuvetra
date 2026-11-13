@@ -4,8 +4,8 @@
 // PrivateStaging configures it is a tab still running the old bundle during the rollout.
 import { afterAll, beforeAll, expect, test } from "bun:test"
 import { createClient, processLock, type Session } from "@supabase/supabase-js"
-import { LINEAGE_FIELD, readStored, stampLineage } from "./auth-lineage"
-import { createAuthSessions, type AuthSessionsOptions } from "./auth-sessions"
+import { addEnded, LINEAGE_FIELD, readStored, stampLineage } from "./auth-lineage"
+import { createAuthSessions, matchesSignedOut, SIGNED_OUT_ISSUE_SLACK_MS, type AuthSessionsOptions } from "./auth-sessions"
 import type { LockFunction } from "./auth-generation"
 
 const URL_BASE = "https://abcdefghijklmnopqrstu.supabase.co"
@@ -59,6 +59,9 @@ function authServer() {
   const sessions = new Map<number, { user: string; current: string; parent: string | null; revoked: boolean; access: string[] }>()
   const calls: Array<{ path: string; grant: string | null; refreshToken?: string; bearer?: string | null }> = []
   let hold: Promise<void> | null = null, releaseHold = () => {}
+  let logoutHold: Promise<void> | null = null, releaseLogout = () => {}
+  let pkceHold: Promise<void> | null = null, releasePkce = () => {}
+  let logoutFails = false
   const json = (status: number, body: unknown) => new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } })
   const issue = (id: number, life = 3600, rotate = true) => {
     const session = sessions.get(id)!
@@ -77,15 +80,18 @@ function authServer() {
     const bearer = new Headers(init?.headers).get("authorization")
     calls.push({ path: url.pathname, grant, refreshToken: body.refresh_token, bearer })
     if (grant === "password") return json(200, signIn(body.email!.startsWith("b0b0") ? UB : UA, nextLife))
-    if (grant === "pkce") return body.auth_code === "good-code" && body.code_verifier ? json(200, signIn(UB)) : json(400, { error_code: "flow_state_not_found", msg: "invalid flow state" })
+    if (grant === "pkce") { if (pkceHold) await pkceHold; return body.auth_code === "good-code" && body.code_verifier ? json(200, signIn(UB)) : json(400, { error_code: "flow_state_not_found", msg: "invalid flow state" }) }
     if (grant === "refresh_token") {
+      // As GoTrue: the server answers at once (a held refresh only delays the answer on its way back).
       const entry = [...sessions.entries()].find(([, s]) => s.current === body.refresh_token || s.parent === body.refresh_token)
+      const answer = !entry || entry[1].revoked ? json(400, { error_code: "refresh_token_not_found", msg: "Invalid Refresh Token" }) : json(200, issue(entry[0], 3600, entry[1].current === body.refresh_token))
       if (hold) await hold
-      if (!entry || entry[1].revoked) return json(400, { error_code: "refresh_token_not_found", msg: "Invalid Refresh Token" })
-      return json(200, issue(entry[0], 3600, entry[1].current === body.refresh_token))
+      return answer
     }
     if (url.pathname.endsWith("/otp")) return json(200, {})
     if (url.pathname.endsWith("/logout")) {
+      if (logoutFails) throw new TypeError("Failed to fetch")
+      if (logoutHold) await logoutHold
       const entry = [...sessions.values()].find(s => s.access.some(a => bearer === `Bearer ${a}`))
       if (!entry || entry.revoked) return json(403, { error_code: "session_not_found", msg: "Session not found" })
       entry.revoked = true
@@ -99,6 +105,11 @@ function authServer() {
     refreshCalls: () => calls.filter(call => call.grant === "refresh_token"),
     holdRefreshes() { hold = new Promise(resolve => { releaseHold = resolve }) },
     release() { releaseHold(); hold = null },
+    failLogouts() { logoutFails = true },
+    holdLogouts() { logoutHold = new Promise(resolve => { releaseLogout = resolve }) },
+    releaseLogouts() { releaseLogout(); logoutHold = null },
+    holdPkce() { pkceHold = new Promise(resolve => { releasePkce = resolve }) },
+    releasePkce() { releasePkce(); pkceHold = null },
   }
 }
 
@@ -260,6 +271,8 @@ test("while a sign-in is in flight, another tab's session isn't adopted; afterwa
   expect(await two.sessions.signIn(`${UA}@example.test`, "x")).toBe("signed-in")
   one.sessions.sync()
   expect(one.adopted()).toBe(0)
+  // Nothing but its boot's "none" is reported while its own sign-in is in flight.
+  expect(one.reported).toEqual([null])
   answer()
   expect(await signing).toBe("signed-in")
   expect(JSON.parse(storage.getItem(key)!).user.id).toBe(UB)
@@ -431,5 +444,287 @@ test("a generation that retires itself makes the page re-read the stored session
   await until(() => t.reported.at(-1) === JSON.parse(storage.getItem(key)!).access_token)
   expect(t.reported.slice(1)).not.toContain(null)
   expect(lineageOf(storage, key)).toBe(t.sessions.generation.lineage)
+  t.sessions.dispose()
+})
+
+// ---------- WO-14c QA round: D11, D10 and the gaps the mutation check found ----------
+
+/** Removes `nv_lineage` from the stored session in place, as a tab on main's code writes it (same tokens). */
+function unstamp(storage: ReturnType<typeof sharedStorage>, key: string) {
+  const value = JSON.parse(storage.getItem(key)!)
+  delete value[LINEAGE_FIELD]
+  storage.setItem(key, JSON.stringify(value))
+}
+
+test("D11: sign-out clicked as an unstamped write lands: the quiet re-read adopts it without onAdopt or a report, and nothing reopens the tab", async () => {
+  for (const logout of ["stalled", "ok"] as const) {
+    const key = freshKey(), storage = sharedStorage(), server = authServer()
+    const t = tab(storage, server, key)
+    await t.sessions.boot()
+    expect(await t.sessions.signIn(`${UA}@example.test`, "x")).toBe("signed-in")
+    const reportedBefore = t.reported.length
+    if (logout === "stalled") server.holdLogouts()
+    // In the same task as the click: the stored session is rewritten without nv_lineage (QA's deterministic D11 case).
+    unstamp(storage, key)
+    const signingOut = t.sessions.signOut()
+    await sleep(50)
+    t.sessions.sync()
+    await sleep(50)
+    // No onAdopt (the page's sign-out gate stays shut), and no session reported (only "none" once it is removed).
+    expect(t.adopted()).toBe(0)
+    expect(t.reported.slice(reportedBefore).filter(token => token !== null)).toEqual([])
+    // The logout went out once, with the session's token, from the generation that now serves it.
+    expect(server.calls.filter(call => call.path.endsWith("/logout"))).toHaveLength(1)
+    if (logout === "stalled") server.releaseLogouts()
+    expect((await signingOut).error).toBeNull()
+    expect(storage.getItem(key)).toBeNull()
+    expect(t.adopted()).toBe(0)
+    expect(t.reported.slice(reportedBefore)).toEqual([null])
+    t.sessions.dispose()
+  }
+})
+
+test("D10: a signed-out tab neither stamps nor adopts an old-code tab's late refresh of the session it signed out", async () => {
+  for (const logout of ["ok", "refused"] as const) {
+    const key = freshKey(), storage = sharedStorage(), server = authServer()
+    const old = oldTab(storage, server, key)
+    expect((await old.client.auth.signInWithPassword({ email: `${UA}@example.test`, password: "x" })).error).toBeNull()
+    const fresh = tab(storage, server, key)
+    await fresh.sessions.boot()
+    // The old tab's refresh reaches the server (which issues new tokens) but its answer is held.
+    server.holdRefreshes()
+    const late = old.client.auth.refreshSession()
+    await until(() => server.refreshCalls().length === 1)
+    if (logout === "refused") server.failLogouts()
+    const reportedBefore = fresh.reported.length
+    const result = await fresh.sessions.signOut()
+    if (logout === "ok") { expect(result.error).toBeNull(); expect(storage.getItem(key)).toBeNull() }
+    // Refused (no answer): as on main, the client reports the error and the stored session stays.
+    else { expect(result.error).toMatchObject({ name: "AuthRetryableFetchError" }); expect(storage.getItem(key)).not.toBeNull() }
+    // The old tab's late answer lands: an unstamped session of the user just signed out here.
+    server.release()
+    expect((await late).error).toBeNull()
+    expect(lineageOf(storage, key)).toBeNull()
+    fresh.sessions.sync()
+    await sleep(20)
+    expect(fresh.adopted()).toBe(0)
+    expect(fresh.reported.slice(reportedBefore).filter(token => token !== null)).toEqual([])
+    // Not stamped by the signed-out tab.
+    expect(lineageOf(storage, key)).toBeNull()
+    fresh.sessions.dispose()
+    await old.client.auth.stopAutoRefresh()
+  }
+})
+
+test("D10 control: after a sign-out, a genuinely new sign-in reopens the tab: same user in an old-code tab later, or another user in a new-code tab", async () => {
+  const key = freshKey(), storage = sharedStorage(), server = authServer()
+  const fresh = tab(storage, server, key)
+  await fresh.sessions.boot()
+  expect(await fresh.sessions.signIn(`${UA}@example.test`, "x")).toBe("signed-in")
+  expect((await fresh.sessions.signOut()).error).toBeNull()
+  // Another user signs in in another new-code tab at once: adopted.
+  const other = tab(storage, server, key)
+  await other.sessions.boot()
+  expect(await other.sessions.signIn(`${UB}@example.test`, "x")).toBe("signed-in")
+  fresh.sessions.sync()
+  expect(fresh.adopted()).toBe(1)
+  expect(fresh.reported.at(-1)).toBe(JSON.parse(storage.getItem(key)!).access_token)
+  // That user signs out there; later the first user signs in again in an old-code tab (a new server session): adopted.
+  expect((await fresh.sessions.signOut()).error).toBeNull()
+  await sleep(2_100)
+  const old = oldTab(storage, server, key)
+  expect((await old.client.auth.signInWithPassword({ email: `${UA}@example.test`, password: "x" })).error).toBeNull()
+  fresh.sessions.sync()
+  expect(fresh.adopted()).toBe(2)
+  expect(lineageOf(storage, key)).toBe(fresh.sessions.generation.lineage)
+  expect(fresh.reported.at(-1)).toBe(JSON.parse(storage.getItem(key)!).access_token)
+  fresh.sessions.dispose(); other.sessions.dispose()
+  await old.client.auth.stopAutoRefresh()
+}, 10_000)
+
+test("a sign-in elsewhere landing during a slow sign-out isn't adopted until the sign-out settles (its logout isn't aborted)", async () => {
+  const key = freshKey(), storage = sharedStorage(), server = authServer()
+  const one = tab(storage, server, key), two = tab(storage, server, key)
+  await one.sessions.boot(); await two.sessions.boot()
+  expect(await one.sessions.signIn(`${UA}@example.test`, "x")).toBe("signed-in")
+  const signingOutGeneration = one.sessions.generation
+  server.holdLogouts()
+  const signingOut = one.sessions.signOut()
+  await until(() => server.calls.some(call => call.path.endsWith("/logout")))
+  expect(await two.sessions.signIn(`${UB}@example.test`, "x")).toBe("signed-in")
+  one.sessions.sync()
+  expect(one.adopted()).toBe(0)
+  expect(signingOutGeneration.retired).toBe(false)
+  server.releaseLogouts()
+  // The logout reached the server; the removal finds B's session (another lineage) and is refused, so B's session stays.
+  await signingOut.catch(() => null)
+  expect([...server.sessions.values()][0]!.revoked).toBe(true)
+  expect(JSON.parse(storage.getItem(key)!).user.id).toBe(UB)
+  // Then B's sign-in is adopted.
+  expect(one.adopted()).toBe(1)
+  expect(one.sessions.generation.lineage).toBe(two.sessions.generation.lineage)
+  one.sessions.dispose(); two.sessions.dispose()
+})
+
+test("a retired current generation is replaced on the next read, even when the stored session is its own lineage", async () => {
+  const key = freshKey(), storage = sharedStorage(), server = authServer()
+  storage.setItem(key, stampLineage(legacy(server.signIn(UA)), LA)!)
+  const t = tab(storage, server, key)
+  await t.sessions.boot()
+  const first = t.sessions.generation
+  first.retire()
+  await sleep(5)
+  const next = t.sessions.generation
+  expect(next).not.toBe(first)
+  expect(next.retired).toBe(false)
+  expect(next.lineage).toBe(LA)
+  t.sessions.dispose()
+})
+
+test("F-B: while the email link's code is being exchanged, another tab's sign-in isn't adopted; the link's session wins", async () => {
+  const key = freshKey(), storage = sharedStorage(), server = authServer()
+  storage.setItem(`${key}-code-verifier`, JSON.stringify("verifier-of-this-browser"))
+  location.href = "https://app.example.test/?code=good-code"
+  try {
+    server.holdPkce()
+    const t = tab(storage, server, key, { search: "?code=good-code" })
+    const booting = t.sessions.boot()
+    await until(() => server.calls.some(call => call.grant === "pkce"))
+    const linkGeneration = t.sessions.generation
+    const other = tab(storage, server, key)
+    await other.sessions.boot()
+    expect(await other.sessions.signIn(`${UA}@example.test`, "x")).toBe("signed-in")
+    t.sessions.sync()
+    expect(t.adopted()).toBe(0)
+    expect(linkGeneration.retired).toBe(false)
+    server.releasePkce()
+    await booting
+    expect(JSON.parse(storage.getItem(key)!).user.id).toBe(UB)
+    expect(lineageOf(storage, key)).toBe(linkGeneration.lineage)
+    t.sessions.dispose(); other.sessions.dispose()
+  } finally { location.href = "https://app.example.test/" }
+})
+
+test("a sign-in link is sent from a live generation even when the current one has retired", async () => {
+  const key = freshKey(), storage = sharedStorage(), server = authServer()
+  const t = tab(storage, server, key)
+  await t.sessions.boot()
+  t.sessions.generation.retire()
+  await sleep(5)
+  const { error } = await t.sessions.sendSignInLink(`${UA}@example.test`, "https://app.example.test/")
+  expect(error).toBeNull()
+  expect(server.calls.filter(call => call.path.endsWith("/otp"))).toHaveLength(1)
+  expect(storage.getItem(`${key}-code-verifier`)).not.toBeNull()
+  t.sessions.dispose()
+})
+
+test("a stored value without a user ID isn't a session: nothing is reported", async () => {
+  const key = freshKey(), storage = sharedStorage(), server = authServer()
+  const noUser = { ...server.signIn(UA) } as Record<string, unknown>
+  delete noUser.user
+  storage.setItem(key, stampLineage(JSON.stringify(noUser), LA)!)
+  const t = tab(storage, server, key)
+  await t.sessions.boot()
+  expect(t.reported).toEqual([null])
+  t.sessions.dispose()
+})
+
+test("matchesSignedOut: the same lineage, refresh token or server session, or the same user issued by the sign-out; nothing else", () => {
+  const at = Date.parse("2026-11-12T10:00:00Z")
+  const jwt = (sessionId: string) => `h.${btoa(JSON.stringify({ sub: UA, session_id: sessionId })).replace(/=+$/, "")}.s`
+  const out = { lineage: LA, userId: UA, refreshToken: "r-signed-out", serverSession: null as string | null, at }
+  const session = (overrides: Record<string, unknown> = {}) => ({ access_token: "a", refresh_token: "r-other", token_type: "bearer", expires_in: 3600, expires_at: Math.floor((at + 60_000) / 1000) + 3600, user: { id: UB }, ...overrides }) as unknown as Session
+  // Each rule on its own.
+  expect(matchesSignedOut(out, session(), LA)).toBe(true)
+  expect(matchesSignedOut(out, session({ refresh_token: "r-signed-out" }), null)).toBe(true)
+  expect(matchesSignedOut(out, session({ user: { id: UA }, expires_at: Math.floor((at - 5_000) / 1000) + 3600 }), null)).toBe(true)
+  expect(matchesSignedOut(out, session({ user: { id: UA }, expires_at: Math.floor((at + SIGNED_OUT_ISSUE_SLACK_MS - 1_000) / 1000) + 3600 }), null)).toBe(true)
+  expect(matchesSignedOut(out, session({ user: { id: UA }, expires_in: undefined }), null)).toBe(true)
+  // Not the signed-out session: another user; the same user issued later; another lineage.
+  expect(matchesSignedOut(out, session(), "bbbbbbbb-2222-4222-8222-000000000002")).toBe(false)
+  expect(matchesSignedOut(out, session({ user: { id: UA } }), null)).toBe(false)
+  expect(matchesSignedOut(out, session(), null)).toBe(false)
+  // With server session IDs (Supabase JWTs) the server session decides, whatever the issue time says.
+  const withId = { ...out, serverSession: "s-1" }
+  expect(matchesSignedOut(withId, session({ user: { id: UA }, access_token: jwt("s-1") }), null)).toBe(true)
+  expect(matchesSignedOut(withId, session({ user: { id: UA }, access_token: jwt("s-2"), expires_at: Math.floor((at - 5_000) / 1000) + 3600 }), null)).toBe(false)
+})
+
+test("D11: during a stalled sign-out, the signed-out lineage refreshed by another tab is not reported here", async () => {
+  const key = freshKey(), storage = sharedStorage(), server = authServer()
+  const one = tab(storage, server, key)
+  await one.sessions.boot()
+  expect(await one.sessions.signIn(`${UA}@example.test`, "x")).toBe("signed-in")
+  const two = tab(storage, server, key)
+  await two.sessions.boot()
+  expect(two.sessions.generation.lineage).toBe(one.sessions.generation.lineage)
+  server.holdLogouts()
+  const signingOut = one.sessions.signOut()
+  await until(() => server.calls.some(call => call.path.endsWith("/logout")))
+  const reportedBefore = one.reported.length
+  // A refresh of the same lineage lands meanwhile (tab two, which shares the lineage's lock, after stealing it): a new token
+  // under the signed-out lineage. Tab one doesn't report it, nor adopt anything.
+  const value = JSON.parse(storage.getItem(key)!)
+  storage.setItem(key, JSON.stringify({ ...value, access_token: "refreshed-meanwhile", refresh_token: "r-meanwhile" }))
+  one.sessions.sync()
+  expect(one.reported.slice(reportedBefore)).toEqual([])
+  expect(one.adopted()).toBe(0)
+  server.releaseLogouts()
+  await signingOut.catch(() => null)
+  one.sessions.dispose(); two.sessions.dispose()
+})
+
+test("a genuine adoption ends what the last sign-out kept closed: the first user signing in again soon after is adopted too", async () => {
+  const key = freshKey(), storage = sharedStorage(), server = authServer()
+  const one = tab(storage, server, key), two = tab(storage, server, key)
+  await one.sessions.boot(); await two.sessions.boot()
+  expect(await one.sessions.signIn(`${UA}@example.test`, "x")).toBe("signed-in")
+  expect((await one.sessions.signOut()).error).toBeNull()
+  // B signs in in tab two: tab one opens (genuine adoption); B signs out there.
+  expect(await two.sessions.signIn(`${UB}@example.test`, "x")).toBe("signed-in")
+  one.sessions.sync()
+  expect(one.adopted()).toBe(1)
+  expect((await two.sessions.signOut()).error).toBeNull()
+  one.sessions.sync()
+  // A signs in again in tab two at once (within the issue-time slack of A's sign-out in tab one): tab one opens again.
+  expect(await two.sessions.signIn(`${UA}@example.test`, "x")).toBe("signed-in")
+  one.sessions.sync()
+  expect(one.adopted()).toBe(2)
+  expect(one.reported.at(-1)).toBe(JSON.parse(storage.getItem(key)!).access_token)
+  one.sessions.dispose(); two.sessions.dispose()
+})
+
+test("a stored session of an ended lineage (E) is dropped at boot and on a later read, and never reported", async () => {
+  const key = freshKey(), storage = sharedStorage(), server = authServer()
+  storage.setItem(key, stampLineage(legacy(server.signIn(UA)), LA)!)
+  addEnded(storage, { lineage: LA, userId: UA }, Date.now())
+  const t = tab(storage, server, key)
+  await t.sessions.boot()
+  expect(storage.getItem(key)).toBeNull()
+  expect(t.reported).toEqual([null])
+  expect(t.sessions.generation.lineage).toBeNull()
+  // Written again later (a lagging tab): dropped on the next read.
+  storage.setItem(key, stampLineage(legacy(server.signIn(UA)), LA)!)
+  t.sessions.sync()
+  expect(storage.getItem(key)).toBeNull()
+  expect(t.reported).toEqual([null])
+  expect(t.adopted()).toBe(0)
+  t.sessions.dispose()
+})
+
+test("D10/D11: after a refused logout, the signed-out session (still stored) refreshed by another tab is never reported here", async () => {
+  const key = freshKey(), storage = sharedStorage(), server = authServer()
+  const t = tab(storage, server, key)
+  await t.sessions.boot()
+  expect(await t.sessions.signIn(`${UA}@example.test`, "x")).toBe("signed-in")
+  server.failLogouts()
+  expect((await t.sessions.signOut()).error).toMatchObject({ name: "AuthRetryableFetchError" })
+  // As on main, a refused logout leaves the session stored. Another tab of the same lineage refreshes it.
+  const value = JSON.parse(storage.getItem(key)!)
+  storage.setItem(key, JSON.stringify({ ...value, access_token: "refreshed-later", refresh_token: "r-later" }))
+  const reportedBefore = t.reported.length
+  t.sessions.sync()
+  expect(t.reported.slice(reportedBefore)).toEqual([])
+  expect(t.adopted()).toBe(0)
   t.sessions.dispose()
 })

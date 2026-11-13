@@ -395,6 +395,9 @@ test("F-D: adoptLegacy refuses a session without a lineage whose user signed out
   const unknown = JSON.stringify({ access_token: "a", refresh_token: "r", expires_at: Math.floor(NOW / 1000) + 3600, user: { id: UA } })
   expect(adoptLegacy(memoryStorage({ [KEY]: unknown }), KEY, signedOut(NOW), { lineage: () => LC })).toEqual({ kind: "ended-user", userId: UA })
   expect(adoptLegacy(memoryStorage({ [KEY]: unknown }), KEY, [], { lineage: () => LC }).kind).toBe("stamped")
+  // User IDs compare in lower case (E stores them so): an upper-case user ID in the session is the same user.
+  const upper = JSON.stringify({ ...JSON.parse(issued(NOW - 60_000)), user: { id: UA.toUpperCase() } })
+  expect(adoptLegacy(memoryStorage({ [KEY]: upper }), KEY, signedOut(NOW), { lineage: () => LC })).toEqual({ kind: "ended-user", userId: UA })
   // A session that already has a live lineage is unaffected by F-D (it is adopted as it is).
   expect(adoptLegacy(memoryStorage({ [KEY]: stampLineage(issued(NOW - 60_000), LA)! }), KEY, signedOut(NOW), { lineage: () => LC })).toEqual({ kind: "existing", lineage: LA })
 })

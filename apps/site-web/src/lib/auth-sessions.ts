@@ -19,7 +19,7 @@
  * - **Sign-out is unchanged** (design §6 step 4): `client.auth.signOut({ scope: "local" })` on the current generation,
  *   after `sync` has made sure the current generation is the stored session's own.
  */
-import type { Session, SupabaseClient } from "@supabase/supabase-js"
+import type { Session } from "@supabase/supabase-js"
 import { adoptLegacy, dropEndedSession, newLineage, readEnded, readStored } from "./auth-lineage"
 import { createGeneration, type Generation, type GenerationOptions, type LockFunction } from "./auth-generation"
 
@@ -56,6 +56,38 @@ function storedSession(raw: string | null): Session | null {
   } catch { return null }
 }
 
+/** Supabase access tokens are JWTs carrying the server session's ID; anything else (a test stub's token) has none. */
+function serverSessionId(accessToken: string | null | undefined): string | null {
+  const payload = accessToken?.split(".")[1]
+  if (!payload) return null
+  try {
+    const json = atob(payload.replace(/-/g, "+").replace(/_/g, "/").padEnd(Math.ceil(payload.length / 4) * 4, "="))
+    const id = (JSON.parse(json) as { session_id?: unknown }).session_id
+    return typeof id === "string" && id ? id : null
+  } catch { return null }
+}
+
+/** The session signed out in this tab (kept in memory until a deliberate sign-in here or a genuine adoption). */
+interface SignedOut { lineage: string | null; userId: string | null; refreshToken: string | null; serverSession: string | null; at: number }
+/** How far after the click a session of the same user still counts as the one signed out (when no server session ID is known). */
+export const SIGNED_OUT_ISSUE_SLACK_MS = 2_000
+
+/**
+ * WO-14c (QA D10/D11): whether a stored session is the one signed out in this tab, or a late write of it (a refresh by a tab
+ * on old code, re-stamped by this or another tab): the same lineage, the same refresh token, the same server session (JWT
+ * `session_id`), or, without a server session ID, the same user with tokens issued before the sign-out (plus a little
+ * slack for a refresh that was already on its way). A new sign-in (another user, or the same user later) doesn't match.
+ */
+export function matchesSignedOut(out: SignedOut, session: Session, lineage: string | null): boolean {
+  if (out.lineage && lineage === out.lineage) return true
+  if (out.refreshToken && session.refresh_token === out.refreshToken) return true
+  const id = serverSessionId(session.access_token)
+  if (id && out.serverSession) return id === out.serverSession
+  if (!out.userId || session.user?.id !== out.userId) return false
+  const issuedAt = typeof session.expires_at === "number" && typeof session.expires_in === "number" ? (session.expires_at - session.expires_in) * 1000 : null
+  return issuedAt === null || issuedAt <= out.at + SIGNED_OUT_ISSUE_SLACK_MS
+}
+
 export function createAuthSessions(options: AuthSessionsOptions) {
   const storage: SyncStorage = options.storage ?? globalThis.localStorage
   const now = options.now ?? Date.now
@@ -70,9 +102,17 @@ export function createAuthSessions(options: AuthSessionsOptions) {
    * single client's events reported it once before WO-14.
    */
   let reported: string | null | undefined = undefined
-  function report(session: Session | null, always = false) {
+  /** A sign-out is in flight in this tab: nothing is adopted until it settles (its logout is never aborted). */
+  let signingOut = false
+  /**
+   * What this tab signed out (D10/D11). Until a deliberate sign-in here, or the adoption of a genuinely new session from
+   * another tab, that session (or a late write of it) never reopens this tab, is never stamped by it, and never lifts the
+   * page's sign-out gate (`onAdopt`).
+   */
+  let signedOut: SignedOut | null = null
+  function report(session: Session | null) {
     const token = session?.access_token ?? null
-    if (!always && token === reported) return
+    if (token === reported) return
     reported = token
     options.onSession(session)
   }
@@ -95,11 +135,18 @@ export function createAuthSessions(options: AuthSessionsOptions) {
     if (previous && previous !== next) previous.retire()
   }
 
-  /** Reads the stored session and brings the page in line with it. Synchronous; safe to call at any time. */
-  function sync(): void {
+  /**
+   * Reads the stored session and brings the page in line with it. Synchronous; safe to call at any time. `quiet` (used by
+   * sign-out) only makes the current generation the stored session's own: it reports nothing and never calls `onAdopt`.
+   */
+  function sync(mode: { quiet?: boolean } = {}): void {
     if (disposed) return
     const ended = readEnded(storage, now())
     dropEndedSession(storage as Pick<Storage, "getItem" | "removeItem">, key, ended)
+    const before = storage.getItem(key)
+    const beforeSession = storedSession(before)
+    // D10: a late, unstamped write of the session signed out here is not stamped (nor reported) by this tab.
+    if (signedOut && beforeSession && !readStored(before)?.lineage && matchesSignedOut(signedOut, beforeSession, null)) return
     // A session without a lineage (stored before WO-14, or refreshed by a tab still on old code) is stamped first.
     adoptLegacy(storage, key, ended)
     const raw = storage.getItem(key)
@@ -110,11 +157,18 @@ export function createAuthSessions(options: AuthSessionsOptions) {
       if (session && lineage && lineage === signingIn.lineage && !signingIn.retired) report(session)
       return
     }
-    if (!session || !lineage) { report(null); return }
-    if (!current.retired && current.lineage === lineage) { report(session); return }
+    if (!session || !lineage) { if (!mode.quiet) report(null); return }
+    // D10/D11: the session signed out here (or a late write of it) never reopens this tab.
+    if (signedOut && matchesSignedOut(signedOut, session, lineage)) return
+    // While a sign-out is in flight nothing is adopted: that would retire the signing-out generation and abort its logout.
+    if (signingOut) return
+    if (!current.retired && current.lineage === lineage) { if (!mode.quiet) report(session); return }
     replace(make(lineage, false))
+    if (mode.quiet) return
+    // A genuinely new session from another tab's sign-in: this tab opens again (design §1, difference 1).
+    signedOut = null
     options.onAdopt?.()
-    report(session, true)
+    report(session)
   }
 
   /** Creates the boot generation and reports the stored session once its initialize (and any refresh) has settled. */
@@ -138,6 +192,8 @@ export function createAuthSessions(options: AuthSessionsOptions) {
 
   /** A password sign-in on a new deliberate generation. */
   async function signIn(email: string, password: string): Promise<SignInOutcome> {
+    // A deliberate sign-in in this tab ends what its last sign-out kept closed.
+    signedOut = null
     const signing = make(newLineage(), true)
     replace(signing)
     signingIn = signing
@@ -159,16 +215,31 @@ export function createAuthSessions(options: AuthSessionsOptions) {
     return { error }
   }
 
-  /** Sign-out exactly as before WO-14 (design §6 step 4), on the generation that serves the stored session. */
+  /**
+   * Sign-out as before WO-14 (design §6 step 4): `client.auth.signOut({ scope: "local" })`, on the generation that serves the
+   * stored session. The quiet sync only makes sure of that (D11: it never reopens the tab); what is signed out is kept so
+   * that nothing but a new sign-in reopens this tab (D10).
+   */
   async function signOut(): Promise<{ error: unknown }> {
-    sync()
-    return current.client.auth.signOut({ scope: "local" })
+    signedOut = null
+    sync({ quiet: true })
+    const raw = storage.getItem(key)
+    const session = storedSession(raw)
+    signedOut = { lineage: session ? readStored(raw)?.lineage ?? null : null, userId: session?.user?.id ?? null, refreshToken: session?.refresh_token ?? null, serverSession: serverSessionId(session?.access_token), at: now() }
+    signingOut = true
+    const signing = current
+    try { return await signing.client.auth.signOut({ scope: "local" }) }
+    finally {
+      signingOut = false
+      // Whatever arrived during the sign-out (another tab's new sign-in) is read now.
+      if (!disposed) sync()
+    }
   }
 
   return {
     boot, sync, signIn, sendSignInLink, signOut,
     /** The current generation's client (for tests and diagnostics; the app never awaits its session methods). */
-    get client(): SupabaseClient { return current.client },
+    get client(): Generation["client"] { return current.client },
     get generation(): Generation { return current },
     dispose() { disposed = true; current?.retire() },
   }

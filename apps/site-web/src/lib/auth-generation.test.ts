@@ -840,3 +840,14 @@ test("onRetire is called on a later task, also when the generation retires itsel
   await sleep(5)
   expect(seen).toEqual([made.id])
 })
+
+test("WO-14c (D14): a generation's client is auth-js's own, sending the headers createClient gave it, and no realtime client", async () => {
+  const key = freshKey(), storage = recordingStorage()
+  const seen: Array<Record<string, string>> = []
+  const fetch = async (_input: RequestInfo | URL, init?: RequestInit) => { seen.push(Object.fromEntries(new Headers(init?.headers).entries())); return new Response(JSON.stringify({ error_code: "invalid_credentials", msg: "no" }), { status: 400, headers: { "content-type": "application/json" } }) }
+  const made = createGeneration({ url: URL_BASE, anonKey: "sb_publishable_test", storageKey: key, lineage: LB, deliberate: true, storage, fetch, lock })
+  await made.client.auth.signInWithPassword({ email: `${UB}@example.test`, password: "x" })
+  expect(seen.at(-1)).toMatchObject({ apikey: "sb_publishable_test", authorization: "Bearer sb_publishable_test", "x-client-info": "supabase-js-web/2.105.1" })
+  expect(Object.keys(made.client)).toEqual(["auth"])
+  made.retire()
+})

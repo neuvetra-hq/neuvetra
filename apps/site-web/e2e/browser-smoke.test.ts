@@ -949,4 +949,54 @@ suite("site-web browser smoke (E2E-01)", () => {
     await used
     await headingIs(page, "Synthetic Bayline")
   }, 120_000)
+  // Difference 1 (design §1, decision (d)): a tab where the user signed out opens when another tab signs in later.
+  journey("a signed-out tab opens when another tab signs in later (difference 1), and what was typed in its form is cleared", {}, async opened => {
+    const one = opened.page
+    await one.goto("/")
+    await signInOn(one, "owner@example.test")
+    await headingIs(one, "Synthetic Bayline")
+    await signOutFromTopBar(one)
+    // Someone starts typing in tab one's form, then signs in in another tab instead.
+    const form = one.locator("form", { has: one.locator("input[type=email]") }).first()
+    await form.locator("input[type=email]").fill("typed-in-tab-one@example.test")
+    await form.locator("input[type=password]").fill("typed-pw")
+    const two = await opened.context.newPage()
+    await two.goto("/")
+    await signInOn(two, "admin@example.test")
+    await headingIs(two, "Synthetic Bayline")
+    await one.locator(".nv-topbar__user").waitFor()
+    expect(await one.locator(".nv-topbar__user").textContent()).toBe("admin@example.test")
+    // Signed out in tab one again: its form is empty (the typed email and password didn't come back).
+    await signOutFromTopBar(one)
+    expect(await form.locator("input[type=email]").inputValue()).toBe("")
+    expect(await form.locator("input[type=password]").inputValue()).toBe("")
+  })
+
+  // QA D14: each sign-in made a new auth client, and the old page stayed reachable from it. 20 sign-in/sign-out cycles in
+  // one tab now leave the DOM and the listeners where the first cycle left them (main after 50: 821 nodes, 195 listeners).
+  journey("20 sign-in/sign-out cycles in one tab keep DOM nodes and event listeners near the first cycle's", {}, async opened => {
+    const page = opened.page
+    await page.goto("/")
+    await page.getByRole("heading", { name: "Sign in", exact: true }).waitFor()
+    const cdp = await opened.context.newCDPSession(page)
+    await cdp.send("Performance.enable")
+    const measure = async () => {
+      await cdp.send("HeapProfiler.collectGarbage")
+      const { metrics } = await cdp.send("Performance.getMetrics")
+      const value = (name: string) => metrics.find(metric => metric.name === name)?.value ?? NaN
+      return { nodes: value("Nodes"), listeners: value("JSEventListeners") }
+    }
+    let first = { nodes: 0, listeners: 0 }
+    for (let cycle = 1; cycle <= 20; cycle++) {
+      // Alternate the two company-1 users, so neither comes near the server's per-user request limit.
+      await signInOn(page, cycle % 2 ? "owner@example.test" : "admin@example.test")
+      await page.locator(".nv-topbar__user").waitFor()
+      await pageHeading(page).waitFor()
+      await signOutFromTopBar(page)
+      if (cycle === 1) first = await measure()
+    }
+    const last = await measure()
+    expect(last.nodes).toBeLessThanOrEqual(first.nodes * 1.25)
+    expect(last.listeners).toBeLessThanOrEqual(first.listeners * 1.25)
+  }, 150_000)
 })
