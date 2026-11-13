@@ -24,7 +24,7 @@ import { SCOPE3_REPLACING_RECORD_CSV_TEXT, SCOPE3_SUPERSEDED_MEMO_TEXT_R3A } fro
 import { SCOPE3_REPORT_TEXT_V3 } from './scope3-text-v3'
 import { scope3SpendConversionNote } from './scope3-spend-currency'
 import { scope3VisibleReviewFlags } from './scope3-trace'
-import { possibleDuplicateCounted, possibleDuplicatesOverstatedText } from './collection-duplicates'
+import { possibleDuplicateCounted, possibleDuplicatesOverstatedText, wouldRepeatCountedOf, wouldRepeatCountedText } from './collection-duplicates'
 import {
   scope3CanonicalJson, scope3ClosedLines, scope3ConstantSourceOf, scope3ConstantText, scope3ConversionText, scope3FactorSourceOfKey, scope3GasTexts, scope3KgToTonnesExact, scope3LineEvidenceLinked, scope3ReplacingRecordOf, scope3SupersededBy, type Scope3ResultsDocument, type Scope3ResultsLine,
 } from './scope3-trace'
@@ -240,11 +240,19 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
 
   // 2. Record: the existing columns, then the full trace of each line.
   const lines = results.records
+  // BF-01e (F1 of QA on PR #65): a line that isn't counted but matches a counted record carries the caution, as on screen and
+  // in the Scope 1 and 2 CSV. Only lines with the caution note change; every other line's cell is as before.
+  const cautionText = (row: Scope3ResultsLine): string[] => {
+    const id = wouldRepeatCountedOf(row.plan.notes)
+    if (id === null) return []
+    const other = lines.find(line => line.recordId === id && line.derivedFrom === null) ?? lines.find(line => line.recordId === id)
+    return [wouldRepeatCountedText(id, other ? { sourceId: other.sourceId, locationName: other.locationName, period: labels.period(other.period.start, other.period.endExclusive) } : null)]
+  }
   const closedLines = scope3ClosedLines(lines)  // round 3 (AC-5): a closed 3C/3D combustion line's status says so
   section('Record', (function* () { for (const row of lines) {
     const r = row.result, origin = row.effectiveDataQuality?.activityDataOrigin
     yield ['Record', String(row.category), labels.kind(row.kind), row.locationName ?? '', row.sourceId, row.period.start, scope3LastDayCovered(row.period.endExclusive), row.quantity.value, labels.unit?.(row.quantity.unit) ?? row.quantity.unit,
-      labels.quality?.(row.quality) ?? row.quality, scope3LineStatusText(row, closedLines.has(row)), scope3LineReasonCodes(row).map(labels.reason).join(' '),
+      labels.quality?.(row.quality) ?? row.quality, scope3LineStatusText(row, closedLines.has(row)), [...scope3LineReasonCodes(row).map(labels.reason), ...cautionText(row)].join(' '),
       r?.total?.display ?? '', r?.gwpSetId ?? '', r?.methodVersionId ?? '', row.evidence.map(scope3EvidenceFileText).join('; '),
       row.recordId, row.versionId, String(row.revision), row.derivedFrom ? `${row.derivedFrom.kind} ${row.derivedFrom.recordId}` : '', row.reference, row.estimateBasis ?? '',
       row.methodType ? SCOPE3_METHOD_TYPE_TEXT[row.methodType] : '', origin ? `${SCOPE3_ORIGIN_TEXT[origin.origin] ?? origin.origin} (${origin.setBy === 'user' ? 'set by the company' : origin.setBy === 'method_type' ? 'fixed by the method type' : 'method default'})` : '',

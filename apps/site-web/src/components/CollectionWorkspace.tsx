@@ -300,6 +300,8 @@ const SCREEN_EXPLAINS: Readonly<Record<string, RegExp>> = {
   zip_not_valid: /^A five-digit ZIP is required/, subregion_not_an_egrid_subregion: /^A verified eGRID subregion is required/,
 }
 const BLOCKING: ReadonlySet<CollectionReadinessFinding["status"]> = new Set(["input_needed", "excluded", "withdrawn"])
+/** B1 (QA of PR #65): readiness statuses that keep a record out of every figure (a partial calculation still counts in one). */
+const NOT_COUNTED: ReadonlySet<CollectionReadinessFinding["status"]> = new Set(["input_needed", "review_required", "excluded", "withdrawn", "method_pending", "memo_only"])
 const DRAFT_ID = "00000000-0000-4000-8000-000000000000"
 
 /**
@@ -349,7 +351,11 @@ function recordReadinessAndCount(activity: CollectionActivity, context: Collecti
   } catch { return { findings: screen, counted: false, placedOutside: false } }
   const period = context.reportingPeriod
   const inside = !period?.start || !period.endExclusive || (activity.period.start >= period.start && activity.period.endExclusive <= period.endExclusive)
-  const counted = activity.state === "active" && plan.action === "calculate" && inside
+  // B1 (QA of PR #65): the plan alone can count a record the engine then holds (purchases-only generator fuel, refrigerant
+  // stock or unknown answers). The screens show those holds in the readiness panel, so a record is counted only when the
+  // plan calculates it AND its own readiness shows no hold of any kind: never "counted" next to its own "Input needed".
+  const planCounts = activity.state === "active" && plan.action === "calculate" && inside
+  const counting = (findings: CollectionReadinessFinding[]) => planCounts && !findings.some(finding => NOT_COUNTED.has(finding.status))
   // Not counted because of where or when it is (excluded, superseded, withdrawn or outside the period), not for missing input.
   const placedOutside = activity.state !== "active" || plan.status === "excluded" || plan.status === "withdrawn" || !inside
   const unique = (items: CollectionReadinessFinding[]) => items.filter((item, index) => items.findIndex(other => other.status === item.status && other.reason === item.reason) === index)
@@ -358,17 +364,19 @@ function recordReadinessAndCount(activity: CollectionActivity, context: Collecti
     const kept = screen.filter(finding => finding.status !== "partial")
     const explained = (code: string) => { const pattern = SCREEN_EXPLAINS[code]; return !!pattern && kept.some(finding => BLOCKING.has(finding.status) && pattern.test(finding.reason)) }
     const optional = plan.status === "method_pending" && plan.optional ? [{ status, reason: SCOPE3_DISCLOSURE_TEXT.optional_activity_not_yet_quantified! }] : []
-    return { findings: unique([...kept, ...plan.reasons.filter(code => !explained(code)).map(code => ({ status, reason: reasonText(code) })), ...optional]), counted, placedOutside }
+    const findings = unique([...kept, ...plan.reasons.filter(code => !explained(code)).map(code => ({ status, reason: reasonText(code) })), ...optional])
+    return { findings, counted: counting(findings), placedOutside }
   }
   const shared = (plan.notes ?? []).filter(note => /^instrument_\d+_evidence_shared$/.test(note)).map((note): CollectionReadinessFinding => ({ status: "partial", reason: `Market-based result held — ${reasonText(note)}` }))
-  return { counted, placedOutside, findings: unique([...screen.map((finding): CollectionReadinessFinding => {
+  const findings = unique([...screen.map((finding): CollectionReadinessFinding => {
     if (finding.status === "partial") return finding
     // The engines calculate these; the finding is something to check, not a hold.
     if (finding.reason.startsWith("Linked evidence “")) return { status: "review_required", reason: finding.reason }
     if (!finding.reason.startsWith("Market-based instrument")) return finding
     if (finding.reason.endsWith(" evidence is waiting for quarantine review.")) return { status: "partial", reason: `Market-based result held — ${finding.reason.slice(0, -1)}; it counts once the review clears the file.`, waitingOnEvidence: true }
     return { status: "partial", reason: `Market-based result held — ${finding.reason}` }
-  }), ...shared]) }
+  }), ...shared])
+  return { findings, counted: counting(findings), placedOutside }
 }
 
 /** A saved vehicle record whose fuel or vehicle type is a legacy value (not blank, not a FIELDS token, or not a pair). A new record's blank choices are not legacy (N7). */
