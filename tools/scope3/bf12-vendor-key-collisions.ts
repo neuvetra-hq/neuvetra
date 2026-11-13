@@ -7,19 +7,8 @@
 // normalize(..., NFKC), but its lower() and its regex classes follow the database's collation and ctype, not Unicode as
 // JavaScript applies it, so a SQL copy could disagree on non-ASCII names. This script calls the TypeScript function itself.
 //
-// What the owner exports (read-only role; psql -At writes one JSON object per line):
-//
-//   psql "$URL" -At -c "select json_build_object('companyId',v.company_id,'recordId',v.record_id,'kind',r.kind,'sourceId',v.source_id,
-//     'periodStart',v.period_start,'periodEndExclusive',v.period_end_exclusive,'payload',v.payload->'payload')
-//     from neuvetra.collection_activity_heads h
-//     join neuvetra.collection_activity_versions v on v.id=h.version_id and v.company_id=h.company_id
-//     join neuvetra.collection_activity_records r on r.id=h.record_id and r.company_id=h.company_id
-//     where r.kind in ('purchase_spend','purchase_supplier','partner_reported') and v.state='active'" > bf12-lines.jsonl
-//
-//   # optional, for the kg each line currently counts (from each company's newest frozen version, if any):
-//   psql "$URL" -At -c "select json_build_object('companyId',s.company_id,'reportingYear',s.reporting_year,'revision',s.revision,'basis',s.change_log_basis::json)
-//     from neuvetra.scope3_report_versions s
-//     where s.revision=(select max(x.revision) from neuvetra.scope3_report_versions x where x.company_id=s.company_id and x.reporting_year=s.reporting_year)" > bf12-versions.jsonl
+// What the owner exports: the two SELECT statements in tools/scope3/bf12-vendor-key-collisions.sql (read-only), each
+// written with `psql -At` as one JSON object per line (bf12-lines.jsonl, and optionally bf12-versions.jsonl for kg).
 //
 // Usage: bun tools/scope3/bf12-vendor-key-collisions.ts bf12-lines.jsonl [bf12-versions.jsonl]
 //
