@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, setSystemTime, test } from "bun:test"
 import { DevelopmentWorkspaceDatabase } from "@neuvetra/database"
-import { createStagingServer, type StagingAddressWarning, type StagingDatabase, type StagingLog } from "./server"
+import { createStagingServer, SCOPE3_RESULTS_TIMEOUT_SECONDS, type StagingAddressWarning, type StagingDatabase, type StagingLog } from "./server"
 import { readStagingConfig, STAGING_PROFILE } from "./config"
 import { serveStagingAsset, verifyStagingAssets } from "./assets"
 import { mkdtemp, writeFile, mkdir, rm } from "node:fs/promises"
@@ -573,6 +573,21 @@ describe("round 3 EN-7: long request limits only after authentication", () => {
     expect(await extended(results, "GET", "test-member-session")).toEqual([90])
     expect(await extended(prepare, "GET", "test-owner-session")).toEqual([])
     expect(await extended(`/workspace-api/workspace/${workspace.id}/scope3/spend-imports`, "GET", "test-owner-session")).toEqual([])
+  })
+
+  test("BI-01: Scope 1 and 2 results get the Scope 3 results allowance, only after authentication and only for GET", async () => {
+    const { app, workspace } = await fixture()
+    const extended = async (pathname: string, method: string, token?: string) => {
+      const seen: number[] = []
+      await app.fetch(new Request(`${ORIGIN}${pathname}`, { method, body: method === "POST" ? "{}" : undefined, headers: { origin: ORIGIN, "content-type": "application/json", ...(token ? { authorization: `Bearer ${token}` } : {}) } }), { extendTimeout: seconds => seen.push(seconds) })
+      return seen
+    }
+    const results = `/workspace-api/workspace/${workspace.id}/results`
+    // Before BI-01 this route kept the listener's 30 s, so a run of more than about 230 records was cut off.
+    expect(await extended(results, "GET", "test-member-session")).toEqual([SCOPE3_RESULTS_TIMEOUT_SECONDS])
+    expect(await extended(results, "GET")).toEqual([])
+    expect(await extended(results, "GET", "unknown-session")).toEqual([])
+    expect(await extended(results, "POST", "test-owner-session")).toEqual([])
   })
 })
 

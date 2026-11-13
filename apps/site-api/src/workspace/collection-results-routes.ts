@@ -5,6 +5,7 @@ import { applyDuplicatePolicy, COLLECTION_DUPLICATE_POLICY, possibleDuplicateCou
 import { assertEngineMatchesRelease, type ReleasedMethod } from "../../../../packages/neuvetra-database/src/method-reference"
 import { extractBearerToken, type AuthenticatedUser } from "../lib/auth"
 import { EngineRefusal } from "../calculation/method-engine-runner"
+import type { EngineBatchItem, EngineCallOptions } from "../calculation/method-engine-runner"
 import type { Scope1Aggregate, Scope1Kind, Scope1Result } from "../calculation/scope1-authority"
 import type { Scope2Aggregate, Scope2Input, Scope2Result } from "../calculation/scope2-authority"
 import { createResultsScheduler } from "./results-scheduler"
@@ -13,7 +14,9 @@ import { createResultsScheduler } from "./results-scheduler"
  * Draft results for the collection journey (Claude UX journey, 2026-09-29).
  *
  * Read only. For every saved activity record the reviewed v7 adapter decides whether the record can be calculated.
- * Calculable records go to the pinned Scope 1 / Scope 2 engines one at a time; every other record is returned with
+ * Calculable records go to the pinned Scope 1 / Scope 2 engines (BI-01: all of a company's Scope 1 records in one engine
+ * process and all its Scope 2 records in another, through scope12_batch.py; each record's result is exactly what its own
+ * per-record call gives); every other record is returned with
  * its named hold reasons. Records whose dates are not wholly inside the reporting period saved in company setup are also
  * held (`periodCheck`), so a report never totals another year's activity under this year's period. Nothing is stored,
  * nothing is rounded here and no number is invented: every figure in the response is the engine's own output. The
@@ -41,6 +44,14 @@ export type MethodReleaseStatus = "released_beta" | "unreleased_beta"
  *  be re-reviewed before these move. */
 export const REVIEWED_SCOPE1_ENGINE_SHA256 = "5dcbdb5b3e7615b44c0f76a8c4a3bfd8131640fa6bde1bbcb99a4db0756faed1"
 export const REVIEWED_SCOPE2_ENGINE_SHA256 = "56f1245df2e5eac10adbbd7f553f2fa63ba64135b6153b5edc1025cf0e3e8dbb"
+/** BI-01: the reviewed bytes of scope12_batch.py, the batch entry point that loads the two engine files above unchanged
+ *  and calls their per-record `handle`. It holds no method, factor or rounding; a changed file must be re-reviewed. */
+export const REVIEWED_SCOPE12_BATCH_SHA256 = "6675e01b5d7b6b36d8d89c1a65fa7ebb2e9d4a616861ce01d803b13bffa80ed6"
+/** BI-01: one results run's time budget, from the moment it starts (reads included), as the Scope 3 results run (I-06):
+ *  each engine call gets what is left of it, inside the web's 35 s limit for this request. */
+export const COLLECTION_RESULTS_BUDGET_MS = 25_000
+/** BI-01: the answer when every record sent to an engine came back unavailable (no engine could run). Never a 200. */
+export const RESULTS_ENGINE_UNAVAILABLE_TEXT = "Results could not be prepared. Try again shortly."
 
 const UUID_SOURCE = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 const ROUTE = new RegExp(`^/workspace/(${UUID_SOURCE})/results$`, "i")
@@ -66,9 +77,15 @@ export interface EngineDescription {
   registerSha256: string
   methods: Array<{ id: string; factorValues: Record<string, string>; constantValues: Record<string, { value: string; unit: string }> }>
 }
+/**
+ * BI-01: with `calculateMany` on both engines, a run sends all its Scope 1 records in one batch and all its Scope 2
+ * records in another; without it (the per-record path, kept for the identity tests), one call per record as before.
+ */
 export interface CollectionResultsEngines {
-  scope1: { calculate(kind: Scope1Kind, input: unknown): Promise<Scope1Result>; aggregate(results: Scope1Result[]): Promise<Scope1Aggregate>; describe(): Promise<EngineDescription> }
-  scope2: { calculate(input: Scope2Input): Promise<Scope2Result>; aggregate(results: Scope2Result[]): Promise<Scope2Aggregate>; describe(): Promise<EngineDescription> }
+  scope1: { calculate(kind: Scope1Kind, input: unknown): Promise<Scope1Result>; aggregate(results: Scope1Result[], call?: EngineCallOptions): Promise<Scope1Aggregate>; describe(): Promise<EngineDescription>
+    calculateMany?(requests: Array<{ kind: Scope1Kind; input: unknown }>, call?: EngineCallOptions): Promise<Array<EngineBatchItem<Scope1Result>>> }
+  scope2: { calculate(input: Scope2Input): Promise<Scope2Result>; aggregate(results: Scope2Result[], call?: EngineCallOptions): Promise<Scope2Aggregate>; describe(): Promise<EngineDescription>
+    calculateMany?(inputs: Scope2Input[], call?: EngineCallOptions): Promise<Array<EngineBatchItem<Scope2Result>>> }
 }
 /** One method as the running engine describes it (from `describe`, keyed by method version id). */
 export interface EngineMethodFacts { engineSha256: string; registerSha256: string; factorValues: Record<string, string>; constantValues: Record<string, { value: string; unit: string }> }
@@ -176,7 +193,9 @@ export function checkPeriod(record: { start: string; endExclusive: string }, per
 
 const respond = (status: number, body: unknown) => Response.json(body, { status, headers: { "cache-control": "no-store" } })
 
-/** Pure planning and engine orchestration, exported for tests. Records are processed strictly one at a time. */
+/** Pure planning and engine orchestration, exported for tests. Records are calculated in two batches (BI-01), or strictly one
+ *  at a time when an engine has no batch. A run whose signal aborts stops and throws (code "ABORTED"); one past its
+ *  deadline gets its remaining records unavailable and its subtotals unverified, never a partial figure. */
 export async function buildCollectionResults(input: {
   companyId: string
   context: CollectionContext
@@ -189,6 +208,10 @@ export async function buildCollectionResults(input: {
   now?: () => Date
   /** BF-01: hold possible duplicates or count them with a warning (defaults to COLLECTION_DUPLICATE_POLICY; tests cover both). */
   duplicatePolicy?: CollectionDuplicatePolicy
+  /** BI-01: stops the run (the request that asked has gone). */
+  signal?: AbortSignal
+  /** BI-01: the run's deadline (epoch ms; the route sets start + COLLECTION_RESULTS_BUDGET_MS). Absent: no budget. */
+  deadline?: number | null
 }): Promise<CollectionResultsResponse> {
   const { context, evidence, engines } = input
   // Context and setup are read separately: an intervening save must not mix old boundary decisions with a new report header.
@@ -210,6 +233,7 @@ export async function buildCollectionResults(input: {
   const duplicatePolicy = input.duplicatePolicy ?? COLLECTION_DUPLICATE_POLICY
   const duplicates = possibleDuplicateRecords(records), keeperCounts = possibleDuplicateCounts(duplicates)
   let duplicatesCounted = 0
+  const pending: Array<{ row: CollectionResultRow; call: NonNullable<CollectionCalculationPlan["call"]> }> = []
   const ordered = [...records].sort((left, right) => left.kind.localeCompare(right.kind) || left.currentVersion.activity.period.start.localeCompare(right.currentVersion.activity.period.start) || left.id.localeCompare(right.id))
   for (const record of ordered) {
     const version = record.currentVersion
@@ -233,29 +257,65 @@ export async function buildCollectionResults(input: {
       outcome: "held", inSubtotal: { scope1: false, scope2LocationBased: false, scope2MarketBased: false }, refusalCode: null, scope1: null, scope2: null,
     }
     const periodHold = row.periodCheck === "outside" || row.periodCheck === "partial"
-    if (plan.action === "calculate" && plan.call && !periodHold) {
-      try {
-        if (plan.call.engine === "scope1") {
-          const result = await engines.scope1.calculate(plan.call.request.kind, plan.call.request.input)
-          row.scope1 = result; scope1Results.push(result)
-        } else {
-          const result = await engines.scope2.calculate(plan.call.input as unknown as Scope2Input)
-          row.scope2 = result; scope2Results.push(result)
-        }
-        row.outcome = "calculated"
-      } catch (error) {
-        if (error instanceof EngineRefusal) { row.outcome = "refused"; row.refusalCode = error.code }
-        else { row.outcome = "unavailable"; warnings.push("A calculation engine was unavailable for at least one record. Try again shortly.") }
-      }
-    }
+    if (plan.action === "calculate" && plan.call && !periodHold) pending.push({ row, call: plan.call })
     rows.push(row)
   }
+  // BI-01: every record's outcome is exactly what its own per-record call gives, assigned in row order.
+  const { signal } = input
+  const stopIfAborted = () => { if (signal?.aborted) throw Object.assign(new Error("Results run stopped."), { code: "ABORTED" }) }
+  const remaining = () => input.deadline === undefined || input.deadline === null ? undefined : Math.max(0, Math.floor(input.deadline - Date.now()))
+  const callOptions = (): EngineCallOptions | null => { const left = remaining(); return left === 0 ? null : { ...(left === undefined ? {} : { timeoutMs: left }), ...(signal ? { signal } : {}) } }
+  const outcome = (row: CollectionResultRow, item: EngineBatchItem<Scope1Result> | EngineBatchItem<Scope2Result>, scope: 1 | 2) => {
+    if (item.status === "ok") {
+      if (scope === 1) { row.scope1 = item.result as Scope1Result; scope1Results.push(row.scope1) } else { row.scope2 = item.result as Scope2Result; scope2Results.push(row.scope2) }
+      row.outcome = "calculated"
+    } else if (item.status === "refused") { row.outcome = "refused"; row.refusalCode = item.code }
+    else { row.outcome = "unavailable"; warnings.push("A calculation engine was unavailable for at least one record. Try again shortly.") }
+  }
+  stopIfAborted()
+  const { calculateMany: many1 } = engines.scope1, { calculateMany: many2 } = engines.scope2
+  if (many1 && many2) {
+    const ones = pending.filter(item => item.call.engine === "scope1"), twos = pending.filter(item => item.call.engine === "scope2")
+    const unavailable = { status: "unavailable", code: null } as const
+    const batch = async <R>(count: number, run: (options: EngineCallOptions) => Promise<Array<EngineBatchItem<R>>>): Promise<Array<EngineBatchItem<R>>> => {
+      if (!count) return []
+      const options = callOptions()
+      const items = options ? await run(options).catch(() => null) : null
+      return Array.isArray(items) && items.length === count ? items : new Array<EngineBatchItem<R>>(count).fill(unavailable)
+    }
+    const first = await batch(ones.length, options => many1.call(engines.scope1, ones.map(item => (item.call as Extract<typeof item.call, { engine: "scope1" }>).request), options))
+    stopIfAborted()
+    const second = await batch(twos.length, options => many2.call(engines.scope2, twos.map(item => (item.call as Extract<typeof item.call, { engine: "scope2" }>).input as unknown as Scope2Input), options))
+    stopIfAborted()
+    const items = new Map<CollectionResultRow, EngineBatchItem<Scope1Result> | EngineBatchItem<Scope2Result>>()
+    ones.forEach((item, i) => items.set(item.row, first[i]!)); twos.forEach((item, i) => items.set(item.row, second[i]!))
+    for (const { row, call } of pending) outcome(row, items.get(row)!, call.engine === "scope1" ? 1 : 2)
+  } else for (const { row, call } of pending) {
+    // The per-record path, as before BI-01: one engine call per record, in row order.
+    stopIfAborted()
+    try {
+      if (call.engine === "scope1") outcome(row, { status: "ok", result: await engines.scope1.calculate(call.request.kind, call.request.input) }, 1)
+      else outcome(row, { status: "ok", result: await engines.scope2.calculate(call.input as unknown as Scope2Input) }, 2)
+    } catch (error) {
+      outcome(row, error instanceof EngineRefusal ? { status: "refused", code: error.code } : { status: "unavailable", code: null }, call.engine === "scope1" ? 1 : 2)
+    }
+  }
+  stopIfAborted()
   // BF-01 (count mode): the totals include records that may repeat others, and the response says so.
   if (duplicatesCounted) warnings.push(possibleDuplicatesCountedWarning(duplicatesCounted))
   let scope1: Scope1Aggregate | null = null
   let scope2: Scope2Aggregate | null = null
-  try { if (scope1Results.length) scope1 = await engines.scope1.aggregate(scope1Results) } catch { warnings.push("The Scope 1 subtotal could not be verified. Per-record results are shown.") }
-  try { if (scope2Results.length) scope2 = await engines.scope2.aggregate(scope2Results) } catch { warnings.push("The Scope 2 subtotals could not be verified. Per-record results are shown.") }
+  // BI-01: each aggregate gets what is left of the run's budget; with none left it is not verified (the same warning).
+  const verify = async <A>(aggregate: (options?: EngineCallOptions) => Promise<A>): Promise<A> => {
+    if (input.deadline === undefined || input.deadline === null) return signal ? aggregate({ signal }) : aggregate()
+    const options = callOptions()
+    if (!options) throw new Error("Results budget spent.")
+    return aggregate(options)
+  }
+  try { if (scope1Results.length) scope1 = await verify(options => engines.scope1.aggregate(scope1Results, ...(options ? [options] : []))) } catch { warnings.push("The Scope 1 subtotal could not be verified. Per-record results are shown.") }
+  stopIfAborted()
+  try { if (scope2Results.length) scope2 = await verify(options => engines.scope2.aggregate(scope2Results, ...(options ? [options] : []))) } catch { warnings.push("The Scope 2 subtotals could not be verified. Per-record results are shown.") }
+  stopIfAborted()
   // Subtotal membership comes from the engines' own aggregates, never from a client-side rule.
   const inScope1 = new Set(scope1?.includedResults ?? []), inLocation = new Set(scope2?.locationBasedIncluded ?? []), inMarket = new Set(scope2?.marketBasedIncluded ?? [])
   for (const row of rows) row.inSubtotal = {
@@ -380,7 +440,9 @@ export function createCollectionResultsRoutes(deps: {
     try {
       const context = await deps.database.findCollectionContext(actor.id, companyId)
       if (!context || context.companyId.toLowerCase() !== companyId) return respond(404, { error: "Results not found." })
-      const job = schedule(companyId, actor.id, async () => {
+      // BI-01: the run stops when the request goes away (client disconnect or listener timeout), unless another request waits for it.
+      const job = schedule(companyId, actor.id, async signal => {
+        const deadline = Date.now() + COLLECTION_RESULTS_BUDGET_MS
         const [records, evidence, setup, current] = await Promise.all([
           deps.database.findCollectionActivities(actor.id, companyId),
           deps.database.findCollectionEvidence(actor.id, companyId),
@@ -392,9 +454,13 @@ export function createCollectionResultsRoutes(deps: {
         if (records.filter(isActiveScope12Record).length > MAX_ACTIVE_SCOPE12_RECORDS) throw Object.assign(new Error("Too many records."), { code: "54000" })
         if (records.some(record => record.companyId.toLowerCase() !== companyId)) throw Object.assign(new Error("Company mismatch."), { code: "42501" })
         const facts = current && current.length ? await describeEngines().catch(report("engine_description")) : new Map<string, EngineMethodFacts>()
-        return buildCollectionResults({ companyId, context, records, evidence, setup, engines: deps.engines, releases: { current, engines: facts } })
-      })
-      return respond(200, await job)
+        return buildCollectionResults({ companyId, context, records, evidence, setup, engines: deps.engines, releases: { current, engines: facts }, signal, deadline })
+      }, request.signal)
+      const body = await job
+      // BI-01: when no record sent to an engine could be calculated or refused (no engine could run), there is no answer to show.
+      const sent = body.records.filter(row => row.outcome !== "held")
+      if (sent.length && sent.every(row => row.outcome === "unavailable")) return respond(503, { code: "results_engine_unavailable", error: RESULTS_ENGINE_UNAVAILABLE_TEXT })
+      return respond(200, body)
     } catch (error) {
       const code = (error as { code?: string }).code
       if (code === "42501") return respond(404, { error: "Results not found." })
