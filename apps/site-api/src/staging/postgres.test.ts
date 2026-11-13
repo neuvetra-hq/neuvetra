@@ -1,11 +1,11 @@
-import { expect, test } from "bun:test"
+import { expect, setSystemTime, test } from "bun:test"
 import { createPostgresConnection, HostedWorkspaceDatabase, provisionStagingRoster, revokeStagingAccess, M61_LIMITATION_ACKNOWLEDGMENTS, M64_LIMITATIONS, type WorkspaceConnection } from "@neuvetra/database"
 import { createSyntheticCompanySetup } from "../../../../packages/neuvetra-database/src/company-setup-fixture"
 import { possibleDuplicatesCountedWarning } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { createStagingSchemaFixture, snapshotStagingTables } from "../../../../packages/neuvetra-database/src/staging-schema-fixture"
 import { EXISTING_PROJECT_REF, migratePrivateStaging } from "@neuvetra/database"
 import { RECORD_LIMIT_SAVE_TEXT } from "../workspace/collection-results-routes"
-import { createStagingServer } from "./server"
+import { createStagingServer, type StagingStorageGuardWarning } from "./server"
 import { readStagingConfig, STAGING_PROFILE } from "./config"
 
 // Operator opts into this already-migrated disposable loopback fixture explicitly.
@@ -387,6 +387,91 @@ integration("BF-09: the same server at schema 30, then after 0031 is applied at 
     expect({ ...scope3At31.body, generatedAt: "" }).toEqual({ ...scope3At30.body, generatedAt: "" })
   } finally { await app?.close(); await database.close().catch(() => {}); await fixture.close() }
 }, 600_000)
+
+// BF-10 (CEO ruling on QA F1): a lost Storage guard grant breaks Storage, not the workspace. A running server and a fresh
+// boot keep serving; /ready stays 200 and reports the missing grant in its own fields (the healthy body keeps its exact
+// shape); a warning names function and role at boot and at most once a minute; the operator migration still refuses.
+integration("BF-10: a missing Storage guard grant is reported by /ready and logged, and the workspace keeps serving", async () => {
+  const { construct, caller } = bf09()
+  const owner = crypto.randomUUID(), company = crypto.randomUUID()
+  const fixture = await createStagingSchemaFixture(target!, "m63_bf10_routes", 30, EXISTING_PROJECT_REF)
+  const operator = fixture.operator
+  const ORIGIN = "http://127.0.0.1:3015", ref = EXISTING_PROJECT_REF
+  const config = readStagingConfig({ NODE_ENV: "test", NEUVETRA_STAGING_ENABLED: "enabled", NEUVETRA_STAGING_PROFILE: STAGING_PROFILE, NEUVETRA_STAGING_PROJECT_REF: ref, NEUVETRA_STAGING_ORIGIN: ORIGIN, SUPABASE_URL: `https://${ref}.supabase.co`, SUPABASE_ANON_KEY: "sb_publishable_synthetic_fixture_not_a_real_key", DATABASE_URL: `postgres://neuvetra_runtime:fixture@db.${ref}.supabase.co:5432/postgres`, NEUVETRA_STAGING_REUSE_EXISTING: "confirmed" })
+  const databases: HostedWorkspaceDatabase[] = []
+  const apps: Array<Awaited<ReturnType<typeof createStagingServer>>> = []
+  const serve = async (warnings: StagingStorageGuardWarning[]) => {
+    const database = construct(fixture.runtimeUrl, ref); databases.push(database)
+    const app = await createStagingServer(config, { database, validateUser: async token => token === "owner" ? { id: owner, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, serveAsset: async () => null, log: () => {}, warn: () => {}, storageGuardWarn: event => warnings.push(event) })
+    apps.push(app)
+    return app
+  }
+  const storageRead = async () => operator.transaction(async tx => {
+    await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [owner]); await tx.exec("set local role authenticated")
+    return (await tx.query("select name from storage.objects where bucket_id='neuvetra-private-company-evidence'")).rows.length
+  }).then(rows => `ok ${rows}`, (error: { code?: string }) => `error ${error.code}`)
+  const healthy = { status: "ready", profile: STAGING_PROFILE, schemaVersion: 30, legacyContainmentVerified: true }
+  const missing = [{ signature: "neuvetra.collection_storage_can_upload(text,text)", role: "anon" }, { signature: "neuvetra.collection_storage_can_upload(text,text)", role: "authenticated" }]
+  try {
+    await operator.query("insert into auth.users(id) values($1)", [owner])
+    await operator.transaction(async tx => {
+      await tx.query("insert into neuvetra.staging_access(user_id,active) values($1,true)", [owner])
+      await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [owner])
+      await tx.query("select neuvetra.create_company_workspace($1,'Synthetic Acme, Inc.',$2,'Synthetic California office',$3,2023,$4)", [company, crypto.randomUUID(), crypto.randomUUID(), crypto.randomUUID()])
+      await tx.query("insert into neuvetra.company_members(company_id,user_id,role) values($1,$2,'owner') on conflict(company_id,user_id) do update set role=excluded.role", [company, owner])
+      await tx.query("update neuvetra.staging_access set company_id=$2,active=true where user_id=$1", [owner, company])
+    })
+    const runningWarnings: StagingStorageGuardWarning[] = []
+    const call = caller(await serve(runningWarnings))
+    // Healthy: /ready's body is exactly what current consumers read, with no new field; nothing is logged.
+    expect(await call("GET", "/ready")).toEqual({ status: 200, body: healthy })
+    expect(await storageRead()).toBe("ok 0")
+    expect(runningWarnings).toEqual([])
+
+    // The upload guard's grant is revoked by hand while the server runs.
+    await operator.exec("revoke execute on function neuvetra.collection_storage_can_upload(text,text) from public")
+    const now = Date.now()
+    setSystemTime(new Date(now))
+    expect(await call("GET", "/ready")).toEqual({ status: 200, body: { ...healthy, storageGuardGrantsMissing: true, missingStorageGuardGrants: missing } })
+    expect((await call("GET", "/session")).status).toBe(200)
+    expect((await call("GET", `/workspace/${company}/collection`)).status).toBe(200)
+    expect((await call("GET", `/workspace/${company}/setup`)).status).toBe(200)
+    // Storage itself fails as before (the restrictive insert policy calls the upload guard).
+    const upload = await operator.transaction(async tx => {
+      await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [owner]); await tx.exec("set local role authenticated")
+      await tx.query("insert into storage.objects(bucket_id,name) values('neuvetra-private-company-evidence',$1)", [`${company}/original/${crypto.randomUUID()}`])
+    }).then(() => "ok", (error: { code?: string; message: string }) => `error ${error.code} ${error.message}`)
+    expect(upload).toBe("error 42501 permission denied for function collection_storage_can_upload")
+    // One warning so far, naming function and role; more requests within the minute add none; after a minute, one more.
+    expect(runningWarnings).toEqual([{ event: "storage_guard_grants_missing", missing }])
+    setSystemTime(new Date(now + 59_000))
+    expect((await call("GET", "/ready")).status).toBe(200)
+    expect(runningWarnings).toHaveLength(1)
+    setSystemTime(new Date(now + 61_000))
+    expect((await call("GET", "/session")).status).toBe(200)
+    expect(runningWarnings).toHaveLength(2)
+    setSystemTime()
+
+    // A fresh boot against the same database starts, warns once at boot, and reports the same on /ready.
+    const bootWarnings: StagingStorageGuardWarning[] = []
+    const fresh = caller(await serve(bootWarnings))
+    expect(bootWarnings).toEqual([{ event: "storage_guard_grants_missing", missing }])
+    expect(await fresh("GET", "/ready")).toEqual({ status: 200, body: { ...healthy, storageGuardGrantsMissing: true, missingStorageGuardGrants: missing } })
+    expect((await fresh("GET", `/workspace/${company}/collection`)).status).toBe(200)
+    // The operator migration still refuses while a guard grant is missing.
+    expect(await migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true }).then(() => "migrated", (error: Error) => error.message)).toBe("Confirmed existing project reuse and verified legacy containment required.")
+
+    // Re-granted: both servers report the exact healthy body again.
+    await operator.exec("grant execute on function neuvetra.collection_storage_can_upload(text,text) to public")
+    expect(await call("GET", "/ready")).toEqual({ status: 200, body: healthy })
+    expect(await fresh("GET", "/ready")).toEqual({ status: 200, body: healthy })
+  } finally {
+    setSystemTime()
+    for (const app of apps) await app.close().catch(() => {})
+    for (const database of databases) await database.close().catch(() => {})
+    await fixture.close()
+  }
+}, 300_000)
 
 // BF-01 part A (auditor S1, BL-01): the same electricity bill saved twice through the collection route on native
 // PostgreSQL. Count mode (the default policy since the CEO's ruling of 12 November 2026): both records are counted, the

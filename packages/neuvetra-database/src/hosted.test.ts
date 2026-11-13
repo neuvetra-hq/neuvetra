@@ -9,6 +9,7 @@ import { M57_WARNINGS, M58_WARNINGS, M61_LIMITATION_ACKNOWLEDGMENTS, type Worksp
 import { EXISTING_PROJECT_REF } from "./staging-audit"
 import { createStagingSchemaFixture, snapshotStagingTables } from "./staging-schema-fixture"
 import { createSyntheticCompanySetup } from "./company-setup-fixture"
+import { registerCollectionEvidence, reserveCollectionEvidenceUpload } from "./collection"
 
 async function rejectionMessage(operation: Promise<unknown>): Promise<string> {
   try { await operation; throw new Error("UNEXPECTED_SUCCESS") } catch(error) {
@@ -498,5 +499,177 @@ pg("BF-09 migration 0031 on a populated schema-30 existing-project database", ()
       await revise(0, { quantity: q("12600", "therm"), payload: { heatContent: null, duplicateConfirmedDistinct: true } }, "Confirmed distinct")
       expect((await database.findCollectionActivities(owner, company)).find(record => record.id === ids[0])!.currentVersion.activity.payload).toEqual({ heatContent: null, duplicateConfirmedDistinct: true })
     } finally { await database.close(); await fixture.close() }
+  }, 120_000)
+})
+
+// BF-10: tools/staging/apply-existing.ts runs every containment statement before migrating. The blanket
+// "REVOKE ALL ON ALL FUNCTIONS IN SCHEMA neuvetra" also took away 0027's deliberate PUBLIC EXECUTE on the two Storage policy
+// guards, so every Supabase Storage insert and select with a user token failed with 42501 in every bucket (the restrictive
+// "to public" policies call the guards), while the audit still reported containment verified.
+const BF10_GUARDS = ["neuvetra.collection_storage_can_read(text,text)", "neuvetra.collection_storage_can_upload(text,text)"]
+const BF10_GRANTS = BF10_GUARDS.map(signature => `GRANT EXECUTE ON FUNCTION ${signature} TO PUBLIC;`)
+pg("BF-10 the legacy containment plan keeps the Storage policy guards callable", () => {
+  test("running the plan's statements leaves Storage behaving exactly as before, the guards executable and the audit verified", async () => {
+    const fixture = await createStagingSchemaFixture(testUrl!, "m63_bf10_containment", 30, EXISTING_PROJECT_REF)
+    const operator = fixture.operator
+    const runtime = createPostgresConnection(fixture.runtimeUrl, { tls: false, maxConnections: 2 })
+    const database = new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string, reuse: boolean) => HostedWorkspaceDatabase)(runtime, EXISTING_PROJECT_REF, true)
+    const EVIDENCE = "neuvetra-private-company-evidence", OTHER = "bf10-other-bucket"
+    try {
+      const owner = crypto.randomUUID(), company = crypto.randomUUID()
+      await operator.query("insert into auth.users(id) values($1)", [owner])
+      await operator.transaction(async tx => {
+        await tx.query("insert into neuvetra.staging_access(user_id,active) values($1,true)", [owner])
+        await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [owner])
+        await tx.query("select neuvetra.create_company_workspace($1,'Synthetic Storage Co.',$2,'Synthetic office',$3,2023,$4)", [company, crypto.randomUUID(), crypto.randomUUID(), crypto.randomUUID()])
+      })
+      await operator.query("insert into neuvetra.company_members(company_id,user_id,role) values($1,$2,'owner') on conflict(company_id,user_id) do update set role=excluded.role", [company, owner])
+      await operator.query("insert into neuvetra.staging_access(user_id,company_id,active) values($1,$2,true) on conflict(user_id) do update set company_id=excluded.company_id,active=true", [owner, company])
+      // Another bucket with ordinary policies, standing in for every other bucket on the hosted project.
+      await operator.exec(`insert into storage.buckets(id,name,public) values('${OTHER}','${OTHER}',false);
+        create policy bf10_other_insert on storage.objects for insert to authenticated with check(bucket_id='${OTHER}');
+        create policy bf10_other_select on storage.objects for select to authenticated using(bucket_id='${OTHER}');
+        insert into storage.objects(bucket_id,name) values('${OTHER}','existing/one.csv');`)
+      const asOwner = <T>(operation: (tx: WorkspaceConnection | Parameters<Parameters<WorkspaceConnection["transaction"]>[0]>[0]) => Promise<T>) => runtime.transaction(async tx => {
+        await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [owner])
+        return operation(tx)
+      })
+      const evidence = () => ({ uploadId: crypto.randomUUID(), evidenceId: crypto.randomUUID(), objectKey: `${company}/original/${crypto.randomUUID()}`, originalName: "synthetic-bill.pdf", mediaType: "application/pdf" as const, byteLength: 1200, sha256: Array.from(crypto.getRandomValues(new Uint8Array(32)), b => b.toString(16).padStart(2, "0")).join("") })
+      // One clean evidence file, through the real collection functions, and one reserved upload that is not yet stored.
+      const clean = evidence(), reserved = evidence()
+      await asOwner(tx => reserveCollectionEvidenceUpload(tx, owner, company, clean))
+      await operator.query("insert into storage.objects(bucket_id,name) values($1,$2)", [EVIDENCE, clean.objectKey])
+      await asOwner(tx => registerCollectionEvidence(tx, owner, company, clean))
+      await operator.query("select neuvetra.record_collection_evidence_quarantine($1,$2,'clean','synthetic-scanner-v1','Synthetic fixture accepted.')", [company, clean.evidenceId])
+      await asOwner(tx => reserveCollectionEvidenceUpload(tx, owner, company, reserved))
+      // Supabase Storage runs each insert and select as the caller's role; every probe is rolled back.
+      const as = async (role: "anon" | "authenticated", sql: string, params: unknown[] = []) => {
+        const rollback = new Error("bf10 rollback")
+        let outcome = ""
+        await operator.transaction(async tx => {
+          if (role === "authenticated") await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [owner])
+          await tx.exec(`set local role ${role}`)
+          try { outcome = "ok " + JSON.stringify((await tx.query(sql, params)).rows) } catch (error) { outcome = `error ${(error as { code?: string }).code} ${(error as Error).message}` }
+          throw rollback
+        }).catch(error => { if (error !== rollback) throw error })
+        return outcome
+      }
+      const probes = async () => ({
+        uploadReserved: await as("authenticated", "insert into storage.objects(bucket_id,name) values($1,$2)", [EVIDENCE, reserved.objectKey]),
+        uploadUnreserved: await as("authenticated", "insert into storage.objects(bucket_id,name) values($1,$2)", [EVIDENCE, `${company}/original/${crypto.randomUUID()}`]),
+        readEvidence: await as("authenticated", "select name from storage.objects where bucket_id=$1 order by name", [EVIDENCE]),
+        uploadOther: await as("authenticated", "insert into storage.objects(bucket_id,name) values($1,'new/two.csv')", [OTHER]),
+        readOther: await as("authenticated", "select name from storage.objects where bucket_id=$1 order by name", [OTHER]),
+        anonReadEvidence: await as("anon", "select name from storage.objects where bucket_id=$1", [EVIDENCE]),
+      })
+      const privileges = async () => (await operator.query<{ signature: string; public: boolean; anon: boolean; authenticated: boolean }>(`select s signature,
+          exists(select 1 from pg_proc p cross join lateral aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a where p.oid=s::regprocedure and a.grantee=0 and a.privilege_type='EXECUTE') public,
+          has_function_privilege('anon',s,'EXECUTE') anon,has_function_privilege('authenticated',s,'EXECUTE') authenticated
+        from unnest($1::text[]) s order by s`, [BF10_GUARDS])).rows
+      const callable = BF10_GUARDS.map(signature => ({ signature, public: true, anon: true, authenticated: true }))
+
+      const before = await probes()
+      expect(before.uploadReserved).toBe("ok []")
+      expect(before.uploadUnreserved).toStartWith("error 42501 new row violates row-level security policy")
+      expect(before.readEvidence).toBe(`ok [{"name":"${clean.objectKey}"}]`)
+      expect(before.uploadOther).toBe("ok []")
+      expect(before.readOther).toBe('ok [{"name":"existing/one.csv"}]')
+      expect(before.anonReadEvidence).toBe("ok []")
+      expect(await privileges()).toEqual(callable)
+      expect((await auditLegacyStagingExposure(operator)).legacyContainmentVerified).toBe(true)
+
+      // The same transaction tools/staging/apply-existing.ts runs: plan, every statement in order, audit.
+      const plan = await planLegacyStagingContainment(operator)
+      const audit = await operator.transaction(async tx => {
+        for (const statement of plan.statements) await tx.exec(statement)
+        return auditLegacyStagingExposure(tx)
+      })
+      // On 8d15de7 both guards lost every EXECUTE grant here and each Storage probe failed with 42501.
+      expect(await privileges()).toEqual(callable)
+      expect(await probes()).toEqual(before)
+      expect([audit.legacyContainmentVerified, audit.storageGuardGrantsVerified, audit.missingStorageGuardGrants, audit.storagePolicyGuards.map(g => g.signature)]).toEqual([true, true, [], BF10_GUARDS])
+      const revoke = plan.statements.indexOf('REVOKE ALL ON ALL FUNCTIONS IN SCHEMA "neuvetra" FROM PUBLIC, anon, authenticated;')
+      expect(revoke).toBeGreaterThan(0)
+      expect(plan.statements.slice(revoke + 1, revoke + 3)).toEqual(BF10_GRANTS)
+      expect(plan.statements.filter(sql => sql.startsWith("GRANT"))).toEqual(BF10_GRANTS)
+      // The image keeps serving this database at schema 30, and at 31 after the operator migration.
+      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 30, legacyContainmentVerified: true })
+      expect((await migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true })).schemaVersion).toBe(31)
+      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 31, legacyContainmentVerified: true })
+      expect(await probes()).toEqual(before)
+      // A second plan on the contained database is the same list, and running it again changes nothing.
+      expect((await planLegacyStagingContainment(operator)).statements).toEqual(plan.statements)
+
+      // A guard revoked by hand: the separate Storage verdict fails and names the missing grants. Operator paths that apply
+      // something refuse; readiness (the serving path) keeps serving and reports it (CEO ruling, QA F1). Storage fails as before.
+      await operator.exec("revoke execute on function neuvetra.collection_storage_can_read(text,text) from public")
+      const revoked = await auditLegacyStagingExposure(operator)
+      const missingRead = [
+        { signature: "neuvetra.collection_storage_can_read(text,text)", role: "anon" },
+        { signature: "neuvetra.collection_storage_can_read(text,text)", role: "authenticated" },
+      ]
+      expect([revoked.legacyContainmentVerified, revoked.storageGuardGrantsVerified, revoked.missingStorageGuardGrants]).toEqual([true, false, missingRead])
+      expect((await probes()).readEvidence).toStartWith("error 42501 permission denied for function collection_storage_can_read")
+      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 31, legacyContainmentVerified: true, storageGuardGrantsMissing: true, missingStorageGuardGrants: missingRead })
+      expect(await rejectionMessage(migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true }))).toBe("Confirmed existing project reuse and verified legacy containment required.")
+      // Granted to authenticated only: anon still missing, still not verified.
+      await operator.exec("grant execute on function neuvetra.collection_storage_can_read(text,text) to authenticated")
+      expect((await auditLegacyStagingExposure(operator)).missingStorageGuardGrants).toEqual([{ signature: "neuvetra.collection_storage_can_read(text,text)", role: "anon" }])
+      // The plan restores it, and readiness is back to its exact healthy shape.
+      for (const statement of (await planLegacyStagingContainment(operator)).statements) await operator.exec(statement)
+      expect(await privileges()).toEqual(callable)
+      const restored = await auditLegacyStagingExposure(operator)
+      expect([restored.legacyContainmentVerified, restored.storageGuardGrantsVerified]).toEqual([true, true])
+      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 31, legacyContainmentVerified: true })
+      expect(await probes()).toEqual(before)
+    } finally { await database.close(); await fixture.close() }
+  }, 120_000)
+
+  test("before 0027 there are no guards: no GRANT is planned and the audit is unchanged", async () => {
+    const fixture = await createStagingSchemaFixture(testUrl!, "m63_bf10_pre0027", 26, EXISTING_PROJECT_REF)
+    try {
+      const plan = await planLegacyStagingContainment(fixture.operator)
+      expect([plan.audit.storagePolicyGuards, plan.audit.missingStorageGuardGrants, plan.audit.legacyContainmentVerified, plan.audit.storageGuardGrantsVerified]).toEqual([[], [], true, true])
+      expect(plan.statements.some(sql => sql.startsWith("GRANT"))).toBe(false)
+    } finally { await fixture.close() }
+  }, 120_000)
+
+  test("a staging-shaped database (7 application schemas, provider defaults) plans the reviewed 29 statements plus exactly the two GRANTs", async () => {
+    const fixture = await createStagingSchemaFixture(testUrl!, "m63_bf10_shape", 30, EXISTING_PROJECT_REF)
+    const rollback = new Error("bf10 shape rollback")
+    let checked = false
+    try {
+      await fixture.operator.transaction(async tx => {
+        await tx.exec(`create schema drizzle; create schema frontdesk; create schema neuvetra_research_dev; create schema site; create schema terrascope;
+          do $$ begin if not exists(select 1 from pg_roles where rolname='supabase_admin') then create role supabase_admin nologin; end if; end $$;
+          alter default privileges for role supabase_admin in schema public grant execute on functions to anon,authenticated;
+          alter default privileges for role supabase_admin in schema public grant all on tables to anon,authenticated;
+          alter default privileges for role supabase_admin in schema public grant all on sequences to anon,authenticated;`)
+        const plan = await planLegacyStagingContainment(tx)
+        expect(plan.audit.applicationSchemas).toEqual(["drizzle", "frontdesk", "neuvetra", "neuvetra_research_dev", "public", "site", "terrascope"])
+        // The 29 statements of the plan reviewed on hosted staging for 0031 (its database is "postgres").
+        const reviewed = ['REVOKE CREATE ON DATABASE "postgres" FROM PUBLIC, anon, authenticated;']
+        for (const schema of plan.audit.applicationSchemas) for (const target of ["SCHEMA", "ALL TABLES IN SCHEMA", "ALL SEQUENCES IN SCHEMA", "ALL FUNCTIONS IN SCHEMA"]) reviewed.push(`REVOKE ALL ON ${target} "${schema}" FROM PUBLIC, anon, authenticated;`)
+        expect(reviewed).toHaveLength(29)
+        const statements = plan.statements.map(sql => sql.replace('DATABASE "m63_bf10_shape"', 'DATABASE "postgres"'))
+        expect(statements).toHaveLength(31)
+        expect(statements.filter(sql => !sql.startsWith("GRANT"))).toEqual(reviewed)
+        const revoke = statements.indexOf('REVOKE ALL ON ALL FUNCTIONS IN SCHEMA "neuvetra" FROM PUBLIC, anon, authenticated;')
+        expect(revoke).toBe(12)
+        expect(statements.slice(13, 15)).toEqual(BF10_GRANTS)
+        expect(statements.slice(15)).toEqual(reviewed.slice(13))
+        // Order follows the catalog collation (hosted lists FUNCTIONS, TABLES, SEQUENCES); the set is what matters.
+        expect([...plan.providerAdminStatements].sort()).toEqual([
+          'ALTER DEFAULT PRIVILEGES FOR ROLE "supabase_admin" IN SCHEMA "public" REVOKE ALL ON FUNCTIONS FROM PUBLIC, anon, authenticated;',
+          'ALTER DEFAULT PRIVILEGES FOR ROLE "supabase_admin" IN SCHEMA "public" REVOKE ALL ON SEQUENCES FROM PUBLIC, anon, authenticated;',
+          'ALTER DEFAULT PRIVILEGES FOR ROLE "supabase_admin" IN SCHEMA "public" REVOKE ALL ON TABLES FROM PUBLIC, anon, authenticated;',
+        ])
+        // Not executed by the tool, and never part of statements.
+        expect(statements.some(sql => sql.startsWith("ALTER DEFAULT PRIVILEGES"))).toBe(false)
+        checked = true
+        throw rollback
+      }).catch(error => { if (error !== rollback) throw error })
+      expect(checked).toBe(true)
+    } finally { await fixture.close() }
   }, 120_000)
 })

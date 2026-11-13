@@ -1,7 +1,7 @@
 import { extractDatabaseUrl } from "../cloud/database-inventory"
 import { createPostgresConnection } from "../../packages/neuvetra-database/src/hosted"
 import { loadStagingDatabaseCa } from "../../packages/neuvetra-database/src/staging-tls"
-import { auditLegacyStagingExposure, planLegacyStagingContainment } from "../../packages/neuvetra-database/src/staging-audit"
+import { auditLegacyStagingExposure, containmentAndStorageGuardsVerified, planLegacyStagingContainment } from "../../packages/neuvetra-database/src/staging-audit"
 import { migratePrivateStaging } from "../../packages/neuvetra-database/src/staging-migrations"
 const [source, reviewedPlan, expectedHash, output] = process.argv.slice(2)
 let db: ReturnType<typeof createPostgresConnection> | undefined
@@ -22,7 +22,7 @@ try {
     if (JSON.stringify(current.statements) !== JSON.stringify(plan.statements) || JSON.stringify(current.providerAdminStatements) !== JSON.stringify(plan.providerAdminStatements)) throw new Error("plan drift")
     for (const statement of current.statements) await tx.exec(statement)
     const result = await auditLegacyStagingExposure(tx)
-    if (!result.legacyContainmentVerified) throw new Error("containment failed")
+    if (!containmentAndStorageGuardsVerified(result)) throw new Error("containment failed")
     return result
   })
   await Bun.write(output, JSON.stringify({stage:"containment_committed",reviewedPlanSha256:expectedHash,audit},null,2)+"\n")

@@ -1,5 +1,5 @@
 import type { WorkspaceConnection, WorkspaceSql } from "./workspace"
-import { auditLegacyStagingExposure, EXISTING_PROJECT_REF } from "./staging-audit"
+import { auditLegacyStagingExposure, containmentAndStorageGuardsVerified, EXISTING_PROJECT_REF } from "./staging-audit"
 
 export const STAGING_MIGRATIONS = [
   "0001_company_workspace.sql", "0002_synthetic_bill_intake.sql", "0003_synthetic_bill_calculation.sql",
@@ -60,7 +60,7 @@ async function validateExisting(tx: WorkspaceSql, expectedProjectRef: string, ma
 export async function migratePrivateStagingFromManifest(db: WorkspaceConnection, approval: PrivateStagingMigrationApproval, sourceManifest: StagingMigrationManifest) {
   if (approval.syntheticTargetConfirmed !== true || !/^[a-z]{20}$/.test(approval.expectedProjectRef)) throw new Error("Reviewed synthetic staging target required.")
   const manifest = pinStagingMigrationManifest(sourceManifest)
-  if (approval.expectedProjectRef === EXISTING_PROJECT_REF && (approval.reuseExistingProject !== true || !(await auditLegacyStagingExposure(db)).legacyContainmentVerified)) throw new Error("Confirmed existing project reuse and verified legacy containment required.")
+  if (approval.expectedProjectRef === EXISTING_PROJECT_REF && (approval.reuseExistingProject !== true || !containmentAndStorageGuardsVerified(await auditLegacyStagingExposure(db)))) throw new Error("Confirmed existing project reuse and verified legacy containment required.")
   await db.transaction(async tx => {
     await tx.query("select pg_advisory_xact_lock(630009)")
     const existing = await tx.query<{ present: boolean }>("select exists(select 1 from pg_namespace where nspname='neuvetra') present")
