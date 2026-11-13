@@ -61,7 +61,7 @@ function completeness(results: ResultsResponse, coverage: Coverage) {
     // BF-01 (count mode): a possible duplicate counted in the subtotal is a known gap too.
     const duplicates = results.records.filter(row => row.scope === scope && countedDuplicate(row)).length
     const parts = [count ? `${plural(count, "record")} not yet counted` : "", duplicates ? `${plural(duplicates, "possible duplicate")} counted` : "", issues.open ? `${plural(issues.open, "setup answer")} still open` : "", issues.gaps ? plural(issues.gaps, "possible coverage gap") : "", !complete ? "some results only partly calculated" : "", issues.unchecked ? "coverage not checked against company setup" : ""].filter(Boolean)
-    return parts.length ? `Incomplete — ${parts.join("; ")}` : COVERAGE_TEXT.resultsNoGaps
+    return parts.length ? `Incomplete — ${parts.join("; ")}` : COVERAGE_TEXT.resultsNoGaps(scope)
   }
   // BF1: no subtotal while a record was calculated means the engine's subtotal couldn't be verified, not that there are no records.
   const unverified = "Incomplete — the subtotal could not be verified; per-record results are listed"

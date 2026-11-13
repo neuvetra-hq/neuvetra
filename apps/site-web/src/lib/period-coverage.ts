@@ -15,12 +15,17 @@ import type { CoverageGap } from "./journey-status"
 
 /** The coverage statements. The wording is the order's (BF-13 rule 3); Codex's acceptance scripts read these strings. */
 export const COVERAGE_TEXT = {
-  /** Results (screen and printed report), per scope, when nothing is held, open or found by the checks. */
-  resultsNoGaps: "No gaps found by these checks: every source type and included site in company setup has records, and the records cover every day of the reporting period for each site and source type. Not checked: whether every meter, vehicle and piece of equipment has its own record.",
-  /** The live CSV's coverage line when no open setup answer or gap remains. */
-  csvNoGaps: "Coverage checks: no open setup answers; each source type and included site in company setup has records covering every day of the reporting period. Not checked: whether every meter, vehicle and piece of equipment has a record.",
+  /**
+   * Results (screen, printed summary and the CSV's completeness lines), per scope, when nothing in that scope is held, open
+   * or found by the checks. Each scope's line claims only what that scope's checks looked at (QA B1 on PR #66).
+   */
+  resultsNoGaps: (scope: 1 | 2) => scope === 1
+    ? "No gaps found by these checks: every Scope 1 source type in company setup has records, and at each included site the records of each Scope 1 source type it has cover every day of the reporting period that the site's dates in company setup include. Not checked: whether every meter, vehicle and piece of equipment has its own record, or whether a site uses a source type that has records only at other sites."
+    : "No gaps found by these checks: every Scope 2 source type in company setup and every included site has records, and at each included site the records of each Scope 2 source type it has cover every day of the reporting period that the site's dates in company setup include. Not checked: whether every meter has its own record.",
+  /** The live CSV's coverage line when no open setup answer or gap remains (held records still count as covering: F2). */
+  csvNoGaps: "Coverage checks: no open company-setup answers for Scope 1 and 2; every Scope 1 and 2 source type in company setup and every included site has records, and at each included site each source type's records (counted or not) cover every day of the reporting period that the site's dates include. Not checked: whether every meter, vehicle and piece of equipment has a record, or whether a site uses a Scope 1 source type recorded only at other sites.",
   /** The printed report's "Not counted, incomplete and possible gaps" section when it has nothing to list. */
-  reportNoneFound: "None found by these checks: every record is counted, company setup has no open answers, and each source type and included site it lists has records covering every day of the reporting period. Not checked: whether every meter, vehicle and piece of equipment has its own record.",
+  reportNoneFound: "None found by these checks: every record is counted, company setup has no open answers for Scope 1 and 2, every Scope 1 and 2 source type it lists and every included site has records, and at each included site each source type's records cover every day of the reporting period that the site's dates include. Not checked: whether every meter, vehicle and piece of equipment has its own record, or whether a site uses a Scope 1 source type recorded only at other sites.",
   /** One uncovered stretch: "Records for <kind> at <site> don't cover <dates> (<n> of <N> days uncovered)". */
   periodGap: (kind: string, site: string, dates: string, uncovered: number, days: number) => `Records for ${kind} at ${site} don't cover ${dates} (${uncovered} of ${days} days uncovered)`,
   periodGapDetail: "Add records for these dates. If the site had no such activity then, or its coverage dates are wrong, say so in that site’s details in company setup (04 Locations).",
@@ -36,6 +41,9 @@ export interface CoverageRecord { kind: string; locationId: string; periodStart:
 const KIND_SCOPE: Readonly<Record<string, 1 | 2>> = { natural_gas: 1, vehicle: 1, distillate_no2: 1, fugitive: 1, electricity: 2 }
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/
 const DAY_MS = 86_400_000
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+/** F3 (QA on PR #66): a one-day stretch is named as one date ("Feb 29, 2024"), in the product's date style. */
+const oneDay = (date: string) => `${MONTHS[Number(date.slice(5, 7)) - 1]} ${Number(date.slice(8, 10))}, ${date.slice(0, 4)}`
 const dayNumber = (date: string) => Date.UTC(Number(date.slice(0, 4)), Number(date.slice(5, 7)) - 1, Number(date.slice(8, 10))) / DAY_MS
 /** Days in a half-open ISO date range. */
 export const daysIn = (period: HalfOpenPeriod) => Math.max(0, dayNumber(period.endExclusive) - dayNumber(period.start))
@@ -91,7 +99,7 @@ export function periodCoverageGaps(input: { reportingPeriod: { start: string | n
       const noun = label.charAt(0).toLowerCase() + label.slice(1)
       for (const stretch of uncoveredStretches(window, periods)) gaps.push({
         id: `period-${kind}-${location.id}-${stretch.start}`, scope: KIND_SCOPE[kind]!,
-        title: COVERAGE_TEXT.periodGap(noun, location.name || "an unnamed site", labels.period(stretch.start, stretch.endExclusive), daysIn(stretch), days),
+        title: COVERAGE_TEXT.periodGap(noun, location.name || "an unnamed site", daysIn(stretch) === 1 ? oneDay(stretch.start) : labels.period(stretch.start, stretch.endExclusive), daysIn(stretch), days),
         detail: COVERAGE_TEXT.periodGapDetail, note: null, noteFrom: "site",
       })
     }

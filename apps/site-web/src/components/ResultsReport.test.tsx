@@ -176,7 +176,7 @@ describe("B02: records the engine held are counted and explained everywhere", ()
     // Four records are not yet counted: one held before the engine, two input needed and one review required by it.
     expect(view.completeness).toEqual({
       scope1: "Incomplete — 4 records not yet counted; some results only partly calculated",
-      scope2Location: journeyStatus.COVERAGE_TEXT.resultsNoGaps,
+      scope2Location: journeyStatus.COVERAGE_TEXT.resultsNoGaps(2),
       scope2Market: "Incomplete — some results only partly calculated",
     })
     expect(view.warnings[0]).toBe("4 records not counted yet · some results partly calculated")
@@ -249,7 +249,7 @@ describe("B02 on the actual Request B captures", () => {
     const view = render(results)
     expect(view.completeness).toEqual({
       scope1: "Incomplete — 4 records not yet counted; some results only partly calculated",
-      scope2Location: journeyStatus.COVERAGE_TEXT.resultsNoGaps,
+      scope2Location: journeyStatus.COVERAGE_TEXT.resultsNoGaps(2),
       scope2Market: "Incomplete — some results only partly calculated",
     })
     expect(view.warnings[0]).toBe("4 records not counted yet · some results partly calculated")
@@ -423,9 +423,9 @@ describe("BF-13: truthful coverage statement on Results, in print and in the CSV
   test("twelve monthly bills: the new statements, with what was not checked", () => {
     const months = Array.from({ length: 12 }, (_, index) => bill(`2025-${String(index + 1).padStart(2, "0")}-01`, index === 11 ? "2026-01-01" : `2025-${String(index + 2).padStart(2, "0")}-01`))
     const view = render(synthetic, coverageFor(months))
-    expect(view.completeness.scope2Location).toBe(journeyStatus.COVERAGE_TEXT.resultsNoGaps)
-    expect(view.completeness.scope2Location).toContain("Not checked: whether every meter, vehicle and piece of equipment has its own record.")
-    expect(csvLines(view.csv)).toContain(`# Completeness, Scope 2 location-based: ${journeyStatus.COVERAGE_TEXT.resultsNoGaps}`)
+    expect(view.completeness.scope2Location).toBe(journeyStatus.COVERAGE_TEXT.resultsNoGaps(2))
+    expect(view.completeness.scope2Location).toContain("Not checked: whether every meter has its own record.")
+    expect(csvLines(view.csv)).toContain(`# Completeness, Scope 2 location-based: ${journeyStatus.COVERAGE_TEXT.resultsNoGaps(2)}`)
     expect(csvLines(view.csv)).toContain(`# ${journeyStatus.COVERAGE_TEXT.csvNoGaps}`)
     for (const phrase of retired) { expect(view.csv).not.toContain(phrase); expect(view.printed).not.toContain(phrase) }
   })

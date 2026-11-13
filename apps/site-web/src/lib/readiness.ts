@@ -6,8 +6,8 @@
  *   count of zero. No label says complete, ready to file, compliant, approved or assured.
  * - S1 (setup): "All setup questions answered · vN", otherwise "Saved vN · N open answers". With Scope 3 on, every Scope 3
  *   category must be decided and each decided category needs its assessment (the Scope 3 to-do's category steps).
- * - S2 (activity): "Nothing waiting on you in Activity", with the hint that this checks one record per source type and
- *   site, not coverage of the whole year.
+ * - S2 (activity): "Nothing waiting on you in Activity", with the hint (BF-13) that this checks records per source type and
+ *   included site and each site's period coverage within its dates, not one record per meter, vehicle or piece of equipment.
  * - S3 (results): "Draft results available · N open · M block internal approval", or "· nothing open". Never a ✓.
  * - One list, in the next-step order: (1) input needed, (2) held, (3) open setup answers, (4) Scope 3 decisions and
  *   assessments, (5) Scope 3 included categories without records, (6) Scope 1 and 2 possible gaps; Scope 3 lines waiting on
@@ -97,7 +97,7 @@ export const READINESS_TEXT = {
   s1Open: (revision: number | null, open: number, scope12: number, scope3: number | null) => `Saved v${revision} · ${plural(open, "open answer")}${scope3 && scope12 ? ` (${scope12} Scope 1 and 2 · ${scope3} Scope 3)` : scope3 ? " (all Scope 3)" : ""}`,
   s1Saved: (revision: number | null) => `Saved v${revision}`,
   s2Done: "Nothing waiting on you in Activity",
-  s2Hint: "This checks that each source type and included site has records covering every day of the reporting period — not that every meter, vehicle and piece of equipment has its own record.",
+  s2Hint: "This checks that each source type and included site has records, and that each site's records of each type cover every day of the reporting period within the site's dates — not that every meter, vehicle and piece of equipment has its own record.",
   s2Open: (records: number, open: number) => `${plural(records, "record")} · ${open} waiting on you`,
   s2NothingWaiting: "Nothing waiting on you",
   duplicatesSuffix: (count: number) => ` · ${plural(count, "possible duplicate")} to confirm`,
