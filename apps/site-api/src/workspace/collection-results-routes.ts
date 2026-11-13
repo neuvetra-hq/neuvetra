@@ -1,7 +1,7 @@
 import type { CollectionActivityRecord, CollectionContext, CollectionEvidenceMetadata, CompanySetupView } from "@neuvetra/database"
 import { instrumentEvidenceClaims, planCollectionCalculation, type CollectionCalculationPlan } from "../../../../packages/neuvetra-database/src/collection-engine-input"
 import { isScope3CollectionKind } from "../../../../packages/neuvetra-database/src/scope3-collection-contract"
-import { applyDuplicatePolicy, COLLECTION_DUPLICATE_POLICY, possibleDuplicateCounts, possibleDuplicateRecords, possibleDuplicatesCountedWarning, type CollectionDuplicatePolicy } from "../../../../packages/neuvetra-database/src/collection-duplicates"
+import { applyDuplicatePolicy, COLLECTION_DUPLICATE_POLICY, possibleDuplicateCounts, possibleDuplicateNotes, possibleDuplicatePairs, possibleDuplicateRecords, possibleDuplicatesCountedWarning, type CollectionDuplicatePolicy } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { assertEngineMatchesRelease, type ReleasedMethod } from "../../../../packages/neuvetra-database/src/method-reference"
 import { extractBearerToken, type AuthenticatedUser } from "../lib/auth"
 import { EngineRefusal } from "../calculation/method-engine-runner"
@@ -208,7 +208,10 @@ export async function buildCollectionResults(input: {
   const claims = instrumentEvidenceClaims(records.map(record => record.currentVersion.activity), context, evidence)
   // BF-01: possible duplicates (same kind and source ID, overlapping dates) among the active records, each mapped to its keeper.
   const duplicatePolicy = input.duplicatePolicy ?? COLLECTION_DUPLICATE_POLICY
-  const duplicates = possibleDuplicateRecords(records), keeperCounts = possibleDuplicateCounts(duplicates)
+  // Hold mode decides before the engines (a held duplicate is never sent); count mode decides after them (BF-01e), from
+  // which records are counted, so a pair is only called counted when both of its records are.
+  const holdMode = duplicatePolicy === "hold"
+  const duplicates = holdMode ? possibleDuplicateRecords(records) : new Map<string, string>(), keeperCounts = possibleDuplicateCounts(duplicates)
   let duplicatesCounted = 0
   const ordered = [...records].sort((left, right) => left.kind.localeCompare(right.kind) || left.currentVersion.activity.period.start.localeCompare(right.currentVersion.activity.period.start) || left.id.localeCompare(right.id))
   for (const record of ordered) {
@@ -250,8 +253,6 @@ export async function buildCollectionResults(input: {
     }
     rows.push(row)
   }
-  // BF-01 (count mode): the totals include records that may repeat others, and the response says so.
-  if (duplicatesCounted) warnings.push(possibleDuplicatesCountedWarning(duplicatesCounted))
   let scope1: Scope1Aggregate | null = null
   let scope2: Scope2Aggregate | null = null
   try { if (scope1Results.length) scope1 = await engines.scope1.aggregate(scope1Results) } catch { warnings.push("The Scope 1 subtotal could not be verified. Per-record results are shown.") }
@@ -263,6 +264,21 @@ export async function buildCollectionResults(input: {
     scope2LocationBased: row.scope2 !== null && inLocation.has(row.scope2.resultSha256),
     scope2MarketBased: row.scope2 !== null && inMarket.has(row.scope2.resultSha256),
   }
+  // BF-01e (count mode): a record is counted when it is in a figure. A pair is a counted possible duplicate only when both
+  // records are; a record that isn't counted and matches one that is gets a caution note instead. Notes only; no figure moves.
+  if (!holdMode) {
+    const countedIds = new Set(rows.filter(row => row.inSubtotal.scope1 || row.inSubtotal.scope2LocationBased || row.inSubtotal.scope2MarketBased).map(row => row.recordId))
+    // A record outside the period, excluded or withdrawn stays out whatever is filled in: no caution for it.
+    const completable = new Set(rows.filter(row => row.plan.status !== "excluded" && row.plan.status !== "withdrawn" && row.periodCheck !== "outside" && row.periodCheck !== "partial" && engineStatus(row) !== "excluded").map(row => row.recordId))
+    const pairs = possibleDuplicatePairs(records, id => countedIds.has(id), id => completable.has(id))
+    for (const row of rows) {
+      const notes = possibleDuplicateNotes(pairs, row.recordId)
+      if (notes.length) row.plan = { ...row.plan, notes: [...row.plan.notes, ...notes] }
+    }
+    duplicatesCounted = pairs.counted.size
+  }
+  // BF-01 (count mode): the totals include records that may repeat others, and the response says so.
+  if (duplicatesCounted) warnings.push(possibleDuplicatesCountedWarning(duplicatesCounted))
   // Taken from each result (the bytes that actually ran), not from the pinned constants.
   const methods = new Map<string, CollectionResultsResponse["methods"][number]>()
   for (const row of rows) for (const [scope, result] of [[1, row.scope1], [2, row.scope2]] as const)
@@ -290,6 +306,8 @@ export async function buildCollectionResults(input: {
   }
 }
 
+/** The engine's own status of a calculated row (electricity: its location-based basis), or null. */
+const engineStatus = (row: CollectionResultRow) => row.scope1 ? row.scope1.status : row.scope2 ? row.scope2.locationBased.status : null
 /**
  * The Results header counts (B02, Request B). A record the engine itself held (input needed, excluded, review required)
  * was sent but produced no number, so it counts with the holds, not as calculated; and an excluded record is counted

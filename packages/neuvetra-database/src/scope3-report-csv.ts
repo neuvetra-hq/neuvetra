@@ -216,8 +216,10 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
   }
 
   // BF-01c (count mode): counted possible duplicates per category; their figures are in the category subtotal and the total.
-  const countedDuplicates = new Map<number, number>()
-  for (const line of results.records) if (line.outcome === 'calculated' && possibleDuplicateCounted({ reasons: line.plan.reasons, notes: line.plan.notes })) countedDuplicates.set(line.category, (countedDuplicates.get(line.category) ?? 0) + 1)
+  // BF-01e: counted per source record, not per line: a record's derived lines (3A-3D) carry its mark but add no duplicate.
+  const duplicateRecords = new Map<number, Set<string>>()
+  for (const line of results.records) if (line.outcome === 'calculated' && possibleDuplicateCounted({ reasons: line.plan.reasons, notes: line.plan.notes })) duplicateRecords.set(line.category, (duplicateRecords.get(line.category) ?? new Set<string>()).add(line.recordId))
+  const countedDuplicates = new Map([...duplicateRecords].map(([category, ids]) => [category, ids.size]))
   const overstated = (count: number) => count ? [`${possibleDuplicatesOverstatedText(count)}.`] : []
   // 1. Category.
   section('Category', coverage.categories.map(row => {
@@ -312,7 +314,7 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
   // 8. Total.
   const total = scope3TotalStatement(coverage.categories)
   // BF-01c: the Total row's label carries the same sentence when its figure includes counted possible duplicates.
-  const totalDuplicates = coverage.knownSourceSubtotal ? coverage.categories.reduce((n, row) => n + (row.subtotal ? countedDuplicates.get(row.category) ?? 0 : 0), 0) : 0
+  const totalDuplicates = coverage.knownSourceSubtotal ? new Set(coverage.categories.flatMap(row => row.subtotal ? [...duplicateRecords.get(row.category) ?? []] : [])).size : 0
   section('Total', [['Total', `Known-source Scope 3 subtotal (${total.label})${totalDuplicates ? `. ${possibleDuplicatesOverstatedText(totalDuplicates)}.` : ''}`, coverage.knownSourceSubtotal?.display ?? '', coverage.knownSourceSubtotal ? scope3KgToTonnesExact(coverage.knownSourceSubtotal.display) : '',
     total.includes.join('; '), total.excludes.map(item => `${item.category} (${(SCOPE3_REPORT_TEXT_V3.status[item.status] ?? SCOPE3_STATUS_TEXT[item.status]).toLowerCase()})`).join('; '), total.label]])
 

@@ -684,7 +684,8 @@ export const SCOPE3_READINESS_TEXT: Readonly<Record<'input_needed' | 'screening_
 export const SCOPE3_READINESS_WHY_TEXT = {
   needsReview: (review: number, duplicates: number) => duplicates === 0 ? SCOPE3_READINESS_TEXT.needs_review : `${SCOPE3_READINESS_TEXT.needs_review}: ${[
     ...(review ? [`${review} line${review === 1 ? '' : 's'} returned for review by the calculation (not counted)`] : []),
-    `${duplicates} counted line${duplicates === 1 ? '' : 's'} may repeat another record (possible duplicate${duplicates === 1 ? '' : 's'}, counted; confirm or withdraw)`,
+    // BF-01e: counted records whose counterpart is counted too (a record's derived lines are one record).
+    `${duplicates} counted record${duplicates === 1 ? '' : 's'} may repeat another counted record (possible duplicate${duplicates === 1 ? '' : 's'}, both counted; confirm or withdraw)`,
   ].join('; ')}`,
 } as const
 /** Report versions: the frozen readiness lines, the approval and the control exception (owner decision 7, ACC-10). */
