@@ -7,6 +7,8 @@ export { scope3Csv, scope3StatementLines, scope3LineStatusText, scope3LineReason
 export { scope3ExclusionRegister, scope3TotalStatement } from "../../../../packages/neuvetra-database/src/scope3-methodology"
 // Round 3, lane A (owner decisions 2, 3 and 4): memo words, a line's memo text and the superseded spend memo words, for the screen and print.
 export { scope3LineMemoText, scope3VendorKeyMatchText } from "../../../../packages/neuvetra-database/src/scope3-report-csv"
+/** BF-01e: the shared duplicate words, re-exported for the Scope 3 panel (which reads only its usual helpers). */
+export { possibleDuplicateOfText, wouldRepeatCountedText } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 export { scope3MemoText } from "../../../../packages/neuvetra-database/src/scope3-r3a"
 export { SCOPE3_SUPERSEDED_MEMO_TEXT_R3A } from "../../../../packages/neuvetra-database/src/scope3-text"
 export { scope3ConstantSourceOf, scope3ConstantText, scope3ConversionText, scope3FactorSourceOfKey, scope3FactorText, scope3GasTexts, scope3KgToTonnesExact, scope3ReplacingRecordOf, scope3SupersededBy } from "../../../../packages/neuvetra-database/src/scope3-trace"
