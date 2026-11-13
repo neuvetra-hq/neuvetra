@@ -414,6 +414,28 @@ describe("BF-12: one supplier-name rule for vendor grouping and supersession, th
     expect(result.coverage.categories[0]!.reasons).toContain("replacing_record_not_counted")
   }, TIMEOUT)
 
+  // BF-12 (CEO decision): a line replaced only by the vendor key says so next to its replacing record, in the CSV's
+  // "Superseded by" cell and Mapping section, with the supplier as the replacing record writes it; other lines print as before.
+  test("the CSV names the vendor-key match next to the replacing record; an exact match prints exactly as before", async () => {
+    const labels = { kind: kindLabel, reason: reasonText, period: periodLabel }
+    const detail = "matched as the same supplier ignoring punctuation and legal suffixes (supplier on the replacing record: Acme Metals Inc)"
+    const a = line("Acme Metals Inc", "Coil Q1"), b = line("Acme Metals, Inc.", "Coil Q2")
+    const figure = allocated("145000", "kg CO2e", { supplierName: "Acme Metals", ...replaces })
+    const csv = scope3Csv(await build([a, b, figure]), labels).split("\n")
+    const rowOf = (r: CollectionActivityRecord) => csv.find(text => text.startsWith("Record,") && text.includes(`,${r.id},`))!
+    expect(rowOf(a)).toContain(`,${figure.id},`)
+    expect(rowOf(a)).not.toContain("matched as the same supplier")
+    expect(rowOf(b)).toContain(`,${figure.id}; ${detail},`)
+    const mapping = csv.find(text => text.startsWith("Mapping,1,331110,"))!
+    expect(mapping).toContain(`${a.id} → ${figure.id}; ${b.id} → ${figure.id} [${detail}]`)
+    // Held (the replacing record isn't counted): the BF-02b cell, then the match.
+    const held = allocated("145000", "kg CO2e", { supplierName: "Acme Metals", allocationNumerator: "200", allocationDenominator: "100", ...replaces })
+    const heldCsv = scope3Csv(await build([a, b, held]), labels).split("\n")
+    const heldRow = (r: CollectionActivityRecord) => heldCsv.find(text => text.startsWith("Record,") && text.includes(`,${r.id},`))!
+    expect(heldRow(a)).toContain(`,"${held.currentVersion.activity.sourceId}, record ${held.id} (not counted right now; this line is held until it is)",`)
+    expect(heldRow(b)).toContain(`,"${held.currentVersion.activity.sourceId}, record ${held.id} (not counted right now; this line is held until it is); ${detail}",`)
+  }, TIMEOUT)
+
   test("without variant spellings nothing changes: the results equal those built with the earlier exact rule", async () => {
     const a = line("Acme Metals Inc", "Coil Q1"), other = line("Another Supplier LLC", "Bolts")
     const figure = allocated("145000", "kg CO2e", { supplierName: "Acme Metals", ...replaces })

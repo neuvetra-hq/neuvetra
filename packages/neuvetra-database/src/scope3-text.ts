@@ -812,4 +812,10 @@ export const SCOPE3_REPLACING_RECORD_CSV_TEXT = (recordId: string, sourceId: str
  * are ignored (`scope3SpendVendorKey`), and not under the earlier rule (capitals and spacing only).
  */
 export const SCOPE3_VENDOR_KEY_MATCH_TEXT = 'matched as the same supplier ignoring punctuation and legal suffixes'
+/**
+ * BF-12 (CEO decision, 13 November 2026): what follows a line's replacing record wherever it is named (CSV "Superseded by"
+ * cell, the screen's and print's calculation details) when the line was matched only by the vendor key: the rule and the
+ * supplier as the replacing record writes it. Lines matched under the earlier exact rule or by mapping key show nothing new.
+ */
+export const SCOPE3_VENDOR_KEY_MATCH_DETAIL = (named: string) => `${SCOPE3_VENDOR_KEY_MATCH_TEXT} (supplier on the replacing record: ${named})`
 // --- end BF-12 ---
