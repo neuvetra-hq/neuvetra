@@ -45,8 +45,19 @@ export function sessionFor(user: UserKey, accessToken: string, refreshToken = `r
     user: { id: USERS[user].id, aud: "authenticated", role: "authenticated", email: USERS[user].email, app_metadata: { provider: "email" }, user_metadata: {}, created_at: "2025-01-01T00:00:00Z" } }
 }
 
-/** One Supabase Auth session of the stub: every access token it issued, and the one refresh token that is current. */
-export interface StubSession { id: number; user: UserKey; revoked: boolean; accessTokens: string[]; refreshToken: string }
+/**
+ * One Supabase Auth session of the stub: every access token it issued (with its expiry), the refresh token that is
+ * current, and the ones it replaced (with when), for the reuse window.
+ */
+export interface StubSession {
+  id: number; user: UserKey; revoked: boolean; accessTokens: string[]; refreshToken: string
+  /** Access token → expiry (ms since the epoch). */
+  expires: Map<string, number>
+  /** Refresh tokens this session has rotated away from → when they were replaced. */
+  replaced: Map<string, number>
+}
+/** GoTrue's default `refresh_token_reuse_interval` (10 s): the parent of the current refresh token is still accepted. */
+export const REFRESH_REUSE_WINDOW_MS = 10_000
 /** One request the stub answered (`status` is absent while it is held or stalled). */
 export interface AuthRequest { at: number; path: string; grant: string | null; scope: string | null; bearer: string | null; session: number | null; status?: number }
 export type LogoutMode = "ok" | "stall" | "refused"
@@ -63,6 +74,18 @@ export type LogoutMode = "ok" | "stall" | "refused"
  *   only the answer is late (the hardest case for a sign-out).
  * - A session whose access tokens were all revoked from the TokenDirectory (`stack.tokens.revokeUser`, which journeys use
  *   to end a session) counts as revoked: it can't be refreshed.
+ *
+ * WO-14b (QA's stub gaps on PR #59), as GoTrue does it as far as documented (still to confirm on staging, design §4):
+ * - **Reuse window.** The refresh token a session has just rotated away from is still accepted for
+ *   `REFRESH_REUSE_WINDOW_MS`: the answer is a new access token with the session's *current* refresh token (no second
+ *   rotation). An older refresh token, or the previous one after the window, is reuse: the whole session is revoked and the
+ *   answer is 400 `refresh_token_already_used`.
+ * - **Access-token expiry at the Auth API.** `/user` and `/logout` refuse an expired access token, and any token the stub
+ *   never issued, with 403 `bad_jwt` (a revoked session's token still gets 403 `session_not_found`).
+ *
+ * Still not like real Supabase: the workspace server (the stack's TokenDirectory) accepts an access token after its expiry;
+ * any password signs in; `scope`, `apikey`, `X-Client-Info` and CORS are not checked (assert on `log[].scope`); no rate
+ * limits on `/token`; PKCE (`/verify`, `grant_type=pkce`) answers 404 `not_stubbed`; tokens aren't JWTs.
  */
 export class AuthStub {
   readonly sessions = new Map<number, StubSession>()
@@ -76,7 +99,7 @@ export class AuthStub {
 
   /** A new live session for `user`, as a sign-in would give (also used to start a journey signed in). */
   newSession(user: UserKey, lifeSeconds = 86_400) {
-    const session: StubSession = { id: ++this.nextSession, user, revoked: false, accessTokens: [], refreshToken: "" }
+    const session: StubSession = { id: ++this.nextSession, user, revoked: false, accessTokens: [], refreshToken: "", expires: new Map(), replaced: new Map() }
     this.sessions.set(session.id, session)
     return this.issue(session, lifeSeconds)
   }
@@ -90,10 +113,18 @@ export class AuthStub {
   /** Answers whatever is still held or stalled (called when the journey closes). */
   dispose() { this.releaseRefresh(); for (const release of this.stalled.splice(0)) release() }
 
-  private issue(session: StubSession, lifeSeconds: number) {
+  /** Whether an access token has passed its expiry (as the Auth API sees it). */
+  isExpired(session: StubSession, token: string) { return (session.expires.get(token) ?? 0) <= Date.now() }
+
+  /** A new access token; with `rotate`, a new refresh token too (the previous one is kept for the reuse window). */
+  private issue(session: StubSession, lifeSeconds: number, rotate = true) {
     const access = this.stack.tokens.issue(session.user)
     session.accessTokens.push(access)
-    session.refreshToken = `refresh-s${session.id}-${session.accessTokens.length}`
+    session.expires.set(access, Date.now() + lifeSeconds * 1000)
+    if (rotate) {
+      if (session.refreshToken) session.replaced.set(session.refreshToken, Date.now())
+      session.refreshToken = `refresh-s${session.id}-${session.accessTokens.length}`
+    }
     return sessionFor(session.user, access, session.refreshToken, lifeSeconds)
   }
 
@@ -105,6 +136,8 @@ export class AuthStub {
     this.log.push(entry)
     const json = (status: number, body: unknown) => { entry.status = status; return route.fulfill({ status, contentType: "application/json", body: JSON.stringify(body) }) }
     const notFound = () => json(403, { code: 403, error_code: "session_not_found", msg: "Session from session_id claim in JWT does not exist" })
+    const badJwt = () => json(403, { code: 403, error_code: "bad_jwt", msg: "invalid JWT: unable to parse or verify signature, token has invalid claims: token is expired" })
+    const refreshRefused = (code: string, message: string) => json(400, { code: 400, error_code: code, error: "invalid_grant", error_description: `Invalid Refresh Token: ${message}`, msg: `Invalid Refresh Token: ${message}` })
 
     if (url.pathname === "/auth/v1/token" && entry.grant === "password") {
       const { email } = JSON.parse(request.postData() ?? "{}") as { email?: string }
@@ -116,29 +149,42 @@ export class AuthStub {
     }
     if (url.pathname === "/auth/v1/token" && entry.grant === "refresh_token") {
       const { refresh_token: refresh } = JSON.parse(request.postData() ?? "{}") as { refresh_token?: string }
-      const session = [...this.sessions.values()].find(item => item.refreshToken === refresh) ?? null
+      const current = [...this.sessions.values()].find(item => item.refreshToken === refresh) ?? null
+      const parent = current ? null : [...this.sessions.values()].find(item => refresh !== undefined && item.replaced.has(refresh)) ?? null
+      const session = current ?? parent
       entry.session = session?.id ?? null
       if (!session || !this.isLive(session)) {
         if (this.held) await this.held
-        return json(400, { code: 400, error_code: "refresh_token_not_found", error: "invalid_grant", error_description: "Invalid Refresh Token: Refresh Token Not Found", msg: "Invalid Refresh Token: Refresh Token Not Found" })
+        return refreshRefused("refresh_token_not_found", "Refresh Token Not Found").catch(() => {})
+      }
+      if (parent) {
+        // The parent of the current refresh token within the reuse window: a new access token, same current refresh token.
+        const replacedAt = parent.replaced.get(refresh!)!
+        const newest = Math.max(...parent.replaced.values())
+        if (replacedAt !== newest || Date.now() - replacedAt > REFRESH_REUSE_WINDOW_MS) {
+          this.revoke(parent)
+          if (this.held) await this.held
+          return refreshRefused("refresh_token_already_used", "Already Used").catch(() => {})
+        }
       }
       // The server issues the new token now; a held refresh only delays the answer on its way back.
-      const issued = this.issue(session, 3600)
+      const issued = this.issue(session, 3600, !parent)
       if (this.held) await this.held
       return json(200, issued).catch(() => {})
     }
     if (url.pathname === "/auth/v1/user") {
       const session = bearer ? this.sessionOfAccess(bearer) : null
-      if (session && !this.isLive(session)) return notFound()
-      const user = bearer ? this.stack.tokens.userOf(bearer) : null
-      return user ? json(200, sessionFor(user, bearer!).user) : json(401, { error: "invalid_token" })
+      if (!session || this.isExpired(session, bearer!)) return badJwt()
+      if (!this.isLive(session)) return notFound()
+      return json(200, sessionFor(session.user, bearer!).user)
     }
     if (url.pathname === "/auth/v1/logout") {
       if (this.logoutMode === "refused") return route.abort("connectionrefused")
       if (this.logoutMode === "stall") { await new Promise<void>(resolve => this.stalled.push(resolve)); return route.abort("timedout").catch(() => {}) }
       const session = bearer ? this.sessionOfAccess(bearer) : null
       entry.session = session?.id ?? null
-      if (!session || !this.isLive(session)) return notFound()
+      if (!session || this.isExpired(session, bearer!)) return badJwt()
+      if (!this.isLive(session)) return notFound()
       this.revoke(session)
       entry.status = 204
       return route.fulfill({ status: 204, body: "" })

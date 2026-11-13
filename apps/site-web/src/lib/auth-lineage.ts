@@ -10,6 +10,10 @@
  * - A **generation** is one Supabase client of one tab, tied to one lineage (or none, on the landing page). The decision
  *   functions below say what that generation's storage adapter does with each `getItem`, `setItem` and `removeItem` of the
  *   session key. Removal and refusal act only on the lineage that was signed out, never on "any session".
+ *
+ * WO-14b (CTO Addendum A, CEO Addendum B): a generation sees only its own lineage's session (R1); `wouldRefuseSet` and
+ * `wouldRefuseRemove` let its fetch refuse an answer before auth-js acts on it (A2 iv); `adoptLegacy` stamps a session
+ * that has no lineage, in app code (R3); lineages (F3) and E's user IDs (F4) must be UUIDs.
  */
 import { DRAFT_PREFIX } from "./draft-store"
 
@@ -19,7 +23,6 @@ export const ENDED_MAX = 50
 export const LINEAGE_FIELD = "nv_lineage"
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
-const USER_ID = /^[A-Za-z0-9-]{1,64}$/
 
 export interface EndedLineage { lineage: string; userId: string | null; at: number }
 type ReadStorage = Pick<Storage, "getItem">
@@ -39,7 +42,8 @@ export function pruneEnded(entries: readonly unknown[], now: number): EndedLinea
     const { lineage, userId, at } = entry as Record<string, unknown>
     if (!isLineage(lineage) || typeof at !== "number" || !Number.isFinite(at)) continue
     if (at < now - ENDED_TTL_MS || at > now + ENDED_TTL_MS) continue
-    const user = typeof userId === "string" && USER_ID.test(userId) ? userId : null
+    // F4: a user ID is a UUID (Supabase's auth.users.id); anything else, such as an opaque refresh token, is not kept.
+    const user = typeof userId === "string" && UUID.test(userId) ? userId.toLowerCase() : null
     const key = lineage.toLowerCase()
     const previous = kept.get(key)
     if (!previous || previous.at < at) kept.set(key, { lineage: key, userId: user, at })
@@ -102,7 +106,7 @@ export function stampLineage(raw: string, lineage: string): string | null {
 export interface GenerationState { retired: boolean; deliberate: boolean; lineage: string | null; lastWritten: string | null }
 
 export type GetDecision =
-  /** Hand the stored value to the client unchanged. */
+  /** Hand the stored value to the client unchanged (only ever this generation's own lineage, or nothing stored). */
   | { kind: "value"; value: string | null }
   /** Hand the client nothing and leave storage as it is. */
   | { kind: "none" }
@@ -111,23 +115,30 @@ export type GetDecision =
   /** An ended lineage overwrote this live generation's own session (cross-tab lag): write `value` back and hand it over. */
   | { kind: "repair"; value: string; dropped: string }
 
+/** The generation's lineage when it is a UUID (F3: anything else counts as no lineage), lower case. */
+function ownLineage(state: GenerationState): string | null { return isLineage(state.lineage) ? state.lineage.toLowerCase() : null }
+
 /**
  * `getItem(sessionKey)`:
  * - a retired generation reads nothing;
  * - a stored session of an ended lineage is dropped, unless this generation is live, its own lineage isn't ended and it
- *   wrote the session last (`lastWritten`): then the ended lineage overwrote it in a lagging tab, and it is repaired;
- * - anything else (no session, this lineage, another live lineage, a session with no lineage) is returned as stored. The
- *   extra `nv_lineage` field is harmless: auth-js checks only the token fields.
+ *   wrote the session last (`lastWritten`): then the ended lineage overwrote it in a lagging tab, and it is repaired.
+ *   F1: a repair happens only over an ended lineage, never over a live other lineage or a session without one;
+ * - R1: otherwise the client sees only its own lineage's session. Another lineage's session, a session without a lineage,
+ *   an unreadable value, or any session for a generation without a lineage reads as nothing, so a generation can never send
+ *   another lineage's refresh token (I9). App code reads the stored session directly, never through a client.
  */
 export function decideGet(state: GenerationState, stored: string | null, ended: readonly EndedLineage[]): GetDecision {
   if (state.retired) return { kind: "none" }
   const view = readStored(stored)
-  if (view?.lineage && isEnded(ended, view.lineage)) {
-    const own = readStored(state.lastWritten)
-    if (state.lineage && state.lastWritten && own?.lineage === state.lineage.toLowerCase() && !isEnded(ended, state.lineage)) return { kind: "repair", value: state.lastWritten, dropped: view.lineage }
+  if (!view) return { kind: "value", value: null }
+  const own = ownLineage(state)
+  if (view.lineage && isEnded(ended, view.lineage)) {
+    const mine = readStored(state.lastWritten)
+    if (own && state.lastWritten && mine?.lineage === own && !isEnded(ended, own)) return { kind: "repair", value: state.lastWritten, dropped: view.lineage }
     return { kind: "drop", lineage: view.lineage }
   }
-  return { kind: "value", value: stored }
+  return own && view.lineage === own ? { kind: "value", value: stored } : { kind: "none" }
 }
 
 export type RefusalReason = "retired" | "ended" | "other-lineage" | "no-lineage"
@@ -139,19 +150,21 @@ export type SetDecision =
 /**
  * `setItem(sessionKey, value)`:
  * - refused if the generation is retired, or its lineage is in E (it then retires itself);
- * - refused if it has no lineage (only a sign-in or an adoption gives one, and only those may store a session);
+ * - refused if it has no lineage, or one that isn't a UUID (F3; only a sign-in or an adoption gives one);
  * - a non-deliberate generation (a refresh, an adopted session) may not replace a stored session of another lineage, or
  *   one with no lineage: refused, and it retires itself;
- * - a deliberate generation (a sign-in) always writes: the deliberate sign-in wins;
+ * - a deliberate generation (a sign-in) always writes: the deliberate sign-in wins. L1: the generation is deliberate for
+ *   exactly one write, the sign-in's own session; `auth-generation.ts` clears `deliberate` once that write is made;
  * - the value written is the session with `nv_lineage` set to the generation's lineage.
  */
 export function decideSet(state: GenerationState, value: string, stored: string | null, ended: readonly EndedLineage[]): SetDecision {
   if (state.retired) return { kind: "refuse", reason: "retired", retire: false }
-  if (!state.lineage) return { kind: "refuse", reason: "no-lineage", retire: false }
-  if (isEnded(ended, state.lineage)) return { kind: "refuse", reason: "ended", retire: true }
+  const own = ownLineage(state)
+  if (!own) return { kind: "refuse", reason: "no-lineage", retire: false }
+  if (isEnded(ended, own)) return { kind: "refuse", reason: "ended", retire: true }
   const view = readStored(stored)
-  if (!state.deliberate && view && view.lineage !== state.lineage.toLowerCase()) return { kind: "refuse", reason: "other-lineage", retire: true }
-  const stamped = stampLineage(value, state.lineage.toLowerCase())
+  if (!state.deliberate && view && view.lineage !== own) return { kind: "refuse", reason: "other-lineage", retire: true }
+  const stamped = stampLineage(value, own)
   return stamped === null ? { kind: "refuse", reason: "no-lineage", retire: false } : { kind: "write", value: stamped }
 }
 
@@ -166,8 +179,69 @@ export function decideRemove(state: GenerationState, stored: string | null): Rem
   if (state.retired) return { kind: "refuse", reason: "retired" }
   const view = readStored(stored)
   if (!view) return { kind: "absent" }
-  if (!state.lineage) return { kind: "refuse", reason: "no-lineage" }
-  return view.lineage === state.lineage.toLowerCase() ? { kind: "remove" } : { kind: "refuse", reason: "other-lineage" }
+  const own = ownLineage(state)
+  if (!own) return { kind: "refuse", reason: "no-lineage" }
+  return view.lineage === own ? { kind: "remove" } : { kind: "refuse", reason: "other-lineage" }
+}
+
+/**
+ * A2 (iv): what the generation's storage would refuse if auth-js wrote a session now. The fetch asks this for a 2xx answer
+ * carrying a session, in the same task in which auth-js will then write it, and answers 503 instead of letting it through.
+ */
+export function wouldRefuseSet(state: GenerationState, stored: string | null, ended: readonly EndedLineage[]): Extract<SetDecision, { kind: "refuse" }> | null {
+  // The session's own fields don't change the decision: only state, the stored session and E do.
+  const decision = decideSet(state, "{}", stored, ended)
+  return decision.kind === "refuse" ? decision : null
+}
+
+/** A2 (iv): what the generation's storage would refuse if auth-js removed the session now (a refresh answered with an error). */
+export function wouldRefuseRemove(state: GenerationState, stored: string | null): Extract<RemoveDecision, { kind: "refuse" }> | null {
+  const decision = decideRemove(state, stored)
+  return decision.kind === "refuse" ? decision : null
+}
+
+export type AdoptResult =
+  /** Nothing stored, or nothing that is a session. */
+  | { kind: "none" }
+  /** The stored session already has a live lineage (stamped by a sign-in, or by another tab's adoption): adopt that one. */
+  | { kind: "existing"; lineage: string }
+  /** The stored session's lineage has ended: nothing to adopt (the boot drop removes it). */
+  | { kind: "ended"; lineage: string }
+  /** The session had no lineage: it now holds `lineage`, written by this call. */
+  | { kind: "stamped"; lineage: string }
+
+function sessionTokens(raw: string | null): { refreshToken: string } | null {
+  if (raw === null) return null
+  try {
+    const value: unknown = JSON.parse(raw)
+    if (!value || typeof value !== "object" || Array.isArray(value)) return null
+    const { access_token: access, refresh_token: refresh, expires_at: expires } = value as Record<string, unknown>
+    return typeof access === "string" && access && typeof refresh === "string" && refresh && typeof expires === "number" ? { refreshToken: refresh } : null
+  } catch { return null }
+}
+
+/**
+ * R3: adopts a stored session that has no lineage (signed in before WO-14, or refreshed by a tab still on old code),
+ * in app code, before any generation exists for it. Synchronous compare-and-set: the stored value is re-read, and only if
+ * it is still a valid session without a lineage (and, when `expectedRefreshToken` is given, still that refresh token) is
+ * it written back stamped with a fresh lineage. A session that already has a lineage is adopted as it is; so two tabs
+ * adopting at once converge: the stamp written last wins, and the next read in the other tab adopts that lineage.
+ */
+export function adoptLegacy(storage: Pick<Storage, "getItem" | "setItem"> | null, sessionKey: string, ended: readonly EndedLineage[], options: { expectedRefreshToken?: string; lineage?: () => string } = {}): AdoptResult {
+  if (!storage) return { kind: "none" }
+  try {
+    const raw = storage.getItem(sessionKey)
+    const view = readStored(raw)
+    const tokens = sessionTokens(raw)
+    if (!view || !tokens) return { kind: "none" }
+    if (view.lineage) return isEnded(ended, view.lineage) ? { kind: "ended", lineage: view.lineage } : { kind: "existing", lineage: view.lineage }
+    if (options.expectedRefreshToken !== undefined && tokens.refreshToken !== options.expectedRefreshToken) return { kind: "none" }
+    const lineage = (options.lineage ?? newLineage)()
+    const stamped = isLineage(lineage) ? stampLineage(raw!, lineage.toLowerCase()) : null
+    if (!stamped) return { kind: "none" }
+    storage.setItem(sessionKey, stamped)
+    return { kind: "stamped", lineage: lineage.toLowerCase() }
+  } catch { return { kind: "none" } }
 }
 
 /**

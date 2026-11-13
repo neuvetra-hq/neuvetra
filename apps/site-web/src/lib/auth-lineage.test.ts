@@ -1,14 +1,17 @@
 // WO-14a step 1: the lineage rules of the WO-14 sign-out design (§1, §2), as the specification the wiring steps are built
 // against. E (the ended-lineages list), the storage adapter's getItem/setItem/removeItem decisions for every combination,
 // the lastWritten repair, the boot drop of an ended session and the boot purge of drafts against E.
+// WO-14b: R1 (only the generation's own lineage is handed over), F1 (repair only over an ended lineage), F3 (a lineage is a
+// UUID), F4 (E's user IDs are UUIDs), the fetch pre-check's wouldRefuseSet/wouldRefuseRemove and R3's adoptLegacy.
 import { expect, test } from "bun:test"
-import { addEnded, decideGet, decideRemove, decideSet, dropEndedSession, ENDED_KEY, ENDED_MAX, ENDED_TTL_MS, isEnded, LINEAGE_FIELD, newLineage, pruneEnded, purgeEndedDrafts, readEnded, readStored, stampLineage, type GenerationState } from "./auth-lineage"
+import { addEnded, adoptLegacy, decideGet, decideRemove, decideSet, dropEndedSession, ENDED_KEY, ENDED_MAX, ENDED_TTL_MS, isEnded, LINEAGE_FIELD, newLineage, pruneEnded, purgeEndedDrafts, readEnded, readStored, stampLineage, wouldRefuseRemove, wouldRefuseSet, type GenerationState } from "./auth-lineage"
 import { DRAFT_PREFIX, DRAFT_TTL_MS } from "./draft-store"
 
 const NOW = Date.parse("2026-11-12T10:00:00Z")
 const DAY = 24 * 60 * 60 * 1000
 const LA = "aaaaaaaa-1111-4111-8111-000000000001", LB = "bbbbbbbb-2222-4222-8222-000000000002", LC = "cccccccc-3333-4333-8333-000000000003"
 const UA = "a0a0a0a0-0000-4000-8000-00000000000a", UB = "b0b0b0b0-0000-4000-8000-00000000000b"
+const LD = "dddddddd-4444-4444-8444-000000000004"
 const KEY = "neuvetra:m63:ref:auth"
 
 function memoryStorage(initial: Record<string, string> = {}) {
@@ -49,6 +52,15 @@ test("E never holds a token: extra fields are dropped, a lineage must be a UUID,
   expect(JSON.parse(storage.getItem(ENDED_KEY)!)).toEqual([{ lineage: LA, userId: UA, at: NOW }])
   addEnded(storage, { lineage: LB, userId: "Bearer eyJ.x.y" }, NOW + 1)
   expect(readEnded(storage, NOW + 1)[0]).toEqual({ lineage: LB, userId: null, at: NOW + 1 })
+  // F4: a user ID must be a UUID. Supabase's opaque refresh tokens (short alphanumeric strings) and any other non-UUID are
+  // stored as null, so a caller passing the wrong field can't put a token in E.
+  for (const notUser of ["v1a2b3c4d5e6", "u12", "refresh-token-value", `${UA}x`, ` ${UA}`]) {
+    addEnded(storage, { lineage: LC, userId: notUser }, NOW + 3)
+    expect(readEnded(storage, NOW + 3)[0]).toEqual({ lineage: LC, userId: null, at: NOW + 3 })
+    if (!notUser.includes(UA)) expect(storage.getItem(ENDED_KEY)).not.toContain(notUser.trim())
+  }
+  addEnded(storage, { lineage: LC, userId: UA.toUpperCase() }, NOW + 4)
+  expect(readEnded(storage, NOW + 4)[0]!.userId).toBe(UA)
   // A hand-edited E with token fields is read without them and rewritten without them.
   storage.setItem(ENDED_KEY, JSON.stringify([{ lineage: LC, userId: UA, at: NOW, access_token: "secret" }]))
   addEnded(storage, { lineage: LA, userId: UA }, NOW + 2)
@@ -114,9 +126,24 @@ test("getItem: a retired generation reads nothing, whatever is stored", () => {
   for (const stored of [null, session(LA), session(LB), session(null), session(LC)]) expect(decideGet(gen({ retired: true }), stored, ended(LC))).toEqual({ kind: "none" })
 })
 
-test("getItem: no session, this lineage, another live lineage and a session with no lineage are returned as stored", () => {
-  for (const state of [gen(), gen({ deliberate: true }), gen({ lineage: null })]) {
-    for (const stored of [null, session(LA), session(LB), session(null), "{garbled"]) expect(decideGet(state, stored, ended(LC))).toEqual({ kind: "value", value: stored })
+test("getItem (R1): a generation is handed only its own lineage's session, or nothing stored", () => {
+  for (const state of [gen(), gen({ deliberate: true })]) {
+    expect(decideGet(state, session(LA), ended(LC))).toEqual({ kind: "value", value: session(LA) })
+    expect(decideGet(state, session(LA.toUpperCase()), ended(LC))).toEqual({ kind: "value", value: session(LA.toUpperCase()) })
+    expect(decideGet(state, null, ended(LC))).toEqual({ kind: "value", value: null })
+  }
+})
+
+test("getItem (R1): another live lineage, a session without a lineage or an unreadable value reads as nothing", () => {
+  for (const state of [gen(), gen({ deliberate: true }), gen({ lastWritten: session(LA) })]) {
+    for (const stored of [session(LB), session(LC), session(null), "{garbled", "[]", "null"]) expect(decideGet(state, stored, ended(LD))).toEqual({ kind: "none" })
+  }
+})
+
+test("getItem (R1, F3): a generation without a lineage, or with one that isn't a UUID, is handed no session at all", () => {
+  for (const lineage of [null, "not-a-uuid", ` ${LA}`, "", `${LA}0`]) {
+    for (const stored of [session(LA), session(LB), session(null), session(` ${LA}`)]) expect(decideGet(gen({ lineage }), stored, [])).toEqual({ kind: "none" })
+    expect(decideGet(gen({ lineage }), null, [])).toEqual({ kind: "value", value: null })
   }
 })
 
@@ -139,8 +166,19 @@ test("lastWritten repair: B's live generation whose key an ended lineage overwro
   expect(decideGet(gen({ lineage: LB, lastWritten: mine }), session(LA), ended(LA, LB)).kind).toBe("drop")
   expect(decideGet(gen({ lineage: LB, lastWritten: null }), session(LA), ended(LA)).kind).toBe("drop")
   expect(decideGet(gen({ lineage: LB, lastWritten: stampLineage(session(null), LC) }), session(LA), ended(LA)).kind).toBe("drop")
-  expect(decideGet(gen({ lineage: LB, lastWritten: mine }), session(LC), ended(LA))).toEqual({ kind: "value", value: session(LC) })
   expect(decideGet(gen({ lineage: LB, lastWritten: mine }), null, ended(LA))).toEqual({ kind: "value", value: null })
+})
+
+test("F1: the repair never writes back over a live other lineage or a session without a lineage", () => {
+  const mine = stampLineage(session(null, UB, "b-access"), LB)!
+  for (const deliberate of [false, true]) {
+    for (const displacing of [session(LA), session(LC), session(null), session(LA.toUpperCase())]) {
+      const decision = decideGet(gen({ lineage: LB, lastWritten: mine, deliberate }), displacing, ended(LD))
+      expect(decision).toEqual({ kind: "none" })
+    }
+  }
+  // Only an ended displacing lineage is repaired over.
+  expect(decideGet(gen({ lineage: LB, lastWritten: mine }), session(LC), ended(LC)).kind).toBe("repair")
 })
 
 // ---------- setItem ----------
@@ -151,6 +189,15 @@ test("setItem: retired refuses (already retired); a generation without a lineage
       expect(decideSet(gen({ retired: true, deliberate }), session(null), stored, [])).toEqual({ kind: "refuse", reason: "retired", retire: false })
       expect(decideSet(gen({ lineage: null, deliberate }), session(null), stored, [])).toEqual({ kind: "refuse", reason: "no-lineage", retire: false })
     }
+  }
+})
+
+test("setItem (F3): a lineage that isn't a UUID is refused, deliberate or not, whatever is stored", () => {
+  for (const lineage of ["not-a-uuid", ` ${LA}`, `${LA} `, "", `${LA}0`, "eyJhbGciOi.payload.sig"]) {
+    for (const deliberate of [false, true]) {
+      for (const stored of [null, session(LA), session(null)]) expect(decideSet(gen({ lineage, deliberate }), session(null), stored, [])).toEqual({ kind: "refuse", reason: "no-lineage", retire: false })
+    }
+    expect(decideRemove(gen({ lineage }), session(LA))).toEqual({ kind: "refuse", reason: "no-lineage" })
   }
 })
 
@@ -234,4 +281,100 @@ test("boot purge of drafts against E: a user's drafts older than their latest si
   // Nothing in E, or no storage: nothing removed.
   expect(purgeEndedDrafts(storage, [])).toEqual([])
   expect(purgeEndedDrafts(null, list)).toEqual([])
+})
+
+// ---------- the fetch pre-check (A2 iv) ----------
+
+test("wouldRefuseSet and wouldRefuseRemove answer exactly as setItem and removeItem would decide", () => {
+  const states = [gen(), gen({ deliberate: true }), gen({ retired: true }), gen({ lineage: null }), gen({ lineage: "nope" }), gen({ lineage: LB }), gen({ lineage: LB, deliberate: true })]
+  const storeds = [null, session(LA), session(LB), session(null), "{garbled"]
+  for (const state of states) {
+    for (const stored of storeds) {
+      for (const list of [[], ended(LA), ended(LB)]) {
+        const set = decideSet(state, session(null), stored, list)
+        expect(wouldRefuseSet(state, stored, list)).toEqual(set.kind === "refuse" ? set : null)
+      }
+      const remove = decideRemove(state, stored)
+      expect(wouldRefuseRemove(state, stored)).toEqual(remove.kind === "refuse" ? remove : null)
+    }
+  }
+  expect(wouldRefuseSet(gen(), session(LB), [])).toEqual({ kind: "refuse", reason: "other-lineage", retire: true })
+  expect(wouldRefuseSet(gen(), session(LA), ended(LA))).toEqual({ kind: "refuse", reason: "ended", retire: true })
+  expect(wouldRefuseSet(gen(), session(LA), [])).toBeNull()
+  expect(wouldRefuseRemove(gen(), session(LB))).toEqual({ kind: "refuse", reason: "other-lineage" })
+  expect(wouldRefuseRemove(gen(), session(LA))).toBeNull()
+})
+
+// ---------- R3: adopting a session without a lineage ----------
+
+test("adoptLegacy stamps a valid session without a lineage with a fresh lineage, keeping every other field", () => {
+  const storage = memoryStorage({ [KEY]: session(null) })
+  const result = adoptLegacy(storage, KEY, [], { lineage: () => LC })
+  expect(result).toEqual({ kind: "stamped", lineage: LC })
+  const stored = JSON.parse(storage.getItem(KEY)!)
+  expect(stored[LINEAGE_FIELD]).toBe(LC)
+  expect(stored.refresh_token).toBe("refresh-token-value")
+  expect(stored.access_token).toBe("access-token-value")
+  // With the default, the lineage is a fresh UUID.
+  const other = memoryStorage({ [KEY]: session(null) })
+  const fresh = adoptLegacy(other, KEY, [])
+  expect(fresh.kind).toBe("stamped")
+  expect(readStored(other.getItem(KEY))!.lineage).toBe((fresh as { lineage: string }).lineage)
+})
+
+test("adoptLegacy adopts an existing live lineage as it is, refuses an ended one, and writes nothing in either case", () => {
+  for (const [stored, list, expected] of [[session(LA), [], { kind: "existing", lineage: LA }], [session(LA), ended(LA), { kind: "ended", lineage: LA }], [session(LA.toUpperCase()), [], { kind: "existing", lineage: LA }]] as const) {
+    const storage = memoryStorage({ [KEY]: stored })
+    let writes = 0
+    const counting = { getItem: storage.getItem, setItem: (k: string, v: string) => { writes++; storage.setItem(k, v) } }
+    expect(adoptLegacy(counting, KEY, list, { lineage: () => LC })).toEqual(expected)
+    expect(writes).toBe(0)
+    expect(storage.getItem(KEY)).toBe(stored)
+  }
+})
+
+test("adoptLegacy is a compare-and-set: nothing stored, not a session, another refresh token, a bad lineage or refused storage write nothing", () => {
+  const notSessions = [null, "{garbled", "[]", "null", JSON.stringify({ access_token: "a", user: {} }), JSON.stringify({ access_token: "a", refresh_token: "r" })]
+  for (const stored of notSessions) {
+    const storage = memoryStorage(stored === null ? {} : { [KEY]: stored })
+    expect(adoptLegacy(storage, KEY, [], { lineage: () => LC })).toEqual({ kind: "none" })
+    expect(storage.getItem(KEY)).toBe(stored)
+  }
+  // The caller saw refresh token X earlier; another tab's refresh has since replaced it: no stamp on the value it didn't see.
+  const moved = memoryStorage({ [KEY]: session(null) })
+  expect(adoptLegacy(moved, KEY, [], { expectedRefreshToken: "an-older-refresh-token", lineage: () => LC })).toEqual({ kind: "none" })
+  expect(readStored(moved.getItem(KEY))!.lineage).toBeNull()
+  expect(adoptLegacy(moved, KEY, [], { expectedRefreshToken: "refresh-token-value", lineage: () => LC })).toEqual({ kind: "stamped", lineage: LC })
+  // A lineage source that doesn't give a UUID stamps nothing.
+  const bad = memoryStorage({ [KEY]: session(null) })
+  expect(adoptLegacy(bad, KEY, [], { lineage: () => "not-a-uuid" })).toEqual({ kind: "none" })
+  expect(bad.getItem(KEY)).toBe(session(null))
+  expect(adoptLegacy({ getItem: () => session(null), setItem: () => { throw new Error("QuotaExceededError") } }, KEY, [], { lineage: () => LC })).toEqual({ kind: "none" })
+  expect(adoptLegacy(null, KEY, [])).toEqual({ kind: "none" })
+})
+
+test("adoptLegacy: two tabs adopting at once converge on the stamp written last", () => {
+  // One shared localStorage, seen by each tab through its own (possibly lagging) copy, as Chrome's renderers do.
+  const shared = memoryStorage({ [KEY]: session(null) })
+  const tab = () => {
+    let copy = new Map(shared.entries)
+    return {
+      sync() { copy = new Map(shared.entries) },
+      storage: { getItem: (k: string) => copy.get(k) ?? null, setItem: (k: string, v: string) => { copy.set(k, v); shared.setItem(k, v) } },
+    }
+  }
+  const one = tab(), two = tab()
+  // Both read the legacy session before either write reached the other.
+  const first = adoptLegacy(one.storage, KEY, [], { lineage: () => LA })
+  const second = adoptLegacy(two.storage, KEY, [], { lineage: () => LB })
+  expect(first).toEqual({ kind: "stamped", lineage: LA })
+  expect(second).toEqual({ kind: "stamped", lineage: LB })
+  // The last write wins in the shared store; when each tab next reads it (syncFromStorage), it adopts that lineage.
+  one.sync(); two.sync()
+  const again = [adoptLegacy(one.storage, KEY, [], { lineage: () => LC }), adoptLegacy(two.storage, KEY, [], { lineage: () => LC })]
+  expect(again).toEqual([{ kind: "existing", lineage: LB }, { kind: "existing", lineage: LB }])
+  expect(readStored(shared.getItem(KEY))!.lineage).toBe(LB)
+  // Once stamped, a later adopter never stamps again.
+  const late = memoryStorage({ [KEY]: shared.getItem(KEY)! })
+  expect(adoptLegacy(late, KEY, [], { lineage: () => LC })).toEqual({ kind: "existing", lineage: LB })
 })
