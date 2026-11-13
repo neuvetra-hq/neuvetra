@@ -24,7 +24,7 @@ import { SCOPE3_REPLACING_RECORD_CSV_TEXT, SCOPE3_SUPERSEDED_MEMO_TEXT_R3A } fro
 import { SCOPE3_REPORT_TEXT_V3 } from './scope3-text-v3'
 import { scope3SpendConversionNote } from './scope3-spend-currency'
 import { scope3VisibleReviewFlags } from './scope3-trace'
-import { possibleDuplicateCounted, possibleDuplicatesOverstatedText } from './collection-duplicates'
+import { possibleDuplicateCounted, possibleDuplicatesOverstatedText, wouldRepeatCountedOf, wouldRepeatCountedText } from './collection-duplicates'
 import {
   scope3CanonicalJson, scope3ClosedLines, scope3ConstantSourceOf, scope3ConstantText, scope3ConversionText, scope3FactorSourceOfKey, scope3GasTexts, scope3KgToTonnesExact, scope3LineEvidenceLinked, scope3ReplacingRecordOf, scope3SupersededBy, type Scope3ResultsDocument, type Scope3ResultsLine,
 } from './scope3-trace'
@@ -216,8 +216,10 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
   }
 
   // BF-01c (count mode): counted possible duplicates per category; their figures are in the category subtotal and the total.
-  const countedDuplicates = new Map<number, number>()
-  for (const line of results.records) if (line.outcome === 'calculated' && possibleDuplicateCounted({ reasons: line.plan.reasons, notes: line.plan.notes })) countedDuplicates.set(line.category, (countedDuplicates.get(line.category) ?? 0) + 1)
+  // BF-01e: counted per source record, not per line: a record's derived lines (3A-3D) carry its mark but add no duplicate.
+  const duplicateRecords = new Map<number, Set<string>>()
+  for (const line of results.records) if (line.outcome === 'calculated' && possibleDuplicateCounted({ reasons: line.plan.reasons, notes: line.plan.notes })) duplicateRecords.set(line.category, (duplicateRecords.get(line.category) ?? new Set<string>()).add(line.recordId))
+  const countedDuplicates = new Map([...duplicateRecords].map(([category, ids]) => [category, ids.size]))
   const overstated = (count: number) => count ? [`${possibleDuplicatesOverstatedText(count)}.`] : []
   // 1. Category.
   section('Category', coverage.categories.map(row => {
@@ -238,11 +240,19 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
 
   // 2. Record: the existing columns, then the full trace of each line.
   const lines = results.records
+  // BF-01e (F1 of QA on PR #65): a line that isn't counted but matches a counted record carries the caution, as on screen and
+  // in the Scope 1 and 2 CSV. Only lines with the caution note change; every other line's cell is as before.
+  const cautionText = (row: Scope3ResultsLine): string[] => {
+    const id = wouldRepeatCountedOf(row.plan.notes)
+    if (id === null) return []
+    const other = lines.find(line => line.recordId === id && line.derivedFrom === null) ?? lines.find(line => line.recordId === id)
+    return [wouldRepeatCountedText(id, other ? { sourceId: other.sourceId, locationName: other.locationName, period: labels.period(other.period.start, other.period.endExclusive) } : null)]
+  }
   const closedLines = scope3ClosedLines(lines)  // round 3 (AC-5): a closed 3C/3D combustion line's status says so
   section('Record', (function* () { for (const row of lines) {
     const r = row.result, origin = row.effectiveDataQuality?.activityDataOrigin
     yield ['Record', String(row.category), labels.kind(row.kind), row.locationName ?? '', row.sourceId, row.period.start, scope3LastDayCovered(row.period.endExclusive), row.quantity.value, labels.unit?.(row.quantity.unit) ?? row.quantity.unit,
-      labels.quality?.(row.quality) ?? row.quality, scope3LineStatusText(row, closedLines.has(row)), scope3LineReasonCodes(row).map(labels.reason).join(' '),
+      labels.quality?.(row.quality) ?? row.quality, scope3LineStatusText(row, closedLines.has(row)), [...scope3LineReasonCodes(row).map(labels.reason), ...cautionText(row)].join(' '),
       r?.total?.display ?? '', r?.gwpSetId ?? '', r?.methodVersionId ?? '', row.evidence.map(scope3EvidenceFileText).join('; '),
       row.recordId, row.versionId, String(row.revision), row.derivedFrom ? `${row.derivedFrom.kind} ${row.derivedFrom.recordId}` : '', row.reference, row.estimateBasis ?? '',
       row.methodType ? SCOPE3_METHOD_TYPE_TEXT[row.methodType] : '', origin ? `${SCOPE3_ORIGIN_TEXT[origin.origin] ?? origin.origin} (${origin.setBy === 'user' ? 'set by the company' : origin.setBy === 'method_type' ? 'fixed by the method type' : 'method default'})` : '',
@@ -312,7 +322,7 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
   // 8. Total.
   const total = scope3TotalStatement(coverage.categories)
   // BF-01c: the Total row's label carries the same sentence when its figure includes counted possible duplicates.
-  const totalDuplicates = coverage.knownSourceSubtotal ? coverage.categories.reduce((n, row) => n + (row.subtotal ? countedDuplicates.get(row.category) ?? 0 : 0), 0) : 0
+  const totalDuplicates = coverage.knownSourceSubtotal ? new Set(coverage.categories.flatMap(row => row.subtotal ? [...duplicateRecords.get(row.category) ?? []] : [])).size : 0
   section('Total', [['Total', `Known-source Scope 3 subtotal (${total.label})${totalDuplicates ? `. ${possibleDuplicatesOverstatedText(totalDuplicates)}.` : ''}`, coverage.knownSourceSubtotal?.display ?? '', coverage.knownSourceSubtotal ? scope3KgToTonnesExact(coverage.knownSourceSubtotal.display) : '',
     total.includes.join('; '), total.excludes.map(item => `${item.category} (${(SCOPE3_REPORT_TEXT_V3.status[item.status] ?? SCOPE3_STATUS_TEXT[item.status]).toLowerCase()})`).join('; '), total.label]])
 

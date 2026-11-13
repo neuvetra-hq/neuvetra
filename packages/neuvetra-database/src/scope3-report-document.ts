@@ -297,12 +297,13 @@ export function scope3ReportReadinessLines(openIssues: readonly Scope3ReportOpen
  * from its own results: lines the calculation returned for review, and counted lines that may repeat another record. The
  * other open issues keep their words, as do `scope3ReportReadinessLines` (approval lines) and every stored version.
  */
-export function scope3ReportFrozenReadinessLines(openIssues: readonly Scope3ReportOpenIssue[], lines: ReadonlyArray<Pick<Scope3ResultsLine, 'category' | 'result' | 'plan' | 'outcome'>>): string[] {
+export function scope3ReportFrozenReadinessLines(openIssues: readonly Scope3ReportOpenIssue[], lines: ReadonlyArray<Pick<Scope3ResultsLine, 'category' | 'result' | 'plan' | 'outcome' | 'recordId'>>): string[] {
   if (openIssues.length === 0) return scope3ReportReadinessLines(openIssues)
   const why = (category: number) => {
     const open = lines.filter(line => line.category === category && line.plan.status !== 'withdrawn' && line.plan.status !== 'excluded' && line.outcome !== 'outside_period')
     const review = open.filter(line => line.result?.status === 'review_required').length
-    const duplicates = open.filter(line => line.outcome === 'calculated' && possibleDuplicateCounted({ reasons: line.plan.reasons ?? [], notes: line.plan.notes ?? [] })).length
+    // BF-01e: records, not lines (a record's derived lines add no duplicate).
+    const duplicates = new Set(open.filter(line => line.outcome === 'calculated' && possibleDuplicateCounted({ reasons: line.plan.reasons ?? [], notes: line.plan.notes ?? [] })).map(line => line.recordId)).size
     return SCOPE3_READINESS_WHY_TEXT.needsReview(review, duplicates)
   }
   return [SCOPE3_REPORT_APPROVAL_TEXT.openIssues(openIssues.length), ...openIssues.map(issue => SCOPE3_REPORT_APPROVAL_TEXT.issue(issue.category, issue.code === 'needs_review' ? why(issue.category) : SCOPE3_READINESS_TEXT[issue.code]))]
