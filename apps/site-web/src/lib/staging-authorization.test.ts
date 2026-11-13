@@ -30,6 +30,8 @@ function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;
  const slots:any[]=[],effects:Array<{deps?:unknown[];cleanup?:void|(()=>void)}>=[],pendingEffects:Array<()=>void>=[],listeners=new Map<string,()=>void>(),requests:Array<{token:string;signal:AbortSignal}>=[]
  let cursor=0,tree:Node,authCallback:((_event:string,s:any)=>void)|null=null,verification:(token:string)=>Promise<Response>=async()=>Response.json(access()),unsubscribed=false,stopped=false
  const otp:any[]=[],focused:string[]=[]
+ // WO-14c: what the component gave createAuthSessions, and how often it asked it to re-read the stored session.
+ let sessionsOptions:any=null;const syncs={count:0}
  const Workspace=()=>null
  const h=(type:unknown,props:Record<string,any>|null,...children:any[]):Node=>({type,props:props??{},children})
  const client={auth:{onAuthStateChange(callback:typeof authCallback){authCallback=callback;return {data:{subscription:{unsubscribe(){unsubscribed=true}}}}},getSession:async()=>({data:{session:initialSession}}),signOut:async()=>({error:null}),signInWithPassword:async()=>({error:null}),signInWithOtp:async(args:any)=>{otp.push(args);return {error:null}},stopAutoRefresh(){stopped=true}}}
@@ -43,7 +45,17 @@ function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;
   localStorage:{getItem:(k:string)=>storage.get(k)??null,setItem:(k:string,v:string)=>{storage.set(k,v)},removeItem:(k:string)=>{storage.delete(k)}}}
  const useEffect=(effect:()=>void|(()=>void),deps?:unknown[])=>{const i=cursor++,prev=effects[i];if(!prev||!deps||!prev.deps||deps.some((d,k)=>!Object.is(d,prev.deps![k])))pendingEffects.push(()=>{if(prev&&typeof prev.cleanup==="function")prev.cleanup();effects[i]={deps,cleanup:effect()}})}
  const names={useEffect,useRef:(value:unknown)=>{const i=cursor++;return slots[i]??(slots[i]={current:value})},useState:(value:unknown)=>{const i=cursor++;if(!(i in slots))slots[i]=value;return [slots[i],(next:any)=>{slots[i]=typeof next==="function"?next(slots[i]):next}]},
-  createClient:()=>client,StagingWorkspace:Workspace,decodeStagingAccess,decodeStagingConfig,
+  // WO-14c: the component takes its sessions from createAuthSessions (tested against the real auth-js in
+  // auth-sessions.test.ts). Here it is a thin stand-in over the same fake client: boot reports the session held at load,
+  // an emitted auth event reports its session, and sign-in, the link and sign-out go to the fake client as before.
+  createAuthSessions:(opts:any)=>{
+   sessionsOptions=opts
+   client.auth.onAuthStateChange((_event:string,s:any)=>opts.onSession(s))
+   return {boot:async()=>{const result=await client.auth.getSession();opts.onSession(result.data.session)},sync(){syncs.count++},
+    signIn:async(email:string,password:string)=>{const {error}=await client.auth.signInWithPassword({email,password});return error?"failed":"signed-in"},
+    sendSignInLink:(email:string,emailRedirectTo:string)=>client.auth.signInWithOtp({email,options:{shouldCreateUser:false,emailRedirectTo}}),
+    signOut:()=>client.auth.signOut({scope:"local"}),dispose(){unsubscribed=true;stopped=true}}
+  },StagingWorkspace:Workspace,decodeStagingAccess,decodeStagingConfig,
   // Retries are scheduled on a fake clock the test advances; jitter is fixed at its midpoint (×1.0).
   createStagingAuthorization:(deps:any)=>createStagingAuthorization({...deps,random:()=>0.5,now:()=>clock.fixed??(clock.t+=10_000),schedule:(run:()=>void,ms:number)=>{const item={run,ms,cancelled:false};scheduled.push(item);return ()=>{item.cancelled=true}}}),
   // The session check's 15 s limit runs in 5 ms here.
@@ -65,7 +77,9 @@ function harness(options:{hash?:string;storage?:Map<string,string>;initial?:any;
  const runEffects=()=>{while(pendingEffects.length)pendingEffects.shift()!()}
  async function flush(){for(let i=0;i<20;i++){await Promise.resolve();render();runEffects()}}
  render();runEffects()
- return {clock,scheduled,flush,render,workspace,message,heading,text,nodes,requests,listeners,location,storage,otp,focused,emit:(s:any,event="SIGNED_IN")=>authCallback!(event,s),setVerification(fn:typeof verification){verification=fn},
+ return {clock,scheduled,flush,render,workspace,message,heading,text,nodes,requests,listeners,location,storage,otp,focused,emit:(s:any,event="SIGNED_IN")=>authCallback!(event,s),
+  // WO-14c: auth-sessions adopted another tab's new session (onAdopt, then the session), as its own tests show it does.
+  adopt:(s:any)=>{sessionsOptions.onAdopt?.();sessionsOptions.onSession(s)},syncs,setVerification(fn:typeof verification){verification=fn},
   button:(label:string)=>nodes().find(n=>n.type==="button"&&text(n).includes(label)),
   // WO-08: with the workspace open, its top bar and Menu sheet call the account's onSignOut (this component's own signOut).
   clickSignOut:()=>{const ws=nodes().find(n=>n.type===Workspace);if(ws)return ws.props.account.onSignOut();return nodes().find(n=>n.type==="button"&&n.children[0]==="Sign out")!.props.onClick()},cleanup(){for(const e of effects)if(e&&typeof e.cleanup==="function")e.cleanup()},closed:()=>unsubscribed&&stopped}
@@ -524,4 +538,39 @@ test("WO-05a QA follow-up 1: a stale session at load that fails its check never 
  expect(g.workspace()).toBeDefined();expect(g.location.hash).toBe("#/activity");g.cleanup()
  // The load-time session that passes keeps the record address (a refresh).
  const ok=harness({hash:`#/activity/${record}`});await ok.flush();expect(ok.location.hash).toBe(`#/activity/${record}`);ok.cleanup()
+})
+
+// ---------------------------------------------------------------------------------------------------------------------
+// WO-14c (QA review of PR #62): the component's wiring of auth-sessions. Adoption opens a signed-out tab (difference 1)
+// and clears what was typed into its sign-in form (D12); a storage event for the session key re-reads the stored session.
+
+test("difference 1: after a deliberate sign-out, a session reported again stays closed, but another tab's adopted sign-in opens it", async () => {
+ const h = harness(); await h.flush(); expect(h.workspace()).toBeDefined()
+ await h.clickSignOut(); await h.flush(); expect(h.workspace()).toBeUndefined()
+ // A plain report (an event, the same or another session) doesn't lift the sign-out gate, as on main.
+ h.emit(session(other, "b-token")); await h.flush(); expect(h.workspace()).toBeUndefined()
+ // An adoption (onAdopt, then the session) does.
+ h.setVerification(async () => Response.json(access(other)))
+ h.adopt(session(other, "b-token")); await h.flush()
+ expect(h.workspace()).toBeDefined(); expect(h.workspace()!.props.staging.actor.userId).toBe(other); h.cleanup()
+})
+
+test("D12: an adoption clears the email and password typed into this tab's sign-in form", async () => {
+ const h = harness({ initial: null }); await h.flush()
+ const landing = () => h.nodes().find(n => typeof n.type === "function" && "onEmail" in n.props)!
+ landing().props.onEmail("someone@synthetic.invalid"); landing().props.onPassword("half-typ"); h.render()
+ expect(landing().props.email).toBe("someone@synthetic.invalid"); expect(landing().props.password).toBe("half-typ")
+ h.adopt(session(owner, "adopted-token")); await h.flush(); expect(h.workspace()).toBeDefined()
+ await h.clickSignOut(); await h.flush()
+ expect(landing().props.email).toBe(""); expect(landing().props.password).toBe(""); h.cleanup()
+})
+
+test("a storage event for the session key (or a cleared storage) makes the page re-read the stored session; other keys don't", async () => {
+ const h = harness(); await h.flush()
+ const onStorage = h.listeners.get("storage")!
+ const before = h.syncs.count
+ onStorage({ key: "neuvetra:m63:abcdefghijklmnopqrst:auth", newValue: null } as any); expect(h.syncs.count).toBe(before + 1)
+ onStorage({ key: null, newValue: null } as any); expect(h.syncs.count).toBe(before + 2)
+ onStorage({ key: "nv:something-else", newValue: "x" } as any); expect(h.syncs.count).toBe(before + 2)
+ h.cleanup()
 })

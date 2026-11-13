@@ -12,7 +12,7 @@
  */
 import { afterAll, beforeAll, describe, expect, test } from "bun:test"
 import type { Browser, Page } from "playwright-core"
-import { addressesSeen, closeJourney, focusReport, horizontalOverflow, launchBrowser, openJourney, pageHeading, type Journey, type JourneyOptions } from "./harness/browser"
+import { addressesSeen, AUTH_STORAGE_KEY, closeJourney, focusReport, horizontalOverflow, launchBrowser, openJourney, pageHeading, unhandledRejections, type Journey, type JourneyOptions } from "./harness/browser"
 import { COMPANIES, RECORDS } from "./harness/seed"
 import { fixtureAssessment } from "../../../packages/neuvetra-database/src/scope3-payload-fixtures"
 import { startStack, type Stack } from "./harness/stack"
@@ -54,7 +54,10 @@ const MEMBER_READING_CONTROLS = [
 let stack: Stack
 let browser: Browser
 
-/** One journey: its own browser context, artifacts kept on failure, and no uncaught page error allowed. */
+/**
+ * One journey: its own browser context, artifacts kept on failure, and no uncaught page error and no unhandled promise
+ * rejection allowed in any of its pages (WO-14c, invariant I11).
+ */
 function journey(name: string, options: JourneyOptions, body: (journey: Journey) => Promise<void>, timeout = 45_000) {
   test(name, async () => {
     const opened = await openJourney(browser, stack, options)
@@ -62,6 +65,7 @@ function journey(name: string, options: JourneyOptions, body: (journey: Journey)
     try {
       await body(opened)
       expect(opened.errors).toEqual([])
+      expect(await unhandledRejections(opened)).toEqual([])
       failed = false
     } finally { await closeJourney(opened, name, failed) }
   }, timeout)
@@ -823,4 +827,176 @@ suite("site-web browser smoke (E2E-01)", () => {
     await correct("E2E: operational control, no reporting period yet", setup => { setup.boundary.approach = "operational_control"; setup.reportingPeriod.start = null; setup.reportingPeriod.endExclusive = null })
     expect(await follow(HQ, "Open company setup (02 Reporting period)")).toEqual({ hash: "#/setup/02", heading: "02 / Reporting period" })
   }, 120_000)
+  // ---------------------------------------------------------------------------------------------------------------------
+  // WO-14c (design step 4): boot and sign-in through auth generations. Sign-out is unchanged (client.auth.signOut).
+
+  /** The stored Supabase session as this page sees it: its user's email, its access token and its lineage (nv_lineage). */
+  function storedSession(page: Page) {
+    return page.evaluate(key => {
+      const value = JSON.parse(localStorage.getItem(key) ?? "null") as { access_token?: string; user?: { email?: string }; nv_lineage?: string } | null
+      return value ? { email: value.user?.email ?? null, token: value.access_token ?? null, lineage: value.nv_lineage ?? null } : null
+    }, AUTH_STORAGE_KEY)
+  }
+  async function signInOn(page: Page, email: string) {
+    const form = page.locator("form", { has: page.locator("input[type=email]") }).first()
+    await form.locator("input[type=email]").fill(email)
+    await form.locator("input[type=password]").fill("synthetic-password")
+    await form.getByRole("button", { name: "Sign in", exact: true }).click()
+  }
+  async function signOutFromTopBar(page: Page) {
+    await page.getByRole("button", { name: "Sign out", exact: true }).first().click()
+    await page.getByRole("heading", { name: "Sign in", exact: true }).waitFor()
+    await page.waitForFunction(() => [...document.querySelectorAll("[role=status]")].some(item => item.textContent === "Signed out on this browser."))
+  }
+
+  // J7 (I8): user B after user A on the same page: no draft, email or record address of A, also after a reload.
+  journey("J7: after user A signs out, user B signing in on the same page sees no draft, email or record address of A, also after a reload", { signedInAs: "owner" }, async opened => {
+    const { page } = opened
+    const leaked = RECORDS.gasHeld
+    await page.goto("/#/activity")
+    await activityListLoaded(page)
+    await openRecordByAddress(page, leaked)
+    await reasonInput(page).fill("E2E J7: A's unsaved reason")
+    await page.waitForFunction(() => Object.keys(sessionStorage).some(key => key.startsWith("nv:draft:v1:")))
+    const before = (await addressesSeen(page)).length
+    await signOutFromTopBar(page)
+    // Sign-out as on main: the stored session and every draft are gone; one logout was sent.
+    expect(await storedSession(page)).toBeNull()
+    expect(await page.evaluate(() => Object.keys(sessionStorage).filter(key => key.startsWith("nv:draft:v1:")))).toEqual([])
+    expect(opened.auth.log.filter(entry => entry.path === "/auth/v1/logout").map(entry => entry.status)).toEqual([204])
+    await signInOn(page, "admin@example.test")
+    await page.locator(".nv-topbar__user").waitFor()
+    await pageHeading(page).waitFor()
+    await page.waitForLoadState("networkidle")
+    const check = async () => {
+      expect(await page.locator(".nv-topbar__user").textContent()).toBe("admin@example.test")
+      const shown = await page.locator("body").innerText()
+      expect(shown).not.toContain("owner@example.test")
+      expect(shown).not.toContain("E2E J7: A's unsaved reason")
+      expect(page.url()).not.toContain(leaked)
+      expect(await page.evaluate(() => JSON.stringify(window.history.state) ?? "")).not.toContain(leaked)
+      expect(await page.evaluate(() => Object.keys(sessionStorage).filter(key => key.startsWith("nv:draft:v1:")))).toEqual([])
+      expect(await page.evaluate(() => JSON.stringify(localStorage))).not.toContain("owner@example.test")
+      expect((await storedSession(page))?.email).toBe("admin@example.test")
+    }
+    await check()
+    expect((await addressesSeen(page)).slice(before).filter(address => address.includes(leaked))).toEqual([])
+    await page.reload()
+    await page.locator(".nv-topbar__user").waitFor()
+    await pageHeading(page).waitFor()
+    await page.waitForLoadState("networkidle")
+    await check()
+  })
+
+  // J8: a session stored before WO-14 (no nv_lineage, as every staging user has on deploy day), near expiry.
+  journey("J8: a session stored before WO-14 opens the workspace, a refresh stores it with a lineage, and sign-out works as before", { signedInAs: "owner", sessionLifeSeconds: 60 }, async opened => {
+    const { page } = opened
+    await page.goto("/#/overview")
+    await headingIs(page, "Synthetic Bayline")
+    // The boot generation refreshed the near-expiry session (auth-js's 90 s margin) and stored it with its lineage.
+    await page.waitForFunction(key => Boolean((JSON.parse(localStorage.getItem(key) ?? "null") as { nv_lineage?: string } | null)?.nv_lineage), AUTH_STORAGE_KEY)
+    const stored = (await storedSession(page))!
+    expect(stored.lineage).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)
+    const refreshes = opened.auth.log.filter(entry => entry.grant === "refresh_token")
+    expect(refreshes.map(entry => entry.status)).toEqual([200])
+    expect(stored.token).toBe([...opened.auth.sessions.values()][0]!.accessTokens.at(-1)!)
+    // The workspace uses the refreshed token.
+    const used = page.waitForRequest(request => request.url().includes("/workspace-api/") && request.headers().authorization === `Bearer ${stored.token}`)
+    await page.goto("/#/activity")
+    await activityListLoaded(page)
+    await used
+    await signOutFromTopBar(page)
+    expect(await storedSession(page)).toBeNull()
+    expect(opened.auth.log.filter(entry => entry.path === "/auth/v1/logout").map(entry => [entry.status, entry.bearer])).toEqual([[204, stored.token]])
+    expect([...opened.auth.sessions.values()][0]!.revoked).toBe(true)
+  })
+
+  // Another tab's sign-in is adopted (standard multi-tab behaviour, now by reading the stored session).
+  journey("two tabs: a sign-in in one tab opens the workspace in the other, which adopts the stored session", {}, async opened => {
+    const one = opened.page
+    await one.goto("/")
+    await one.getByRole("heading", { name: "Sign in", exact: true }).waitFor()
+    const two = await opened.context.newPage()
+    await two.goto("/")
+    await signInOn(two, "owner@example.test")
+    await headingIs(two, "Synthetic Bayline")
+    // Tab one opens the same user's workspace without a reload or a sign-in of its own.
+    await headingIs(one, "Synthetic Bayline")
+    expect(await one.locator(".nv-topbar__user").textContent()).toBe("owner@example.test")
+    expect(opened.auth.log.filter(entry => entry.grant === "password")).toHaveLength(1)
+    const [seenByOne, seenByTwo] = [await storedSession(one), await storedSession(two)]
+    expect(seenByOne).toEqual(seenByTwo)
+    expect(seenByOne!.lineage).toBeTruthy()
+  })
+
+  // A normal refresh near expiry (the 30 s auto-refresh tick) keeps the workspace open on the new token.
+  journey("a refresh near expiry keeps the workspace open: same lineage, new token, the workspace uses it", { signedInAs: "owner", sessionLifeSeconds: 125 }, async opened => {
+    const { page } = opened
+    await page.goto("/#/activity")
+    await activityListLoaded(page)
+    const before = (await storedSession(page))!
+    expect(before.lineage).toBeTruthy()
+    // 125 s is outside auth-js's 90 s margin at load; the tick after about 30 s refreshes it.
+    await page.waitForFunction(([key, old]) => (JSON.parse(localStorage.getItem(key) ?? "null") as { access_token?: string } | null)?.access_token !== old, [AUTH_STORAGE_KEY, before.token] as const, { timeout: 60_000 })
+    const after = (await storedSession(page))!
+    expect(after.lineage).toBe(before.lineage)
+    expect(opened.auth.log.filter(entry => entry.grant === "refresh_token").map(entry => entry.status)).toEqual([200])
+    // Still open (nothing remounted to the session-ended screen), and the next check of the session uses the new token.
+    expect(await page.getByRole("heading", { name: "Your session ended" }).count()).toBe(0)
+    const used = page.waitForRequest(request => request.url().includes("/workspace-api/") && request.headers().authorization === `Bearer ${after.token}`, { timeout: 30_000 })
+    await page.goto("/#/overview")
+    await overviewChecked(page)
+    await used
+    await headingIs(page, "Synthetic Bayline")
+  }, 120_000)
+  // Difference 1 (design §1, decision (d)): a tab where the user signed out opens when another tab signs in later.
+  journey("a signed-out tab opens when another tab signs in later (difference 1), and what was typed in its form is cleared", {}, async opened => {
+    const one = opened.page
+    await one.goto("/")
+    await signInOn(one, "owner@example.test")
+    await headingIs(one, "Synthetic Bayline")
+    await signOutFromTopBar(one)
+    // Someone starts typing in tab one's form, then signs in in another tab instead.
+    const form = one.locator("form", { has: one.locator("input[type=email]") }).first()
+    await form.locator("input[type=email]").fill("typed-in-tab-one@example.test")
+    await form.locator("input[type=password]").fill("typed-pw")
+    const two = await opened.context.newPage()
+    await two.goto("/")
+    await signInOn(two, "admin@example.test")
+    await headingIs(two, "Synthetic Bayline")
+    await one.locator(".nv-topbar__user").waitFor()
+    expect(await one.locator(".nv-topbar__user").textContent()).toBe("admin@example.test")
+    // Signed out in tab one again: its form is empty (the typed email and password didn't come back).
+    await signOutFromTopBar(one)
+    expect(await form.locator("input[type=email]").inputValue()).toBe("")
+    expect(await form.locator("input[type=password]").inputValue()).toBe("")
+  })
+
+  // QA D14: each sign-in made a new auth client, and the old page stayed reachable from it. 20 sign-in/sign-out cycles in
+  // one tab now leave the DOM and the listeners where the first cycle left them (main after 50: 821 nodes, 195 listeners).
+  journey("20 sign-in/sign-out cycles in one tab keep DOM nodes and event listeners near the first cycle's", {}, async opened => {
+    const page = opened.page
+    await page.goto("/")
+    await page.getByRole("heading", { name: "Sign in", exact: true }).waitFor()
+    const cdp = await opened.context.newCDPSession(page)
+    await cdp.send("Performance.enable")
+    const measure = async () => {
+      await cdp.send("HeapProfiler.collectGarbage")
+      const { metrics } = await cdp.send("Performance.getMetrics")
+      const value = (name: string) => metrics.find(metric => metric.name === name)?.value ?? NaN
+      return { nodes: value("Nodes"), listeners: value("JSEventListeners") }
+    }
+    let first = { nodes: 0, listeners: 0 }
+    for (let cycle = 1; cycle <= 20; cycle++) {
+      // Alternate the two company-1 users, so neither comes near the server's per-user request limit.
+      await signInOn(page, cycle % 2 ? "owner@example.test" : "admin@example.test")
+      await page.locator(".nv-topbar__user").waitFor()
+      await pageHeading(page).waitFor()
+      await signOutFromTopBar(page)
+      if (cycle === 1) first = await measure()
+    }
+    const last = await measure()
+    expect(last.nodes).toBeLessThanOrEqual(first.nodes * 1.25)
+    expect(last.listeners).toBeLessThanOrEqual(first.listeners * 1.25)
+  }, 150_000)
 })
