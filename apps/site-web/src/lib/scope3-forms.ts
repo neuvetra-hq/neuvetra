@@ -10,10 +10,10 @@
  * - `scope3ReadinessOptions`: the plan options the results route uses (reporting period, consolidation approach, distance
  *   commuting periods, supersession), so the Activity screen shows the same holds as Results.
  */
-import type { CollectionActivity, CollectionActivityRecord, CollectionContext } from "../../../../packages/neuvetra-database/src/collection-contract"
+import type { CollectionActivity, CollectionActivityRecord, CollectionContext, CollectionEvidenceMetadata } from "../../../../packages/neuvetra-database/src/collection-contract"
 import type { CompanySetupView } from "../../../../packages/neuvetra-database/src/company-setup-contract"
 import {
-  SCOPE3_SPEND_NAICS_SETS, isScope3CollectionKind, planScope3Supersession, scope3DistanceCommutingPeriods, scope3SpendMappingKeyInput, validateScope3Payload,
+  SCOPE3_SPEND_NAICS_SETS, isScope3CollectionKind, planScope3Calculation, planScope3SupersessionClaimants, scope3DistanceCommutingPeriods, scope3SpendMappingKeyInput, validateScope3Payload,
   type Scope3CollectionKind, type Scope3CollectionVersion, type Scope3ConsolidationApproach, type Scope3DataQuality, type Scope3PlanOptions, type Scope3ReportingPeriod,
 } from "../../../../packages/neuvetra-database/src/scope3-collection"
 import { SCOPE3_FORM_TOKEN_TEXT_I08 } from "../../../../packages/neuvetra-database/src/scope3-text"
@@ -254,7 +254,13 @@ const asVersion = (recordId: string, companyId: string, activity: CollectionActi
  * commuting periods, supersession), and the mapping keys already hashed (`scope3SpendLineChoices`). Supersession is keyed
  * by record ID, as the route keys it.
  */
-export function scope3ReadinessOptions(input: { setup: Scope3SetupFacts | undefined; context: CollectionContext; records: readonly CollectionActivityRecord[]; draft?: { recordId: string; activity: CollectionActivity } | null; mappingKeys: ReadonlyMap<string, string> }): Scope3PlanOptions {
+/**
+ * BF-02b (b): the plan options with `replacementHeld`: spend line record ID -> the record that claims it, for a line every
+ * claimant of which the adapter itself holds (so Results holds the line with `replacing_record_not_counted`; display only).
+ * Those lines are not in `supersession`, which keeps, for every other line, the first claimant that can calculate.
+ */
+export type Scope3ReadinessPlanOptions = Scope3PlanOptions & { replacementHeld?: ReadonlyMap<string, string> }
+export function scope3ReadinessOptions(input: { setup: Scope3SetupFacts | undefined; context: CollectionContext; records: readonly CollectionActivityRecord[]; draft?: { recordId: string; activity: CollectionActivity } | null; mappingKeys: ReadonlyMap<string, string>; evidence?: CollectionEvidenceMetadata[] }): Scope3ReadinessPlanOptions {
   const reportingPeriod = input.setup?.reportingPeriod ?? null
   const versions = [
     ...input.records.filter(record => record.id !== input.draft?.recordId && isScope3CollectionKind(record.kind)).map(record => asVersion(record.id, input.context.companyId, record.currentVersion.activity)),
@@ -265,8 +271,19 @@ export function scope3ReadinessOptions(input: { setup: Scope3SetupFacts | undefi
     ...(input.setup ? { consolidationApproach: input.setup.consolidationApproach } : {}),
     ...(input.setup?.locationCountries ? { locationCountries: input.setup.locationCountries } : {}),
     distanceCommutingPeriods: scope3DistanceCommutingPeriods(versions, input.context, { reportingPeriod }),
-    supersession: planScope3Supersession(versions, input.context, { reportingPeriod, sha256: text => input.mappingKeys.get(text) ?? "" }),
+    ...replacements(versions, input.context, input.evidence ?? [], reportingPeriod, text => input.mappingKeys.get(text) ?? ""),
   }
+}
+
+function replacements(versions: Scope3CollectionVersion[], context: CollectionContext, evidence: CollectionEvidenceMetadata[], reportingPeriod: Scope3SetupFacts["reportingPeriod"], sha256: (text: string) => string) {
+  const held = new Set(versions.filter(v => (v.activity.kind === "purchase_supplier" || v.activity.kind === "partner_reported") && planScope3Calculation(v, context, evidence, { reportingPeriod }).action === "hold").map(v => v.recordId))
+  const supersession = new Map<string, string>(), replacementHeld = new Map<string, string>()
+  for (const [line, ids] of planScope3SupersessionClaimants(versions, context, { reportingPeriod, sha256 })) {
+    const counted = ids.find(id => !held.has(id))
+    if (counted !== undefined) supersession.set(line, counted)
+    else replacementHeld.set(line, ids[0]!)
+  }
+  return { supersession, ...(replacementHeld.size ? { replacementHeld } : {}) }
 }
 
 // --- A saved record's Scope 3 details, for the read-only version view ---

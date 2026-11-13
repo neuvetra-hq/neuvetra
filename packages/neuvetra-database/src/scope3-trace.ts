@@ -296,6 +296,14 @@ export function scope3SupersededBy(line: Pick<Scope3ResultsLine, 'plan'>): strin
   const note = line.plan.notes.find(item => item.startsWith('superseded_by:'))
   return note ? note.slice('superseded_by:'.length) : null
 }
+/**
+ * BF-02b: the record that replaces a held spend line (BF-02's note `replacing_record:<id>`, on a line held with
+ * `replacing_record_not_counted` because that record isn't counted), or null.
+ */
+export function scope3ReplacingRecordOf(line: Pick<Scope3ResultsLine, 'plan'>): string | null {
+  const note = line.plan.notes.find(item => item.startsWith('replacing_record:'))
+  return note ? note.slice('replacing_record:'.length) : null
+}
 const ALL_FACTOR_SOURCES: ReadonlyArray<{ id: string; text: string }> = [...SCOPE3_FACTOR_SOURCES, ...SCOPE3_COMPLETION_FACTOR_SOURCES]
 /** A factor source by id (the catalog's two lists), or null. */
 export const scope3FactorSourceById = (id: string) => ALL_FACTOR_SOURCES.find(source => source.id === id) ?? null

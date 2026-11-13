@@ -308,3 +308,24 @@ describe("BF-01: possible duplicate Scope 3 records", () => {
     expect(shown).toContain(line)
   })
 })
+
+// BF-02b (a, QA follow-up 1 of PR #45): a spend line held because the record replacing it isn't counted names that record,
+// and its to-do opens that record (the one the reason tells the user to finish), not the spend line itself.
+describe("BF-02b: a spend line held for its replacing record", () => {
+  const SPEND = "93000000-0000-4000-8000-000000001011", SUPPLIER = "93000000-0000-4000-8000-000000001012"
+  const held = () => {
+    const results = clone(fixture)
+    const line = results.records.find(row => row.recordId === SPEND)! as any
+    Object.assign(line, { outcome: "held", result: null, methodType: null, effectiveDataQuality: null,
+      plan: { action: "hold", status: "input_needed", reasons: ["replacing_record_not_counted"], notes: ["spend_tax_treatment_excludes_sales_tax", `replacing_record:${SUPPLIER}`] } })
+    return results
+  }
+  test("one to-do per replacing record, titled by it, whose action opens it", () => {
+    const item = scope3Todos(held()).find(todo => todo.key.startsWith("replacing:"))!
+    expect(item).toMatchObject({ kind: "line", category: 2, recordId: SUPPLIER, title: "1 spend line waits for Supplier-specific purchases · SUP-7",
+      actions: [{ type: "fix", recordId: SUPPLIER, fields: [], label: "Open Supplier-specific purchases · SUP-7" }] })
+    expect(item.reasons).toEqual([reasonText("replacing_record_not_counted"), "Waiting for Supplier-specific purchases · SUP-7, the record that replaces this spend line: it isn’t counted yet, so this line is held."])
+    // The line itself is not a separate to-do with a Fix that opens the spend line.
+    expect(scope3Todos(held()).some(todo => todo.actions.some(action => action.type === "fix" && action.recordId === SPEND))).toBe(false)
+  })
+})

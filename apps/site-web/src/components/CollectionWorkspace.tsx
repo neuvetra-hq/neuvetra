@@ -8,7 +8,7 @@ import { reasonText, SCOPE3_ACTIVITY_KINDS, unitLabel } from "@/lib/plain-langua
 import { CollectionApiError, downloadCollectionEvidence, listCollectionActivities, listCollectionEvidence, listGridLossLineages, loadCollectionContext, loadCollectionOverview, loadCollectionVersion, lookupCollectionZip, saveCollectionActivity, saveGridLossLineage, uploadCollectionEvidence, type CollectionActivityRecord, type CollectionActivitySaveInput, type CollectionActivityVersion, type CollectionContext, type CollectionEvidenceMetadata, type CollectionZipLookup, type GridLossLineage } from "@/lib/collection-api"
 import { loadCompanySetup } from "@/lib/company-setup-api"
 import { SCOPE3_FORM_KINDS, SCOPE3_FORM_SOURCE_LABELS, scope3BlankPayload, scope3FormGroups, scope3InitialQuantity, scope3Payload, type Scope3SpendLineChoice } from "@/lib/scope3-form-defaults"
-import { scope3DataQualityProblem, scope3PayloadLines, scope3PayloadProblem, scope3ReadinessOptions, scope3SetupFacts, scope3SpendLineChoices, scope3TokenOptions, type Scope3SetupFacts } from "@/lib/scope3-forms"
+import { scope3DataQualityProblem, scope3PayloadLines, scope3PayloadProblem, scope3ReadinessOptions, scope3SetupFacts, scope3SpendLineChoices, scope3TokenOptions, type Scope3ReadinessPlanOptions, type Scope3SetupFacts } from "@/lib/scope3-forms"
 // Round 2 lane E (ENG-13): the record forms, the data-quality editor and the spend import load on first use.
 import { DataQualityEditor, Scope3RecordForm, SpendImport } from "./scope3/lazy-forms"
 import { COPY_TEXT_R2E, egridSubregionLabel, formatTimeR2E, LOCATION_CONTROL_TEXT_R2E, LOCATION_INCLUSION_TEXT_R2E, SAVED_LIST_TEXT_R2E, SCOPE3_TRANSPORT_ANSWER_TEXT_R2E, SCOPE3_TRANSPORT_VEHICLE_TEXT_R2E, SCOPE3_WASTE_MATERIAL_TEXT_R2E, SCOPE3_WASTE_TREATMENT_TEXT_R2E, unitsHintR2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
@@ -29,6 +29,8 @@ import { ACTIVITY_FORM_TEXT_WO10 } from "@/lib/activity-form-text-wo10"
 import { ACTIVITY_READ_ONLY_TEXT, FIELD_NEED_TEXT, SAVE_OUTCOME_TEXT_WO12, type FieldNeed } from "@/lib/wo12-text"
 import { activityFieldFacts, activityFieldNeed, fieldLabel, type FieldNeedFacts } from "@/lib/field-needs-wo12"
 import { RecordHoldNotice } from "./RecordHoldNotice"
+import { RECORD_DUPLICATE_TEXT, RECORD_LIMIT_LINK_TEXT } from "@/lib/bf-followups-text"
+import { draftDuplicateMatches, recordDuplicateState } from "@/lib/record-duplicates-bf01c"
 import { recordHold } from "@/lib/record-holds-wo12b"
 import { activityPresaveProblems, activitySaveProblems, CONTRACT_FIELDS, DECIMAL, prepareActivityForSave, SUPPORTED_UNITS, VOLUMETRIC_GAS_UNITS, type FormProblem } from "@/lib/activity-save-checks"
 import { activityDraftFields, DRAFT_DEBOUNCE_MS, DRAFT_TEXT, draftKey, draftStorage, draftTime, keepDraft, readDraft, removeDraft, removeDraftSoon, writeDraft, type ActivityDraftFields, type DraftBinding, type DraftScope, type StoredDraft } from "@/lib/draft-store"
@@ -329,6 +331,9 @@ export function recordReadiness(activity: CollectionActivity, context: Collectio
     const options: Scope3PlanOptions = scope3 ? { ...scope3.options, supersession: new Map(superseding === undefined ? [] : [[DRAFT_ID, superseding]]) } : {}
     // Scope 3 package 2: Scope 3 records are planned by the Scope 3 adapter, exactly as Results plans them.
     plan = isScope3CollectionKind(activity.kind) ? planScope3Calculation(version as unknown as Scope3CollectionVersion, context, evidence, options) : planCollectionCalculation(version, context, evidence, claims)
+    // BF-02b (b): a spend line whose every replacing record the adapter holds is held by Results (BF-02), never shown as replaced.
+    const heldFor = scope3 ? (scope3.options as Scope3ReadinessPlanOptions).replacementHeld?.get(scope3.recordId) : undefined
+    if (heldFor !== undefined && activity.state === "active" && plan.status !== "excluded") plan = { action: "hold", status: "input_needed", reasons: ["replacing_record_not_counted"], notes: [`replacing_record:${heldFor}`] }
   } catch { return screen }
   const unique = (items: CollectionReadinessFinding[]) => items.filter((item, index) => items.findIndex(other => other.status === item.status && other.reason === item.reason) === index)
   if (plan.action === "hold") {
@@ -455,7 +460,8 @@ function ChoiceOrOther({ label, value, choices, placeholder, otherLabel, describ
 function Tri({ label, need, needNote, value, onChange }: { label: string; need: FieldNeed; needNote?: string; value: boolean | null; onChange: (value: boolean | null) => void }) {
   return <Select need={need} needNote={needNote} label={label} value={value === null ? "unknown" : value ? "yes" : "no"} options={[["unknown", "I don't know yet"], ["yes", "Yes"], ["no", "No"]]} onChange={item => onChange(item === "unknown" ? null : item === "yes")} />
 }
-type SaveProblem = FormProblem
+/** BF-03b (d): `recordsLink` adds a link to the saved activities list (a save refused at the Scope 1 and 2 record cap). */
+type SaveProblem = FormProblem & { recordsLink?: true }
 /**
  * WO-10: move focus to an element by id once it has rendered: a form field is centred (clear of the sticky bars at every
  * width), anything else is brought to the top, below the sticky bars (its scroll margin). Returns whether it was found.
@@ -841,7 +847,8 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     finally { setBusy(false) }
   }
   /** UX-4: the save failed; say so next to Save and at the top. WO-10: in the error summary, linked to the field it names, with focus on the summary. */
-  function failSave(text: string, ...fields: string[]) { setError(true); setMessage(text); setSaveProblem({ text, fields }); setAttempted(true); focusNext.current = "collection-save-problems" }
+  function failSave(text: string, ...fields: string[]) { failSaveWith({ text, fields }) }
+  function failSaveWith(problem: SaveProblem) { setError(true); setMessage(problem.text); setSaveProblem(problem); setAttempted(true); focusNext.current = "collection-save-problems" }
   async function save() {
     if (!workspaceId || !canManage || busy) return
     setSaveProblem(null)
@@ -922,7 +929,9 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
         } else {
           // BF-08: a 422 is a definite refusal: the same request would be refused again, so it is retired, not offered for retry.
           pending.current = null
-          failSave(SAVE_OUTCOME_TEXT_WO12.refused(cause.message, cause.code))
+          // BF-03b (d): at the record cap the fix is to withdraw records, so the summary links to the list that holds them.
+          if (cause.code === "record_limit_reached") failSaveWith({ text: SAVE_OUTCOME_TEXT_WO12.refused(cause.message, cause.code), recordsLink: true })
+          else failSave(SAVE_OUTCOME_TEXT_WO12.refused(cause.message, cause.code))
         }
       } else failSave(`${cause instanceof Error ? cause.message : "Activity could not be saved."} Retry keeps the same save request.`)
       // WO-05b: the input is still unsaved; keep it with whatever request the next save will reuse (none after a conflict).
@@ -1059,8 +1068,8 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   const completionDraft = isScope3CompletionKind(draft.kind)
   const readinessDraft = scope3Draft ? prepareActivityForSave(withCurrentSetupVersion(draft, context), scope3Completion) : draft
   const mappingKeys = new Map(spendLines.map(line => [line.mappingKeyInput, line.mappingKey]))
-  const savedScope3Options = context ? scope3ReadinessOptions({ setup: setupFacts, context, records, draft: null, mappingKeys }) : null
-  const draftScope3Options = context && scope3Draft ? scope3ReadinessOptions({ setup: setupFacts, context, records, draft: { recordId, activity: readinessDraft }, mappingKeys }) : null
+  const savedScope3Options = context ? scope3ReadinessOptions({ setup: setupFacts, context, records, draft: null, mappingKeys, evidence }) : null
+  const draftScope3Options = context && scope3Draft ? scope3ReadinessOptions({ setup: setupFacts, context, records, draft: { recordId, activity: readinessDraft }, mappingKeys, evidence }) : null
   const draftFindings = recordReadiness(readinessDraft, context, evidence, draftClaims, draftScope3Options ? { options: draftScope3Options, recordId } : undefined)
   const scope3Problem = scope3Draft ? scope3PayloadProblem(draft.kind as Scope3CollectionKind, readinessDraft.payload) ?? scope3DataQualityProblem(readinessDraft.payload) : null
   const separatorSuggestion = thousandsSeparatorSuggestion(draft.quantity.originalValue)
@@ -1091,11 +1100,9 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     if (!dirty) { setAttempted(true); setSaveProblem({ text: ACTIVITY_FORM_TEXT_WO10.unchanged }); focusNext.current = "collection-save-problems"; return }
     void save()
   }
-  const duplicateRows = records.filter(row => {
-    if (row.id === selected?.id || row.kind !== draft.kind) return false
-    const other = row.currentVersion.activity as CollectionDraft
-    return other.state !== "withdrawn" && Boolean(draft.sourceId.trim()) && other.sourceId.trim().toLocaleLowerCase() === draft.sourceId.trim().toLocaleLowerCase() && periodsOverlap(other.period, draft.period)
-  })
+  // BF-01c: the form's alert uses the results routes' own rule (possibleDuplicateRecords), so the form, the record view, the
+  // Overview and Results agree. Both records are counted (count mode); the alert asks the person to check before saving.
+  const duplicateRows = draft.state === "withdrawn" || !draft.sourceId.trim() ? [] : draftDuplicateMatches(records, draft as CollectionActivity, recordId)
   const sourceLabel = draft.kind === "natural_gas" ? "Gas account or meter ID"
     : draft.kind === "distillate_no2" ? "Generator or equipment ID"
     : draft.kind === "vehicle" ? "Vehicle or group ID"
@@ -1232,7 +1239,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
           <Field {...anatomy("notes")} multiline label="Notes and unresolved questions" value={draft.notes} onChange={value => edit(next => { next.notes = value })} />
         </div>
         {separatorSuggestion && <div className="collection-suggestion"><p>The quantity includes thousands separators. It remains uncalculated unless you explicitly accept the plain-decimal form.</p><button type="button" onClick={() => edit(next => { next.quantity.originalValue = separatorSuggestion; if (next.kind === "vehicle") next.payload.gallons = separatorSuggestion; if (next.kind === "distillate_no2" && next.payload.consumption.basis === "measured") next.payload.consumption.gallons = separatorSuggestion; if (next.kind === "distillate_no2" && next.payload.consumption.basis !== "measured") next.payload.consumption.purchasedGallons = separatorSuggestion })}>Use {separatorSuggestion}</button></div>}
-        {duplicateRows.length > 0 && <div className="collection-duplicate-warning" role="alert"><strong>Probable duplicate</strong><p>{duplicateRows.length} active record{duplicateRows.length === 1 ? "" : "s"} use this activity type and source ID during an overlapping period. Review the saved record before adding another.</p></div>}
+        {duplicateRows.length > 0 && <div className="collection-duplicate-warning" role="alert"><strong>{RECORD_DUPLICATE_TEXT.formHeading}</strong><p>{RECORD_DUPLICATE_TEXT.formText(duplicateRows.map(row => `${typeName(row.kind)} · ${row.currentVersion.activity.sourceId}`))}</p></div>}
         <ReadinessPanel findings={draftFindings} />
         {scope3Problem && <p className="worksheet-error" role="note">Before saving: {scope3Problem}</p>}
         {completionDraft && <Scope3RecordForm activity={draft} onEdit={edit} disabled={busy || !canManage} env={{ consolidationApproach: setupFacts === undefined ? undefined : setupFacts.consolidationApproach, zipLookup, onZipLookup: zip => void runScope3ZipLookup(zip), spendLines, context, reportingPeriod: setupFacts?.reportingPeriod ?? null, fieldFacts }} />}
@@ -1335,7 +1342,12 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       <button type="button" className="collection-save" disabled={!canManage || offer !== null} aria-disabled={busy || undefined} aria-describedby={summary.length > 0 ? "collection-save-problems" : undefined} onClick={attemptSave}>{selected ? draft.state === "withdrawn" ? "Save withdrawal" : "Save correction" : "Save activity"}</button>
       {summary.length > 0 && <div className="collection-save-problems" id="collection-save-problems" tabIndex={-1} aria-labelledby="collection-save-problems-title">
         <p id="collection-save-problems-title">{attempted ? ACTIVITY_FORM_TEXT_WO10.summaryAfter(summary.length) : ACTIVITY_FORM_TEXT_WO10.summaryBefore(summary.length)}</p>
-        <ul>{summary.map(problem => <li key={problem.text}>{problem.fields?.length ? <a className="nv-link" href={`#${fieldElementId(problem.fields[0]!)}`} onClick={event => { event.preventDefault(); focusElementById(fieldElementId(problem.fields![0]!)) }}>{problem.text}</a> : problem.text}</li>)}</ul>
+        <ul>{summary.map(problem => <li key={problem.text}>{problem.fields?.length ? <a className="nv-link" href={`#${fieldElementId(problem.fields[0]!)}`} onClick={event => { event.preventDefault(); focusElementById(fieldElementId(problem.fields![0]!)) }}>{problem.text}</a> : problem.text}
+          {(problem as SaveProblem).recordsLink && <> <a className="nv-link" id="collection-records-link" href={recordMode ? allActivityHref : "#saved-activities"} onClick={event => {
+            // The record view leaves for the list ("All activity"); on the list page the saved activities card is above the form.
+            if (recordMode) { if (!plainClick(event) || !onAllActivity) return; event.preventDefault(); onAllActivity(); return }
+            event.preventDefault(); const target = document.getElementById("saved-activities"); target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true })
+          }}>{RECORD_LIMIT_LINK_TEXT.link}</a></>}</li>)}</ul>
       </div>}
       {recordMode && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--sm" disabled={busy} onClick={cancelCorrection}>Cancel correction</button></div>}
       {!recordMode && history}
@@ -1350,6 +1362,9 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   // WO-06: the record view.
   if (recordMode) {
     const activity = selected ? selected.currentVersion.activity as CollectionDraft : null
+    // BF-01c: the possible-duplicate state (the results routes' rule; the Overview's "To confirm" group).
+    const duplicateState = selected ? recordDuplicateState(records, selected.id, context) : null
+    const openLinked = (event: ReactMouseEvent<HTMLAnchorElement>, id: string) => { if (!plainClick(event) || !onOpenRecord) return; event.preventDefault(); onOpenRecord(id) }
     const linked = activity ? evidence.filter(file => activity.evidenceIds.includes(file.id)) : []
     return <section className="worksheet collection-workspace collection-record-view" aria-busy={busy} onFocus={keepClearOfStickyBars}>
       <p className="collection-back"><a className="nv-link" id="collection-back-link" href={allActivityHref} onClick={event => { if (!plainClick(event) || !onAllActivity) return; event.preventDefault(); onAllActivity() }}><span aria-hidden="true">← </span>All activity</a></p>
@@ -1370,6 +1385,13 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
         </dl>
         <h3>Readiness</h3>
         {openedItem.readiness.length ? <ReadinessPanel findings={openedItem.readiness} /> : <p>No findings.</p>}
+        {duplicateState && <div className="nv-notice nv-notice--warn collection-record-duplicate" role="note" aria-labelledby="collection-record-duplicate-heading">
+          <div><h3 id="collection-record-duplicate-heading">{RECORD_DUPLICATE_TEXT.heading}</h3>
+            {duplicateState.of && <p>{RECORD_DUPLICATE_TEXT.isDuplicate(duplicateState.of.text)} <a className="nv-link" href={`#/activity/${duplicateState.of.id}`} onClick={event => openLinked(event, duplicateState.of!.id)}>{RECORD_DUPLICATE_TEXT.open(duplicateState.of.name)}</a></p>}
+            {duplicateState.repeatedBy.length > 0 && <><p>{RECORD_DUPLICATE_TEXT.repeatedBy(duplicateState.repeatedBy.length)}</p>
+              <ul>{duplicateState.repeatedBy.map(item => <li key={item.id}>{item.text} <a className="nv-link" href={`#/activity/${item.id}`} onClick={event => openLinked(event, item.id)}>{RECORD_DUPLICATE_TEXT.open(item.name)}</a></li>)}</ul></>}
+            <p>{canManage ? RECORD_DUPLICATE_TEXT.manage : RECORD_DUPLICATE_TEXT.view}</p></div>
+        </div>}
         {canManage && !correcting && !offer && <div className="nv-actions"><button type="button" className="nv-btn nv-btn--primary" id="collection-correct-record" disabled={busy} onClick={correctRecord}>Correct this record</button></div>}
       </div>}
       {selected && correcting && editorCard}
@@ -1392,7 +1414,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       {canManage && <a className="nv-btn nv-btn--sm" href="#collection-record-editor" onClick={event => { event.preventDefault(); const target = document.getElementById("collection-record-editor"); target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true }) }}>{ACTIVITY_LIST_TEXT_R3C.jumpNew}</a>}
     </nav>}
 
-    <div className="worksheet-card" id="saved-activities"><h2>Saved activities</h2>
+    <div className="worksheet-card" id="saved-activities" tabIndex={-1}><h2>Saved activities</h2>
       {loaded && records.length > 0 && <div className="collection-list-filters" role="group" aria-label={ACTIVITY_LIST_TEXT_R3C.filterLabel}>
         <label className="setup-field"><span>{ACTIVITY_LIST_TEXT_R3C.statusLabel}</span><select aria-label={ACTIVITY_LIST_TEXT_R3C.statusLabel} value={listFilter.status} onChange={event => setFilter({ status: event.target.value as typeof listFilter.status })}>{ACTIVITY_LIST_TEXT_R3C.statuses.map(([value, label]) => <option key={value} value={value}>{`${label} (${value === "all" ? listed.length : listed.filter(item => item.status === value).length})`}</option>)}</select></label>
         <label className="setup-field"><span>{ACTIVITY_LIST_TEXT_R3C.kindLabel}</span><select aria-label={ACTIVITY_LIST_TEXT_R3C.kindLabel} value={kindFilter} onChange={event => setFilter({ kind: event.target.value })}><option value="">{ACTIVITY_LIST_TEXT_R3C.allKinds}</option>{presentKinds.map(kind => <option key={kind} value={kind}>{kindName(kind)}</option>)}</select></label>

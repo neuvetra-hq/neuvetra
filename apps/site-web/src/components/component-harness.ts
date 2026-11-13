@@ -42,9 +42,11 @@ async function scope3Defaults(injected: Record<string, unknown>): Promise<Record
   // WO-12b: the record-hold notice and its rule, the assessment form's labels and the texts.
   const [wo12bText, holds, assessmentNeeds, holdNotice] = await Promise.all([import("@/lib/wo12b-text"), import("@/lib/record-holds-wo12b"), import("@/lib/assessment-field-needs-wo12b"), import("./RecordHoldNotice")])
   const viewRoute = await import("@/lib/view-route")
+  // BF-03b, BF-02b and BF-01c: their texts, and the record view's possible-duplicate state.
+  const [bfText, recordDuplicates] = await Promise.all([import("@/lib/bf-followups-text"), import("@/lib/record-duplicates-bf01c")])
   const loadContext = injected.loadCollectionContext as ((...args: unknown[]) => Promise<unknown>) | undefined
   return {
-    ...wo12bText, ...holds, ...assessmentNeeds, ...holdNotice, setupSectionHash: viewRoute.setupSectionHash,
+    ...bfText, ...recordDuplicates, ...wo12bText, ...holds, ...assessmentNeeds, ...holdNotice, setupSectionHash: viewRoute.setupSectionHash,
     ...drafts, ...readiness, ...assessmentTarget, ...wo12Text, ...fieldNeeds, ...saveChecks, duplicateCompanySetupIds: setupContract.duplicateCompanySetupIds, subscribeWrites, subscribeWriteActivity, ...textsR2e, ...textsR2c, ...textsWo10, ...textsR3c, ...spendTarget, ...displayR3d, ...textsR3d, ...collection, CARB_PROPOSED_MANDATORY_CATEGORIES: coverage.CARB_PROPOSED_MANDATORY_CATEGORIES, SCOPE3_ENGINE_CATEGORIES: coverage.SCOPE3_ENGINE_CATEGORIES, SCOPE3_SETUP_CATEGORY_TOKENS: coverage.SCOPE3_SETUP_CATEGORY_TOKENS,
     validateCollectionActivity: contract.validateCollectionActivity, instrumentEvidenceClaims: adapter.instrumentEvidenceClaims, M71_CATEGORIES: m71.M71_CATEGORIES, SCOPE3_ACTIVITY_KINDS: language.SCOPE3_ACTIVITY_KINDS, unitLabel: language.unitLabel, sourceCategoryLabel: language.sourceCategoryLabel,
     Scope3ResultsApiError: results.Scope3ResultsApiError, loadScope3Results: async () => { throw new results.Scope3ResultsApiError("Scope 3 results are not available yet.", 503, "scope3_unavailable") },

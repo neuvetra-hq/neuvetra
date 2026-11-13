@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import { Icon } from "./Icon"
 import { groupDigits, kgToTonnes, kindIcon, kindLabel, periodLabel, QUALITY_LABELS, reasonText, shortUnit } from "@/lib/plain-language"
-import { SCOPE3_ASSESSMENT_REASON_TEXT, SCOPE3_DQ_INDICATOR_TEXT, SCOPE3_DQ_RATING_TEXT, SCOPE3_EXCLUDABLE_NOTE_TEXT, SCOPE3_METHOD_TYPE_TEXT, SCOPE3_ORIGIN_TEXT, SCOPE3_REVIEW_FLAG_TEXT, SCOPE3_SET_BY_TEXT, SCOPE3_STATUS_TEXT, SCOPE3_TRACE_TEXT, scope3ConstantSourceOf, scope3ConstantText, scope3ConversionText, scope3Csv, scope3ExclusionRegister, scope3FactorSourceOfKey, scope3GasTexts, scope3KgToTonnesExact, scope3LineReasonCodes, scope3LineStatusText, scope3StatementLines, scope3SupersededBy, scope3TotalStatement, type Scope3ResultsResponse, type Scope3Row, type Scope3State } from "@/lib/scope3-results-api"
+import { SCOPE3_ASSESSMENT_REASON_TEXT, SCOPE3_DQ_INDICATOR_TEXT, SCOPE3_DQ_RATING_TEXT, SCOPE3_EXCLUDABLE_NOTE_TEXT, SCOPE3_METHOD_TYPE_TEXT, SCOPE3_ORIGIN_TEXT, SCOPE3_REVIEW_FLAG_TEXT, SCOPE3_SET_BY_TEXT, SCOPE3_STATUS_TEXT, SCOPE3_TRACE_TEXT, scope3ConstantSourceOf, scope3ConstantText, scope3ConversionText, scope3Csv, scope3ExclusionRegister, scope3FactorSourceOfKey, scope3GasTexts, scope3KgToTonnesExact, scope3LineReasonCodes, scope3LineStatusText, scope3ReplacingRecordOf, scope3StatementLines, scope3SupersededBy, scope3TotalStatement, type Scope3ResultsResponse, type Scope3Row, type Scope3State } from "@/lib/scope3-results-api"
 import { EVIDENCE_STATUS_TEXT } from "@/lib/results-api"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { Scope3ReportVersions } from "./scope3/lazy-forms"
@@ -11,7 +11,7 @@ import { scope3CategoryAction, scope3DisclosureGroups, scope3FilterRecords, scop
 import { requestRecordFieldFocus } from "@/lib/scope3-fix-target"
 // Round 3 lane C (PR-3): imported spend holds open the spend import's grouped review.
 import { requestSpendImportFocus } from "@/lib/spend-import-target"
-import { SCOPE3_ACTION_TEXT, SCOPE3_DISCLOSURE_GROUP_TEXT, SCOPE3_EMPTY_TEXT, SCOPE3_RECORD_FILTER_TEXT, SCOPE3_SCREENING_CONFLICT_TEXT, SCOPE3_TODO_TEXT, SCOPE3_UNIT_TEXT } from "@/lib/scope3-results-text"
+import { REPLACING_RECORD_TEXT, SCOPE3_ACTION_TEXT, SCOPE3_DISCLOSURE_GROUP_TEXT, SCOPE3_EMPTY_TEXT, SCOPE3_RECORD_FILTER_TEXT, SCOPE3_SCREENING_CONFLICT_TEXT, SCOPE3_TODO_TEXT, SCOPE3_UNIT_TEXT } from "@/lib/scope3-results-text"
 // WO-12: a view-only member views the assessment (read-only), never "Add" or "Edit".
 import { SCREENING_READ_ONLY_TEXT } from "@/lib/wo12-text"
 import { scope3ClosedLines, scope3LineState } from "../../../../packages/neuvetra-database/src/scope3-trace"
@@ -91,11 +91,12 @@ async function downloadScope3CsvZip(results: Scope3ResultsResponse) {
  * conversions, the gases, the GWP set and the input and result SHA-256. The screen folds it; print shows it open.
  */
 function CalculationDetails({ row, records }: { row: Scope3Row; records: readonly Scope3Row[] }) {
-  const r = row.result, superseded = scope3SupersededBy(row), duplicate = scope3PossibleDuplicateText(row, records)
+  const r = row.result, superseded = scope3SupersededBy(row), duplicate = scope3PossibleDuplicateText(row, records), replacing = scope3ReplacingRecordOf(row)
   return <dl className="worksheet-details">
     <dt>Record</dt><dd>{row.recordId} · version {row.versionId} (revision {row.revision}){row.derivedFrom ? ` · ${SCOPE3_TRACE_TEXT.derivedFrom(kindLabel(row.derivedFrom.kind), row.derivedFrom.recordId)}` : ""}</dd>
     <dt>Source reference</dt><dd>{row.reference || "—"}{row.estimateBasis ? ` · estimate basis: ${row.estimateBasis}` : ""}</dd>
     {superseded && <><dt>Superseded</dt><dd>{SCOPE3_TRACE_TEXT.supersededBy(superseded)}</dd></>}
+    {replacing && <><dt>{REPLACING_RECORD_TEXT.heldTerm}</dt><dd>{replacingRecordName(replacing, records)} (record {replacing})</dd></>}
     {duplicate && <><dt>Possible duplicate</dt><dd>{duplicate}</dd></>}
     {row.supersededSpendMemo && <><dt>{SCOPE3_SUPERSEDED_MEMO_TEXT_R3A.heading}</dt><dd>{scope3LineMemoText(row)}</dd></>}
     {row.currencyConversion && <><dt>Currency conversion provenance</dt><dd>{scope3SpendConversionNote(row.currencyConversion)}</dd></>}
@@ -273,20 +274,24 @@ export function Scope3Panel({ state, canManage, onFix, onRetry, reports, onNavig
           // Round 3 lane D (PR-7): a calculated line is never "fixed"; in a screened-out category the screening is resolved
           // (the to-do group offers "Withdraw or correct" and "Change the screening").
           const resolve = attention && (state === "calculated" || state === "partialBoundary")
-          const fix: Scope3TodoAction | null = !attention || resolve ? null : own ?? { type: "fix", recordId: row.derivedFrom?.recordId ?? row.recordId, fields: [], label: SCOPE3_ACTION_TEXT.fix }
+          // BF-02b (a): a spend line held for its replacing record is fixed on that record, which the button names.
+          const replacing = scope3ReplacingRecordOf(row), replacingName = replacing ? replacingRecordName(replacing, results.records) : null
+          const fix: Scope3TodoAction | null = !attention || resolve ? null : replacing && replacingName ? { type: "fix", recordId: replacing, fields: [], label: REPLACING_RECORD_TEXT.todoAction(replacingName) }
+            : own ?? { type: "fix", recordId: row.derivedFrom?.recordId ?? row.recordId, fields: [], label: SCOPE3_ACTION_TEXT.fix }
           return <div className="nv-record-card" key={`${row.recordId}-${row.kind}`}><span className="nv-record-card__icon" aria-hidden="true"><Icon name={kindIcon(row.kind)} /></span><div style={{ minWidth: 0 }}>
             <div className="nv-record-card__title">{kindLabel(row.kind)} · {row.sourceId} · category {row.category}</div>
             <div className="nv-record-card__meta">{row.locationName ?? "Unknown site"} · {periodLabel(row.period.start, row.period.endExclusive)} · {row.quantity.value ? scope3QuantityText(row.quantity.value, row.quantity.unit) : "amount missing"}{row.evidence.length ? ` · ${row.evidence.map(file => EVIDENCE_STATUS_TEXT[file.status]).join(", ")}` : ""}</div>
             {row.methodType && <div className="nv-record-card__meta">{SCOPE3_METHOD_TYPE_TEXT[row.methodType]} · {originText(row)}</div>}
             {/* Audit D14 (I-04): every reason, as print and CSV show them. */}
             {reasons.map(reason => <div key={reason} className="nv-record-card__reason">{reason}</div>)}
+            {replacingName && <div className="nv-record-card__meta">{REPLACING_RECORD_TEXT.held(replacingName)}</div>}
             {/* Round 2 lane E (UX-12): a calculated zero says why on the card (for example a feedstock that is not burned). */}
             {(() => { const zero = scope3KnownZeroLineText(row.result?.total?.display, row.result?.boundary.notes ?? [], reasonText); return zero ? <div className="nv-record-card__reason">{zero}</div> : null })()}
             {partial && <div className="nv-record-card__meta">{partial}</div>}
             <details><summary>{SCOPE3_TRACE_TEXT.heading}</summary><CalculationDetails row={row} records={results.records} /></details>
           </div><div className="nv-record-card__side"><span className={`nv-chip nv-chip--${status.tone}`}>{status.label}</span>
             {row.result?.total && <span className="nv-num" style={{ fontWeight: 600 }} title={SCOPE3_UNIT_TEXT.hoverKg(groupDigits(row.result.total.display))}>{scope3Tonnes(row.result.total.unrounded)} {SCOPE3_UNIT_TEXT.unit}</span>}
-            {fix && <button type="button" className="nv-btn nv-btn--sm" aria-label={`${row.derivedFrom ? SCOPE3_ACTION_TEXT.fixSource(row.sourceId) : canManage ? SCOPE3_ACTION_TEXT.fixAria(row.sourceId) : `${SCOPE3_ACTION_TEXT.view} ${row.sourceId}`}`} onClick={() => act(fix)}>{row.derivedFrom ? "Fix the source record" : canManage ? SCOPE3_ACTION_TEXT.fix : SCOPE3_ACTION_TEXT.view}</button>}
+            {fix && replacingName ? <button type="button" className="nv-btn nv-btn--sm" onClick={() => act(fix)}>{fix.label}</button> : fix && <button type="button" className="nv-btn nv-btn--sm" aria-label={`${row.derivedFrom ? SCOPE3_ACTION_TEXT.fixSource(row.sourceId) : canManage ? SCOPE3_ACTION_TEXT.fixAria(row.sourceId) : `${SCOPE3_ACTION_TEXT.view} ${row.sourceId}`}`} onClick={() => act(fix)}>{row.derivedFrom ? "Fix the source record" : canManage ? SCOPE3_ACTION_TEXT.fix : SCOPE3_ACTION_TEXT.view}</button>}
             {resolve && <button type="button" className="nv-btn nv-btn--sm" aria-label={SCOPE3_CONFLICT_TEXT_R3D.resolveAria(row.sourceId)} onClick={() => act({ type: "todo", category: row.category, label: SCOPE3_CONFLICT_TEXT_R3D.resolve })}>{SCOPE3_CONFLICT_TEXT_R3D.resolve}</button>}
           </div></div> })}
       </div>)}
@@ -298,6 +303,12 @@ export function Scope3Panel({ state, canManage, onFix, onRetry, reports, onNavig
     {/* I-10 (DESIGN 7.4): prepare, open, print, download and approve frozen report versions of these results; round 2: with the readiness gate. */}
     {reports && <Scope3ReportVersions companyId={reports.companyId} actor={reports.actor} results={results} />}
   </div>
+}
+
+/** BF-02b (a): a replacing record by its kind and source ID (its own line in these results), else by its record ID. */
+function replacingRecordName(recordId: string, records: readonly Scope3Row[]): string {
+  const line = records.find(item => item.recordId === recordId && item.derivedFrom === null)
+  return line ? `${kindLabel(line.kind)} · ${line.sourceId}` : REPLACING_RECORD_TEXT.unlisted(recordId)
 }
 
 /**

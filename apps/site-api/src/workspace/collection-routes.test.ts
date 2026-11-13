@@ -53,6 +53,7 @@ function harness(options: { schema?: number } = {}) {
   let failRegister = false
   let hasAccess = true
   let others: any[] = []
+  let listedRecord: any = null // BF-03b: the harness record as findCollectionActivities lists it (null: as saved, active)
   let lineages: any[] = []
   const failures: Record<string, unknown> = {} // BF-08: an error the named database method throws
   let zipLookup: any = { zip: "94105", subregions: ["CAMX"], utilities: [{ subregion: "CAMX", utility: "Pacific Gas and Electric Co", eiaId: "14328", state: "CA", predominantUtility: true }], needsUtilityChoice: false, found: true, source: "EPA Power Profiler zip.csv (eGRID2023)" }
@@ -60,7 +61,7 @@ function harness(options: { schema?: number } = {}) {
   const record = { id: RECORD, companyId: COMPANY, kind: "fugitive", currentVersion: current, history: [{ ...current, activity: undefined }] } as any
   const database: CollectionRouteDatabase = {
     async findCollectionContext(...args) { calls.push({ name: "findContext", args }); if (failures.context) throw failures.context; return hasAccess ? { companyId: COMPANY, setupVersionId: SETUP, setupRevision: 1, locations: [{ id: LOCATION, name: "Office", inclusion: "included", control: "operational_control" }] } : null },
-    async findCollectionActivities(...args) { calls.push({ name: "findActivities", args }); return [record, ...others] },
+    async findCollectionActivities(...args) { calls.push({ name: "findActivities", args }); return [listedRecord ?? record, ...others] },
     async findCollectionActivityVersion(...args) { calls.push({ name: "findVersion", args }); return current },
     async saveCollectionActivity(...args) { calls.push({ name: "save", args }); if (saveError) throw saveError; if (failures.save) throw failures.save; return { record, version: current, replayed: false } },
     async findCollectionEvidence(...args) { calls.push({ name: "findEvidence", args }); return evidence },
@@ -77,7 +78,7 @@ function harness(options: { schema?: number } = {}) {
   }
   const route = createCollectionRoutes({ database, evidenceStorage: storage, origin: ORIGIN, ...(options.schema === undefined ? {} : { schemaVersion: async () => options.schema! }), lookupZip: async zip => { calls.push({ name: "lookupZip", args: [zip] }); return zipLookup }, validateUser: async token => token === "valid" ? { id: ACTOR, email: "fixture@example.test", phone: null, fullName: null } : null })
   const request = (path: string, init: RequestInit = {}) => route(new Request(`https://api.example.test${path}`, { ...init, headers: { origin: ORIGIN, authorization: "Bearer valid", ...(init.headers ?? {}) } }))
-  return { calls, request, failures, setLineages(value: any[]) { lineages = value }, setOthers(value: any[]) { others = value }, setEvidence(value: any[]) { evidence = value }, setDownloadable(value: any) { downloadable = value }, setStored(value: Uint8Array<ArrayBuffer>) { stored = value }, setAccess(value: boolean) { hasAccess = value }, setZipLookup(value: any) { zipLookup = value }, failNextPut() { failPut = true }, failNextRegistration() { failRegister = true }, failSavesWith(code: string) { saveError = { code } } }
+  return { calls, request, failures, setLineages(value: any[]) { lineages = value }, setOthers(value: any[]) { others = value }, setRecord(value: any) { listedRecord = value }, setEvidence(value: any[]) { evidence = value }, setDownloadable(value: any) { downloadable = value }, setStored(value: Uint8Array<ArrayBuffer>) { stored = value }, setAccess(value: boolean) { hasAccess = value }, setZipLookup(value: any) { zipLookup = value }, failNextPut() { failPut = true }, failNextRegistration() { failRegister = true }, failSavesWith(code: string) { saveError = { code } } }
 }
 
 describe("collection routes", () => {
@@ -130,7 +131,21 @@ describe("collection routes", () => {
     }
     // A wrongly typed flag is invalid at every schema.
     expect((await post("00000000-0000-4000-8000-0000000000b3", { ...confirmed, activity: { ...confirmed.activity, payload: { ...confirmed.activity.payload, duplicateConfirmedDistinct: "yes" } } })).status).toBe(422)
-    // 0031's refusal (raised only at 31, mapped at every schema): a reactivation the route check does not see.
+    // BF-03b: at both schemas the route check also refuses a withdrawn record corrected back to active at 400, before any SQL
+    // (0031's 54N31 repeats it under the lock at 31). The same correction is accepted below the cap, and a correction of a
+    // record that is active now (or a withdrawal) is never refused.
+    const withdrawn = { id: RECORD, companyId: COMPANY, kind: "fugitive", currentVersion: { activity: { state: "withdrawn" } }, history: [] }
+    const restore = () => ({ ...fresh(), expectedRevision: 2, expectedVersionId: VERSION, correctionReason: "Reactivated" })
+    h.setRecord(withdrawn); h.setOthers(Array.from({ length: 400 }, (_, i) => gas(i)))
+    const savesBefore = saves()
+    const refusedRestore = await post(RECORD, restore())
+    expect([refusedRestore.status, await refusedRestore.json(), saves() - savesBefore]).toEqual([422, { code: "record_limit_reached", error: "This company already has 400 active Scope 1 and 2 records, the most one draft can calculate. Withdraw records you no longer need, then save again." }, 0])
+    h.setOthers(Array.from({ length: 399 }, (_, i) => gas(i)))
+    expect([(await post(RECORD, restore())).status, saves() - savesBefore]).toEqual([201, 1])
+    h.setRecord(null); h.setOthers(Array.from({ length: 400 }, (_, i) => gas(i)))
+    expect((await post(RECORD, restore())).status).toBe(201)
+    // 0031's refusal (raised only at 31, mapped at every schema): a save that raced past the route check.
+    h.setOthers([])
     h.failSavesWith("54N31")
     const reactivated = await post(RECORD, { ...fresh(), expectedRevision: 2, expectedVersionId: VERSION, correctionReason: "Reactivated" })
     expect([reactivated.status, await reactivated.json()]).toEqual([422, { code: "record_limit_reached", error: "This company already has 400 active Scope 1 and 2 records, the most one draft can calculate. Withdraw records you no longer need, then save again." }])

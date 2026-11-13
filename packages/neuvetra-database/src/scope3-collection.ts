@@ -680,7 +680,9 @@ const comparableName = (name: string) => name.trim().toLowerCase().replace(/\s+/
  * replacing record is counted. After the engine batch (and again if the run's budget makes lines unavailable), the
  * results route keeps a line excluded only when its replacing record was calculated in full (a complete engine total);
  * otherwise it holds the line as `input_needed` with `replacing_record_not_counted` and the note
- * `replacing_record:<recordId>`, so the purchase is never silently missing from every total.
+ * `replacing_record:<recordId>`, so the purchase is never silently missing from every total. BF-02b: when several records
+ * claim the line, it stays excluded (naming that record) whenever any of them is calculated in full
+ * (`planScope3SupersessionClaimants`).
  *
  * `sha256` hashes a mapping-key text to lowercase hex (node:crypto on the server); it is passed in so this module stays
  * browser-safe.
@@ -692,6 +694,15 @@ const comparableName = (name: string) => name.trim().toLowerCase().replace(/\s+/
  */
 export function planScope3Supersession(versions: readonly Scope3CollectionVersion[], context: CollectionContext,
   options: { reportingPeriod?: Scope3ReportingPeriod | null; sha256: (text: string) => string }): Map<string, string> {
+  return new Map([...planScope3SupersessionClaimants(versions, context, options)].map(([line, claimants]) => [line, claimants[0]!]))
+}
+/**
+ * BF-02b (d): every record that claims each superseded spend line, smallest record ID first (the first is the one
+ * `planScope3Supersession` names). The results route keeps a line excluded whenever ANY claimant is calculated in full, and
+ * names that one; it holds the line only when no claimant is counted.
+ */
+export function planScope3SupersessionClaimants(versions: readonly Scope3CollectionVersion[], context: CollectionContext,
+  options: { reportingPeriod?: Scope3ReportingPeriod | null; sha256: (text: string) => string }): Map<string, string[]> {
   const reportingPeriod = usableReportingPeriod(options.reportingPeriod !== undefined ? options.reportingPeriod : context.reportingPeriod)
   if (versions.some(v => v.companyId !== context.companyId)) throw new Error('Collection context belongs to another company.')
   const counts = (v: Scope3CollectionVersion) => v.activity.state === 'active' && !scope3EligibilityHold(v.activity, context, options)
@@ -705,7 +716,7 @@ export function planScope3Supersession(versions: readonly Scope3CollectionVersio
       return [{ version: v, name: comparableName(a.payload.supersedesSpend.supplierName), keys: new Set(a.payload.supersedesSpend.mappingKeys), categories }]
     })
     .sort((x, y) => x.version.recordId < y.version.recordId ? -1 : x.version.recordId > y.version.recordId ? 1 : 0)
-  const out = new Map<string, string>()
+  const out = new Map<string, string[]>()
   if (superseders.length === 0) return out
   const anyKeys = superseders.some(s => s.keys.size > 0)
   for (const v of versions) {
@@ -713,8 +724,8 @@ export function planScope3Supersession(versions: readonly Scope3CollectionVersio
     if (a.kind !== 'purchase_spend' || !superseders.some(s => s.categories.has(a.payload.category)) || !counts(v)) continue
     const name = comparableName(a.payload.supplierName)
     const key = anyKeys ? options.sha256(scope3SpendMappingKeyInput(a.payload)) : null
-    const by = superseders.find(s => s.categories.has(a.payload.category) && sameYear(s.version, v) && ((name !== '' && s.name === name) || (key !== null && s.keys.has(key))))
-    if (by) out.set(v.recordId, by.version.recordId)
+    const by = superseders.filter(s => s.categories.has(a.payload.category) && sameYear(s.version, v) && ((name !== '' && s.name === name) || (key !== null && s.keys.has(key))))
+    if (by.length) out.set(v.recordId, by.map(s => s.version.recordId))
   }
   return out
 }

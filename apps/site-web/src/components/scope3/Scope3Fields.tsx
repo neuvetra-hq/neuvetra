@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { SPEND_REPLACED_STEP_TEXT } from "@/lib/bf-followups-text"
 import { ENGINE_SUBREGIONS } from "../../../../../packages/neuvetra-database/src/collection-engine-input"
 import type { Scope3SupersedesSpend } from "../../../../../packages/neuvetra-database/src/scope3-collection-contract"
 import type { CollectionZipLookup } from "@/lib/collection-api"
@@ -108,7 +109,7 @@ export function SupersedesSpendFields({ kind, value, onChange, lines }: { kind: 
   for (const line of lines) groups.set(line.mappingKey, [...groups.get(line.mappingKey) ?? [], line])
   const names = [...new Set(lines.map(line => line.supplierName).filter(Boolean))].sort().map(name => [name, name] as const)
   return <div className="setup-subcard"><h4>Spend lines this record replaces</h4>
-    <p className="nv-subtle">When this figure covers purchases already recorded by spend, name them so each purchase is counted once. The replaced lines stay listed in Results, marked as replaced.</p>
+    <p className="nv-subtle">When this figure covers purchases already recorded by spend, name them so each purchase is counted once. {SPEND_REPLACED_STEP_TEXT.formHint}</p>
     <CheckField label="This record replaces spend lines already recorded for the same purchases" need={need("supersedes")} checked={value !== null} onChange={checked => onChange(checked ? { supplierName: "", mappingKeys: [] } : null)} />
     {value && <>
       <ChoiceField label="Supplier named on the spend lines" need={need("supersedesSupplier")} value={value.supplierName} choices={names} placeholder="Choose a supplier from the spend lines" otherLabel="Another name" describeLabel="Supplier name as the spend lines give it" maxLength={200}

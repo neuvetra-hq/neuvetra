@@ -1,6 +1,7 @@
 import { groupDigits, kgToTonnes, kindLabel, reasonText } from "./plain-language"
 import { scope3LineReasonCodes, type Scope3ResultsResponse, type Scope3Row } from "./scope3-results-api"
-import { scope3ClosedLines, scope3LineState, type Scope3LineState } from "../../../../packages/neuvetra-database/src/scope3-trace"
+import { scope3ClosedLines, scope3LineState, scope3ReplacingRecordOf, type Scope3LineState } from "../../../../packages/neuvetra-database/src/scope3-trace"
+import { REPLACING_RECORD_TEXT } from "./bf-followups-text"
 import { SCOPE3_DISCLOSURE_TEXT } from "../../../../packages/neuvetra-database/src/scope3-text"
 import { COPY_TEXT_R2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
 import { scope3UpstreamPartialText } from "../../../../packages/neuvetra-database/src/scope3-r3a"
@@ -180,6 +181,7 @@ export function scope3Todos(results: Scope3ResultsResponse): Scope3TodoItem[] {
   const issueOf = (category: number) => [...issues.values()].some(issue => issue.category === category && issue.code !== "assessment_missing")
   // Saved records first, so a derived line held for its Scope 3 source record joins that record's item.
   const lines = [...results.records].sort((a, b) => Number(a.derivedFrom !== null) - Number(b.derivedFrom !== null))
+  const replacingGroups = new Map<string, { category: number; recordId: string; rows: Scope3Row[]; blocking: boolean }>()
   const spendGroups = new Map<string, { category: number; tab: SpendImportTab; reason: string; rows: Scope3Row[]; blocking: boolean; vendors: Set<string> }>()
   for (const row of lines) {
     const state = scope3LineState(row, closed.has(row)), category = categories.get(row.category)
@@ -187,6 +189,16 @@ export function scope3Todos(results: Scope3ResultsResponse): Scope3TodoItem[] {
     const countedDuplicate = scope3CountedDuplicate(row)
     if (!scope3LineNeedsAttention(state, category) && !countedDuplicate) continue
     const codes = scope3LineReasonCodes(row), target = row.derivedFrom?.recordId ?? row.recordId
+    // BF-02b (a): a spend line held because the record replacing it isn't counted is fixed on that record: the lines waiting
+    // for one record are one item, whose action opens that record (the one the reason text says to finish).
+    const replacing = !conflict && state === "inputNeeded" ? scope3ReplacingRecordOf(row) : null
+    if (replacing !== null) {
+      const key = `${row.category}:${replacing}`
+      const group = replacingGroups.get(key) ?? { category: row.category, recordId: replacing, rows: [], blocking: false }
+      group.rows.push(row); group.blocking ||= issueOf(row.category)
+      replacingGroups.set(key, group)
+      continue
+    }
     // Round 3 lane C (PR-3): an imported spend line held for input joins its reason's group (the spend import maps by
     // vendor and account, many lines at once); a screening conflict or a pending line stays its own item.
     const payload = (row.payload ?? {}) as { importId?: unknown; supplierName?: unknown; glAccount?: unknown }
@@ -223,6 +235,12 @@ export function scope3Todos(results: Scope3ResultsResponse): Scope3TodoItem[] {
       ...(countedDuplicate && !scope3LineNeedsAttention(state, category) ? { toConfirm: true } : {}) }
     items.push(item)
     if (!row.derivedFrom) bySource.set(row.recordId, item)
+  }
+  for (const [key, group] of replacingGroups) {
+    const own = results.records.find(line => line.recordId === group.recordId && line.derivedFrom === null)
+    const name = own ? `${kindLabel(own.kind)} · ${own.sourceId}` : REPLACING_RECORD_TEXT.unlisted(group.recordId)
+    items.push({ key: `replacing:${key}`, category: group.category, kind: "line", blocking: group.blocking, recordId: group.recordId, title: REPLACING_RECORD_TEXT.todoTitle(group.rows.length, name),
+      reasons: [reasonText("replacing_record_not_counted"), REPLACING_RECORD_TEXT.held(name)], actions: [{ type: "fix", recordId: group.recordId, fields: [], label: REPLACING_RECORD_TEXT.todoAction(name) }] })
   }
   for (const [key, group] of spendGroups) {
     const usd = group.rows.filter(row => row.quantity.unit === "USD").map(row => row.quantity.value)
