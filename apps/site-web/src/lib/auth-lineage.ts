@@ -209,14 +209,23 @@ export type AdoptResult =
   | { kind: "ended"; lineage: string }
   /** The session had no lineage: it now holds `lineage`, written by this call. */
   | { kind: "stamped"; lineage: string }
+  /**
+   * F-D: the session has no lineage, and its user signed out on this browser after it was issued (or its issue time can't
+   * be read): it is a late write of an ended session (an old-code tab's refresh), not something to adopt. Nothing written.
+   */
+  | { kind: "ended-user"; userId: string }
 
-function sessionTokens(raw: string | null): { refreshToken: string } | null {
+function sessionTokens(raw: string | null): { refreshToken: string; userId: string | null; issuedAt: number | null } | null {
   if (raw === null) return null
   try {
     const value: unknown = JSON.parse(raw)
     if (!value || typeof value !== "object" || Array.isArray(value)) return null
-    const { access_token: access, refresh_token: refresh, expires_at: expires } = value as Record<string, unknown>
-    return typeof access === "string" && access && typeof refresh === "string" && refresh && typeof expires === "number" ? { refreshToken: refresh } : null
+    const { access_token: access, refresh_token: refresh, expires_at: expires, expires_in: expiresIn, user } = value as Record<string, unknown>
+    if (!(typeof access === "string" && access && typeof refresh === "string" && refresh && typeof expires === "number")) return null
+    const id = user && typeof user === "object" ? (user as Record<string, unknown>).id : null
+    // auth-js stores expires_at (seconds) and expires_in (seconds) of the answer that issued the tokens.
+    const issuedAt = Number.isFinite(expires) && typeof expiresIn === "number" && Number.isFinite(expiresIn) && expiresIn > 0 ? (expires - expiresIn) * 1000 : null
+    return { refreshToken: refresh, userId: typeof id === "string" ? id.toLowerCase() : null, issuedAt }
   } catch { return null }
 }
 
@@ -226,6 +235,8 @@ function sessionTokens(raw: string | null): { refreshToken: string } | null {
  * it is still a valid session without a lineage (and, when `expectedRefreshToken` is given, still that refresh token) is
  * it written back stamped with a fresh lineage. A session that already has a lineage is adopted as it is; so two tabs
  * adopting at once converge: the stamp written last wins, and the next read in the other tab adopts that lineage.
+ * F-D (Addendum C): a session without a lineage whose user has an E entry newer than the session's issue time
+ * (`expires_at − expires_in`), or whose issue time can't be read while the user is in E, is refused ("ended-user").
  */
 export function adoptLegacy(storage: Pick<Storage, "getItem" | "setItem"> | null, sessionKey: string, ended: readonly EndedLineage[], options: { expectedRefreshToken?: string; lineage?: () => string } = {}): AdoptResult {
   if (!storage) return { kind: "none" }
@@ -236,6 +247,11 @@ export function adoptLegacy(storage: Pick<Storage, "getItem" | "setItem"> | null
     if (!view || !tokens) return { kind: "none" }
     if (view.lineage) return isEnded(ended, view.lineage) ? { kind: "ended", lineage: view.lineage } : { kind: "existing", lineage: view.lineage }
     if (options.expectedRefreshToken !== undefined && tokens.refreshToken !== options.expectedRefreshToken) return { kind: "none" }
+    // F-D: a user who signed out here after this session was issued (or at an unknown time relative to it) isn't adopted.
+    if (tokens.userId) {
+      const signedOutAt = ended.filter(entry => entry.userId === tokens.userId).reduce((latest, entry) => Math.max(latest, entry.at), -Infinity)
+      if (signedOutAt > -Infinity && (tokens.issuedAt === null || signedOutAt > tokens.issuedAt)) return { kind: "ended-user", userId: tokens.userId }
+    }
     const lineage = (options.lineage ?? newLineage)()
     const stamped = isLineage(lineage) ? stampLineage(raw!, lineage.toLowerCase()) : null
     if (!stamped) return { kind: "none" }
