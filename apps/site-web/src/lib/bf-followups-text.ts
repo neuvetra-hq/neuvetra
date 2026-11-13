@@ -33,6 +33,8 @@ export const SPEND_REPLACED_STEP_TEXT = {
 /** BF-01c: the record view's possible-duplicate state (Overview "To confirm" group; Results wording). */
 export const RECORD_DUPLICATE_TEXT = {
   heading: "To confirm: possible duplicate (both are counted)",
+  /** BF-01e: on a record that isn't counted but matches one that is (completing it would count the activity twice). */
+  cautionHeading: "Possible duplicate of a counted record",
   /** On the record that repeats an earlier one; `of` is possibleDuplicateOfText's sentence. */
   isDuplicate: (of: string) => `${of} Both records are counted in the totals.`,
   /** On the earlier record that later records may repeat. */

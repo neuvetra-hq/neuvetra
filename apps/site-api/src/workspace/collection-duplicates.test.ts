@@ -326,13 +326,13 @@ describe("BF-01c: the Scope 3 CSV and frozen readiness name counted possible dup
     const document = buildScope3ReportDocument({ results: r, reportingYear: 2025, revision: 1, setupVersionId: setup, consolidationApproach: "operational_control", preparedBy: owner, preparedAt: "2026-11-12T00:00:00.000Z", previous: null })
     const stored = validateScope3ReportDocument(JSON.parse(scope3ReportText(document)), company) as Scope3ReportDocument
     const csv = scope3ReportCsv(stored, labels)
-    expect(csv).toContain("# Open issue, category 6: Lines need review: 1 counted line may repeat another record (possible duplicate, counted; confirm or withdraw).")
+    expect(csv).toContain("# Open issue, category 6: Lines need review: 1 counted record may repeat another counted record (possible duplicate, both counted; confirm or withdraw).")
     expect(csv).not.toContain("# Open issue, category 6: Lines need review.")
     expect(scope3ReportApprovalLines({ approval: { approvedBy: owner, approvedAt: "2026-11-12T00:00:00.000Z", acknowledgedOpenIssues: [{ category: 6, code: "needs_review" }], selfApproved: false, selfApprovalConfirmed: false } as never }))
       .toContain("Open issue, category 6: Lines need review.")
     // Without a counted possible duplicate the frozen words stay exactly as before (engine review only), so versions prepared
     // from data without duplicates are byte-identical; with both, both reasons are named.
     expect(SCOPE3_READINESS_WHY_TEXT.needsReview(2, 0)).toBe("Lines need review")
-    expect(SCOPE3_READINESS_WHY_TEXT.needsReview(1, 2)).toBe("Lines need review: 1 line returned for review by the calculation (not counted); 2 counted lines may repeat another record (possible duplicates, counted; confirm or withdraw)")
+    expect(SCOPE3_READINESS_WHY_TEXT.needsReview(1, 2)).toBe("Lines need review: 1 line returned for review by the calculation (not counted); 2 counted records may repeat another counted record (possible duplicates, both counted; confirm or withdraw)")
   }, TIMEOUT)
 })

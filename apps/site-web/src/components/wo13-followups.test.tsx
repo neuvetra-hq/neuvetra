@@ -55,11 +55,14 @@ describe("follow-up 3: a vehicle-group pair with the same period is told apart b
       .toBe("Company vehicles · FLEET-1 (Jan 1 – Dec 31, 2025) and Company vehicles · FLEET-1 (Jan 1 – Jun 30, 2025)")
   })
   test("from saved records: the journey status carries each side's fuel and model year to the Overview's title", () => {
-    const vehicle = (id: string, fuel: string, modelYear: number, saved: string) => ({ id, kind: "vehicle", currentVersion: { id: `${id}-v`, revision: 1, createdAt: saved, activity: { kind: "vehicle", sourceId: "FLEET-1", locationId: "l1", period: { start: "2025-01-01", endExclusive: "2026-01-01" }, quantity: { originalValue: "10", originalUnit: "US_gallon", normalizedValue: "10", normalizedUnit: "US_gallon" }, payload: { vehicleGroupId: "FLEET-1", fuel, vehicleType: `${fuel}_light_duty_truck`, modelYear, gallons: "10", vehicleCount: null, miles: null, fuelEconomy: null }, evidenceIds: [], quality: "actual", state: "active" } }, history: [{ createdAt: saved }] })
-    const status = computeJourneyStatus({ setup: null, context: null, records: [vehicle("v-1", "gasoline", 2018, "2025-03-01T00:00:00Z"), vehicle("v-2", "diesel", 2020, "2025-03-02T00:00:00Z")] as any, evidence: [], canManage: true })
-    for (const row of status.collection.records) row.state = "ready"
+    // BF-01e: a pair is listed only when both records are counted, so the records are complete and the company context known.
+    const context = { companyId: "00000000-0000-4000-8000-000000000001", setupVersionId: "00000000-0000-4000-8000-0000000000aa", setupRevision: 1, boundaryApproach: "operational_control", reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, locations: [{ id: "l1", name: "Depot", inclusion: "included", control: "reporting_company", entityId: null, entity: null, startMode: "period_start", endMode: "period_end" }] } as any
+    const vehicle = (id: string, fuel: string, modelYear: number, saved: string) => ({ id, kind: "vehicle", currentVersion: { id: `${id}-v`, revision: 1, createdAt: saved, activity: { kind: "vehicle", sourceId: "FLEET-1", locationId: "l1", setupVersionId: context.setupVersionId, period: { start: "2025-01-01", endExclusive: "2026-01-01" }, quantity: { originalValue: "10", originalUnit: "US_gallon", normalizedValue: "10", normalizedUnit: "US_gallon" },
+      payload: { vehicleGroupId: "FLEET-1", fuel, vehicleType: fuel === "diesel" ? "diesel_light_duty_truck" : "gasoline_passenger_car", modelYear, gallons: "10", vehicleCount: null, miles: { value: "1000", basis: "odometer" }, fuelEconomy: null }, evidenceIds: [], quality: "actual", state: "active", estimateBasis: null, reference: "", notes: "", withdrawalReason: null } }, history: [{ createdAt: saved }] })
+    const status = computeJourneyStatus({ setup: null, context, records: [vehicle("v-1", "gasoline", 2018, "2025-03-01T00:00:00Z"), vehicle("v-2", "diesel", 2020, "2025-03-02T00:00:00Z")] as any, evidence: [], canManage: true })
     expect(scope12Items(status).find(item => item.group === "duplicate")!.title).toBe("Company vehicles · FLEET-1 (diesel) and Company vehicles · FLEET-1 (gasoline)")
   })
+
 })
 
 describe("follow-up 4: a write's start says so at once, and a failed write ends it", () => {

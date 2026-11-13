@@ -9,7 +9,7 @@ import { recordReadiness, type CollectionReadinessFinding } from "@/components/C
 import { kindLabel, periodLabel, sourceCategoryLabel, type RecordState } from "./plain-language"
 import { TODO_SPEND_TEXT_R3C } from "./scope3-text-r3c"
 import { scope3ReadinessOptions, scope3SetupFacts, scope3SpendLineChoices } from "./scope3-forms"
-import { possibleDuplicateOfText, possibleDuplicateRecords } from "../../../../packages/neuvetra-database/src/collection-duplicates"
+import { possibleDuplicateOfText, possibleDuplicatePairs, wouldRepeatCountedText } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { COVERAGE_TEXT, periodCoverageGaps } from "./period-coverage"
 /** BF-13: the coverage statements, re-exported so every surface that reads coverage reads one wording. */
 export { COVERAGE_TEXT }
@@ -28,6 +28,8 @@ export interface JourneyRecord { id: string; kind: string; label: string; source
   /** WO-04b: the other record of the pair (its kind label and source ID), so the Overview names both records. WO-04c: and
    * its site and period, so a pair with the same name can be told apart. */
   possibleDuplicateOther?: { id: string; label: string; sourceId: string; site?: string; period?: string; fuel?: string; modelYear?: number }
+  /** BF-01e: on a record that isn't counted but matches a counted one: completing it would count the activity twice. */
+  wouldRepeatCounted?: string
   /** WO-04c: the record's own period, in words. */
   period?: string
   /** WO-13: a vehicle group's fuel and model year, which tell apart a possible-duplicate pair with the same period. */
@@ -154,9 +156,13 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
     setup: scope3SetupFacts(input.setup ?? { currentVersion: null }), context: input.context, records: input.records,
     mappingKeys: input.scope3MappingKeys ?? new Map(), evidence: input.evidence,
   }) : undefined
+  // BF-01e: whether the results routes count each record (the readiness panel's plan) and whether it is placed outside every total.
+  const countedById = new Map<string, boolean>(), placedOutside = new Map<string, boolean>()
   const records: JourneyRecord[] = input.records.map(row => {
     const activity = row.currentVersion.activity
-    const findings = recordReadiness(activity, input.context, input.evidence, claims, scope3Options ? { options: scope3Options, recordId: row.id } : undefined)
+    const outcome: { counted?: boolean; placedOutside?: boolean } = {}
+    const findings = recordReadiness(activity, input.context, input.evidence, claims, scope3Options ? { options: scope3Options, recordId: row.id } : undefined, outcome)
+    countedById.set(row.id, outcome.counted === true); placedOutside.set(row.id, outcome.placedOutside === true)
     // BF2: a file still in quarantine review is waiting, not something to fix, so it never makes the record need input
     // (Results counts it as calculated). A-03: its market-based result is held meanwhile, so the record is partial.
     // Pending files are listed separately.
@@ -178,10 +184,16 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
   // WO-04b (BF-01A): Scope 1 and 2 possible duplicates, by the results route's own rule over the same records (Scope 3
   // duplicates come from the Scope 3 results). Withdrawn, excluded and held records keep their precedence, as there.
   const scope12 = input.records.filter(row => SCOPE12_KINDS.has(row.kind))
-  const duplicates = possibleDuplicateRecords(scope12)
+  // BF-01e (CEO ruling, 13 November 2026): a pair is "both counted" only when both records are; a record that isn't counted
+  // but matches a counted one gets the caution instead (completing it would repeat the counted record).
+  const isCounted = (id: string) => countedById.get(id) === true && records.find(row => row.id === id)?.state !== "held_period"
+  const pairs = possibleDuplicatePairs(scope12, isCounted, id => placedOutside.get(id) !== true && !["withdrawn", "excluded", "held_period", "method_pending"].includes(records.find(row => row.id === id)?.state ?? "withdrawn"))
   for (const row of records) {
-    const otherId = duplicates.get(row.id)
-    if (otherId === undefined || row.state === "withdrawn" || row.state === "excluded" || row.state === "held_period") continue
+    const cautionId = pairs.cautions.get(row.id)
+    const caution = cautionId === undefined ? undefined : scope12.find(item => item.id === cautionId)?.currentVersion.activity
+    if (cautionId !== undefined) row.wouldRepeatCounted = wouldRepeatCountedText(cautionId, caution ? { sourceId: caution.sourceId, locationName: input.context?.locations.find(location => location.id === caution.locationId)?.name ?? null, period: periodLabel(caution.period.start, caution.period.endExclusive) } : null)
+    const otherId = pairs.counted.get(row.id)
+    if (otherId === undefined) continue
     const other = scope12.find(item => item.id === otherId)?.currentVersion.activity
     const otherRecord = scope12.find(item => item.id === otherId)
     if (otherRecord) row.possibleDuplicateOther = { id: otherId, label: kindLabel(otherRecord.kind), sourceId: otherRecord.currentVersion.activity.sourceId, site: siteName(otherRecord.currentVersion.activity.locationId), period: periodLabel(otherRecord.currentVersion.activity.period.start, otherRecord.currentVersion.activity.period.endExclusive), ...vehicleFacts(otherRecord.kind, otherRecord.currentVersion.activity.payload) }

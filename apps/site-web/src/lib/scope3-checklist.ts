@@ -1,4 +1,5 @@
-import { groupDigits, kgToTonnes, kindLabel, reasonText } from "./plain-language"
+import { groupDigits, kgToTonnes, kindLabel, periodLabel, reasonText } from "./plain-language"
+import { wouldRepeatCountedOf, wouldRepeatCountedText } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { scope3LineReasonCodes, type Scope3ResultsResponse, type Scope3Row } from "./scope3-results-api"
 import { scope3ClosedLines, scope3LineState, scope3ReplacingRecordOf, type Scope3LineState } from "../../../../packages/neuvetra-database/src/scope3-trace"
 import { REPLACING_RECORD_TEXT } from "./bf-followups-text"
@@ -187,7 +188,9 @@ export function scope3Todos(results: Scope3ResultsResponse): Scope3TodoItem[] {
     const state = scope3LineState(row, closed.has(row)), category = categories.get(row.category)
     const conflict = !!category && SCOPE3_CONFLICT_STATUSES.has(statusOf(category)) && COUNTED_STATES.has(state)
     const countedDuplicate = scope3CountedDuplicate(row)
-    if (!scope3LineNeedsAttention(state, category) && !countedDuplicate) continue
+    // BF-01e: a derived line (3A-3D) carries its source pair's mark but is not a duplicate of its own: its source record is
+    // confirmed where it is listed (Scope 1 and 2), so it adds no "to confirm" item here.
+    if (!scope3LineNeedsAttention(state, category) && !(countedDuplicate && !row.derivedFrom)) continue
     const codes = scope3LineReasonCodes(row), target = row.derivedFrom?.recordId ?? row.recordId
     // BF-02b (a): a spend line held because the record replacing it isn't counted is fixed on that record: the lines waiting
     // for one record are one item, whose action opens that record (the one the reason text says to finish).
@@ -219,7 +222,10 @@ export function scope3Todos(results: Scope3ResultsResponse): Scope3TodoItem[] {
     const merged = source ? bySource.get(source.recordId) : undefined
     // WO-04c: a held line joining a counted possible duplicate's item makes it a real to-do again.
     if (merged) { if (!countedDuplicate) { merged.reasons.push(SCOPE3_TODO_TEXT.alsoHolds([kindLabel(row.kind)])); if (scope3LineNeedsAttention(state, category)) merged.toConfirm = false } continue }
-    const reasons = [...(conflict ? [SCOPE3_TODO_TEXT.conflictLine(row.category)] : []), ...codes.map(reasonText),
+    // BF-01e: a line that isn't counted but matches a counted record says that completing it would repeat that record.
+    const cautionId = wouldRepeatCountedOf(row.plan.notes ?? []), cautionOf = cautionId ? results.records.find(line => line.recordId === cautionId && line.derivedFrom === null) ?? results.records.find(line => line.recordId === cautionId) : undefined
+    const caution = cautionId ? [wouldRepeatCountedText(cautionId, cautionOf ? { sourceId: cautionOf.sourceId, locationName: cautionOf.locationName, period: periodLabel(cautionOf.period.start, cautionOf.period.endExclusive) } : null)] : []
+    const reasons = [...(conflict ? [SCOPE3_TODO_TEXT.conflictLine(row.category)] : []), ...codes.map(reasonText), ...caution,
       ...(state === "methodPending" ? [SCOPE3_TODO_TEXT.pendingLine] : state === "optionalPending" ? [SCOPE3_TODO_TEXT.optionalPendingLine] : []),
       // A derived line held for its source names that record; a pending one (no factor yet) has nothing to fix there.
       ...(row.derivedFrom && state !== "methodPending" && state !== "optionalPending" ? [SCOPE3_TODO_TEXT.derivedFrom(kindLabel(row.derivedFrom.kind), row.sourceId)] : [])]
