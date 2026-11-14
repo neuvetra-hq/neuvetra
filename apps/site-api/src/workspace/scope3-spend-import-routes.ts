@@ -209,10 +209,10 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
       error: SCOPE3_CAPACITY_TEXT.lineBudgetExceeded(lineBudget.max, lineBudget.used, attemptedFileLines),
     })
     // BF-19 (BI-02): every write here is a bulk write (an import, a withdrawal, a currency conversion, a mapping that corrects
-    // its group). A second one on this instance is refused before any SQL, so nothing is read, saved or receipted; the
-    // hold is released in the `finally` below on every path (answer, refusal, thrown error, timeout).
-    const release = request.method === "POST" ? gate.tryAcquire() : null
-    if (request.method === "POST" && release === null) return bulkWriteBusyResponse()
+    // its group). It takes the instance's gate once the caller is authorised for this company (QA follow-up 5 of PR #74: a
+    // non-member still gets 404 and a member 403, never "busy") and before anything is written or receipted; the hold is
+    // released in the `finally` below on every path (answer, refusal, thrown error, timeout).
+    let release: (() => void) | null = null
     try {
       const setup = await deps.database.findCompanySetup(actor.id, companyId)
       if (!setup) return respond(404, NOT_FOUND)
@@ -234,6 +234,8 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
         return respond(200, body)
       }
       if (!setup.canManage) return respond(403, { error: "Forbidden." })
+      release = gate.tryAcquire(companyId)
+      if (release === null) return bulkWriteBusyResponse()
       if (withdrawImportId !== null) {
         // Round 3 (owner decision 7, EN-3): withdraw every active line of one import, in one set-based statement.
         const input = await readScope3JsonBody(request, MAX_MAPPING_BYTES, "Invalid Scope 3 spend import withdrawal JSON.")

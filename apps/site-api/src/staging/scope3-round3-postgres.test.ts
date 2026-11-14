@@ -9,7 +9,7 @@
 // Runs on the disposable loopback fixture hosted.test.ts migrates (verify.yml native step); any loopback port.
 import { expect, test } from "bun:test"
 import { readdirSync, readFileSync, writeFileSync } from "node:fs"
-import { createPostgresConnection, HostedWorkspaceDatabase, provisionStagingRoster, type WorkspaceConnection } from "@neuvetra/database"
+import { createPostgresConnection, HostedWorkspaceDatabase, provisionStagingRoster, STAGING_SCHEMA_VERSION, type WorkspaceConnection } from "@neuvetra/database"
 import { createSyntheticCompanySetup } from "../../../../packages/neuvetra-database/src/company-setup-fixture"
 import { SCOPE3_SETUP_CATEGORY_TOKENS } from "../../../../packages/neuvetra-database/src/scope3-coverage"
 import { SCOPE3_SPEND_IMPORT_READBACK_SQL } from "../../../../packages/neuvetra-database/src/scope3-spend-imports"
@@ -118,12 +118,12 @@ integration("BF-19 natively (J5, K1): concurrent bulk imports are refused at onc
       expect([admitted.length, refused.length]).toEqual([1, importers - 1])
       expect([admitted[0]!.body.saved, admitted[0]!.body.replayed]).toEqual([2000, false])
       for (const d of refused) {
-        expect([d.body, d.retryAfter]).toEqual([{ code: "bulk_write_busy", error: "Another large import or conversion is running. Try again in a moment." }, "10"])
+        expect([d.body, d.retryAfter]).toEqual([{ code: "bulk_write_busy", error: "Another large spend change (an import, currency conversion, mapping or withdrawal) is in progress or next in line. Try again in a moment." }, "10"])
         expect(d.ms).toBeLessThan(BF19_REFUSAL_MS)
       }
       expect(probes[0].status).toBe(200)
       expect(probes[0].ms).toBeLessThan(BF19_READ_MS)
-      expect([probes[1].status, probes[1].body]).toEqual([200, { status: "ready", profile: STAGING_PROFILE, schemaVersion: 31 }])
+      expect([probes[1].status, probes[1].body]).toEqual([200, { status: "ready", profile: STAGING_PROFILE, schemaVersion: STAGING_SCHEMA_VERSION }])
       expect(probes[1].ms).toBeLessThan(BF19_READY_MS)
       expect(probes[2].status).toBe(200)
       // A refused import read and wrote nothing: no import, no line and no receipt for that company ...

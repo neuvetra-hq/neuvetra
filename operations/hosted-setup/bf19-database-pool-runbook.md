@@ -6,17 +6,24 @@ the nearest match and note it for the CTO.
 
 ## What BF-19 changes (PR "BF-19: bulk writes must not starve other companies")
 
-- **One large write at a time per server.** A spend import, a currency conversion, a spend mapping save and "withdraw this
-  import" each hold a database connection for seconds. While one runs, a second one on the same server is refused at
-  once (nothing is read or saved) and the person sees: *"Another large import or conversion is running. Try again in a
-  moment."* Trying again a little later works normally. Everything else (reading, single saves, Results) is unchanged.
+- **One large write at a time per server, taken in turns.** A spend import, a currency conversion, a spend mapping save
+  and "withdraw this import" each hold a database connection for seconds. While one runs, another one on the same server
+  is refused at once (nothing is saved) and the person sees: *"Another large spend change (an import, currency
+  conversion, mapping or withdrawal) is in progress or next in line. Try again in a moment."* Trying again about ten
+  seconds later works: a company that was turned away goes before any company that has already had a turn, so one busy
+  company cannot keep another out. People without the right to make the change still get their usual "not allowed" or
+  "not found" answer. Everything else (reading, single saves, Results) is unchanged.
 - **The number of database connections per server becomes a setting**: `NEUVETRA_STAGING_DB_POOL_SIZE`, a whole number
   from 1 to 8. Without it the server uses 4, as today. Any other value (0, 9, `4.0`, empty) stops the server from starting.
 - **Health check (`/ready`) gets its own extra connection** (1 per server), so it never waits behind large writes.
-- **The health check now proves two safety settings reach the database**: `lock_timeout` 5 s and `statement_timeout`
-  15 s. Every time budget in the app assumes them. If they do not arrive (possible with Supabase's *transaction*
-  pooler, port 6543), the server **refuses to start** and says why (step 5). On Railway that means the deploy fails and
-  **the previous version keeps running**; nothing breaks, but later deploys are blocked until it is sorted out.
+- **Four safety settings on every database session**: `lock_timeout` 5 s, `statement_timeout` 15 s,
+  `idle_in_transaction_session_timeout` 30 s and the UTC time zone. Every time budget in the app assumes them. The app
+  now sets them itself on every new connection and again at the start of every transaction, so they no longer depend on
+  the pooler passing connection options on (Supabase's pooler may not). The health check proves they hold.
+- **Transaction-mode pooling (Supabase port 6543) is not supported.** There, a setting made on a connection does not
+  stay with it. The server detects this at start-up and **refuses to start**, saying why (step 5). On Railway that means
+  the deploy fails and **the previous version keeps running** (Railway's behaviour, not tested here); nothing breaks, but
+  later deploys are blocked until it is sorted out.
 
 Because of that last point, **do step 1 before the CEO merges BF-19**, and tell the CEO the answer.
 
@@ -28,9 +35,9 @@ Because of that last point, **do step 1 before the CEO merges BF-19**, and tell 
 
 | What you see after `@` | Meaning | What to do |
 |---|---|---|
-| `aws-…pooler.supabase.com:5432` | Session pooler | Fine. Continue with step 2. |
-| `db.<project-ref>.supabase.co:5432` (or no port) | Direct connection | Fine for the settings. Continue; in step 3 use the database's own connection limit. |
-| `aws-…pooler.supabase.com:6543` | **Transaction pooler** | **Stop. Tell the CTO before BF-19 is merged.** The settings check will probably fail and the new version will not start. |
+| `aws-…pooler.supabase.com:5432` | Session pooler | Expected fine; step 5 confirms. Continue with step 2. |
+| `db.<project-ref>.supabase.co:5432` (or no port) | Direct connection | Expected fine; step 5 confirms. Continue; in step 2 use the database's own connection limit. |
+| `aws-…pooler.supabase.com:6543` | **Transaction pooler (not supported)** | **Stop. Tell the CTO before BF-19 is merged.** The new version will refuse to start on it. |
 
 ## Step 2: Supabase pool size
 
@@ -75,8 +82,10 @@ Include that when you report R.
 
 1. Wait for the deploy to show **Active** (a few minutes).
 2. Open `https://<staging address>/ready` in a browser. Expected (one line):
-   `{"status":"ready","profile":"neuvetra.private-synthetic-staging.v1","schemaVersion":31,"legacyContainmentVerified":true}`
-   (the schema number is whatever staging is at). Nothing else needs checking here.
+   `{"status":"ready","profile":"neuvetra.private-synthetic-staging.v1","schemaVersion":32,"legacyContainmentVerified":true}`
+   (the schema number is whatever staging is at). It is still "ready" if the line also contains
+   `"storageGuardGrantsMissing":true` and a `"missingStorageGuardGrants"` list: that is the separate Storage report from
+   the 0031 runbook (BF-10); follow that runbook for it. Nothing else needs checking here.
 3. If the deploy **failed**, open the deploy's logs and look for a line starting `{"event":"staging_start_failed"`:
    - `{"event":"staging_start_failed","reason":"database_session_settings_not_applied"}`: the safety settings did not
      reach the database (step 1's transaction pooler, or a pooler setting). **Stop and tell the CTO**, with what step 1
@@ -85,7 +94,9 @@ Include that when you report R.
    - `{"event":"staging_start_failed"}` with no reason, right after you set the variable: the value is not a digit from
      1 to 8. Fix it (or delete the variable) and Railway redeploys.
 4. A running server whose `/ready` page shows `{"status":"unavailable","reason":"database_session_settings_not_applied"}`
-   means the same as the first case: tell the CTO.
+   (and whose logs show `{"event":"database_session_settings_not_applied"}`, at most once a minute) has lost the
+   settings on its health-check connection. People can keep working (every save and read sets the settings for itself),
+   but Railway's health check fails: tell the CTO, and do not restart or redeploy until the CTO says so.
 
 ## Undo
 

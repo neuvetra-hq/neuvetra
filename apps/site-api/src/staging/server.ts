@@ -100,7 +100,16 @@ export interface StagingOverrides {
   storageGuardWarn?: (event: StagingStorageGuardWarning) => void
   /** BF-19: the readiness cache's clock in milliseconds (tests only; default `performance.now`). */
   readinessClock?: () => number
+  /** BF-19: sink for `StagingSessionSettingsWarning`; defaults to one JSON line on stderr. */
+  sessionSettingsWarn?: (event: StagingSessionSettingsWarning) => void
 }
+
+/**
+ * BF-19 (QA follow-up 2 of PR #74): a running instance whose readiness session no longer shows the runtime settings. Logged
+ * at once and then at most once a minute while it lasts; /ready answers 503 with the reason; data routes keep serving,
+ * because every transaction sets the same settings itself (SET LOCAL with its BEGIN, hosted.ts).
+ */
+export interface StagingSessionSettingsWarning { event: "database_session_settings_not_applied" }
 
 /** BF-19: the one readiness failure the owner can act on; /ready and the start-up log name it (nothing else is disclosed). */
 const SESSION_SETTINGS_REASON = "database_session_settings_not_applied"
@@ -272,8 +281,24 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const electricitySourceRoutes=createElectricitySourceRoutes({database,validateUser,origin:config.origin})
   const reportRoutes = createWorksheetReportRoutes({ database, validateUser, origin: config.origin })
   const worksheetRoutes = createWorksheetRoutes({ database, validateUser, origin: config.origin })
+  const sessionSettingsWarn = overrides.sessionSettingsWarn ?? ((event: StagingSessionSettingsWarning) => console.error(JSON.stringify(event)))
+  let sessionSettingsWarnedAt = -Infinity
+  const noteSessionSettings = () => {
+    const now = Date.now()
+    if (now - sessionSettingsWarnedAt < 60_000) return
+    sessionSettingsWarnedAt = now
+    try { sessionSettingsWarn({ event: "database_session_settings_not_applied" }) } catch { /* A log failure never changes the response. */ }
+  }
   const checkDatabaseReadiness = async () => {
-    const receipt = await database.checkReadiness()
+    // BF-19: a settings-only failure carries the receipt of every other check. It refuses start-up and fails /ready, but
+    // the receipt still admits data requests (their transactions carry the settings). Any other failure refuses as before.
+    let receipt: Awaited<ReturnType<StagingDatabase["checkReadiness"]>>, sessionSettingsMissing = false
+    try { receipt = await database.checkReadiness() } catch (error) {
+      const settings = error as { reason?: unknown; receipt?: typeof receipt }
+      if (settings?.reason !== SESSION_SETTINGS_REASON || !settings.receipt) throw error
+      receipt = settings.receipt; sessionSettingsMissing = true
+      noteSessionSettings()
+    }
     // BF-10 (CEO ruling): reported and logged, never a reason to stop serving.
     if (receipt.storageGuardGrantsMissing) noteStorageGuards(receipt.missingStorageGuardGrants)
     const existingProject = config.projectRef === EXISTING_PROJECT_REF
@@ -282,7 +307,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       && receipt.schemaVersion >= STAGING_SCHEMA_BRIDGE_VERSION && receipt.schemaVersion < STAGING_SCHEMA_VERSION
     if (receipt.profile !== STAGING_PROFILE || (!current && !upgrading)) throw new Error("Staging database unavailable.")
     if (existingProject && (!config.reuseExistingProject || receipt.legacyContainmentVerified !== true)) throw new Error("Existing project containment unavailable.")
-    return receipt
+    return sessionSettingsMissing ? { ...receipt, sessionSettingsMissing: true as const } : receipt
   }
   // BF-19 (lead 5): the guard before every workspace request keeps a fully validated success for 5 s and never a failure;
   // /ready always checks afresh (and its answer replaces the kept one). See readiness-cache.ts.
@@ -294,15 +319,17 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
     return receipt
   }
   const served = (schemaVersion: number) => STAGING_SERVED_SCHEMA_VERSIONS.includes(schemaVersion)
+  const sessionSettingsRefusal = () => Object.assign(new Error("Database session settings are not applied."), { reason: SESSION_SETTINGS_REASON })
   const readiness = async () => {
     const receipt = await databaseReadiness(true)
+    if ("sessionSettingsMissing" in receipt) throw sessionSettingsRefusal()
     if (!served(receipt.schemaVersion)) throw new Error("Staging database is upgrading.")
     await checkAssets()
     return receipt
   }
   // The schema-30 image starts and reports ready at exactly 28, 29 and 30 (hosted
   // 0029 is on hold); any other prefix refuses to start.
-  try { await databaseReadiness(true); await checkAssets() } catch (error) { await database.close(); throw Object.assign(new Error("Private staging dependencies are unavailable."), failureReason(error)) }
+  try { if ("sessionSettingsMissing" in await databaseReadiness(true)) throw sessionSettingsRefusal(); await checkAssets() } catch (error) { await database.close(); throw Object.assign(new Error("Private staging dependencies are unavailable."), failureReason(error)) }
 
   const routeName = (pathname: string): StagingLog["route"] => pathname === "/health" ? "health" : pathname === "/ready" ? "ready" : pathname === "/workspace-api/config" ? "config" : pathname === "/workspace-api/session" ? "session" : pathname.startsWith("/workspace-api/workspace") ? "workspace" : pathname === "/" || pathname === "/workspace" || pathname.startsWith("/assets/") ? "asset" : "unknown"
 

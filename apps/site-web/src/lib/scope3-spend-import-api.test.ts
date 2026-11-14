@@ -165,7 +165,7 @@ describe("CSV v2 Mapping section (I-09): amounts per currency, import rows and h
 describe("BF-19: a bulk write refused while another runs", () => {
   const originalFetch = globalThis.fetch
   afterEach(() => { globalThis.fetch = originalFetch })
-  const BUSY = { code: "bulk_write_busy", error: "Another large import or conversion is running. Try again in a moment." }
+  const BUSY = { code: "bulk_write_busy", error: "Another large spend change (an import, currency conversion, mapping or withdrawal) is in progress or next in line. Try again in a moment." }
   const actor = { accessToken: "token", userId: user, role: "owner" as const }
   const calls: Array<{ path: string; method: string }> = []
   const busyServer = () => { calls.length = 0; globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => { calls.push({ path: String(input), method: init?.method ?? "GET" }); return Response.json(BUSY, { status: 503, headers: { "retry-after": "10" } }) }) as typeof fetch }

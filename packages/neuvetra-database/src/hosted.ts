@@ -83,6 +83,26 @@ export interface HostedWorkspaceOptions {
   tlsCaPem?: string
 }
 
+/**
+ * BF-19 (QA follow-ups 1-3 of PR #74): the runtime session settings. They are sent as connect options (as before), and
+ * because a pooler may drop connect options (Supavisor issue 206; PgBouncer `ignore_startup_parameters`), they are also
+ * set (1) with session-level SET on every new connection, before its first use, which holds for the life of a session on
+ * a session pooler or a direct connection, and (2) with SET LOCAL in the same round trip as every BEGIN, so every
+ * transaction (every request's SQL) runs with them whatever the pooler does. PostgreSQL displays them as below.
+ */
+export const STAGING_SESSION_SETTINGS = { lock_timeout: "5s", statement_timeout: "15s", idle_in_transaction_session_timeout: "30s", TimeZone: "UTC" } as const
+const SESSION_SETTINGS_SET = Object.entries(STAGING_SESSION_SETTINGS).map(([name, value]) => `set ${name}='${value}'`).join(";")
+const SESSION_SETTINGS_SQL = `${SESSION_SETTINGS_SET};select pg_backend_pid() pid`
+const BEGIN_SQL = `begin;${Object.entries(STAGING_SESSION_SETTINGS).map(([name, value]) => `set local ${name}='${value}'`).join(";")}`
+const SESSION_PROBE_SQL = `select pg_backend_pid() pid,${Object.keys(STAGING_SESSION_SETTINGS).map(name => `current_setting('${name}') "${name}"`).join(",")}`
+/** BF-19: one session's settings as a plain statement (outside any transaction) sees them, and the session's server process. */
+export interface SessionSettingsProbe { pid: number; preparedPid: number | null; settings: Record<keyof typeof STAGING_SESSION_SETTINGS, string> }
+/** Whether a probe shows every runtime setting, on the same server session that applied them. */
+export function sessionSettingsApplied(probe: SessionSettingsProbe): boolean {
+  return (Object.keys(STAGING_SESSION_SETTINGS) as Array<keyof typeof STAGING_SESSION_SETTINGS>).every(name => probe.settings[name] === STAGING_SESSION_SETTINGS[name])
+    && (probe.preparedPid === null || probe.preparedPid === probe.pid)
+}
+
 /** Low-level driver shared with explicit operator tooling; never migrates. */
 export function createPostgresConnection(connectionString: string, options: { maxConnections?: number; tls?: boolean; tlsCaPem?:string } = {}): WorkspaceConnection {
   const ca = options.tlsCaPem === undefined ? undefined : validateDatabaseCaPem(options.tlsCaPem)
@@ -109,11 +129,21 @@ export function createPostgresConnection(connectionString: string, options: { ma
   let closing = false
   let closePromise: Promise<void> | undefined
   const active = new Set<() => void>()
+  // BF-19: each physical client's server process when its session settings were applied (once, before its first use).
+  const preparedPid = new WeakMap<PoolClient, number>()
 
   async function acquire() {
     if (closing) throw new Error("Database connection is closed.")
     const client = await pool.connect()
     if (closing) { client.release(true); throw new Error("Database connection is closed.") }
+    if (!preparedPid.has(client)) {
+      try {
+        const results = await client.query(SESSION_SETTINGS_SQL) as unknown as QueryResult[]
+        const pid = Number(results[results.length - 1]?.rows[0]?.pid)
+        if (!Array.isArray(results) || !Number.isInteger(pid)) throw new Error("Database session settings could not be applied.")
+        preparedPid.set(client, pid)
+      } catch (error) { client.release(true); throw error }
+    }
     let failed = false, released = false
     let rejectFailure!: (error: unknown) => void
     const failure = new Promise<never>((_, reject) => { rejectFailure = reject })
@@ -126,7 +156,7 @@ export function createPostgresConnection(connectionString: string, options: { ma
     client.on("end", onEnd)
     active.add(onClose)
     return {
-      client, failure,
+      client, failure, preparedPid: preparedPid.get(client)!,
       get failed() { return failed },
       release(destroy: boolean) {
         if (released) return
@@ -147,11 +177,11 @@ export function createPostgresConnection(connectionString: string, options: { ma
     if (Array.isArray(result)) throw new Error("Multiple SQL results require exec().")
     return { rows: result.rows as T[] }
   }
-  async function standalone<T>(operation: (client: PoolClient) => Promise<T>): Promise<T> {
+  async function standalone<T>(operation: (client: PoolClient, preparedPid: number) => Promise<T>): Promise<T> {
     const lease = await acquire()
     let succeeded = false
     try {
-      const result = await Promise.race([operation(lease.client), lease.failure])
+      const result = await Promise.race([operation(lease.client, lease.preparedPid), lease.failure])
       succeeded = true
       return result
     } finally { lease.release(!succeeded) }
@@ -159,6 +189,13 @@ export function createPostgresConnection(connectionString: string, options: { ma
   return {
     query<T>(statement: string, params: unknown[] = []) { return standalone(async client => rows<T>(await query(client, statement, params))) },
     exec(statement: string) { return standalone(async client => { await query(client, statement) }) },
+    /** BF-19: one pooled session's settings, read by a plain statement (no transaction, so no SET LOCAL). */
+    sessionSettings(): Promise<SessionSettingsProbe> {
+      return standalone(async (client, pid) => {
+        const row = (await query(client, SESSION_PROBE_SQL) as QueryResult).rows[0] as Record<string, string | number>
+        return { pid: Number(row.pid), preparedPid: pid, settings: Object.fromEntries(Object.keys(STAGING_SESSION_SETTINGS).map(name => [name, String(row[name])])) as SessionSettingsProbe["settings"] }
+      })
+    },
     async transaction<T>(operation: (tx: WorkspaceSql) => Promise<T>): Promise<T> {
       // Exclusive checkout happens BEFORE BEGIN and ends only after confirmed
       // completion. No transaction statement ever uses pool.query().
@@ -178,7 +215,8 @@ export function createPostgresConnection(connectionString: string, options: { ma
         exec(statement: string) { return dispatch(async () => { await query(lease.client, statement) }) },
       })
       try {
-        await Promise.race([query(lease.client, "BEGIN"), lease.failure])
+        // BF-19: BEGIN and the transaction's own copy of the runtime settings, in one round trip.
+        await Promise.race([query(lease.client, BEGIN_SQL), lease.failure])
         began = true
         const value = await Promise.race([Promise.resolve().then(() => operation(tx)), lease.failure])
         // Revoke before draining already-dispatched SQL. A retained callback may
@@ -251,16 +289,22 @@ function requireSubject(userId: string) {
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId)) throw new Error("Verified authentication subject required.")
 }
 
-/** BF-19: what every runtime session must show (PostgreSQL's display of the connect options in createPostgresConnection). */
-export const STAGING_LOCK_TIMEOUT_SETTING = "5s"
-export const STAGING_STATEMENT_TIMEOUT_SETTING = "15s"
 /**
- * BF-19: readiness found a session without the connect options (`lock_timeout` 5 s, `statement_timeout` 15 s), which a
- * transaction-mode pooler can drop. `reason` is the only detail that leaves the process (/ready, the start-up log).
+ * BF-19: readiness found that the runtime session settings (`STAGING_SESSION_SETTINGS`) do not hold for a pooled session:
+ * a setting is missing, or a plain statement ran on another server session than the one that applied them (a
+ * transaction-mode pooler, which is unsupported). `reason` is the only detail that leaves the process (/ready, the logs).
+ * `receipt` is set when every other readiness check passed (the database itself is ready for transactions, which carry
+ * their own copy of the settings).
  */
 export class StagingSessionSettingsError extends Error {
   readonly reason = "database_session_settings_not_applied" as const
-  constructor() { super("Database session settings (lock_timeout, statement_timeout) are not applied.") }
+  constructor(readonly receipt?: StagingReadinessReceipt) { super("Database session settings (lock_timeout, statement_timeout, idle_in_transaction_session_timeout, TimeZone) are not applied.") }
+}
+/** BF-19: a connection without the hosted driver's probe (test wrappers): one plain statement, no session identity check. */
+async function probeSessionSettings(db: WorkspaceConnection): Promise<SessionSettingsProbe> {
+  if (db.sessionSettings) return db.sessionSettings()
+  const row = (await db.query<Record<string, string | number>>(SESSION_PROBE_SQL)).rows[0] ?? {}
+  return { pid: Number(row.pid), preparedPid: null, settings: Object.fromEntries(Object.keys(STAGING_SESSION_SETTINGS).map(name => [name, String(row[name])])) as SessionSettingsProbe["settings"] }
 }
 
 /** What readiness reports. The two BF-10 fields appear only while a reviewed Storage guard grant is missing. */
@@ -292,7 +336,7 @@ export class HostedWorkspaceDatabase extends WorkspaceDatabase {
     const db = createPostgresConnection(options.connectionString, { maxConnections: options.maxConnections, tlsCaPem:options.tlsCaPem })
     const readiness = createPostgresConnection(options.connectionString, { maxConnections: 1, tlsCaPem:options.tlsCaPem })
     const workspace = new HostedWorkspaceDatabase(db, options.expectedProjectRef, options.reuseExistingProject, readiness)
-    try { await workspace.checkReadiness(); return workspace } catch (error) {
+    try { await workspace.checkReadiness(); await workspace.verifySessionPooling(); return workspace } catch (error) {
       await Promise.all([db.close(), readiness.close()])
       // BF-19: the one cause the owner can act on is named (no value, server message or credential is carried).
       throw Object.assign(new Error("Staging database readiness validation failed."), error instanceof StagingSessionSettingsError ? { reason: error.reason } : {})
@@ -301,6 +345,17 @@ export class HostedWorkspaceDatabase extends WorkspaceDatabase {
 
   override async close() {
     await Promise.all([super.close(), this.readinessDb === this.db ? undefined : this.readinessDb.close()])
+  }
+
+  /**
+   * BF-19, at start-up: a session of the request pool is a different server session from the (idle, still connected)
+   * readiness session, and has the settings too. On a session pooler or a direct connection two open sessions never share
+   * a server process; a transaction-mode pooler hands the idle one's server process to the next client, so they do.
+   */
+  async verifySessionPooling(): Promise<void> {
+    const readiness = await probeSessionSettings(this.readinessDb)
+    const request = await probeSessionSettings(this.db)
+    if (!sessionSettingsApplied(readiness) || !sessionSettingsApplied(request) || (this.readinessDb !== this.db && request.pid === readiness.pid)) throw new StagingSessionSettingsError()
   }
 
   async checkReadiness(): Promise<StagingReadinessReceipt> {
@@ -313,11 +368,10 @@ export class HostedWorkspaceDatabase extends WorkspaceDatabase {
       missingStorageGuardGrants = audit.missingStorageGuardGrants
     }
     const manifest = await (this.migrationManifest ??= readMigrationManifest().catch(error => { this.migrationManifest = undefined; throw error }))
+    // BF-19: the readiness session's own settings, read by a plain statement (a transaction carries its own SET LOCAL copy,
+    // so only this shows whether the session-level settings hold). Every bulk-write and lock budget assumes them.
+    const sessionSettings = await probeSessionSettings(this.readinessDb)
     const schemaVersion = await this.readinessDb.transaction(async tx => {
-      // BF-19: the session options set at connect (lock_timeout 5 s, statement_timeout 15 s) must reach the database. A
-      // transaction-mode pooler can drop them; every bulk-write and lock budget assumes them, so readiness fails instead.
-      const settings = await tx.query<{ lock_timeout: string; statement_timeout: string }>("select current_setting('lock_timeout') lock_timeout,current_setting('statement_timeout') statement_timeout")
-      if (settings.rows[0]?.lock_timeout !== STAGING_LOCK_TIMEOUT_SETTING || settings.rows[0]?.statement_timeout !== STAGING_STATEMENT_TIMEOUT_SETTING) throw new StagingSessionSettingsError()
       const role = await tx.query<{ safe: boolean }>(`select
         current_user='neuvetra_runtime' and session_user='neuvetra_runtime'
         and not r.rolsuper and not r.rolbypassrls and not r.rolcreatedb and not r.rolcreaterole and not r.rolreplication and not r.rolinherit
@@ -335,8 +389,10 @@ export class HostedWorkspaceDatabase extends WorkspaceDatabase {
       const receipts = await tx.query<{ name: string; sha256: string }>("select name,sha256 from neuvetra.schema_migrations order by name")
       return validateHostedSchemaReceipts(receipts.rows, manifest, { expectedProjectRef: this.expectedProjectRef, reuseExistingProject: this.reuseExistingProject })
     })
-    return { profile: STAGING_PROFILE, schemaVersion, ...(this.expectedProjectRef === EXISTING_PROJECT_REF ? {legacyContainmentVerified:true as const} : {}),
+    const receipt: StagingReadinessReceipt = { profile: STAGING_PROFILE, schemaVersion, ...(this.expectedProjectRef === EXISTING_PROJECT_REF ? {legacyContainmentVerified:true as const} : {}),
       ...(missingStorageGuardGrants.length > 0 ? { storageGuardGrantsMissing: true as const, missingStorageGuardGrants } : {}) }
+    if (!sessionSettingsApplied(sessionSettings)) throw new StagingSessionSettingsError(receipt)
+    return receipt
   }
 
   protected override async asUser<T>(userId: string, operation: (tx: WorkspaceSql) => Promise<T>): Promise<T> {

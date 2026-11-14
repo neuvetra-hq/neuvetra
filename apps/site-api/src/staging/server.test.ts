@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, setSystemTime, test } from "bun:test"
-import { DevelopmentWorkspaceDatabase, StagingSessionSettingsError } from "@neuvetra/database"
+import { DevelopmentWorkspaceDatabase, STAGING_SCHEMA_VERSION, StagingSessionSettingsError } from "@neuvetra/database"
 import { createStagingServer, SCOPE3_RESULTS_TIMEOUT_SECONDS, type StagingAddressWarning, type StagingDatabase, type StagingLog } from "./server"
 import { readStagingConfig, STAGING_PROFILE } from "./config"
 import { serveStagingAsset, verifyStagingAssets } from "./assets"
@@ -750,7 +750,7 @@ describe("BF-19: pool size, readiness session settings and the readiness cache",
   test("session settings not applied: start-up refuses naming the cause; a running /ready says so; other failures keep their body", async () => {
     let failure: Error | null = new StagingSessionSettingsError()
     let closed = false
-    const database = { checkReadiness: async () => { if (failure) throw failure; return { profile: STAGING_PROFILE, schemaVersion: 31 } }, close: async () => { closed = true } } as unknown as StagingDatabase
+    const database = { checkReadiness: async () => { if (failure) throw failure; return { profile: STAGING_PROFILE, schemaVersion: STAGING_SCHEMA_VERSION } }, close: async () => { closed = true } } as unknown as StagingDatabase
     const options = { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {} }
     const refused = await createStagingServer(readStagingConfig(environment), options).then(() => null, (error: Error & { reason?: string }) => error)
     expect([refused?.message, refused?.reason, closed]).toEqual(["Private staging dependencies are unavailable.", "database_session_settings_not_applied", true])
@@ -760,7 +760,7 @@ describe("BF-19: pool size, readiness session settings and the readiness cache",
     failure = null
     const app = await createStagingServer(readStagingConfig(environment), options)
     cleanup = app.close
-    expect(await (await app.fetch(new Request(`${ORIGIN}/ready`))).json()).toEqual({ status: "ready", profile: STAGING_PROFILE, schemaVersion: 31 })
+    expect(await (await app.fetch(new Request(`${ORIGIN}/ready`))).json()).toEqual({ status: "ready", profile: STAGING_PROFILE, schemaVersion: STAGING_SCHEMA_VERSION })
     failure = new StagingSessionSettingsError()
     const ready = await app.fetch(new Request(`${ORIGIN}/ready`))
     expect([ready.status, await ready.json()]).toEqual([503, { status: "unavailable", reason: "database_session_settings_not_applied" }])
@@ -769,8 +769,32 @@ describe("BF-19: pool size, readiness session settings and the readiness cache",
     expect([other.status, await other.json()]).toEqual([503, { status: "unavailable" }])
   })
 
+  test("a running instance whose readiness session loses the settings: /ready 503 with the reason, one log line a minute, data requests keep working", async () => {
+    let lost = false
+    const warnings: unknown[] = []
+    const receipt = { profile: STAGING_PROFILE, schemaVersion: STAGING_SCHEMA_VERSION }
+    const database = {
+      checkReadiness: async () => { if (lost) throw new StagingSessionSettingsError(receipt as never); return receipt },
+      close: async () => {}, hasStagingAccess: async () => true,
+      findStagingMembershipForUser: async () => ({ companyId: "80000000-0000-4000-8000-000000000901", role: "owner" as const, evidenceId: null }),
+    } as unknown as StagingDatabase
+    const app = await createStagingServer(readStagingConfig(environment), { database, validateUser: async token => token === "ok" ? { id: OWNER, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, log: () => {}, sessionSettingsWarn: event => warnings.push(event) })
+    cleanup = app.close
+    const session = () => app.fetch(new Request(`${ORIGIN}/workspace-api/session`, { headers: { authorization: "Bearer ok", "x-real-ip": "198.51.100.90" } }))
+    lost = true
+    const ready = await app.fetch(new Request(`${ORIGIN}/ready`))
+    expect([ready.status, await ready.json()]).toEqual([503, { status: "unavailable", reason: "database_session_settings_not_applied" }])
+    expect((await session()).status).toBe(200)
+    expect((await app.fetch(new Request(`${ORIGIN}/ready`))).status).toBe(503)
+    expect(warnings).toEqual([{ event: "database_session_settings_not_applied" }])
+    // Start-up with the same answer refuses, naming the cause.
+    expect(await createStagingServer(readStagingConfig(environment), { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {}, sessionSettingsWarn: () => {} }).then(() => null, (error: Error & { reason?: string }) => error.reason)).toBe("database_session_settings_not_applied")
+    lost = false
+    expect(await (await app.fetch(new Request(`${ORIGIN}/ready`))).json()).toEqual({ status: "ready", ...receipt })
+  })
+
   test("/ready checks afresh every time and its answer updates the guard the requests use", async () => {
-    let schemaVersion = 31, checks = 0, clock = 0
+    let schemaVersion = STAGING_SCHEMA_VERSION as number, checks = 0, clock = 0
     const database = { checkReadiness: async () => { checks++; return { profile: STAGING_PROFILE, schemaVersion } }, close: async () => {} } as unknown as StagingDatabase
     const app = await createStagingServer(readStagingConfig(environment), { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {}, readinessClock: () => clock })
     cleanup = app.close
@@ -778,9 +802,9 @@ describe("BF-19: pool size, readiness session settings and the readiness cache",
     for (let i = 0; i < 3; i++) expect((await app.fetch(new Request(`${ORIGIN}/ready`))).status).toBe(200)
     expect(checks - before).toBe(3)
     // The database leaves the served schemas: /ready reports it at once, and the guard has no kept success left.
-    schemaVersion = 30
+    schemaVersion = STAGING_SCHEMA_VERSION - 1
     expect((await app.fetch(new Request(`${ORIGIN}/ready`))).status).toBe(503)
-    schemaVersion = 31
+    schemaVersion = STAGING_SCHEMA_VERSION
     expect((await app.fetch(new Request(`${ORIGIN}/ready`))).status).toBe(200)
   })
 })

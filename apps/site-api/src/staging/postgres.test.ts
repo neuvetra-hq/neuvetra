@@ -1,5 +1,5 @@
 import { expect, setSystemTime, test } from "bun:test"
-import { createPostgresConnection, HostedWorkspaceDatabase, provisionStagingRoster, revokeStagingAccess, M61_LIMITATION_ACKNOWLEDGMENTS, M64_LIMITATIONS, type WorkspaceConnection } from "@neuvetra/database"
+import { createPostgresConnection, HostedWorkspaceDatabase, provisionStagingRoster, revokeStagingAccess, M61_LIMITATION_ACKNOWLEDGMENTS, M64_LIMITATIONS, STAGING_SCHEMA_VERSION, type WorkspaceConnection } from "@neuvetra/database"
 import { createSyntheticCompanySetup } from "../../../../packages/neuvetra-database/src/company-setup-fixture"
 import { possibleDuplicatesCountedWarning } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { createStagingSchemaFixture, snapshotStagingTables } from "../../../../packages/neuvetra-database/src/staging-schema-fixture"
@@ -762,51 +762,99 @@ integration("BF-08: a member's refused writes are 403, duplicate setup IDs are 4
     expect(race.find(r => r.status === 409)!.body.code).toBe("revision_conflict")
   } finally { await app.close?.(); await database.close(); await operator.close() }
 }, 120_000)
+// BF-19 (QA follow-ups 1-3 of PR #74): the runtime settings (lock_timeout 5 s, statement_timeout 15 s,
+// idle_in_transaction_session_timeout 30 s, TimeZone UTC) are set with SQL on every new pooled session and again with
+// every BEGIN, so they hold whatever a pooler does with connect options. Readiness reads them with a plain statement on its
+// own session; start-up also checks that two open sessions are two server sessions (a transaction-mode pooler, which is
+// unsupported, shares them). A running instance whose readiness session loses them answers /ready 503 with the reason and
+// logs it, while data requests keep working (each transaction sets them itself).
+const BF19_SETTINGS = { lock_timeout: "5s", statement_timeout: "15s", idle_in_transaction_session_timeout: "30s", TimeZone: "UTC" }
+const BF19_SETTINGS_SQL = "select pg_backend_pid() pid,current_setting('lock_timeout') lock_timeout,current_setting('statement_timeout') statement_timeout,current_setting('idle_in_transaction_session_timeout') idle_in_transaction_session_timeout,current_setting('TimeZone') \"TimeZone\""
+type Bf19Row = { pid: number } & typeof BF19_SETTINGS
+const bf19Hosted = (db: WorkspaceConnection, readiness: WorkspaceConnection) => new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string, reuse: boolean, readiness: WorkspaceConnection) => HostedWorkspaceDatabase)(db, "abcdefghijklmnopqrst", false, readiness)
 
-// BF-19 (lead 5): readiness runs on its own connection and proves that the session options set at connect (lock_timeout
-// 5 s, statement_timeout 15 s) reach the database. A session without them (what a transaction-mode pooler can give) fails
-// readiness: the server refuses to start, naming the cause, and a running /ready answers 503 with that reason.
-integration("BF-19: readiness asserts lock_timeout and statement_timeout on its own connection", async () => {
-  const { caller } = bf09()
+integration("BF-19: every pooled session and every transaction carries the runtime settings; a lost session setting is seen by the probe only", async () => {
+  const runtimeUrl = new URL(target!); runtimeUrl.username = "neuvetra_runtime"
+  const pool = createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 4 })
+  const single = createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 1 })
+  try {
+    // Four transactions at once: four server sessions, each with all four settings.
+    const rows = await Promise.all(Array.from({ length: 4 }, () => pool.transaction(async tx => { const row = (await tx.query<Bf19Row>(BF19_SETTINGS_SQL)).rows[0]!; await tx.query("select pg_sleep(0.2)"); return row })))
+    expect(new Set(rows.map(row => row.pid)).size).toBe(4)
+    for (const { pid: _pid, ...settings } of rows) expect(settings).toEqual(BF19_SETTINGS)
+    // Each of those sessions also has them at session level (a plain statement, outside any transaction).
+    const probes = await Promise.all(Array.from({ length: 4 }, () => pool.sessionSettings!()))
+    for (const probe of probes) { expect(probe.settings).toEqual(BF19_SETTINGS); expect(probe.preparedPid).toBe(probe.pid) }
+    // A session that lost a setting (here reset by hand): its transactions still carry it; the plain-statement probe shows the loss.
+    await single.exec("set lock_timeout=0")
+    expect((await single.transaction(async tx => (await tx.query<Bf19Row>(BF19_SETTINGS_SQL)).rows[0]!)).lock_timeout).toBe("5s")
+    expect((await single.sessionSettings!()).settings.lock_timeout).toBe("0")
+  } finally { await pool.close(); await single.close() }
+}, 60_000)
+
+integration("BF-19: start-up refuses a readiness session without the settings, and two clients sharing one server session (transaction pooling)", async () => {
+  const runtimeUrl = new URL(target!); runtimeUrl.username = "neuvetra_runtime"
+  // Healthy: separate sessions, all settings.
+  let db = createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 4 }), readiness = createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 1 })
+  let database = bf19Hosted(db, readiness)
+  try {
+    await database.checkReadiness()
+    await database.verifySessionPooling()
+  } finally { await database.close() }
+  // The readiness session lost a setting: readiness refuses with the reason, carrying the rest of the receipt.
+  db = createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 4 }); readiness = createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 1 })
+  database = bf19Hosted(db, readiness)
+  try {
+    await readiness.exec("set statement_timeout=0")
+    const refused = await database.checkReadiness().then(() => null, (error: { reason?: string; receipt?: { schemaVersion: number } }) => [error.reason, error.receipt?.schemaVersion])
+    expect(refused).toEqual(["database_session_settings_not_applied", STAGING_SCHEMA_VERSION])
+  } finally { await database.close() }
+  // Transaction pooling emulated: the request pool and readiness are two clients of ONE server session.
+  const shared = createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 1 })
+  const view = (): WorkspaceConnection => ({ query: shared.query.bind(shared), exec: shared.exec.bind(shared), transaction: shared.transaction.bind(shared), sessionSettings: () => shared.sessionSettings!(), close: async () => {} }) as WorkspaceConnection
+  database = bf19Hosted(view(), view())
+  try {
+    await database.checkReadiness()
+    expect(await database.verifySessionPooling().then(() => null, (error: { reason?: string }) => error.reason)).toBe("database_session_settings_not_applied")
+  } finally { await shared.close() }
+}, 60_000)
+
+integration("BF-19: a running server whose readiness session loses a setting: /ready 503 with the reason and a log line, data requests keep working", async () => {
+  const { caller, setUp } = bf09()
   const REF = "abcdefghijklmnopqrst", ORIGIN = "http://127.0.0.1:3015"
   const runtimeUrl = new URL(target!); runtimeUrl.username = "neuvetra_runtime"
+  const operator = createPostgresConnection(target!, { tls: false })
   const config = readStagingConfig({ NODE_ENV: "test", NEUVETRA_STAGING_ENABLED: "enabled", NEUVETRA_STAGING_PROFILE: STAGING_PROFILE, NEUVETRA_STAGING_PROJECT_REF: REF, NEUVETRA_STAGING_ORIGIN: ORIGIN, SUPABASE_URL: `https://${REF}.supabase.co`, SUPABASE_ANON_KEY: "sb_publishable_synthetic_fixture_not_a_real_key", DATABASE_URL: `postgres://neuvetra_runtime:fixture@db.${REF}.supabase.co:5432/postgres` })
-  // `drop` emulates a pooler that does not pass the connect options on: each readiness transaction resets one of them.
-  let drop: "lock_timeout" | "statement_timeout" | null = null
-  const readinessPool = createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 1 })
-  const readiness = { query: readinessPool.query.bind(readinessPool), exec: readinessPool.exec.bind(readinessPool), close: () => readinessPool.close(),
-    transaction: <T,>(operation: Parameters<WorkspaceConnection["transaction"]>[0]) => readinessPool.transaction(async tx => { if (drop) await tx.exec(`set local ${drop} = 0`); return operation(tx) as Promise<T> }) } as WorkspaceConnection
-  const requestPool = createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 4 })
-  const database = new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string, reuse: boolean, readiness: WorkspaceConnection) => HostedWorkspaceDatabase)(requestPool, REF, false, readiness)
-  const serve = () => createStagingServer(config, { database, validateUser: async () => null, verifyAssets: async () => {}, serveAsset: async () => null, log: () => {} })
-  let app: Awaited<ReturnType<typeof serve>> | undefined
+  const readiness = createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 1 })
+  const database = bf19Hosted(createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 4 }), readiness)
+  const owner = crypto.randomUUID(), company = crypto.randomUUID()
+  const warnings: unknown[] = []
+  let clock = 0
+  const app = await createStagingServer(config, { database, validateUser: async token => token === "owner" ? { id: owner, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, serveAsset: async () => null, log: () => {}, sessionSettingsWarn: event => warnings.push(event), readinessClock: () => clock })
   try {
-    // The readiness transaction really is on its own backend, and sees the options the pool set at connect.
-    const pids = await Promise.all([readiness.query<{ pid: number }>("select pg_backend_pid() pid"), requestPool.query<{ pid: number }>("select pg_backend_pid() pid")])
-    expect(pids[0].rows[0]!.pid).not.toBe(pids[1].rows[0]!.pid)
-    expect((await readiness.query<{ l: string; s: string }>("select current_setting('lock_timeout') l,current_setting('statement_timeout') s")).rows[0]).toEqual({ l: "5s", s: "15s" })
-    for (const setting of ["lock_timeout", "statement_timeout"] as const) {
-      drop = setting
-      const refused = await database.checkReadiness().then(() => null, (error: Error & { reason?: string }) => error.reason)
-      expect([setting, refused]).toEqual([setting, "database_session_settings_not_applied"])
-    }
-    // Start-up refuses (and closes the adapter), naming the cause.
-    expect(await serve().then(() => null, (error: Error & { reason?: string }) => [error.message, error.reason])).toEqual(["Private staging dependencies are unavailable.", "database_session_settings_not_applied"])
-  } finally { await requestPool.close().catch(() => {}); await readinessPool.close().catch(() => {}) }
-  // A fresh adapter (serve() closed the last one on refusal): healthy first, then the options are lost while it runs.
-  drop = null
-  const pool2 = createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 1 })
-  const readiness2 = { query: pool2.query.bind(pool2), exec: pool2.exec.bind(pool2), close: () => pool2.close(),
-    transaction: <T,>(operation: Parameters<WorkspaceConnection["transaction"]>[0]) => pool2.transaction(async tx => { if (drop) await tx.exec(`set local ${drop} = 0`); return operation(tx) as Promise<T> }) } as WorkspaceConnection
-  const database2 = new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string, reuse: boolean, readiness: WorkspaceConnection) => HostedWorkspaceDatabase)(createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 4 }), REF, false, readiness2)
-  try {
-    app = await createStagingServer(config, { database: database2, validateUser: async () => null, verifyAssets: async () => {}, serveAsset: async () => null, log: () => {} })
+    await operator.query("insert into auth.users(id) values($1)", [owner])
+    await provisionStagingRoster(operator, { expectedProjectRef: REF, workspaceId: company, ownerUserId: owner, members: [] })
     const call = caller(app)
-    // The healthy body is exactly as before BF-19 (no new field).
-    expect(await call("GET", "/ready")).toEqual({ status: 200, body: { status: "ready", profile: STAGING_PROFILE, schemaVersion: 31 } })
-    drop = "lock_timeout"
+    await setUp(call, company)
+    const healthy = { status: 200, body: { status: "ready", profile: STAGING_PROFILE, schemaVersion: STAGING_SCHEMA_VERSION } }
+    expect(await call("GET", "/ready")).toEqual(healthy)
+    await readiness.exec("set lock_timeout=0")
     expect(await call("GET", "/ready")).toEqual({ status: 503, body: { status: "unavailable", reason: "database_session_settings_not_applied" } })
-    drop = null
-    expect((await call("GET", "/ready")).status).toBe(200)
-  } finally { await app?.close().catch(() => {}); await database2.close().catch(() => {}) }
+    expect(warnings).toEqual([{ event: "database_session_settings_not_applied" }])
+    // Data requests (each a transaction carrying the settings) keep working, also after the kept success expires.
+    clock += 6_000
+    const collection = await call("GET", `/workspace/${company}/collection`)
+    expect(collection.status).toBe(200)
+    expect((await call("GET", `/workspace/${company}/setup`)).status).toBe(200)
+    expect(warnings).toHaveLength(1)
+    // Restored: /ready is ready again with the exact healthy body.
+    await readiness.exec("set lock_timeout='5s'")
+    expect(await call("GET", "/ready")).toEqual(healthy)
+    // A fresh start against a readiness session without the settings refuses, naming the cause.
+    const again = createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 1 })
+    await again.exec("set idle_in_transaction_session_timeout=0")
+    const refused = await createStagingServer(config, { database: bf19Hosted(createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 4 }), again), validateUser: async () => null, verifyAssets: async () => {}, serveAsset: async () => null, log: () => {}, sessionSettingsWarn: () => {} })
+      .then(server => { void server.close(); return null }, (error: Error & { reason?: string }) => [error.message, error.reason])
+    expect(refused).toEqual(["Private staging dependencies are unavailable.", "database_session_settings_not_applied"])
+  } finally { await app.close().catch(() => {}); await operator.close() }
 }, 120_000)

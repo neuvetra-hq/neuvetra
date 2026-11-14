@@ -1,10 +1,12 @@
 // BF-19 (BI-02): the per-instance bulk-write gate. One bulk spend write at a time (import, currency conversion, mapping
-// correction, import withdrawal); a second is refused with 503 bulk_write_busy and Retry-After before any database call;
-// the gate is released on every path (answer, refusal, thrown error, database timeout, client abort), and a hold that
-// never ends frees itself.
+// correction, import withdrawal); a second is refused with 503 bulk_write_busy and Retry-After once the caller is
+// authorised (a non-member 404, a member 403) and before any bulk database call; the gate is released on every path
+// (answer, refusal, thrown error, database timeout, client abort), and a hold that never ends frees itself. QA follow-up
+// 1 of PR #74: a company that has had a turn since another company was refused lets that company go first, so one company
+// re-sending its own bulk writes cannot keep another out; a company alone is never slowed; memory lapses and is bounded.
 import { afterEach, describe, expect, test } from "bun:test"
 import type { CompanySetupView } from "@neuvetra/database"
-import { BULK_WRITE_BUSY, BULK_WRITE_RETRY_SECONDS, createBulkWriteGate, type BulkWriteGate } from "./bulk-write-gate"
+import { BULK_WRITE_BUSY, BULK_WRITE_RETRY_SECONDS, BULK_WRITE_WAIT_LAPSE_MS, createBulkWriteGate, type BulkWriteGate } from "./bulk-write-gate"
 import { createScope3SpendImportRoutes, type Scope3SpendImportRouteDatabase } from "./scope3-spend-import-routes"
 
 const company = "93910000-0000-4000-8000-000000000001", setupId = "93910000-0000-4000-8000-000000000002", owner = "93910000-0000-4000-8000-0000000000a1"
@@ -17,10 +19,10 @@ const deferred = <T,>() => { let resolve!: (value: T) => void, reject!: (error: 
 const CSV = "line_id,date,vendor,gl_account,gl_description,description,amount,currency,dollar_year,category,naics_code,margin_choice,capital_full_cost\nL-1,2025-03-14,Vendor,6100,Services,Invoice,100.00,USD,2025,1,541611,with_margins,\n"
 
 /** A stub database whose four bulk writes run `bulk` (the test decides how each ends); every call is recorded. */
-function stub(bulk: (fn: string) => Promise<unknown>, options: { canManage?: boolean } = {}) {
+function stub(bulk: (fn: string) => Promise<unknown>, options: { canManage?: boolean; member?: boolean } = {}) {
   const calls: string[] = []
   const database: Scope3SpendImportRouteDatabase = {
-    findCompanySetup: async () => { calls.push("setup"); return setup(options.canManage) },
+    findCompanySetup: async () => { calls.push("setup"); return options.member === false ? null : setup(options.canManage) },
     findCollectionContext: async () => { calls.push("context"); return null },
     findCollectionActivities: async () => { calls.push("activities"); return [] },
     findCollectionEvidence: async () => { calls.push("evidence"); return [] },
@@ -44,38 +46,101 @@ const expectBusy = async (response: Response) => {
   expect(response.status).toBe(503)
   expect(response.headers.get("retry-after")).toBe(String(BULK_WRITE_RETRY_SECONDS))
   expect(response.headers.get("cache-control")).toBe("no-store")
-  expect(await response.json()).toEqual({ code: "bulk_write_busy", error: "Another large import or conversion is running. Try again in a moment." })
+  expect(await response.json()).toEqual({ code: "bulk_write_busy", error: "Another large spend change (an import, currency conversion, mapping or withdrawal) is in progress or next in line. Try again in a moment." })
 }
+const A = "93910000-0000-4000-8000-00000000c0a1", B = "93910000-0000-4000-8000-00000000c0b1", C = "93910000-0000-4000-8000-00000000c0c1"
 
 describe("BF-19 bulk-write gate", () => {
   test("one hold at a time; a release is idempotent and frees only its own hold", () => {
     const gate = createBulkWriteGate()
-    const first = gate.tryAcquire()!
-    expect(gate.tryAcquire()).toBeNull()
+    const first = gate.tryAcquire(A)!
+    expect(gate.tryAcquire(A)).toBeNull()
     first(); first()
     expect(gate.held).toBe(0)
-    const second = gate.tryAcquire()!
+    const second = gate.tryAcquire(A)!
     first()
-    expect([gate.held, gate.tryAcquire()]).toEqual([1, null])
+    expect([gate.held, gate.tryAcquire(A)]).toEqual([1, null])
     second()
     expect(gate.held).toBe(0)
-    expect(BULK_WRITE_BUSY).toEqual({ code: "bulk_write_busy", error: "Another large import or conversion is running. Try again in a moment." })
+  })
+
+  test("fairness: a company refused while another held the gate gets in on its next attempt, however often the holder re-sends", () => {
+    let clock = 0
+    const gate = createBulkWriteGate({ now: () => clock })
+    let hold = gate.tryAcquire(A)!
+    clock += 100; expect(gate.tryAcquire(B)).toBeNull()                  // B is refused while A holds
+    clock += 5_000; hold()
+    // A re-sends at once and keeps re-sending while B waits out Retry-After: refused every time (A had a turn since B waited).
+    for (let i = 0; i < 12; i++) { clock += 400; expect(gate.tryAcquire(A)).toBeNull() }
+    hold = gate.tryAcquire(B)!                                           // B's second attempt gets in
+    expect(hold).not.toBeNull()
+    clock += 5_000; hold()
+    hold = gate.tryAcquire(A)!                                           // A waited during B's turn: A goes next
+    expect(hold).not.toBeNull()
+    hold()
+    expect(gate.remembered).toBe(0)
+  })
+
+  test("fairness: a company that has not had a turn is not held back; each company gets at most one turn while another waits", () => {
+    let clock = 0
+    const gate = createBulkWriteGate({ now: () => clock })
+    let hold = gate.tryAcquire(A)!
+    clock += 100; expect(gate.tryAcquire(B)).toBeNull()                  // B waits
+    clock += 100; hold()
+    clock += 100; hold = gate.tryAcquire(C)!                             // C has had no turn: admitted
+    expect(hold).not.toBeNull()
+    clock += 100; hold()
+    expect([gate.tryAcquire(A), gate.tryAcquire(C)]).toEqual([null, null]) // both had their turn while B waits
+    hold = gate.tryAcquire(B)!
+    expect(hold).not.toBeNull()
+    hold()
+  })
+
+  test("fairness: a company alone is never refused while the gate is free, and a place lapses when its company stops asking", () => {
+    let clock = 0
+    const gate = createBulkWriteGate({ now: () => clock })
+    for (let i = 0; i < 50; i++) { const hold = gate.tryAcquire(A)!; expect(hold).not.toBeNull(); hold(); clock += 800 }
+    expect(gate.remembered).toBe(0)
+    const hold = gate.tryAcquire(A)!
+    expect(gate.tryAcquire(B)).toBeNull()
+    hold()
+    clock += BULK_WRITE_WAIT_LAPSE_MS - 1
+    expect(gate.tryAcquire(A)).toBeNull()                                // B still counts as waiting
+    clock += 1
+    const again = gate.tryAcquire(A)                                     // B never came back: A goes on
+    expect(again).not.toBeNull()
+    again!()
+    expect(gate.remembered).toBe(0)
+  })
+
+  test("fairness: the line is bounded and holds nothing but waiting companies", () => {
+    let clock = 0
+    const gate = createBulkWriteGate({ now: () => clock, maxWaiting: 3 })
+    const hold = gate.tryAcquire(A)!
+    for (const company of [B, C, "d", "e", "f"]) expect(gate.tryAcquire(company)).toBeNull()
+    expect(gate.waiting).toBe(3)
+    hold()
+    expect(gate.remembered).toBe(4)                                      // three waiting, one turn end
+    expect(gate.tryAcquire(A)).toBeNull()
+    expect(gate.tryAcquire(B)).not.toBeNull()
+    clock += BULK_WRITE_WAIT_LAPSE_MS
+    expect(gate.remembered).toBe(0)
   })
 
   test("a hold that is never released frees itself after its maximum, and a late release then changes nothing", async () => {
     const gate = createBulkWriteGate({ maxHoldMs: 30 })
-    const stuck = gate.tryAcquire()!
-    expect(gate.tryAcquire()).toBeNull()
+    const stuck = gate.tryAcquire(A)!
+    expect(gate.tryAcquire(A)).toBeNull()
     await Bun.sleep(60)
-    const next = gate.tryAcquire()!
+    const next = gate.tryAcquire(A)!
     expect(next).not.toBeNull()
     stuck()
-    expect([gate.held, gate.tryAcquire()]).toEqual([1, null])
+    expect([gate.held, gate.tryAcquire(A)]).toEqual([1, null])
     next()
     expect(gate.held).toBe(0)
   })
 
-  test("while an import runs, each of the four bulk writes is refused before any database call; reads are not gated", async () => {
+  test("while an import runs, each of the four bulk writes is refused after the authorisation read and before any write; reads are not gated", async () => {
     const running = deferred<unknown>()
     const gate = createBulkWriteGate()
     const { database, calls } = stub(fn => fn === "import" ? running.promise : Promise.resolve({}))
@@ -84,7 +149,8 @@ describe("BF-19 bulk-write gate", () => {
     while (!calls.includes("import")) await Bun.sleep(1)
     const before = calls.length
     for (const make of [requests.import, requests.convert, requests.mapping, requests.withdraw]) await expectBusy(await send(make()))
-    expect(calls.length).toBe(before)
+    // Each refused request read only the company setup (its authorisation): no bulk call, nothing written.
+    expect(calls.slice(before)).toEqual(["setup", "setup", "setup", "setup"])
     // A read of the same route is answered (it is not a bulk write).
     expect((await send(new Request(`https://api.example.test${root}/spend-imports`, { headers: { authorization: "Bearer ok" } }))).status).not.toBe(503)
     // Refusals before the gate keep their own answers (origin, method, authentication).
@@ -93,6 +159,19 @@ describe("BF-19 bulk-write gate", () => {
     running.reject(Object.assign(new Error("stop"), { code: "57014" }))
     expect((await first).status).toBe(503)
     expect(gate.held).toBe(0)
+  })
+
+  test("while the gate is held, a non-member gets 404 and a member 403 for every bulk action, never busy (QA follow-up 5)", async () => {
+    const gate = createBulkWriteGate()
+    const hold = gate.tryAcquire(A)!
+    for (const [options, status] of [[{ member: false }, 404], [{ canManage: false }, 403]] as const) {
+      const { database, calls } = stub(() => Promise.reject(new Error("unreachable")), options)
+      const send = route(database, gate)
+      for (const make of [requests.import, requests.convert, requests.mapping, requests.withdraw]) expect((await send(make())).status).toBe(status)
+      expect(calls.every(call => call === "setup")).toBe(true)
+    }
+    expect(gate.waiting).toBe(0)
+    hold()
   })
 
   // Every way a bulk write can end. After each, the gate is free and the next bulk write reaches the database.
@@ -112,7 +191,7 @@ describe("BF-19 bulk-write gate", () => {
       const send = route(database, gate)
       expect((await send(requests[kind]())).status).toBe(status)
       expect(gate.held).toBe(0)
-      const next = gate.tryAcquire()
+      const next = gate.tryAcquire(company)
       expect(next).not.toBeNull()
       next!()
     })
