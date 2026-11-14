@@ -4,7 +4,7 @@
 // row of every company table, every table's row count and the response compared after normalising only what is random
 // by construction (new version IDs, idempotency keys, the transaction time).
 import { createHash } from 'node:crypto'
-import { expect } from 'bun:test'
+import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 import { PGlite } from '@electric-sql/pglite'
 import { readMigrationManifest } from './staging-migrations'
 import type { WorkspaceSql } from './workspace'
@@ -55,16 +55,13 @@ export async function asActor<T>(db: DiffDb, actor: string, operation: (tx: Work
  * The rows of every company table that belong to `companies` (as jsonb text, sorted) and every neuvetra table's row count
  * (company tables included, so a row written for any other company shows), read in one statement by the caller's role.
  */
-const snapshotSql = new Map<string, string>()
 export async function snapshot(tx: WorkspaceSql, companies: readonly string[]): Promise<Record<string, string[]>> {
-  const key = 'neuvetra'
-  if (!snapshotSql.has(key)) {
-    const tables = (await tx.query<{ table_name: string; has_company: boolean }>(`select t.table_name,exists(select 1 from information_schema.columns c where c.table_schema=t.table_schema and c.table_name=t.table_name and c.column_name='company_id') has_company
-      from information_schema.tables t where t.table_schema='neuvetra' and t.table_type='BASE TABLE' order by t.table_name`)).rows
-    snapshotSql.set(key, tables.flatMap(t => [`select '#count' t,'${t.table_name}='||count(*) r from neuvetra.${t.table_name} x`, ...(t.has_company ? [`select '${t.table_name}' t,to_jsonb(x)::text r from neuvetra.${t.table_name} x where x.company_id=any($1::uuid[])`] : [])]).join('\nunion all\n'))
-  }
+  // The table list is read each time (schemas 31 and 32 differ; one process may hold databases at both).
+  const tables = (await tx.query<{ table_name: string; has_company: boolean }>(`select t.table_name,exists(select 1 from information_schema.columns c where c.table_schema=t.table_schema and c.table_name=t.table_name and c.column_name='company_id') has_company
+    from information_schema.tables t where t.table_schema='neuvetra' and t.table_type='BASE TABLE' order by t.table_name`)).rows
+  const sql = tables.flatMap(t => [`select '#count' t,'${t.table_name}='||count(*) r from neuvetra.${t.table_name} x`, ...(t.has_company ? [`select '${t.table_name}' t,to_jsonb(x)::text r from neuvetra.${t.table_name} x where x.company_id=any($1::uuid[])`] : [])]).join('\nunion all\n')
   const out: Record<string, string[]> = {}
-  for (const row of (await tx.query<{ t: string; r: string }>(snapshotSql.get(key)!, [companies])).rows) (out[row.t] ??= []).push(row.r)
+  for (const row of (await tx.query<{ t: string; r: string }>(sql, [companies])).rows) (out[row.t] ??= []).push(row.r)
   for (const k of Object.keys(out)) out[k]!.sort()
   return out
 }
@@ -227,3 +224,47 @@ export const SEQUENCE: Scope3SpendConversionInput[] = [
   { currency: 'SEK', rate: '0.1', rateSource: 'No lines in this currency', rateDate: '2025-08-01' },
 ]
 
+/** The BF-20 differential suite on one database (the test files register it per target). */
+export function registerDifferentialSuite(name: string, open: () => Promise<DiffDb>) {
+describe(`BF-20 differential: per-line (main) vs set-based, ${name}`, () => {
+  let db: DiffDb, fx: Fixture, other: Fixture
+  const results: DifferentialCase[] = []
+  beforeAll(async () => {
+    db = await open()
+    other = await seedCompany(db, 7, [40, 40], { prefix: '20b00000' })
+    fx = await seedCompany(db, 20, [120, 120], { prefix: '20a00000' })
+  }, 300_000)
+  afterAll(async () => { console.info(`BF-20 differential ${name}:`, JSON.stringify(results.map(r => [r.input.currency, r.input.rate, r.input.rateDate, r.converted, r.skipped, r.refused, r.mismatches]))); await db?.close() })
+
+  test('every conversion of the adversarial sequence: identical rows, row counts, response and refusals', async () => {
+    for (const input of SEQUENCE) results.push(await differential(db, fx, other, input))
+    expect(results.every(r => r.mismatches === 0)).toBe(true)
+    // The sequence exercises conversions, skips of every reason, a refusal and a conversion with nothing to do.
+    expect(results.reduce((n, r) => n + r.converted, 0)).toBeGreaterThan(100)
+    expect(results.some(r => r.refused !== null)).toBe(true)
+    expect(results.some(r => r.refused === null && r.converted === 0)).toBe(true)
+  }, 600_000)
+
+  test('refusals from SQL: the line location no longer in setup (23503), rejected evidence (22023); the same SQLSTATE from both, nothing saved', async () => {
+    const gbp2026 = { currency: 'GBP', rate: '1.27', rateSource: 'Bank of England', rateDate: '2026-02-01' }
+    // A third setup version without the lines' location: every line is refused by both (23503); then back to setup 2.
+    const v3 = fx.setups[1]!.replace(/.{12}$/, '000000000006'), elsewhere = fx.setups[1]!.replace(/.{12}$/, '000000000007')
+    await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,payload,payload_sha256,period_start,period_end_exclusive,boundary_approach,created_by,previous_version_id) values($1,$2,3,'{}',$3,'2025-01-01','2026-01-01','operational_control',$4,$5)", [v3, fx.company, '3'.repeat(64), fx.owner, fx.setups[1]])
+    await db.query("insert into neuvetra.company_setup_locations(company_id,version_id,id,name,locality,purpose,occupancy,control,inclusion,reason,other_entity,operator_details,start_mode,end_mode) values($1,$2,$3,'Other plant','Fresno','Plant','owned','reporting_company','included','','','','period_start','period_end')", [fx.company, v3, elsewhere])
+    await db.query('update neuvetra.company_setup_heads set version_id=$2, revision=3 where company_id=$1', [fx.company, v3])
+    const moved = await differential(db, fx, other, gbp2026)
+    await db.query('update neuvetra.company_setup_heads set version_id=$2, revision=2 where company_id=$1', [fx.company, fx.setups[1]])
+    // Both imported files' evidence rejected by quarantine review: both refuse 22023.
+    for (const n of [101, 102]) await db.query("insert into neuvetra.collection_evidence_quarantine_events(id,company_id,evidence_id,status,scanner_reference,details,event_seq) values(gen_random_uuid(),$1,$2,'rejected','bf20','Synthetic rejection',(select coalesce(max(event_seq),0)+1 from neuvetra.collection_evidence_quarantine_events))", [fx.company, fx.company.replace(/.{12}$/, String(n).padStart(12, '0'))])
+    const rejected = await differential(db, fx, other, gbp2026)
+    expect([moved.refused, moved.mismatches, rejected.refused, rejected.mismatches]).toEqual(['23503', 0, '22023', 0])
+    results.push(moved, rejected)
+  }, 120_000)
+
+  test('a converted version is immutable, as before (the same triggers apply to the set-based writer)', async () => {
+    const id = (await db.query<{ id: string }>("select id from neuvetra.collection_activity_versions where company_id=$1 and correction_reason like 'Converted from %' limit 1", [fx.company])).rows[0]!.id
+    expect(await db.query("update neuvetra.collection_activity_versions set notes='x' where id=$1", [id]).then(() => 'updated', () => 'refused')).toBe('refused')
+    expect(await db.query('delete from neuvetra.collection_activity_versions where id=$1', [id]).then(() => 'deleted', () => 'refused')).toBe('refused')
+  })
+})
+}
