@@ -26,6 +26,14 @@ describe('vendor and account normalisation', () => {
     expect(scope3SpendVendorKey('Inc.')).toBe('inc')
     expect(scope3SpendVendorKey('')).toBe('')
   })
+  // BF-12 (QA F4): combining marks are part of a vendor's name, so names that differ only in them are separate vendors.
+  test('combining marks are kept: Devanagari and Thai names that differ in vowel signs stay apart; NFKC-composed accents as before', () => {
+    expect(scope3SpendVendorKey('काल')).not.toBe(scope3SpendVendorKey('कुल'))
+    expect(scope3SpendVendorKey('กิน')).not.toBe(scope3SpendVendorKey('กัน'))
+    expect(scope3SpendVendorKey('काल ट्रेडर्स')).toBe('काल ट्रेडर्स')
+    expect(scope3SpendVendorKey('Cafe\u0301 Supply Inc')).toBe(scope3SpendVendorKey('Café Supply'))
+    expect(scope3SpendVendorKey('Acme ★ Metals, Inc.')).toBe('acme metals')
+  })
   test('accounts compare trimmed, lower-cased, spaces collapsed', () => {
     expect(scope3SpendAccountKey(' 6100 ')).toBe('6100')
     expect(scope3SpendAccountKey('Office  Supplies')).toBe('office supplies')

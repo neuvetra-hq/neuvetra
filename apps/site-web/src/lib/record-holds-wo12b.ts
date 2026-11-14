@@ -18,6 +18,7 @@ import type { Scope3ConsolidationApproach } from "../../../../packages/neuvetra-
 import { reasonText } from "./plain-language"
 import { scope3TokenLabel } from "./scope3-forms"
 import { RECORD_HOLD_ANSWER_TEXT, RECORD_HOLD_INSTEAD_TEXT, RECORD_HOLD_TEXT, SETUP_APPROACH_WORDS, SETUP_HOLD_TEXT } from "./wo12b-text"
+import { SCOPE3_VENDOR_KEY_MATCH_SENTENCE } from "../../../../packages/neuvetra-database/src/scope3-text"
 
 const COMPANY_CODES = ["equity_share_not_supported", "boundary_approach_unknown", "reporting_period_unknown", "scope3_consolidation_approach_required"] as const
 const SITE_CODES = ["location_not_in_current_setup", "location_excluded_by_company_setup", "location_inclusion_unknown", "boundary_metadata_unavailable", "location_entity_unresolved",
@@ -64,7 +65,9 @@ export interface RecordHold {
  */
 export interface RecordSupersession { id: string; name: string; match: "name" | "key" | "both"; fields: readonly string[]
   /** QA round 3: the spend categories the record replaces (1 and 2; a partner's own spend category 4, 5 or 9 too). */
-  categories: readonly number[] }
+  categories: readonly number[]
+  /** BF-12 (QA F1): the supplier the record names, when it matches the line only by the vendor key; absent otherwise. */
+  vendorKeyMatch?: string }
 
 /** What company setup says about the record's site and scope, as the adapters decide it (`recordBoundaryHold`). */
 export interface RecordBoundaryHold { code: CompanyHoldCode | SiteHoldCode; site: string; approach: string; entityControl: string | null
@@ -153,7 +156,7 @@ export function recordHold(activity: Pick<CollectionActivity, "kind" | "payload"
       text: reasonText(boundary.code), instead, setupStep: words.step }
   }
   const by = facts.supersededBy
-  if (by) return { ...base, code: "superseded_by_supplier_record", level: "record", fields: by.fields, question: by.match === "key" ? "GL account" : "Supplier", cause: SETUP_HOLD_TEXT.supersededCause(by.name),
+  if (by) return { ...base, code: "superseded_by_supplier_record", level: "record", fields: by.fields, question: by.match === "key" ? "GL account" : "Supplier", cause: `${SETUP_HOLD_TEXT.supersededCause(by.name)}${by.vendorKeyMatch !== undefined ? ` ${SCOPE3_VENDOR_KEY_MATCH_SENTENCE(by.vendorKeyMatch)}` : ""}`,
     text: reasonText("superseded_by_supplier_record"), instead: RECORD_HOLD_INSTEAD_TEXT.superseded(by.name, by.match, by.categories), link: { href: `#/activity/${by.id}`, label: `Open ${by.name}` } }
   const p = activity.payload as unknown as Record<string, unknown>
   const hold = (code: RecordHoldCode, fields: string[], question: string, answer: string, instead: string | null = null, upstream: string[] = []): RecordHold =>

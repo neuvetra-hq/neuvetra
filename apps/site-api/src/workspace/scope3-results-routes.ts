@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto"
 // Round 3 (EN-9): the package's public exports, never its source paths (method-reference stays: its constants are not exported).
-import { type CollectionActivityRecord, type CollectionContext, type CollectionEvidenceMetadata, type CompanySetupView, scope3ReportingYearOf, type Scope3AssessmentRecord, isScope3CollectionKind, planElectricityUpstream, planEnergyResoldUpstream, planFuelUpstream, planGridLossCalculation, planScope3Calculation, SCOPE3_UPSTREAM_SOURCES, planScope3ProductOverlap, planScope3Supersession, planScope3SupersessionClaimants, scope3DistanceCommutingPeriods, type Scope3CalculationPlan, type Scope3Category, type Scope3CollectionVersion, type Scope3PlanOptions, scope3ScreeningFromSetup, SCOPE3_NULL_ANNOTATION, SCOPE3_PLAN_NOTE_DISCLOSURES, type Scope3Annotation, type Scope3Coverage, type Scope3CoverageRecord, type Scope3EngineAggregate, type Scope3EngineResult, scope3Coverage, type Scope3AggregateEngine, SCOPE3_METHODS, type Scope3MethodType, scope3MethodologyStatement, scope3AnnotationFromPayload, scope3EffectiveDataQuality, scope3LineAnnotation, scope3LineEvidenceLinked, scope3Readiness, type Scope3EffectiveDataQuality, type Scope3LineBudget, type Scope3MethodologySentence, type Scope3Readiness, type Scope3ResultsDocument, SCOPE3_CAPACITY_TEXT } from "@neuvetra/database"
+import { type CollectionActivityRecord, type CollectionContext, type CollectionEvidenceMetadata, type CompanySetupView, scope3ReportingYearOf, type Scope3AssessmentRecord, isScope3CollectionKind, planElectricityUpstream, planEnergyResoldUpstream, planFuelUpstream, planGridLossCalculation, planScope3Calculation, SCOPE3_UPSTREAM_SOURCES, planScope3ProductOverlap, planScope3Supersession, planScope3SupersessionClaimants, scope3NotesWithVendorKeyMatch, scope3DistanceCommutingPeriods, type Scope3CalculationPlan, type Scope3Category, type Scope3CollectionVersion, type Scope3PlanOptions, scope3ScreeningFromSetup, SCOPE3_NULL_ANNOTATION, SCOPE3_PLAN_NOTE_DISCLOSURES, type Scope3Annotation, type Scope3Coverage, type Scope3CoverageRecord, type Scope3EngineAggregate, type Scope3EngineResult, scope3Coverage, type Scope3AggregateEngine, SCOPE3_METHODS, type Scope3MethodType, scope3MethodologyStatement, scope3AnnotationFromPayload, scope3EffectiveDataQuality, scope3LineAnnotation, scope3LineEvidenceLinked, scope3Readiness, type Scope3EffectiveDataQuality, type Scope3LineBudget, type Scope3MethodologySentence, type Scope3Readiness, type Scope3ResultsDocument, SCOPE3_CAPACITY_TEXT } from "@neuvetra/database"
 import { STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION } from "@neuvetra/database"
 import { scope3CurrencyConversionValid, scope3SpendConversionOf, type Scope3SpendConversion } from "@neuvetra/database"
 import { SCOPE3_BUILDING_HOTEL_REGISTER_SHA256, SCOPE3_REGISTER_2025_SHA256, SCOPE3_SPEND_REGISTER_SHA256, SCOPE3_SUPPLEMENT_REGISTER_SHA256, SCOPE3_US_UPSTREAM_REGISTER_SHA256, type ReleasedMethod } from "../../../../packages/neuvetra-database/src/method-reference"
@@ -284,7 +284,9 @@ export async function buildScope3Results(input: {
   const supersessionInput = { reportingPeriod: planPeriod, sha256: (text: string) => createHash("sha256").update(text, "utf8").digest("hex") }
   // BF-02b (d): every claimant of each superseded line, smallest record ID first (the pre-pass names the first).
   const claimants = planScope3SupersessionClaimants(versions, context, supersessionInput)
-  const planOptions: Scope3PlanOptions = { reportingPeriod: planPeriod, supersession: planScope3Supersession(versions, context, supersessionInput),
+  // BF-12 (QA B1): how each line matches each claimant, so the vendor-key note follows the record actually named on it.
+  const supersession = planScope3Supersession(versions, context, supersessionInput)
+  const planOptions: Scope3PlanOptions = { reportingPeriod: planPeriod, supersession,
     // I-05 (A15, B5c): the lease boundary follows setup's consolidation approach; average commuting knows the distance records.
     consolidationApproach: current?.setup.boundary.approach ?? null, distanceCommutingPeriods: scope3DistanceCommutingPeriods(versions, context, { reportingPeriod: planPeriod }),
     // I-07 (B5(d)): the same product in category 12 and released in full during use in category 11 (a disclosure on both).
@@ -414,11 +416,11 @@ export async function buildScope3Results(input: {
       const counted = (claimants.get(line.row.recordId) ?? []).find(id => id !== line.by && replacingRowOf(id))
       if (counted !== undefined) {
         line.by = counted; line.memo.supersededBy = counted
-        line.row.plan = { ...line.row.plan, notes: line.row.plan.notes.map(note => note.startsWith("superseded_by:") ? `superseded_by:${counted}` : note) }
+        line.row.plan = { ...line.row.plan, notes: scope3NotesWithVendorKeyMatch(line.row.plan.notes.map(note => note.startsWith("superseded_by:") ? `superseded_by:${counted}` : note), supersession.pairs, line.row.recordId, counted) }
         continue
       }
       const plan = { action: "hold" as const, status: "input_needed" as const, reasons: ["replacing_record_not_counted"],
-        notes: [...line.row.plan.notes.filter(note => !note.startsWith("superseded_by:")), `replacing_record:${line.by}`] }
+        notes: [...scope3NotesWithVendorKeyMatch(line.row.plan.notes.filter(note => !note.startsWith("superseded_by:")), supersession.pairs, line.row.recordId, line.by), `replacing_record:${line.by}`] }
       line.row.plan = plan
       line.coverage.result = scope3HeldOutcome(plan)
       superseded.splice(superseded.indexOf(line), 1)
