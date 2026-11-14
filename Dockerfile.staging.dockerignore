@@ -211,6 +211,7 @@ apps/site-web/src/m71-local-preview.tsx
 
 !packages/neuvetra-database/src/collection.ts
 !packages/neuvetra-database/src/collection-contract.ts
+!packages/neuvetra-database/src/collection-text-rule.ts
 !packages/neuvetra-database/src/collection-engine-input.ts
 !packages/neuvetra-database/src/scope3-collection-contract.ts
 !packages/neuvetra-database/src/scope3-collection.ts
