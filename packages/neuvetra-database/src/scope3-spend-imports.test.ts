@@ -169,6 +169,65 @@ describe('spend imports in the database (I-09)', () => {
     expect([payloadOf(await row(1, b.import.id)()), payloadOf(await row(2, b.import.id)())].map(p => [p.naicsCode, p.mappingSource])).toEqual([['339940', 'memory'], ['325910', 'memory']])
   })
 
+  // BF-12b (QA F-1): BF-12 kept combining marks in the vendor key, so a group mapping saved before it (Devanagari or Thai
+  // vowel signs, Turkish capital İ, which lower-cases to i and a combining dot) is stored under a key its texts no longer
+  // give. It is read under today's key, maps later files from memory, and is revised in place: the screen's revision is
+  // honoured (no 409 loop) and no second remembered row with the same texts is created.
+  test('BF-12b: a group mapping stored under the pre-BF-12 key is found, maps from memory and is revised in place, never duplicated', async () => {
+    // The vendor key before BF-12: combining marks became spaces.
+    const LEGAL = new Set(['inc', 'incorporated', 'llc', 'l l c', 'ltd', 'limited', 'corp', 'corporation', 'co', 'company', 'plc', 'lp', 'llp', 'l p', 'gmbh', 'ag', 'sa', 'bv', 'pty', 'pc', 'pllc'])
+    const oldVendorKey = (vendor: string) => {
+      const words = vendor.normalize('NFKC').toLowerCase().replace(/&/g, ' and ').replace(/[^\p{L}\p{N}]+/gu, ' ').trim()
+      if (!words) return ''
+      let out = words
+      for (;;) { const before = out; for (const suffix of LEGAL) if (out.endsWith(` ${suffix}`)) out = out.slice(0, -suffix.length - 1).trim(); out = out.replace(/ and$/, '').replace(/^the /, '').trim(); if (out === before) break }
+      return out || words
+    }
+    const vendors = [['कुमार ट्रेडर्स', '6120'], ['กินดี จำกัด', '6130'], ['İSTANBUL TEKSTİL', '6140']] as const
+    let n = 0
+    for (const [vendor, gl] of vendors) {
+      const oldKey = scope3Sha256(`vendor-account\u001e${gl}\u001f${oldVendorKey(vendor)}`)
+      const { scope3SpendGroupKeyInput } = await import('./scope3-spend-grouping')
+      const newKey = scope3Sha256(scope3SpendGroupKeyInput({ glAccount: gl, supplierName: vendor })!)
+      expect([vendor, oldKey === newKey]).toEqual([vendor, false])
+      // The mapping as saved before BF-12 (revision 1 under the old key).
+      await db.query("insert into neuvetra.scope3_spend_mapping_versions(id,company_id,mapping_key_sha256,gl_account,vendor,description,category,naics_code,margin_choice,revision,created_by) values($1,$2,$3,$4,$5,'',1,'541611','with_margins',1,$6)",
+        [`30970000-0000-4000-8000-${String(++n).padStart(12, '0')}`, company, oldKey, gl, vendor, owner])
+      // Read under today's key.
+      const read = (await asUser(owner, tx => readScope3SpendMappings(tx, company))).filter(m => m.vendor === vendor)
+      expect(read.map(m => [m.mappingKeySha256, m.revision])).toEqual([[newKey, 1]])
+      // A file of that vendor and account is mapped from memory (before this fix: unmatched).
+      const bytes = new TextEncoder().encode(`${HEADER}\nCM-${n}-1,2025-06-01,${vendor},${gl},,Services,100,USD,2025,,,,\n`)
+      const imported = await importFile(bytes, `combining-${n}.csv`)
+      const line = (await spendRecords()).find(r => payloadOf(r).importId === imported.import.id)!
+      expect([vendor, payloadOf(line).naicsCode, payloadOf(line).mappingSource]).toEqual([vendor, '541611', 'memory'])
+      // The screen sends the revision it shows (1): saved in place (revision 2, same stored row), not 409.
+      const body = (expectedRevision: number, naicsCode: string) => ({ expectedRevision, scope: 'group', mapping: { glAccount: gl, vendor, description: '', category: 1, naicsCode, marginChoice: 'with_margins' }, categoryConfirmed: null, activityOverlapConfirmed: null })
+      const saved = await asUser(owner, tx => saveScope3SpendMapping(tx, owner, company, body(1, '541612')))
+      expect([saved.mapping.revision, saved.mapping.mappingKeySha256, saved.corrected.map(c => c.recordId)]).toEqual([2, newKey, [line.id]])
+      // Revision 0 (as if new) is refused: no second remembered row with the same texts.
+      expect((await failure(asUser(owner, tx => saveScope3SpendMapping(tx, owner, company, body(0, '541613')))))?.code).toBe('23505')
+      const stored = (await db.query<{ mapping_key_sha256: string; revision: number }>("select mapping_key_sha256,revision from neuvetra.scope3_spend_mapping_versions where company_id=$1 and vendor=$2 order by revision", [company, vendor])).rows
+      expect(stored).toEqual([{ mapping_key_sha256: oldKey, revision: 1 }, { mapping_key_sha256: oldKey, revision: 2 }])
+      expect((await asUser(owner, tx => readScope3SpendMappings(tx, company))).filter(m => m.vendor === vendor).map(m => [m.mappingKeySha256, m.revision, m.naicsCode])).toEqual([[newKey, 2, '541612']])
+    }
+    // A pair made before this fix (old-key row, then a revision-0 save under the new key): read once, as the new-key row,
+    // and saves revise that row.
+    const [vendor, gl] = ['ไทยดี', '6150'] as const
+    const oldKey = scope3Sha256(`vendor-account\u001e${gl}\u001f${oldVendorKey(vendor)}`)
+    await db.query("insert into neuvetra.scope3_spend_mapping_versions(id,company_id,mapping_key_sha256,gl_account,vendor,description,category,naics_code,margin_choice,revision,created_by,created_at) values($1,$2,$3,$4,$5,'',1,'541611','with_margins',1,$6,now()-interval '1 day')",
+      ['30970000-0000-4000-8000-000000000099', company, oldKey, gl, vendor, owner])
+    const { scope3SpendGroupKeyInput } = await import('./scope3-spend-grouping')
+    const newKey = scope3Sha256(scope3SpendGroupKeyInput({ glAccount: gl, supplierName: vendor })!)
+    await db.query("insert into neuvetra.scope3_spend_mapping_versions(id,company_id,mapping_key_sha256,gl_account,vendor,description,category,naics_code,margin_choice,revision,created_by) values($1,$2,$3,$4,$5,'',1,'541620','with_margins',1,$6)",
+      ['30970000-0000-4000-8000-000000000098', company, newKey, gl, vendor, owner])
+    const pair = (await asUser(owner, tx => readScope3SpendMappings(tx, company))).filter(m => m.vendor === vendor)
+    expect(pair.map(m => [m.mappingKeySha256, m.naicsCode])).toEqual([[newKey, '541620']])
+    const revised = await asUser(owner, tx => saveScope3SpendMapping(tx, owner, company, { expectedRevision: 1, scope: 'group', mapping: { glAccount: gl, vendor, description: '', category: 1, naicsCode: '541611', marginChoice: 'with_margins' }, categoryConfirmed: null, activityOverlapConfirmed: null }))
+    expect([revised.mapping.revision, revised.mapping.mappingKeySha256]).toEqual([2, newKey])
+    expect((await db.query<{ k: string; r: number }>("select mapping_key_sha256 k,max(revision) r from neuvetra.scope3_spend_mapping_versions where company_id=$1 and vendor=$2 group by 1 order by 1", [company, vendor])).rows.map(row => [row.k === newKey ? 'new' : 'old', row.r]).sort()).toEqual([['new', 2], ['old', 1]])
+  })
+
   test('access: members read; members cannot import; outsiders see nothing; another company’s owner cannot import into this one; evidence and location must be this company’s', async () => {
     const bytes = new TextEncoder().encode(`${HEADER}\nAC-1,2025-05-01,Access TEST,6100,,Toner,10,USD,2025,1,339940,,\n`)
     const evidenceId = await upload(company, owner, bytes, 'access.csv')

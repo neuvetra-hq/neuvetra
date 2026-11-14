@@ -57,7 +57,7 @@ import {
 } from './scope3-collection-contract'
 
 import { scope3TaxTreatmentNote } from './scope3-r3a'
-import { scope3SpendMappingKeyInput, scope3SpendVendorKey } from './scope3-spend-grouping'
+import { LEGAL_SUFFIXES, scope3SpendMappingKeyInput, scope3SpendVendorKey } from './scope3-spend-grouping'
 
 export const SCOPE3_COLLECTION_INPUT_PROFILE = 'neuvetra.scope3-collection-input.v1' as const
 export * from './scope3-collection-contract'
@@ -689,12 +689,17 @@ export function scope3SupersessionNameMatch(lineSupplier: string, namedSupplier:
 function scope3SupersessionVendorKey(name: string): string | null {
   const key = scope3SpendVendorKey(name)
   // `scope3SpendVendorKey` keeps a name that is only legal words (a real name never becomes an empty vendor group); for
-  // replacement it is no name at all.
+  // replacement it is no name at all. BF-12b (QA F-3): legal words are the suffix list's phrases ("l l c" and "l p" as
+  // whole phrases), so a supplier named "C", "L", "P" or "C & P" is a real name.
   const words = key.split(' ').filter(word => word !== '' && word !== 'the' && word !== 'and')
-  return words.length === 0 || words.every(word => LEGAL_WORDS.has(word)) ? null : key
+  return words.length === 0 || onlyLegalPhrases(words) ? null : key
 }
-/** The words of `scope3SpendVendorKey`'s legal suffixes ("l l c" and "l p" split into letters). */
-const LEGAL_WORDS = new Set(['inc', 'incorporated', 'llc', 'l', 'c', 'ltd', 'limited', 'corp', 'corporation', 'co', 'company', 'plc', 'lp', 'llp', 'p', 'gmbh', 'ag', 'sa', 'bv', 'pty', 'pc', 'pllc'])
+/** Whether the words are a sequence of whole legal-suffix phrases (`LEGAL_SUFFIXES`, some of several words). */
+function onlyLegalPhrases(words: readonly string[]): boolean {
+  const reach = [true, ...words.map(() => false)]
+  for (let end = 1; end <= words.length; end++) for (let start = 0; start < end && !reach[end]; start++) reach[end] = reach[start]! && LEGAL_SUFFIXES.has(words.slice(start, end).join(' '))
+  return reach[words.length]!
+}
 /** BF-12: how a spend line is matched to one replacing record: by mapping key, by the earlier exact name rule, or only by the vendor key. */
 export type Scope3SupersessionMatch = 'mapping_key' | 'exact' | 'vendor_key'
 /** BF-12: the plan note of a spend line replaced only by the vendor key, followed by the supplier text the record names. */

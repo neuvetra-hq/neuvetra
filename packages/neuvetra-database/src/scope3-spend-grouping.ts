@@ -20,7 +20,7 @@ export function scope3SpendMappingKeyInput(line: { glAccount: string; supplierNa
 }
 
 /** Legal-form words dropped from the end (and "the" from the start) of a vendor name when grouping. */
-const LEGAL_SUFFIXES = new Set(['inc', 'incorporated', 'llc', 'l l c', 'ltd', 'limited', 'corp', 'corporation', 'co', 'company', 'plc', 'lp', 'llp', 'l p', 'gmbh', 'ag', 'sa', 'bv', 'pty', 'pc', 'pllc'])
+export const LEGAL_SUFFIXES: ReadonlySet<string> = new Set(['inc', 'incorporated', 'llc', 'l l c', 'ltd', 'limited', 'corp', 'corporation', 'co', 'company', 'plc', 'lp', 'llp', 'l p', 'gmbh', 'ag', 'sa', 'bv', 'pty', 'pc', 'pllc'])
 
 /**
  * A vendor name as groups compare it: NFKC, lower case, `&` as "and", punctuation and symbols as spaces, legal suffixes
