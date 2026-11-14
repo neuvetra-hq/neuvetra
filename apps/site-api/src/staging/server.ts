@@ -250,7 +250,8 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const fugitiveRoutes=createM77Routes({database,validateUser,origin:config.origin,authority:createM77Authority()})
   const scope1Routes=createM78Routes({database,validateUser,origin:config.origin,authorities:{gas:createM73Authority(),mobile:createM74Authority(),diesel:createM76DieselAuthority(),fugitive:createM77Authority()},policy:M78_REVIEWED_POLICY})
   const scope1BetaRoutes=createM80BetaRoutes({database,validateUser,origin:config.origin})
-  const companySetupRoutes=createCompanySetupRoutes({database,validateUser,origin:config.origin})
+  // BF-21: from schema 32 a setup save that includes category 3 says when it took the stored Scope 3 lines over the limit.
+  const companySetupRoutes=createCompanySetupRoutes({database,validateUser,origin:config.origin,schemaVersion:async()=>(await databaseReadiness()).schemaVersion})
   // Scope 3 package 2 (D5) and completion I-02: the 0029 kinds exist from schema 29 and the 0030 kinds and payload
   // features from 30; below that the route refuses the save with 503 before any SQL.
   const collectionRoutes=createCollectionRoutes({database,validateUser,origin:config.origin,evidenceStorage,schemaVersion:async()=>(await databaseReadiness()).schemaVersion})
@@ -270,7 +271,8 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   // I-09: spend CSV imports and mappings (0030); behind the same /scope3/ schema-30 gate.
   // BF-19 (BI-02): one gate per instance for every bulk spend write (import, conversion, mapping correction, withdrawal).
   const bulkWriteGate=createBulkWriteGate()
-  const scope3SpendImportRoutes=createScope3SpendImportRoutes({database,validateUser,origin:config.origin,bulkWriteGate})
+  // BF-21: the import pre-check counts lines as the database at this schema does (0032's count from 32).
+  const scope3SpendImportRoutes=createScope3SpendImportRoutes({database,validateUser,origin:config.origin,bulkWriteGate,schemaVersion:async()=>(await databaseReadiness()).schemaVersion})
   const mobileDieselRoutes=createM74Routes({database,validateUser,origin:config.origin,authority:createM74Authority()})
   const annualEvidenceRoutes=createAnnualEvidenceRoutes({database,validateUser,origin:config.origin})
   const annualEvidenceReportRoutes=createAnnualEvidenceReportRoutes({database,validateUser,origin:config.origin})

@@ -702,9 +702,37 @@ export const SCOPE3_REPORT_APPROVAL_TEXT = {
 export const SCOPE3_CAPACITY_TEXT = {
   lineBudgetExceeded: (max: number, used: number, adding: number) => `This would take Scope 3 past its limit of ${max.toLocaleString('en-US')} active lines (${used.toLocaleString('en-US')} in use, ${adding.toLocaleString('en-US')} more). Withdraw lines you no longer need, or import a smaller file. Nothing was saved.`,
   resultsOverBudget: (max: number) => `More than ${max.toLocaleString('en-US')} active Scope 3 lines. Withdraw lines you no longer need (withdrawn lines don’t count) to calculate again.`,
-  reportTooLarge: 'This Scope 3 report is larger than a frozen version can store. Nothing was saved.',
+  /**
+   * BF-21 (CEO ruling): a version too large to prepare, said truthfully with the way back. `size` is what the draft measured
+   * (absent only for the request-size refusal, whose input-version list cannot reach its limit at the line caps).
+   */
+  reportTooLarge: (measured?: { reportBytes: number; csvBytes: number; maxTextBytes: number; maxCombinedTextBytes: number; lines: number }) => {
+    const size = measured && typeof measured === 'object' && Number.isFinite(measured.lines) ? measured : undefined
+    const mb = (bytes: number) => `${(bytes / 1_000_000).toLocaleString('en-US', { maximumFractionDigits: 1 })} MB`
+    const mib = (bytes: number) => `${(bytes / 1_048_576).toLocaleString('en-US', { maximumFractionDigits: 1 })} MiB`
+    const what = !size ? 'This Scope 3 report version lists more records than one version can hold'
+      : size.reportBytes > size.maxTextBytes || size.csvBytes > size.maxTextBytes
+        // QA F-4: 0030's per-text limit is 128 MiB (134,217,728 bytes), so this sentence is in MiB throughout.
+        ? `This Scope 3 report version would need ${mib(Math.max(size.reportBytes, size.csvBytes))} of ${size.reportBytes >= size.csvBytes ? 'report' : 'CSV'} text for its ${size.lines.toLocaleString('en-US')} lines, more than the ${mib(size.maxTextBytes)} one version can hold`
+        : `This Scope 3 report version would need ${mb(size.reportBytes + size.csvBytes)} of report and CSV text for its ${size.lines.toLocaleString('en-US')} lines, more than the ${mb(size.maxCombinedTextBytes)} one version can be prepared with`
+    return `${what}, so it was not prepared. Nothing was saved, and no record or figure changed; Scope 3 results stay available to view. Most of the size is each line’s saved details: notes, evidence file lists and, for the three category 3 lines of each electricity record, all of that record’s certificates. To prepare a version, withdraw records you no longer need, enter fewer certificates per electricity record, or exclude category 3 in company setup, then prepare again.`
+  },
   /** Round 3 (owner decision 7): the database refused a save or import that adds lines past the cap (SQLSTATE 54N30). */
   lineBudgetSaveRefused: (max: number) => `This would take Scope 3 past its limit of ${max.toLocaleString('en-US')} active lines, so nothing was saved. Category 3 lines derived from electricity and fuel records count too. Withdraw lines or a whole import you no longer need (withdrawn lines don’t count), then try again.`,
+  /**
+   * BF-21 (schema 32, 0032's count): only stored Scope 3 records count, so the save refused is the Scope 3 save that would
+   * pass the limit; Scope 1 and 2 records never count (no "derived lines count too").
+   */
+  /** BF-21 (schema 32): an import refused before saving because the stored Scope 3 lines would pass the limit. */
+  storedLineBudgetExceeded: (max: number, used: number, adding: number) => `This would take Scope 3 past its limit of ${max.toLocaleString('en-US')} saved lines (${used.toLocaleString('en-US')} saved, ${adding.toLocaleString('en-US')} more). Each active Scope 3 record counts once (an energy-resold record twice while category 3 is included); Scope 1 and 2 records don’t count. Withdraw lines you no longer need, or import a smaller file. Nothing was saved.`,
+  /** BF-21 (schema 32): a company setup save that includes category 3 took the stored Scope 3 lines past the limit (saved; a warning). */
+  setupOverLineBudget: (max: number, used: number) => `Company setup is saved. With category 3 included, Scope 3 now has ${used.toLocaleString('en-US')} saved lines, more than its limit of ${max.toLocaleString('en-US')} (each energy-resold record counts twice while category 3 is included), so Scope 3 results and report versions can’t be prepared until it is back within the limit. Withdraw Scope 3 lines you no longer need, or exclude category 3 again. Scope 1 and 2 are not affected.`,
+  storedLineBudgetSaveRefused: (max: number) => `This would take Scope 3 past its limit of ${max.toLocaleString('en-US')} saved lines, so nothing was saved. Each active Scope 3 record counts once (an energy-resold record twice while category 3 is included); Scope 1 and 2 records don’t count. Withdraw lines or a whole import you no longer need (withdrawn lines don’t count), then try again.`,
+  /**
+   * BF-21 (schema 32): results over the stored-record limit. Reachable only through a company setup save that includes
+   * category 3 while many energy-resold records are saved (each then counts twice); says the count and both ways back.
+   */
+  storedResultsOverBudget: (max: number, used: number) => `Scope 3 has ${used.toLocaleString('en-US')} saved lines, more than its limit of ${max.toLocaleString('en-US')}, so it can’t be calculated. Each active Scope 3 record counts once and an energy-resold record twice while category 3 is included in company setup. Withdraw Scope 3 lines you no longer need (withdrawn lines don’t count), or exclude category 3 in company setup, then calculate again.`,
   /** Round 3 (owner decision 7): a whole import withdrawn in one action. */
   importWithdrawn: (withdrawn: number, already: number) => `${withdrawn.toLocaleString('en-US')} line${withdrawn === 1 ? '' : 's'} withdrawn${already > 0 ? `; ${already.toLocaleString('en-US')} already withdrawn` : ''}. Withdrawn lines stay in the history and no longer count.`,
   /** Bug hunt (PR 22): a bulk spend write over lines whose location is no longer in company setup (0030 refuses it, 23503). */

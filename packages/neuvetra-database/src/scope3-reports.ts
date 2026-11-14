@@ -17,7 +17,7 @@
  */
 import { createHash } from 'node:crypto'
 import type { WorkspaceSql } from './workspace'
-import { SCOPE3_REPORT_MAX_REQUEST_BYTES, SCOPE3_REPORT_MAX_TEXT_BYTES, SCOPE3_REPORT_REQUEST_SLACK_BYTES, type Scope3ReportApproveRequest, type Scope3ReportPrepareCall, type Scope3ReportPrepareRequest } from './scope3-assessment-contract'
+import { SCOPE3_REPORT_MAX_COMBINED_TEXT_BYTES, SCOPE3_REPORT_MAX_REQUEST_BYTES, SCOPE3_REPORT_MAX_TEXT_BYTES, SCOPE3_REPORT_REQUEST_SLACK_BYTES, type Scope3ReportApproveRequest, type Scope3ReportPrepareCall, type Scope3ReportPrepareRequest } from './scope3-assessment-contract'
 import type { Scope3CsvLabels } from './scope3-report-csv'
 import type { Scope3ResultsDocument } from './scope3-trace'
 import {
@@ -135,6 +135,8 @@ export function scope3ReportDraft(input: {
   setupVersionId: string; consolidationApproach: Scope3ReportConsolidationApproach | null; preparedBy: string; preparedAt: string; engineSha256: string; labels: Scope3CsvLabels
   /** Round 2: the size limit of each text (default 0030's, SCOPE3_REPORT_MAX_TEXT_BYTES); a test may lower it. */
   maxTextBytes?: number
+  /** BF-21: the size limit of both texts together (default SCOPE3_REPORT_MAX_COMBINED_TEXT_BYTES); a test may lower it. */
+  maxCombinedTextBytes?: number
   /** Round 2c: the size limit of the whole request (default 0030's, SCOPE3_REPORT_MAX_REQUEST_BYTES); a test may lower it. */
   maxRequestBytes?: number
   /**
@@ -151,8 +153,13 @@ export function scope3ReportDraft(input: {
   const csvText = scope3ReportCsv(document, input.labels, input.betweenPhases)
   input.betweenPhases?.()
   // Round 2 (owner decision 10, ENG-3): 0030's limit, checked before any call, with its own error.
+  // BF-21 (CEO ruling): and both together within what keeps the storing database backend inside its memory budget. The
+  // refusal carries the sizes and limits, so the route can say what is too large (nothing is calculated or changed here).
   const max = Math.min(input.maxTextBytes ?? SCOPE3_REPORT_MAX_TEXT_BYTES, SCOPE3_REPORT_MAX_TEXT_BYTES)
-  if (utf8Bytes(reportText) > max || utf8Bytes(csvText) > max) throw coded('Scope 3 report too large.', 'report_too_large')
+  const maxCombined = Math.min(input.maxCombinedTextBytes ?? SCOPE3_REPORT_MAX_COMBINED_TEXT_BYTES, SCOPE3_REPORT_MAX_COMBINED_TEXT_BYTES)
+  const reportBytes = utf8Bytes(reportText), csvBytes = utf8Bytes(csvText)
+  if (reportBytes > max || csvBytes > max || reportBytes + csvBytes > maxCombined)
+    throw Object.assign(coded('Scope 3 report too large.', 'report_too_large'), { size: { reportBytes, csvBytes, maxTextBytes: max, maxCombinedTextBytes: maxCombined, lines: input.results.records.length } satisfies Scope3ReportSize })
   const results = input.results
   // Round 3 (owner decision 6): the request holds only small fields; the texts travel beside it as plain text parameters.
   // Round 3 (EN-5): with what the results depended on, so 0030 can refuse results that went stale before they were stored.
@@ -171,6 +178,9 @@ export function scope3ReportDraft(input: {
   if (utf8Bytes(JSON.stringify(request)) + SCOPE3_REPORT_REQUEST_SLACK_BYTES > maxRequest) throw coded('Scope 3 report too large.', 'report_too_large')
   return { request, reportText, csvText, document }
 }
+
+/** BF-21: what a report_too_large refusal measured (the route words its answer from it). */
+export interface Scope3ReportSize { reportBytes: number; csvBytes: number; maxTextBytes: number; maxCombinedTextBytes: number; lines: number }
 
 async function assertActor(tx: WorkspaceSql, actorId: string, what: string) {
   const actor = await tx.query<{ id: string }>('select neuvetra.current_user_id() id')

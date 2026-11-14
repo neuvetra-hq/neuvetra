@@ -9,7 +9,7 @@ import type { CompanySetupView } from "@neuvetra/database"
 import type { Scope3ReportApproveRequest, Scope3ReportPrepareCall } from "../../../../packages/neuvetra-database/src/scope3-assessment-contract"
 import { scope3ReportCsv, scope3ReportText, validateScope3ReportDocument, type Scope3ReportDocument, type Scope3ReportVersionSummary } from "../../../../packages/neuvetra-database/src/scope3-report-document"
 import type { Scope3ResultsDocument } from "../../../../packages/neuvetra-database/src/scope3-trace"
-import { SCOPE3_CSV_LABELS } from "@neuvetra/database"
+import { SCOPE3_CAPACITY_TEXT, SCOPE3_CSV_LABELS } from "@neuvetra/database"
 import { createScope3PrepareGate, scope3ReportVersionResponse, SCOPE3_REPORT_PREPARE_RETRY_SECONDS, createScope3ReportRoutes, SCOPE3_REPORTS_PROFILE } from "./scope3-report-routes"
 import { REVIEWED_SCOPE3_ENGINE_SHA256, SCOPE3_BUDGET_WARNING, type Scope3ResultsResponse } from "./scope3-results-routes"
 
@@ -78,12 +78,13 @@ function memory() {
   return { database, rows, calls }
 }
 
-function app(options: { results?: () => Scope3ResultsDocument | null; maxReportTextBytes?: number } = {}) {
+function app(options: { results?: () => Scope3ResultsDocument | null; maxReportTextBytes?: number; maxReportCombinedTextBytes?: number } = {}) {
   const store = memory()
   let runs = 0
   const routes = createScope3ReportRoutes({
     database: store.database, origin: ORIGIN, engineSha256: REVIEWED_SCOPE3_ENGINE_SHA256, labels: SCOPE3_CSV_LABELS, now: () => new Date("2026-10-30T10:00:00.000Z"),
     ...(options.maxReportTextBytes === undefined ? {} : { maxReportTextBytes: options.maxReportTextBytes }),
+    ...(options.maxReportCombinedTextBytes === undefined ? {} : { maxReportCombinedTextBytes: options.maxReportCombinedTextBytes }),
     validateUser: async token => [owner, admin, member, outsider].includes(token) ? { id: token, email: null, phone: null, fullName: null } : null,
     results: async (actor, companyId) => { runs++; return store.database.findCompanySetup(actor, companyId).then(s => s ? (options.results ?? liveResults)() as Scope3ResultsResponse | null : null) },
   })
@@ -280,6 +281,23 @@ describe("Scope 3 report version routes (I-10)", () => {
     const tooLarge = await small.json(await small.call("POST", base, owner, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, reason: null }))
     expect([tooLarge.status, tooLarge.body.code]).toEqual([413, "report_too_large"])
     expect(small.calls).not.toContain("prepare")
+    // BF-21 (CEO ruling): the answer says what is too large and the way back, with the sizes measured.
+    expect(tooLarge.body.error).toBe(SCOPE3_CAPACITY_TEXT.reportTooLarge(tooLarge.body.size))
+    expect([tooLarge.body.size.maxTextBytes, tooLarge.body.error]).toEqual([10_000, expect.stringContaining("withdraw records you no longer need, enter fewer certificates per electricity record, or exclude category 3 in company setup")])
+    expect(tooLarge.body.error).not.toContain("larger than a frozen version can store")
+    // BF-21: both texts together over the combined limit (which keeps the storing backend inside its memory budget): the same
+    // answer, before any call.
+    const combined = app({ maxReportCombinedTextBytes: 20_000 })
+    const both = await combined.json(await combined.call("POST", base, owner, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, reason: null }))
+    expect([both.status, both.body.code, both.body.size.maxCombinedTextBytes, both.body.size.reportBytes + both.body.size.csvBytes > 20_000, both.body.size.reportBytes <= both.body.size.maxTextBytes]).toEqual([413, "report_too_large", 20_000, true, true])
+    expect(both.body.error).toContain("of report and CSV text for its")
+    expect(combined.calls).not.toContain("prepare")
+    // BF-21: a run refused for its size answers as the results route does: below schema 32 as before, from 32 with the stored count.
+    for (const [rule, used, body] of [["listed", 3005, { code: "line_budget_exceeded", error: SCOPE3_CAPACITY_TEXT.resultsOverBudget(3000) }],
+      ["stored", 3001, { code: "line_budget_exceeded", lineBudget: { max: 3000, used: 3001 }, error: SCOPE3_CAPACITY_TEXT.storedResultsOverBudget(3000, 3001) }]] as const) {
+      const refused = app({ results: () => { throw Object.assign(new Error("Too many Scope 3 lines."), { code: "54000", lineBudget: { rule, max: 3000, used } }) } })
+      expect(await refused.json(await refused.call("POST", base, owner, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, reason: null }))).toEqual({ status: 422, body })
+    }
     // ENG-11: 0030 refuses inputs that are no longer the records' heads with 40001; the route says so and stores nothing.
     const a = app()
     a.database.prepareScope3Report = async () => { throw Object.assign(new Error("Scope 3 records changed after the results were read"), { code: "40001" }) }

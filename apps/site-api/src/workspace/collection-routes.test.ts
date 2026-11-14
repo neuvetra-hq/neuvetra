@@ -158,6 +158,21 @@ describe("collection routes", () => {
     expect([reactivated.status, await reactivated.json()]).toEqual([422, { code: "record_limit_reached", error: "This company already has 400 active Scope 1 and 2 records, the most one draft can calculate. Withdraw records you no longer need, then save again." }])
   })
 
+  // BF-21: the database's line-budget refusal (54N30, raised only for a save that adds a Scope 3 line) says what the database at
+  // this schema counts: below 32 (0030's count) derived category 3 lines count too; from 32 (0032's) only stored Scope 3 records.
+  test("BF-21: the line-budget refusal is worded by the schema's count (unchanged below 32)", async () => {
+    const answers: Record<string, unknown> = {}
+    for (const schema of [undefined, 30, 31, 32]) {
+      const h = harness(schema === undefined ? {} : { schema })
+      h.failSavesWith("54N30")
+      const refused = await h.request(`/workspace/${COMPANY}/collection/activities/${RECORD}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(activity()) })
+      answers[String(schema)] = [refused.status, await refused.json()]
+    }
+    const before = [409, { code: "line_budget_exceeded", error: "This would take Scope 3 past its limit of 3,000 active lines, so nothing was saved. Category 3 lines derived from electricity and fuel records count too. Withdraw lines or a whole import you no longer need (withdrawn lines don’t count), then try again." }]
+    expect(answers).toEqual({ undefined: before, 30: before, 31: before,
+      32: [409, { code: "line_budget_exceeded", error: "This would take Scope 3 past its limit of 3,000 saved lines, so nothing was saved. Each active Scope 3 record counts once (an energy-resold record twice while category 3 is included); Scope 1 and 2 records don’t count. Withdraw lines or a whole import you no longer need (withdrawn lines don’t count), then try again." }] })
+  })
+
   // BF-03 (BL-02): a new active Scope 1/2 record is refused once 400 are active; corrections and withdrawals are not.
   test("refuses a new active Scope 1 or 2 record when 400 are already active, but allows corrections and withdrawals", async () => {
     const h = harness()

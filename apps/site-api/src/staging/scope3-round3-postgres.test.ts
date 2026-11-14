@@ -9,7 +9,8 @@
 // Runs on the disposable loopback fixture hosted.test.ts migrates (verify.yml native step); any loopback port.
 import { expect, test } from "bun:test"
 import { readdirSync, readFileSync, writeFileSync } from "node:fs"
-import { createPostgresConnection, HostedWorkspaceDatabase, provisionStagingRoster, STAGING_SCHEMA_VERSION, type WorkspaceConnection, type WorkspaceSql } from "@neuvetra/database"
+import { createPostgresConnection, EXISTING_PROJECT_REF, HostedWorkspaceDatabase, provisionStagingRoster, SCOPE3_CAPACITY_TEXT, SCOPE3_REPORT_MAX_COMBINED_TEXT_BYTES, SCOPE3_REPORT_MAX_TEXT_BYTES, STAGING_SCHEMA_VERSION, validateCollectionSaveInput, type WorkspaceConnection, type WorkspaceSql } from "@neuvetra/database"
+import { createStagingSchemaFixture } from "../../../../packages/neuvetra-database/src/staging-schema-fixture"
 import { createSyntheticCompanySetup } from "../../../../packages/neuvetra-database/src/company-setup-fixture"
 import { SCOPE3_SETUP_CATEGORY_TOKENS } from "../../../../packages/neuvetra-database/src/scope3-coverage"
 import { SCOPE3_SPEND_IMPORT_READBACK_SQL } from "../../../../packages/neuvetra-database/src/scope3-spend-imports"
@@ -411,7 +412,8 @@ integration("round 3 owner decision 7 natively: the line cap holds in SQL (impor
     const refused = await saveWaste()
     const refusal = await refused.json()
     expect([refused.status, refusal.code]).toEqual([409, "line_budget_exceeded"])
-    expect(refusal.error).toContain("3,000 active lines")
+    // BF-21: this fixture is at schema 32, where 0032 counts stored Scope 3 records only, and the answer says so.
+    expect(refusal.error).toBe(SCOPE3_CAPACITY_TEXT.storedLineBudgetSaveRefused(3000))
     // "Withdraw this import": a member may not; the owner withdraws all 1,000 lines in one set-based statement.
     const withdraw = (actor: string, importId: string, reason = "Imported the wrong month's ledger.") => h.json(`${c.root}/scope3/spend-imports/${importId}/withdrawal`, actor, { reason })
     const started = performance.now()
@@ -593,4 +595,251 @@ integration("BF-20 natively: differential at 3,000 lines (two chunks): the per-l
     expect([result.converted, result.mismatches, result.refused]).toEqual([3000, 0, null])
     expect(result.chunks).toBeGreaterThan(1)
   } finally { await operator.close() }
+}, 900_000)
+
+// --- BF-21 (BI-03 option C; CEO decision and ruling, 13 November 2026) -----------------------------------------------------
+// An existing-project database at schema 31 (hosted staging until the owner applies 0032) and at 32, through the real server.
+// At 31 nothing changes: 0030's count, in which category 3 lines derived from Scope 1 and 2 records count. At 32 the API
+// counts as 0032 does (stored Scope 3 records only), so a Scope 1 or 2 save never locks Scope 3 results or report versions;
+// the save that would pass 3,000 stored lines is the one refused, saying so; a setup save that takes the count over is saved
+// with a warning, and results then say why and how to recover. At both schemas a version whose two texts are too large to
+// store within the backend's memory budget is refused before any call, saying what is too large and what to do.
+async function bf21Server(schema: 31 | 32, name: string) {
+  const fixture = await createStagingSchemaFixture(target!, name, schema, EXISTING_PROJECT_REF)
+  const operator = fixture.operator
+  const database = new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string, reuse: boolean) => HostedWorkspaceDatabase)(createPostgresConnection(fixture.runtimeUrl, { tls: false, maxConnections: 4 }), EXISTING_PROJECT_REF, true)
+  const ORIGIN = "http://127.0.0.1:3017", ref = EXISTING_PROJECT_REF
+  const config = readStagingConfig({ NODE_ENV: "test", NEUVETRA_STAGING_ENABLED: "enabled", NEUVETRA_STAGING_PROFILE: STAGING_PROFILE, NEUVETRA_STAGING_PROJECT_REF: ref, NEUVETRA_STAGING_ORIGIN: ORIGIN, SUPABASE_URL: `https://${ref}.supabase.co`, SUPABASE_ANON_KEY: "sb_publishable_synthetic_fixture_not_a_real_key", DATABASE_URL: `postgres://neuvetra_runtime:fixture@db.${ref}.supabase.co:5432/postgres`, NEUVETRA_STAGING_REUSE_EXISTING: "confirmed" })
+  const users = new Map<string, string>(), stored = new Map<string, Uint8Array<ArrayBuffer>>()
+  const app = await createStagingServer(config, { database, collectionEvidenceStorage: { put: async (_t: string, _b: string, key: string, bytes: Uint8Array<ArrayBuffer>) => { stored.set(key, bytes) }, get: async (_t: string, _b: string, key: string) => stored.get(key)! },
+    validateUser: async token => users.has(token) ? { id: users.get(token)!, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, serveAsset: async () => null, log: () => {} })
+  const raw = (actor: string, method: string, route: string, body?: BodyInit, type?: string, extra: Record<string, string> = {}) => app.fetch(new Request(`${ORIGIN}${route === "/ready" ? "" : "/workspace-api"}${route}`, { method, body, headers: { origin: ORIGIN, authorization: `Bearer ${actor}`, ...(type ? { "content-type": type } : {}), ...extra } }))
+  const call = async (actor: string, method: string, route: string, body?: unknown) => { const r = await raw(actor, method, route, body === undefined ? undefined : JSON.stringify(body), body === undefined ? undefined : "application/json"); return { status: r.status, body: await r.json() as any } }
+  /** A company whose setup includes Scope 3 categories 1, 4, 5 and 6, and category 3 when `category3`. */
+  const company = async (actor: string, category3: boolean) => {
+    const owner = crypto.randomUUID(), id = crypto.randomUUID()
+    users.set(actor, owner)
+    await operator.query("insert into auth.users(id) values($1)", [owner])
+    await operator.transaction(async tx => {
+      await tx.query("insert into neuvetra.staging_access(user_id,active) values($1,true)", [owner])
+      await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [owner])
+      await tx.query("select neuvetra.create_company_workspace($1,'Synthetic Acme, Inc.',$2,'Synthetic California office',$3,2023,$4)", [id, crypto.randomUUID(), crypto.randomUUID(), crypto.randomUUID()])
+      await tx.query("insert into neuvetra.company_members(company_id,user_id,role) values($1,$2,'owner') on conflict(company_id,user_id) do update set role=excluded.role", [id, owner])
+      await tx.query("update neuvetra.staging_access set company_id=$2,active=true where user_id=$1", [owner, id])
+    })
+    const base = createSyntheticCompanySetup(), site = { ...base.locations[0]!, inclusion: "included" as const, control: "reporting_company" as const, startMode: "period_start" as const, endMode: "period_end" as const }
+    const setupBody = (withCategory3: boolean) => ({ ...base, boundary: { ...base.boundary, approach: "operational_control" as const }, entities: base.entities.map(e => ({ ...e, inclusion: "included" as const, control: "operational_control" as const })), locations: [site],
+      screening: [...base.screening.filter(s => s.scope !== 3), ...[1, 3, 4, 5, 6, 7].map(category => ({ id: `s3-${category}`, scope: 3, category: SCOPE3_SETUP_CATEGORY_TOKENS[category - 1]!, state: category === 3 && !withCategory3 ? "no" as const : "yes" as const, reason: category === 3 && !withCategory3 ? "Not material this year." : "", details: `Synthetic category ${category}.`, locationId: null }))] })
+    const first = await call(actor, "POST", `/workspace/${id}/setup`, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, setup: setupBody(category3) })
+    expect(first.status).toBe(201)
+    const c = { actor, owner, id, root: `/workspace/${id}`, site: site.id, setupVersionId: first.body.savedVersion.id as string, setupRevision: 1, setupBody }
+    return c
+  }
+  const close = async () => { await app.close?.(); await database.close(); await fixture.close() }
+  return { operator, database, app, raw, call, company, close, ORIGIN }
+}
+type Bf21 = Awaited<ReturnType<typeof bf21Server>>
+type Bf21Company = Awaited<ReturnType<Bf21["company"]>>
+const bf21Activities = (s: Bf21, c: Bf21Company) => {
+  const common = () => ({ locationId: c.site, setupVersionId: c.setupVersionId, state: "active", withdrawalReason: null, quality: "actual", estimateBasis: null, period: { start: "2025-01-01", endExclusive: "2026-01-01" }, reference: "Synthetic BF-21", notes: "", evidenceIds: [] })
+  const q = (value: string, unit: string) => ({ originalValue: value, originalUnit: unit, normalizedValue: value, normalizedUnit: unit })
+  const save = (activity: unknown) => s.call(c.actor, "POST", `${c.root}/collection/activities/${crypto.randomUUID()}`, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity })
+  return {
+    save,
+    gas: (id: string) => save({ ...common(), kind: "natural_gas", sourceId: id, quantity: q("1250", "therm"), payload: { heatContent: null } }),
+    electricity: (id: string) => save({ ...common(), kind: "electricity", sourceId: id, quantity: q("25000", "kWh"), payload: { meterOrAccountNumber: id, utilityName: "City & County of San Francisco", site: "Office", zip: "94105", subregion: "CAMX", utilityEiaId: "16612", instruments: [] } }),
+    waste: (id: string) => save({ ...common(), kind: "waste", sourceId: id, quantity: q("1.5", "metric_ton"), payload: { category: 5, material: "asphalt_concrete", treatment: "recycled" } }),
+    resold: (id: string) => save({ ...common(), kind: "energy_resold", sourceId: id, quantity: q("10", "MWh"), payload: { gridBasis: "subregion", zip: "94105", subregion: "CAMX", utilityEiaId: null, resoldEnergyNotInScope2: true } }),
+    results: async () => { const r = await s.call(c.actor, "GET", `${c.root}/results/scope3`); return { status: r.status, code: r.body.code ?? null, lines: r.body.records?.length ?? null, lineBudget: r.body.lineBudget ?? null, error: r.body.error ?? null } },
+    prepare: async (expectedRevision: number) => { const r = await s.call(c.actor, "POST", `${c.root}/scope3/reports`, { idempotencyKey: crypto.randomUUID(), expectedRevision, reason: expectedRevision ? "Again after a change." : null }); return { status: r.status, code: r.body.code ?? null, error: r.body.error ?? null, size: r.body.size ?? null } },
+    importFile: async (bytes: Uint8Array<ArrayBuffer>, file: string) => {
+      const up = await s.raw(c.actor, "POST", `${c.root}/collection/evidence`, bytes, "text/csv", { "x-neuvetra-original-name": file, "x-neuvetra-upload-id": crypto.randomUUID() })
+      expect(up.status).toBe(201)
+      const r = await s.raw(c.actor, "POST", `${c.root}/scope3/spend-imports?evidenceId=${(await up.json() as any).receipt.evidenceId}&locationId=${c.site}`, bytes, "text/csv")
+      return { status: r.status, body: await r.json() as any }
+    },
+    withdrawImport: (importId: string) => s.call(c.actor, "POST", `${c.root}/scope3/spend-imports/${importId}/withdrawal`, { reason: "Imported the wrong ledger." }),
+    withdrawKind: async (kind: string, n: number) => {
+      const all = (await s.call(c.actor, "GET", `${c.root}/collection/activities`)).body.records as any[]
+      for (const r of all.filter(r => r.kind === kind && r.currentVersion.activity.state === "active").slice(0, n))
+        expect(await s.call(c.actor, "POST", `${c.root}/collection/activities/${r.id}`, { idempotencyKey: crypto.randomUUID(), expectedRevision: r.currentVersion.revision, expectedVersionId: r.currentVersion.id, correctionReason: "Not ours.", activity: { ...r.currentVersion.activity, setupVersionId: c.setupVersionId, state: "withdrawn", withdrawalReason: "Not ours." } })).toMatchObject({ status: 201 })
+    },
+    setup: async (withCategory3: boolean) => {
+      const r = await s.call(c.actor, "POST", `${c.root}/setup`, { idempotencyKey: crypto.randomUUID(), expectedRevision: c.setupRevision, expectedVersionId: c.setupVersionId, correctionReason: "Screening changed.", setup: c.setupBody(withCategory3) })
+      if (r.status === 201) { c.setupVersionId = r.body.savedVersion.id; c.setupRevision++ }
+      return r
+    },
+    count: async () => Number((await s.operator.query<{ n: number }>("select neuvetra.scope3_active_line_count($1) n", [c.id])).rows[0]!.n),
+  }
+}
+const BF21_LISTED_OVER = "More than 3,000 active Scope 3 lines. Withdraw lines you no longer need (withdrawn lines don’t count) to calculate again."
+const BF21_LISTED_SAVE = "This would take Scope 3 past its limit of 3,000 active lines, so nothing was saved. Category 3 lines derived from electricity and fuel records count too. Withdraw lines or a whole import you no longer need (withdrawn lines don’t count), then try again."
+
+integration("BF-21 at schema 31: the line budget answers exactly as before (0030's count; a Scope 1 or 2 save past 3,000 still locks Scope 3 results)", async () => {
+  const s = await bf21Server(31, "m63_bf21_schema31")
+  try {
+    expect((await s.call("x", "GET", "/ready")).body.schemaVersion).toBe(31)
+    const c = await s.company("bf21-31", true), a = bf21Activities(s, c)
+    expect([(await a.importFile(ledger("A", 2000), "a.csv")).status, (await a.importFile(ledger("B", 1000), "b.csv")).status]).toEqual([201, 201])
+    expect(await a.results()).toEqual({ status: 200, code: null, lines: 3000, lineBudget: { max: 3000, used: 3000, remaining: 0 }, error: null })
+    // BI-03 as it is at 31 (fixed by 0032 with BF-21): the gas save is accepted and Scope 3 is refused until lines are withdrawn.
+    expect((await a.gas("GAS-1")).status).toBe(201)
+    expect([await a.count(), await a.results()]).toEqual([3001, { status: 422, code: "line_budget_exceeded", lines: null, lineBudget: null, error: BF21_LISTED_OVER }])
+    expect(await a.prepare(0)).toEqual({ status: 422, code: "line_budget_exceeded", error: BF21_LISTED_OVER, size: null })
+    expect(await a.waste("W-1")).toEqual({ status: 409, body: { code: "line_budget_exceeded", error: BF21_LISTED_SAVE } })
+    const b = (await s.call(c.actor, "GET", `${c.root}/scope3/spend-imports`)).body.imports.find((item: any) => item.rowCount === 1000)
+    expect((await a.withdrawImport(b.id)).status).toBe(201)
+    expect((await a.waste("W-2")).status).toBe(201)
+    // The import pre-check counts every listed line: 2,002 in use, so 999 more are refused.
+    const c999 = await a.importFile(ledger("C", 999), "c.csv")
+    expect([c999.status, c999.body.lineBudget, c999.body.error]).toEqual([409, { max: 3000, used: 2002, remaining: 998 }, "This would take Scope 3 past its limit of 3,000 active lines (2,002 in use, 999 more). Withdraw lines you no longer need, or import a smaller file. Nothing was saved."])
+    // A setup save that includes category 3 carries no warning at 31 (the answer is exactly as before).
+    expect(Object.keys((await a.setup(false)).body).sort()).toEqual(["foundation", "replayed", "savedVersion"])
+    expect(Object.keys((await a.setup(true)).body).sort()).toEqual(["foundation", "replayed", "savedVersion"])
+    expect((await a.prepare(0)).status).toBe(201)
+  } finally { await s.close() }
+}, 900_000)
+
+integration("BF-21 at schema 32: Scope 1 and 2 saves never lock Scope 3; the save that would pass 3,000 stored lines is refused; a setup save that does is saved with a warning and results say how to recover", async () => {
+  const s = await bf21Server(32, "m63_bf21_schema32")
+  try {
+    expect((await s.call("x", "GET", "/ready")).body.schemaVersion).toBe(32)
+    const c = await s.company("bf21-32", true), a = bf21Activities(s, c)
+    expect([(await a.importFile(ledger("A", 2000), "a.csv")).status, (await a.importFile(ledger("B", 1000), "b.csv")).status]).toEqual([201, 201])
+    expect([await a.count(), await a.results()]).toEqual([3000, { status: 200, code: null, lines: 3000, lineBudget: { max: 3000, used: 3000, remaining: 0 }, error: null }])
+    // BI-03: the Scope 1 gas and Scope 2 electricity saves at 3,000 stored lines change nothing in the count; results and a
+    // report version are still produced (before BF-21: 422 line_budget_exceeded until Scope 3 lines were withdrawn).
+    expect([(await a.gas("GAS-1")).status, (await a.electricity("M-1")).status]).toEqual([201, 201])
+    expect([await a.count(), await a.results()]).toEqual([3000, { status: 200, code: null, lines: 3004, lineBudget: { max: 3004, used: 3004, remaining: 0 }, error: null }])
+    expect(await a.prepare(0)).toEqual({ status: 201, code: null, error: null, size: null })
+    // The Scope 3 save that would pass 3,000 stored lines is the one refused, saying what counts.
+    expect(await a.waste("W-1")).toEqual({ status: 409, body: { code: "line_budget_exceeded", error: SCOPE3_CAPACITY_TEXT.storedLineBudgetSaveRefused(3000) } })
+    const b = (await s.call(c.actor, "GET", `${c.root}/scope3/spend-imports`)).body.imports.find((item: any) => item.rowCount === 1000)
+    expect((await a.withdrawImport(b.id)).status).toBe(201)
+    expect((await a.waste("W-2")).status).toBe(201)
+    // The import pre-check counts as 0032 does: 2,001 stored, so 999 more fit exactly (before BF-21: refused, "2,005 in use").
+    const c999 = await a.importFile(ledger("C", 999), "c.csv")
+    expect([c999.status, await a.count()]).toEqual([201, 3000])
+    expect(await a.results()).toEqual({ status: 200, code: null, lines: 3004, lineBudget: { max: 3004, used: 3004, remaining: 0 }, error: null })
+    const one = await a.importFile(ledger("D", 1), "d.csv")
+    expect([one.status, one.body.lineBudget, one.body.error]).toEqual([409, { max: 3004, used: 3004, remaining: 0 }, SCOPE3_CAPACITY_TEXT.storedLineBudgetExceeded(3000, 3000, 1)])
+    expect(await a.prepare(1)).toEqual({ status: 201, code: null, error: null, size: null })
+    // The setup path: the 999-line import withdrawn (2,001 stored), category 3 excluded, four energy-resold records saved (one
+    // line each) and a 995-line file imported: 3,000 stored. Category 3 included again (each energy-resold record then counts
+    // twice): 3,004. Nothing refuses a setup save for Scope 3 volume; it is saved with a warning, which the web's own decoder
+    // accepts.
+    expect((await a.withdrawImport(c999.body.import.id)).status).toBe(201)
+    expect(Object.keys((await a.setup(false)).body).sort()).toEqual(["foundation", "replayed", "savedVersion"])
+    for (const i of [1, 2, 3, 4]) expect((await a.resold(`RES-${i}`)).status).toBe(201)
+    expect((await a.importFile(ledger("E", 995), "e.csv")).status).toBe(201)
+    expect(await a.count()).toBe(3000)
+    const { saveCompanySetup } = await import("../../../site-web/src/lib/company-setup-api")
+    const originalFetch = globalThis.fetch
+    let warned: any = null
+    globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+      const response = await s.app.fetch(new Request(`${s.ORIGIN}${String(input)}`, { ...init, headers: { ...(init?.headers as Record<string, string>), origin: s.ORIGIN } }))
+      warned = await response.clone().json()
+      return response
+    }) as typeof fetch
+    let decoded: Awaited<ReturnType<typeof saveCompanySetup>>
+    try {
+      decoded = await saveCompanySetup(c.id, { idempotencyKey: crypto.randomUUID(), expectedRevision: c.setupRevision, expectedVersionId: c.setupVersionId, correctionReason: "Category 3 included again.", setup: c.setupBody(true) as never }, { accessToken: c.actor, userId: c.owner, role: "owner" })
+    } finally { globalThis.fetch = originalFetch }
+    c.setupVersionId = decoded.savedVersion.id; c.setupRevision++
+    expect(warned.warnings).toEqual([{ code: "scope3_line_budget_exceeded", lineBudget: { max: 3000, used: 3004 }, message: SCOPE3_CAPACITY_TEXT.setupOverLineBudget(3000, 3004) }])
+    expect(await a.count()).toBe(3004)
+    // Results and report versions then say why and how to recover; Scope 1 and 2 saves still go through.
+    const over = { status: 422, code: "line_budget_exceeded", lines: null, lineBudget: { max: 3000, used: 3004 }, error: SCOPE3_CAPACITY_TEXT.storedResultsOverBudget(3000, 3004) }
+    expect(await a.results()).toEqual(over)
+    expect(await a.prepare(2)).toEqual({ status: 422, code: "line_budget_exceeded", error: over.error, size: null })
+    expect((await a.gas("GAS-2")).status).toBe(201)
+    expect((await s.call(c.actor, "GET", `${c.root}/results`)).status).toBe(200)
+    // Recovery, either way the answer names: excluding category 3 again, or withdrawing lines (two energy-resold records).
+    expect((await a.setup(false)).status).toBe(201)
+    expect((await a.results()).status).toBe(200)
+    expect((await a.setup(true)).body.warnings).toHaveLength(1)
+    await a.withdrawKind("energy_resold", 2)
+    expect([await a.count(), (await a.results()).status, (await a.prepare(2)).status]).toEqual([3000, 200, 201])
+  } finally { await s.close() }
+}, 900_000)
+
+// BF-21 (CEO ruling): the two texts together are refused before any call over SCOPE3_REPORT_MAX_COMBINED_TEXT_BYTES
+// (158,000,000), which keeps the storing database backend near 650 MiB (measured), with a truthful, recoverable answer. At 31:
+// 400 electricity records with 100 certificates each (category 3 included) and 700 worst-case commuting records come to about
+// 163 MB; before BF-21 this prepared (each text under 128 MiB) with the backend near the 768 MiB budget.
+const bf21Files = async (s: Bf21, c: Bf21Company) => {
+  const files = Array.from({ length: 20 }, () => crypto.randomUUID())
+  for (const [i, file] of files.entries()) await s.operator.query("insert into neuvetra.collection_evidence_objects(id,company_id,storage_key,original_name,media_type,byte_length,sha256,uploaded_by) values($1,$2,$3,$4,'application/pdf',1,$5,$6)",
+    [file, c.id, `${c.id}/original/${file}`, `${String(i).padStart(4, "0")}${"E".repeat(247)}.pdf`, "f".repeat(62) + i.toString(16).padStart(2, "0"), c.owner])
+  return files
+}
+/** `count` electricity records at the field maximums with `certificates` certificates each (identity keys at schema 32). */
+async function bf21CertificateHeavy(s: Bf21, c: Bf21Company, files: string[], count: number, certificates: number, identity: boolean) {
+  for (let i = 0; i < count; i++) {
+    const meter = `${String(i).padStart(6, "0")}${"M".repeat(114)}`
+    const instruments = Array.from({ length: certificates }, (_, k) => ({ type: "energy_attribute_certificate", mwh: "9".repeat(100), qualityCriteriaMet: true, vintageYear: 2025, evidenceReference: files[k % 20], generationTechnology: "solar_photovoltaic",
+      rateLbPerMwh: { co2: "9".repeat(100), ch4: "9".repeat(100), n2o: "9".repeat(100) }, ...(identity ? { instrumentId: `${String(k).padStart(4, "0")}${"I".repeat(116)}`, registry: "G".repeat(80), faceMwh: "999999999999.999" } : {}) }))
+    const request = { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity: { locationId: c.site, setupVersionId: c.setupVersionId, state: "active", withdrawalReason: null, quality: "estimated", estimateBasis: "B".repeat(2000), period: { start: "2025-01-01", endExclusive: "2026-01-01" },
+      reference: "R".repeat(1000), notes: "N".repeat(4000), evidenceIds: files, kind: "electricity", sourceId: meter, quantity: { originalValue: String(250000 + i), originalUnit: "kWh", normalizedValue: String(250000 + i), normalizedUnit: "kWh" },
+      payload: { meterOrAccountNumber: meter, utilityName: "U".repeat(200), site: "S".repeat(200), zip: "94105", subregion: "CAMX", utilityEiaId: "16612", instruments } } }
+    validateCollectionSaveInput(request) // the API's own contract accepts it
+    await s.database.saveCollectionActivity(c.owner, c.id, crypto.randomUUID(), request as never)
+  }
+}
+async function bf21Commuting(s: Bf21, c: Bf21Company, files: string[], count: number) {
+  const vehicles = ["passenger_car", "light_duty_truck", "motorcycle"]
+  const modes = [...vehicles, "intercity_rail_northeast_corridor", "intercity_rail_other_routes", "intercity_rail_national_average", "commuter_rail", "transit_rail", "bus", "non_motorized"]
+    .map(mode => ({ mode, sharePercent: "10", oneWayDistance: "999999999999.999", distanceUnit: "km", occupancy: vehicles.includes(mode) ? "3.333" : null }))
+  const dataQuality = { indicators: { technological: "very_good", temporal: "very_good", geographical: "very_good", completeness: "very_good", reliability: "very_good" }, activityDataOrigin: "value_chain_partner", basis: "D".repeat(500) }
+  for (let i = 0; i < count; i++) {
+    const employees = `${999999999999 - i}.999`
+    await s.database.saveCollectionActivity(c.owner, c.id, crypto.randomUUID(), { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity: { locationId: c.site, setupVersionId: c.setupVersionId, state: "active", withdrawalReason: null, quality: "estimated", estimateBasis: "B".repeat(2000), period: { start: "2025-01-01", endExclusive: "2026-01-01" },
+      reference: "R".repeat(1000), notes: "N".repeat(4000), evidenceIds: files, kind: "commuting_average", sourceId: `${String(i).padStart(6, "0")}${"S".repeat(114)}`,
+      quantity: { originalValue: employees, originalUnit: "employee", normalizedValue: employees, normalizedUnit: "employee" },
+      payload: { workingDays: 365, modes, sharesBasis: "H".repeat(300), distanceBasis: "K".repeat(300), activityOverlap: "none_confirmed", dataQuality } } } as never)
+  }
+}
+
+integration("BF-21 at schema 31: a version whose texts together pass 158,000,000 bytes is refused before any call, saying what is too large and what to do", async () => {
+  const s = await bf21Server(31, "m63_bf21_size31")
+  try {
+    const c = await s.company("bf21-size31", true), a = bf21Activities(s, c), files = await bf21Files(s, c)
+    await bf21CertificateHeavy(s, c, files, 400, 100, false)
+    await bf21Commuting(s, c, files, 700)
+    const before = Number((await s.operator.query<{ n: string }>("select count(*) n from neuvetra.scope3_report_versions where company_id=$1", [c.id])).rows[0]!.n)
+    const refused = await a.prepare(0)
+    console.info(`BF-21 native (31): ${JSON.stringify(refused.size)}`)
+    expect([refused.status, refused.code]).toEqual([413, "report_too_large"])
+    expect(refused.size.reportBytes + refused.size.csvBytes).toBeGreaterThan(SCOPE3_REPORT_MAX_COMBINED_TEXT_BYTES)
+    expect(Math.max(refused.size.reportBytes, refused.size.csvBytes)).toBeLessThanOrEqual(SCOPE3_REPORT_MAX_TEXT_BYTES) // 0030 alone would have stored it
+    expect(refused.error).toBe(SCOPE3_CAPACITY_TEXT.reportTooLarge(refused.size))
+    expect(refused.size.lines).toBe(1900)
+    expect(Number((await s.operator.query<{ n: string }>("select count(*) n from neuvetra.scope3_report_versions where company_id=$1", [c.id])).rows[0]!.n)).toBe(before)
+    // The way back the answer names: excluding category 3 removes the 1,200 lines that repeat the certificates.
+    expect((await a.setup(false)).status).toBe(201)
+    expect((await a.prepare(0)).status).toBe(201)
+  } finally { await s.close() }
+}, 900_000)
+
+// BF-21 (CEO ruling, item 4; the fix is BF-31): today's behaviour for a certificate-heavy company at schema 32. 400 electricity
+// records with 100 certificates each, identity keys included, and category 3 included: each certificate is repeated on the
+// three category 3 lines of its record, so the report text alone is about 139 MB with no Scope 3 record at all. Results are
+// produced; a report version is refused before any call, with the truthful answer (before BF-21: "larger than a frozen
+// version can store" and no way out).
+integration("BF-21 at schema 32: a certificate-heavy company (400 electricity records x 100 certificates) is refused a report version with the truthful answer (BF-31 documents the fix)", async () => {
+  const s = await bf21Server(32, "m63_bf21_size32")
+  try {
+    const c = await s.company("bf21-size32", true), a = bf21Activities(s, c), files = await bf21Files(s, c)
+    await bf21CertificateHeavy(s, c, files, 400, 100, true)
+    const results = await a.results()
+    expect([results.status, results.lines, results.lineBudget]).toEqual([200, 1200, { max: 4200, used: 1200, remaining: 3000 }])
+    const refused = await a.prepare(0)
+    console.info(`BF-21 native (32): ${JSON.stringify(refused.size)}`)
+    expect([refused.status, refused.code, refused.size.lines]).toEqual([413, "report_too_large", 1200])
+    expect(refused.size.reportBytes).toBeGreaterThan(SCOPE3_REPORT_MAX_TEXT_BYTES)
+    expect(refused.error).toBe(SCOPE3_CAPACITY_TEXT.reportTooLarge(refused.size))
+    expect(refused.error).toContain("enter fewer certificates per electricity record, or exclude category 3 in company setup")
+    expect((await a.setup(false)).status).toBe(201)
+    expect((await a.prepare(0)).status).toBe(201)
+  } finally { await s.close() }
 }, 900_000)

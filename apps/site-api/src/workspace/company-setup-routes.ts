@@ -1,11 +1,23 @@
-import { duplicateCompanySetupIds, type CompanySetupSaveResult, type CompanySetupVersion, type CompanySetupView } from "@neuvetra/database"
+import { duplicateCompanySetupIds, SCOPE3_CAPACITY_TEXT, type CollectionActivityRecord, type CompanySetupSaveResult, type CompanySetupVersion, type CompanySetupView } from "@neuvetra/database"
+import { MAX_SCOPE3_LINES, scope3GridLossesIncluded, scope3LineCountRule, scope3StoredLineCount } from "./scope3-results-routes"
 import { extractBearerToken, type AuthenticatedUser } from "../lib/auth"
 
 export interface CompanySetupRouteDatabase {
   findCompanySetup(userId: string, companyId: string): Promise<CompanySetupView | null>
   findCompanySetupVersion(userId: string, companyId: string, versionId: string): Promise<CompanySetupVersion | null>
   saveCompanySetup(userId: string, companyId: string, input: unknown): Promise<CompanySetupSaveResult>
+  /** BF-21: read after a save that includes category 3 at schema 32, for the line-budget warning (absent: no warning). */
+  findCollectionActivities?(userId: string, companyId: string): Promise<CollectionActivityRecord[]>
 }
+
+/**
+ * BF-21 (BI-03 option C, CEO decision): the one warning a setup save can carry. From schema 32 the database counts stored
+ * Scope 3 records only, and nothing refuses a setup save for it, so a save that includes category 3 while energy-resold
+ * records are saved (each then counts twice) can take the count past 3,000. The save stands (setup is never blocked by
+ * Scope 3 volume); the answer says so, with the count and the ways back. Sent only then, so every other answer is unchanged.
+ */
+export const SETUP_SCOPE3_LINE_BUDGET_WARNING = "scope3_line_budget_exceeded" as const
+export interface CompanySetupWarning { code: typeof SETUP_SCOPE3_LINE_BUDGET_WARNING; lineBudget: { max: number; used: number }; message: string }
 
 const UUID = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 const ROUTE = new RegExp(`^/workspace/(${UUID})/setup(?:/versions/(${UUID}))?$`, "i")
@@ -16,7 +28,18 @@ export function createCompanySetupRoutes(deps: {
   database: CompanySetupRouteDatabase
   validateUser: (token: string) => Promise<AuthenticatedUser | null>
   origin: string
+  /** BF-21: the database's schema version (the warning needs 0032's count, schema 32). Absent: no warning. */
+  schemaVersion?: () => Promise<number>
 }) {
+  /** BF-21: the warning for a saved setup, or null. The save has committed, so a failed read gives no warning, never an error. */
+  const scope3BudgetWarning = async (actorId: string, result: CompanySetupSaveResult): Promise<CompanySetupWarning | null> => {
+    try {
+      if (!deps.schemaVersion || !deps.database.findCollectionActivities || !scope3GridLossesIncluded(result.foundation)) return null
+      if (scope3LineCountRule(await deps.schemaVersion()) !== "stored") return null
+      const used = scope3StoredLineCount(await deps.database.findCollectionActivities(actorId, result.savedVersion.companyId), true)
+      return used > MAX_SCOPE3_LINES ? { code: SETUP_SCOPE3_LINE_BUDGET_WARNING, lineBudget: { max: MAX_SCOPE3_LINES, used }, message: SCOPE3_CAPACITY_TEXT.setupOverLineBudget(MAX_SCOPE3_LINES, used) } : null
+    } catch { return null }
+  }
   return async (request: Request): Promise<Response> => {
     const respond = (status: number, body: unknown) => Response.json(body, { status, headers: { "cache-control": "no-store" } })
     const match = ROUTE.exec(new URL(request.url).pathname)
@@ -49,7 +72,8 @@ export function createCompanySetupRoutes(deps: {
       // refused before any SQL, so a unique violation below means only a head or idempotency conflict.
       if (duplicateCompanySetupIds((input as { setup?: unknown } | null)?.setup)) return respond(422, { error: "Invalid or unsupported company setup.", code: "duplicate_setup_id" })
       const result = await deps.database.saveCompanySetup(actor.id, companyId, input)
-      return respond(result.replayed ? 200 : 201, result)
+      const warning = await scope3BudgetWarning(actor.id, result)
+      return respond(result.replayed ? 200 : 201, warning ? { ...result, warnings: [warning] } : result)
     } catch (error) {
       const code = (error as { code?: string }).code
       if (code === "42501") return respond(404, NOT_FOUND)

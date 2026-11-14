@@ -1,14 +1,14 @@
 import { createHash } from "node:crypto"
 // Round 3 (EN-9): the package's public exports, never its source paths (method-reference stays: its constants are not exported).
 import { type CollectionActivityRecord, type CollectionContext, type CollectionEvidenceMetadata, type CompanySetupView, scope3ReportingYearOf, type Scope3AssessmentRecord, isScope3CollectionKind, planElectricityUpstream, planEnergyResoldUpstream, planFuelUpstream, planGridLossCalculation, planScope3Calculation, SCOPE3_UPSTREAM_SOURCES, planScope3ProductOverlap, planScope3Supersession, planScope3SupersessionClaimants, scope3NotesWithVendorKeyMatch, scope3DistanceCommutingPeriods, type Scope3CalculationPlan, type Scope3Category, type Scope3CollectionVersion, type Scope3PlanOptions, scope3ScreeningFromSetup, SCOPE3_NULL_ANNOTATION, SCOPE3_PLAN_NOTE_DISCLOSURES, type Scope3Annotation, type Scope3Coverage, type Scope3CoverageRecord, type Scope3EngineAggregate, type Scope3EngineResult, scope3Coverage, type Scope3AggregateEngine, SCOPE3_METHODS, type Scope3MethodType, scope3MethodologyStatement, scope3AnnotationFromPayload, scope3EffectiveDataQuality, scope3LineAnnotation, scope3LineEvidenceLinked, scope3Readiness, type Scope3EffectiveDataQuality, type Scope3LineBudget, type Scope3MethodologySentence, type Scope3Readiness, type Scope3ResultsDocument, SCOPE3_CAPACITY_TEXT } from "@neuvetra/database"
-import { STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION } from "@neuvetra/database"
+import { STAGING_INSTRUMENT_IDENTITY_SCHEMA_VERSION, STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION } from "@neuvetra/database"
 import { scope3CurrencyConversionValid, scope3SpendConversionOf, type Scope3SpendConversion } from "@neuvetra/database"
 import { SCOPE3_BUILDING_HOTEL_REGISTER_SHA256, SCOPE3_REGISTER_2025_SHA256, SCOPE3_SPEND_REGISTER_SHA256, SCOPE3_SUPPLEMENT_REGISTER_SHA256, SCOPE3_US_UPSTREAM_REGISTER_SHA256, type ReleasedMethod } from "../../../../packages/neuvetra-database/src/method-reference"
 // Round 3 (integration): lane A's superseded-spend helpers through the package index too (EN-9).
 import { scope3SupersedingComparison, type Scope3SupersededSpendMemo } from "@neuvetra/database"
 import { extractBearerToken, type AuthenticatedUser } from "../lib/auth"
 import type { Scope3Request } from "../calculation/scope3-authority"
-import { checkPeriod, classifyMethodRelease, DRAFT_RESULTS_ENVIRONMENT, DRAFT_RESULTS_LABEL, RELEASED_DRAFT_RESULTS_LABEL, type EngineDescription, type EngineMethodFacts, type EvidenceStatus, type MethodReleaseStatus, type PeriodCheck, type ReleaseEvidence } from "./collection-results-routes"
+import { checkPeriod, classifyMethodRelease, DRAFT_RESULTS_ENVIRONMENT, MAX_ACTIVE_SCOPE12_RECORDS, RECORD_LIMIT_RESULTS_TEXT, DRAFT_RESULTS_LABEL, RELEASED_DRAFT_RESULTS_LABEL, type EngineDescription, type EngineMethodFacts, type EvidenceStatus, type MethodReleaseStatus, type PeriodCheck, type ReleaseEvidence } from "./collection-results-routes"
 import { createResultsScheduler } from "./results-scheduler"
 // BF-01: the shared, browser-safe duplicate rule (the same module the Scope 1 and 2 results use).
 import { applyDuplicatePolicy, COLLECTION_DUPLICATE_POLICY, possibleDuplicateCounts, possibleDuplicateNotes, possibleDuplicatePairs, possibleDuplicateRecords, possibleDuplicatesCountedWarning, type CollectionDuplicatePolicy } from "../../../../packages/neuvetra-database/src/collection-duplicates"
@@ -76,6 +76,17 @@ const ROUTE = new RegExp(`^/workspace/(${UUID_SOURCE})/results/scope3$`, "i")
  * are refused before saving (`scope3ActiveLineCount`). The frozen report size limit (0030) is measured against this cap.
  */
 export const MAX_SCOPE3_LINES = 3000
+/**
+ * BF-21 (BI-03 option C, CEO decision 13 Nov 2026): how the 3,000-line cap is counted. "listed" (schema 31 and below, 0030's
+ * count): every listed line, derived category 3 lines included. "stored" (schema 32, 0032's `scope3_active_line_count`):
+ * stored Scope 3 records only (an energy-resold record counts twice while category 3 is included); the lines derived from
+ * Scope 1 and 2 records do not count, so a Scope 1 or 2 save can never take Scope 3 over its budget. They are bounded by the
+ * 400 active Scope 1 and 2 records (at most 3 each), so a run lists at most 3,000 + 1,200 = 4,200 lines.
+ */
+export type Scope3LineCountRule = "listed" | "stored"
+export const scope3LineCountRule = (schemaVersion: number): Scope3LineCountRule => schemaVersion >= STAGING_INSTRUMENT_IDENTITY_SCHEMA_VERSION ? "stored" : "listed"
+/** BF-21: the most lines a run lists under the "stored" rule (3,000 stored + 3 derived per active Scope 1 or 2 record). */
+export const MAX_SCOPE3_RUN_LINES = MAX_SCOPE3_LINES + 3 * MAX_ACTIVE_SCOPE12_RECORDS
 /** Fetch guard on all of a company's records (any scope) read for one run. */
 export const MAX_COMPANY_RECORDS = 20000
 
@@ -191,9 +202,43 @@ export function scope3ResultLines(records: readonly CollectionActivityRecord[], 
 /** Round 2: whether company setup includes category 3 (its derived lines then count). */
 export const scope3GridLossesIncluded = (setup: CompanySetupView | null) => scope3ScreeningFromSetup(setup?.currentVersion?.setup.screening ?? []).screening.some(row => row.category === 3 && row.decision === "included")
 /** Round 2 (owner decision 10): the active-line budget of a company's records under its current setup. */
-export function scope3LineBudget(records: readonly CollectionActivityRecord[], setup: CompanySetupView | null): Scope3LineBudget {
-  const used = scope3ResultLines(records, scope3GridLossesIncluded(setup)).length
-  return { max: MAX_SCOPE3_LINES, used, remaining: Math.max(0, MAX_SCOPE3_LINES - used) }
+export function scope3LineBudget(records: readonly CollectionActivityRecord[], setup: CompanySetupView | null, rule: Scope3LineCountRule = "listed"): Scope3LineBudget {
+  const included = scope3GridLossesIncluded(setup), listed = scope3ResultLines(records, included).length
+  return rule === "stored" ? scope3StoredLineBudget(listed, scope3StoredLineCount(records, included)) : { max: MAX_SCOPE3_LINES, used: listed, remaining: Math.max(0, MAX_SCOPE3_LINES - listed) }
+}
+/**
+ * BF-21 (schema 32): the budget a run reports, true under 0032's count while the shape stays the one the web decoder and
+ * the frozen v3 validator check (`used` = the lines listed, `remaining` = max(0, `max` - `used`)): `max` is the lines this
+ * run may list (3,000 stored lines plus the lines derived from the company's Scope 1 and 2 records, which never count), so
+ * `remaining` is exactly the stored lines still free (3,000 - stored). Below schema 32 it is the budget as before.
+ */
+export function scope3StoredLineBudget(listed: number, stored: number): Scope3LineBudget {
+  const max = MAX_SCOPE3_LINES + (listed - stored)
+  return { max, used: listed, remaining: Math.max(0, max - listed) }
+}
+/**
+ * BF-21: 0032's `scope3_active_line_count`, over the records as read: each Scope 3 record that is not withdrawn counts one,
+ * and an energy-resold one a second (its 3D upstream line) when category 3 is included. Lines derived from Scope 1 and 2
+ * records never count.
+ */
+export function scope3StoredLineCount(records: readonly CollectionActivityRecord[], gridLossesIncluded: boolean): number {
+  let count = 0
+  for (const record of records) if (record.currentVersion.activity.state !== "withdrawn" && isScope3CollectionKind(record.kind)) count += gridLossesIncluded && record.kind === "energy_resold" ? 2 : 1
+  return count
+}
+/** BF-21: a run refused for its size, with the rule and count it was refused on (the routes word the answer from them). */
+export type Scope3LineBudgetError = Error & { code: "54000"; lineBudget: { rule: Scope3LineCountRule; max: number; used: number } }
+const overBudget = (rule: Scope3LineCountRule, used: number): Scope3LineBudgetError => Object.assign(new Error("Too many Scope 3 lines."), { code: "54000" as const, lineBudget: { rule, max: MAX_SCOPE3_LINES, used } })
+/**
+ * BF-21: the answer to a run refused for its size (the runner's 54000), for the results and report routes. Under the
+ * "listed" rule it is exactly the answer before BF-21; under "stored" it names the stored count and the ways back.
+ */
+export function scope3OverBudgetBody(error: unknown): { code: string; error: string; lineBudget?: { max: number; used: number } } {
+  const budget = (error as Partial<Scope3LineBudgetError>).lineBudget
+  if (budget?.rule === "stored") return { code: "line_budget_exceeded", lineBudget: { max: budget.max, used: budget.used }, error: SCOPE3_CAPACITY_TEXT.storedResultsOverBudget(budget.max, budget.used) }
+  // BF-21: more lines derived from Scope 1 and 2 records than 400 active records can give (data saved before 0031's cap).
+  if ((error as { scope12RecordLimit?: boolean }).scope12RecordLimit) return { code: "record_limit_reached", error: RECORD_LIMIT_RESULTS_TEXT }
+  return { code: "line_budget_exceeded", error: SCOPE3_CAPACITY_TEXT.resultsOverBudget(MAX_SCOPE3_LINES) }
 }
 const isObject = (value: unknown): value is Record<string, unknown> => !!value && typeof value === "object" && !Array.isArray(value)
 
@@ -249,6 +294,8 @@ export async function buildScope3Results(input: {
   formulas?: ReadonlyMap<string, string> | null
   /** BF-01: hold possible duplicates or count them with a warning (defaults to COLLECTION_DUPLICATE_POLICY; tests cover both). */
   duplicatePolicy?: CollectionDuplicatePolicy
+  /** BF-21: how the 3,000-line cap is counted ("listed" below schema 32, as before BF-21; "stored" from 32). Default "listed". */
+  lineCountRule?: Scope3LineCountRule
 }): Promise<Scope3ResultsResponse> {
   const { context, records, evidence, engine } = input
   const clock = input.clock ?? Date.now, deadline = input.deadline ?? null
@@ -276,7 +323,14 @@ export async function buildScope3Results(input: {
   // coverage counts only; they are not listed and do not count toward the line limit (`scope3ResultLines`).
   const ordered = scope3ResultLines(records, gridLossesIncluded)
   const withdrawnRecords = scope3Records.filter(record => record.currentVersion.activity.state === "withdrawn")
-  if (ordered.length > MAX_SCOPE3_LINES) throw tooMany("Scope 3 lines")
+  // BF-21: below schema 32 every listed line counts (unchanged); from 32 stored Scope 3 records only, as 0032 counts them,
+  // and the derived lines are bounded by the 400 active Scope 1 and 2 records (a run lists at most 4,200 lines).
+  if ((input.lineCountRule ?? "listed") === "listed") { if (ordered.length > MAX_SCOPE3_LINES) throw overBudget("listed", ordered.length) }
+  else {
+    const stored = scope3StoredLineCount(records, gridLossesIncluded)
+    if (stored > MAX_SCOPE3_LINES) throw overBudget("stored", stored)
+    if (ordered.length > MAX_SCOPE3_RUN_LINES) throw Object.assign(overBudget("listed", ordered.length), { scope12RecordLimit: true })
+  }
   // --- I-03 --- (lane A; DESIGN §5.1, A22): the supersession pre-pass, once, before planning. A spend line a supplier
   // record replaces is planned as excluded with its reason and never counted.
   const planPeriod = reportingPeriod?.start && reportingPeriod.endExclusive ? { start: reportingPeriod.start, endExclusive: reportingPeriod.endExclusive } : null
@@ -498,7 +552,8 @@ export async function buildScope3Results(input: {
     coverage: { ...coverage, categories },
     unmatchedScreening: unmatched, warnings: [...new Set(warnings)],
     // Round 2 (owner decisions 7 and 10): the active-line budget and the readiness gate, from the response's own fields.
-    lineBudget: { max: MAX_SCOPE3_LINES, used: rows.length, remaining: Math.max(0, MAX_SCOPE3_LINES - rows.length) },
+    // BF-21: from schema 32 the budget states 0032's count (see scope3StoredLineBudget); below it, exactly as before.
+    lineBudget: (input.lineCountRule ?? "listed") === "stored" ? scope3StoredLineBudget(rows.length, scope3StoredLineCount(records, gridLossesIncluded)) : { max: MAX_SCOPE3_LINES, used: rows.length, remaining: Math.max(0, MAX_SCOPE3_LINES - rows.length) },
     readiness: scope3Readiness(categories, rows),
   } satisfies Scope3ResultsDocument
 }
@@ -538,9 +593,11 @@ export function createScope3ResultsRunner(deps: { database: Scope3ResultsDatabas
       const facts = current && current.length ? await describeEngine().catch(() => null) : new Map<string, EngineMethodFacts>()
       // I-04 (DESIGN 5.2): assessments of the setup's reporting year, only from schema 30 (no 0030 table is queried below it).
       const reportingYear = scope3ReportingYearOf(setup?.currentVersion?.setup.reportingPeriod.endExclusive ?? null)
-      const completion = deps.schemaVersion !== undefined && (await deps.schemaVersion()) >= STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION
+      // BF-21: the schema also decides how the line cap is counted (absent: 0, the "listed" rule as before).
+      const schema = deps.schemaVersion !== undefined ? await deps.schemaVersion() : 0
+      const completion = deps.schemaVersion !== undefined && schema >= STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION
       const assessments = completion && reportingYear !== null && deps.database.findScope3Assessments ? await deps.database.findScope3Assessments(actorId, companyId, reportingYear) : null
-      return buildScope3Results({ companyId, context, records, evidence, setup, engine: deps.engine, releases: { current, engines: facts }, assessments, deadline })
+      return buildScope3Results({ companyId, context, records, evidence, setup, engine: deps.engine, releases: { current, engines: facts }, assessments, deadline, lineCountRule: scope3LineCountRule(schema) })
     })
   }
 }
@@ -580,8 +637,9 @@ export function createScope3ResultsRoutes(deps: {
       const code = (error as { code?: string }).code
       if (code === "42501") return respond(404, { error: "Results not found." })
       if (code === "SETUP_CHANGED") return respond(409, { code: "setup_changed", error: "Company setup changed while preparing results. Reload and try again." })
-      // Round 2 (owner decision 10): only active lines count, so withdrawing lines always recovers; say so.
-      if (code === "54000") return respond(422, { code: "line_budget_exceeded", error: SCOPE3_CAPACITY_TEXT.resultsOverBudget(MAX_SCOPE3_LINES) })
+      // Round 2 (owner decision 10): only active lines count, so withdrawing lines always recovers; say so. BF-21: worded from the
+      // rule and count the run was refused on (below schema 32 exactly the answer before).
+      if (code === "54000") return respond(422, scope3OverBudgetBody(error))
       return respond(503, { error: "Scope 3 results could not be prepared or verified. Try again shortly." })
     }
   }
