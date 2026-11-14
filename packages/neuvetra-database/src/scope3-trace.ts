@@ -9,6 +9,7 @@
  * catalog, so a method added to the engine and the catalog appears without a change here.
  */
 import type { Scope3SupersededSpendMemo } from './scope3-r3a'
+import type { Scope3SourceRecordV4 } from './scope3-report-v4'
 import { possibleDuplicateCounted } from './collection-duplicates'
 import { scope3SpendConvertAmount, validateScope3SpendConversionInput, type Scope3SpendConversion } from './scope3-spend-currency'
 import { SCOPE3_NULL_ANNOTATION, type Scope3Annotation, type Scope3CategoryProfile, type Scope3CategoryRow, type Scope3Coverage, type Scope3EngineResult, type Scope3Ratio, type Scope3Total } from './scope3-coverage'
@@ -40,7 +41,10 @@ export interface Scope3ResultsLine {
   reference: string
   /** I-06: the record a derived line follows (3C: the electricity record); null for a saved Scope 3 record. */
   derivedFrom: { recordId: string; kind: string } | null
-  /** I-06: the saved payload of the record the line comes from, as saved (never sent to the engine as is). */
+  /**
+   * I-06: the saved payload of the record the line comes from, as saved (never sent to the engine as is). BF-31: null on a
+   * derived line when the results carry `sourceRecords` (report profile v4); readers must not rely on a derived line's payload.
+   */
   payload: unknown
   /** I-06: the method type of the line's result (catalog), null without a result. */
   methodType: Scope3MethodType | null
@@ -85,6 +89,11 @@ export interface Scope3ResultsDocument {
   lineBudget?: Scope3LineBudget
   /** Round 2 (owner decision 7): the readiness gate a report version's approval checks (`scope3Readiness`). Always sent since round 2; absent only in v1 documents. */
   readiness?: Scope3Readiness
+  /**
+   * BF-31 (report profile v4): each source record version of the derived lines once, with its activity SHA-256 and only the
+   * facts the derivation uses (`scope3-report-v4.ts`). Absent in results and documents written before BF-31b.
+   */
+  sourceRecords?: Scope3SourceRecordV4[]
 }
 export interface Scope3LineBudget { max: number; used: number; remaining: number }
 /** Round 2 (owner decision 7): the open issues that block approval unless acknowledged, per category; `ready` exactly when there are none. */

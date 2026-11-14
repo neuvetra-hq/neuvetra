@@ -34,12 +34,14 @@ import { scope3CanonicalJson, scope3CanonicalJsonText, scope3KgToTonnesExact, SC
 import { SCOPE3_REPORT_PROFILE_V1, validateScope3ReportDocumentV1 } from './scope3-report-v1'
 import { SCOPE3_REPORT_PROFILE_V2, validateScope3ReportDocumentV2 } from './scope3-report-v2'
 import { SCOPE3_REPORT_PROFILE_V3, validateScope3ReportDocumentV3 } from './scope3-report-v3'
+import { SCOPE3_REPORT_PROFILE_V4, validateScope3ReportDocumentV4 } from './scope3-report-v4'
 import { SCOPE3_REPORT_TEXT_V3 } from './scope3-text-v3'
 export { SCOPE3_REPORT_PROFILE_V1, type Scope3ReportDocumentV1 } from './scope3-report-v1'
 export { SCOPE3_REPORT_PROFILE_V2, type Scope3ReportDocumentV2 } from './scope3-report-v2'
 export { SCOPE3_REPORT_PROFILE_V3, type Scope3ReportDocumentV3 } from './scope3-report-v3'
+export { SCOPE3_REPORT_PROFILE_V4, type Scope3ReportDocumentV4, type Scope3SourceRecordV4 } from './scope3-report-v4'
 
-/** The profile new versions are written with (round 2: v2). */
+/** The profile new versions are written with (v3; BF-31a adds the v4 reader only, BF-31b switches the writer to v4). */
 export const SCOPE3_REPORT_PROFILE = SCOPE3_REPORT_PROFILE_V3
 /** DESIGN 3.7 (critique I-2): the criteria the assertion is made against. */
 export const SCOPE3_REPORT_CRITERIA = 'GHG Protocol Corporate Value Chain (Scope 3) Standard (2011) and the methodology statements in this report' as const
@@ -98,7 +100,7 @@ export interface Scope3ReportDocument {
  * readiness or line budget in its results (read them only when `profile` is v2) and may list withdrawn lines and call an
  * engine-held line `calculated`.
  */
-export type Scope3StoredReportDocument = Omit<Scope3ReportDocument, 'profile'> & { profile: typeof SCOPE3_REPORT_PROFILE_V1 | typeof SCOPE3_REPORT_PROFILE_V2 | typeof SCOPE3_REPORT_PROFILE_V3 }
+export type Scope3StoredReportDocument = Omit<Scope3ReportDocument, 'profile'> & { profile: typeof SCOPE3_REPORT_PROFILE_V1 | typeof SCOPE3_REPORT_PROFILE_V2 | typeof SCOPE3_REPORT_PROFILE_V3 | typeof SCOPE3_REPORT_PROFILE_V4 }
 /** One open issue of the readiness gate (owner decision 7). */
 export type Scope3ReportOpenIssue = { category: number; code: Scope3ReadinessCode }
 /** One stored version as the API lists it (0030 `scope3_report_versions` and its approval; the texts are fetched separately). */
@@ -370,7 +372,7 @@ export function scope3ReportCsv(document: Scope3ReportDocument, labels: Scope3Cs
 const year = (value: unknown) => Number.isSafeInteger(value) && (value as number) >= 2012 && (value as number) <= 2035
 
 /**
- * A stored report document, read with the frozen validator of its own profile (round 2, owner decision 11): v1 or v2.
+ * A stored report document, read with the frozen validator of its own profile (round 2, owner decision 11): v1 to v4.
  * Structure and internal consistency only; never live wording, the live catalog or the live results decoder.
  */
 export function validateScope3ReportDocument(value: unknown, companyId: string): Scope3StoredReportDocument {
@@ -378,6 +380,9 @@ export function validateScope3ReportDocument(value: unknown, companyId: string):
   if (profile === SCOPE3_REPORT_PROFILE_V1) return validateScope3ReportDocumentV1(value, companyId) as unknown as Scope3StoredReportDocument
   if (profile === SCOPE3_REPORT_PROFILE_V2) return validateScope3ReportDocumentV2(value, companyId) as unknown as Scope3StoredReportDocument
   if (profile === SCOPE3_REPORT_PROFILE_V3) return validateScope3ReportDocumentV3(value, companyId) as unknown as Scope3StoredReportDocument
+  // BF-31a: a v4 document (derived lines without payload copies, each source record version listed once) is read by its own
+  // validator before any writer produces one, so no deployed image meets a version it cannot open.
+  if (profile === SCOPE3_REPORT_PROFILE_V4) return validateScope3ReportDocumentV4(value, companyId) as unknown as Scope3StoredReportDocument
   return fail('document profile')
 }
 
