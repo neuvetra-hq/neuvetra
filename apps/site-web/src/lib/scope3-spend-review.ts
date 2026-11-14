@@ -76,6 +76,7 @@ export function scope3SpendReviewGroups(view: Pick<Scope3SpendImportsView, "line
 /** What to do about each hold a mapping cannot fix (shown beside the lines; the reason text itself says why). */
 export const SCOPE3_SPEND_HOLD_FIXES: Readonly<Record<string, { fix: string; withdraw: boolean }>> = {
   currency_not_supported: { fix: "Open the line and enter the amount in US dollars, saying in the notes how it was converted.", withdraw: false },
+  currency_rate_outside_line_year: { fix: "Open the line, put back its original currency and amount (they are in its notes), then convert that year at a rate dated in the same year. A line with no date needs its invoice date first.", withdraw: false },
   negative_amount_not_supported: { fix: "A credit or refund: net it against the purchase it reverses, then withdraw this line.", withdraw: true },
   amount_not_a_number: { fix: "Open the line and enter the amount from the ledger as a plain number.", withdraw: false },
   quantity_not_calculable: { fix: "Open the line and enter the amount as a plain number with at most 3 decimals.", withdraw: false },

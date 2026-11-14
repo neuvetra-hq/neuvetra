@@ -63,7 +63,7 @@ export const SCOPE3_FIX_FIELDS: Readonly<Record<string, readonly string[]>> = {
   outside_reporting_period: ["Period start", "First day covered"], partly_outside_reporting_period: ["Period start", "First day covered"],
   spend_line_date_outside_reporting_period: ["Invoice or posting date", "First day covered"],
   capital_goods_must_be_full_cost: ["Is the amount the full acquisition cost (not depreciation)?"],
-  currency_not_supported: ["Currency"], negative_spend_not_counted: ["Amount spent"], negative_amount_not_supported: ["Amount spent"],
+  currency_not_supported: ["Currency"], currency_rate_outside_line_year: ["Currency"], negative_spend_not_counted: ["Amount spent"], negative_amount_not_supported: ["Amount spent"],
   naics_code_required: ["Search NAICS codes"], trade_sector_naics_maps_margin_only: ["Search NAICS codes"], naics_code_not_in_factor_set: ["Search NAICS codes"],
   possible_duplicate_spend_line: ["This is a different purchase, not a duplicate"],
   finance_lease_in_scope1_2: ["Lease"], lease_type_required: ["Lease"],
