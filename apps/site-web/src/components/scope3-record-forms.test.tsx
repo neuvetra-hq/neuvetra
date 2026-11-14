@@ -542,7 +542,7 @@ describe("the record form dispatcher, the shared fields and the data-quality edi
     value = { supplierName: "", mappingKeys: [] }; app.render()
     expect(app.byLabel("Supplier named on the spend lines")!.props.choices).toEqual([["Acme", "Acme"], ["Bolt Co", "Bolt Co"]])
     // BF-12 (B-2): the hint states the rule supersession uses (the spend import's vendor key).
-    expect(app.byLabel("Supplier named on the spend lines")!.props.hint).toBe("Every spend line naming this supplier is replaced (capitals, spacing, punctuation and endings such as Inc, LLC or Co are ignored).")
+    expect(app.byLabel("Supplier named on the spend lines")!.props.hint).toBe("Every spend line naming this supplier is replaced. Capitals, spacing, punctuation, symbols, “&” or “and”, a leading “The”, full-width letters and endings such as Inc, LLC or Co are ignored; accents count.")
     const boxes = app.nodes().filter(node => typeof node.props.label === "string" && node.props.label.includes(" · GL "))
     expect(boxes.map(node => node.props.label)).toEqual(["Bolts · Acme · GL 5000 (2 lines, 10 USD, 20 USD)", "Press · Bolt Co · GL 1500 (1 line, 900 USD)"])
     boxes[1]!.props.onChange(true)

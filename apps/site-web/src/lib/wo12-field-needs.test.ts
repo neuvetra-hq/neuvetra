@@ -612,11 +612,15 @@ describe("WO-12b: record holds (one answer holds the record whatever else is fil
     expect(replacedLine().payload.supplierName).toBe("Synthetic Software LLC")
     const variant = at("SYNTHETIC SOFTWARE, L.L.C.")!
     expect([variant.code, variant.fields]).toEqual(["superseded_by_supplier_record", ["supplier", "category"]])
+    // QA F1: matched only by the key, the explanation says so with the supplier the record names; exact or keyed, it doesn't.
+    expect(variant.cause).toBe("Another record replaces this spend line: Supplier-specific purchases · SRC-1. It was matched as the same supplier ignoring punctuation, symbols, “&” or “and”, a leading “The”, full-width letters and endings such as Inc, LLC or Co (accents count) (supplier on the replacing record: SYNTHETIC SOFTWARE, L.L.C.).")
+    expect(at("synthetic  software llc")!.cause).toBe("Another record replaces this spend line: Supplier-specific purchases · SRC-1.")
     expect(plan(replacedLine(), world("SYNTHETIC SOFTWARE, L.L.C.")).reasons).toEqual(["superseded_by_supplier_record"])
     // Named and keyed: matched by both, so only Supplier (and Category) frees it, as for an exact spelling (QA round 2).
     const keyed = { ...world("SYNTHETIC SOFTWARE, L.L.C."), records: [supplierRecordBy("SYNTHETIC SOFTWARE, L.L.C.", [LINE_KEY])] }
     const both = (() => { const draft = replacedLine(); return recordHold(draft, factsFor(draft, keyed))! })()
     expect([both.code, both.fields]).toEqual(["superseded_by_supplier_record", ["supplier", "category"]])
+    expect(both.cause).not.toContain("matched as the same supplier")
     expect(at("Synthetic Softwares")?.code ?? null).not.toBe("superseded_by_supplier_record")
     expect(plan(replacedLine(), world("Synthetic Softwares")).reasons).not.toContain("superseded_by_supplier_record")
   })

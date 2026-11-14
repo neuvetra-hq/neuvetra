@@ -50,6 +50,10 @@ describe("spend import decoders (I-09)", () => {
     const pairs = api.scope3SpendDuplicatePairs(view)
     expect(pairs.map(p => [p.line.recordId, p.earlier?.recordId, p.earlierFile])).toEqual([[rec(4), rec(1), "1.csv"]])
     expect(api.scope3SpendSupersessionBySupplier(view)).toEqual([{ supplierName: "Cater", supersededBy: supplier, spendRecordIds: [rec(2)] }])
+    // BF-12: the vendor-key flag decodes when present (true), and is absent otherwise.
+    expect(view.superseded[0]!.vendorKeyMatch).toBeUndefined()
+    const flagged = copy(); flagged.superseded[0].vendorKeyMatch = true
+    expect(api.decodeScope3SpendImports(flagged, company).superseded[0]!.vendorKeyMatch).toBe(true)
     expect(api.scope3SpendMappingBody(groups[0]!, { category: 1, naicsCode: "711320", marginChoice: "with_margins", categoryConfirmed: true, activityOverlapConfirmed: null }))
       .toEqual({ expectedRevision: 1, mapping: { glAccount: "6310", vendor: "Events", description: "Venue", category: 1, naicsCode: "711320", marginChoice: "with_margins" }, categoryConfirmed: true, activityOverlapConfirmed: null })
     // A confirmed-distinct or withdrawn line leaves the duplicate queue; a mapped line leaves the unmatched queue.
@@ -72,6 +76,8 @@ describe("spend import decoders (I-09)", () => {
       ["bad created at", v => { v.imports[0].createdAt = "yesterday" }], ["duplicate reference shape", v => { v.lines[3].possibleDuplicateOf = { importId: imp1 } }],
       ["mapping source", v => { v.lines[0].mappingSource = "guess" }], ["reporting year without setup", v => { v.setupVersionId = null }],
       // Round 2 (UX-1, ACC-16): the GL name, the superseded line's own amount and the replacing record's figure.
+      // BF-12: the vendor-key flag is absent or exactly true.
+      ["vendor-key flag not true", v => { v.superseded[0].vendorKeyMatch = false }], ["vendor-key flag a string", v => { v.superseded[0].vendorKeyMatch = "yes" }],
       ["GL name not text", v => { v.lines[0].glDescription = 5 }], ["superseded amount differs from the line", v => { v.superseded[0].spendAmount = "99" }],
       ["superseder missing", v => { v.superseders = [] }], ["superseder listed twice", v => { v.superseders.push(structuredClone(v.superseders[0])) }],
       ["superseder that replaces nothing", v => { v.superseders[0].recordId = rec(9) }],

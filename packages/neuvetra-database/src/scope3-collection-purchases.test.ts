@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url'
 import type { CollectionContext } from './collection-contract'
 import { SCOPE3_REGISTER_2025_SHA256, SCOPE3_SPEND_REGISTER_SHA256, SCOPE3_SUPPLEMENT_REGISTER_SHA256, SCOPE3_US_UPSTREAM_REGISTER_SHA256, SCOPE3_BUILDING_HOTEL_REGISTER_SHA256 } from './method-reference'
 import {
-  planScope3Calculation, planScope3Supersession, planScope3SupersessionClaimants, SCOPE3_ACTIVITY_OVERLAP, SCOPE3_FACTOR_ORIGINS, SCOPE3_GWP_BASES, SCOPE3_HYBRID_UPSTREAM_COVERAGE, SCOPE3_SPEND_CATEGORIES,
+  planScope3Calculation, planScope3Supersession, planScope3SupersessionClaimants, scope3SupersessionNameMatch, SCOPE3_ACTIVITY_OVERLAP, SCOPE3_FACTOR_ORIGINS, SCOPE3_GWP_BASES, SCOPE3_HYBRID_UPSTREAM_COVERAGE, SCOPE3_SPEND_CATEGORIES,
   SCOPE3_SPEND_IMPORT_CATEGORIES, SCOPE3_SPEND_NAICS_SETS, SCOPE3_SUPPLIER_BOUNDARIES, SCOPE3_UNIT_FAMILIES, SCOPE3_VERIFICATION, scope3SpendMappingKeyInput, scope3SpendNaicsAllowed,
   validateScope3Payload, type Scope3CalculationPlan, type Scope3CollectionActivity, type Scope3CollectionKind, type Scope3CollectionVersion, type Scope3PlanOptions,
 } from './scope3-collection'
@@ -451,7 +451,7 @@ describe('BF-12 (B-2): one supplier-name rule for vendor grouping and supersessi
     expect(plans[1]!.notes).toEqual(['spend_tax_treatment_excludes_sales_tax', `superseded_by:${figure.recordId}`, `${VENDOR_KEY_NOTE}Acme Metals Inc`])
     expect(runAll(plans.filter(p => p.action === 'calculate')).map(r => r.result!.total!.display)).toEqual(['3625.0000'])
     // The note has reviewed words.
-    expect(SCOPE3_VENDOR_KEY_MATCH_TEXT).toBe('matched as the same supplier ignoring punctuation and legal suffixes')
+    expect(SCOPE3_VENDOR_KEY_MATCH_TEXT).toBe('matched as the same supplier ignoring punctuation, symbols, “&” or “and”, a leading “The”, full-width letters and endings such as Inc, LLC or Co (accents count)')
   }, TIMEOUT)
 
   test('"ACME METALS, INC" and "The Acme Metals Co." match "Acme Metals Inc"; "Acme Metal" (singular) and "Acme Metals Steel" do not', () => {
@@ -463,6 +463,23 @@ describe('BF-12 (B-2): one supplier-name rule for vendor grouping and supersessi
     // The empty-name guard stays: a name that is only punctuation (vendor key '') never matches another such name by the key.
     expect(supersede([spend({ supplierName: '...' }), supplier({ supersedesSpend: { supplierName: '-', mappingKeys: [] } })]).size).toBe(0)
     expect(supersede([spend({ supplierName: '' }), supplier({ supersedesSpend: { supplierName: 'Inc', mappingKeys: [] } })]).size).toBe(0)
+  })
+
+  // CEO rulings on the QA review (F4 and the empty-name rule).
+  test('names that are only "The" and legal words never match by the key; combining marks count; symbols are dropped', () => {
+    const m = scope3SupersessionNameMatch
+    for (const [a, b] of [['The Limited', 'The Co'], ['The', 'The Co'], ['The Co', 'The Company'], ['Inc', 'Inc.'], ['Inc', 'LLC'], ['L.L.C.', 'LLC'], ['The & Co', 'The Co.']]) expect([a, b, m(a!, b!)]).toEqual([a, b, null])
+    // The earlier exact rule still applies to such names.
+    expect(m('The Co', '  the  CO ')).toBe('exact')
+    // F4: Devanagari and Thai vowel signs are part of the name.
+    for (const [a, b] of [['काल', 'कुल'], ['กิน', 'กัน']]) expect([a, b, m(a!, b!)]).toEqual([a, b, null])
+    expect(m('काल ट्रेडर्स Pvt', 'काल ट्रेडर्स, Pvt')).toBe('vendor_key')
+    // Symbols are dropped like punctuation (as the spend import groups vendors); ™ becomes "TM" under NFKC, so it is not.
+    expect([m('Acme ★', 'Acme'), m('Acme ®', 'Acme'), m('Acme™', 'Acme')]).toEqual(['vendor_key', 'vendor_key', null])
+    // Accents count.
+    expect(m('Café Supply', 'Cafe Supply')).toBeNull()
+    // Through the pre-pass: a record naming "The Co" replaces no line named "The Limited".
+    expect(supersede([spend({ supplierName: 'The Limited' }), supplier({ supersedesSpend: { supplierName: 'The Co', mappingKeys: [] } })]).size).toBe(0)
   })
 
   test('every line the old rule replaced is still replaced, with no new note (ASCII: case, spaces, punctuation-only names)', () => {

@@ -183,7 +183,7 @@ function supersessionOf(id: string, activity: Pick<CollectionActivity, "payload"
   const name = replacingRecordName(id, records)
   const line = activity.payload as unknown as { supplierName: string; glAccount: string; description: string }
   const named = (replacer?.currentVersion.activity.payload as { supersedesSpend?: { supplierName: string; mappingKeys: string[] } | null } | undefined)?.supersedesSpend ?? null
-  const byName = named !== null && scope3SupersessionNameMatch(line.supplierName, named.supplierName) !== null
+  const nameMatch = named !== null ? scope3SupersessionNameMatch(line.supplierName, named.supplierName) : null, byName = nameMatch !== null
   const key = mappingKeys?.get(scope3SpendMappingKeyInput(line))
   const byKey = named !== null && key !== undefined && key !== "" && named.mappingKeys.includes(key)
   const match = byName && byKey ? "both" : byKey ? "key" : "name"
@@ -192,5 +192,7 @@ function supersessionOf(id: string, activity: Pick<CollectionActivity, "payload"
   const categories = [1, 2, ...(partnerCategory !== undefined && [4, 5, 9].includes(partnerCategory) ? [partnerCategory] : [])]
   // The fields whose correction alone stops the replacement carry the note: by both, only Supplier (GL account and
   // Description alone leave the name match); the category always.
-  return { id, name, match, fields: match === "key" ? ["glAccount", "supplier", "description", "category"] : ["supplier", "category"], categories }
+  // BF-12 (QA F1): matched only by the vendor key (not exactly, not by mapping key): the explanation says so, with the supplier the record names.
+  const vendorKeyMatch = nameMatch === "vendor_key" && !byKey ? named!.supplierName : undefined
+  return { id, name, match, fields: match === "key" ? ["glAccount", "supplier", "description", "category"] : ["supplier", "category"], categories, ...(vendorKeyMatch !== undefined ? { vendorKeyMatch } : {}) }
 }

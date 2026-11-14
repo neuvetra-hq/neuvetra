@@ -418,14 +418,14 @@ describe("BF-12: one supplier-name rule for vendor grouping and supersession, th
   // "Superseded by" cell and Mapping section, with the supplier as the replacing record writes it; other lines print as before.
   test("the CSV names the vendor-key match next to the replacing record; an exact match prints exactly as before", async () => {
     const labels = { kind: kindLabel, reason: reasonText, period: periodLabel }
-    const detail = "matched as the same supplier ignoring punctuation and legal suffixes (supplier on the replacing record: Acme Metals Inc)"
+    const detail = "matched as the same supplier ignoring punctuation, symbols, “&” or “and”, a leading “The”, full-width letters and endings such as Inc, LLC or Co (accents count) (supplier on the replacing record: Acme Metals Inc)"
     const a = line("Acme Metals Inc", "Coil Q1"), b = line("Acme Metals, Inc.", "Coil Q2")
     const figure = allocated("145000", "kg CO2e", { supplierName: "Acme Metals", ...replaces })
     const csv = scope3Csv(await build([a, b, figure]), labels).split("\n")
     const rowOf = (r: CollectionActivityRecord) => csv.find(text => text.startsWith("Record,") && text.includes(`,${r.id},`))!
     expect(rowOf(a)).toContain(`,${figure.id},`)
     expect(rowOf(a)).not.toContain("matched as the same supplier")
-    expect(rowOf(b)).toContain(`,${figure.id}; ${detail},`)
+    expect(rowOf(b)).toContain(`,"${figure.id}; ${detail}",`)
     const mapping = csv.find(text => text.startsWith("Mapping,1,331110,"))!
     expect(mapping).toContain(`${a.id} → ${figure.id}; ${b.id} → ${figure.id} [${detail}]`)
     // Held (the replacing record isn't counted): the BF-02b cell, then the match.
@@ -435,6 +435,58 @@ describe("BF-12: one supplier-name rule for vendor grouping and supersession, th
     expect(heldRow(a)).toContain(`,"${held.currentVersion.activity.sourceId}, record ${held.id} (not counted right now; this line is held until it is)",`)
     expect(heldRow(b)).toContain(`,"${held.currentVersion.activity.sourceId}, record ${held.id} (not counted right now; this line is held until it is); ${detail}",`)
   }, TIMEOUT)
+
+  // BF-12 QA B1: with several claimants, the note follows the record actually named on the line (the pre-pass's first
+  // claimant, or the one BF-02b switches to, or the one a held line waits for), never another claimant's match or text.
+  describe("QA B1: several claimants", () => {
+    const held = { allocationNumerator: "200", allocationDenominator: "100" }
+    const loose = (named: string, extra: Record<string, unknown> = {}) => allocated("145000", "kg CO2e", { supplierName: "Acme Metals", ...extra, supersedesSpend: { supplierName: named, mappingKeys: [] } })
+    const note = (named: string) => `superseded_by_vendor_key_match:${named}`
+    const rowOf = (result: Awaited<ReturnType<typeof build>>, r: CollectionActivityRecord) => result.records.find(item => item.recordId === r.id)!
+    const notesOf = (result: Awaited<ReturnType<typeof build>>, r: CollectionActivityRecord) => rowOf(result, r).plan.notes.filter(n => !n.startsWith("spend_tax"))
+    const labels = { kind: kindLabel, reason: reasonText, period: periodLabel }
+    const cellOf = (result: Awaited<ReturnType<typeof build>>, r: CollectionActivityRecord) => scope3Csv(result, labels).split("\n").find(text => text.startsWith("Record,") && text.includes(`,${r.id},`))!
+
+    test("mixed1: the first claimant (complete) matches only by the key, a later exact claimant is held: excluded WITH the note", async () => {
+      const a = loose("Acme Metals Inc"), b = loose("acme metals, inc.", held), l = line("Acme Metals, Inc.", "Coil")
+      const result = await build([a, b, l])
+      expect([rowOf(result, l).plan.status, notesOf(result, l)]).toEqual(["excluded", [`superseded_by:${a.id}`, note("Acme Metals Inc")]])
+    }, TIMEOUT)
+    test("mixed2: the first claimant (exact) is held, BF-02b switches to a complete key-only claimant: the note is added", async () => {
+      const a = loose("acme metals, inc.", held), b = loose("Acme Metals Inc"), l = line("Acme Metals, Inc.", "Coil")
+      const result = await build([a, b, l])
+      expect([rowOf(result, l).plan.status, notesOf(result, l)]).toEqual(["excluded", [`superseded_by:${b.id}`, note("Acme Metals Inc")]])
+      expect(rowOf(result, l).supersededSpendMemo?.supersededBy).toBe(b.id)
+    }, TIMEOUT)
+    test("mixed3: two key-only claimants, the first held: the note names the supplier of the record that replaces the line", async () => {
+      const a = loose("ACME METALS LLC", held), b = loose("Acme Metals Co"), l = line("Acme Metals, Inc.", "Coil")
+      const result = await build([a, b, l])
+      expect([rowOf(result, l).plan.status, notesOf(result, l)]).toEqual(["excluded", [`superseded_by:${b.id}`, note("Acme Metals Co")]])
+      expect(cellOf(result, l)).toContain(`(supplier on the replacing record: Acme Metals Co)`)
+      expect(cellOf(result, l)).not.toContain("ACME METALS LLC")
+    }, TIMEOUT)
+    test("mixed4: a held mapping-key claimant, a complete key-only claimant: the note is added on the switch", async () => {
+      const l = line("Acme Metals, Inc.", "Coil")
+      const key = createHash("sha256").update(scope3SpendMappingKeyInput({ glAccount: "5100", supplierName: "Acme Metals, Inc.", description: "Coil" }), "utf8").digest("hex")
+      const a = allocated("145000", "kg CO2e", { supplierName: "Acme Metals", ...held, supersedesSpend: { supplierName: "Unrelated", mappingKeys: [key] } }), b = loose("Acme Metals Inc")
+      const result = await build([l, a, b])
+      expect([rowOf(result, l).plan.status, notesOf(result, l)]).toEqual(["excluded", [`superseded_by:${b.id}`, note("Acme Metals Inc")]])
+    }, TIMEOUT)
+    test("the reverse switch: a key-only first claimant held, a complete exact claimant: the note is dropped", async () => {
+      const a = loose("Acme Metals Inc", held), b = loose("acme metals, inc."), l = line("Acme Metals, Inc.", "Coil")
+      const result = await build([a, b, l])
+      expect([rowOf(result, l).plan.status, notesOf(result, l)]).toEqual(["excluded", [`superseded_by:${b.id}`]])
+      expect(cellOf(result, l)).not.toContain("matched as the same supplier")
+    }, TIMEOUT)
+    test("all held: the line waits for the first claimant, and carries the note only when THAT record matches by the key alone", async () => {
+      { const a = loose("Acme Metals Inc", held), b = loose("acme metals, inc.", held), l = line("Acme Metals, Inc.", "Coil")
+        const result = await build([a, b, l])
+        expect([rowOf(result, l).plan.status, rowOf(result, l).plan.reasons, notesOf(result, l)]).toEqual(["input_needed", ["replacing_record_not_counted"], [note("Acme Metals Inc"), `replacing_record:${a.id}`]]) }
+      { const a = loose("acme metals, inc.", held), b = loose("Acme Metals Inc", held), l = line("Acme Metals, Inc.", "Coil")
+        const result = await build([a, b, l])
+        expect([rowOf(result, l).plan.status, notesOf(result, l)]).toEqual(["input_needed", [`replacing_record:${a.id}`]]) }
+    }, TIMEOUT)
+  })
 
   test("without variant spellings nothing changes: the results equal those built with the earlier exact rule", async () => {
     const a = line("Acme Metals Inc", "Coil Q1"), other = line("Another Supplier LLC", "Bolts")

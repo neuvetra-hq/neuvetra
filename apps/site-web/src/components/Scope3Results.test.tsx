@@ -320,7 +320,7 @@ describe("I-06: calculation details, profiles, methodology, exclusion register a
   // BF-12 (CEO decision): a spend line replaced only by the vendor key says so next to its replacing record, on screen and
   // in print, with the supplier as the replacing record writes it; a line replaced by the exact rule shows only the record.
   test("BF-12: the vendor-key match is shown next to the replacing record; an exact match shows only the record", () => {
-    const detail = "matched as the same supplier ignoring punctuation and legal suffixes (supplier on the replacing record: Acme Metals Inc)"
+    const detail = "matched as the same supplier ignoring punctuation, symbols, “&” or “and”, a leading “The”, full-width letters and endings such as Inc, LLC or Co (accents count) (supplier on the replacing record: Acme Metals Inc)"
     const by = "93700000-0000-4000-8000-00000000abcd"
     const base = fixture.records.find(row => row.kind === "purchase_spend")!
     const withNotes = (notes: string[]): Scope3ResultsResponse => ({ ...fixture, records: fixture.records.map(row => row === base ? { ...row, plan: { ...row.plan, notes } } : row) })
