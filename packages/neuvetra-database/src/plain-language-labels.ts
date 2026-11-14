@@ -9,7 +9,7 @@
  */
 import type { CollectionActivityKind } from './collection-contract'
 import { SCOPE3_COMPLETION_KINDS } from './scope3-collection-contract'
-import { SCOPE3_DERIVED_KIND_TEXT, SCOPE3_DERIVED_KIND_TEXT_I02B, SCOPE3_DISCLOSURE_TEXT, SCOPE3_KIND_CATEGORIES_TEXT_I02B, SCOPE3_KIND_TEXT, SCOPE3_REASON_TEXT_I02, SCOPE3_REASON_TEXT_I03, SCOPE3_REASON_TEXT_I04, SCOPE3_REASON_TEXT_I05, SCOPE3_REASON_TEXT_I07, SCOPE3_REASON_TEXT_I12H, SCOPE3_REASON_TEXT_I12U, SCOPE3_REASON_TEXT_R2A, SCOPE3_REASON_TEXT_R2B, SCOPE3_REASON_TEXT_BF01 } from './scope3-text'
+import { SCOPE3_DERIVED_KIND_TEXT, SCOPE3_DERIVED_KIND_TEXT_I02B, SCOPE3_DISCLOSURE_TEXT, SCOPE3_KIND_CATEGORIES_TEXT_I02B, SCOPE3_KIND_TEXT, SCOPE3_REASON_TEXT_I02, SCOPE3_REASON_TEXT_I03, SCOPE3_REASON_TEXT_I04, SCOPE3_REASON_TEXT_I05, SCOPE3_REASON_TEXT_I07, SCOPE3_REASON_TEXT_I12H, SCOPE3_REASON_TEXT_I12U, SCOPE3_REASON_TEXT_R2A, SCOPE3_REASON_TEXT_R2B, SCOPE3_REASON_TEXT_BF01, SCOPE3_REASON_TEXT_BF14 } from './scope3-text'
 import type { Scope3CsvLabels } from './scope3-report-csv'
 
 export const ACTIVITY_KINDS: ReadonlyArray<{ kind: CollectionActivityKind; label: string; scope: 1 | 2; source: string; description: string }> = [
@@ -165,6 +165,8 @@ const REASONS: Record<string, string> = {
   ...SCOPE3_REASON_TEXT_R2A,
   // BF-01: a counted possible duplicate (count mode; the Scope 3 CSV prints it as a reason code).
   ...SCOPE3_REASON_TEXT_BF01,
+  // BF-14: a spend line converted at a rate from another year (or of unknown year).
+  ...SCOPE3_REASON_TEXT_BF14,
   // BF-01: a possible duplicate held out of the totals (Scope 1 and 2 records, Scope 3 records and the lines derived from them).
   possible_duplicate_record: 'This record matches another active record (same activity type, location and source ID; for Scope 3, also the same category and quantity) for overlapping dates, so it may be the same record entered twice. It isn’t counted until you withdraw one of them or correct its source ID, location or dates.',
 }
