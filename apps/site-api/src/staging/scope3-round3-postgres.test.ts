@@ -356,7 +356,8 @@ integration("round 3 owner decision 7 natively: the line cap holds in SQL (impor
     const refused = await saveWaste()
     const refusal = await refused.json()
     expect([refused.status, refusal.code]).toEqual([409, "line_budget_exceeded"])
-    expect(refusal.error).toContain("3,000 active lines")
+    // BF-21: this fixture is at schema 32, where 0032 counts stored Scope 3 records only, and the answer says so.
+    expect(refusal.error).toBe(SCOPE3_CAPACITY_TEXT.storedLineBudgetSaveRefused(3000))
     // "Withdraw this import": a member may not; the owner withdraws all 1,000 lines in one set-based statement.
     const withdraw = (actor: string, importId: string, reason = "Imported the wrong month's ledger.") => h.json(`${c.root}/scope3/spend-imports/${importId}/withdrawal`, actor, { reason })
     const started = performance.now()

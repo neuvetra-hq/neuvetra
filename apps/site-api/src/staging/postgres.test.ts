@@ -487,11 +487,11 @@ integration("BF-18: the same server at schema 31, then after 0032 is applied at 
     expect(await database.findCollectionActivities(owner, company)).toEqual(recordsBefore)
     expect(recordsBefore.filter(r => recordsAt31.some(x => x.id === r.id))).toEqual(recordsAt31)
     // BF-21 (CEO ruling): only the Scope 3 results' lineBudget changes at 32, so that it states 0032's count truthfully: each
-    // company lists 11 lines (one flight, and 10 category 3 lines from three electricity records and a gas record, which no
-    // longer count): max = 3,000 + 10, remaining = 3,000 - 1 stored. Every figure, row, frozen text and CSV is unchanged.
+    // company has one stored Scope 3 record (a flight) and category 3 lines derived from its electricity and gas records, which
+    // no longer count: max = 3,000 + the derived lines, remaining = 3,000 - 1. Every figure, row, frozen text and CSV is unchanged.
     for (const id of [company, small]) {
-      const at32 = await observe(id)
-      expect([after31[id]!.scope3.lineBudget, at32.scope3.lineBudget]).toEqual([{ max: 3000, used: 11, remaining: 2989 }, { max: 3010, used: 11, remaining: 2999 }])
+      const at32 = await observe(id), used = after31[id]!.scope3.records.length
+      expect([after31[id]!.scope3.lineBudget, at32.scope3.lineBudget]).toEqual([{ max: 3000, used, remaining: 3000 - used }, { max: 3000 + used - 1, used, remaining: 2999 }])
       expect([id, { ...at32, scope3: { ...at32.scope3, lineBudget: null } }]).toEqual([id, { ...after31[id], scope3: { ...after31[id]!.scope3, lineBudget: null } }])
     }
     expect(after31[small]).toEqual(at31[small])
