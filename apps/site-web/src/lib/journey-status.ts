@@ -10,9 +10,14 @@ import { kindLabel, periodLabel, sourceCategoryLabel, type RecordState } from ".
 import { TODO_SPEND_TEXT_R3C } from "./scope3-text-r3c"
 import { scope3ReadinessOptions, scope3SetupFacts, scope3SpendLineChoices } from "./scope3-forms"
 import { possibleDuplicateOfText, possibleDuplicatePairs, wouldRepeatCountedText } from "../../../../packages/neuvetra-database/src/collection-duplicates"
+import { COVERAGE_TEXT, periodCoverageGaps } from "./period-coverage"
+/** BF-13: the coverage statements, re-exported so every surface that reads coverage reads one wording. */
+export { COVERAGE_TEXT }
 
 export type JourneyPanel = "home" | "setup" | "collection" | "results"
 export interface JourneyRecord { id: string; kind: string; label: string; sourceId: string; locationId: string; site: string; state: RecordState; reasons: string[]; evidenceCount: number; quality: string
+  /** BF-13: the record's own dates (half-open ISO), for the period-coverage check. */
+  periodStart: string; periodEndExclusive: string
   /** Round 3 lane C (PR-3): a line of a spend import (its holds are fixed in the spend import's grouped review). */
   importedSpend?: true
   /**
@@ -124,6 +129,8 @@ export function coverageGaps(view: CompanySetupView | null, records: JourneyReco
     if (location.inclusion !== "included") continue
     if (!counted.some(record => record.kind === "electricity" && record.locationId === location.id)) gaps.push({ id: `electricity-${location.id}`, scope: 2, title: `No electricity record for ${location.name || "an unnamed site"}`, detail: "Add the site’s electricity bill. If the site buys no electricity (for example, the landlord pays), say so in that site’s “Operator / control details” in company setup (04 Locations) — the note is printed with this gap in the report.", note: (location.operatorDetails ?? "").trim() || null, noteFrom: "site" })
   }
+  // BF-13: and whether each included site's counted records of each Scope 1 or 2 kind cover the whole period there.
+  gaps.push(...periodCoverageGaps({ reportingPeriod: setup.reportingPeriod, locations: setup.locations, records: counted }, { kind: kindLabel, period: periodLabel }))
   return gaps
 }
 
@@ -172,7 +179,7 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
       state = "held_period"
     }
     const imported = row.kind === "purchase_spend" && typeof (activity.payload as { importId?: unknown }).importId === "string"
-    return { id: row.id, kind: row.kind, label: kindLabel(row.kind), sourceId: activity.sourceId, locationId: activity.locationId, site: siteName(activity.locationId), state, reasons, evidenceCount: activity.evidenceIds.length, quality: activity.quality, period: periodLabel(activity.period.start, activity.period.endExclusive), ...vehicleFacts(row.kind, activity.payload), ...(imported ? { importedSpend: true as const } : {}) }
+    return { id: row.id, kind: row.kind, label: kindLabel(row.kind), sourceId: activity.sourceId, locationId: activity.locationId, site: siteName(activity.locationId), state, reasons, evidenceCount: activity.evidenceIds.length, quality: activity.quality, periodStart: activity.period.start, periodEndExclusive: activity.period.endExclusive, period: periodLabel(activity.period.start, activity.period.endExclusive), ...vehicleFacts(row.kind, activity.payload), ...(imported ? { importedSpend: true as const } : {}) }
   })
   // WO-04b (BF-01A): Scope 1 and 2 possible duplicates, by the results route's own rule over the same records (Scope 3
   // duplicates come from the Scope 3 results). Withdrawn, excluded and held records keep their precedence, as there.
@@ -256,7 +263,7 @@ export function coverageLines(coverage: Coverage): string[] {
     ...coverage.setupOpen.map(item => `Open in company setup: ${item.title}. ${item.detail}`),
     ...coverage.gaps.map(gap => `Possible gap (Scope ${gap.scope}): ${gap.title}.${gap.note ? ` ${noteLabel(gap)}: ${gap.note}` : ""}`),
   ]
-  return lines.length ? lines : ["No open setup answers or possible gaps: each source type and included site in company setup has at least one record."]
+  return lines.length ? lines : [COVERAGE_TEXT.csvNoGaps]
 }
 
 export async function loadJourneyStatus(workspaceId: string, actor: HostedWorkspaceActor): Promise<JourneyStatus> {
