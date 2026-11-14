@@ -35,6 +35,16 @@ export interface CollectionInstrument {
   evidenceReference: string | null
   generationTechnology: 'wind' | 'solar_photovoltaic' | 'hydro' | 'nuclear' | 'geothermal' | 'natural_gas' | 'coal' | 'oil' | 'biomass' | 'biogas' | 'landfill_gas' | 'mixed' | 'unknown'
   rateLbPerMwh: null | { co2: string; ch4: string | null; n2o: string | null }
+  /**
+   * BF-18 (0032), for BF-11: the certificate or contract identity, each optional and absent on every instrument saved before
+   * 0032. `instrumentId`: the certificate serial or serial range, or the contract's settlement statement or retirement record
+   * (1-120 characters, not blank, no control character); `registry`: 1-80 such characters, or null; `faceMwh`: the MWh the
+   * document conveys, a QUANTITY decimal above 0. Stored as given (the ledger normalises). A database below schema 32 refuses
+   * them, so the route refuses such a save first (`scope12PayloadAvailable`).
+   */
+  instrumentId?: string
+  registry?: string | null
+  faceMwh?: string
 }
 /**
  * BF-09 (0031): a Scope 1 or 2 payload may carry `duplicateConfirmedDistinct`, the user's confirmation that a record flagged as
@@ -212,7 +222,11 @@ const calendarDate = (value: unknown): string => {
 const nullableBoolean = (value: unknown): boolean | null => value === null || typeof value === 'boolean' ? value : fail('Unknown yes/no answers must be null.')
 
 function validateInstrument(value: unknown): CollectionInstrument {
-  const row = object(value, ['type','mwh','qualityCriteriaMet','vintageYear','evidenceReference','generationTechnology','rateLbPerMwh'])
+  // BF-18 (0032): the optional identity keys are checked below and the seven keys of 0027 without them, as 0032 does.
+  if (!value || typeof value !== 'object' || Array.isArray(value)) fail()
+  const { instrumentId, registry, faceMwh: face, ...base } = value as Record<string, unknown>
+  const identity = Object.fromEntries(Object.entries({ instrumentId, registry, faceMwh: face }).filter(([key]) => Object.prototype.hasOwnProperty.call(value, key)))
+  const row = object(base, ['type','mwh','qualityCriteriaMet','vintageYear','evidenceReference','generationTechnology','rateLbPerMwh'])
   const type = enumeration(row.type, ['energy_attribute_certificate','power_purchase_agreement','green_tariff','supplier_specific_rate'] as const)
   const technology = enumeration(row.generationTechnology, ['wind','solar_photovoltaic','hydro','nuclear','geothermal','natural_gas','coal','oil','biomass','biogas','landfill_gas','mixed','unknown'] as const)
   if (typeof row.qualityCriteriaMet !== 'boolean' || !Number.isInteger(row.vintageYear) || (row.vintageYear as number) < 1000 || (row.vintageYear as number) > 9999) fail()
@@ -221,7 +235,22 @@ function validateInstrument(value: unknown): CollectionInstrument {
     const r = object(row.rateLbPerMwh, ['co2','ch4','n2o'])
     rate = { co2: numericInput(r.co2), ch4: r.ch4===null?null:numericInput(r.ch4), n2o: r.n2o===null?null:numericInput(r.n2o) }
   }
-  return { type, mwh: numericInput(row.mwh), qualityCriteriaMet: row.qualityCriteriaMet as boolean, vintageYear: row.vintageYear as number, evidenceReference: row.evidenceReference===null?null:uuid(row.evidenceReference), generationTechnology: technology, rateLbPerMwh: rate }
+  const instrument: CollectionInstrument = { type, mwh: numericInput(row.mwh), qualityCriteriaMet: row.qualityCriteriaMet as boolean, vintageYear: row.vintageYear as number, evidenceReference: row.evidenceReference===null?null:uuid(row.evidenceReference), generationTechnology: technology, rateLbPerMwh: rate }
+  // BF-18 (0032): each identity key kept present only when sent, so a saved payload reads back byte for byte.
+  if (Object.prototype.hasOwnProperty.call(identity, 'instrumentId')) instrument.instrumentId = identityText(identity.instrumentId, 120)
+  if (Object.prototype.hasOwnProperty.call(identity, 'registry')) instrument.registry = identity.registry === null ? null : identityText(identity.registry, 80)
+  if (Object.prototype.hasOwnProperty.call(identity, 'faceMwh')) instrument.faceMwh = faceMwh(identity.faceMwh)
+  return instrument
+}
+/** BF-18 (0032): identity text is collection text with no control character at all (tab and line breaks included). */
+const identityText = (value: unknown, max: number): string => {
+  const valid = text(value, max, false)
+  return /[\u0000-\u001f\u007f-\u009f]/u.test(valid) ? fail() : valid
+}
+/** BF-18 (0032): a QUANTITY decimal (12 integer and 3 fractional digits) above 0. */
+const faceMwh = (value: unknown): string => {
+  const valid = decimal(value)
+  return /^0(\.0+)?$/.test(valid) ? fail('The face value of a certificate or contract must be above 0 MWh.') : valid
 }
 
 function validatePayload(kind: CollectionActivityKind, value: unknown): CollectionPayload {
