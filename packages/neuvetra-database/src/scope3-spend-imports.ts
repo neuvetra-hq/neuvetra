@@ -18,7 +18,7 @@ import { scope3SpendMappingKeyInput } from './scope3-collection'
 import { buildScope3SpendImportRequest, scope3SpendImportReconciliation, type Scope3SpendParse, type Scope3SpendReconciliation } from './scope3-spend-import'
 import { scope3SpendGroupKeyInput, scope3SpendIsGroupMapping, scope3SpendMappingKeyInputOf } from './scope3-spend-grouping'
 import { validateCollectionSaveInput } from './collection-contract'
-import { scope3SpendConversionReason, scope3SpendConvertAmount, scope3SpendNotesWithConversion, scope3SpendRateMatchesLineYear, validateScope3SpendConversionInput } from './scope3-spend-currency'
+import { scope3SpendConversionGroupReason, scope3SpendConvertAmount, scope3SpendNotesWithConversion, scope3SpendRateMatchesLineYear, validateScope3SpendConversionInput } from './scope3-spend-currency'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 const SHA256 = /^[0-9a-f]{64}$/
@@ -303,11 +303,28 @@ export async function saveScope3SpendCorrections(tx: WorkspaceSql, actorId: stri
 }
 
 /**
+ * BF-20: the corrections of one conversion in chunks that save_scope3_spend_corrections accepts: at most `maxLines` lines
+ * (its limit is 3,000) and at most `maxBytes` of JSON each. The function refuses more than 8 MiB of jsonb text, and jsonb's
+ * text form adds at most one space per structural colon or comma, i.e. it is at most twice the JSON; 3.5 MiB keeps a margin.
+ * Order is kept. A worst-case conversion (3,000 lines of about 2 kB) is two chunks.
+ */
+export function scope3SpendCorrectionChunks<T>(corrections: readonly T[], maxLines = 3000, maxBytes = 3_670_016): T[][] {
+  const chunks: T[][] = []
+  let current: T[] = [], bytes = 0
+  for (const item of corrections) {
+    const size = Buffer.byteLength(JSON.stringify(item), 'utf8') + 1
+    if (current.length > 0 && (current.length >= maxLines || bytes + size > maxBytes)) { chunks.push(current); current = []; bytes = 0 }
+    current.push(item); bytes += size
+  }
+  if (current.length > 0) chunks.push(current)
+  return chunks
+}
+
+/**
  * Round 3 lane C (PR-11): converts every active imported spend line in one currency to US dollars at the user's rate, in
- * the caller's one transaction, through the existing record-save RPC (`save_collection_activity`, owner or admin; one
- * correction per line against the version read here). A line whose amount is not a plain positive number (a credit, text)
- * is skipped and listed, and so is a line whose calendar year is not the rate date's (BF-14, `rate_date_outside_line_year`). The lines are read back once at the end and checked. No new SQL: the integrator may later move
- * this to a set-based 0030 statement (see the round 3 lane C log).
+ * the caller's one transaction (owner or admin; each line corrected against the version read here). A line whose amount is not a plain positive number (a credit, text)
+ * is skipped and listed, and so is a line whose calendar year is not the rate date's (BF-14, `rate_date_outside_line_year`). The lines are read back once at the end and checked. BF-20: the
+ * converted lines are written set-based (0030's save_scope3_spend_corrections), with one correction reason for all of them.
  */
 export async function convertScope3SpendCurrency(tx: WorkspaceSql, actorId: string, companyId: string, input: unknown): Promise<{
   converted: Array<{ recordId: string; sourceId: string; versionId: string; revision: number; from: string; usd: string }>; skipped: Array<{ recordId: string; sourceId: string; reason: string }> }> {
@@ -335,19 +352,30 @@ export async function convertScope3SpendCurrency(tx: WorkspaceSql, actorId: stri
     if (!scope3SpendRateMatchesLineYear({ lineDate: (a.payload as PurchaseSpendCollectionPayload).lineDate, period: a.period }, conversion.rateDate)) { skipped.push({ recordId: record.id, sourceId: a.sourceId, reason: 'rate_date_outside_line_year' }); continue }
     planned.push({ record, from: written, usd: scope3SpendConvertAmount(written, conversion.rate) })
   }
-  for (const { record, from, usd } of planned) {
+  // BF-20 (audit BI-02, lead 1): the converted lines are written set-based through 0030's save_scope3_spend_corrections (the
+  // shared writer of the mapping save and "withdraw this import"), not one save_collection_activity call per line: a few
+  // statements under the company lock instead of up to 3,000 round trips. Each line's next activity is built and checked
+  // exactly as before (the same request contract; arithmetic stays in scope3SpendConvertAmount); the correction reason is
+  // one for the whole conversion (the line's own amounts stay in its notes). The lines go in chunks bounded by count and
+  // size (the function takes at most 3,000 lines and 8 MiB of jsonb text), all in the caller's one transaction, so a
+  // refused chunk saves nothing; a line changed since it was read refuses the whole conversion (23505), as before.
+  const reason = scope3SpendConversionGroupReason(conversion).normalize('NFC')
+  const corrections = planned.map(({ record, from, usd }) => {
     const version = record.currentVersion, a = version.activity
     const full = { ...conversion, amount: from, usd }
-    const request = validateCollectionSaveInput({ idempotencyKey: crypto.randomUUID(), expectedRevision: version.revision, expectedVersionId: version.id, correctionReason: scope3SpendConversionReason(full),
+    const request = validateCollectionSaveInput({ idempotencyKey: crypto.randomUUID(), expectedRevision: version.revision, expectedVersionId: version.id, correctionReason: reason,
       activity: { ...a, setupVersionId: setupHead, quantity: { originalValue: usd, originalUnit: 'USD', normalizedValue: usd, normalizedUnit: 'USD' }, notes: scope3SpendNotesWithConversion(a.notes, full) } })
-    const receipt = (await tx.query<{ record_id: string; version_id: string; replayed: boolean }>('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)', [companyId, record.id, JSON.stringify(request)])).rows[0]
-    if (!receipt || receipt.record_id !== record.id || receipt.replayed) throw new Error('Scope 3 currency conversion returned no receipt.')
+    return { recordId: record.id, expectedVersionId: version.id, activity: request.activity }
+  })
+  for (const chunk of scope3SpendCorrectionChunks(corrections)) {
+    const done = await saveScope3SpendCorrections(tx, actorId, companyId, { reason, corrections: chunk })
+    if (done.corrected !== chunk.length || done.unchanged !== 0) throw new Error('Scope 3 currency conversion returned no receipt.')
   }
   // Read back once: each converted line is one revision later, in US dollars, with exactly the planned amount.
   const after = new Map((await readCollectionActivities(tx, companyId)).map(record => [record.id, record]))
   const converted = planned.map(({ record, from, usd }) => {
     const now = after.get(record.id)!.currentVersion
-    if (now.revision !== record.currentVersion.revision + 1 || now.previousVersionId !== record.currentVersion.id || now.activity.quantity.originalUnit !== 'USD' || now.activity.quantity.originalValue !== usd) throw new Error('Scope 3 currency conversion could not be read back.')
+    if (now.revision !== record.currentVersion.revision + 1 || now.previousVersionId !== record.currentVersion.id || now.activity.quantity.originalUnit !== 'USD' || now.activity.quantity.originalValue !== usd || now.correctionReason !== reason) throw new Error('Scope 3 currency conversion could not be read back.')
     return { recordId: record.id, sourceId: now.activity.sourceId, versionId: now.id, revision: now.revision, from, usd }
   })
   return { converted, skipped }

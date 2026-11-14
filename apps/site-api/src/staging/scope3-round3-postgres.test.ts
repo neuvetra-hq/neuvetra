@@ -391,3 +391,128 @@ integration("round 3 owner decision 7 natively: the line cap holds in SQL (impor
     expect([head.currentVersion.revision, head.currentVersion.activity.quantity.originalValue, head.currentVersion.correctionReason]).toEqual([pick[0].currentVersion.revision + 1, "123.45", "Converted at the stated rate."])
   } finally { await h.close() }
 }, 900_000)
+
+// BF-20 (backend audit BI-02, lead 1): the currency conversion writes set-based (0030's save_scope3_spend_corrections in at
+// most a few chunks) instead of one save_collection_activity round trip per line. Measured on main on a 2-CPU host: 3,000
+// EUR lines took 9-11 s with the company lock held 8.6 s (a colleague's save failed after the 5 s lock_timeout); with 20 ms
+// per round trip 79 s. Set-based: 3.5 s (lock about 2.9 s), 4.8 s with 20 ms per round trip (lock about 3.6 s).
+/** Waits until the company row lock is held by another transaction (probed with NOWAIT as the operator), up to `ms`. */
+async function companyLockHeld(operator: WorkspaceConnection, companyId: string, ms: number) {
+  const until = performance.now() + ms
+  while (performance.now() < until) {
+    const held = await operator.transaction(async tx => { try { await tx.query("select 1 from neuvetra.companies where id=$1 for update nowait", [companyId]); return false } catch { return true } })
+    if (held) return true
+    await Bun.sleep(20)
+  }
+  return false
+}
+/** Spans during which the company row lock was seen held (20 ms NOWAIT probes) until `done()`; returns the longest span in ms. */
+async function companyLockSpan(operator: WorkspaceConnection, companyId: string, done: () => boolean) {
+  let first = 0, last = 0
+  while (!done()) {
+    const held = await operator.transaction(async tx => { try { await tx.query("select 1 from neuvetra.companies where id=$1 for update nowait", [companyId]); return false } catch { return true } })
+    if (held) { last = performance.now(); first ||= last }
+    await Bun.sleep(20)
+  }
+  return first ? Math.round(last - first + 20) : 0
+}
+
+integration("BF-20 natively: a 2,990-line EUR conversion through the route is set-based; a colleague's save in the same company waits and succeeds; another company's reads stay fast", async () => {
+  const h = await harness()
+  try {
+    const c = await h.company("bf20-convert", [1, 4, 5, 6]), other = await h.company("bf20-other", [1, 4, 5, 6])
+    const eur = (prefix: string, rows: number) => enc(new TextDecoder().decode(ledger(prefix, rows)).replaceAll(",USD,", ",EUR,"))
+    for (const [prefix, rows] of [["FA", 2000], ["FB", 990]] as const) { const bytes = eur(prefix, rows); expect((await h.importFile(c, bytes, await h.upload(c.root, c.name, bytes, `${prefix}.csv`))).status).toBe(201) }
+    const theirs = ledger("FO", 200); expect((await h.importFile(other, theirs, await h.upload(other.root, other.name, theirs, "o.csv"))).status).toBe(201)
+    await h.operator.exec("analyze")
+    const theirBefore = (await h.operator.query<{ n: string; h: string }>("select count(*) n,md5(string_agg(v.id::text||v.payload_sha256,',' order by v.id)) h from neuvetra.collection_activity_versions v where v.company_id=$1", [other.id])).rows[0]
+    const gas = { locationId: c.site, setupVersionId: c.setupVersionId, state: "active", withdrawalReason: null, quality: "actual", estimateBasis: null, period: { start: "2025-01-01", endExclusive: "2026-01-01" },
+      reference: "Synthetic colleague", notes: "", evidenceIds: [], kind: "natural_gas", sourceId: "BF20-GAS", quantity: { originalValue: "120", originalUnit: "therm", normalizedValue: "120", normalizedUnit: "therm" }, payload: { heatContent: null } }
+    const started = performance.now()
+    const conversion = h.json(`${c.root}/scope3/spend-currency-conversions`, c.name, { currency: "EUR", rate: "1.0823", rateSource: "ECB euro reference rate", rateDate: "2025-06-30" })
+    let finished = false
+    void conversion.finally(() => { finished = true })
+    // The colleague saves while the conversion holds the company lock; another company's member reads meanwhile.
+    expect(await companyLockHeld(h.operator, c.id, 15_000)).toBe(true)
+    const reads: number[] = []
+    const reading = (async () => { while (!finished) { const s = performance.now(); const r = await h.call(`${other.root}/collection/activities`, other.name); await r.arrayBuffer(); reads.push(r.status === 200 ? Math.round(performance.now() - s) : -r.status); await Bun.sleep(50) } })()
+    const colleagueStart = performance.now()
+    const colleague = await h.json(`${c.root}/collection/activities/${crypto.randomUUID()}`, c.name, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity: gas })
+    const colleagueMs = Math.round(performance.now() - colleagueStart)
+    await reading
+    const response = await conversion
+    const totalMs = Math.round(performance.now() - started)
+    const body = await response.json()
+    console.info(`BF-20 native: 2,990-line conversion ${response.status} in ${totalMs} ms; colleague save ${colleague.status} in ${colleagueMs} ms; other company's reads ${JSON.stringify(reads)} ms`)
+    expect([response.status, body.converted.length, body.skipped.length]).toEqual([201, 2990, 0])
+    // Main: a colleague's save failed after the 5 s lock_timeout (503); now it waits for the conversion and saves.
+    expect(colleague.status).toBe(201)
+    expect(colleagueMs).toBeLessThan(5000)
+    expect(totalMs).toBeLessThan(IMPORT_BUDGET_MS)
+    expect(reads.length).toBeGreaterThan(0)
+    expect(reads.every(ms => ms >= 0 && ms < 2000)).toBe(true)
+    // Every converted line: one revision later, in US dollars at exactly the amount the TypeScript arithmetic gives, the shared reason.
+    const { scope3SpendConvertAmount } = await import("../../../../packages/neuvetra-database/src/scope3-spend-currency")
+    const rows = (await h.operator.query<{ source_id: string; revision: number; original_quantity: string; normalized_quantity: string; original_unit: string; correction_reason: string; prior: string }>(`select v.source_id,v.revision,v.original_quantity,v.normalized_quantity::text,v.original_unit,v.correction_reason,p.original_quantity prior
+      from neuvetra.collection_activity_heads hd join neuvetra.collection_activity_versions v on v.id=hd.version_id join neuvetra.collection_activity_versions p on p.id=v.previous_version_id where hd.company_id=$1 and v.payload->>'kind'='purchase_spend'`, [c.id])).rows
+    expect(rows.length).toBe(2990)
+    expect(rows.filter(r => r.revision !== 2 || r.original_unit !== "USD" || r.original_quantity !== scope3SpendConvertAmount(r.prior, "1.0823") || Number(r.normalized_quantity) !== Number(r.original_quantity)
+      || r.correction_reason !== "Converted from EUR to USD at 1.0823 USD per EUR (ECB euro reference rate, rate date 2025-06-30; rounded half-even to the cent).")).toEqual([])
+    // The other company's rows are untouched.
+    expect((await h.operator.query<{ n: string; h: string }>("select count(*) n,md5(string_agg(v.id::text||v.payload_sha256,',' order by v.id)) h from neuvetra.collection_activity_versions v where v.company_id=$1", [other.id])).rows[0]).toEqual(theirBefore)
+  } finally { await h.close() }
+}, 900_000)
+
+integration("BF-20 natively (lead 1): with 20 ms per database round trip a 2,990-line conversion holds the company lock well inside the 5 s lock_timeout", async () => {
+  const h = await harness()
+  // A loopback TCP proxy that delays every chunk 10 ms in each direction (order kept), in front of the same database.
+  type Side = { peer?: { write(b: Uint8Array): number; end(): void }; queue: Promise<unknown>; pending?: Uint8Array[] }
+  const delayed = (side: Side, to: { write(b: Uint8Array): number }, bytes: Uint8Array) => { const due = performance.now() + 10; side.queue = side.queue.then(() => Bun.sleep(Math.max(0, due - performance.now()))).then(() => to.write(bytes)) }
+  const target = new URL(process.env.M63_API_TEST_DATABASE_URL!)
+  const proxy = Bun.listen<Side>({ hostname: "127.0.0.1", port: 0, socket: {
+    open(client) {
+      client.data = { queue: Promise.resolve() }
+      void Bun.connect<Side>({ hostname: target.hostname, port: Number(target.port), socket: {
+        open(up) { up.data = { peer: client, queue: Promise.resolve() }; client.data.peer = up; for (const b of client.data.pending ?? []) delayed(client.data, up, b) },
+        data(up, bytes) { delayed(up.data, client, new Uint8Array(bytes)) }, close() { client.end() }, error() { client.end() } } })
+    },
+    data(client, bytes) { const copy = new Uint8Array(bytes); if (client.data.peer) delayed(client.data, client.data.peer, copy); else (client.data.pending ??= []).push(copy) },
+    close(client) { client.data.peer?.end() }, error(client) { client.data.peer?.end() } } })
+  const slowUrl = new URL(target); slowUrl.username = "neuvetra_runtime"; slowUrl.port = String(proxy.port)
+  const slow = createPostgresConnection(slowUrl.toString(), { tls: false, maxConnections: 2 })
+  const slowDatabase = new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string) => HostedWorkspaceDatabase)(slow, REF)
+  try {
+    const c = await h.company("bf20-latency", [1, 4, 5, 6])
+    const eur = (prefix: string, rows: number) => enc(new TextDecoder().decode(ledger(prefix, rows)).replaceAll(",USD,", ",EUR,"))
+    for (const [prefix, rows] of [["LA", 2000], ["LB", 990]] as const) { const bytes = eur(prefix, rows); expect((await h.importFile(c, bytes, await h.upload(c.root, c.name, bytes, `${prefix}.csv`))).status).toBe(201) }
+    // One round trip through the proxy takes at least 20 ms.
+    const ping = performance.now(); await slow.query("select 1"); await slow.query("select 1")
+    expect((performance.now() - ping) / 2).toBeGreaterThanOrEqual(19)
+    let finished = false
+    const started = performance.now()
+    const conversion = slowDatabase.convertScope3SpendCurrency(c.owner, c.id, { currency: "EUR", rate: "1.0823", rateSource: "ECB euro reference rate", rateDate: "2025-06-30" }).finally(() => { finished = true })
+    const lockMs = await companyLockSpan(h.operator, c.id, () => finished)
+    const done = await conversion
+    const totalMs = Math.round(performance.now() - started)
+    console.info(`BF-20 native lead 1: 2,990 lines at 20 ms per round trip converted in ${totalMs} ms, company lock held about ${lockMs} ms (main: 79 s, lock about 78 s)`)
+    expect(done.converted.length).toBe(2990)
+    expect(lockMs).toBeGreaterThan(0)
+    expect(lockMs).toBeLessThan(5000)
+    expect(totalMs).toBeLessThan(IMPORT_BUDGET_MS)
+  } finally { await slow.close(); proxy.stop(true); await h.close() }
+}, 900_000)
+
+integration("BF-20 natively: differential at 3,000 lines (two chunks): the per-line reference of main and the set-based conversion store identical rows", async () => {
+  const { seedCompany, differential } = await import("../../../../packages/neuvetra-database/src/scope3-currency-differential.fixture")
+  const operator = createPostgresConnection(process.env.M63_API_TEST_DATABASE_URL!, { tls: false })
+  const db = { query: operator.query.bind(operator), exec: operator.exec.bind(operator), transaction: operator.transaction.bind(operator), close: () => operator.close() }
+  try {
+    const hex = () => crypto.randomUUID().slice(0, 8)
+    const other = await seedCompany(db, 11, [100, 100], { prefix: hex() })
+    const fx = await seedCompany(db, 12, [2000, 1000], { prefix: hex(), currencies: ["EUR"], plain: true })
+    const result = await differential(db, fx, other, { currency: "EUR", rate: "1.0823", rateSource: "ECB euro reference rate", rateDate: "2025-06-30" })
+    console.info(`BF-20 native differential: ${result.converted} converted, ${result.skipped} skipped, ${result.chunks} chunks, ${result.rows} rows compared, ${result.mismatches} mismatches`)
+    expect([result.converted, result.mismatches, result.refused]).toEqual([3000, 0, null])
+    expect(result.chunks).toBeGreaterThan(1)
+  } finally { await operator.close() }
+}, 900_000)

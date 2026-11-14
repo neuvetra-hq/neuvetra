@@ -50,9 +50,12 @@ const NOTE_PREFIX = 'Currency conversion: '
 /** The notes line a converted spend line keeps (one line; parsed back by `scope3SpendConversionOf`). */
 export const scope3SpendConversionNote = (c: Scope3SpendConversion) =>
   `${NOTE_PREFIX}${c.currency} ${c.amount} × ${c.rate} USD per ${c.currency} = USD ${c.usd} (rate source: ${c.rateSource}; rate date: ${c.rateDate}; rounded half-even to the cent).`
-/** The correction reason of a converted line. */
+/** The correction reason of a converted line before BF-20 (kept for the per-line reference the BF-20 differential tests run). */
 export const scope3SpendConversionReason = (c: Scope3SpendConversion) =>
   `Converted from ${c.currency} ${c.amount} to USD ${c.usd} at ${c.rate} USD per ${c.currency} (${c.rateSource}, rate date ${c.rateDate}; rounded half-even to the cent).`
+/** BF-20: the one correction reason of a whole conversion (each line's own amounts are in its notes line). */
+export const scope3SpendConversionGroupReason = (c: Scope3SpendConversionInput) =>
+  `Converted from ${c.currency} to USD at ${c.rate} USD per ${c.currency} (${c.rateSource}, rate date ${c.rateDate}; rounded half-even to the cent).`
 const NOTE = /^Currency conversion: ([A-Z]{3}) (\S+) × (\S+) USD per \1 = USD (\S+) \(rate source: (.{1,200}); rate date: (\d{4}-\d{2}-\d{2}); rounded half-even to the cent\)\.$/
 /** The conversion a line's notes record, or null. */
 export function scope3SpendConversionOf(notes: string): Scope3SpendConversion | null {
