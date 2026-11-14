@@ -1,7 +1,7 @@
 // Scope 3 package 2: the draft Scope 3 results route, end to end through the adapter, the real Scope 3 engine and the
 // trusted boundary. Cases S3-01 to S3-14 of the 19 October brief that are route behaviour. Claude, 26 October 2026.
 import { describe, expect, test } from "bun:test"
-import { validateCollectionActivity, type CollectionActivityRecord, type CollectionContext, type CollectionEvidenceMetadata, type CompanySetupView } from "@neuvetra/database"
+import { SCOPE3_CAPACITY_TEXT, validateCollectionActivity, type CollectionActivityRecord, type CollectionContext, type CollectionEvidenceMetadata, type CompanySetupView } from "@neuvetra/database"
 import { createScope1Engine } from "../calculation/scope1-authority"
 import { createScope2Engine } from "../calculation/scope2-authority"
 import { createScope3Engine } from "../calculation/scope3-authority"
@@ -10,7 +10,7 @@ import { planElectricityUpstream, planEnergyResoldUpstream, planFuelUpstream, pl
 import { SCOPE3_COMPLETION_KINDS, SCOPE3_KIND_CATEGORIES } from "../../../../packages/neuvetra-database/src/scope3-collection-contract"
 import { SCOPE3_PAYLOAD_FIXTURES } from "../../../../packages/neuvetra-database/src/scope3-payload-fixtures"
 import { buildCollectionResults, DRAFT_RESULTS_LABEL, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256 } from "./collection-results-routes"
-import { buildScope3Results, createScope3ResultsRoutes, MAX_COMPANY_RECORDS, MAX_SCOPE3_LINES, REVIEWED_SCOPE3_ENGINE_SHA256, SCOPE3_RESULTS_PROFILE, scope3AnnotationOf, scope3HeldOutcome, scope3RowPlan, type Scope3ResultRow, type Scope3ResultsDatabase, type Scope3ResultsEngine } from "./scope3-results-routes"
+import { buildScope3Results, createScope3ResultsRoutes, MAX_COMPANY_RECORDS, MAX_SCOPE3_LINES, MAX_SCOPE3_RUN_LINES, scope3LineCountRule, scope3StoredLineCount, REVIEWED_SCOPE3_ENGINE_SHA256, SCOPE3_RESULTS_PROFILE, scope3AnnotationOf, scope3HeldOutcome, scope3RowPlan, type Scope3ResultRow, type Scope3ResultsDatabase, type Scope3ResultsEngine } from "./scope3-results-routes"
 import { fixtureAssessmentRecord } from "../../../../packages/neuvetra-database/src/scope3-payload-fixtures"
 import type { Scope3AssessmentRecord } from "../../../../packages/neuvetra-database/src/scope3-assessment-contract"
 
@@ -349,6 +349,50 @@ describe("Scope 3 results through the batch engine path (I-01)", () => {
     // Round 2 (owner decision 10): only active lines count; the refusal says how to recover.
     expect([over.status, await over.json()]).toEqual([422, { code: "line_budget_exceeded", error: "More than 3,000 active Scope 3 lines. Withdraw lines you no longer need (withdrawn lines don’t count) to calculate again." }])
     expect((await get(Array(MAX_COMPANY_RECORDS + 1).fill(gas))).status).toBe(422)
+  }, TIMEOUT)
+
+  test("BF-21: from schema 32 the limit counts stored Scope 3 records only (0032's count); below 32 every listed line, as before", async () => {
+    expect([scope3LineCountRule(28), scope3LineCountRule(31), scope3LineCountRule(32), MAX_SCOPE3_RUN_LINES]).toEqual(["listed", "listed", "stored", 4200])
+    // 2,999 stored Scope 3 records and two electricity records: 3,005 listed lines with category 3 included.
+    const lines = Array.from({ length: 2999 }, (_, i) => clone(asphalt, 30_000 + i))
+    const power2 = [clone(powerOffice, 1), clone(powerOffice, 2)]
+    const stored = (records: CollectionActivityRecord[], screen = included) => buildScope3Results({ companyId: company, context, records, evidence, setup: setupView(screen), engine, now: () => new Date("2026-10-26T00:00:00Z"), lineCountRule: "stored" })
+    await expect(build([...lines, ...power2])).rejects.toMatchObject({ code: "54000", lineBudget: { rule: "listed", used: 3005 } })
+    const ok = await stored([...lines, ...power2])
+    // The budget is true under 0032's count and keeps the shape the web decoder and the frozen v3 validator check: 3,000
+    // stored lines plus the 6 lines derived from the two Scope 2 records may be listed; 1 stored line is still free.
+    expect([ok.records.length, ok.lineBudget]).toEqual([3005, { max: 3006, used: 3005, remaining: 1 }])
+    expect(ok.records.every(row => row.outcome === "calculated")).toBe(true)
+    // Not one figure changes with the rule: the same records under 3,000 listed lines give the same document but the budget.
+    const few = [...lines.slice(0, 10), ...power2]
+    const [a, b] = [await build(few), await stored(few)]
+    expect({ ...b, lineBudget: null, generatedAt: null }).toEqual({ ...a, lineBudget: null, generatedAt: null })
+    expect([a.lineBudget, b.lineBudget]).toEqual([{ max: 3000, used: 16, remaining: 2984 }, { max: 3006, used: 16, remaining: 2990 }])
+    // Category 3 excluded: no derived lines, the two budgets agree exactly.
+    expect((await stored(few, { ...included, 3: "no" })).lineBudget).toEqual((await build(few, { ...included, 3: "no" })).lineBudget)
+    // Over 3,000 stored lines: refused under both rules, with the stored count under "stored".
+    const over = [...lines, clone(asphalt, 40_000), clone(asphalt, 40_001)]
+    await expect(stored(over)).rejects.toMatchObject({ code: "54000", lineBudget: { rule: "stored", max: 3000, used: 3001 } })
+    // An energy-resold record counts twice while category 3 is included, once otherwise (0032).
+    const resold = record({ kind: "energy_resold", sourceId: "RES-1", quantity: q("10", "MWh"), payload: { gridBasis: "subregion", zip: "94105", subregion: "CAMX", utilityEiaId: null, resoldEnergyNotInScope2: true } })
+    expect([scope3StoredLineCount([resold, asphalt, gas, powerOffice], true), scope3StoredLineCount([resold, asphalt, gas, powerOffice], false), scope3StoredLineCount([cancelled], true)]).toEqual([3, 2, 0])
+    // More derived lines than 400 active Scope 1 and 2 records can give (data saved before 0031's cap): refused before the engine.
+    const legacy = Array.from({ length: 1401 }, (_, i) => clone(powerOffice, 50_000 + i))
+    await expect(stored(legacy)).rejects.toMatchObject({ code: "54000", scope12RecordLimit: true })
+    // Through the route: at 31 the answer before BF-21; at 32 the run, or the stored count and the ways back.
+    const database = (records: CollectionActivityRecord[]): Scope3ResultsDatabase => ({
+      findCollectionContext: async () => context, findCollectionActivities: async () => records, findCollectionEvidence: async () => [], findCompanySetup: async () => setupView(included), findCurrentMethodReleases: async () => [],
+    })
+    const get = (records: CollectionActivityRecord[], schema: number) => createScope3ResultsRoutes({ database: database(records), engine, origin: "https://staging.example.test", environment: "synthetic_staging", schemaVersion: async () => schema, validateUser: async () => ({ id: owner, email: null, phone: null, fullName: null }) })(new Request(`https://api.example.test/workspace/${company}/results/scope3`, { headers: { authorization: "Bearer ok" } }))
+    const at31 = await get([...lines, ...power2], 31)
+    expect([at31.status, await at31.json()]).toEqual([422, { code: "line_budget_exceeded", error: "More than 3,000 active Scope 3 lines. Withdraw lines you no longer need (withdrawn lines don’t count) to calculate again." }])
+    const at32 = await get([...lines, ...power2], 32)
+    expect([at32.status, (await at32.json()).lineBudget]).toEqual([200, { max: 3006, used: 3005, remaining: 1 }])
+    const over32 = await get(over, 32)
+    expect([over32.status, await over32.json()]).toEqual([422, { code: "line_budget_exceeded", lineBudget: { max: 3000, used: 3001 }, error: SCOPE3_CAPACITY_TEXT.storedResultsOverBudget(3000, 3001) }])
+    expect(SCOPE3_CAPACITY_TEXT.storedResultsOverBudget(3000, 3001)).toBe("Scope 3 has 3,001 saved lines, more than its limit of 3,000, so it can’t be calculated. Each active Scope 3 record counts once and an energy-resold record twice while category 3 is included in company setup. Withdraw Scope 3 lines you no longer need (withdrawn lines don’t count), or exclude category 3 in company setup, then calculate again.")
+    const legacy32 = await get(legacy, 32)
+    expect([legacy32.status, (await legacy32.json()).code]).toEqual([422, "record_limit_reached"])
   }, TIMEOUT)
 })
 

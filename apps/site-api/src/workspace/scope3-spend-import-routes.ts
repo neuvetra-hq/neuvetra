@@ -10,7 +10,7 @@ import type { AuthenticatedUser } from "../lib/auth"
 // Round 2b integration (ENG-14): the shared Scope 3 route helpers (prelude, body readers, UUID, responses).
 import { readScope3Body, readScope3JsonBody, scope3BusyResponse, scope3Respond, scope3RoutePrelude, Scope3RouteProblem, SCOPE3_UUID, SCOPE3_UUID_SOURCE } from "./scope3-route-helpers"
 // Round 2, lane B (owner decision 10): the active-line budget check before an import saves anything.
-import { scope3LineBudget } from "./scope3-results-routes"
+import { MAX_SCOPE3_LINES, scope3GridLossesIncluded, scope3LineBudget, scope3LineCountRule, scope3StoredLineCount, type Scope3LineCountRule } from "./scope3-results-routes"
 // BF-19 (BI-02): one bulk write per API instance at a time.
 import { bulkWriteBusyResponse, createBulkWriteGate, type BulkWriteGate } from "./bulk-write-gate"
 
@@ -188,6 +188,8 @@ export async function scope3LinesAtRemovedLocations(database: Pick<Scope3SpendIm
 }
 
 export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImportRouteDatabase; validateUser: (token: string) => Promise<AuthenticatedUser | null>; origin: string
+  /** BF-21: the database's schema version; from 32 the pre-check counts as 0032 does (stored Scope 3 records only). Absent: 0. */
+  schemaVersion?: () => Promise<number>
   /** BF-19: the instance's bulk-write gate (the staging server passes its one gate; a new one per route by default). */
   bulkWriteGate?: BulkWriteGate }) {
   const gate = deps.bulkWriteGate ?? createBulkWriteGate()
@@ -204,10 +206,16 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
     const actor: AuthenticatedUser = prelude.actor
     let attemptedFileLines = 0
     let completedImport: Awaited<ReturnType<Scope3SpendImportRouteDatabase["importScope3Spend"]>> | null = null
-    const capRefusal = (lineBudget: ReturnType<typeof scope3LineBudget>) => respond(409, {
-      code: "line_budget_exceeded", lineBudget, fileLines: attemptedFileLines,
-      error: SCOPE3_CAPACITY_TEXT.lineBudgetExceeded(lineBudget.max, lineBudget.used, attemptedFileLines),
-    })
+    // BF-21: the count the database at this schema enforces (0030's below 32, 0032's from 32), read once per request.
+    let rule: Scope3LineCountRule | null = null
+    const lineRule = async () => rule ??= scope3LineCountRule(await (deps.schemaVersion?.() ?? Promise.resolve(0)))
+    const capRefusal = (records: Parameters<typeof scope3LineBudget>[0], setup: Parameters<typeof scope3LineBudget>[1], counted: Scope3LineCountRule) => {
+      const lineBudget = scope3LineBudget(records, setup, counted)
+      // Below schema 32 exactly the answer before BF-21; from 32 the stored count, as the database counts it.
+      return respond(409, { code: "line_budget_exceeded", lineBudget, fileLines: attemptedFileLines,
+        error: counted === "stored" ? SCOPE3_CAPACITY_TEXT.storedLineBudgetExceeded(MAX_SCOPE3_LINES, scope3StoredLineCount(records, scope3GridLossesIncluded(setup)), attemptedFileLines)
+          : SCOPE3_CAPACITY_TEXT.lineBudgetExceeded(lineBudget.max, lineBudget.used, attemptedFileLines) })
+    }
     // BF-19 (BI-02): every write here is a bulk write (an import, a withdrawal, a currency conversion, a mapping that corrects
     // its group). It takes the instance's gate once the caller is authorised for this company (QA follow-up 5 of PR #74: a
     // non-member still gets 404 and a member 403, never "busy") and before anything is written or receipted; the hold is
@@ -273,9 +281,10 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
       // refused before anything is saved (withdrawn lines never count; a replay of the same bytes saves nothing, so it is
       // never refused). The body carries the budget and the file's line count.
       const [earlier, records] = await Promise.all([deps.database.findScope3SpendImports(actor.id, companyId), deps.database.findCollectionActivities(actor.id, companyId)])
-      const budget = scope3LineBudget(records, setup)
+      const counted = await lineRule()
+      const budget = scope3LineBudget(records, setup, counted)
       if (!earlier.some(item => item.fileSha256 === fileSha256) && parsed.lines.length > budget.remaining)
-        return capRefusal(budget)
+        return capRefusal(records, setup, counted)
       const result = await deps.database.importScope3Spend(actor.id, companyId, { parsed, fileSha256, evidenceId, locationId })
       completedImport = result
       const ids = new Set(result.import.lines.map(line => line.recordId))
@@ -308,7 +317,7 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
         try {
           const [setup, records] = await Promise.all([deps.database.findCompanySetup(actor.id, companyId), deps.database.findCollectionActivities(actor.id, companyId)])
           if (!setup) return respond(404, NOT_FOUND)
-          return capRefusal(scope3LineBudget(records, setup))
+          return capRefusal(records, setup, await lineRule())
         } catch { return respond(503, { error: "The current Scope 3 line budget could not be read. Nothing was saved. Reload and try again." }) }
       }
       // Bug hunt (PR 22, 1 November 2026): every bulk spend write saves its lines against the current setup version, and 0030
