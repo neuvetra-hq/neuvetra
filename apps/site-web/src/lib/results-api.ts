@@ -1,4 +1,5 @@
 import type { HostedWorkspaceActor } from "./workspace-api"
+import { withRequestTimeout } from "./request-timeout"
 import { POSSIBLE_DUPLICATE_COUNTED_REASON, possibleDuplicateCounted, possibleDuplicateOf, possibleDuplicateOfText, possibleDuplicatesOverstatedText, wouldRepeatCountedOf, wouldRepeatCountedText } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { periodLabel } from "../../../../packages/neuvetra-database/src/plain-language-labels"
 
@@ -177,13 +178,17 @@ export class ResultsApiError extends Error { constructor(message: string, readon
 export async function loadResults(companyId: string, actor: HostedWorkspaceActor): Promise<ResultsResponse> {
   if (!UUID.test(companyId)) throw new Error("Invalid company reference.")
   if (!actor.accessToken || /[\r\n]/.test(actor.accessToken)) throw new Error("Sign in again to continue.")
-  const response = await fetch(`/workspace-api/workspace/${companyId}/results`, { headers: { authorization: `Bearer ${actor.accessToken}` }, cache: "no-store", signal: actor.signal })
-  if (response.status === 401 || response.status === 403) actor.onUnauthorized?.(response.status)
-  if (!response.ok) {
-    const body: unknown = await response.json().catch(() => null)
-    throw new ResultsApiError(record(body) && typeof body.error === "string" ? body.error : "Results are unavailable right now.", response.status)
-  }
-  return decodeResults(await response.json(), companyId)
+  // BI-01b: limited to 60 s (the "results" kind; a run behind another for the same user can take about 50 s). Before,
+  // this request had no limit of its own. The limit covers reading the answer too.
+  const { response, value } = await withRequestTimeout("results", actor.signal, async signal => {
+    const response = await fetch(`/workspace-api/workspace/${companyId}/results`, { headers: { authorization: `Bearer ${actor.accessToken}` }, cache: "no-store", signal })
+    if (response.status === 401 || response.status === 403) actor.onUnauthorized?.(response.status)
+    const value: unknown = response.ok ? await response.json() : await response.json().catch(() => null)
+    return { response, value }
+  })
+  if (!response.ok) throw new ResultsApiError(record(value) && typeof value.error === "string" ? value.error : "Results are unavailable right now.", response.status)
+  actor.signal?.throwIfAborted()
+  return decodeResults(value, companyId)
 }
 
 /** A CSV of every record and its draft result. Figures are the engine's exact display strings; nothing is re-summed. */

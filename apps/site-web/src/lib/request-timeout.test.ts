@@ -4,6 +4,7 @@ import { afterEach, describe, expect, test } from "bun:test"
 import { configureRequestTimeouts, isRequestTimeout, REQUEST_TIMEOUT_TEXT, requestTimeoutMs, RequestTimeoutError, SERVER_BUSY_TEXT, SLOW_REQUEST_TEXT, serverErrorText, slowRequestCount, subscribeRequestEvents, withRequestTimeout, type RequestEvent } from "./request-timeout"
 import { CollectionApiError, downloadCollectionEvidence, listCollectionActivities, saveCollectionActivity, uploadCollectionEvidence } from "./collection-api"
 import { loadScope3Results, Scope3ResultsApiError } from "./scope3-results-api"
+import { loadResults, ResultsApiError } from "./results-api"
 import { loadScope3Reports, prepareScope3Report, Scope3ReportApiError } from "./scope3-report-api"
 import { clearSharedGets } from "./shared-get"
 
@@ -18,8 +19,8 @@ const company = "00000000-0000-4000-8000-000000000001", record = "00000000-0000-
 const actor = { accessToken: "t", userId: "00000000-0000-4000-8000-0000000000aa", role: "owner" as const }
 
 describe("limits and texts", () => {
-  test("design §6 P0-08: 35 s by default, 95 s for Scope 3 results, 125 s for report prepare and uploads; slow at 8 s", async () => {
-    expect([requestTimeoutMs("default"), requestTimeoutMs("scope3Results"), requestTimeoutMs("reportPrepare"), requestTimeoutMs("upload")]).toEqual([35_000, 95_000, 125_000, 125_000])
+  test("design §6 P0-08: 35 s by default, 60 s for Scope 1 and 2 results (BI-01b), 95 s for Scope 3 results, 125 s for report prepare and uploads; slow at 8 s", async () => {
+    expect([requestTimeoutMs("default"), requestTimeoutMs("results"), requestTimeoutMs("scope3Results"), requestTimeoutMs("reportPrepare"), requestTimeoutMs("upload")]).toEqual([35_000, 60_000, 95_000, 125_000, 125_000])
     expect(SLOW_REQUEST_TEXT).toBe("Taking longer than usual…")
     expect(REQUEST_TIMEOUT_TEXT).toBe("Neuvetra didn't answer in time. Nothing was lost — Try again.")
     expect(SERVER_BUSY_TEXT).toBe("Neuvetra is busy — try again in a moment.")
@@ -158,5 +159,37 @@ describe("the request paths", () => {
     globalThis.fetch = (async () => Response.json({ code: "scope3_unavailable", error: "Scope 3 results are not available yet." }, { status: 503 })) as unknown as typeof fetch
     const results = await loadScope3Results(company, actor).catch(cause => cause)
     expect(results.code).toBe("scope3_unavailable"); expect(results.message).toBe("Scope 3 results are not available yet.")
+  })
+})
+
+describe("BI-01b: Scope 1 and 2 results have their own limit", () => {
+  test("a results request is stopped at the results limit, not the default one, and its error offers Try again", async () => {
+    // Before BI-01b this request had no limit: a server that never answered left Results loading forever.
+    configureRequestTimeouts({ default: 20, results: 120, slowAfterMs: 1_000 })
+    let seen: AbortSignal | undefined
+    globalThis.fetch = (async (_: unknown, init?: RequestInit) => { seen = init?.signal ?? undefined; return hang(_, init) }) as typeof fetch
+    const started = performance.now()
+    const error = await loadResults(company, actor).catch(cause => cause)
+    expect(error).toBeInstanceOf(RequestTimeoutError)
+    expect((error as RequestTimeoutError).kind).toBe("results")
+    expect(error.message).toBe(REQUEST_TIMEOUT_TEXT)
+    expect(performance.now() - started).toBeGreaterThanOrEqual(100)  // well past the 20 ms default
+    expect(seen?.aborted).toBe(true)
+  })
+  test("an answer after the default limit but inside the results limit is used; a server error keeps its words", async () => {
+    configureRequestTimeouts({ default: 20, results: 400, slowAfterMs: 1_000 })
+    globalThis.fetch = (async () => { await sleep(60); return Response.json({ error: "Results could not be prepared. Try again shortly.", code: "results_engine_unavailable" }, { status: 503 }) }) as unknown as typeof fetch
+    const error = await loadResults(company, actor).catch(cause => cause)
+    expect(error).toBeInstanceOf(ResultsApiError)
+    expect([error.message, error.status]).toEqual(["Results could not be prepared. Try again shortly.", 503])
+  })
+  test("only the results request uses the results kind; Scope 3 results keep theirs", async () => {
+    const kinds: string[] = []
+    const stop = subscribeRequestEvents(event => { if (event.type === "settled") kinds.push(event.kind) })
+    globalThis.fetch = (async () => Response.json({ error: "x" }, { status: 500 })) as unknown as typeof fetch
+    await loadResults(company, actor).catch(() => null)
+    await loadScope3Results(company, actor).catch(() => null)
+    stop()
+    expect(kinds).toEqual(["results", "scope3Results"])
   })
 })
