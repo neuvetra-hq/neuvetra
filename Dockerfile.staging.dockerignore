@@ -15,6 +15,7 @@
 !apps/site-api/src/staging/server.ts
 !apps/site-api/src/staging/config.ts
 !apps/site-api/src/staging/assets.ts
+!apps/site-api/src/staging/readiness-cache.ts
 !apps/site-api/src/workspace/
 !apps/site-api/src/workspace/service.ts
 !apps/site-api/src/workspace/routes.ts
@@ -232,6 +233,7 @@ apps/site-web/src/m71-local-preview.tsx
 !packages/neuvetra-database/src/scope3-spend-grouping.ts
 !packages/neuvetra-database/src/scope3-spend-currency.ts
 !apps/site-api/src/workspace/scope3-spend-import-routes.ts
+!apps/site-api/src/workspace/bulk-write-gate.ts
 # Scope 3 completion I-06
 !packages/neuvetra-database/src/scope3-trace.ts
 !packages/neuvetra-database/src/scope3-methodology.ts

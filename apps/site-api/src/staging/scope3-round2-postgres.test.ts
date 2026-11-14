@@ -49,8 +49,12 @@ async function harness() {
   const users = new Map<string, string>()
   const stored = new Map<string, Uint8Array<ArrayBuffer>>()
   const collectionEvidenceStorage = { put: async (_token: string, _bucket: string, key: string, bytes: Uint8Array<ArrayBuffer>) => { stored.set(key, bytes) }, get: async (_token: string, _bucket: string, key: string) => stored.get(key)! }
-  const app = await createStagingServer(config, { database, collectionEvidenceStorage, validateUser: async token => users.has(token) ? { id: users.get(token)!, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, serveAsset: async () => null, log: () => {} })
-  const call = (route: string, actor: string, init: { method?: string; body?: BodyInit; type?: string } = {}) => app.fetch(new Request(`${ORIGIN}/workspace-api${route}`, {
+  const serve = () => createStagingServer(config, { database, collectionEvidenceStorage, validateUser: async token => users.has(token) ? { id: users.get(token)!, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, serveAsset: async () => null, log: () => {} })
+  const app = await serve()
+  // BF-19: a second API instance on the same database (a second Railway replica). Each instance has its own bulk-write gate,
+  // so two imports racing in the database (ENG-10) come from two instances. Closing `app` closes the shared adapter.
+  const replica = await serve()
+  const call = (route: string, actor: string, init: { method?: string; body?: BodyInit; type?: string } = {}, instance = app) => instance.fetch(new Request(`${ORIGIN}/workspace-api${route}`, {
     method: init.method ?? (init.body === undefined ? "GET" : "POST"), body: init.body, headers: { origin: ORIGIN, authorization: `Bearer ${actor}`, ...(init.type ? { "content-type": init.type } : {}) } }))
   const json = (route: string, actor: string, body: unknown) => call(route, actor, { body: JSON.stringify(body), type: "application/json" })
   /** A company with one included site and Scope 3 categories `included` (setup saved through the route). */
@@ -73,10 +77,10 @@ async function harness() {
     expect(response.status).toBe(201)
     return (await response.json()).receipt.evidenceId as string
   }
-  const importFile = (c: { root: string; site: string; name: string }, bytes: Uint8Array<ArrayBuffer>, evidenceId: string) => call(`${c.root}/scope3/spend-imports?evidenceId=${evidenceId}&locationId=${c.site}`, c.name, { body: bytes, type: "text/csv" })
+  const importFile = (c: { root: string; site: string; name: string }, bytes: Uint8Array<ArrayBuffer>, evidenceId: string, instance = app) => call(`${c.root}/scope3/spend-imports?evidenceId=${evidenceId}&locationId=${c.site}`, c.name, { body: bytes, type: "text/csv" }, instance)
   const results = async (c: { root: string; id: string; name: string }) => { const response = await call(`${c.root}/results/scope3`, c.name); expect(response.status).toBe(200); return decodeScope3Results(await response.json(), c.id) }
   const close = async () => { await app.close?.(); await database.close(); await operator.close() }
-  return { operator, database, seen, call, json, company, upload, importFile, results, close }
+  return { operator, database, seen, call, json, company, upload, importFile, results, close, replica }
 }
 
 integration("round 2 natively: the line budget at the cap, the set-based mapping of a 2,000-line group, and the SQLSTATE retry of racing imports", async () => {
@@ -127,7 +131,8 @@ integration("round 2 natively: the line budget at the cap, the set-based mapping
     expect((await h.importFile(a, third, thirdEvidence)).status).toBe(201)
     expect((await h.results(a)).lineBudget).toEqual({ max: 3000, used: 3000, remaining: 0 })
 
-    // ENG-10: two overlapping files race on the company lock (held here, inside the runtime's 5-second lock timeout): both
+    // ENG-10: two overlapping files, imported on two API instances (BF-19: one instance runs one bulk write at a time and
+    // refuses a second with 503 bulk_write_busy), race on the company lock (held here, inside the runtime's 5-second lock timeout): both
     // read no earlier line, the first commits, the second's call then names a stale possible duplicate, is refused with 40001
     // and is retried once in a new transaction, which holds the shared line as a duplicate of the first file's.
     const r = await h.company("race", [1])
@@ -138,7 +143,7 @@ integration("round 2 natively: the line budget at the cap, the set-based mapping
     let racing: Promise<Response[]> | null = null
     await h.operator.transaction(async tx => {
       await tx.query("select id from neuvetra.companies where id=$1 for update", [r.id])
-      racing = Promise.all([h.importFile(r, one, evidenceOne), h.importFile(r, two, evidenceTwo)])
+      racing = Promise.all([h.importFile(r, one, evidenceOne), h.importFile(r, two, evidenceTwo, h.replica)])
       await Bun.sleep(3000)
     })
     const [first2, second2] = await racing!

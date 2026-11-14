@@ -310,6 +310,8 @@ export interface WorkspaceSql {
 export interface WorkspaceConnection extends WorkspaceSql {
   transaction<T>(operation: (tx: WorkspaceSql) => Promise<T>): Promise<T>
   close(): Promise<void>
+  /** BF-19: the hosted driver's probe of one pooled session's runtime settings (hosted.ts `SessionSettingsProbe`). */
+  sessionSettings?(): Promise<{ pid: number; preparedPid: number | null; settings: Record<"lock_timeout" | "statement_timeout" | "idle_in_transaction_session_timeout" | "TimeZone", string> }>
 }
 
 export class WorkspaceDatabase {

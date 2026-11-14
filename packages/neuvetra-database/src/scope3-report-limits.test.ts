@@ -7,7 +7,8 @@
 // 20 evidence files each, the longest numbers): report text 83,903,788 bytes, CSV 68,205,657, request JSON 161.7 MB
 // (tmp-int8/logs/report-size-*.log); the native suite (scope3-round2-postgres.test.ts) prepares and approves it.
 import { describe, expect, test } from 'bun:test'
-import { SCOPE3_REPORT_MAX_REQUEST_BYTES, SCOPE3_REPORT_MAX_TEXT_BYTES, SCOPE3_REPORT_REQUEST_SLACK_BYTES } from './scope3-assessment-contract'
+import { SCOPE3_REPORT_MAX_COMBINED_TEXT_BYTES, SCOPE3_REPORT_MAX_REQUEST_BYTES, SCOPE3_REPORT_MAX_TEXT_BYTES, SCOPE3_REPORT_REQUEST_SLACK_BYTES } from './scope3-assessment-contract'
+import { SCOPE3_CAPACITY_TEXT } from './scope3-text'
 import { scope3ReportDraft, scope3TextChunks, SCOPE3_REPORT_TEXT_CHUNK_CHARS } from './scope3-reports'
 import { readMigrationManifest } from './staging-migrations'
 import type { Scope3ResultsDocument } from './scope3-trace'
@@ -15,7 +16,7 @@ import type { Scope3ResultsDocument } from './scope3-trace'
 const fixture: Scope3ResultsDocument = await Bun.file(new URL('../../../apps/site-web/src/lib/scope3-results.fixture.json', import.meta.url)).json()
 const company = '31020000-0000-4000-8000-000000000001', setupVersion = '31050000-0000-4000-8000-000000000001', owner = '31010000-0000-4000-8000-000000000001'
 const labels = { kind: (kind: string) => kind.replace(/_/g, ' '), reason: (code: string) => code, period: (start: string | null | undefined, end: string | null | undefined) => `${start} – ${end}` }
-const draft = (limits: { maxTextBytes?: number; maxRequestBytes?: number } = {}) => scope3ReportDraft({
+const draft = (limits: { maxTextBytes?: number; maxRequestBytes?: number; maxCombinedTextBytes?: number } = {}) => scope3ReportDraft({
   results: { ...JSON.parse(JSON.stringify(fixture)), companyId: company, records: [], lineBudget: { max: 3000, used: 0, remaining: 3000 } }, previous: null, reportingYear: 2025, expectedRevision: 0,
   reason: null, idempotencyKey: '31090000-0000-4000-8000-000000000001', setupVersionId: setupVersion, consolidationApproach: 'operational_control', preparedBy: owner,
   preparedAt: '2026-10-31T10:00:00.000Z', engineSha256: fixture.methods[0]!.engineSha256, labels, ...limits,
@@ -67,5 +68,30 @@ describe('Scope 3 frozen report size limits (round 2c; round 3)', () => {
     expect(refusal(() => draft({ maxRequestBytes: json + SCOPE3_REPORT_REQUEST_SLACK_BYTES - 1 }))).toBe('report_too_large')
     // A test can only lower the limits, never raise them past 0030's.
     expect(refusal(() => draft({ maxRequestBytes: Number.MAX_SAFE_INTEGER, maxTextBytes: Number.MAX_SAFE_INTEGER }))).toBeNull()
+  })
+
+  // BF-21 (CEO ruling, 13 November 2026): the database backend that stores a version peaks at about 134 MiB + 2.9 MiB per MB of
+  // report text + 3.6 MiB per MB of CSV (fitted on seven native runs, 497-771 MiB). 158,000,000 bytes together keeps it at about
+  // 650 MiB: measured 651 MiB at 157.7 MB (schema 31, certificate-heavy electricity) and 624 MiB at 157.1 MB (schema 32); the
+  // line-cap worst case of round 3 (152.8 MB, 606 MiB) still prepares; 4,200 maximum-length lines (201.1 MB) peaked at 771 MiB.
+  test('BF-21: both texts together are refused over 158,000,000 bytes, before any call, with the sizes measured', () => {
+    expect(SCOPE3_REPORT_MAX_COMBINED_TEXT_BYTES).toBe(158_000_000)
+    expect(SCOPE3_REPORT_MAX_COMBINED_TEXT_BYTES).toBeGreaterThan(83_348_189 + 69_481_359)
+    const full = draft()
+    const report = bytes(full.reportText), csv = bytes(full.csvText)
+    expect(refusal(() => draft({ maxCombinedTextBytes: report + csv }))).toBeNull()
+    let caught: { code?: string; size?: unknown } = {}
+    try { draft({ maxCombinedTextBytes: report + csv - 1 }) } catch (error) { caught = error as typeof caught }
+    expect([caught.code, caught.size]).toEqual(['report_too_large', { reportBytes: report, csvBytes: csv, maxTextBytes: SCOPE3_REPORT_MAX_TEXT_BYTES, maxCombinedTextBytes: report + csv - 1, lines: 0 }])
+    // A test can only lower it.
+    expect(refusal(() => draft({ maxCombinedTextBytes: Number.MAX_SAFE_INTEGER }))).toBeNull()
+    // The answer says what is too large and the way back; never only "larger than a frozen version can store".
+    const combined = SCOPE3_CAPACITY_TEXT.reportTooLarge({ reportBytes: 110_810_029, csvBytes: 90_308_252, maxTextBytes: SCOPE3_REPORT_MAX_TEXT_BYTES, maxCombinedTextBytes: 158_000_000, lines: 4200 })
+    expect(combined).toBe('This Scope 3 report version would need 201.1 MB of report and CSV text for its 4,200 lines, more than the 158 MB one version can be prepared with, so it was not prepared. Nothing was saved, and no record or figure changed; Scope 3 results stay available to view. Most of the size is each line’s saved details: notes, evidence file lists and, for the three category 3 lines of each electricity record, all of that record’s certificates. To prepare a version, withdraw records you no longer need, enter fewer certificates per electricity record, or exclude category 3 in company setup, then prepare again.')
+    const single = SCOPE3_CAPACITY_TEXT.reportTooLarge({ reportBytes: 139_300_000, csvBytes: 26_000_000, maxTextBytes: SCOPE3_REPORT_MAX_TEXT_BYTES, maxCombinedTextBytes: 158_000_000, lines: 1200 })
+    // QA F-4: the per-text limit is stated as it is, 128 MiB, and the size in the same unit.
+    expect(single.startsWith('This Scope 3 report version would need 132.8 MiB of report text for its 1,200 lines, more than the 128 MiB one version can hold, so it was not prepared.')).toBe(true)
+    expect(single).not.toContain('134.2')
+    for (const text of [combined, single, SCOPE3_CAPACITY_TEXT.reportTooLarge()]) expect(text).toContain('withdraw records you no longer need, enter fewer certificates per electricity record, or exclude category 3 in company setup')
   })
 })
