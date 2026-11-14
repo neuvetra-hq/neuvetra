@@ -1,10 +1,18 @@
 # Owner runbook: applying migration 0032 to staging
 
-Migration: `packages/neuvetra-database/src/migrations/0032_instrument_identity_and_bindings.sql` (PR "BF-18: migration 0032").
+> **Do not apply until the CEO says the Scope 3 line-budget change (BF-21) is deployed.** CEO decision of 13 Nov 2026
+> (`fix-orders-round2-partB.md`, "CEO decisions on BF-18 / migration 0032", item 1): the image that serves 0032 may be
+> deployed when the 0032 PR merges, but 0032 itself is applied only once BF-21 is merged and deployed, so the new Scope 3
+> line count and its route code arrive together.
+>
+> **Already checked by the CEO (13 Nov 2026, read only):** staging's `postgres` role has `rolbypassrls = true` and
+> `rolsuper = false`; `neuvetra_runtime`, `anon` and `authenticated` have neither. Step P1 repeats this check on the day.
+
+Migration: `packages/neuvetra-database/src/migrations/0032_instrument_identity_and_bindings.sql` (PR #72, "BF-18: migration 0032").
 File fingerprint (sha256): `1d9a2c5ee01f90f6c1fd6a56baebc92c2d1a70a1442db2a1ff00085a5555033f` (78,957 bytes).
-In this runbook, **"the 0032 PR"** is that pull request and **"the 0032 merge commit"** is its merge commit on `main`
-(message `Merge pull request #<number> from neuvetra-hq/claude/bf-18-migration-0032`; the number is in the PR's title bar).
-Step B3 finds that commit with git; you do not need to type it.
+In this runbook, **"the 0032 PR"** is PR #72 and **"the 0032 merge commit"** is its merge commit on `main`, titled
+`Merge pull request #72 from neuvetra-hq/claude/bf-18-migration-0032`. Step B3 finds that commit with git; you do not need
+to type it.
 
 Written for the owner on a Windows PC. Every command is typed in **PowerShell**. The repository is at `C:\neuvetra-repo`.
 Your operator export file is the one you used for 0031 (kept by you, outside the repository; see B5). Choose an output
@@ -22,8 +30,10 @@ One migration, applied once, in one transaction (all or nothing):
 
 1. Electricity certificates and contracts can carry an identity (serial or contract statement, registry, face MWh): three
    new empty columns. Nothing uses them until a later order (BF-11).
-2. The stored copy of each certificate's numbers is corrected to equal what the user typed (until now numbers with more
-   than three decimals were stored empty, and 12.5 was stored as 12.500). Nothing reads this copy, so **no figure changes**.
+2. The stored copy of each certificate's numbers is corrected to equal what the user typed. A stored number is empty
+   (NULL) exactly when the typed value is empty (null), blank, or not a plain decimal such as `12.5` (for example `1e3`,
+   `-1` or `12,5`); every plain decimal is stored as typed, with any number of decimals. Until now values with more than
+   three decimals were stored empty and 12.5 was stored as 12.500. Nothing reads this copy, so **no figure changes**.
 3. A Scope 3 report approval now also records the CSV it approved. Existing approvals get their own version's CSV hash.
 4. Three smaller rules for later orders: a clearer database code for a reused save request, a "different meter"
    confirmation for leased assets, and the Scope 3 line budget counting Scope 3 records only (CEO decision on BF-21).
@@ -59,7 +69,9 @@ staging keeps serving; the CTO fixes forward with a new migration.
 
 ## A. Checks before you start
 
-A1. In GitHub, open the 0032 PR. It must say **merged**. Note its number. On the main branch's commit list, the merge
+A0. The CEO has told you that BF-21 is deployed (see the note at the top). If not, stop here.
+
+A1. In GitHub, open PR #72. It must say **merged**. On the main branch's commit list, the merge
 commit's checks must all be green.
 
 A2. In Railway, open the staging project, the staging service, the **Deployments** tab, and find the deployment marked
@@ -156,7 +168,7 @@ git status
 git fetch origin
 git checkout --detach <full commit code from A2>
 git log -1 --format=%H
-$m = git log --format=%H --merges --grep='^Merge pull request #[0-9]* from neuvetra-hq/claude/bf-18-migration-0032' origin/main | Select-Object -First 1; if ($m) { git merge-base --is-ancestor $m HEAD; $LASTEXITCODE } else { 'The 0032 PR is not merged on origin/main' }
+$m = git log --format=%H --merges --grep='^Merge pull request #72 from neuvetra-hq/claude/bf-18-migration-0032' origin/main | Select-Object -First 1; if ($m) { git merge-base --is-ancestor $m HEAD; $LASTEXITCODE } else { 'The 0032 PR is not merged on origin/main' }
 git branch -r --contains HEAD
 Get-ChildItem packages\neuvetra-database\src\migrations\*.sql | Select-Object -Last 1 -ExpandProperty Name
 (Get-FileHash packages\neuvetra-database\src\migrations\0032_instrument_identity_and_bindings.sql -Algorithm SHA256).Hash.ToLower()
@@ -164,7 +176,9 @@ Get-ChildItem packages\neuvetra-database\src\migrations\*.sql | Select-Object -L
 
 - `git status` must show no changed files (if it does, stop and ask).
 - `git log` must print the commit code from A2.
-- The `$m` line must print `0`. `1`, or `The 0032 PR is not merged on origin/main`, means stop (rule 1).
+- The `$m` line must print `0` (it finds the merge commit titled `Merge pull request #72 from
+  neuvetra-hq/claude/bf-18-migration-0032` and checks that the deployed commit contains it). `1`, or `The 0032 PR is not
+  merged on origin/main`, means stop (rule 1).
 - `git branch -r --contains HEAD` must list `origin/main`.
 - The migrations line must print `0032_instrument_identity_and_bindings.sql`. A later file (0033 or above): stop, this
   runbook does not cover it.
@@ -230,9 +244,56 @@ C3. The plan's fingerprint:
 (Get-FileHash <out>\0032-plan.json -Algorithm SHA256).Hash.ToLower()
 ```
 
-C3b. Immediately before C4, run the 0031 runbook's C3b query (section C3b of `migration-0031-runbook.md`, unchanged). It
-must return exactly the two guard rows (kind `function`, grantee `PUBLIC`, privilege `EXECUTE`), with `owner` equal to
-`running_as`. Anything else: stop and ask.
+C3b. Immediately before C4, in the SQL editor, run this **read-only** query (the same as the 0031 runbook's C3b). It lists
+every grant in the seven application schemas, and the database's CREATE, that C4's revokes could remove; `running_as`
+shows who you are (C4 runs as the same `postgres` role).
+
+```sql
+with s(n) as (values ('drizzle'),('frontdesk'),('neuvetra'),('neuvetra_research_dev'),('public'),('site'),('terrascope')),
+objs as (
+  select 'database'::text as kind, null::text as schema_name, datname::text as object_name, datacl as acl, datdba as owner, 'd'::"char" as t
+    from pg_database where datname = current_database()
+  union all
+  select 'schema', nspname::text, nspname::text, nspacl, nspowner, 'n'::"char" from pg_namespace where nspname in (select n from s)
+  union all
+  select case c.relkind when 'S' then 'sequence' else 'table' end, n.nspname::text, c.relname::text, c.relacl, c.relowner,
+         case c.relkind when 'S' then 's'::"char" else 'r'::"char" end
+    from pg_class c join pg_namespace n on n.oid = c.relnamespace
+   where n.nspname in (select n from s) and c.relkind in ('r','p','v','m','f','S')
+  union all
+  select 'function', n.nspname::text, p.oid::regprocedure::text, p.proacl, p.proowner, 'f'::"char"
+    from pg_proc p join pg_namespace n on n.oid = p.pronamespace where n.nspname in (select n from s)
+),
+cols as (
+  select 'column'::text as kind, n.nspname::text as schema_name, c.relname || '.' || a.attname as object_name, c.relowner as owner, x.grantee, x.privilege_type, x.grantor, false as implicit_default
+    from pg_attribute a join pg_class c on c.oid = a.attrelid join pg_namespace n on n.oid = c.relnamespace
+    cross join lateral aclexplode(a.attacl) x
+   where n.nspname in (select n from s) and a.attnum > 0 and not a.attisdropped and a.attacl is not null
+)
+select kind, schema_name, object_name, pg_get_userbyid(owner) as owner, current_user as running_as,
+       case when grantee = 0 then 'PUBLIC' else pg_get_userbyid(grantee) end as grantee,
+       privilege_type, pg_get_userbyid(grantor) as grantor, implicit_default
+from (
+  select o.kind, o.schema_name, o.object_name, o.owner, a.grantee, a.privilege_type, a.grantor, (o.acl is null) as implicit_default
+    from objs o cross join lateral aclexplode(coalesce(o.acl, acldefault(o.t, o.owner))) a
+   where not (o.kind = 'database' and a.privilege_type <> 'CREATE')
+  union all select * from cols
+) g
+where grantee = 0 or pg_get_userbyid(grantee) in ('anon', 'authenticated')
+order by kind, schema_name, object_name, grantee, privilege_type;
+```
+
+It must return **exactly two rows**, the two guards: kind `function`, schema `neuvetra`, object
+`neuvetra.collection_storage_can_read(text,text)` and `neuvetra.collection_storage_can_upload(text,text)`, grantee
+`PUBLIC`, privilege `EXECUTE`, and `owner` equal to `running_as`. Anything else: stop and ask.
+
+C3c. **Make sure nobody is saving or approving during C4.** Tell the staging users (or pick a moment when you know nobody
+is working) that staging must be left alone for a minute, then run C4 straight away; the change itself takes under a
+second. Why: a save that has already started when C4 begins waits for C4 and then finishes with the **old** save function,
+so for a certificate whose figure has more than three decimals it stores the derived copy empty again. No emissions figure
+is affected (nothing reads that copy), but the copy would no longer match. Step E3's check P6 catches exactly this: after
+C4 it must be `0`. If P6 is not `0`, stop and send the CTO the P6 result and the time; do not run anything yourself (the
+CTO's repair is in the appendix at the end, not an owner step).
 
 C4. Apply:
 
@@ -248,18 +309,29 @@ guard shows `false`, tell the CTO at once; do not retry C4.
 
 ### If C4 prints `apply_failed`
 
-The migration runs in one transaction, so in every case below 0032 was **not** applied and staging keeps working at 31.
+**First, before anything else, open `/ready` and write down its `schemaVersion`, and send it to the CTO with the printed
+line, the output file and the time.** In every case below the migration runs in one transaction, so normally nothing was
+applied and `/ready` still says `31`. But if the connection dropped at the exact moment of commit, 0032 may have been
+applied after all: `/ready` then says `32`. In that case **do not retry C4**; rule 2 now applies, and you continue with E1
+to E5 only after the CTO says so.
 
-- **`"sqlstate":"55P03"`** at stage `migration`: someone was saving; 0032 could not get a table lock within 5 seconds.
-  Safe. Wait a few minutes and run C4 again with a new output name (same plan and fingerprint).
-- **`"sqlstate":"55000"`** at stage `migration`: 0032's own guard stopped it (a function is not the expected one, P2, or
-  the role does not bypass row-level security, P1, or a backfill check failed). Do not retry. Send the output to the CTO.
-- **`"sqlstate":null`** at stage `migration`: the new safety check found that the migration would expose something to
-  anon or authenticated (the tool's message is "A migration would break the verified legacy containment"); nothing was
-  applied. Do not retry. Send the output to the CTO.
-- **stage `validate`**: nothing was contacted. Check the fingerprint (C3), the output name (B6), the export file (B5) and
-  the folder (B2).
-- **Anything else**: do not retry. Send the CTO the printed line, the output file and the time.
+The printed line has a `stage`, a `sqlstate` and (from this PR on) a `reason` with a plain sentence (`detail`):
+
+| `reason` | Meaning | What you do |
+|---|---|---|
+| `inputs_invalid` (stage `validate`) | Nothing was contacted. Wrong fingerprint, an output name that exists, the export file, or not in `C:\neuvetra-repo`. | Check C3, B6, B5 and B2, then run C4 again with a new output name. |
+| `role_without_bypassrls` (stage `role`) | The role in the export file does not bypass row-level security. Nothing was run. | Stop and ask (P1 should have caught it). |
+| `plan_drift` (stage `containment`) | The database's plan is no longer the reviewed plan file. Nothing was applied. | Make a new plan (C1) and check it again (C2, C2b, C3, C3b). |
+| `containment_not_verified` (stage `containment`) | The containment check failed after the plan's statements; rolled back. | Stop and ask. |
+| `database_refused` with `"sqlstate":"55P03"` (stage `migration`) | Someone was saving; 0032 could not get a table lock within 5 seconds. Safe. | Check `/ready` says 31, wait a few minutes (C3c), run C4 again with a new output name (same plan and fingerprint). |
+| `database_refused` with `"sqlstate":"55000"` (stage `migration`) | 0032 stopped itself: one of the four functions is not the expected one (P2), or one of its own checks after a backfill failed (the database's message starts `0032:`). | Do not retry. Stop and ask. |
+| `database_refused` with any other `sqlstate` | The database refused a statement. | Do not retry. Stop and ask. |
+| `legacy_containment_not_verified`, `receipts_mismatch` or `migration_would_expose` (stage `migration`) | The migration tool refused: containment not verified before migrating; the database's receipts are not what this folder expects; or a migration would have exposed something to anon or authenticated (rolled back). | Do not retry. Stop and ask. |
+| `connection_lost` (any stage) | The network or the database connection failed. | `/ready` first (above). If it says 31, wait and run C4 again with a new output name; if it says 32, do not retry. |
+| `other` | Anything else. | Do not retry. Stop and ask. |
+
+An older tool (before this PR) printed only `"sqlstate":null` for every failure that is not a database refusal; that never
+meant only one thing.
 
 ## D. Backup (optional)
 
@@ -292,7 +364,8 @@ E3. Run P2, P3, P4, P5 and P6 again in the SQL editor and save them as `<out>\sq
 - P3: both values must equal the ones you wrote down before.
 - P4: all six values must equal the ones you wrote down before.
 - P5: `0`.
-- P6: `0`.
+- P6: `0`. If it is not `0`, a save ran during C4 (C3c): stop and send the CTO the P6 result and the time. Do not
+  repair it yourself.
 
 Then:
 
@@ -331,7 +404,10 @@ Stop (change nothing, ask the CTO) if:
 - B1: Bun is not 1.3.12. B3: any check fails. B4: another package fails, or files changed.
 - C2: not 31 statements, any `UNEXPECTED:` line, the GRANT lines missing or elsewhere, not 3 provider lines.
 - C2b / C3b: a guard not executable, a third row, or `owner` different from `running_as`.
-- C4: `apply_failed` with `55000`, `null` or anything other than `55P03` (see above).
+- A0: the CEO has not said BF-21 is deployed.
+- C4: any `apply_failed` other than `inputs_invalid`, `plan_drift`, `55P03` or `connection_lost` with `/ready` at 31; and
+  always check `/ready` first after any `apply_failed`.
+- E3: P6 is not `0` after C4.
 - E1–E5: any value other than the expected one.
 - Anything on your screen that this runbook does not describe.
 
@@ -349,3 +425,33 @@ every Results, Scope 3 and frozen-report file identical before and after (only `
 A1 as expected; a second plan and apply changed no row, function, constraint or trigger. The commands and outputs are in
 the PR description. Deviations from your PC: Linux instead of Windows, Bun 1.4.4, a rehearsal certificate authority, and
 psql instead of the SQL editor.
+
+## Appendix for the CTO only: repairing P6 after a save raced C4
+
+Not an owner step. A save that started before C4 waits on 0032's table lock and then finishes with the old body of
+`save_collection_activity` (its plan was already running), so its instrument rows store values with more than three
+decimals as NULL and `12.5` as `12.500`. QA reproduced this (PR #72 QA notes, `sc-race2`). Nothing reads those columns;
+figures are unaffected; only the projection proof (P6) is broken.
+
+Fix forward, in the Supabase SQL editor as `postgres`, in a quiet moment (C3c):
+
+1. Run the read-only P2: all four values must be the "After 0032" column, so the save function in place is 0032's.
+2. Copy section 2 of `0032_instrument_identity_and_bindings.sql` from GitHub's **Raw** view of the merged commit: from the
+   line starting `-- 2. Backfill the projection from each version's own payload (BI-06).` (line 69) to the line
+   `end $projection$;` (line 112). That section only rewrites instrument rows whose stored numbers differ from their payload
+   (its own WHERE clause), with the row trigger disabled for that one UPDATE and enabled again, and then proves the whole
+   projection. It replaces no function, so a Windows line-ending change in the paste cannot change any function text.
+   Run it as one query:
+
+   ```sql
+   begin;
+   set local lock_timeout = '5s';
+   -- section 2 of 0032 (lines 69-112), pasted unchanged
+   commit;
+   ```
+
+   If it stops (for example `55P03`, or `0032: an instrument row differs from its payload`), it rolled back and changed
+   nothing. Do not add a receipt line: the receipt is already there.
+3. Run P2 to P6 and A1 again: P6 must be `0`, P2 the "After 0032" column, P3 and P4 unchanged. (Rehearsed: running 0032's
+   SQL again on a schema-32 database changed no row, function, constraint or trigger; QA's repair of the race brought P6
+   from 1 to 0; the section-2-only repair was rehearsed: P6 2 → 0, the four function texts unchanged, the trigger enabled.)
