@@ -326,13 +326,13 @@ export async function convertScope3SpendCurrency(tx: WorkspaceSql, actorId: stri
   const planned: Array<{ record: CollectionActivityRecord; from: string; usd: string }> = []
   const skipped: Array<{ recordId: string; sourceId: string; reason: string }> = []
   for (const record of lines) {
-    // BF-14 (audit B-5): one rate is never applied across years. Only a line of the rate date's own calendar year is converted;
-    // any other line of the currency (or one whose year is unknown: no date and a period crossing years) is listed and stays
-    // held in its own currency, to be converted at a rate dated in its own year.
-    const a = record.currentVersion.activity
-    if (!scope3SpendRateMatchesLineYear({ lineDate: (a.payload as PurchaseSpendCollectionPayload).lineDate, period: a.period }, conversion.rateDate)) { skipped.push({ recordId: record.id, sourceId: a.sourceId, reason: 'rate_date_outside_line_year' }); continue }
     const written = record.currentVersion.activity.quantity.originalValue.trim()
     if (!/^(0|[1-9][0-9]{0,11})(\.[0-9]{1,3})?$/.test(written)) { skipped.push({ recordId: record.id, sourceId: record.currentVersion.activity.sourceId, reason: written.startsWith('-') ? 'negative_amount_not_supported' : 'amount_not_a_number' }); continue }
+    // BF-14 (audit B-5), after the amount checks so a credit is reported as a credit in any year: one rate is never applied across
+    // years. Only a line of the rate date's own calendar year is converted; any other line of the currency (or one whose year is unknown:
+    // no date and a period crossing years) is listed and stays held in its own currency, to be converted at a rate dated in its own year.
+    const a = record.currentVersion.activity
+    if (!scope3SpendRateMatchesLineYear({ lineDate: (a.payload as PurchaseSpendCollectionPayload).lineDate, period: a.period }, conversion.rateDate)) { skipped.push({ recordId: record.id, sourceId: a.sourceId, reason: 'rate_date_outside_line_year' }); continue }
     planned.push({ record, from: written, usd: scope3SpendConvertAmount(written, conversion.rate) })
   }
   for (const { record, from, usd } of planned) {

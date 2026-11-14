@@ -41,10 +41,10 @@ const SPEND = { category: 1, naicsCode: '541511', dollarYear: 2024, marginChoice
   mappingSource: 'file', paidByReportingCompany: null, spendEstimateBasis: null, lineDate: null, possibleDuplicateOf: null, duplicateConfirmedDistinct: false }
 const converted = (rateDate: string, currency = 'EUR') => scope3SpendNotesWithConversion('GL description: Components', { currency, amount: '1000', rate: '1.0823', usd: '1082.3', rateSource: 'ECB euro reference rate', rateDate })
 let n = 0
-function line(period: { start: string; endExclusive: string }, payload: Record<string, unknown>, notes: string): Scope3CollectionVersion {
+function line(period: { start: string; endExclusive: string }, payload: Record<string, unknown>, notes: string, usd = '1082.3'): Scope3CollectionVersion {
   n++
   const activity = { locationId: office, setupVersionId: setup, sourceId: `FX-${n}`, state: 'active', withdrawalReason: null, quality: 'actual', estimateBasis: null, reference: 'Synthetic source', notes, evidenceIds: [], period, kind: 'purchase_spend',
-    quantity: { originalValue: '1082.3', originalUnit: 'USD', normalizedValue: '1082.3', normalizedUnit: 'USD' }, payload: validateScope3Payload('purchase_spend', { ...SPEND, ...payload }) } as unknown as Scope3CollectionActivity
+    quantity: { originalValue: usd, originalUnit: 'USD', normalizedValue: usd, normalizedUnit: 'USD' }, payload: validateScope3Payload('purchase_spend', { ...SPEND, ...payload }) } as unknown as Scope3CollectionActivity
   return { id: `14300000-0000-4000-8000-${String(10000 + n).padStart(12, '0')}`, recordId: `14300000-0000-4000-8000-${String(50000 + n).padStart(12, '0')}`, companyId: company, revision: 2, previousVersionId: null, correctionReason: null, activity, payloadSha256: 'a'.repeat(64), createdBy: company, createdAt: '2026-06-01T00:00:00.000Z' }
 }
 const Y2025 = { start: '2025-01-01', endExclusive: '2026-01-01' }, Y2026 = { start: '2026-01-01', endExclusive: '2027-01-01' }, FY = { start: '2025-07-01', endExclusive: '2026-07-01' }
@@ -77,6 +77,19 @@ describe('BF-14: the planner holds a line converted at a rate from another year 
     expect(outcome(line(FY, { lineDate: '2026-03-01' }, converted('2025-12-31')), ctxFy)).toEqual(['hold', 'input_needed', ['currency_rate_outside_line_year']])
     // An unconverted USD line over a crossing period is not affected: no conversion, nothing to hold.
     expect(outcome(line(FY, {}, 'GL description: Components'), ctxFy)).toEqual(['calculate', null, []])
+  })
+  test('F1: a hand-typed note in the machine format that does not describe the line does not hold it (plans exactly as without the note)', () => {
+    const ctx = contextFor(Y2025.start, Y2025.endExclusive)
+    const typed = (fields: { amount: string; rate: string; usd: string }) => scope3SpendNotesWithConversion('GL description: Components', { currency: 'EUR', rateSource: 'my bank', rateDate: '2024-12-31', ...fields })
+    // QA's case: a USD 1,000 line whose note claims EUR 900 x 1.1 = USD 990, rate date 2024-12-31.
+    const claim990 = line(Y2025, { lineDate: '2025-05-01' }, typed({ amount: '900', rate: '1.1', usd: '990' }), '1000')
+    expect(outcome(claim990, ctx)).toEqual(['calculate', null, []])
+    const strip = (p: ReturnType<typeof planScope3Calculation>) => ({ ...p, versionId: '', recordId: '', sourceId: '' })
+    expect(strip(planScope3Calculation(claim990, ctx, [], {}))).toEqual(strip(planScope3Calculation(line(Y2025, { lineDate: '2025-05-01' }, 'GL description: Components', '1000'), ctx, [], {})))
+    // The note's own arithmetic is wrong (900 x 1.1 is 990, not 1000) even though its USD figure equals the line's amount.
+    expect(outcome(line(Y2025, { lineDate: '2025-05-01' }, typed({ amount: '900', rate: '1.1', usd: '1000' }), '1000'), ctx)).toEqual(['calculate', null, []])
+    // The mirror: a note that is valid for the line (900 x 1.1 = 990 on a USD 990 line) is still held at a rate of another year.
+    expect(outcome(line(Y2025, { lineDate: '2025-05-01' }, typed({ amount: '900', rate: '1.1', usd: '990' }), '990'), ctx)).toEqual(['hold', 'input_needed', ['currency_rate_outside_line_year']])
   })
   test('the reason says what to do', () => {
     const text = SCOPE3_REASON_TEXT_BF14.currency_rate_outside_line_year
@@ -147,6 +160,8 @@ describe('BF-14 / ACCT-LEAD-2 (PGlite): one EUR rate converts only the lines of 
     const input = { currency: 'EUR', rate: '1.1', rateSource: 'ECB euro reference rate, annual average 2026', rateDate: '2026-06-30' }
     const result = await asUser(owner, tx => convertScope3SpendCurrency(tx, owner, company, input))
     expect(result.converted.map(c => [c.sourceId, c.from, c.usd, c.revision])).toEqual([['FX-6', '1000', '1100', 2]])
+    // F5: the 2025 credit is reported as a credit, whatever year the rate is in.
+    expect(result.skipped.map(s => [s.sourceId, s.reason])).toEqual([['FX-3', 'negative_amount_not_supported']])
     expect(scope3SpendConversionOf((await row('FX-6')).activity.notes)).toMatchObject({ rateDate: '2026-06-30', usd: '1100' })
     expect((await row('FX-1')).revision).toBe(2)
   })

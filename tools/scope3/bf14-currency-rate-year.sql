@@ -9,6 +9,8 @@
 -- The line year is the year of the line date; without one, the year of its period when the period lies in one calendar
 -- year; otherwise it is null (no date and a period crossing years).
 -- Expected on staging: 0 rows. Any row is a line whose amount changes from counted to held when BF-14 deploys.
+-- A note counts only if its US-dollar figure equals the line's own amount (the product also checks rate x amount = figure, which
+-- is not repeated here, so a hand-typed note with a consistent figure but wrong arithmetic could be listed though it is not held).
 -- If a line was converted more than once, its notes keep only the last conversion, which is the one read here.
 --
 -- A second, summary statement follows the list: the number of such lines and their USD total per company.
@@ -24,6 +26,7 @@ converted as (
   select s.*,
     substring(s.a->>'notes' from 'Currency conversion: [A-Z]{3} [^\n]*; rate date: ([0-9]{4}-[0-9]{2}-[0-9]{2});') as rate_date,
     substring(s.a->>'notes' from 'Currency conversion: ([A-Z]{3}) ') as from_currency,
+    substring(s.a->>'notes' from ' = USD ([0-9.]+) \(rate source: ') as note_usd,
     case
       when s.a->'payload'->>'lineDate' is not null then substring(s.a->'payload'->>'lineDate' from '^[0-9]{4}')::int
       when extract(year from (s.a->'period'->>'start')::date) = extract(year from ((s.a->'period'->>'endExclusive')::date - 1))
@@ -37,6 +40,7 @@ select c.company_id, c.record_id, c.version_id, c.revision, c.a->>'sourceId' as 
   c.line_year, c.rate_date, substring(c.rate_date from '^[0-9]{4}')::int as rate_year, c.a->'quantity'->>'originalValue' as usd_amount
 from converted c
 where c.rate_date is not null
+  and c.note_usd is not null and c.note_usd::numeric = (c.a->'quantity'->>'normalizedValue')::numeric
   and (c.line_year is null or c.line_year <> substring(c.rate_date from '^[0-9]{4}')::int)
 order by c.company_id, c.a->>'sourceId', c.record_id;
 
@@ -50,6 +54,7 @@ with spend as (
 converted as (
   select s.company_id, s.a,
     substring(s.a->>'notes' from 'Currency conversion: [A-Z]{3} [^\n]*; rate date: ([0-9]{4}-[0-9]{2}-[0-9]{2});') as rate_date,
+    substring(s.a->>'notes' from ' = USD ([0-9.]+) \(rate source: ') as note_usd,
     case
       when s.a->'payload'->>'lineDate' is not null then substring(s.a->'payload'->>'lineDate' from '^[0-9]{4}')::int
       when extract(year from (s.a->'period'->>'start')::date) = extract(year from ((s.a->'period'->>'endExclusive')::date - 1))
@@ -60,6 +65,7 @@ converted as (
 select c.company_id, count(*) as lines, sum((c.a->'quantity'->>'normalizedValue')::numeric) as usd_total
 from converted c
 where c.rate_date is not null
+  and c.note_usd is not null and c.note_usd::numeric = (c.a->'quantity'->>'normalizedValue')::numeric
   and (c.line_year is null or c.line_year <> substring(c.rate_date from '^[0-9]{4}')::int)
 group by c.company_id
 order by c.company_id;
