@@ -706,7 +706,8 @@ export const SCOPE3_CAPACITY_TEXT = {
    * BF-21 (CEO ruling): a version too large to prepare, said truthfully with the way back. `size` is what the draft measured
    * (absent only for the request-size refusal, whose input-version list cannot reach its limit at the line caps).
    */
-  reportTooLarge: (size?: { reportBytes: number; csvBytes: number; maxTextBytes: number; maxCombinedTextBytes: number; lines: number }) => {
+  reportTooLarge: (measured?: { reportBytes: number; csvBytes: number; maxTextBytes: number; maxCombinedTextBytes: number; lines: number }) => {
+    const size = measured && typeof measured === 'object' && Number.isFinite(measured.lines) ? measured : undefined
     const mb = (bytes: number) => `${(bytes / 1_000_000).toLocaleString('en-US', { maximumFractionDigits: 1 })} MB`
     const what = !size ? 'This Scope 3 report version lists more records than one version can hold'
       : size.reportBytes > size.maxTextBytes || size.csvBytes > size.maxTextBytes
