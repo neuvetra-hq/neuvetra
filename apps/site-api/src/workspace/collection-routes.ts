@@ -250,12 +250,19 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
         }
         if (operation || versionId || request.method !== "POST") return fail(405, "Method not allowed.")
         const input = await jsonBody(request)
-        let validated: ReturnType<typeof validateCollectionSaveInput>
-        try { validated = validateCollectionSaveInput(input) } catch (error) {
-          // BF-32: over-long text is refused by name, with the limit and how far over it is; every other refusal keeps its answer.
-          if (error instanceof CollectionTextLimitError) throw new RequestProblem(422, error.message, error.code)
-          throw new RequestProblem(422, "Invalid or unsupported collection record.")
+        // BF-32 (F3): text the request leaves as the corrected version stored it is not re-validated, so the version being corrected is read first.
+        const sent = input as { expectedRevision?: unknown; expectedVersionId?: unknown } | null
+        let previous: unknown
+        if (typeof sent?.expectedVersionId === "string" && UUID.test(sent.expectedVersionId) && typeof sent.expectedRevision === "number" && sent.expectedRevision > 0)
+          previous = (await deps.database.findCollectionActivityVersion(actor.id, companyId, resourceId, sent.expectedVersionId.toLowerCase()).catch(() => null))?.activity
+        // BF-32: over-long text is refused by name, with the limit and how far over it is; every other refusal keeps its answer. The refusal is
+        // held, not thrown, until the database layer has looked for a replay: a request first sent before the rule that the database already
+        // saved is answered from its receipt (F4), and the database layer repeats the text rule for everything else.
+        let validated: ReturnType<typeof validateCollectionSaveInput> | null = null
+        try { validated = validateCollectionSaveInput(input, previous) } catch (error) {
+          if (!(error instanceof CollectionTextLimitError)) throw new RequestProblem(422, "Invalid or unsupported collection record.")
         }
+        if (validated) {
         if (isScope3CollectionKind(validated.activity.kind)) {
           const schema = await (deps.schemaVersion?.() ?? 0)
           if (schema < STAGING_SCOPE3_SCHEMA_VERSION) throw new RequestProblem(503, "Scope 3 activity is not available yet.", "scope3_unavailable")
@@ -286,13 +293,15 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
             : saved !== undefined && saved.currentVersion.activity.state === "withdrawn" && saved.currentVersion.id.toLowerCase() === validated.expectedVersionId?.toLowerCase() && saved.currentVersion.revision === validated.expectedRevision
           if (activates && existing.filter(isActiveScope12Record).length >= MAX_ACTIVE_SCOPE12_RECORDS) throw new RequestProblem(422, RECORD_LIMIT_SAVE_TEXT, "record_limit_reached")
         }
+        }
         let saved: Awaited<ReturnType<typeof deps.database.saveCollectionActivity>>
         try { saved = await deps.database.saveCollectionActivity(actor.id, companyId, resourceId, input) }
         catch (error) {
           // BF-08 (BL-05): a unique violation on a FIRST save is the record ID, held by another company, unless this company has just
           // saved it itself (two saves racing), which is a true revision conflict.
           // BF-18: 0032's 23N32 (receipt mismatch) takes this branch exactly as 23505 did before 0032, until BF-28.
-          if (validated.expectedRevision === 0 && ["23505", "23N32"].includes((error as { code?: string }).code ?? "") && !(await deps.database.findCollectionActivities(actor.id, companyId)).some(record => record.id.toLowerCase() === resourceId))
+          if (error instanceof CollectionTextLimitError) throw new RequestProblem(422, error.message, error.code)
+          if ((validated?.expectedRevision ?? sent?.expectedRevision) === 0 && ["23505", "23N32"].includes((error as { code?: string }).code ?? "") && !(await deps.database.findCollectionActivities(actor.id, companyId)).some(record => record.id.toLowerCase() === resourceId))
             throw new RequestProblem(409, RECORD_ID_UNAVAILABLE_TEXT, "record_id_unavailable")
           throw error
         }

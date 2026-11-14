@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { COLLECTION_EVIDENCE_BUCKET, COLLECTION_EVIDENCE_MAX_BYTES } from "@neuvetra/database"
+import { COLLECTION_EVIDENCE_BUCKET, COLLECTION_EVIDENCE_MAX_BYTES, CollectionTextLimitError, validateCollectionSaveInput } from "@neuvetra/database"
 import { createCollectionRoutes, type CollectionEvidenceStorage, type CollectionRouteDatabase } from "./collection-routes"
 
 const ORIGIN = "https://staging.example.test"
@@ -63,7 +63,7 @@ function harness(options: { schema?: number } = {}) {
     async findCollectionContext(...args) { calls.push({ name: "findContext", args }); if (failures.context) throw failures.context; return hasAccess ? { companyId: COMPANY, setupVersionId: SETUP, setupRevision: 1, locations: [{ id: LOCATION, name: "Office", inclusion: "included", control: "operational_control" }] } : null },
     async findCollectionActivities(...args) { calls.push({ name: "findActivities", args }); return [listedRecord ?? record, ...others] },
     async findCollectionActivityVersion(...args) { calls.push({ name: "findVersion", args }); return current },
-    async saveCollectionActivity(...args) { calls.push({ name: "save", args }); if (saveError) throw saveError; if (failures.save) throw failures.save; return { record, version: current, replayed: false } },
+    async saveCollectionActivity(...args) { calls.push({ name: "save", args }); /* BF-32: the real database layer applies the text rule (against the version being corrected) before it saves */ try { validateCollectionSaveInput(args[3], (args[3] as { expectedRevision?: number })?.expectedRevision ? current?.activity : undefined) } catch (error) { if (error instanceof CollectionTextLimitError) throw error } if (saveError) throw saveError; if (failures.save) throw failures.save; return { record, version: current, replayed: false } },
     async findCollectionEvidence(...args) { calls.push({ name: "findEvidence", args }); return evidence },
     async reserveCollectionEvidenceUpload(...args) { calls.push({ name: "reserveEvidence", args }); if (failures.reserve) throw failures.reserve; const input = args[2] as any; return { uploadId: input.uploadId, evidenceId: input.evidenceId, objectKey: input.objectKey, bucket: COLLECTION_EVIDENCE_BUCKET } },
     async registerCollectionEvidence(...args) { calls.push({ name: "registerEvidence", args }); if (failRegister) throw new Error("sensitive-registration-marker"); return { uploadId: (args[2] as any).uploadId, evidenceId: evidence[0]?.id ?? (args[2] as any).evidenceId, reused: evidence.length > 0, quarantineStatus: "pending", orphanRecoveryRequired: false } },
@@ -106,7 +106,7 @@ describe("collection routes", () => {
   })
 
   // BF-32: one text-length rule on the save path: NFC first, then count (UTF-16 code units); every refusal names the field, the limit and the excess.
-  test("BF-32: refuses over-long text with a 422 that names the field, the limit and how far over it is; never reaches the database", async () => {
+  test("BF-32: refuses over-long text with a 422 that names the field, the limit and how far over it is (the database layer applies the rule before any SQL)", async () => {
     const h = harness()
     const post = (body: unknown) => h.request(`/workspace/${COMPANY}/collection/activities/${RECORD}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
     // U+0958 normalises to two characters: 4,000 of them were accepted before, then refused by PostgreSQL (23514 / 22023, a 500).
@@ -123,7 +123,6 @@ describe("collection routes", () => {
     const composed = activity(); (composed.activity as any).reference = "e\u0301".repeat(1000)
     expect((await post(composed)).status).toBe(201)
     // (The database layer validates again and stores the composed text; the package test proves it against PostgreSQL.)
-    expect(h.calls.filter(call => call.name === "save").length).toBe(1)
     // Leading formula characters are kept as written (the CSV export neutralises them; unchanged).
     for (const lead of ["=", "+", "-", "@"]) { const formula = activity(); (formula.activity as any).reference = lead + "a".repeat(999); expect((await post(formula)).status).toBe(201) }
   })

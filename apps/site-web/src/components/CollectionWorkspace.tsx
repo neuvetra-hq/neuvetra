@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useId, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode, type RefObject } from "react"
-import { savedAgainstCurrentSetup, validateCollectionActivity, withCurrentSetupVersion, type CollectionActivity, type CollectionActivityKind, type CollectionInstrument, type CollectionPayload } from "../../../../packages/neuvetra-database/src/collection-contract"
+import { savedAgainstCurrentSetup, withCurrentSetupVersion, type CollectionActivity, type CollectionActivityKind, type CollectionInstrument, type CollectionPayload } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { instrumentEvidenceClaims, planCollectionCalculation, type InstrumentEvidenceClaims } from "../../../../packages/neuvetra-database/src/collection-engine-input"
 import { isScope3CollectionKind, isScope3CompletionKind, planScope3Calculation, scope3IsHotelMode, SCOPE3_LEGACY_KINDS, SCOPE3_AIR_BY_DISTANCE, SCOPE3_AIR_HAULS, SCOPE3_CABIN_CLASSES, SCOPE3_COLLECTION_UNITS, SCOPE3_COMMUTING_MODES, SCOPE3_HOTEL_MODE, SCOPE3_TRANSPORT_FACILITIES, SCOPE3_TRANSPORT_UNITS, SCOPE3_TRANSPORT_VEHICLES, SCOPE3_TRAVEL_MODES, SCOPE3_WASTE_MATERIALS, type BusinessTravelCollectionPayload, type Scope3CollectionKind, type Scope3CollectionVersion, type Scope3PlanOptions } from "../../../../packages/neuvetra-database/src/scope3-collection"
 import { SCOPE3_DISCLOSURE_TEXT, SCOPE3_RECORD_STATE_TEXT_I08 } from "../../../../packages/neuvetra-database/src/scope3-text"
@@ -32,7 +32,7 @@ import { RecordHoldNotice } from "./RecordHoldNotice"
 import { RECORD_DUPLICATE_TEXT, RECORD_LIMIT_LINK_TEXT, REPLACING_RECORD_TEXT } from "@/lib/bf-followups-text"
 import { draftDuplicateMatches, recordDuplicateState } from "@/lib/record-duplicates-bf01c"
 import { recordHold } from "@/lib/record-holds-wo12b"
-import { activityPresaveProblems, activitySaveProblems, CONTRACT_FIELDS, DECIMAL, prepareActivityForSave, SUPPORTED_UNITS, VOLUMETRIC_GAS_UNITS, type FormProblem } from "@/lib/activity-save-checks"
+import { activityPresaveProblems, activitySaveProblems, contractProblem, correctionReasonFor, DECIMAL, prepareActivityForSave, SUPPORTED_UNITS, VOLUMETRIC_GAS_UNITS, type FormProblem } from "@/lib/activity-save-checks"
 import { activityDraftFields, DRAFT_DEBOUNCE_MS, DRAFT_TEXT, draftKey, draftStorage, draftTime, keepDraft, readDraft, removeDraft, removeDraftSoon, writeDraft, type ActivityDraftFields, type DraftBinding, type DraftScope, type StoredDraft } from "@/lib/draft-store"
 
 const kinds: readonly [CollectionActivityKind, string][] = [
@@ -894,9 +894,10 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     if (scope3Problem) { failSave(`${scope3Problem} Nothing was saved.`); return }
     // Beta client run (26 October 2026): check the record against the same contract the server applies, so a record the
     // server would refuse (for example dates outside calendar 2025) says why, and nothing is sent or saved.
-    try { validateCollectionActivity(copy) }
-    catch (cause) { const text = cause instanceof Error ? cause.message : "This record can’t be saved."; failSave(`${text} Nothing was saved.`, ...(CONTRACT_FIELDS.find(([pattern]) => pattern.test(text))?.[1] ?? [])); return }
-    const correctionReason = selected ? copy.state === "withdrawn" ? `Withdrawn: ${copy.withdrawalReason}` : reason.trim() : null
+    // BF-32 (F1, F2, F3): the server's own save rule, with the correction reason the save sends and the version being corrected.
+    const correctionReason = correctionReasonFor(copy, Boolean(selected), reason)
+    const refused = contractProblem(copy, selected?.currentVersion.activity ?? null, correctionReason)
+    if (refused) { failSave(`${refused.text} Nothing was saved.`, ...refused.fields); return }
     // WO-05b: a restored draft keeps the version it was based on (a newer one gives the conflict state, never an overwrite).
     const input = pending.current ?? { idempotencyKey: crypto.randomUUID(), expectedRevision: binding.expectedRevision, expectedVersionId: binding.expectedVersionId, correctionReason, activity: copy }
     pending.current = input; setBusy(true); setError(false); setMessage("Saving and verifying this activity…")
@@ -1115,7 +1116,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   // WO-12b: one answer that holds the record whatever else is filled in (a record hold), shown at the top of the form.
   const hold = recordHold(draft, fieldFacts)
   const presave: FormProblem[] = canManage ? activityPresaveProblems(draft) : []
-  const saveChecks: FormProblem[] = canManage ? activitySaveProblems(draft, { context, evidence, correcting: Boolean(selected), reason, zipLookup, scope3Completion }) : []
+  const saveChecks: FormProblem[] = canManage ? activitySaveProblems(draft, { context, evidence, correcting: Boolean(selected), reason, zipLookup, scope3Completion, previous: selected?.currentVersion.activity ?? null }) : []
   const problems = dirty || attempted ? saveChecks : presave
   // The summary: a refused or failed save first, then every problem left.
   const summary: FormProblem[] = saveProblem ? [saveProblem, ...problems.filter(problem => problem.text !== saveProblem.text)] : problems

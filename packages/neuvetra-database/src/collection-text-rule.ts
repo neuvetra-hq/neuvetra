@@ -90,13 +90,14 @@ export const SAVE_TEXT_LIMITS: ReadonlyArray<readonly [path: string, label: stri
 /** A save refused because text is over its limit: names the field, the limit and how far over the value is. */
 export class CollectionTextLimitError extends Error {
   readonly code = 'text_too_long'
-  constructor(readonly field: string, readonly limit: number, readonly length: number, readonly note: string) {
+  /** `path` is the field's entry in `SAVE_TEXT_LIMITS` (or `correctionReason`), for screens that mark the field. */
+  constructor(readonly field: string, readonly limit: number, readonly length: number, readonly note: string, readonly path: string = '') {
     super(`${field} is ${length.toLocaleString('en-US')} characters; the limit is ${limit.toLocaleString('en-US')} (${(length - limit).toLocaleString('en-US')} over).${note} Shorten it and save again.`)
   }
   get over(): number { return this.length - this.limit }
 }
 
-/** Every string of the value in NFC, keys untouched. Not a copy when the value has no string that changes. */
+/** Every string of the value in NFC, keys untouched. */
 export function normalizeTextDeep<T>(value: T): T {
   if (typeof value === 'string') return value.normalize('NFC') as T
   if (Array.isArray(value)) return value.map(normalizeTextDeep) as T
@@ -106,25 +107,62 @@ export function normalizeTextDeep<T>(value: T): T {
 
 const ASTRAL = /[\ud800-\udbff][\udc00-\udfff]/
 const noteFor = (value: string) => ASTRAL.test(value) ? ' Emoji and other rare characters count as 2 characters.' : ''
-function atPath(root: unknown, keys: string[], shown: string, out: Array<{ shown: string; value: unknown }>): void {
-  if (keys.length === 0) { out.push({ shown, value: root }); return }
+
+type Token = string | number
+interface Occurrence { tokens: Token[]; shown: string; value: unknown }
+function occurrences(root: unknown, keys: string[], label: string, tokens: Token[] = [], shown = label, out: Occurrence[] = []): Occurrence[] {
+  if (keys.length === 0) { out.push({ tokens, shown, value: root }); return out }
   const [key, ...rest] = keys
-  if (key!.endsWith('[]')) {
-    const holder = (root as Record<string, unknown> | null)?.[key!.slice(0, -2)]
-    if (Array.isArray(holder)) holder.forEach((item, index) => atPath(item, rest, `${shown} (item ${index + 1})`, out))
-    return
-  }
-  if (root && typeof root === 'object' && !Array.isArray(root) && Object.prototype.hasOwnProperty.call(root, key!)) atPath((root as Record<string, unknown>)[key!], rest, shown, out)
+  const isArray = key!.endsWith('[]'), name = isArray ? key!.slice(0, -2) : key!
+  if (!root || typeof root !== 'object' || Array.isArray(root) || !Object.prototype.hasOwnProperty.call(root, name)) return out
+  const child = (root as Record<string, unknown>)[name]
+  if (!isArray) return occurrences(child, rest, label, [...tokens, name], shown, out)
+  if (Array.isArray(child)) child.forEach((item, index) => occurrences(item, rest, label, [...tokens, name, index], `${shown} (item ${index + 1})`, out))
+  return out
+}
+const valueAt = (root: unknown, tokens: Token[]): unknown => tokens.reduce<unknown>((at, token) => at && typeof at === 'object' ? (at as Record<Token, unknown>)[token] : undefined, root)
+function setAt(root: unknown, tokens: Token[], value: unknown): void {
+  const holder = valueAt(root, tokens.slice(0, -1)) as Record<Token, unknown> | undefined
+  if (holder && typeof holder === 'object') holder[tokens[tokens.length - 1]!] = value
 }
 
-/** Throws `CollectionTextLimitError` for the first text of an NFC-normalised activity (or correction reason) over its limit. */
-export function checkTextLimits(normalized: unknown, correctionReason?: unknown): void {
-  const found: Array<{ label: string; max: number; shown: string; value: unknown }> = []
-  for (const [path, label, max] of SAVE_TEXT_LIMITS) {
-    const hits: Array<{ shown: string; value: unknown }> = []
-    atPath(normalized, path.split('.'), label, hits)
-    for (const hit of hits) found.push({ label, max, shown: hit.shown, value: hit.value })
+/** The correction reason the web sends with a withdrawal. The save's own limit for the reason the user typed is what is left of 2,000. */
+export const WITHDRAWN_REASON_PREFIX = 'Withdrawn: '
+const CORRECTION_REASON_MAX = 2000
+const NOTE_FOR_WITHDRAWAL = ` The saved note begins with "${WITHDRAWN_REASON_PREFIX.trim()}", which leaves ${(CORRECTION_REASON_MAX - WITHDRAWN_REASON_PREFIX.length).toLocaleString('en-US')} characters for the reason.`
+
+/**
+ * The save path's text step (BF-32): returns the activity with every text in NFC, and the correction reason in NFC, after checking each
+ * limit. Throws `CollectionTextLimitError` for the first text over its limit.
+ *
+ * A field the request does not change is not re-validated (CEO ruling F3): when `previous` is the version the request corrects and a
+ * field's text is exactly what that version stored, it is kept as stored (not normalised, not counted), so an old record whose text
+ * is over the new rule can still be withdrawn or corrected elsewhere; a field the request changes must meet the rule. The stored
+ * value passed the rule that saved it, so it reads back and satisfies the database.
+ */
+export function prepareSaveText(activity: unknown, previous: unknown, correctionReason: unknown): { activity: unknown; correctionReason: unknown } {
+  const normalized = normalizeTextDeep(activity)
+  const reason = typeof correctionReason === 'string' ? correctionReason.normalize('NFC') : correctionReason
+  const unchanged = new Set<string>()
+  if (previous && typeof previous === 'object') {
+    for (const [path, label] of SAVE_TEXT_LIMITS) for (const hit of occurrences(activity, path.split('.'), label)) {
+      if (typeof hit.value === 'string' && valueAt(previous, hit.tokens) === hit.value) { setAt(normalized, hit.tokens, hit.value); unchanged.add(hit.tokens.join('.')) }
+    }
   }
-  if (typeof correctionReason === 'string') found.push({ label: 'Correction reason', max: 2000, shown: 'Correction reason', value: correctionReason })
-  for (const { max, shown, value } of found) if (typeof value === 'string' && value.length > max) throw new CollectionTextLimitError(shown, max, value.length, noteFor(value))
+  const withdrawnReason = (normalized as Record<string, unknown> | null)?.withdrawalReason
+  const composed = (normalized as Record<string, unknown> | null)?.state === 'withdrawn' && typeof withdrawnReason === 'string' && reason === WITHDRAWN_REASON_PREFIX + withdrawnReason
+  for (const [path, label, max] of SAVE_TEXT_LIMITS) for (const hit of occurrences(normalized, path.split('.'), label)) {
+    if (typeof hit.value !== 'string' || unchanged.has(hit.tokens.join('.'))) continue
+    const effective = composed && path === 'withdrawalReason' ? CORRECTION_REASON_MAX - WITHDRAWN_REASON_PREFIX.length : max
+    if (hit.value.length > effective) throw new CollectionTextLimitError(hit.shown, effective, hit.value.length, noteFor(hit.value) + (effective < max ? NOTE_FOR_WITHDRAWAL : ''), path)
+  }
+  if (typeof reason === 'string' && !composed && reason.length > CORRECTION_REASON_MAX) throw new CollectionTextLimitError('Correction reason', CORRECTION_REASON_MAX, reason.length, noteFor(reason), 'correctionReason')
+  return { activity: normalized, correctionReason: reason }
+}
+
+/** A text typed outside the collection contract (a withdrawal reason, a mapping's vendor): NFC first, then the same count and refusal. */
+export function limitedText(value: string, max: number, label: string, path = ''): string {
+  const normalized = value.normalize('NFC')
+  if (normalized.length > max) throw new CollectionTextLimitError(label, max, normalized.length, noteFor(normalized), path)
+  return normalized
 }
