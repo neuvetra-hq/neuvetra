@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { SPEND_REPLACED_STEP_TEXT } from "@/lib/bf-followups-text"
+import { SCOPE3_VENDOR_KEY_MATCH_DETAIL } from "../../../../../packages/neuvetra-database/src/scope3-text"
 import { parseScope3SpendCsv, scope3DecimalSum, scope3SpendImportTemplate, type Scope3SpendImportLine, type Scope3SpendParse } from "../../../../../packages/neuvetra-database/src/scope3-spend-import"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { reasonText } from "@/lib/plain-language"
@@ -420,7 +421,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
             <div><dt>Counted instead</dt><dd className="nv-num">{row.figure}</dd></div>
           </dl>
           <div className="nv-table-wrap spend-import__table-wrap"><table className="nv-table spend-import__table"><thead><tr><th scope="col">Spend line</th><th scope="col">Description</th><th scope="col" className="nv-right">Amount</th></tr></thead>
-            <tbody>{row.lines.map(line => <tr key={line.spendRecordId}><td data-label="Spend line">{line.spendSourceId}</td><td data-label="Description">{line.spendDescription}</td><td data-label="Amount" className="nv-right nv-num">{spendMoney(line.spendAmount, line.spendCurrency)}</td></tr>)}</tbody></table></div>
+            <tbody>{row.lines.map(line => <tr key={line.spendRecordId}><td data-label="Spend line">{line.spendSourceId}</td><td data-label="Description">{line.spendDescription}{line.vendorKeyMatch ? <span className="nv-subtle"> · {SCOPE3_VENDOR_KEY_MATCH_DETAIL(line.supplierName)}</span> : null}</td><td data-label="Amount" className="nv-right nv-num">{spendMoney(line.spendAmount, line.spendCurrency)}</td></tr>)}</tbody></table></div>
         </li>)}</ul>
       </div>}
     </section>

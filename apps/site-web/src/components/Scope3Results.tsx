@@ -15,7 +15,7 @@ import { REPLACING_RECORD_TEXT, SCOPE3_ACTION_TEXT, SCOPE3_DISCLOSURE_GROUP_TEXT
 // WO-12: a view-only member views the assessment (read-only), never "Add" or "Edit".
 import { SCREENING_READ_ONLY_TEXT } from "@/lib/wo12-text"
 import { scope3ClosedLines, scope3LineState } from "../../../../packages/neuvetra-database/src/scope3-trace"
-import { scope3LineMemoText, scope3MemoText, SCOPE3_SUPERSEDED_MEMO_TEXT_R3A } from "@/lib/scope3-results-api"
+import { scope3LineMemoText, scope3MemoText, scope3VendorKeyMatchText, SCOPE3_SUPERSEDED_MEMO_TEXT_R3A } from "@/lib/scope3-results-api"
 import { scope3CategoryDq, scope3ConflictInHeadline, scope3DqScoresText, scope3ProvenanceText, scope3QuantityText, scope3ScreeningWord } from "@/lib/scope3-display-r3d"
 import { SCOPE3_CONFLICT_TEXT_R3D, SCOPE3_CSV_TEXT_R3D, SCOPE3_DQ_TEXT_R3D, SCOPE3_PRINT_TEXT_D, SCOPE3_STATUS_TEXT_R3D } from "@/lib/scope3-text-r3d"
 // Round 2 lane D (UX-3): a derived line (3A, 3B, 3C, 3C upstream, 3D upstream, hotel) is fixed on its source record
@@ -92,11 +92,13 @@ async function downloadScope3CsvZip(results: Scope3ResultsResponse) {
  */
 function CalculationDetails({ row, records }: { row: Scope3Row; records: readonly Scope3Row[] }) {
   const r = row.result, superseded = scope3SupersededBy(row), duplicate = scope3PossibleDuplicateText(row, records), replacing = scope3ReplacingRecordOf(row)
+  // BF-12: a line replaced only by the vendor key says so next to its replacing record (nothing new for any other line).
+  const vendorKeyMatch = scope3VendorKeyMatchText(row), matched = vendorKeyMatch !== null ? ` · ${vendorKeyMatch}` : ""
   return <dl className="worksheet-details">
     <dt>Record</dt><dd>{row.recordId} · version {row.versionId} (revision {row.revision}){row.derivedFrom ? ` · ${SCOPE3_TRACE_TEXT.derivedFrom(kindLabel(row.derivedFrom.kind), row.derivedFrom.recordId)}` : ""}</dd>
     <dt>Source reference</dt><dd>{row.reference || "—"}{row.estimateBasis ? ` · estimate basis: ${row.estimateBasis}` : ""}</dd>
-    {superseded && <><dt>Superseded</dt><dd>{SCOPE3_TRACE_TEXT.supersededBy(superseded)}</dd></>}
-    {replacing && <><dt>{REPLACING_RECORD_TEXT.heldTerm}</dt><dd>{replacingRecordName(replacing, records)} (record {replacing})</dd></>}
+    {superseded && <><dt>Superseded</dt><dd>{SCOPE3_TRACE_TEXT.supersededBy(superseded)}{matched}</dd></>}
+    {replacing && <><dt>{REPLACING_RECORD_TEXT.heldTerm}</dt><dd>{replacingRecordName(replacing, records)} (record {replacing}){matched}</dd></>}
     {duplicate && <><dt>Possible duplicate</dt><dd>{duplicate}</dd></>}
     {row.supersededSpendMemo && <><dt>{SCOPE3_SUPERSEDED_MEMO_TEXT_R3A.heading}</dt><dd>{scope3LineMemoText(row)}</dd></>}
     {row.currencyConversion && <><dt>Currency conversion provenance</dt><dd>{scope3SpendConversionNote(row.currencyConversion)}</dd></>}
