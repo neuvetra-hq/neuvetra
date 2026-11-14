@@ -51,6 +51,13 @@ export const countedDuplicate = (row: ResultRow) => duplicateReasonCodes(row).le
 /** Not yet counted (B02): held by the adapter, the period check or the engine, and neither withdrawn nor excluded. */
 export const notYetCounted = (row: ResultRow) => row.plan.status !== "withdrawn" && row.plan.status !== "excluded"
   && (row.outcome !== "calculated" || engineHold(row) === "input_needed" || engineHold(row) === "review_required")
+/** BF-29: a record the engine could not run for (capacity, an outage), as opposed to one held for input: the user cannot fix it, only try again. */
+export const couldNotCalculateNow = (row: ResultRow) => row.outcome === "unavailable" && notYetCounted(row)
+/** BF-29: not yet counted because something needs doing (held by the adapter, the period check or the engine, or refused), not because the engine could not run. */
+export const heldForInput = (row: ResultRow) => notYetCounted(row) && !couldNotCalculateNow(row)
+/** BF-29: the completeness and banner wording for records the engine could not run for. Same words on screen, in print and in the CSV. */
+export const couldNotCalculateCountText = (count: number) => `${count} ${count === 1 ? "record" : "records"} could not be calculated right now`
+export const TRY_AGAIN_SHORTLY_TEXT = "Try again shortly."
 /**
  * WO-13 (QA follow-up 1 of PR #55): the Results records banner. Records not counted yet or only partly calculated are
  * fixed to complete the totals; a counted possible duplicate is not: both records are counted, and it is checked, then
@@ -81,17 +88,20 @@ export function partlyCalculated(row: ResultRow): boolean {
  * The banner's counts over the records that need attention: not counted yet, only partly calculated (a possible duplicate
  * that is also partly calculated counts here as well), counted possible duplicates, and how many of those also need a fix.
  */
-export function attentionCounts(rows: ResultRow[]): { notCounted: number; partly: number; duplicates: number; duplicatesAlsoFix: number } {
-  const notCounted = rows.filter(notYetCounted).length
+export function attentionCounts(rows: ResultRow[]): { notCounted: number; partly: number; duplicates: number; duplicatesAlsoFix: number; unavailable: number } {
+  // BF-29: records the engine could not run for are their own count; "notCounted" is the ones that need something doing.
+  const notCounted = rows.filter(heldForInput).length, unavailable = rows.filter(couldNotCalculateNow).length
   const partly = rows.filter(row => !notYetCounted(row) && (!countedDuplicate(row) || partlyCalculated(row))).length
   const duplicateRows = rows.filter(countedDuplicate)
-  return { notCounted, partly, duplicates: duplicateRows.length, duplicatesAlsoFix: duplicateRows.filter(row => notYetCounted(row) || partlyCalculated(row)).length }
+  return { notCounted, unavailable, partly, duplicates: duplicateRows.length, duplicatesAlsoFix: duplicateRows.filter(row => notYetCounted(row) || partlyCalculated(row)).length }
 }
-export function attentionBannerText(counts: { notCounted: number; partly: number; duplicates: number; duplicatesAlsoFix?: number }, canManage: boolean): string {
+export function attentionBannerText(counts: { notCounted: number; partly: number; duplicates: number; duplicatesAlsoFix?: number; unavailable?: number }, canManage: boolean): string {
   const plural = (count: number, one: string, many: string) => `${count} ${count === 1 ? one : many}`
   const work = [counts.notCounted ? `${plural(counts.notCounted, "record isn’t", "records aren’t")} counted yet` : "", counts.partly ? `${plural(counts.partly, "record is", "records are")} only partly calculated` : ""].filter(Boolean).join(" and ")
   const parts: string[] = []
   if (work) parts.push(`${work}.${canManage ? ATTENTION_BANNER_TEXT.fix(counts.notCounted + counts.partly) : ""}`)
+  // BF-29: an outage is not something to fix, and it is said to everyone: it clears by trying again.
+  if (counts.unavailable) parts.push(`${couldNotCalculateCountText(counts.unavailable)}. ${TRY_AGAIN_SHORTLY_TEXT}`)
   const also = Math.min(counts.duplicatesAlsoFix ?? 0, counts.duplicates)
   if (counts.duplicates) parts.push(`${ATTENTION_BANNER_TEXT.duplicates(counts.duplicates)}${also
     ? canManage ? ATTENTION_BANNER_TEXT.duplicatesAlsoFixManage(counts.duplicates, also) : ATTENTION_BANNER_TEXT.duplicatesAlsoFixView(counts.duplicates, also)

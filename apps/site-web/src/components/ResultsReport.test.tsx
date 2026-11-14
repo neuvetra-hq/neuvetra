@@ -66,7 +66,7 @@ function render(results: ResultsResponse, coverage: Coverage = READY, scope3Over
     actionsLabelled: nodes.filter(node => node.type === "button" && /Print or save|Download CSV/.test(text(node))).map(node => node.props["aria-describedby"]),
     tableRegions: nodes.filter(node => typeof node.props.className === "string" && node.props.className.startsWith("nv-report__scroll")).map(node => ({ role: node.props.role, label: node.props["aria-label"], tabIndex: node.props.tabIndex })),
     warnings: nodes.filter(node => node.props.className === "nv-stat__warn").map(text),
-    banner: nodes.filter(node => node.props.className === "nv-notice nv-notice--warn").map(text).find(line => / counted yet| partly calculated|possible duplicates? to confirm/.test(line)) ?? null,
+    banner: nodes.filter(node => node.props.className === "nv-notice nv-notice--warn").map(text).find(line => / counted yet| partly calculated|possible duplicates? to confirm|could not be calculated right now/.test(line)) ?? null,
     csv,
   }
 }
@@ -481,5 +481,79 @@ describe("BF-13b: the printed \"None found\" line claims only Scope 1 and 2 reco
     expect(view.printed).toContain(journeyStatus.COVERAGE_TEXT.reportNoneFound)
     expect(journeyStatus.COVERAGE_TEXT.reportNoneFound.startsWith("None found by these checks: every Scope 1 and 2 record is counted, ")).toBe(true)
     expect(view.printed).not.toContain(["every record", "is counted"].join(" "))
+  })
+})
+
+// BF-29 (backend audit lead 3): records the engine could not run for ("unavailable": capacity or an outage) are said apart
+// from records held for input. The user can fix a held record; they can only try again for an unavailable one, so the
+// completeness text, the banner and the stat cards say which, in every state, with the same words on screen, in print and in the CSV.
+describe("BF-29: records that could not be calculated right now are not 'held for input'", () => {
+  const counted = () => row("GAS-1", "natural_gas", 1, { inSubtotal: { scope1: true, scope2LocationBased: false, scope2MarketBased: false }, scope1: s1(GAS, "complete", { total: kg("5311.4500") }) })
+  const down = (name: string) => row(name, "natural_gas", 1, { outcome: "unavailable" })
+  const waiting = (name: string) => row(name, "natural_gas", 1, { outcome: "held", plan: { action: "hold", status: "input_needed", reasons: ["quantity_not_calculable"], notes: [] } })
+  const state = (others: ResultRow[]) => {
+    const keeper = counted()
+    return { ...synthetic, records: [keeper, ...others], methods: [method(GAS, 1)], scope2: null,
+      scope1: { knownSourceSubtotal: kg("5311.4500"), includedResults: [keeper.scope1!.resultSha256], incompleteResults: [], notCalculated: [], reportedOutsideScopes: [], resultCount: 1, complete: true } } as unknown as ResultsResponse
+  }
+  const fix = /Fix (it|them) to complete your totals/
+  const everywhere = (view: ReturnType<typeof render>, sentence: string) => {
+    expect(view.completeness.scope1).toBe(sentence)
+    expect(view.printed).toContain(sentence)
+    expect(csvLines(view.csv)).toContain(`# Completeness, Scope 1: ${sentence}`)
+  }
+  test("none: nothing held and nothing unavailable says neither", () => {
+    const view = render(state([]))
+    expect(view.completeness.scope1).toBe(journeyStatus.COVERAGE_TEXT.resultsNoGaps(1))
+    for (const surface of [view.printed, view.csv, view.banner ?? "", ...view.warnings]) expect(surface).not.toMatch(/could not be calculated right now|not yet counted/)
+    expect(view.banner).toBeNull()
+  })
+  test("outage only: says to try again and never says to fix; singular and plural", () => {
+    const two = render(state([down("GAS-2"), down("GAS-3")]))
+    everywhere(two, "Incomplete — 2 records could not be calculated right now")
+    expect(two.banner).toBe("2 records could not be calculated right now. Try again shortly.")
+    expect(two.banner).not.toMatch(fix)
+    expect(two.warnings.join(" ")).toContain("2 records could not be calculated right now")
+    expect(two.warnings.join(" ")).not.toContain("not counted yet")
+    expect(two.totalNotes[0]).toContain("incomplete")
+    const one = render(state([down("GAS-2")]))
+    everywhere(one, "Incomplete — 1 record could not be calculated right now")
+    expect(one.banner).toBe("1 record could not be calculated right now. Try again shortly.")
+    expect(one.warnings.join(" ")).toContain("1 record could not be calculated right now")
+    // Nothing is said to be held for input, and the figures are the engine's, unchanged.
+    expect(one.completeness.scope1).not.toContain("not yet counted")
+    expect(one.totals).toEqual(render(state([])).totals)
+  })
+  test("held only: unchanged wording, with the instruction to fix", () => {
+    const view = render(state([waiting("GAS-2")]))
+    everywhere(view, "Incomplete — 1 record not yet counted")
+    expect(view.banner).toBe("1 record isn’t counted yet. Fix it to complete your totals.")
+    expect(view.completeness.scope1).not.toContain("could not be calculated right now")
+    expect(view.banner).not.toContain("Try again")
+    expect(render(state([waiting("GAS-2"), waiting("GAS-3")])).banner).toBe("2 records aren’t counted yet. Fix them to complete your totals.")
+  })
+  test("both: each is counted on its own and each instruction is for its own records", () => {
+    const view = render(state([waiting("GAS-2"), down("GAS-3"), down("GAS-4")]))
+    everywhere(view, "Incomplete — 1 record not yet counted; 2 records could not be calculated right now")
+    expect(view.banner).toBe("1 record isn’t counted yet. Fix it to complete your totals. 2 records could not be calculated right now. Try again shortly.")
+    expect(view.warnings.join(" ")).toContain("1 record not counted yet")
+    expect(view.warnings.join(" ")).toContain("2 records could not be calculated right now")
+    // A viewer who cannot manage records is never told to fix, and is still told to try again (the banner function).
+    expect(resultsView.attentionBannerText({ notCounted: 1, partly: 0, duplicates: 0, unavailable: 2 }, false)).toBe("1 record isn’t counted yet. 2 records could not be calculated right now. Try again shortly.")
+  })
+  test("a scope with no subtotal because every record was unavailable: Not calculated, with the reason", () => {
+    const results = { ...state([]), records: [down("GAS-1"), down("GAS-2")], scope1: null } as unknown as ResultsResponse
+    const view = render(results)
+    everywhere(view, "Not calculated — 2 records could not be calculated right now")
+    expect(view.banner).toBe("2 records could not be calculated right now. Try again shortly.")
+    expect(view.totalNotes[0]).toContain(resultsView.COULD_NOT_CALCULATE_NOW_TEXT)
+  })
+  test("the reasons list still names each unavailable record, and attentionCounts counts them apart", () => {
+    const records = [waiting("GAS-2"), down("GAS-3")]
+    expect(resultsView.attentionCounts(records)).toMatchObject({ notCounted: 1, unavailable: 1, partly: 0 })
+    expect(resultsView.couldNotCalculateNow(records[1]!)).toBe(true)
+    expect(resultsView.heldForInput(records[1]!)).toBe(false)
+    expect(resultsView.heldForInput(records[0]!)).toBe(true)
+    expect(render(state([down("GAS-3")])).notCounted.join(" ")).toContain("The calculation service was unavailable for this record. Try again shortly.")
   })
 })
