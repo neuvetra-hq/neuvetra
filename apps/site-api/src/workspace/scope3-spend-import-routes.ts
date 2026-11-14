@@ -11,6 +11,8 @@ import type { AuthenticatedUser } from "../lib/auth"
 import { readScope3Body, readScope3JsonBody, scope3BusyResponse, scope3Respond, scope3RoutePrelude, Scope3RouteProblem, SCOPE3_UUID, SCOPE3_UUID_SOURCE } from "./scope3-route-helpers"
 // Round 2, lane B (owner decision 10): the active-line budget check before an import saves anything.
 import { MAX_SCOPE3_LINES, scope3GridLossesIncluded, scope3LineBudget, scope3LineCountRule, scope3StoredLineCount, type Scope3LineCountRule } from "./scope3-results-routes"
+// BF-19 (BI-02): one bulk write per API instance at a time.
+import { bulkWriteBusyResponse, createBulkWriteGate, type BulkWriteGate } from "./bulk-write-gate"
 
 /**
  * Spend CSV import (Scope 3 completion I-09; Claude, 30 October 2026; DESIGN §3.6, §7.3, D9, A11, A29):
@@ -187,7 +189,10 @@ export async function scope3LinesAtRemovedLocations(database: Pick<Scope3SpendIm
 
 export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImportRouteDatabase; validateUser: (token: string) => Promise<AuthenticatedUser | null>; origin: string
   /** BF-21: the database's schema version; from 32 the pre-check counts as 0032 does (stored Scope 3 records only). Absent: 0. */
-  schemaVersion?: () => Promise<number> }) {
+  schemaVersion?: () => Promise<number>
+  /** BF-19: the instance's bulk-write gate (the staging server passes its one gate; a new one per route by default). */
+  bulkWriteGate?: BulkWriteGate }) {
+  const gate = deps.bulkWriteGate ?? createBulkWriteGate()
   return async (request: Request): Promise<Response> => {
     const respond = scope3Respond
     const url = new URL(request.url)
@@ -211,6 +216,11 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
         error: counted === "stored" ? SCOPE3_CAPACITY_TEXT.storedLineBudgetExceeded(MAX_SCOPE3_LINES, scope3StoredLineCount(records, scope3GridLossesIncluded(setup)), attemptedFileLines)
           : SCOPE3_CAPACITY_TEXT.lineBudgetExceeded(lineBudget.max, lineBudget.used, attemptedFileLines) })
     }
+    // BF-19 (BI-02): every write here is a bulk write (an import, a withdrawal, a currency conversion, a mapping that corrects
+    // its group). It takes the instance's gate once the caller is authorised for this company (QA follow-up 5 of PR #74: a
+    // non-member still gets 404 and a member 403, never "busy") and before anything is written or receipted; the hold is
+    // released in the `finally` below on every path (answer, refusal, thrown error, timeout).
+    let release: (() => void) | null = null
     try {
       const setup = await deps.database.findCompanySetup(actor.id, companyId)
       if (!setup) return respond(404, NOT_FOUND)
@@ -232,6 +242,8 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
         return respond(200, body)
       }
       if (!setup.canManage) return respond(403, { error: "Forbidden." })
+      release = gate.tryAcquire(companyId)
+      if (release === null) return bulkWriteBusyResponse()
       if (withdrawImportId !== null) {
         // Round 3 (owner decision 7, EN-3): withdraw every active line of one import, in one set-based statement.
         const input = await readScope3JsonBody(request, MAX_MAPPING_BYTES, "Invalid Scope 3 spend import withdrawal JSON.")
@@ -329,6 +341,6 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
       }
       if (["22023", "22P02", "22P05", "22021", "22007", "22008", "22003", "23514", "23502"].includes(code ?? "")) return respond(422, { error: resource === "spend-mappings" ? "Invalid or unsupported Scope 3 spend mapping." : resource === "spend-currency-conversions" ? (error instanceof Error && error.message && (error as { code?: string }).code === "22023" ? error.message : "Invalid currency conversion.") : "Invalid or unsupported Scope 3 spend import." })
       return respond(503, { error: "Scope 3 spend imports could not be read or saved. Try again shortly." })
-    }
+    } finally { release?.() }
   }
 }

@@ -89,7 +89,9 @@ describe('Scope 3 frozen report size limits (round 2c; round 3)', () => {
     const combined = SCOPE3_CAPACITY_TEXT.reportTooLarge({ reportBytes: 110_810_029, csvBytes: 90_308_252, maxTextBytes: SCOPE3_REPORT_MAX_TEXT_BYTES, maxCombinedTextBytes: 158_000_000, lines: 4200 })
     expect(combined).toBe('This Scope 3 report version would need 201.1 MB of report and CSV text for its 4,200 lines, more than the 158 MB one version can be prepared with, so it was not prepared. Nothing was saved, and no record or figure changed; Scope 3 results stay available to view. Most of the size is each line’s saved details: notes, evidence file lists and, for the three category 3 lines of each electricity record, all of that record’s certificates. To prepare a version, withdraw records you no longer need, enter fewer certificates per electricity record, or exclude category 3 in company setup, then prepare again.')
     const single = SCOPE3_CAPACITY_TEXT.reportTooLarge({ reportBytes: 139_300_000, csvBytes: 26_000_000, maxTextBytes: SCOPE3_REPORT_MAX_TEXT_BYTES, maxCombinedTextBytes: 158_000_000, lines: 1200 })
-    expect(single.startsWith('This Scope 3 report version would need 139.3 MB of report text for its 1,200 lines, more than the 134.2 MB one version can hold, so it was not prepared.')).toBe(true)
+    // QA F-4: the per-text limit is stated as it is, 128 MiB, and the size in the same unit.
+    expect(single.startsWith('This Scope 3 report version would need 132.8 MiB of report text for its 1,200 lines, more than the 128 MiB one version can hold, so it was not prepared.')).toBe(true)
+    expect(single).not.toContain('134.2')
     for (const text of [combined, single, SCOPE3_CAPACITY_TEXT.reportTooLarge()]) expect(text).toContain('withdraw records you no longer need, enter fewer certificates per electricity record, or exclude category 3 in company setup')
   })
 })

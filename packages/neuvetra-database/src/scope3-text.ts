@@ -709,9 +709,11 @@ export const SCOPE3_CAPACITY_TEXT = {
   reportTooLarge: (measured?: { reportBytes: number; csvBytes: number; maxTextBytes: number; maxCombinedTextBytes: number; lines: number }) => {
     const size = measured && typeof measured === 'object' && Number.isFinite(measured.lines) ? measured : undefined
     const mb = (bytes: number) => `${(bytes / 1_000_000).toLocaleString('en-US', { maximumFractionDigits: 1 })} MB`
+    const mib = (bytes: number) => `${(bytes / 1_048_576).toLocaleString('en-US', { maximumFractionDigits: 1 })} MiB`
     const what = !size ? 'This Scope 3 report version lists more records than one version can hold'
       : size.reportBytes > size.maxTextBytes || size.csvBytes > size.maxTextBytes
-        ? `This Scope 3 report version would need ${mb(Math.max(size.reportBytes, size.csvBytes))} of ${size.reportBytes >= size.csvBytes ? 'report' : 'CSV'} text for its ${size.lines.toLocaleString('en-US')} lines, more than the ${mb(size.maxTextBytes)} one version can hold`
+        // QA F-4: 0030's per-text limit is 128 MiB (134,217,728 bytes), so this sentence is in MiB throughout.
+        ? `This Scope 3 report version would need ${mib(Math.max(size.reportBytes, size.csvBytes))} of ${size.reportBytes >= size.csvBytes ? 'report' : 'CSV'} text for its ${size.lines.toLocaleString('en-US')} lines, more than the ${mib(size.maxTextBytes)} one version can hold`
         : `This Scope 3 report version would need ${mb(size.reportBytes + size.csvBytes)} of report and CSV text for its ${size.lines.toLocaleString('en-US')} lines, more than the ${mb(size.maxCombinedTextBytes)} one version can be prepared with`
     return `${what}, so it was not prepared. Nothing was saved, and no record or figure changed; Scope 3 results stay available to view. Most of the size is each line’s saved details: notes, evidence file lists and, for the three category 3 lines of each electricity record, all of that record’s certificates. To prepare a version, withdraw records you no longer need, enter fewer certificates per electricity record, or exclude category 3 in company setup, then prepare again.`
   },
@@ -848,3 +850,14 @@ export const SCOPE3_VENDOR_KEY_MATCH_DETAIL = (named: string) => `${SCOPE3_VENDO
 /** BF-12 (QA F1): the same, as a sentence after the record form's "Another record replaces this spend line: …". */
 export const SCOPE3_VENDOR_KEY_MATCH_SENTENCE = (named: string) => `It was ${SCOPE3_VENDOR_KEY_MATCH_DETAIL(named)}.`
 // --- end BF-12 ---
+
+// --- BF-14 --- (accounting audit B-5; 13 November 2026). New text only; no shipped text is edited.
+/**
+ * The hold of a spend line that was converted to US dollars at a rate dated in a different calendar year from the line, or
+ * whose year is not known (no date, and a period that crosses years). One exchange rate must not be applied across years. Which
+ * rate to use (date of the purchase, annual average or one per import) is for the company's accountant (question C-6).
+ */
+export const SCOPE3_REASON_TEXT_BF14: Readonly<Record<string, string>> = {
+  currency_rate_outside_line_year: 'This line was converted to US dollars at a rate dated in a different calendar year from the line (or it has no date and covers more than one year), and one exchange rate can’t be used across years. It isn’t counted until you convert that year at a rate dated in the same year: open the line, put back its original currency and amount (they are in its notes), and convert that currency again with a rate dated in the line’s own year. A line with no date needs its invoice date first.',
+}
+// --- end BF-14 ---

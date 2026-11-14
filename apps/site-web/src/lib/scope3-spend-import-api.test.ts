@@ -2,7 +2,7 @@
 // Spend CSV import client (Scope 3 completion I-09; Claude, 30 October 2026; DESIGN 7.3): the strict decoders accept the
 // route's shapes and refuse every mutation (keys, ids, a reconciliation flag that does not add up, lines that belong to no
 // import, a calculated line with reasons or a held line without, recounted holds); the queues read from decoded lines.
-import { describe, expect, test } from "bun:test"
+import { afterEach, describe, expect, test } from "bun:test"
 import * as api from "./scope3-spend-import-api"
 
 const company = "93910000-0000-4000-8000-000000000001", other = "93910000-0000-4000-8000-000000000002"
@@ -156,5 +156,31 @@ describe("CSV v2 Mapping section (I-09): amounts per currency, import rows and h
     const row = csv.split("\n").find(line => line.startsWith("Mapping,"))!
     const total = (await import("../../../../packages/neuvetra-database/src/scope3-spend-import")).scope3DecimalSum([spend.quantity.value, "0.125"])
     expect(row.endsWith(`,USD ${total}; EUR 1 line not a plain amount,${IMPORT} row 2; ${IMPORT} row 3; ${IMPORT} row 4,${second.recordId} → ${EARLIER} row 1`)).toBe(true)
+  })
+})
+
+// BF-19 (BI-02): the four bulk spend writes are refused with 503 bulk_write_busy while another runs on the same server.
+// Each client call is asked once (no automatic retry of a write) and fails with the server's retryable message and code,
+// which the spend import screen shows as is.
+describe("BF-19: a bulk write refused while another runs", () => {
+  const originalFetch = globalThis.fetch
+  afterEach(() => { globalThis.fetch = originalFetch })
+  const BUSY = { code: "bulk_write_busy", error: "Another large spend change (an import, currency conversion, mapping or withdrawal) is in progress or next in line. Try again in a moment." }
+  const actor = { accessToken: "token", userId: user, role: "owner" as const }
+  const calls: Array<{ path: string; method: string }> = []
+  const busyServer = () => { calls.length = 0; globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => { calls.push({ path: String(input), method: init?.method ?? "GET" }); return Response.json(BUSY, { status: 503, headers: { "retry-after": "10" } }) }) as typeof fetch }
+  const actions: Array<[string, () => Promise<unknown>]> = [
+    ["spend import", () => api.importScope3SpendFile(company, new TextEncoder().encode("x") as Uint8Array<ArrayBuffer>, "93910000-0000-4000-8000-0000000000e1", loc, actor)],
+    ["currency conversion", () => api.convertScope3SpendCurrency(company, { currency: "EUR", rate: "1.08", rateSource: "ECB", rateDate: "2025-12-31" }, actor)],
+    ["spend mapping (bulk correction)", () => api.saveScope3SpendMapping(company, api.scope3SpendMappingBody({ glAccount: "6300", vendor: "Cater", description: "Lunch", mapping: null }, { category: 1, naicsCode: "722320", marginChoice: "with_margins", categoryConfirmed: null, activityOverlapConfirmed: null }), actor)],
+    ["import withdrawal", () => api.withdrawScope3SpendImport(company, imp1, "Wrong file.", actor)],
+  ]
+  for (const [name, run] of actions) test(`${name}: the retryable message and code reach the screen, after exactly one request`, async () => {
+    busyServer()
+    const error = await run().then(() => null, (thrown: unknown) => thrown)
+    expect(error).toBeInstanceOf(api.Scope3SpendImportApiError)
+    const refusal = error as InstanceType<typeof api.Scope3SpendImportApiError>
+    expect([refusal.message, refusal.status, refusal.code, refusal.problems, refusal.unavailable]).toEqual([BUSY.error, 503, "bulk_write_busy", [], false])
+    expect(calls.map(call => call.method)).toEqual(["POST"])
   })
 })

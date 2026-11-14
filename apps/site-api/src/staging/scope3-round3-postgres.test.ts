@@ -9,7 +9,7 @@
 // Runs on the disposable loopback fixture hosted.test.ts migrates (verify.yml native step); any loopback port.
 import { expect, test } from "bun:test"
 import { readdirSync, readFileSync, writeFileSync } from "node:fs"
-import { createPostgresConnection, EXISTING_PROJECT_REF, HostedWorkspaceDatabase, provisionStagingRoster, SCOPE3_CAPACITY_TEXT, SCOPE3_REPORT_MAX_COMBINED_TEXT_BYTES, SCOPE3_REPORT_MAX_TEXT_BYTES, validateCollectionSaveInput, type WorkspaceConnection } from "@neuvetra/database"
+import { createPostgresConnection, EXISTING_PROJECT_REF, HostedWorkspaceDatabase, provisionStagingRoster, SCOPE3_CAPACITY_TEXT, SCOPE3_REPORT_MAX_COMBINED_TEXT_BYTES, SCOPE3_REPORT_MAX_TEXT_BYTES, STAGING_SCHEMA_VERSION, validateCollectionSaveInput, type WorkspaceConnection } from "@neuvetra/database"
 import { createStagingSchemaFixture } from "../../../../packages/neuvetra-database/src/staging-schema-fixture"
 import { createSyntheticCompanySetup } from "../../../../packages/neuvetra-database/src/company-setup-fixture"
 import { SCOPE3_SETUP_CATEGORY_TOKENS } from "../../../../packages/neuvetra-database/src/scope3-coverage"
@@ -33,11 +33,13 @@ const ledger = (prefix: string, rows: number) => enc(HEADER + Array.from({ lengt
 /** EN-1 budget: the runtime's statement timeout is 15 s (hosted.ts); the whole import (several statements) must finish well inside it (4-6 s unloaded, about 10 s on a loaded 2-CPU host). */
 const IMPORT_BUDGET_MS = 12_000
 
-async function harness() {
+async function harness(options: { maxConnections?: number; readinessPool?: boolean } = {}) {
   const operator = createPostgresConnection(target!, { tls: false })
   const runtimeUrl = new URL(target!); runtimeUrl.username = "neuvetra_runtime"
-  const runtime = createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 6 })
-  const database = new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string) => HostedWorkspaceDatabase)(runtime, REF)
+  const runtime = createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: options.maxConnections ?? 6 })
+  // BF-19: as HostedWorkspaceDatabase.create builds it in production: readiness on its own one-connection pool.
+  const readiness = options.readinessPool ? createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 1 }) : undefined
+  const database = new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string, reuse: boolean, readiness?: WorkspaceConnection) => HostedWorkspaceDatabase)(runtime, REF, false, readiness)
   const config = readStagingConfig({ NODE_ENV: "test", NEUVETRA_STAGING_ENABLED: "enabled", NEUVETRA_STAGING_PROFILE: STAGING_PROFILE, NEUVETRA_STAGING_PROJECT_REF: REF, NEUVETRA_STAGING_ORIGIN: ORIGIN, SUPABASE_URL: `https://${REF}.supabase.co`, SUPABASE_ANON_KEY: "sb_publishable_synthetic_fixture_not_a_real_key", DATABASE_URL: `postgres://neuvetra_runtime:fixture@db.${REF}.supabase.co:5432/postgres` })
   const users = new Map<string, string>()
   const stored = new Map<string, Uint8Array<ArrayBuffer>>()
@@ -81,8 +83,62 @@ async function harness() {
   const close = async () => { await app.close?.(); await database.close(); await operator.close() }
   /** Lets this harness's server authenticate a user another harness created (its bearer token is `name`). */
   const register = (name: string, owner: string) => { users.set(name, owner) }
-  return { operator, runtime, database, call, json, company, upload, importFile, explain, close, register }
+  return { operator, runtime, database, app, call, json, company, upload, importFile, explain, close, register }
 }
+
+/**
+ * BF-19 (BI-02, lead 5): the audit's J5 and K1 with production pool settings (4 request connections, readiness on its own
+ * connection). Before BF-19 on a 2-CPU host: J5's six concurrent 2,000-line imports all ran (8-12 s each) and another
+ * company's first read waited 8.5 s; K1's nine made another company's read and /ready fail with 503 after 10 s.
+ */
+const BF19_REFUSAL_MS = 1_000, BF19_READ_MS = 2_000, BF19_READY_MS = 1_000
+async function bf19Burst(h: Awaited<ReturnType<typeof harness>>, label: string, importers: number) {
+  const companies = [] as Array<Awaited<ReturnType<typeof h.company>>>
+  for (let i = 0; i <= importers; i++) companies.push(await h.company(`bf19-${label}-${i}`, [1, 4, 5, 6]))
+  const reader = companies[importers]!
+  const files = await Promise.all(companies.slice(0, importers).map(async (c, i) => { const bytes = ledger(`${label}${i}`, 2000); return { c, bytes, evidence: await h.upload(c.root, c.name, bytes, `${label}-${i}.csv`) } }))
+  const started = performance.now()
+  const imports = files.map(({ c, bytes, evidence }) => h.importFile(c, bytes, evidence).then(async response => ({ c, bytes, evidence, status: response.status, ms: Math.round(performance.now() - started), retryAfter: response.headers.get("retry-after"), body: await response.json() })))
+  await Bun.sleep(300)
+  const probes = await Promise.all([
+    (async () => { const s = performance.now(); const r = await h.call(`${reader.root}/collection`, reader.name); await r.arrayBuffer(); return { status: r.status, ms: Math.round(performance.now() - s) } })(),
+    (async () => { const s = performance.now(); const r = await h.app.fetch(new Request(`${ORIGIN}/ready`)); return { status: r.status, ms: Math.round(performance.now() - s), body: await r.json() } })(),
+    (async () => { const s = performance.now(); const r = await h.app.fetch(new Request(`${ORIGIN}/health`)); return { status: r.status, ms: Math.round(performance.now() - s) } })(),
+  ])
+  const done = await Promise.all(imports)
+  console.info(`BF-19 native ${label}: ${importers} 2,000-line imports at once (pool 4) ${JSON.stringify(done.map(d => `${d.status}/${d.ms}ms/${d.body.code ?? ""}`))} | another company's read ${probes[0].status}/${probes[0].ms}ms | ready ${probes[1].status}/${probes[1].ms}ms | health ${probes[2].status}/${probes[2].ms}ms`)
+  return { done, probes, companies }
+}
+
+integration("BF-19 natively (J5, K1): concurrent bulk imports are refused at once, other companies' reads and /ready stay fast, and a refused import retried later is a first attempt", async () => {
+  const h = await harness({ maxConnections: 4, readinessPool: true })
+  try {
+    for (const [label, importers] of [["J5", 6], ["K1", 9]] as const) {
+      const { done, probes } = await bf19Burst(h, label, importers)
+      const admitted = done.filter(d => d.status === 201), refused = done.filter(d => d.status === 503)
+      expect([admitted.length, refused.length]).toEqual([1, importers - 1])
+      expect([admitted[0]!.body.saved, admitted[0]!.body.replayed]).toEqual([2000, false])
+      for (const d of refused) {
+        expect([d.body, d.retryAfter]).toEqual([{ code: "bulk_write_busy", error: "Another large spend change (an import, currency conversion, mapping or withdrawal) is in progress or next in line. Try again in a moment." }, "10"])
+        expect(d.ms).toBeLessThan(BF19_REFUSAL_MS)
+      }
+      expect(probes[0].status).toBe(200)
+      expect(probes[0].ms).toBeLessThan(BF19_READ_MS)
+      expect([probes[1].status, probes[1].body]).toEqual([200, { status: "ready", profile: STAGING_PROFILE, schemaVersion: STAGING_SCHEMA_VERSION }])
+      expect(probes[1].ms).toBeLessThan(BF19_READY_MS)
+      expect(probes[2].status).toBe(200)
+      // A refused import read and wrote nothing: no import, no line and no receipt for that company ...
+      const late = refused[0]!
+      const counts = async () => (await h.operator.query<{ imports: number; records: number }>("select (select count(*) from neuvetra.scope3_spend_imports where company_id=$1)::int imports,(select count(*) from neuvetra.collection_activity_records where company_id=$1)::int records", [late.c.id])).rows[0]
+      expect(await counts()).toEqual({ imports: 0, records: 0 })
+      // ... so the same request, sent again once the gate is free, is its first attempt (saved, not replayed).
+      const retried = await h.importFile(late.c, late.bytes, late.evidence)
+      const body = await retried.json()
+      expect([retried.status, body.saved, body.replayed]).toEqual([201, 2000, false])
+      expect(await counts()).toEqual({ imports: 1, records: 2000 })
+    }
+  } finally { await h.close() }
+}, 900_000)
 
 integration("round 3 EN-1 natively: on an ANALYZEd multi-company database a new company's 2,000-line import saves well inside the statement timeout", async () => {
   const h = await harness()
