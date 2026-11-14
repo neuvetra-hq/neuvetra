@@ -101,11 +101,34 @@ const mapping = (row: MappingRow): Scope3SpendMappingRecord => ({ id: row.id, co
   category: row.category, naicsCode: row.naics_code, marginChoice: row.margin_choice, revision: row.revision, createdBy: row.created_by, createdAt: new Date(row.created_at).toISOString() })
 const MAPPING_COLUMNS = 'id,company_id,mapping_key_sha256,gl_account,vendor,description,category,naics_code,margin_choice,revision,created_by,created_at::text created_at'
 
-/** The latest revision of each remembered mapping, by mapping key. */
-export async function readScope3SpendMappings(tx: WorkspaceSql, companyId: string): Promise<Scope3SpendMappingRecord[]> {
+/**
+ * BF-12b (QA F-1): remembered mappings by the key their own texts give TODAY. A group mapping's key is the SHA-256 of its
+ * vendor-and-account key text (`scope3SpendMappingKeyInputOf`), and that text follows `scope3SpendVendorKey`; when the rule
+ * changes (BF-12 kept combining marks: Devanagari, Thai, Turkish capital İ), a row saved earlier is still stored under its
+ * old key. Each stored head is therefore read under the key its texts give now (`mappingKeySha256`), with the key it is
+ * stored under (`storedKeySha256`), so the import, the screen and the save all find it; nothing stored is rewritten.
+ * When two heads give the same key (the row saved under the old key and one saved later under the new key), the one stored
+ * under the new key is used (it is the one saves reach), else the newest. Rows whose stored key is already today's key are
+ * read exactly as before. Pure, so it is tested without a database.
+ */
+export function scope3SpendCanonicalMappingHeads(rows: readonly Scope3SpendMappingRecord[], sha256: (text: string) => string = scope3Sha256): Array<Scope3SpendMappingRecord & { storedKeySha256: string }> {
+  const chosen = new Map<string, Scope3SpendMappingRecord & { storedKeySha256: string }>()
+  for (const row of rows) {
+    const key = sha256(scope3SpendMappingKeyInputOf(row)), candidate = { ...row, mappingKeySha256: key, storedKeySha256: row.mappingKeySha256 }
+    const held = chosen.get(key)
+    const better = !held || (held.storedKeySha256 !== key && (candidate.storedKeySha256 === key || candidate.createdAt > held.createdAt || (candidate.createdAt === held.createdAt && candidate.storedKeySha256 > held.storedKeySha256)))
+    if (better) chosen.set(key, candidate)
+  }
+  return [...chosen.values()].sort((a, b) => a.mappingKeySha256 < b.mappingKeySha256 ? -1 : a.mappingKeySha256 > b.mappingKeySha256 ? 1 : 0)
+}
+async function readScope3SpendMappingHeads(tx: WorkspaceSql, companyId: string) {
   if (!UUID.test(companyId)) return []
   const rows = await tx.query<MappingRow>(`select ${MAPPING_COLUMNS} from neuvetra.scope3_spend_mapping_heads where company_id=$1 order by mapping_key_sha256`, [companyId])
-  return rows.rows.map(mapping)
+  return scope3SpendCanonicalMappingHeads(rows.rows.map(mapping))
+}
+/** The latest revision of each remembered mapping, by the mapping key its texts give today (BF-12b). */
+export async function readScope3SpendMappings(tx: WorkspaceSql, companyId: string): Promise<Scope3SpendMappingRecord[]> {
+  return (await readScope3SpendMappingHeads(tx, companyId)).map(({ storedKeySha256: _stored, ...row }) => row)
 }
 
 async function checkActor(tx: WorkspaceSql, actorId: string, message: string) {
@@ -213,16 +236,21 @@ export async function saveScope3SpendMapping(tx: WorkspaceSql, actorId: string, 
   const mappingKeySha256 = scope3Sha256(scope3SpendMappingKeyInputOf(m))
   // Round 2 integration: lane C's group rule (UX-1) selects the lines; lane B's set-based save (ENG-9) writes them. A group
   // mapping corrects the vendor-and-account group's lines except those with their own (line) mapping, which always wins.
-  const lineKeysWithOwnMapping = valid.scope === 'group' ? new Set((await readScope3SpendMappings(tx, companyId)).filter(row => !scope3SpendIsGroupMapping(row)).map(row => row.mappingKeySha256)) : undefined
+  const heads = await readScope3SpendMappingHeads(tx, companyId)
+  const lineKeysWithOwnMapping = valid.scope === 'group' ? new Set(heads.filter(row => !scope3SpendIsGroupMapping(row)).map(row => row.mappingKeySha256)) : undefined
   const group = scope3SpendMappingGroup(await readCollectionActivities(tx, companyId), mappingKeySha256, scope3Sha256, { scope: valid.scope, lineKeysWithOwnMapping })
-  const request: Scope3SpendMappingRequest = { expectedRevision: valid.expectedRevision, mapping: { mappingKeySha256, glAccount: m.glAccount, vendor: m.vendor, description: m.description,
+  // BF-12b (QA F-1): a mapping remembered under an earlier key for the same texts is revised under the key it is stored
+  // under, with its own revision checked: the screen's expected revision applies to it, and no second remembered row
+  // with the same texts can be created.
+  const storedKeySha256 = heads.find(row => row.mappingKeySha256 === mappingKeySha256)?.storedKeySha256 ?? mappingKeySha256
+  const request: Scope3SpendMappingRequest = { expectedRevision: valid.expectedRevision, mapping: { mappingKeySha256: storedKeySha256, glAccount: m.glAccount, vendor: m.vendor, description: m.description,
     category: m.category as Scope3SpendMappingRequest['mapping']['category'], naicsCode: m.naicsCode, marginChoice: m.marginChoice },
     corrections: group.map(record => ({ recordId: record.id, expectedVersionId: record.currentVersion.id })),
     attestations: { categoryConfirmed: valid.categoryConfirmed, activityOverlapConfirmed: valid.activityOverlapConfirmed } }
   const receipt = (await tx.query<{ mapping_id: string; revision: number; corrected: number; unchanged: number }>('select * from neuvetra.save_scope3_spend_mapping($1,$2::text::jsonb)', [companyId, JSON.stringify(request)])).rows[0]
   if (!receipt) throw new Error('Scope 3 spend mapping returned no receipt.')
   const savedRow = (await tx.query<MappingRow>(`select ${MAPPING_COLUMNS} from neuvetra.scope3_spend_mapping_versions where company_id=$1 and id=$2`, [companyId, receipt.mapping_id])).rows[0]
-  if (!savedRow || savedRow.revision !== receipt.revision || savedRow.mapping_key_sha256 !== mappingKeySha256 || savedRow.naics_code !== m.naicsCode || savedRow.category !== m.category || savedRow.created_by !== actorId) throw new Error('Scope 3 spend mapping could not be read back.')
+  if (!savedRow || savedRow.revision !== receipt.revision || savedRow.mapping_key_sha256 !== storedKeySha256 || savedRow.naics_code !== m.naicsCode || savedRow.category !== m.category || savedRow.created_by !== actorId) throw new Error('Scope 3 spend mapping could not be read back.')
   // Read back: every listed line is at its read version (unchanged) or one revision later with exactly the mapping.
   const before = new Map(group.map(record => [record.id, record]))
   const corrected: Array<{ recordId: string; versionId: string; revision: number }> = []
@@ -236,7 +264,7 @@ export async function saveScope3SpendMapping(tx: WorkspaceSql, actorId: string, 
   }
   if (corrected.length !== receipt.corrected || unchanged !== receipt.unchanged || corrected.length + unchanged !== group.length) throw new Error('Scope 3 spend mapping could not be read back.')
   corrected.sort((a, b) => a.recordId.localeCompare(b.recordId))
-  return { mapping: mapping(savedRow), corrected, unchanged }
+  return { mapping: { ...mapping(savedRow), mappingKeySha256 }, corrected, unchanged }
 }
 
 /**

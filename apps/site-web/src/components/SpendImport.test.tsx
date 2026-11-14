@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- the injected hook harness drives the real component without a DOM. */
 // Scope 3 completion I-09 (Claude, 30 October 2026; DESIGN 7.3): the spend import panel. A chosen file is previewed with
-import { SCOPE3_VENDOR_KEY_MATCH_DETAIL } from "../../../../packages/neuvetra-database/src/scope3-text"
 // the shared parser (refusals block the import; totals and hold counts shown); an import uploads the file as evidence,
 // imports those bytes at the chosen location and shows the reconciliation and holds by reason; a mapping group saves the
 // chosen code; a possible duplicate is confirmed distinct or withdrawn by a correction of that record.
@@ -12,6 +11,9 @@ import * as forms from "@/lib/scope3-forms"
 import * as naics from "@/lib/scope3-naics"
 import * as review from "@/lib/scope3-spend-review"
 import { harness, loadComponent } from "./component-harness"
+import { SCOPE3_VENDOR_KEY_MATCH_DETAIL } from "../../../../packages/neuvetra-database/src/scope3-text"
+/** The existing reload notice (lazy-forms.tsx), as a node: the harness renders injected components as nodes. */
+const NewerVersionNotice = () => null
 
 const company = "93920000-0000-4000-8000-000000000001", loc = "93920000-0000-4000-8000-0000000000b1", user = "93920000-0000-4000-8000-0000000000ff", setup = "93920000-0000-4000-8000-0000000000c1"
 const imp = "93920000-0000-4000-8000-0000000000a1", evidenceId = "93920000-0000-4000-8000-0000000000e1"
@@ -35,8 +37,8 @@ async function panel(initial: any = view([]), onOpenRecord?: (id: string) => voi
   let changed = 0, saves = 0
   const record = { id: rec(2), currentVersion: { id: rec(52), revision: 1, activity: { kind: "purchase_spend", state: "active", withdrawalReason: null, payload: { duplicateConfirmedDistinct: false, possibleDuplicateOf: { importId: imp, row: 1 } } } } }
   const make = await loadComponent("./scope3/SpendImport.tsx", "SpendImport", {
-    ...parser, ...api, ...review, reasonText, SCOPE3_VENDOR_KEY_MATCH_DETAIL, scope3NaicsChoices: naics.scope3NaicsChoices, scope3NaicsGuard: forms.scope3NaicsGuard, SCOPE3_NAICS_GUARD_TEXT: forms.SCOPE3_NAICS_GUARD_TEXT, scope3NaicsTitle: naics.scope3NaicsTitle,
-    loadScope3SpendImports: async () => { if (loadFailures-- > 0 || (correctionFailure && saves)) throw new Error("Rate limited."); return current },
+    ...parser, ...api, ...review, reasonText, SCOPE3_VENDOR_KEY_MATCH_DETAIL, NewerVersionNotice, scope3NaicsChoices: naics.scope3NaicsChoices, scope3NaicsGuard: forms.scope3NaicsGuard, SCOPE3_NAICS_GUARD_TEXT: forms.SCOPE3_NAICS_GUARD_TEXT, scope3NaicsTitle: naics.scope3NaicsTitle,
+    loadScope3SpendImports: async () => { if (globals.loadError) throw globals.loadError; if (loadFailures-- > 0 || (correctionFailure && saves)) throw new Error("Rate limited."); return current },
     uploadCollectionEvidence: async (...args: any[]) => { calls.push(["upload", args[1].name, args[1].type]); return { receipt: { evidenceId } } },
     importScope3SpendFile: async (...args: any[]) => { calls.push(["import", new TextDecoder().decode(args[1]), args[2], args[3]]); current = view([line(1, {}), line(2, {})])
       return api.decodeScope3SpendImportResult({ profile: api.SCOPE3_SPEND_IMPORTS_PROFILE, import: imported, replayed: false, saved: 2, calculable: 0, holds: { naics_code_required: 2 }, lines: current.lines }, company) },
@@ -284,6 +286,17 @@ describe("SpendImport (I-09)", () => {
     p.app.nodes().find(n => n.type === "button" && n.children.flat(Infinity).join("") === "Withdraw")!.props.onClick(); await new Promise(r => setTimeout(r, 5)); await p.app.settle()
     expect(p.calls.find(c => c[0] === "save")!.slice(1)).toMatchObject([rec(2), { activity: { state: "withdrawn" } }])
     expect(p.calls.find(c => c[0] === "save")![2].correctionReason).toStartWith("Withdrawn from the spend review: ")
+  })
+
+  // BF-12b (QA F-2): a response this page can't read (a release changed its shape) offers the existing reload notice,
+  // not "could not be loaded"; any other load failure keeps its message and Try again.
+  test("BF-12b: an unrecognized response shows the newer-version reload notice", async () => {
+    const stale = await panel(view([]), undefined, undefined, false, 0, { loadError: new api.Scope3SpendResponseUnrecognized() })
+    expect(stale.app.nodes().some(node => node.type === NewerVersionNotice)).toBe(true)
+    expect(stale.app.text()).not.toContain("Spend imports could not be loaded.")
+    const other = await panel(view([]), undefined, undefined, false, 0, { loadError: new Error("Network down.") })
+    other.says("Spend imports could not be loaded.")
+    expect(other.app.nodes().some(node => node.type === NewerVersionNotice)).toBe(false)
   })
 
   test("round 2 ACC-16: each supplier record beside the spend lines it replaces (amounts as recorded) and its own figure", async () => {
