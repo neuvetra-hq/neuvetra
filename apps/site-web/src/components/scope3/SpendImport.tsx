@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { SPEND_REPLACED_STEP_TEXT } from "@/lib/bf-followups-text"
+import { NewerVersionNotice } from "./lazy-forms"
 import { SCOPE3_VENDOR_KEY_MATCH_DETAIL } from "../../../../../packages/neuvetra-database/src/scope3-text"
 import { parseScope3SpendCsv, scope3DecimalSum, scope3SpendImportTemplate, type Scope3SpendImportLine, type Scope3SpendParse } from "../../../../../packages/neuvetra-database/src/scope3-spend-import"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
@@ -16,7 +17,7 @@ import { SPEND_IMPORT_ANCHOR, takeSpendImportFocus } from "@/lib/spend-import-ta
 import { SPEND_IMPORT_READ_ONLY_TEXT } from "@/lib/wo12-text"
 import {
   convertScope3SpendCurrency, importScope3SpendFile, loadScope3SpendImports, saveScope3SpendMapping, scope3SpendDuplicatePairs, scope3SpendMappingBody, withdrawScope3SpendImport,
-  Scope3SpendImportApiError, SCOPE3_SPEND_TEMPLATE_PATH, type Scope3SpendImportResult, type Scope3SpendImportsView, type Scope3SpendLineView, type Scope3SpendMappingView,
+  Scope3SpendImportApiError, Scope3SpendResponseUnrecognized, SCOPE3_SPEND_TEMPLATE_PATH, type Scope3SpendImportResult, type Scope3SpendImportsView, type Scope3SpendLineView, type Scope3SpendMappingView,
 } from "@/lib/scope3-spend-import-api"
 import {
   scope3SpendAmountBasis, scope3SpendHoldFix, scope3SpendNaicsSuggestions, scope3SpendSuggest, spendMoney, scope3SpendOtherHolds, scope3SpendProgress, scope3SpendReviewGroups, scope3SpendSupersessionReconciliation,
@@ -53,6 +54,9 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
   const [view, setView] = useState<Scope3SpendImportsView | null>(null)
   const [message, setMessage] = useState<string | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
+  // BF-12b (QA F-2): a response this page can't read (after a release) offers the existing reload notice.
+  const [stale, setStale] = useState(false)
+  const seen = (error: unknown): string | null => { if (error instanceof Scope3SpendResponseUnrecognized) setStale(true); return error instanceof Error ? error.message : null }
   const [busy, setBusy] = useState(false)
   const [file, setFile] = useState<{ name: string; bytes: Uint8Array<ArrayBuffer>; type: string } | null>(null)
   // WO-10 (WO-06 QA follow-ups 1 and 2): the file input is reset once its file is imported, and an import being sent is
@@ -102,6 +106,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
       setTab(asked); setShown(PAGE); focusReview.current = true
     })
       .catch(error => { if (live) {
+        if (error instanceof Scope3SpendResponseUnrecognized) setStale(true)
         const problem = error instanceof Scope3SpendImportApiError && error.unavailable ? "Spend import isn’t available in this workspace yet." : "Spend imports could not be loaded."
         setLoadError(problem)
       } })
@@ -142,7 +147,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
       setFile(null); setPreviewAll(false); setFileInputKey(n => n + 1); focusResult.current = true
       setTab("code"); setSelected([]); setReload(n => n + 1); onChanged?.()
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "The import failed; nothing was saved.")
+      setMessage(seen(error) ?? "The import failed; nothing was saved.")
       if (error instanceof Scope3SpendImportApiError) setProblems(error.problems.map(p => `${p.line ? `Line ${p.line}: ` : ""}${p.message}`))
     } finally { setBusy(false); setImporting(false) }
   }
@@ -154,7 +159,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
       const receipt = await withdrawScope3SpendImport(companyId, withdrawal.importId, withdrawal.reason, actor)
       setMessage(receipt.message); setWithdrawal(null); setSelected([]); setResult(null)
       setReload(n => n + 1); onChanged?.()
-    } catch (error) { setMessage(error instanceof Error ? error.message : "This import could not be withdrawn.") }
+    } catch (error) { setMessage(seen(error) ?? "This import could not be withdrawn.") }
     finally { setBusy(false) }
   }
   const correct = async (recordIds: string[], change: "distinct" | "withdraw", withdrawalReason = "Duplicate of an earlier imported spend line.") => {
@@ -179,7 +184,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
       }
       if (change === "withdraw" && withdrawalReason !== "Duplicate of an earlier imported spend line.") setMessage(`${recordIds.length} line${recordIds.length === 1 ? "" : "s"} withdrawn.`)
     } catch (error) {
-      const problem = error instanceof Error ? error.message : "The line could not be saved."
+      const problem = seen(error) ?? "The line could not be saved."
       setMessage(`${saved.length ? `${saved.length} of ${recordIds.length} lines ${change === "withdraw" ? "withdrawn" : "confirmed distinct"}; check the remaining lines before retrying. ` : ""}${problem}`)
     } finally {
       if (saved.length) {
@@ -201,7 +206,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
       const done = await convertScope3SpendCurrency(companyId, { currency, rate: typed.rate.trim(), rateSource: typed.rateSource.trim(), rateDate: typed.rateDate }, actor)
       setMessage(SPEND_TEXT_R3C.converted(done.converted.length, currency, typed.rate.trim(), typed.rateSource.trim(), typed.rateDate, done.skipped))
       setReload(n => n + 1); onChanged?.()
-    } catch (error) { setMessage(error instanceof Error ? error.message : SPEND_TEXT_R3C.convertFailed) } finally { setBusy(false) }
+    } catch (error) { setMessage(seen(error) ?? SPEND_TEXT_R3C.convertFailed) } finally { setBusy(false) }
   }
   /** One mapping per target (a group, or one line key), saved in turn; each corrects its own lines on the server. */
   const saveMappings = async (targets: MappingTarget[], choice: MappingChoice) => {
@@ -215,7 +220,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
       setMessage(`Mapping saved${targets.length > 1 ? ` for ${saved} groups` : ""}; ${corrected} line(s) corrected.`)
       setSelected([]); setReload(n => n + 1); onChanged?.()
     } catch (error) {
-      setMessage(`${saved ? `${saved} of ${targets.length} mappings saved; then: ` : ""}${error instanceof Error ? error.message : "The mapping could not be saved."}`)
+      setMessage(`${saved ? `${saved} of ${targets.length} mappings saved; then: ` : ""}${seen(error) ?? "The mapping could not be saved."}`)
       if (saved) setReload(n => n + 1)
     } finally { setBusy(false) }
   }
@@ -266,7 +271,8 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord, onDirty
         <a className="nv-btn nv-btn--sm" href={`data:text/csv;charset=utf-8,${encodeURIComponent(scope3SpendImportTemplate())}`} download={SCOPE3_SPEND_TEMPLATE_PATH.split("/").pop()}>Download the template</a>
       </div>
       {message && <p className="spend-import__status" role="status">{message}</p>}
-      {loadError && <div className="nv-notice nv-notice--error" role="status"><p>{loadError}</p><button type="button" className="nv-btn" disabled={busy} onClick={() => setReload(n => n + 1)}>Try again</button></div>}
+      {stale && <NewerVersionNotice />}
+      {loadError && !stale && <div className="nv-notice nv-notice--error" role="status"><p>{loadError}</p><button type="button" className="nv-btn" disabled={busy} onClick={() => setReload(n => n + 1)}>Try again</button></div>}
 
       <div className="spend-import__step" aria-label="Upload">
         <h4 className="spend-import__step-title"><span className="spend-import__num">1</span> Choose a file and check it</h4>

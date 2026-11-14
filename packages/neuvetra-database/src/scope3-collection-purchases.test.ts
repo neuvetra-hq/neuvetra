@@ -482,6 +482,15 @@ describe('BF-12 (B-2): one supplier-name rule for vendor grouping and supersessi
     expect(supersede([spend({ supplierName: 'The Limited' }), supplier({ supersedesSpend: { supplierName: 'The Co', mappingKeys: [] } })]).size).toBe(0)
   })
 
+  // BF-12b (QA F-3): a single letter is a real name; legal suffixes count only as whole phrases ("l l c", "l p").
+  test('BF-12b: suppliers named "C", "L", "P" or "C & P" match by the key; "L.L.C." and "L P" alone still never do', () => {
+    const m = scope3SupersessionNameMatch
+    expect([m('C', 'C.'), m('P', 'P.'), m('L', 'L.'), m('C & P', 'C and P'), m('C & P Inc', 'C&P')]).toEqual(['vendor_key', 'vendor_key', 'vendor_key', 'vendor_key', 'vendor_key'])
+    expect([m('L.L.C.', 'L L C'), m('L.L.C.', 'LLC'), m('L P', 'L.P.'), m('The Co', 'The Limited'), m('Inc', 'Inc.')]).toEqual([null, null, null, null, null])
+    expect(m('C', 'P')).toBeNull()
+    expect(supersede([spend({ supplierName: 'C & P' }), supplier({ supersedesSpend: { supplierName: 'C and P, Inc.', mappingKeys: [] } })]).size).toBe(1)
+  })
+
   test('every line the old rule replaced is still replaced, with no new note (ASCII: case, spaces, punctuation-only names)', () => {
     const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,&-()/\'"!?#@*+;:_'
     let seed = 12

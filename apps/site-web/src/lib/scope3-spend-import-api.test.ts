@@ -61,9 +61,25 @@ describe("spend import decoders (I-09)", () => {
     expect(api.scope3SpendDuplicatePairs(api.decodeScope3SpendImports(next, company))).toEqual([])
   })
 
+  // BF-12b (QA F-2): a field this page doesn't know (a later release's additive field) never makes it refuse the whole
+  // response, at any level; the decoded value never carries it.
+  test("unknown extra fields are ignored at every level and never copied", () => {
+    const v = copy()
+    v.extra = 1; v.imports[0].extra = 1; v.imports[0].lines[0].extra = 1; v.imports[0].reconciliation.extra = 1; v.mappings[0].extra = 1
+    v.lines[0].extra = 1; v.lines[1].plan.extra = 1; v.superseded[0].extra = 1; v.superseders[0].extra = 1; v.locations[0].extra = 1; v.reportingPeriod.extra = 1
+    const decoded = api.decodeScope3SpendImports(v, company)
+    expect(decoded).toEqual(api.decodeScope3SpendImports(fixture(), company))
+    expect(JSON.stringify(decoded)).not.toContain("extra")
+    // The refusal is a typed error, so the spend import can offer the reload notice.
+    const bad = copy(); bad.profile = "x"
+    expect(() => api.decodeScope3SpendImports(bad, company)).toThrow(api.Scope3SpendResponseUnrecognized)
+  })
+
   test("every mutation is refused", () => {
     const cases: Array<[string, (v: any) => void]> = [
-      ["profile", v => { v.profile = "x" }], ["company", v => { v.companyId = other }], ["extra key", v => { v.extra = 1 }],
+      ["profile", v => { v.profile = "x" }], ["company", v => { v.companyId = other }],
+      // BF-12b (QA F-2): a missing known key is still refused (an unknown extra key is now ignored; see below).
+      ["missing key", v => { delete v.superseders }], ["missing line key", v => { delete v.lines[0].vendor }],
       ["line of no import", v => { v.lines[0].importId = "93910000-0000-4000-8000-0000000000a9" }], ["line at another row", v => { v.lines[0].importRow = 2 }],
       ["calculated with a reason", v => { v.lines[0].plan.reasons = ["x"] }], ["held without a reason", v => { v.lines[2].plan.reasons = [] }],
       ["held without a status", v => { v.lines[2].plan.status = null }], ["category 9 line", v => { v.lines[0].category = 9 }],
