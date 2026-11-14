@@ -6,16 +6,18 @@ import { readMigrationManifest, type StagingMigration } from "./staging-migratio
 import { SCOPE3_COLLECTION_KINDS, SCOPE3_COMPLETION_SCHEMA, SCOPE3_LEGACY_KINDS, scope3SchemaRequired } from "./scope3-collection-contract"
 
 export const STAGING_PROFILE = "neuvetra.private-synthetic-staging.v1" as const
-export const STAGING_SCHEMA_VERSION = 31
+export const STAGING_SCHEMA_VERSION = 32
 /**
  * Temporary image-activation bridge for the pinned existing synthetic project; never migrates.
- * Schema 29 adds only Scope 3 collection (0029), schema 30 only Scope 3 completion (0030) and schema 31 only the integrity
- * guards (0031). Hosted staging is at 30 when this image deploys, and the owner applies 0031 by hand afterwards, so the
- * schema-31 image serves the existing project at exactly 28, 29, 30 or 31 (every prefix from this bridge up). Below 29
- * every Scope 3 write and Scope 3 result is refused before any SQL runs (D5); below 30 the 0030 record kinds and the
- * assessment, spend-import and report routes are refused the same way; below 31 a Scope 1 or 2 save carrying
- * `duplicateConfirmedDistinct` is refused before any SQL, and the BF-03 and BF-05 route checks are the only cap and
- * superseded-approval guards (from 31 the database enforces both again under its company lock).
+ * Schema 29 adds only Scope 3 collection (0029), schema 30 only Scope 3 completion (0030), schema 31 only the integrity
+ * guards (0031) and schema 32 only instrument identity and the round-2 bindings (0032). Hosted staging is at 31 when this
+ * image deploys, and the owner applies 0032 by hand afterwards, so the schema-32 image serves the existing project at
+ * exactly 28, 29, 30, 31 or 32 (every prefix from this bridge up). Below 29 every Scope 3 write and Scope 3 result is
+ * refused before any SQL runs (D5); below 30 the 0030 record kinds and the assessment, spend-import and report routes are
+ * refused the same way; below 31 a Scope 1 or 2 save carrying `duplicateConfirmedDistinct` is refused before any SQL, and
+ * the BF-03 and BF-05 route checks are the only cap and superseded-approval guards (from 31 the database enforces both
+ * again under its company lock); below 32 an instrument carrying `instrumentId`, `registry` or `faceMwh` and a Scope 3
+ * payload carrying `scope2OverlapConfirmedDistinct` are refused before any SQL, with the answer they got before 0032.
  */
 export const STAGING_SCHEMA_BRIDGE_VERSION = 28
 /** First schema with the collection tables and draft results (0027). */
@@ -36,9 +38,31 @@ export const STAGING_INTEGRITY_GUARDS_SCHEMA_VERSION = 31
  * payloads are judged by `scope3ActivityAvailable`.
  */
 export function scope12PayloadAvailable(payload: unknown, schemaVersion: number): boolean {
-  return schemaVersion >= STAGING_INTEGRITY_GUARDS_SCHEMA_VERSION || !(payload !== null && typeof payload === "object" && !Array.isArray(payload) && Object.prototype.hasOwnProperty.call(payload, "duplicateConfirmedDistinct"))
+  if (!isObject(payload)) return true
+  // BF-18 (0032): an electricity instrument's identity keys (BF-11) need schema 32.
+  if (schemaVersion < STAGING_INSTRUMENT_IDENTITY_SCHEMA_VERSION && Array.isArray(payload.instruments) && payload.instruments.some(instrument => isObject(instrument) && INSTRUMENT_IDENTITY_KEYS.some(key => hasOwn(instrument, key)))) return false
+  return schemaVersion >= STAGING_INTEGRITY_GUARDS_SCHEMA_VERSION || !hasOwn(payload, "duplicateConfirmedDistinct")
 }
-/** The exact prefixes a schema-31 image serves for the existing project: 28, 29, 30 and 31. A new project must be at 31. */
+/**
+ * First schema with instrument identity and the round-2 bindings (0032): an electricity instrument's optional `instrumentId`,
+ * `registry` and `faceMwh` (stored in their own columns), the instrument columns equal to their payload, the approval bound
+ * to the CSV hash too, the receipt-mismatch SQLSTATE 23N32, the optional Scope 3 flag `scope2OverlapConfirmedDistinct` and
+ * the Scope 3 line budget counting stored Scope 3 records only. Code that needs 0032 is gated on this.
+ */
+export const STAGING_INSTRUMENT_IDENTITY_SCHEMA_VERSION = 32
+/** BF-11's optional instrument identity keys (0032). */
+export const INSTRUMENT_IDENTITY_KEYS = ["instrumentId", "registry", "faceMwh"] as const
+/**
+ * BF-18 (0032): whether the database at `schemaVersion` stores this Scope 3 payload's `scope2OverlapConfirmedDistinct`
+ * (BF-17's flag, on asset_energy and building_average). Below 32 the route refuses such a save first, with the answer an
+ * unknown key got before 0032 (422).
+ */
+export function scope3OverlapConfirmationAvailable(payload: unknown, schemaVersion: number): boolean {
+  return schemaVersion >= STAGING_INSTRUMENT_IDENTITY_SCHEMA_VERSION || !(isObject(payload) && hasOwn(payload, "scope2OverlapConfirmedDistinct"))
+}
+const isObject = (value: unknown): value is Record<string, unknown> => value !== null && typeof value === "object" && !Array.isArray(value)
+const hasOwn = (value: object, key: string) => Object.prototype.hasOwnProperty.call(value, key)
+/** The exact prefixes a schema-32 image serves for the existing project: 28 to 32. A new project must be at 32. */
 export const STAGING_SERVED_SCHEMA_VERSIONS: readonly number[] = Array.from({ length: STAGING_SCHEMA_VERSION - STAGING_SCHEMA_BRIDGE_VERSION + 1 }, (_, i) => STAGING_SCHEMA_BRIDGE_VERSION + i)
 /**
  * Whether the database at `schemaVersion` stores this Scope 3 activity: the 0029 kinds with 0029 payloads from 29;
@@ -210,8 +234,8 @@ export function validateHostedSchemaReceipts(
   options: Pick<HostedWorkspaceOptions, "expectedProjectRef" | "reuseExistingProject">,
 ): number {
   const current = receipts.length === STAGING_SCHEMA_VERSION
-  // The exact bridge prefixes (28 and 29) let the schema-30 image start and serve
-  // the existing project before the operator applies 0029 and 0030.
+  // The exact bridge prefixes (28 up to the current schema) let the image start and
+  // serve the existing project before the operator applies the newest migrations.
   const existingProjectUpgrade = options.expectedProjectRef === EXISTING_PROJECT_REF
     && options.reuseExistingProject === true
     && receipts.length >= STAGING_SCHEMA_BRIDGE_VERSION

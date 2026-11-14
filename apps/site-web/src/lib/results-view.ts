@@ -126,3 +126,6 @@ export function resultsReducer(state: ResultsState, action: ResultsAction): Resu
     case "no_workspace": return { results: null, error: { message: "Choose an admitted synthetic company to continue.", missingRoute: false }, busy: false }
   }
 }
+
+/** BI-01b: a scope whose engine could not run (its records "unavailable", no subtotal), on its stat card. */
+export const COULD_NOT_CALCULATE_NOW_TEXT = "Could not be calculated just now — try again shortly"

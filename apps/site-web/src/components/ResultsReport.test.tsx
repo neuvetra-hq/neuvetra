@@ -433,6 +433,39 @@ describe("BF-13: truthful coverage statement on Results, in print and in the CSV
   })
 })
 
+// BI-01b: when one scope's engine batch fails, its records are "unavailable" and there is no subtotal. The card used to read
+// "No electricity calculated yet" (or "No Scope 1 source calculated yet"), as if nothing had been entered.
+describe("BI-01b: a scope whose engine could not run says so on its card", () => {
+  const outage = (scope: 1 | 2) => {
+    const down = structuredClone(synthetic)
+    down.records = down.records.map(row => row.scope !== scope || row.outcome !== "calculated" ? row : { ...row, outcome: "unavailable", scope1: null, scope2: null, inSubtotal: { scope1: false, scope2LocationBased: false, scope2MarketBased: false } }) as typeof down.records
+    if (scope === 1) down.scope1 = null; else down.scope2 = null
+    down.warnings = ["A calculation engine was unavailable for at least one record. Try again shortly."]
+    return render(down)
+  }
+  test("Scope 2 down: both electricity cards say it could not be calculated just now; Scope 1 is unchanged", () => {
+    const view = outage(2)
+    expect(view.totalNotes[1]).toContain(resultsView.COULD_NOT_CALCULATE_NOW_TEXT)
+    expect(view.totalNotes[2]).toContain(resultsView.COULD_NOT_CALCULATE_NOW_TEXT)
+    expect(view.totalNotes.join(" ")).not.toContain("No electricity calculated yet")
+    expect(view.totals[0]).toBe(render(synthetic).totals[0])
+    expect([view.totals[1], view.totals[2]]).toEqual(["—t CO2e", "—t CO2e"])
+  })
+  test("Scope 1 down: its card says so", () => {
+    const view = outage(1)
+    expect(view.totalNotes[0]).toContain(resultsView.COULD_NOT_CALCULATE_NOW_TEXT)
+    expect(view.totalNotes[0]).not.toContain("No Scope 1 source calculated yet")
+  })
+  test("a company with no records of a scope keeps \"No … calculated yet\", which is true there", () => {
+    const none = structuredClone(synthetic)
+    none.records = none.records.filter(row => row.scope === 1)
+    none.scope2 = null
+    const view = render(none)
+    expect([view.totalNotes[1], view.totalNotes[2]].every(note => note.includes("No electricity calculated yet"))).toBe(true)
+    expect(view.totalNotes.join(" ")).not.toContain(resultsView.COULD_NOT_CALCULATE_NOW_TEXT)
+  })
+})
+
 // BF-13b F1 (QA round 3 on PR #66, company q13): Scope 3 category 6 answered yes with a held (Needs input) travel record, and
 // clean Scope 1 and 2. The printed "None found" line sits in the Scope 1 and 2 part and must not claim every record is counted.
 const scope3Fixture: scope3ResultsApi.Scope3ResultsResponse = await Bun.file(new URL("../lib/scope3-results.fixture.json", import.meta.url)).json()

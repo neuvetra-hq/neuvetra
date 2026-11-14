@@ -73,7 +73,7 @@ describe('candidate 0027 collection database boundary',()=>{
   afterAll(async()=>{await db.close()})
 
   test('pins 0027 after the method migrations and creates the private bucket',async()=>{
-    expect(STAGING_MIGRATIONS.slice(23)).toEqual(['0024_method_reference.sql','0025_scope3_method_reference.sql','0026_scope2_residual_mix.sql','0027_collection.sql','0028_collection_zip_check.sql','0029_scope3_collection.sql','0030_scope3_completion.sql','0031_integrity_guards.sql'])
+    expect(STAGING_MIGRATIONS.slice(23)).toEqual(['0024_method_reference.sql','0025_scope3_method_reference.sql','0026_scope2_residual_mix.sql','0027_collection.sql','0028_collection_zip_check.sql','0029_scope3_collection.sql','0030_scope3_completion.sql','0031_integrity_guards.sql','0032_instrument_identity_and_bindings.sql'])
     expect(await Bun.file(new URL('./migrations/0027_collection.sql',import.meta.url)).exists()).toBe(true)
     expect((await db.query('select id,name,public,file_size_limit,allowed_mime_types from storage.buckets where id=$1',['neuvetra-private-company-evidence'])).rows[0]).toEqual({id:'neuvetra-private-company-evidence',name:'neuvetra-private-company-evidence',public:false,file_size_limit:10485760,allowed_mime_types:['application/pdf','image/jpeg','image/png','text/csv','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']})
   })

@@ -47,7 +47,7 @@ describe("Scope 3 collection behind the schema 29 gate (D5)", () => {
       expect((await request(`/workspace/${COMPANY}/collection/activities/${RECORD}`, { method: "POST", body: JSON.stringify(save(activities.natural_gas)) })).status).toBe(201)
       expect(calls.filter(call => call === "save")).toHaveLength(1)
       const root = await (await request(`/workspace/${COMPANY}/collection`)).json()
-      expect(root.capabilities).toEqual({ calculations: false, zipLookup: "available", duplicateConfirmation: false, scope3: { gridLossLineage: true, calculations: false, kinds: [], completion: false } })
+      expect(root.capabilities).toEqual({ calculations: false, zipLookup: "available", duplicateConfirmation: false, instrumentIdentity: false, scope3: { gridLossLineage: true, calculations: false, kinds: [], completion: false, overlapConfirmation: false } })
     }
   })
 
@@ -59,7 +59,7 @@ describe("Scope 3 collection behind the schema 29 gate (D5)", () => {
     }
     expect(calls.filter(call => call === "save")).toHaveLength(4)
     const root = await (await request(`/workspace/${COMPANY}/collection`)).json()
-    expect(root.capabilities.scope3).toEqual({ gridLossLineage: true, calculations: true, kinds: [...SCOPE3_LEGACY_KINDS], completion: false })
+    expect(root.capabilities.scope3).toEqual({ gridLossLineage: true, calculations: true, kinds: [...SCOPE3_LEGACY_KINDS], completion: false, overlapConfirmation: false })
   })
 
   test("I-02: at schema 29 every 0030 kind and payload feature is refused with 503 before the database; at 30 each saves", async () => {
@@ -76,12 +76,33 @@ describe("Scope 3 collection behind the schema 29 gate (D5)", () => {
       }
       expect(calls.filter(call => call === "save")).toHaveLength(schema === 29 ? 0 : needs30.length)
       const root = await (await request(`/workspace/${COMPANY}/collection`)).json()
-      expect(root.capabilities.scope3).toEqual({ gridLossLineage: true, calculations: true, kinds: schema === 29 ? [...SCOPE3_LEGACY_KINDS] : [...SCOPE3_COLLECTION_KINDS], completion: schema === 30 })
+      expect(root.capabilities.scope3).toEqual({ gridLossLineage: true, calculations: true, kinds: schema === 29 ? [...SCOPE3_LEGACY_KINDS] : [...SCOPE3_COLLECTION_KINDS], completion: schema === 30, overlapConfirmation: false })
     }
     // A 0029 hotel record (room-night written, not normalized) still saves at 29.
     const { request } = harness(29)
     const hotel = { ...common, kind: "business_travel", sourceId: "H-1", quantity: { originalValue: "10", originalUnit: "room-night", normalizedValue: null, normalizedUnit: null }, payload: { mode: "hotel", passengerSegments: null, haulBasis: null } }
     expect((await request(`/workspace/${COMPANY}/collection/activities/${RECORD}`, { method: "POST", body: JSON.stringify(save(hotel)) })).status).toBe(201)
+  })
+
+  // BF-18 (0032): BF-17's flag on asset_energy and building_average is refused before the database below 32, with the answer
+  // an unknown key got before 0032 (422); at 32 it is saved, and the capability says so. Without the flag nothing changes.
+  test("BF-18: scope2OverlapConfirmedDistinct is refused before the database below schema 32 and saved at 32", async () => {
+    const assets = SCOPE3_PAYLOAD_FIXTURES.filter(f => f.valid && (f.kind === "asset_energy" || f.kind === "building_average"))
+    expect(assets.length).toBeGreaterThan(2)
+    for (const schema of [30, 31, 32]) {
+      const { calls, request } = harness(schema)
+      for (const f of assets) {
+        const post = (payload: unknown) => request(`/workspace/${COMPANY}/collection/activities/${RECORD}`, { method: "POST", body: JSON.stringify(save({ ...common, kind: f.kind, sourceId: "S-1", quantity: f.quantity, payload })) })
+        expect([f.label, (await post(f.payload)).status]).toEqual([f.label, 201])
+        const flagged = await post({ ...(f.payload as object), scope2OverlapConfirmedDistinct: true })
+        if (schema < 32) expect([f.label, flagged.status, await flagged.json()]).toEqual([f.label, 422, { error: "Invalid or unsupported collection record." }])
+        else expect([f.label, flagged.status]).toEqual([f.label, 201])
+        expect([f.label, (await post({ ...(f.payload as object), scope2OverlapConfirmedDistinct: "yes" })).status]).toEqual([f.label, 422])
+      }
+      expect(calls.filter(call => call === "save")).toHaveLength(assets.length * (schema < 32 ? 1 : 2))
+      const root = await (await request(`/workspace/${COMPANY}/collection`)).json()
+      expect([root.capabilities.instrumentIdentity, root.capabilities.scope3.overlapConfirmation]).toEqual([schema >= 32, schema >= 32])
+    }
   })
 
   test("an invalid Scope 3 record is refused as invalid at either schema, never as unavailable", async () => {

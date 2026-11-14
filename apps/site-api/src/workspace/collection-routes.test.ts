@@ -187,6 +187,33 @@ describe("collection routes", () => {
     expect((await post("00000000-0000-4000-8000-0000000000a4", fresh())).status).toBe(201)
   })
 
+  // BF-18: the same image runs against hosted staging at schema 31 (before the owner applies 0032) and at 32. An instrument's
+  // identity keys (BF-11) are refused before any SQL below 32, with the answer an unknown key got before this change, and
+  // passed on at 32; an instrument without them saves the same at both; a malformed identity is invalid at both.
+  for (const schema of [31, 32]) test(`at schema ${schema}: instrument identity keys and the capability`, async () => {
+    const h = harness({ schema })
+    const certificate = { type: "energy_attribute_certificate", mwh: "250", qualityCriteriaMet: true, vintageYear: 2025, evidenceReference: null, generationTechnology: "wind", rateLbPerMwh: null }
+    const electricity = (instrument: Record<string, unknown>) => ({ ...activity(), idempotencyKey: crypto.randomUUID(), activity: { ...activity().activity, kind: "electricity", sourceId: "meter-a",
+      quantity: { originalValue: "250000", originalUnit: "kWh", normalizedValue: "250000", normalizedUnit: "kWh" },
+      payload: { meterOrAccountNumber: "meter-a", utilityName: "Utility", site: "Site", zip: "94105", subregion: "CAMX", utilityEiaId: null, instruments: [instrument] } } })
+    const post = (body: unknown) => h.request(`/workspace/${COMPANY}/collection/activities/${RECORD}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
+    const saves = () => h.calls.filter(call => call.name === "save").length
+    expect((await (await h.request(`/workspace/${COMPANY}/collection`)).json() as any).capabilities.instrumentIdentity).toBe(schema >= 32)
+    expect((await post(electricity(certificate))).status).toBe(201)
+    expect(saves()).toBe(1)
+    for (const identity of [{ instrumentId: "WREGIS-123" }, { registry: null }, { faceMwh: "250" }, { instrumentId: "WREGIS-123", registry: "WREGIS", faceMwh: "250" }]) {
+      const response = await post(electricity({ ...certificate, ...identity }))
+      if (schema < 32) expect([JSON.stringify(identity), response.status, await response.json()]).toEqual([JSON.stringify(identity), 422, { error: "Invalid or unsupported collection record." }])
+      else {
+        expect([JSON.stringify(identity), response.status]).toEqual([JSON.stringify(identity), 201])
+        expect((h.calls.filter(call => call.name === "save").at(-1)!.args[3] as any).activity.payload.instruments[0]).toEqual({ ...certificate, ...identity })
+      }
+    }
+    expect(saves()).toBe(schema < 32 ? 1 : 5)
+    for (const bad of [{ faceMwh: "0" }, { instrumentId: "" }, { registry: 7 }]) expect((await post(electricity({ ...certificate, ...bad }))).status).toBe(422)
+    expect(saves()).toBe(schema < 32 ? 1 : 5)
+  })
+
   test("rejects unreal dates before any persistence call", async () => {
     const h = harness()
     const input = activity()
@@ -436,6 +463,23 @@ describe("BF-08 truthful write errors", () => {
     // An idempotency or head conflict (40001) is unchanged.
     h.failures.save = sqlError("40001")
     expect((await (await post(h, `activities/${other}`, activity())).json() as any).code).toBe("revision_conflict")
+  })
+
+  // BF-18: 0032 raises 23N32 for a receipt mismatch where 0031 raised 23505. Until BF-28 gives it its own answer, every route
+  // answers it exactly as it answered 23505, so a save answers the same at schema 31 and 32.
+  test("BF-18: 0032's 23N32 gets exactly the answers 23505 got (first save, correction, racing own save)", async () => {
+    for (const code of ["23505", "23N32"]) {
+      const h = harness({ schema: code === "23505" ? 31 : 32 })
+      h.failures.save = sqlError(code)
+      h.setOthers([])
+      const other = "00000000-0000-4000-8000-0000000000b1"
+      const first = await post(h, `activities/${other}`, activity())
+      expect([code, first.status, await first.json()]).toEqual([code, 409, unavailable])
+      const correction = await post(h, `activities/${other}`, { ...activity(), expectedRevision: 1, expectedVersionId: VERSION, correctionReason: "Fix" })
+      expect([code, correction.status, await correction.json()]).toEqual([code, 409, { error: "Collection record changed. Refresh and try again.", code: "revision_conflict" }])
+      const racing = await post(h, `activities/${RECORD}`, activity())
+      expect([code, racing.status, (await racing.json() as any).code]).toEqual([code, 409, "revision_conflict"])
+    }
   })
 
   test("an upload or lineage ID that another company holds is record_id_unavailable", async () => {

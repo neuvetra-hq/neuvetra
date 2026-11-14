@@ -75,7 +75,7 @@ describe('0029: Scope 3 collection in the database (D1)', () => {
 
   // I-02: 0030 follows 0029 (collection-scope3-completion.test.ts); this file keeps testing the database at schema 29.
   test('0029 follows 0028 and leaves every earlier collection row byte-identical', async () => {
-    expect(STAGING_MIGRATIONS.slice(26)).toEqual(['0027_collection.sql', '0028_collection_zip_check.sql', '0029_scope3_collection.sql', '0030_scope3_completion.sql', '0031_integrity_guards.sql'])
+    expect(STAGING_MIGRATIONS.slice(26)).toEqual(['0027_collection.sql', '0028_collection_zip_check.sql', '0029_scope3_collection.sql', '0030_scope3_completion.sql', '0031_integrity_guards.sql', '0032_instrument_identity_and_bindings.sql'])
     expect(before.collection_activity_versions).toHaveLength(3)
     expect(await snapshot()).toEqual(before)
     const checks = await db.query<{ conname: string }>("select conname from pg_constraint where conrelid='neuvetra.collection_activity_records'::regclass and contype='c' order by 1")

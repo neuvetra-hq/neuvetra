@@ -321,7 +321,8 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
       if (code === "location_not_included") return respond(422, { code, error: "Choose a location that company setup includes." })
       if (code === "evidence_mismatch") return respond(422, { code, error: "Upload this exact file as evidence first; the import must be the same bytes." })
       if (code === "23503") return respond(409, { code: "reload_required", error: "Company setup or the uploaded file changed. Reload and try again." })
-      if (code === "23505" || code === "40001") return respond(409, { code: "changed", error: resource === "spend-mappings" ? "This mapping changed elsewhere. Reload it before saving." : resource === "spend-currency-conversions" ? "Some lines changed while converting; nothing was converted. Reload and try again." : "This file was already imported for another reporting year, or the records changed. Reload and try again." })
+      // BF-18: 0032's 23N32 (a line's receipt mismatch inside the import or a conversion) answers as 23505 did before 0032.
+      if (code === "23505" || code === "23N32" || code === "40001") return respond(409, { code: "changed", error: resource === "spend-mappings" ? "This mapping changed elsewhere. Reload it before saving." : resource === "spend-currency-conversions" ? "Some lines changed while converting; nothing was converted. Reload and try again." : "This file was already imported for another reporting year, or the records changed. Reload and try again." })
       if (code === "54000") return respond(413, { error: "The import is too large." })
       if (code === "22023" && withdrawImportId !== null) {
         const helpful = "Say why this import is withdrawn (at least 3 characters)."
