@@ -5,6 +5,12 @@
 // rejected-evidence record never gets the "Completing this record would repeat …, which is already counted" caution, which
 // would be false for a record already in the subtotal. A rejected file next to any other hold still leaves the record not
 // counted (the caution stays). The fuzz compares the screen's counted value with Results' real engines, as QA's script does.
+// QA of PR #69: B1, the Overview's readiness items (and so the sidebar, the Menu sheet and Ask) list the pair as well as B's
+// review item; F2, a record its readiness excludes (refrigerant outside the boundary) gets no caution in the record view,
+// as in Results and the Overview.
+//
+// The unit run fuzzes one batch of 200 records (about 20 s). Set BF01F_FULL_FUZZ=1 for QA's full four offsets of 400
+// records (about 140 s): `BF01F_FULL_FUZZ=1 bun test src/components/bf01f-rejected-evidence-duplicate.test.tsx`.
 import { describe, expect, test } from "bun:test"
 import { deriveCollectionQuantity, savedAgainstCurrentSetup, validateCollectionActivity, validateCollectionSaveInput, withCurrentSetupVersion, type CollectionActivity, type CollectionContext, type CollectionEvidenceMetadata } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { instrumentEvidenceClaims, planCollectionCalculation } from "../../../../packages/neuvetra-database/src/collection-engine-input"
@@ -12,6 +18,9 @@ import { possibleDuplicateOf, possibleDuplicatePairs } from "../../../../package
 import { CollectionApiError } from "@/lib/collection-api"
 import { reasonText } from "@/lib/plain-language"
 import { computeJourneyStatus } from "@/lib/journey-status"
+import { computeReadiness, progressAnswer } from "@/lib/readiness"
+import { countedDuplicatesIn } from "@/lib/results-api"
+import { attentionCounts } from "@/lib/results-view"
 import { recordDuplicateState } from "@/lib/record-duplicates-bf01c"
 import { recordReadiness } from "./CollectionWorkspace"
 import { harness, loadComponent } from "./component-harness"
@@ -42,7 +51,11 @@ const meter = (sourceId: string, evidenceIds: string[], kwh = "10000") => ({ ...
 // G1: A clean, B rejected (QA's pair). Guard: A clean, B rejected AND missing its quantity (a real hold): not counted.
 const g1 = [saved(meter("M-REJ", [CLEAN])), saved(meter("M-REJ", [REJECTED]))]
 const guard = [saved(meter("M-HELD", [CLEAN])), saved(meter("M-HELD", [REJECTED], ""))]
-const records: any[] = [...g1, ...guard]
+// F2 (QA of PR #69): a counted refrigerant record and a matching one outside the declared boundary (the engine excludes it).
+const refrigerant = (sourceId: string, insideBoundary: boolean) => ({ ...base, kind: "fugitive", sourceId, quantity: { originalValue: "12.5", originalUnit: "kg", normalizedValue: "12.5", normalizedUnit: "kg" },
+  payload: { gas: "HFC-134a", unit: "kg", terms: { PN: "12.5", CN: "0", PS: "0", CD: "0", RD: "0" }, insideBoundary, maintainsRefrigerantStock: false, retrofitInPeriod: false, contractorRecordsComplete: true, eventChronologyComplete: true } })
+const refOut = [saved(refrigerant("REF-OUT", true)), saved(refrigerant("REF-OUT", false))]
+const records: any[] = [...g1, ...guard, ...refOut]
 const CAUTION = (sourceId: string, recordId: string) => `Completing this record would repeat ${sourceId} at HQ, Jan 1 – Dec 31, 2025 (record ${recordId}), which is already counted; withdraw it if it is the same activity.`
 
 const api = new URL("../../../site-api/src/", import.meta.url).pathname
@@ -93,7 +106,7 @@ describe("BF-01f: a record whose only finding is rejected evidence is counted fo
     expect(b.findings[0]!.reason).toStartWith("Linked evidence “bill.pdf” was rejected")
     expect(screenCounted(guard[1]).counted).toBe(false)
     const counted = (id: string) => screenCounted(records.find(item => item.id === id)).counted
-    const pairs = possibleDuplicatePairs(records, counted)
+    const pairs = possibleDuplicatePairs([...g1, ...guard], counted)
     expect([...pairs.counted]).toEqual([[g1[1].id, g1[0].id]])
     expect([...pairs.cautions]).toEqual([[guard[1].id, guard[0].id]])
     // The record view's state: B is a counted possible duplicate of A, never the caution.
@@ -109,6 +122,37 @@ describe("BF-01f: a record whose only finding is rejected evidence is counted fo
     expect(row(guard[1].id).wouldRepeatCounted).toBe(CAUTION("M-HELD", guard[0].id))
   })
 
+  test("B1 (QA of PR #69): the Overview's items, the sidebar and Menu sheet line and Ask list the pair, as Results counts it", async () => {
+    const r12 = await built
+    const status = computeJourneyStatus({ setup: setupView, context, records, evidence, canManage: true, scope3: false })
+    const readiness = computeReadiness({ status, statusFailed: false, scope3: { state: "off" } }) as any
+    // To confirm: exactly the G1 pair (named on its later record, B); B's rejected-file review item stays open too.
+    expect(readiness.duplicates.map((item: any) => item.target.recordId)).toEqual([g1[1].id])
+    expect(readiness.duplicates[0].detail).toContain("Both records are counted.")
+    const input = (id: string) => readiness.items.find((item: any) => item.key === `record:${id}`)
+    expect(input(g1[1].id)?.detail).toStartWith("Linked evidence “bill.pdf” was rejected")
+    expect(input(g1[1].id)?.detail).not.toContain("Completing this record would repeat")
+    // The guard stays an open item with its caution and is never "to confirm".
+    expect(input(guard[1].id)?.detail).toContain(CAUTION("M-HELD", guard[0].id))
+    expect(readiness.duplicates.some((item: any) => item.target.recordId === guard[1].id || item.target.recordId === guard[0].id)).toBe(false)
+    // The counts agree with Results: one counted possible duplicate (not counted as open).
+    expect([readiness.open.duplicates, attentionCounts(r12.records).duplicates, countedDuplicatesIn(r12, "scope2LocationBased")]).toEqual([1, 1, 1])
+    // Sidebar and Menu sheet (the Activity step's line) and Ask read the same readiness.
+    expect(readiness.steps?.[1]?.text ?? JSON.stringify(readiness)).toContain("1 possible duplicate to confirm")
+    const ask = progressAnswer(readiness)
+    expect(ask.find(line => line.startsWith("To confirm: possible duplicates (both are counted) — "))).toContain("1 possible duplicate to confirm")
+    expect(ask.filter(line => line.startsWith("• ")).some(line => line.includes("M-REJ"))).toBe(true)
+  }, 120_000)
+
+  test("F2 (QA of PR #69): a record outside the declared boundary gets no caution in the record view, as in Results and the Overview", async () => {
+    const r12 = await built
+    const row = r12.records.find((item: any) => item.recordId === refOut[1].id)
+    expect([row.inSubtotal.scope1, row.plan.notes.some((note: string) => note.startsWith("would_repeat_counted:"))]).toEqual([false, false])
+    const status = computeJourneyStatus({ setup: setupView, context, records, evidence, canManage: true, scope3: false }) as any
+    expect(status.collection.records.find((item: any) => item.id === refOut[1].id).wouldRepeatCounted).toBeUndefined()
+    for (const record of refOut) expect([record.id, (await workspace(record.id)).text().includes("Completing this record would repeat")]).toEqual([record.id, false])
+  }, 120_000)
+
   test("the record view: both G1 records show the both-counted notice and B never shows the caution; the guard keeps it", async () => {
     for (const record of g1) {
       const text = (await workspace(record.id)).text()
@@ -122,6 +166,7 @@ describe("BF-01f: a record whose only finding is rejected evidence is counted fo
 // engines. Here Scope 1 records may also carry a rejected file. Electricity grid facts the save route refuses (422:
 // `validateElectricityLookup`) are a separate, engine-only gap the screens cannot see without the eGRID ZIP table, so the
 // equality is asserted over records the save route accepts, and every disagreement outside them is pinned to that gap.
+const FULL_FUZZ = process.env.BF01F_FULL_FUZZ === "1"
 describe("BF-01f fuzz: the screen's counted value equals Results' on every record the save route accepts", () => {
   const company = "71000000-0000-4000-8000-000000000001", setup = "71000000-0000-4000-8000-000000000002", office = "71000000-0000-4000-8000-000000000003"
   const clean = "71000000-0000-4000-8000-0000000000c1", pending = "71000000-0000-4000-8000-0000000000c2", rejected = "71000000-0000-4000-8000-0000000000c3", E = "71000000-0000-4000-8000-0000000000e1"
@@ -154,15 +199,15 @@ describe("BF-01f fuzz: the screen's counted value equals Results' on every recor
       payload: { meterOrAccountNumber: "M-1", utilityName: "Synthetic", site: "Office", zip: pick(["94105", "07401", "00000"], i, 8), subregion: pick(["CAMX", "NYUP", "RFCE"], i, 7), utilityEiaId: pick([null, "15477", "1"], i, 9), instruments: [instrument] } })
   }
 
-  test("0 claims more and 0 counts fewer across four offsets (1,600 records); the rest is only the refused grid-facts gap", async () => {
+  test(`0 claims more and 0 counts fewer (${FULL_FUZZ ? "four offsets of 400 records" : "one batch of 200 records"}); the rest is only the refused grid-facts gap`, async () => {
     const { s12, engines: e } = await engines()
     const { validateElectricityLookup } = await import(`${api}workspace/collection-routes.ts`)
     const lookups = new Map<string, unknown>()
     for (const zip of ["94105", "07401", "00000"]) lookups.set(zip, await e.scope2.lookupZip(zip))
     const accepted = (activity: CollectionActivity) => { try { validateElectricityLookup(activity, lookups.get((activity.payload as { zip: string }).zip)); return true } catch { return false } }
     const tally = { more: 0, fewer: 0, agree: 0, rejectedCountedBoth: 0, refusedDisagree: 0, refusedOtherReason: 0 }
-    for (const offset of [0, 400, 800, 1200]) {
-      const activities = Array.from({ length: 400 }, (_, j) => activityAt(j + offset))
+    for (const offset of FULL_FUZZ ? [0, 400, 800, 1200] : [0]) {
+      const activities = Array.from({ length: FULL_FUZZ ? 400 : 200 }, (_, j) => activityAt(j + offset))
       const recs = activities.map((activity, j) => { const id = crypto.randomUUID(); return { id, companyId: company, kind: activity.kind, currentVersion: { id: crypto.randomUUID(), recordId: id, companyId: company, revision: 1, previousVersionId: null, correctionReason: null, activity: { ...activity, sourceId: `FZ-${j}` }, payloadSha256: "b".repeat(64), createdBy: company, createdAt: `2025-06-01T00:${String(Math.floor(j / 60) % 60).padStart(2, "0")}:${String(j % 60).padStart(2, "0")}.000Z` }, history: [] } })
       const res = await s12.buildCollectionResults({ companyId: company, context: fctx, records: recs, evidence: fevidence, setup: fsetup, engines: e })
       for (const r of recs) {

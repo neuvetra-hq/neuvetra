@@ -1166,7 +1166,10 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   }
   const countedIds = new Set(listed.filter(item => item.counted).map(item => item.row.id))
   // BF-01e: records that could be counted once completed (held or needing input; not withdrawn, excluded, replaced or outside the period).
-  const completableIds = new Set(listed.filter(item => !item.counted && !item.placedOutside && !item.readiness.some(finding => finding.status === "method_pending")).map(item => item.row.id))
+  // BF-01f (QA of PR #69, F2): a record its own readiness excludes (equipment outside the declared boundary: the engine's
+  // only exclusion) or shows withdrawn can't be completed into a count, as Results (engine status "excluded") and the
+  // Overview (row state "excluded") treat it, so it gets no "Completing this record would repeat …" caution either.
+  const completableIds = new Set(listed.filter(item => !item.counted && !item.placedOutside && !item.readiness.some(finding => finding.status === "method_pending" || finding.status === "excluded" || finding.status === "withdrawn")).map(item => item.row.id))
   // BF-01c: the form's alert uses the results routes' own rule (possibleDuplicateRecords), so the form, the record view, the
   // Overview and Results agree; only against a counted record, and not while the draft's site, entity, replacement or dates
   // keep it out of every total (a draft still missing an answer is warned about, as it will be counted once complete).
