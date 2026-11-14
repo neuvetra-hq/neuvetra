@@ -9,7 +9,7 @@ Step B3 finds that commit with git; you do not need to type it.
 Written for the owner on a Windows PC. Every command is typed in **PowerShell**. The repository is at `C:\neuvetra-repo`.
 Your operator export file is the one you used for 0031 (kept by you, outside the repository; see B5). Choose an output
 folder, for example `C:\neuvetra-0032`; this runbook writes `<out>` for it. Do this in a quiet period, when nobody is using
-staging. The whole job takes about 20 minutes; the database change itself took 0.3 seconds in the rehearsal.
+staging. The whole job takes about 20 minutes; the database change itself took about half a second in the rehearsal.
 
 > **Stop and ask.** If anything on your screen differs from this runbook (a button or tab with another name, a message or
 > value that is not the one written here, an extra step you are asked to confirm), **stop and ask the CTO before
@@ -108,11 +108,12 @@ Any other "before" value: **stop and ask** (0032's own guard would refuse with `
 
 ```sql
 -- P3: every other neuvetra function, as one fingerprint (must be the same after 0032).
-select count(*) as other_functions, md5(string_agg(p.oid::regprocedure::text || ':' || md5(p.prosrc) || ':' || coalesce(array_to_string(p.proacl::text[], ','), ''), ',' order by p.oid::regprocedure::text)) as fingerprint from pg_proc p where p.pronamespace='neuvetra'::regnamespace and p.proname not in ('collection_assert_activity','save_collection_activity','approve_scope3_report','scope3_active_line_count');
+select count(*) as other_functions, md5(string_agg(p.oid::regprocedure::text || ':' || md5(p.prosrc), ',' order by p.oid::regprocedure::text)) as fingerprint from pg_proc p where p.pronamespace='neuvetra'::regnamespace and p.proname not in ('collection_assert_activity','save_collection_activity','approve_scope3_report','scope3_active_line_count');
 ```
 
-Write down both values. (The rehearsal copy built from the repository gave `266` and `0ca697d12c4dd46cd4d5abc75456a4bb`;
-staging may differ if it has extra functions, which is not a reason to stop. Only a change from before to after matters.)
+Write down both values. (The rehearsal copy built from the repository gave `266` and `3e3a781076dfdd675ecc6926c9c2bdf4`;
+staging may differ if it has extra functions, which is not a reason to stop. Only a change from before to after matters.
+The function privileges are not part of this fingerprint: 0032 proves its own and C2b, C5 and E5 check the rest.)
 
 ```sql
 -- P4: rows 0032 touches or must not touch (must be the same after 0032).
@@ -343,7 +344,7 @@ dump with the hosted shape: a non-superuser migration role with BYPASSRLS named 
 `authenticated`, `neuvetra_runtime`, the seven application schemas, Supabase's provider default privileges, the Storage
 guards, verified TLS on the pooler host name, and two companies seeded through the image's own routes (Scope 1, Scope 2
 with certificates, contracts and a stated rate with four-decimal figures, Scope 3 records, a correction, a withdrawal, a
-report version approved and a second one prepared). Plan: 31 statements as above. C4 committed in 0.3 s; `/ready` 32;
+report version approved and a second one prepared). Plan: 31 statements as above. C4 committed in 0.5 s; `/ready` 32;
 every Results, Scope 3 and frozen-report file identical before and after (only `# Generated:` lines differ); P2 to P6 and
 A1 as expected; a second plan and apply changed no row, function, constraint or trigger. The commands and outputs are in
 the PR description. Deviations from your PC: Linux instead of Windows, Bun 1.4.4, a rehearsal certificate authority, and
