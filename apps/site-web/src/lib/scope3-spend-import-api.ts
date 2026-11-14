@@ -34,7 +34,9 @@ export interface Scope3SpendLineView {
 export interface Scope3SpendConversionView { currency: string; amount: string; rate: string; rateSource: string; rateDate: string; usd: string }
 export interface Scope3SpendConversionResult { converted: Array<{ recordId: string; sourceId: string; versionId: string; revision: number; from: string; usd: string }>; skipped: Array<{ recordId: string; sourceId: string; reason: string }> }
 /** Round 2 ACC-16: a superseded spend line (amount as recorded) and the record whose own figure replaces it. */
-export interface Scope3SpendSupersededView { spendRecordId: string; supersededBy: string; supplierName: string; kind: "purchase_supplier" | "partner_reported"; spendSourceId: string; spendDescription: string; spendAmount: string; spendCurrency: string }
+export interface Scope3SpendSupersededView { spendRecordId: string; supersededBy: string; supplierName: string; kind: "purchase_supplier" | "partner_reported"; spendSourceId: string; spendDescription: string; spendAmount: string; spendCurrency: string
+  /** BF-12: present only when the replacing record matches this line only by the vendor key (`supplierName` is what it names). */
+  vendorKeyMatch?: true }
 export interface Scope3SpendSupersederView {
   recordId: string; kind: "purchase_supplier" | "partner_reported"; sourceId: string; name: string; category: number; quantity: string; unit: string
   basis: string | null; factorValue: string | null; factorUnit: string | null; allocationNumerator: string | null; allocationDenominator: string | null
@@ -158,9 +160,13 @@ export function decodeScope3SpendImports(value: unknown, companyId: string): Sco
   linesBelong(lines, imports)
   const kindOf = (x: unknown) => x === "purchase_supplier" || x === "partner_reported" ? x as "purchase_supplier" | "partner_reported" : fail()
   const superseded = array(v.superseded).map(item => {
-    const s = exact(item, ["spendRecordId", "supersededBy", "supplierName", "kind", "spendSourceId", "spendDescription", "spendAmount", "spendCurrency"])
+    // BF-12: `vendorKeyMatch` is either absent or exactly true.
+    const keys = ["spendRecordId", "supersededBy", "supplierName", "kind", "spendSourceId", "spendDescription", "spendAmount", "spendCurrency"]
+    const s = object(item) && "vendorKeyMatch" in item ? exact(item, [...keys, "vendorKeyMatch"]) : exact(item, keys)
+    if ("vendorKeyMatch" in s && s.vendorKeyMatch !== true) fail()
     return { spendRecordId: uuid(s.spendRecordId), supersededBy: uuid(s.supersededBy), supplierName: str(s.supplierName, 200), kind: kindOf(s.kind),
-      spendSourceId: str(s.spendSourceId, 120), spendDescription: str(s.spendDescription, 200), spendAmount: str(s.spendAmount, 100), spendCurrency: str(s.spendCurrency, 80) }
+      spendSourceId: str(s.spendSourceId, 120), spendDescription: str(s.spendDescription, 200), spendAmount: str(s.spendAmount, 100), spendCurrency: str(s.spendCurrency, 80),
+      ...(s.vendorKeyMatch === true ? { vendorKeyMatch: true as const } : {}) }
   })
   for (const line of lines) {
     const entry = superseded.find(s => s.spendRecordId === line.recordId)

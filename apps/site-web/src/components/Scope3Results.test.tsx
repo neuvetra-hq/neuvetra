@@ -317,6 +317,28 @@ describe("I-06: calculation details, profiles, methodology, exclusion register a
     expect(badges).toContain("T poor · default")
   })
 
+  // BF-12 (CEO decision): a spend line replaced only by the vendor key says so next to its replacing record, on screen and
+  // in print, with the supplier as the replacing record writes it; a line replaced by the exact rule shows only the record.
+  test("BF-12: the vendor-key match is shown next to the replacing record; an exact match shows only the record", () => {
+    const detail = "matched as the same supplier ignoring punctuation, symbols, “&” or “and”, a leading “The”, full-width letters and endings such as Inc, LLC or Co (accents count) (supplier on the replacing record: Acme Metals Inc)"
+    const by = "93700000-0000-4000-8000-00000000abcd"
+    const base = fixture.records.find(row => row.kind === "purchase_spend")!
+    const withNotes = (notes: string[]): Scope3ResultsResponse => ({ ...fixture, records: fixture.records.map(row => row === base ? { ...row, plan: { ...row.plan, notes } } : row) })
+    const detailsOf = (results: Scope3ResultsResponse, printed = false) => {
+      const nodes = flatten(printed ? Scope3ReportSection({ results }) : Scope3Panel({ state: { data: results, message: null, unavailable: false, busy: false }, canManage: true, onFix() {}, onRetry() {} }))
+      return text(nodes)
+    }
+    for (const printed of [false, true]) {
+      const keyOnly = detailsOf(withNotes([`superseded_by:${by}`, "superseded_by_vendor_key_match:Acme Metals Inc"]), printed)
+      expect(keyOnly).toContain(`replaced by record ${by} · ${detail}`)
+      const exact = detailsOf(withNotes([`superseded_by:${by}`]), printed)
+      expect(exact).toContain(`replaced by record ${by}`)
+      expect(exact).not.toContain("matched as the same supplier")
+      const held = detailsOf(withNotes(["superseded_by_vendor_key_match:Acme Metals Inc", `replacing_record:${by}`]), printed)
+      expect(held).toContain(`(record ${by}) · ${detail}`)
+    }
+  })
+
   test("print shows every line's details open, the profile columns, the methodology and the exclusion register", () => {
     expect(printed.some(node => node.type === "details")).toBe(false)
     for (const row of fixture.records.filter(item => item.result)) expect(printedText).toContain(row.result!.resultSha256)
