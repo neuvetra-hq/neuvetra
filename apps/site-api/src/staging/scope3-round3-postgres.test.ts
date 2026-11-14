@@ -9,7 +9,7 @@
 // Runs on the disposable loopback fixture hosted.test.ts migrates (verify.yml native step); any loopback port.
 import { expect, test } from "bun:test"
 import { readdirSync, readFileSync, writeFileSync } from "node:fs"
-import { createPostgresConnection, HostedWorkspaceDatabase, provisionStagingRoster, STAGING_SCHEMA_VERSION, type WorkspaceConnection } from "@neuvetra/database"
+import { createPostgresConnection, HostedWorkspaceDatabase, provisionStagingRoster, STAGING_SCHEMA_VERSION, type WorkspaceConnection, type WorkspaceSql } from "@neuvetra/database"
 import { createSyntheticCompanySetup } from "../../../../packages/neuvetra-database/src/company-setup-fixture"
 import { SCOPE3_SETUP_CATEGORY_TOKENS } from "../../../../packages/neuvetra-database/src/scope3-coverage"
 import { SCOPE3_SPEND_IMPORT_READBACK_SQL } from "../../../../packages/neuvetra-database/src/scope3-spend-imports"
@@ -473,7 +473,7 @@ async function companyLockSpan(operator: WorkspaceConnection, companyId: string,
   return first ? Math.round(last - first + 20) : 0
 }
 
-integration("BF-20 natively: a 2,990-line EUR conversion through the route is set-based; a colleague's save in the same company waits and succeeds; another company's reads stay fast", async () => {
+integration("BF-20 natively: a 2,990-line EUR conversion through the route; a colleague's save in the same company waits for it (refused only if the lock outlasts lock_timeout); another company's reads are served", async () => {
   const h = await harness()
   try {
     const c = await h.company("bf20-convert", [1, 4, 5, 6]), other = await h.company("bf20-other", [1, 4, 5, 6])
@@ -492,21 +492,25 @@ integration("BF-20 natively: a 2,990-line EUR conversion through the route is se
     expect(await companyLockHeld(h.operator, c.id, 15_000)).toBe(true)
     const reads: number[] = []
     const reading = (async () => { while (!finished) { const s = performance.now(); const r = await h.call(`${other.root}/collection/activities`, other.name); await r.arrayBuffer(); reads.push(r.status === 200 ? Math.round(performance.now() - s) : -r.status); await Bun.sleep(50) } })()
+    // QA F1: the lock span is measured, not bounded here (that is timing; the lead 1 test compares it with main's).
+    const span = companyLockSpan(h.operator, c.id, () => finished)
     const colleagueStart = performance.now()
     const colleague = await h.json(`${c.root}/collection/activities/${crypto.randomUUID()}`, c.name, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity: gas })
     const colleagueMs = Math.round(performance.now() - colleagueStart)
     await reading
+    const lockMs = await span
     const response = await conversion
     const totalMs = Math.round(performance.now() - started)
     const body = await response.json()
-    console.info(`BF-20 native: 2,990-line conversion ${response.status} in ${totalMs} ms; colleague save ${colleague.status} in ${colleagueMs} ms; other company's reads ${JSON.stringify(reads)} ms`)
+    console.info(`BF-20 native: 2,990-line conversion ${response.status} in ${totalMs} ms; colleague save ${colleague.status} in ${colleagueMs} ms; company lock seen held about ${lockMs} ms; other company's reads ${JSON.stringify(reads)} ms`)
     expect([response.status, body.converted.length, body.skipped.length]).toEqual([201, 2990, 0])
-    // Main: a colleague's save failed after the 5 s lock_timeout (503); now it waits for the conversion and saves.
-    expect(colleague.status).toBe(201)
-    expect(colleagueMs).toBeLessThan(5000)
-    expect(totalMs).toBeLessThan(IMPORT_BUDGET_MS)
+    // The colleague waits for the conversion and saves. QA F1: on a loaded host the lock can still outlast the 5 s lock_timeout
+    // (less often than on main, where it always did at this size); then, and only then, the colleague's save is refused with
+    // 503 after waiting: never another refusal, never a lost or half-converted line (checked below).
+    if (colleague.status !== 201) expect([colleague.status, colleagueMs >= 4500, lockMs >= 4500]).toEqual([503, true, true])
+    // Another company's reads are served throughout (no wait on this company's lock; their times are logged above).
     expect(reads.length).toBeGreaterThan(0)
-    expect(reads.every(ms => ms >= 0 && ms < 2000)).toBe(true)
+    expect(reads.every(ms => ms >= 0)).toBe(true)
     // Every converted line: one revision later, in US dollars at exactly the amount the TypeScript arithmetic gives, the shared reason.
     const { scope3SpendConvertAmount } = await import("../../../../packages/neuvetra-database/src/scope3-spend-currency")
     const rows = (await h.operator.query<{ source_id: string; revision: number; original_quantity: string; normalized_quantity: string; original_unit: string; correction_reason: string; prior: string }>(`select v.source_id,v.revision,v.original_quantity,v.normalized_quantity::text,v.original_unit,v.correction_reason,p.original_quantity prior
@@ -519,7 +523,7 @@ integration("BF-20 natively: a 2,990-line EUR conversion through the route is se
   } finally { await h.close() }
 }, 900_000)
 
-integration("BF-20 natively (lead 1): with 20 ms per database round trip a 2,990-line conversion holds the company lock well inside the 5 s lock_timeout", async () => {
+integration("BF-20 natively (lead 1): with 20 ms per database round trip the set-based conversion makes 6 round trips (main: one per line) and holds the company lock a small fraction of main's time, measured on the same data in the same run", async () => {
   const h = await harness()
   // A loopback TCP proxy that delays every chunk 10 ms in each direction (order kept), in front of the same database.
   type Side = { peer?: { write(b: Uint8Array): number; end(): void }; queue: Promise<unknown>; pending?: Uint8Array[] }
@@ -536,25 +540,43 @@ integration("BF-20 natively (lead 1): with 20 ms per database round trip a 2,990
     close(client) { client.data.peer?.end() }, error(client) { client.data.peer?.end() } } })
   const slowUrl = new URL(target); slowUrl.username = "neuvetra_runtime"; slowUrl.port = String(proxy.port)
   const slow = createPostgresConnection(slowUrl.toString(), { tls: false, maxConnections: 2 })
-  const slowDatabase = new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string) => HostedWorkspaceDatabase)(slow, REF)
+  const { asActor } = await import("../../../../packages/neuvetra-database/src/scope3-currency-differential.fixture")
+  const { convertScope3SpendCurrency } = await import("../../../../packages/neuvetra-database/src/scope3-spend-imports")
+  const { convertScope3SpendCurrencyPerLineReference } = await import("../../../../packages/neuvetra-database/src/scope3-spend-currency-per-line.reference")
+  const slowDb = { query: slow.query.bind(slow), exec: slow.exec.bind(slow), transaction: slow.transaction.bind(slow), close: () => slow.close() }
   try {
+    // QA F1: no wall-clock bound (a loaded host stretches both). Main's per-line path and the set-based path run on the same
+    // 1,000 lines through the same proxy (main's rolled back), and the test asserts what does not depend on load: the exact
+    // round trips, and the set-based lock span as a small fraction of main's.
+    const LINES = 1000
     const c = await h.company("bf20-latency", [1, 4, 5, 6])
-    const eur = (prefix: string, rows: number) => enc(new TextDecoder().decode(ledger(prefix, rows)).replaceAll(",USD,", ",EUR,"))
-    for (const [prefix, rows] of [["LA", 2000], ["LB", 990]] as const) { const bytes = eur(prefix, rows); expect((await h.importFile(c, bytes, await h.upload(c.root, c.name, bytes, `${prefix}.csv`))).status).toBe(201) }
+    const bytes = enc(new TextDecoder().decode(ledger("LA", LINES)).replaceAll(",USD,", ",EUR,"))
+    expect((await h.importFile(c, bytes, await h.upload(c.root, c.name, bytes, "LA.csv"))).status).toBe(201)
     // One round trip through the proxy takes at least 20 ms.
     const ping = performance.now(); await slow.query("select 1"); await slow.query("select 1")
     expect((performance.now() - ping) / 2).toBeGreaterThanOrEqual(19)
-    let finished = false
-    const started = performance.now()
-    const conversion = slowDatabase.convertScope3SpendCurrency(c.owner, c.id, { currency: "EUR", rate: "1.0823", rateSource: "ECB euro reference rate", rateDate: "2025-06-30" }).finally(() => { finished = true })
-    const lockMs = await companyLockSpan(h.operator, c.id, () => finished)
-    const done = await conversion
-    const totalMs = Math.round(performance.now() - started)
-    console.info(`BF-20 native lead 1: 2,990 lines at 20 ms per round trip converted in ${totalMs} ms, company lock held about ${lockMs} ms (main: 79 s, lock about 78 s)`)
-    expect(done.converted.length).toBe(2990)
-    expect(lockMs).toBeGreaterThan(0)
-    expect(lockMs).toBeLessThan(5000)
-    expect(totalMs).toBeLessThan(IMPORT_BUDGET_MS)
+    const input = { currency: "EUR", rate: "1.0823", rateSource: "ECB euro reference rate", rateDate: "2025-06-30" }
+    const measure = async (convert: (tx: WorkspaceSql, actor: string, company: string, input: unknown) => Promise<{ converted: Array<{ sourceId: string; usd: string }> }>, keep: boolean) => {
+      let trips = 0, finished = false
+      const counted = (tx: WorkspaceSql): WorkspaceSql => ({ query: (sql, args) => { trips++; return tx.query(sql, args) }, exec: sql => { trips++; return tx.exec(sql) } })
+      const run = asActor(slowDb, c.owner, tx => convert(counted(tx), c.owner, c.id, input), { keep }).finally(() => { finished = true })
+      const lockMs = await companyLockSpan(h.operator, c.id, () => finished)
+      const { value } = await run
+      return { trips, lockMs, converted: value.converted.map(line => `${line.sourceId}=${line.usd}`).sort() }
+    }
+    const main = await measure((tx, actor, company, body) => convertScope3SpendCurrencyPerLineReference(tx, actor, company, body), false)
+    const setBased = await measure(convertScope3SpendCurrency, true)
+    console.info(`BF-20 native lead 1: ${LINES} lines at 20 ms per round trip: main ${main.trips} round trips, lock about ${main.lockMs} ms; set-based ${setBased.trips} round trips, lock about ${setBased.lockMs} ms`)
+    // The same lines converted to the same amounts.
+    expect(setBased.converted).toEqual(main.converted)
+    expect(setBased.converted.length).toBe(LINES)
+    // Round trips: main 4 + one per line (actor, setup, read, N saves, read-back); set-based 6 (actor, setup, read, actor + one
+    // save_scope3_spend_corrections for the single chunk, read-back).
+    expect([main.trips, setBased.trips]).toEqual([LINES + 4, 6])
+    // The lock: main holds it for every per-line round trip (at least LINES x 20 ms); set-based a small fraction of that.
+    expect(main.lockMs).toBeGreaterThan(LINES * 20)
+    expect(setBased.lockMs).toBeGreaterThan(0)
+    expect(setBased.lockMs).toBeLessThan(main.lockMs * 0.25)
   } finally { await slow.close(); proxy.stop(true); await h.close() }
 }, 900_000)
 

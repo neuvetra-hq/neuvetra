@@ -1,14 +1,16 @@
 // TEST-ONLY REFERENCE (BF-20). Never imported by product code (not exported from index.ts).
 // `convertScope3SpendCurrency` exactly as on main at 5b98b86 (after BF-14, PR #76): one save_collection_activity call per
 // converted line, each line with its own correction reason. The BF-20 differential tests run this and the set-based
-// implementation over the same data and compare every stored row and the response. The only change from main is the
-// optional `reason` override, so the reference can also be run with BF-20's one shared reason (then every stored row,
-// receipt hash included, must be identical).
+// implementation over the same data and compare every stored row and the response. The only changes from main are two
+// options, both off by default (then this is main exactly): `reason`, so the reference can run with BF-20's one shared
+// reason (then every stored row, receipt hash included, must be identical), and `skipOverflow`, BF-20's one declared
+// behaviour change (QA F2): a line whose amount in US dollars would pass 12 integer digits is skipped
+// (`converted_amount_too_large`) instead of refusing the whole conversion with an uncoded error.
 import type { WorkspaceSql } from './workspace'
 import { readCollectionActivities } from './collection'
 import { validateCollectionSaveInput, type CollectionActivityRecord } from './collection-contract'
 import type { PurchaseSpendCollectionPayload } from './scope3-collection-contract'
-import { scope3SpendConversionReason, scope3SpendConvertAmount, scope3SpendNotesWithConversion, scope3SpendRateMatchesLineYear, validateScope3SpendConversionInput, type Scope3SpendConversion } from './scope3-spend-currency'
+import { scope3SpendConversionReason, scope3SpendConvertAmount, scope3SpendConvertedAmountFits, scope3SpendNotesWithConversion, scope3SpendRateMatchesLineYear, validateScope3SpendConversionInput, type Scope3SpendConversion } from './scope3-spend-currency'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 const problem = (message: string, code: string) => Object.assign(new Error(message), { code })
@@ -24,7 +26,7 @@ async function checkActor(tx: WorkspaceSql, actorId: string, message: string) {
  * is skipped and listed, and so is a line whose calendar year is not the rate date's (BF-14, `rate_date_outside_line_year`). The lines are read back once at the end and checked. No new SQL: the integrator may later move
  * this to a set-based 0030 statement (see the round 3 lane C log).
  */
-export async function convertScope3SpendCurrencyPerLineReference(tx: WorkspaceSql, actorId: string, companyId: string, input: unknown, options: { reason?: (c: Scope3SpendConversion) => string } = {}): Promise<{
+export async function convertScope3SpendCurrencyPerLineReference(tx: WorkspaceSql, actorId: string, companyId: string, input: unknown, options: { reason?: (c: Scope3SpendConversion) => string; skipOverflow?: boolean } = {}): Promise<{
   converted: Array<{ recordId: string; sourceId: string; versionId: string; revision: number; from: string; usd: string }>; skipped: Array<{ recordId: string; sourceId: string; reason: string }> }> {
   if (!UUID.test(actorId) || !UUID.test(companyId)) throw new Error('Scope 3 currency conversion unavailable.')
   await checkActor(tx, actorId, 'Scope 3 currency conversion unavailable.')
@@ -48,7 +50,9 @@ export async function convertScope3SpendCurrencyPerLineReference(tx: WorkspaceSq
     // no date and a period crossing years) is listed and stays held in its own currency, to be converted at a rate dated in its own year.
     const a = record.currentVersion.activity
     if (!scope3SpendRateMatchesLineYear({ lineDate: (a.payload as PurchaseSpendCollectionPayload).lineDate, period: a.period }, conversion.rateDate)) { skipped.push({ recordId: record.id, sourceId: a.sourceId, reason: 'rate_date_outside_line_year' }); continue }
-    planned.push({ record, from: written, usd: scope3SpendConvertAmount(written, conversion.rate) })
+    const usd = scope3SpendConvertAmount(written, conversion.rate)
+    if (options.skipOverflow && !scope3SpendConvertedAmountFits(usd)) { skipped.push({ recordId: record.id, sourceId: a.sourceId, reason: 'converted_amount_too_large' }); continue }
+    planned.push({ record, from: written, usd })
   }
   for (const { record, from, usd } of planned) {
     const version = record.currentVersion, a = version.activity

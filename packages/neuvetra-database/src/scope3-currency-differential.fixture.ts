@@ -156,7 +156,8 @@ export async function seedCompany(db: DiffDb, seed: number, lines: [number, numb
 }
 
 export type Impl = (tx: WorkspaceSql, actor: string, company: string, input: unknown) => Promise<{ converted: Array<{ recordId: string; sourceId: string; versionId: string; revision: number; from: string; usd: string }>; skipped: Array<{ recordId: string; sourceId: string; reason: string }> }>
-const shared: Impl = (tx, actor, company, input) => convertScope3SpendCurrencyPerLineReference(tx, actor, company, input, { reason: c => scope3SpendConversionGroupReason(c) })
+// The reference with BF-20's two declared changes (the shared reason; QA F2's overflow skip): must equal the new one exactly.
+const shared: Impl = (tx, actor, company, input) => convertScope3SpendCurrencyPerLineReference(tx, actor, company, input, { reason: c => scope3SpendConversionGroupReason(c), skipOverflow: true })
 const original: Impl = (tx, actor, company, input) => convertScope3SpendCurrencyPerLineReference(tx, actor, company, input)
 
 async function run(db: DiffDb, fx: Fixture, impl: Impl, input: unknown, keep: boolean, companies: string[]) {
@@ -171,7 +172,9 @@ async function run(db: DiffDb, fx: Fixture, impl: Impl, input: unknown, keep: bo
 }
 const responseOf = (value: Awaited<ReturnType<Impl>>, ids: Map<string, string>) => ({ converted: value.converted.map(c => ({ ...c, versionId: ids.get(c.versionId) ?? `UNMAPPED ${c.versionId}` })), skipped: value.skipped })
 
-export interface DifferentialCase { input: Scope3SpendConversionInput; converted: number; skipped: number; refused: string | null; mismatches: number; rows: number; chunks: number }
+/** `declared`: main refused this conversion for an overflowing line (uncoded error) where BF-20 skips that line (QA F2). */
+export interface DifferentialCase { input: Scope3SpendConversionInput; converted: number; skipped: number; refused: string | null; mismatches: number; rows: number; chunks: number; declared: boolean }
+export const OVERFLOW_REFUSAL = 'no code: Collection decimals allow 12 integer digits and 3 fractional digits.'
 /** One conversion, three runs from the same state: reference (shared reason) and reference (main) rolled back, then the new one committed. */
 export async function differential(db: DiffDb, fx: Fixture, other: Fixture, input: Scope3SpendConversionInput, options: { againstMain?: boolean } = {}): Promise<DifferentialCase> {
   const companies = [fx.company, other.company]
@@ -181,12 +184,18 @@ export async function differential(db: DiffDb, fx: Fixture, other: Fixture, inpu
   const n = await run(db, fx, convertScope3SpendCurrency, input, true, companies)
   let mismatches = 0
   const same = (x: unknown, y: unknown) => { try { expect(x).toEqual(y) } catch (error) { mismatches++; throw error } }
-  same([a.ok, b.ok], [n.ok, n.ok])
-  if (!n.ok || !a.ok || !b.ok) {
+  const code = (r: typeof n) => r.ok ? null : r.code
+  const tooLarge = (r: typeof n) => r.ok ? r.value.skipped.filter(x => x.reason === 'converted_amount_too_large').length : 0
+  // The only declared difference from main besides the reason (QA F2): main refuses the whole conversion, uncoded, when a
+  // line would overflow; BF-20 skips exactly those lines. Otherwise main and BF-20 succeed or refuse alike.
+  const declared = !b.ok && b.code === OVERFLOW_REFUSAL && n.ok
+  same([a.ok, code(a)], [n.ok, code(n)])
+  if (declared) same(tooLarge(n) > 0, true)
+  else { same([b.ok, code(b)], [n.ok, code(n)]); same(tooLarge(n), 0) }
+  if (!n.ok || !a.ok) {
     // A refusal: the same SQLSTATE from every implementation, and nothing saved (the next snapshot equals `before`).
-    same([(a as { code: string | null }).code, (b as { code: string | null }).code], [(n as { code: string | null }).code, (n as { code: string | null }).code])
     same(await db.transaction(tx => snapshot(tx, companies)), before)
-    return { input, converted: 0, skipped: 0, refused: (n as { code: string | null }).code, mismatches, rows: 0, chunks: 0 }
+    return { input, converted: 0, skipped: 0, refused: code(n), mismatches, rows: 0, chunks: 0, declared }
   }
   const na = normalise(before, a.after), nn = normalise(before, n.after)
   same(nn.rows, na.rows)
@@ -196,7 +205,7 @@ export async function differential(db: DiffDb, fx: Fixture, other: Fixture, inpu
   // The new reason: one for the whole conversion.
   const groupReason = scope3SpendConversionGroupReason(input).normalize('NFC')
   same(reasons(n.after).map(r => r.correction_reason), reasons(n.after).map(() => groupReason))
-  if (options.againstMain !== false) {
+  if (options.againstMain !== false && b.ok) {
     // Against main exactly: only the reason (main's is per line) and the receipt request hash that covers it differ.
     const mask = ['correction_reason', 'request_sha256']
     same(normalise(before, n.after, mask).rows, normalise(before, b.after, mask).rows)
@@ -207,7 +216,7 @@ export async function differential(db: DiffDb, fx: Fixture, other: Fixture, inpu
   // The other company's rows are exactly as before (tenant isolation), in every table.
   const theirs = (s: Record<string, string[]>) => Object.entries(s).flatMap(([table, rows]) => rows.filter(text => text.includes(other.company)).map(text => `${table} ${text}`)).sort()
   same(theirs(n.after), theirs(before))
-  return { input, converted: n.value.converted.length, skipped: n.value.skipped.length, refused: null, mismatches, rows: Object.values(nn.rows).flat().length, chunks: n.calls }
+  return { input, converted: n.value.converted.length, skipped: n.value.skipped.length, refused: null, mismatches, rows: Object.values(nn.rows).flat().length, chunks: n.calls, declared }
 }
 
 /** The adversarial conversion sequence run on every database (each committed with the new implementation before the next). */
@@ -234,14 +243,15 @@ describe(`BF-20 differential: per-line (main) vs set-based, ${name}`, () => {
     other = await seedCompany(db, 7, [40, 40], { prefix: '20b00000' })
     fx = await seedCompany(db, 20, [120, 120], { prefix: '20a00000' })
   }, 300_000)
-  afterAll(async () => { console.info(`BF-20 differential ${name}:`, JSON.stringify(results.map(r => [r.input.currency, r.input.rate, r.input.rateDate, r.converted, r.skipped, r.refused, r.mismatches]))); await db?.close() })
+  afterAll(async () => { console.info(`BF-20 differential ${name}:`, JSON.stringify(results.map(r => [r.input.currency, r.input.rate, r.input.rateDate, r.converted, r.skipped, r.refused, r.mismatches, r.declared ? 'declared' : '']))); await db?.close() })
 
   test('every conversion of the adversarial sequence: identical rows, row counts, response and refusals', async () => {
     for (const input of SEQUENCE) results.push(await differential(db, fx, other, input))
     expect(results.every(r => r.mismatches === 0)).toBe(true)
     // The sequence exercises conversions, skips of every reason, a refusal and a conversion with nothing to do.
     expect(results.reduce((n, r) => n + r.converted, 0)).toBeGreaterThan(100)
-    expect(results.some(r => r.refused !== null)).toBe(true)
+    // QA F2: exactly the overflow conversion differs from main (main refused it whole); BF-20 skips the overflowing lines and converts the rest.
+    expect(results.filter(r => r.declared).map(r => [r.input.currency, r.input.rate, r.refused, r.converted > 0])).toEqual([['CAD', '999999.99999999', null, true]])
     expect(results.some(r => r.refused === null && r.converted === 0)).toBe(true)
   }, 600_000)
 

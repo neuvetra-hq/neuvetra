@@ -11,7 +11,18 @@
 import { describe, expect, test } from 'bun:test'
 import { createPostgresConnection } from './hosted'
 import { scope3SpendCorrectionChunks } from './scope3-spend-imports'
+import { scope3SpendConvertAmount, scope3SpendConvertedAmountFits } from './scope3-spend-currency'
 import { pgliteAt, registerDifferentialSuite, type DiffDb } from './scope3-currency-differential.fixture'
+
+describe('BF-20 (QA F2): a converted amount past 12 integer digits is that line\'s skip (pure)', () => {
+  test('fits up to 999,999,999,999.99; one cent more, or a 12-digit amount at a rate above 1, does not', () => {
+    expect(scope3SpendConvertedAmountFits(scope3SpendConvertAmount('999999999999.994', '1'))).toBe(true) // rounds to .99
+    expect(scope3SpendConvertedAmountFits(scope3SpendConvertAmount('999999999999.995', '1'))).toBe(false) // rounds to 1,000,000,000,000
+    expect(scope3SpendConvertedAmountFits(scope3SpendConvertAmount('999999999999', '1.08'))).toBe(false)
+    expect(scope3SpendConvertedAmountFits(scope3SpendConvertAmount('999999999999', '0.9'))).toBe(true)
+    expect(scope3SpendConvertedAmountFits(scope3SpendConvertAmount('0.001', '0.00000001'))).toBe(true) // rounds to 0
+  })
+})
 
 describe('BF-20: correction chunks (pure)', () => {
   test('order kept; at most maxLines lines and maxBytes of JSON per chunk; one item larger than maxBytes is its own chunk', () => {

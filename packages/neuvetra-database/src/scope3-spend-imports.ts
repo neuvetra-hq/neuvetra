@@ -18,7 +18,7 @@ import { scope3SpendMappingKeyInput } from './scope3-collection'
 import { buildScope3SpendImportRequest, scope3SpendImportReconciliation, type Scope3SpendParse, type Scope3SpendReconciliation } from './scope3-spend-import'
 import { scope3SpendGroupKeyInput, scope3SpendIsGroupMapping, scope3SpendMappingKeyInputOf } from './scope3-spend-grouping'
 import { validateCollectionSaveInput } from './collection-contract'
-import { scope3SpendConversionGroupReason, scope3SpendConvertAmount, scope3SpendNotesWithConversion, scope3SpendRateMatchesLineYear, validateScope3SpendConversionInput } from './scope3-spend-currency'
+import { scope3SpendConversionGroupReason, scope3SpendConvertAmount, scope3SpendConvertedAmountFits, scope3SpendNotesWithConversion, scope3SpendRateMatchesLineYear, validateScope3SpendConversionInput } from './scope3-spend-currency'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 const SHA256 = /^[0-9a-f]{64}$/
@@ -323,7 +323,7 @@ export function scope3SpendCorrectionChunks<T>(corrections: readonly T[], maxLin
 /**
  * Round 3 lane C (PR-11): converts every active imported spend line in one currency to US dollars at the user's rate, in
  * the caller's one transaction (owner or admin; each line corrected against the version read here). A line whose amount is not a plain positive number (a credit, text)
- * is skipped and listed, and so is a line whose calendar year is not the rate date's (BF-14, `rate_date_outside_line_year`). The lines are read back once at the end and checked. BF-20: the
+ * is skipped and listed, and so is a line whose calendar year is not the rate date's (BF-14, `rate_date_outside_line_year`), and one whose amount in US dollars would pass 12 integer digits (BF-20, `converted_amount_too_large`). The lines are read back once at the end and checked. BF-20: the
  * converted lines are written set-based (0030's save_scope3_spend_corrections), with one correction reason for all of them.
  */
 export async function convertScope3SpendCurrency(tx: WorkspaceSql, actorId: string, companyId: string, input: unknown): Promise<{
@@ -350,7 +350,10 @@ export async function convertScope3SpendCurrency(tx: WorkspaceSql, actorId: stri
     // no date and a period crossing years) is listed and stays held in its own currency, to be converted at a rate dated in its own year.
     const a = record.currentVersion.activity
     if (!scope3SpendRateMatchesLineYear({ lineDate: (a.payload as PurchaseSpendCollectionPayload).lineDate, period: a.period }, conversion.rateDate)) { skipped.push({ recordId: record.id, sourceId: a.sourceId, reason: 'rate_date_outside_line_year' }); continue }
-    planned.push({ record, from: written, usd: scope3SpendConvertAmount(written, conversion.rate) })
+    const usd = scope3SpendConvertAmount(written, conversion.rate)
+    // BF-20 (QA F2): a converted amount past the contract's 12 integer digits is this line's skip, not the whole conversion's refusal.
+    if (!scope3SpendConvertedAmountFits(usd)) { skipped.push({ recordId: record.id, sourceId: a.sourceId, reason: 'converted_amount_too_large' }); continue }
+    planned.push({ record, from: written, usd })
   }
   // BF-20 (audit BI-02, lead 1): the converted lines are written set-based through 0030's save_scope3_spend_corrections (the
   // shared writer of the mapping save and "withdraw this import"), not one save_collection_activity call per line: a few

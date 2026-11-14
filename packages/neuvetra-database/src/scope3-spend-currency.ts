@@ -46,6 +46,12 @@ export function scope3SpendConvertAmount(amount: string, rate: string): string {
   return `${whole}${fraction ? `.${fraction}` : ''}`
 }
 
+/**
+ * BF-20 (QA F2): whether a converted amount fits the collection contract's decimals (at most 12 integer digits). A larger
+ * one (a 12-digit amount at a rate above 1) cannot be stored as a quantity, so that one line is skipped
+ * (`converted_amount_too_large`) and the others convert; before, the whole conversion was refused with an uncoded error.
+ */
+export const scope3SpendConvertedAmountFits = (usd: string) => AMOUNT.test(usd)
 const NOTE_PREFIX = 'Currency conversion: '
 /** The notes line a converted spend line keeps (one line; parsed back by `scope3SpendConversionOf`). */
 export const scope3SpendConversionNote = (c: Scope3SpendConversion) =>
