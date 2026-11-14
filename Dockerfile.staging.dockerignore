@@ -284,3 +284,4 @@ apps/site-web/src/m71-local-preview.tsx
 !apps/site-api/src/calculation/scope1_engine.py
 !apps/site-api/src/calculation/scope2_engine.py
 !apps/site-api/src/calculation/scope3_engine.py
+!apps/site-api/src/calculation/scope12_batch.py

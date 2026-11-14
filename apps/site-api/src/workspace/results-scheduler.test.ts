@@ -47,4 +47,36 @@ describe("results scheduler", () => {
     expect(await failing.catch((error: Error) => error.message)).toBe("engine unavailable")
     expect(await next).toBe("b")
   })
+
+  test("BI-01: a run is stopped only when every request waiting for it has gone; a later request gets a fresh run", async () => {
+    const schedule = createResultsScheduler<string>(), gate = deferred(), seen: AbortSignal[] = []
+    let count = 0
+    const run = (wait?: Promise<void>) => async (signal: AbortSignal) => { seen.push(signal); const label = `run#${++count}`; if (wait) await wait; if (signal.aborted) throw new Error("stopped"); return label }
+    // The first request's run: stopped when that request goes.
+    const first = new AbortController()
+    const a = schedule("company-1", "actor-a", run(gate.promise), first.signal)
+    await tick()
+    // Two later requests share the follow-up; one of them goes, the other still waits, so the follow-up is not stopped.
+    const later = [new AbortController(), new AbortController()]
+    const b = schedule("company-1", "actor-a", run(), later[0]!.signal), c = schedule("company-1", "actor-a", run(), later[1]!.signal)
+    first.abort()
+    expect(seen[0]!.aborted).toBe(true)
+    later[0]!.abort()
+    gate.resolve()
+    expect(await a.catch((error: Error) => error.message)).toBe("stopped")
+    expect(await b).toBe(await c)
+    expect(seen[1]!.aborted).toBe(false)
+    // A request without a signal never has its run stopped; a follow-up whose requests all went is replaced for a newcomer.
+    const hold = deferred()
+    const d = schedule("company-1", "actor-a", run(hold.promise))
+    await tick()
+    const gone = new AbortController()
+    const e = schedule("company-1", "actor-a", run(), gone.signal)
+    gone.abort()
+    const f = schedule("company-1", "actor-a", run())
+    hold.resolve()
+    expect(await d).toMatch(/^run#/)
+    expect(await e.catch((error: Error) => error.message)).toBe("stopped")
+    expect(await f).toMatch(/^run#/)
+  })
 })
