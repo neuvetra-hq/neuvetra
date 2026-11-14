@@ -1,7 +1,7 @@
 // The Activity screen's save checks (WO-10, round 2 lane E UX-4), moved out of CollectionWorkspace.tsx (WO-12 QA) so the
 // field-label derivation test calls the screen's real checks instead of a copy. CollectionWorkspace uses exactly these:
 // the problems listed next to Save, the activity as save() sends it, and the units the screen accepts and normalizes.
-import { deriveCollectionQuantity, validateCollectionActivity, withCurrentSetupVersion, type CollectionActivity, type CollectionActivityKind, type CollectionContext, type CollectionEvidenceMetadata, type CollectionPayload } from "../../../../packages/neuvetra-database/src/collection-contract"
+import { CollectionTextLimitError, deriveCollectionQuantity, validateCollectionActivityForSave, WITHDRAWN_REASON_PREFIX, withCurrentSetupVersion, type CollectionActivity, type CollectionActivityKind, type CollectionContext, type CollectionEvidenceMetadata, type CollectionPayload } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { isScope3CollectionKind, isScope3CompletionKind, SCOPE3_COLLECTION_UNITS, type Scope3CollectionKind } from "../../../../packages/neuvetra-database/src/scope3-collection"
 import type { CollectionZipLookup } from "./collection-api"
 import { ACTIVITY_FORM_TEXT_WO10 } from "./activity-form-text-wo10"
@@ -62,6 +62,28 @@ export function prepareActivityForSave(draft: CollectionActivity, completion = f
   return copy
 }
 
+/** BF-32: the form fields the server's text-limit refusals name (the save rule's field table, by path). */
+const TEXT_LIMIT_FIELDS: Readonly<Record<string, string>> = { sourceId: "source", reference: "reference", notes: "notes", estimateBasis: "estimateBasis", withdrawalReason: "withdrawalReason", correctionReason: "reason" }
+
+/** What save() sends as the correction reason: the typed reason, or "Withdrawn: " and the withdrawal reason; none on a first save. */
+export function correctionReasonFor(copy: CollectionActivity, correcting: boolean, reason: string): string | null {
+  return correcting ? copy.state === "withdrawn" ? `${WITHDRAWN_REASON_PREFIX}${copy.withdrawalReason}` : reason.trim() : null
+}
+
+/**
+ * BF-32 (F1): the shared save rule (NFC first, then count, named field, limit and excess; text the save leaves as the corrected
+ * version stored it is not re-checked), then the contract: exactly what the server applies, so a save the server accepts is never
+ * blocked here and text it refuses is refused with its words.
+ */
+export function contractProblem(copy: CollectionActivity, previous: CollectionActivity | null, correctionReason: string | null): { text: string; fields: string[] } | null {
+  try { validateCollectionActivityForSave(copy, previous, correctionReason); return null }
+  catch (cause) {
+    const text = cause instanceof Error ? cause.message : "This record can’t be saved."
+    const fields = cause instanceof CollectionTextLimitError ? (TEXT_LIMIT_FIELDS[cause.path] ? [TEXT_LIMIT_FIELDS[cause.path]!] : []) : [...(CONTRACT_FIELDS.find(([pattern]) => pattern.test(text))?.[1] ?? [])]
+    return { text, fields }
+  }
+}
+
 /** The Scope 3 forms' own pre-save problems (shown before any edit on a record opened by Fix). */
 export function activityPresaveProblems(draft: CollectionActivity): FormProblem[] {
   if (!isScope3CollectionKind(draft.kind) || draft.state !== "active") return []
@@ -77,6 +99,8 @@ export interface ActivitySaveState {
   zipLookup: CollectionZipLookup | null
   /** Schema 30 (0030's payload additions). */
   scope3Completion: boolean
+  /** BF-32: the version being corrected: text a save leaves as that version stored it is not re-checked (the server's rule). */
+  previous?: CollectionActivity | null
 }
 
 /**
@@ -123,8 +147,9 @@ export function activitySaveProblems(draft: CollectionActivity, state: ActivityS
   // contract's message ("Only estimated records carry an estimate basis.") is shipped and stays the server's, and Scope 1's.
   if (draft.quality === "estimated" && !draft.estimateBasis?.trim()) add(scope3 ? SAVE_TEXT_R2C.estimateBasisMissing : "Only estimated records carry an estimate basis.", "estimateBasis")
   if (problems.length === 0) {
-    try { validateCollectionActivity(prepareActivityForSave(withCurrentSetupVersion(draft, context), scope3Completion)) }
-    catch (cause) { const text = cause instanceof Error ? cause.message : "This record can’t be saved."; add(text, ...(CONTRACT_FIELDS.find(([pattern]) => pattern.test(text))?.[1] ?? [])) }
+    const prepared = prepareActivityForSave(withCurrentSetupVersion(draft, context), scope3Completion)
+    const refusal = contractProblem(prepared, state.previous ?? null, correctionReasonFor(prepared, state.correcting, state.reason))
+    if (refusal) add(refusal.text, ...refusal.fields)
   }
   return problems
 }

@@ -14,6 +14,7 @@ import {
   COLLECTION_EVIDENCE_BUCKET,
   COLLECTION_EVIDENCE_MAX_BYTES,
   COLLECTION_PROFILE,
+  CollectionTextLimitError,
   validateCollectionSaveInput,
   type CollectionActivityRecord,
   type CollectionActivityVersion,
@@ -129,13 +130,20 @@ async function readBoundedBytes(request: Request): Promise<Uint8Array<ArrayBuffe
   return bytes
 }
 
+/** BF-32: the file name limit is 255 characters, counted as everywhere else on the save path: NFC first, then UTF-16 code units. */
+const EVIDENCE_NAME_MAX = 255
 function originalName(request: Request): string {
   const encoded = request.headers.get("x-neuvetra-original-name")
-  if (!encoded || encoded.length > 1024) throw new RequestProblem(422, "Evidence file name is required.")
+  // The header is percent-encoded (up to 9 characters for one 3-byte character), so its length is not the name's: it is decoded first
+  // and only an absurd header is refused unread. HTTP stacks cap a header well below this.
+  if (!encoded) throw new RequestProblem(422, "Evidence file name is required.")
+  if (encoded.length > 16384) throw new RequestProblem(422, "Evidence file name is too long: the limit is 255 characters.", "text_too_long")
   let decoded: string
   try { decoded = decodeURIComponent(encoded) } catch { throw new RequestProblem(422, "Evidence file name is invalid.") }
   decoded = decoded.normalize("NFC")
-  if (!decoded.trim() || decoded.length > 255 || /[\u0000-\u001f\u007f-\u009f\ud800-\udfff]/u.test(decoded)) throw new RequestProblem(422, "Evidence file name is invalid.")
+  if (!decoded.trim()) throw new RequestProblem(422, "Evidence file name is required.")
+  if (/[\u0000-\u001f\u007f-\u009f\ud800-\udfff]/u.test(decoded)) throw new RequestProblem(422, "Evidence file name is invalid.")
+  if (decoded.length > EVIDENCE_NAME_MAX) throw new RequestProblem(422, new CollectionTextLimitError("Evidence file name", EVIDENCE_NAME_MAX, decoded.length, /[\ud800-\udbff][\udc00-\udfff]/.test(decoded) ? " Emoji and other rare characters count as 2 characters." : "").message, "text_too_long")
   return decoded
 }
 
@@ -242,8 +250,19 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
         }
         if (operation || versionId || request.method !== "POST") return fail(405, "Method not allowed.")
         const input = await jsonBody(request)
-        let validated: ReturnType<typeof validateCollectionSaveInput>
-        try { validated = validateCollectionSaveInput(input) } catch { throw new RequestProblem(422, "Invalid or unsupported collection record.") }
+        // BF-32 (F3): text the request leaves as the corrected version stored it is not re-validated, so the version being corrected is read first.
+        const sent = input as { expectedRevision?: unknown; expectedVersionId?: unknown } | null
+        let previous: unknown
+        if (typeof sent?.expectedVersionId === "string" && UUID.test(sent.expectedVersionId) && typeof sent.expectedRevision === "number" && sent.expectedRevision > 0)
+          previous = (await deps.database.findCollectionActivityVersion(actor.id, companyId, resourceId, sent.expectedVersionId.toLowerCase()).catch(() => null))?.activity
+        // BF-32: over-long text is refused by name, with the limit and how far over it is; every other refusal keeps its answer. The refusal is
+        // held, not thrown, until the database layer has looked for a replay: a request first sent before the rule that the database already
+        // saved is answered from its receipt (F4), and the database layer repeats the text rule for everything else.
+        let validated: ReturnType<typeof validateCollectionSaveInput> | null = null
+        try { validated = validateCollectionSaveInput(input, previous) } catch (error) {
+          if (!(error instanceof CollectionTextLimitError)) throw new RequestProblem(422, "Invalid or unsupported collection record.")
+        }
+        if (validated) {
         if (isScope3CollectionKind(validated.activity.kind)) {
           const schema = await (deps.schemaVersion?.() ?? 0)
           if (schema < STAGING_SCOPE3_SCHEMA_VERSION) throw new RequestProblem(503, "Scope 3 activity is not available yet.", "scope3_unavailable")
@@ -274,13 +293,15 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
             : saved !== undefined && saved.currentVersion.activity.state === "withdrawn" && saved.currentVersion.id.toLowerCase() === validated.expectedVersionId?.toLowerCase() && saved.currentVersion.revision === validated.expectedRevision
           if (activates && existing.filter(isActiveScope12Record).length >= MAX_ACTIVE_SCOPE12_RECORDS) throw new RequestProblem(422, RECORD_LIMIT_SAVE_TEXT, "record_limit_reached")
         }
+        }
         let saved: Awaited<ReturnType<typeof deps.database.saveCollectionActivity>>
         try { saved = await deps.database.saveCollectionActivity(actor.id, companyId, resourceId, input) }
         catch (error) {
           // BF-08 (BL-05): a unique violation on a FIRST save is the record ID, held by another company, unless this company has just
           // saved it itself (two saves racing), which is a true revision conflict.
           // BF-18: 0032's 23N32 (receipt mismatch) takes this branch exactly as 23505 did before 0032, until BF-28.
-          if (validated.expectedRevision === 0 && ["23505", "23N32"].includes((error as { code?: string }).code ?? "") && !(await deps.database.findCollectionActivities(actor.id, companyId)).some(record => record.id.toLowerCase() === resourceId))
+          if (error instanceof CollectionTextLimitError) throw new RequestProblem(422, error.message, error.code)
+          if ((validated?.expectedRevision ?? sent?.expectedRevision) === 0 && ["23505", "23N32"].includes((error as { code?: string }).code ?? "") && !(await deps.database.findCollectionActivities(actor.id, companyId)).some(record => record.id.toLowerCase() === resourceId))
             throw new RequestProblem(409, RECORD_ID_UNAVAILABLE_TEXT, "record_id_unavailable")
           throw error
         }

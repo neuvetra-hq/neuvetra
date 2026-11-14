@@ -6,6 +6,8 @@ import {
   validateCollectionActivity,
   validateCollectionEvidenceUpload,
   validateCollectionSaveInput,
+  validateCollectionSaveInputBeforeTextRule,
+  type CollectionActivity,
   type CollectionActivityRecord,
   type CollectionContext,
   type CollectionActivitySaveInput,
@@ -70,8 +72,35 @@ export async function saveCollectionActivity(tx:WorkspaceSql,actorId:string,comp
   const actor=await tx.query<{id:string}>('select neuvetra.current_user_id() id')
   if(actor.rows[0]?.id!==actorId)throw Object.assign(new Error('Collection activity unavailable.'),{code:'42501'})
   await holdManagerAuthorization(tx,companyId,'Collection activity unavailable.')
-  const valid:CollectionActivitySaveInput=validateCollectionSaveInput(input)
-  const receipt=await tx.query<{record_id:string;version_id:string;replayed:boolean}>('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[companyId,recordId,JSON.stringify(valid)])
+  const sent=input as {idempotencyKey?:unknown;expectedRevision?:unknown;expectedVersionId?:unknown}|null
+  type Receipt={record_id:string;version_id:string;replayed:boolean}
+  // BF-32 (F4): a request first sent before the text rule is recognised from its receipt before the rule is applied: the database holds its
+  // fingerprint under the old form (no normalising before the check), so the replay is looked up in that form, and only when this
+  // company already holds a receipt for the key (a request with no receipt is never saved in the old form). A receipt that does not match
+  // is the same conflict as before, and the request is then judged by the rule as usual.
+  let receipt:{rows:Receipt[]}|null=null
+  if(typeof sent?.idempotencyKey==='string'&&UUID.test(sent.idempotencyKey)){
+    const known=await tx.query<{record_id:string}>('select record_id from neuvetra.collection_activity_requests where company_id=$1 and idempotency_key=$2',[companyId,sent.idempotencyKey])
+    if(known.rows[0]?.record_id===recordId){
+      let earlier:CollectionActivitySaveInput|null=null
+      try{earlier=validateCollectionSaveInputBeforeTextRule(input)}catch{earlier=null}
+      if(earlier){
+        await tx.exec('savepoint collection_replay')
+        try{
+          const replay=await tx.query<Receipt>('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[companyId,recordId,JSON.stringify(earlier)])
+          if(replay.rows[0]?.replayed===true){await tx.exec('release savepoint collection_replay');receipt=replay}else await tx.exec('rollback to savepoint collection_replay')
+        }catch{await tx.exec('rollback to savepoint collection_replay')}
+      }
+    }
+  }
+  if(receipt===null){
+    // BF-32 (F3): text the request leaves as the corrected version stored it is not re-validated.
+    let previous:CollectionActivity|undefined
+    if(typeof sent?.expectedVersionId==='string'&&UUID.test(sent.expectedVersionId)&&typeof sent.expectedRevision==='number'&&sent.expectedRevision>0)
+      previous=(await readCollectionActivityVersion(tx,companyId,recordId,sent.expectedVersionId))?.activity
+    const valid:CollectionActivitySaveInput=validateCollectionSaveInput(input,previous)
+    receipt=await tx.query<Receipt>('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[companyId,recordId,JSON.stringify(valid)])
+  }
   const row=receipt.rows[0]
   if(!row)throw new Error('Collection activity save returned no receipt.')
   const record=(await readCollectionActivities(tx,companyId,row.record_id)).find(item=>item.id===row.record_id)

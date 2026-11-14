@@ -34,7 +34,7 @@ COPY packages/neuvetra-database/src/m77-contract.ts packages/neuvetra-database/s
 COPY packages/neuvetra-database/src/m78-contract.ts packages/neuvetra-database/src/m78-validation.ts packages/neuvetra-database/src/m78-reconciliation.ts packages/neuvetra-database/src/m78-policy.ts packages/neuvetra-database/src/m78-report.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/m80-contract.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/company-setup-contract.ts ./packages/neuvetra-database/src/
-COPY packages/neuvetra-database/src/collection-contract.ts packages/neuvetra-database/src/collection-engine-input.ts packages/neuvetra-database/src/collection-duplicates.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/collection-contract.ts packages/neuvetra-database/src/collection-text-rule.ts packages/neuvetra-database/src/collection-engine-input.ts packages/neuvetra-database/src/collection-duplicates.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/scope3-collection-contract.ts packages/neuvetra-database/src/scope3-collection.ts packages/neuvetra-database/src/scope3-coverage.ts ./packages/neuvetra-database/src/
 # Scope 3 completion I-01: the method catalog and texts that scope3-coverage.ts re-exports.
 # Scope 3 completion I-02: the assessment contract (scope3-text.ts is copied once, above).
@@ -130,7 +130,7 @@ COPY packages/neuvetra-database/src/migrations/0023_company_setup.sql ./packages
 COPY apps/site-api/src/workspace/collection-routes.ts apps/site-api/src/workspace/collection-storage.ts apps/site-api/src/workspace/collection-zip.ts apps/site-api/src/workspace/collection-results-routes.ts apps/site-api/src/workspace/scope3-results-routes.ts ./apps/site-api/src/workspace/
 COPY apps/site-api/src/calculation/method-engine-runner.ts apps/site-api/src/calculation/scope1-authority.ts apps/site-api/src/calculation/scope2-authority.ts apps/site-api/src/calculation/scope3-authority.ts ./apps/site-api/src/calculation/
 COPY apps/site-api/src/calculation/scope1_engine.py apps/site-api/src/calculation/scope2_engine.py apps/site-api/src/calculation/scope3_engine.py apps/site-api/src/calculation/scope12_batch.py ./apps/site-api/src/calculation/
-COPY packages/neuvetra-database/src/collection.ts packages/neuvetra-database/src/collection-contract.ts packages/neuvetra-database/src/collection-engine-input.ts packages/neuvetra-database/src/collection-duplicates.ts packages/neuvetra-database/src/method-reference.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/collection.ts packages/neuvetra-database/src/collection-contract.ts packages/neuvetra-database/src/collection-text-rule.ts packages/neuvetra-database/src/collection-engine-input.ts packages/neuvetra-database/src/collection-duplicates.ts packages/neuvetra-database/src/method-reference.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/scope3-collection-contract.ts packages/neuvetra-database/src/scope3-collection.ts packages/neuvetra-database/src/scope3-coverage.ts packages/neuvetra-database/src/scope3-engine-output.ts ./packages/neuvetra-database/src/
 # Scope 3 completion I-01: the method catalog and texts used by the coverage boundary and the results route, and the
 # per-company results scheduler both results routes import (missing from the image since it was added).

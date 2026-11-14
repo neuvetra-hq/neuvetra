@@ -11,7 +11,8 @@
 import { createHash } from 'node:crypto'
 import type { WorkspaceSql } from './workspace'
 import { readCollectionActivities, readCollectionEvidence } from './collection'
-import { validateCollectionActivity, type CollectionActivityRecord } from './collection-contract'
+import { limitedText } from './collection-text-rule'
+import { validateCollectionActivityForSave, type CollectionActivityRecord } from './collection-contract'
 import { scope3ReportingYearOf } from './scope3-assessment-contract'
 import { scope3SpendNaicsAllowed, SCOPE3_SPEND_IMPORT_CATEGORIES, type PurchaseSpendCollectionPayload, type Scope3SpendMappingRequest } from './scope3-collection-contract'
 import { scope3SpendMappingKeyInput } from './scope3-collection'
@@ -190,8 +191,12 @@ export function validateScope3SpendMappingSaveInput(value: unknown): Scope3Spend
   const scope = v.scope === undefined || v.scope === 'line' ? 'line' as const : v.scope === 'group' ? 'group' as const : bad()
   if (!Number.isInteger(v.expectedRevision) || (v.expectedRevision as number) < 0 || (v.expectedRevision as number) > 999) bad()
   if (!exactKeys(m, ['glAccount', 'vendor', 'description', 'category', 'naicsCode', 'marginChoice'])) bad()
-  const text = (x: unknown, max: number) => typeof x === 'string' && x.length <= max && !/[\u0000-\u001f\u007f-\u009f]/u.test(x)
-  if (!text(m.glAccount, 120) || !text(m.vendor, 200) || !text(m.description, 200) || !(SCOPE3_SPEND_IMPORT_CATEGORIES as readonly unknown[]).includes(m.category)
+  // BF-32: counted after NFC, and an over-long text is named (the limits are 0030's, which count characters of the stored, normalised text).
+  const text = (x: unknown) => typeof x === 'string' && !/[\u0000-\u001f\u007f-\u009f]/u.test(x)
+  if (text(m.glAccount)) limitedText(m.glAccount as string, 120, 'GL account')
+  if (text(m.vendor)) limitedText(m.vendor as string, 200, 'Vendor')
+  if (text(m.description)) limitedText(m.description as string, 200, 'Description')
+  if (!text(m.glAccount) || !text(m.vendor) || !text(m.description) || !(SCOPE3_SPEND_IMPORT_CATEGORIES as readonly unknown[]).includes(m.category)
     || typeof m.naicsCode !== 'string' || !/^\d{6}$/.test(m.naicsCode) || !scope3SpendNaicsAllowed(m.category as number, m.naicsCode) || !['with_margins', 'without_margins'].includes(m.marginChoice as string)) bad()
   for (const flag of [v.categoryConfirmed, v.activityOverlapConfirmed]) if (flag !== null && typeof flag !== 'boolean') bad()
   // A group mapping is stored with an empty description and needs a vendor or an account; a line mapping a description.
@@ -276,9 +281,10 @@ export async function withdrawScope3SpendImport(tx: WorkspaceSql, actorId: strin
   if (!UUID.test(actorId) || !UUID.test(companyId) || !UUID.test(importId)) throw problem('Invalid Scope 3 spend import withdrawal.', '22023')
   if (!exactKeys(input, ['reason'])) throw problem('Invalid Scope 3 spend import withdrawal.', '22023')
   const reason = (input as { reason: unknown }).reason
-  if (typeof reason !== 'string' || reason.trim().length < 3 || reason.length > 2000 || /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/u.test(reason)) throw problem('Say why this import is withdrawn (at least 3 characters).', '22023')
+  if (typeof reason !== 'string' || reason.trim().length < 3 || /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/u.test(reason)) throw problem('Say why this import is withdrawn (at least 3 characters).', '22023')
+  const normalizedReason = limitedText(reason, 2000, 'Withdrawal reason', 'reason')
   await checkActor(tx, actorId, 'Scope 3 spend import withdrawal unavailable.')
-  const row = (await tx.query<{ import_id: string; withdrawn: number; already_withdrawn: number }>('select * from neuvetra.withdraw_scope3_spend_import($1,$2::text::jsonb)', [companyId, JSON.stringify({ importId, reason: reason.normalize('NFC') })])).rows[0]
+  const row = (await tx.query<{ import_id: string; withdrawn: number; already_withdrawn: number }>('select * from neuvetra.withdraw_scope3_spend_import($1,$2::text::jsonb)', [companyId, JSON.stringify({ importId, reason: normalizedReason })])).rows[0]
   if (!row || row.import_id !== importId) throw new Error('Scope 3 spend import withdrawal returned no receipt.')
   return { importId: row.import_id, withdrawn: row.withdrawn, alreadyWithdrawn: row.already_withdrawn }
 }
@@ -293,9 +299,10 @@ export async function withdrawScope3SpendImport(tx: WorkspaceSql, actorId: strin
  */
 export async function saveScope3SpendCorrections(tx: WorkspaceSql, actorId: string, companyId: string, input: { reason: string; corrections: Array<{ recordId: string; expectedVersionId: string; activity: unknown }> }): Promise<{ corrected: number; unchanged: number }> {
   if (!UUID.test(actorId) || !UUID.test(companyId)) throw problem('Invalid Scope 3 spend corrections.', '22023')
-  if (typeof input.reason !== 'string' || input.reason.trim().length < 3 || input.reason.length > 2000 || !Array.isArray(input.corrections) || input.corrections.length < 1 || input.corrections.length > 3000
+  if (typeof input.reason !== 'string' || input.reason.trim().length < 3 || !Array.isArray(input.corrections) || input.corrections.length < 1 || input.corrections.length > 3000
     || input.corrections.some(item => !exactKeys(item, ['recordId', 'expectedVersionId', 'activity']) || !UUID.test(item.recordId) || !UUID.test(item.expectedVersionId))) throw problem('Invalid Scope 3 spend corrections.', '22023')
-  const corrections = input.corrections.map(item => ({ recordId: item.recordId, expectedVersionId: item.expectedVersionId, activity: validateCollectionActivity(item.activity) }))
+  limitedText(input.reason, 2000, 'Correction reason', 'correctionReason')
+  const corrections = input.corrections.map(item => ({ recordId: item.recordId, expectedVersionId: item.expectedVersionId, activity: validateCollectionActivityForSave(item.activity) }))
   await checkActor(tx, actorId, 'Scope 3 spend corrections unavailable.')
   const row = (await tx.query<{ corrected: number; unchanged: number }>('select * from neuvetra.save_scope3_spend_corrections($1,$2::text::jsonb)', [companyId, JSON.stringify({ reason: input.reason.normalize('NFC'), corrections })])).rows[0]
   if (!row) throw new Error('Scope 3 spend corrections returned no receipt.')

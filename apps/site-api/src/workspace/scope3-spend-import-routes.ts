@@ -5,6 +5,7 @@ import {
   type PurchaseSpendCollectionPayload, type Scope3SpendLineRef, parseScope3SpendCsv, SCOPE3_SPEND_IMPORT_MAX_BYTES,
   type Scope3SpendImportProblem, type Scope3SpendParse, scope3SpendConversionOf, scope3SpendNotesWithoutConversion,
   type Scope3SpendConversion, type Scope3SpendImportRecord, type Scope3SpendMappingRecord, SCOPE3_CAPACITY_TEXT,
+  CollectionTextLimitError,
 } from "@neuvetra/database"
 import type { AuthenticatedUser } from "../lib/auth"
 // Round 2b integration (ENG-14): the shared Scope 3 route helpers (prelude, body readers, UUID, responses).
@@ -295,6 +296,8 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
       return respond(result.replayed ? 200 : 201, body)
     } catch (error) {
       if (error instanceof Scope3RouteProblem) return respond(error.status, error.body)
+      // BF-32: over-long text (counted after NFC) is a named 422.
+      if (error instanceof CollectionTextLimitError) return respond(422, { code: error.code, error: error.message })
       const code = (error as { code?: string }).code
       if (code === "42501") return respond(404, NOT_FOUND)
       // The import transaction has already committed before its separate review read.

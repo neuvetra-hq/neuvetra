@@ -174,12 +174,13 @@ describe('0029: Scope 3 collection in the database (D1)', () => {
     for (const value of invalid) for (const [kind, field] of [['waste', 'material'], ['waste', 'treatment'], ['transport', 'vehicle'], ['business_travel', 'mode'], ['business_travel', 'haulBasis'], ['employee_commuting', 'mode']] as const) {
       expect([kind, field, JSON.stringify(value), (() => { try { validateCollectionSaveInput(request(with_(kind, field, value))); return 'accepted' } catch { return 'refused' } })()]).toEqual([kind, field, JSON.stringify(value), 'refused'])
     }
-    // Characters outside the BMP (paired surrogates), decomposed accents, tabs and line breaks are storable, and are kept as typed.
+    // Characters outside the BMP (paired surrogates), decomposed accents, tabs and line breaks are storable, and are kept as typed (accents are stored composed, BF-32).
     for (const value of ['recycled \u267b\ufe0f \ud83d\ude9a', 'cafe\u0301 waste', 'line one\nline two\tend']) {
       const activity = with_('waste', 'material', value)
       const saved = await asUser(owner, tx => saveCollectionActivity(tx, owner, company, crypto.randomUUID(), request(activity)))
       const [read] = (await asUser(owner, tx => readCollectionActivities(tx, company))).filter(record => record.id === saved.record.id)
-      expect((read!.currentVersion.activity.payload as { material: string }).material).toBe(value)
+      // BF-32: saved text is stored in NFC (the one save-path rule), so a decomposed accent reads back composed; everything else is as typed.
+      expect((read!.currentVersion.activity.payload as { material: string }).material).toBe(value.normalize('NFC'))
     }
   })
 
