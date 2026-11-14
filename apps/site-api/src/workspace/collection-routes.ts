@@ -6,6 +6,8 @@ import {
   scope3ActivityAvailable,
   scope3KindsAvailable,
   scope12PayloadAvailable,
+  scope3OverlapConfirmationAvailable,
+  STAGING_INSTRUMENT_IDENTITY_SCHEMA_VERSION,
   STAGING_INTEGRITY_GUARDS_SCHEMA_VERSION,
   STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION,
   STAGING_SCOPE3_SCHEMA_VERSION,
@@ -170,7 +172,9 @@ function mappedError(error: unknown, readable = false): Response {
   if (error instanceof RequestProblem) return fail(error.status, error.publicMessage, error.publicCode)
   const code = (error as { code?: string }).code
   if (code === "42501") return readable ? fail(403, READ_ONLY_TEXT, "read_only") : fail(404, "Collection resource not found.")
-  if (["23505", "40001", "23P01"].includes(code ?? "")) return fail(409, "Collection record changed. Refresh and try again.", "revision_conflict")
+  // BF-18 (0032) raises 23N32 for a receipt mismatch (an idempotency key reused for different content); until BF-28 gives it
+  // its own answer it gets exactly the answer 23505 got before 0032, so a save answers the same at schema 31 and 32.
+  if (["23505", "23N32", "40001", "23P01"].includes(code ?? "")) return fail(409, "Collection record changed. Refresh and try again.", "revision_conflict")
   if (code === "54000") return fail(422, "Collection history capacity reached.", "history_limit")
   // Round 3 (owner decision 7, EN-3): 0030 refuses a Scope 3 save that adds a line past the 3,000-line cap.
   if (code === "54N30") return fail(409, SCOPE3_CAPACITY_TEXT.lineBudgetSaveRefused(MAX_SCOPE3_LINES), "line_budget_exceeded")
@@ -211,7 +215,10 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
         const schema = await (deps.schemaVersion?.() ?? 0)
         // `kinds`: the Scope 3 kinds this database stores; `completion`: the 0030 payload features (data quality, travel v2).
         // `duplicateConfirmation` (BF-09): the database stores a Scope 1 or 2 payload's `duplicateConfirmedDistinct` (schema 31).
-        return respond(200, { profile: COLLECTION_PROFILE, context, capabilities: { calculations: false, zipLookup: "available", duplicateConfirmation: schema >= STAGING_INTEGRITY_GUARDS_SCHEMA_VERSION, scope3: { gridLossLineage: true, calculations: schema >= STAGING_SCOPE3_SCHEMA_VERSION, kinds: scope3KindsAvailable(schema), completion: schema >= STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION } } })
+        // `instrumentIdentity` and `scope3.overlapConfirmation` (BF-18): the database stores an instrument's `instrumentId`,
+        // `registry` and `faceMwh` (BF-11) and a Scope 3 payload's `scope2OverlapConfirmedDistinct` (BF-17) (schema 32).
+        const round2 = schema >= STAGING_INSTRUMENT_IDENTITY_SCHEMA_VERSION
+        return respond(200, { profile: COLLECTION_PROFILE, context, capabilities: { calculations: false, zipLookup: "available", duplicateConfirmation: schema >= STAGING_INTEGRITY_GUARDS_SCHEMA_VERSION, instrumentIdentity: round2, scope3: { gridLossLineage: true, calculations: schema >= STAGING_SCOPE3_SCHEMA_VERSION, kinds: scope3KindsAvailable(schema), completion: schema >= STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION, overlapConfirmation: round2 } } })
       }
 
       if (collection === "zip-lookup") {
@@ -240,8 +247,11 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
           const schema = await (deps.schemaVersion?.() ?? 0)
           if (schema < STAGING_SCOPE3_SCHEMA_VERSION) throw new RequestProblem(503, "Scope 3 activity is not available yet.", "scope3_unavailable")
           if (!scope3ActivityAvailable(validated.activity, schema)) throw new RequestProblem(503, "This record type needs database schema 30.", "scope3_schema_30_required")
+          // BF-18: below schema 32 the database refuses `scope2OverlapConfirmedDistinct`; refuse first, with the answer saves got before 0032.
+          if (!scope3OverlapConfirmationAvailable(validated.activity.payload, schema)) throw new RequestProblem(422, "Invalid or unsupported collection record.")
         } else if (!scope12PayloadAvailable(validated.activity.payload, 0) && !scope12PayloadAvailable(validated.activity.payload, await (deps.schemaVersion?.() ?? 0))) {
           // BF-09: below schema 31 the database refuses `duplicateConfirmedDistinct`; refuse first, with the answer saves got before 0031.
+          // BF-18: the same for an instrument's `instrumentId`, `registry` or `faceMwh` below schema 32.
           throw new RequestProblem(422, "Invalid or unsupported collection record.")
         }
         if (validated.activity.kind === "electricity") {
@@ -268,7 +278,8 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
         catch (error) {
           // BF-08 (BL-05): a unique violation on a FIRST save is the record ID, held by another company, unless this company has just
           // saved it itself (two saves racing), which is a true revision conflict.
-          if (validated.expectedRevision === 0 && (error as { code?: string }).code === "23505" && !(await deps.database.findCollectionActivities(actor.id, companyId)).some(record => record.id.toLowerCase() === resourceId))
+          // BF-18: 0032's 23N32 (receipt mismatch) takes this branch exactly as 23505 did before 0032, until BF-28.
+          if (validated.expectedRevision === 0 && ["23505", "23N32"].includes((error as { code?: string }).code ?? "") && !(await deps.database.findCollectionActivities(actor.id, companyId)).some(record => record.id.toLowerCase() === resourceId))
             throw new RequestProblem(409, RECORD_ID_UNAVAILABLE_TEXT, "record_id_unavailable")
           throw error
         }

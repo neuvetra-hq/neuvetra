@@ -273,6 +273,7 @@ apps/site-web/src/m71-local-preview.tsx
 !packages/neuvetra-database/src/migrations/0029_scope3_collection.sql
 !packages/neuvetra-database/src/migrations/0030_scope3_completion.sql
 !packages/neuvetra-database/src/migrations/0031_integrity_guards.sql
+!packages/neuvetra-database/src/migrations/0032_instrument_identity_and_bindings.sql
 !apps/site-api/src/workspace/collection-routes.ts
 !apps/site-api/src/workspace/collection-storage.ts
 !apps/site-api/src/workspace/collection-zip.ts
