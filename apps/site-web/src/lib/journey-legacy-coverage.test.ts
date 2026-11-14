@@ -10,7 +10,7 @@ function setupView(category = "stationary_combustion") {
   return { currentVersion: { setup } } as CompanySetupView
 }
 const site = createSyntheticCompanySetup().locations[0]!.id
-const record = (kind: string, state: JourneyRecord["state"] = "ready", locationId = site): JourneyRecord => ({ id: kind, kind, locationId, state, label: "Synthetic", sourceId: "Synthetic", site: "Synthetic depot", reasons: [], evidenceCount: 0, quality: "unknown" })
+const record = (kind: string, state: JourneyRecord["state"] = "ready", locationId = site): JourneyRecord => ({ id: kind, kind, locationId, state, label: "Synthetic", sourceId: "Synthetic", site: "Synthetic depot", reasons: [], evidenceCount: 0, quality: "unknown", periodStart: "2025-01-01", periodEndExclusive: "2026-01-01" })
 const gaps = (view: CompanySetupView, records: JourneyRecord[]) => coverageGaps(view, records).filter(gap => gap.id === "screen-stationary")
 
 describe("legacy source coverage", () => {

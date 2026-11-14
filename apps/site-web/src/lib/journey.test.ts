@@ -168,7 +168,7 @@ describe("journey progress", () => {
   test("setup answers without matching records are gaps, never complete", () => {
     const office = "29400000-0000-4000-8000-000000000001"
     const view = { currentVersion: { setup: { screening: [{ id: "s3", scope: 1, category: "Road & off-road vehicles", state: "yes", details: "" }, { id: "s4", scope: 1, category: "Cooling & fire suppression", state: "no", details: "" }], locations: [{ id: office, name: "Office", inclusion: "included", operatorDetails: "" }] } } } as never
-    const gas: JourneyRecord = { id: "r", kind: "natural_gas", label: "Natural gas", sourceId: "G", locationId: office, site: "Office", state: "ready", reasons: [], evidenceCount: 1, quality: "actual" }
+    const gas: JourneyRecord = { id: "r", kind: "natural_gas", label: "Natural gas", sourceId: "G", locationId: office, site: "Office", state: "ready", reasons: [], evidenceCount: 1, quality: "actual", periodStart: "2025-01-01", periodEndExclusive: "2026-01-01" }
     const gaps = coverageGaps(view, [gas])
     expect(gaps.map(gap => gap.id)).toEqual(["screen-s3", `electricity-${office}`])
     expect(gaps[0]!.title).toBe("Setup says you have vehicles, but there are no vehicle records yet")
@@ -243,7 +243,7 @@ describe("Scope 3 screening rows in company setup", () => {
     expect(setupMissing(withScope3)).toEqual(setupMissing(without))
     expect(setupMissing(withScope3)).toEqual([])
     expect(coverageGaps(withScope3, [])).toEqual(coverageGaps(without, []))
-    const gas: JourneyRecord = { id: "r", kind: "natural_gas", label: "Natural gas", sourceId: "G", locationId: office, site: "Office", state: "ready", reasons: [], evidenceCount: 1, quality: "actual" }
+    const gas: JourneyRecord = { id: "r", kind: "natural_gas", label: "Natural gas", sourceId: "G", locationId: office, site: "Office", state: "ready", reasons: [], evidenceCount: 1, quality: "actual", periodStart: "2025-01-01", periodEndExclusive: "2026-01-01" }
     expect(coverageGaps(withScope3, [gas, { ...gas, id: "e", kind: "electricity" }])).toEqual([])
   })
 })
