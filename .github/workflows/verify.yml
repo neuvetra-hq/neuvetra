@@ -314,6 +314,10 @@ jobs:
           '
       - name: Verify pinned fugitive authority inside the offline image
         run: docker run --rm --network none --entrypoint bun neuvetra-m63:${{ github.sha }} tools/staging/m77-image-smoke.ts
+      # BI-01b: one real calculate_many call per scope through the pinned scope12_batch.py, built as the staged server builds
+      # its results engines; a missing or mis-pinned batch entry point fails here instead of as 503s on /results.
+      - name: Verify Scope 1 and 2 batch results engines inside the offline image
+        run: docker run --rm --network none --entrypoint bun neuvetra-m63:${{ github.sha }} tools/staging/scope12-batch-image-smoke.ts
       - name: Refuse ordinary container startup without explicit staging configuration
         run: |
           if docker run --rm --network none neuvetra-m63:${{ github.sha }}; then

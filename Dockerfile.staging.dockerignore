@@ -187,6 +187,7 @@ apps/site-web/src/m71-local-preview.tsx
 !apps/site-api/src/calculation/m77_fugitive.py
 !tools/staging/
 !tools/staging/m77-image-smoke.ts
+!tools/staging/scope12-batch-image-smoke.ts
 
 !packages/neuvetra-database/src/m78.ts
 !packages/neuvetra-database/src/m78-contract.ts

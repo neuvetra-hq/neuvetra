@@ -61,6 +61,9 @@ def item_text(engine: types.ModuleType, name: str, item) -> str:
         return '{"status":"error","code":"%s_engine_unavailable"}' % name
 
 
+UNREADABLE = object()  # an item whose own text cannot be parsed (BI-01b: nested deeper than the parser allows)
+
+
 def run(request) -> str:
     if not isinstance(request, dict) or set(request) != {'action', 'engine', 'items'} or request['action'] != 'calculate_many' or request['engine'] not in ENGINES:
         raise Refused('invalid_request')
@@ -68,7 +71,54 @@ def run(request) -> str:
     if not isinstance(items, list) or not 1 <= len(items) <= MAX_ITEMS:
         raise Refused('invalid_request')
     engine = load_engine(request['engine'])
-    return '{"results":[' + ','.join(item_text(engine, request['engine'], item) for item in items) + '],"status":"ok"}'
+    return '{"results":[' + ','.join(
+        ('{"status":"error","code":"%s_engine_unavailable"}' % request['engine']) if item is UNREADABLE else item_text(engine, request['engine'], item)
+        for item in items) + '],"status":"ok"}'
+
+
+def item_texts(text: str, start: int) -> tuple:
+    """Splits a JSON array, from the character after its '[', into its elements' texts without parsing them (no recursion),
+    and returns them with the index just after the closing ']'."""
+    out, depth, in_string, escaped, begin, i = [], 0, False, False, start, start
+    while i < len(text):
+        c = text[i]
+        if in_string:
+            if escaped: escaped = False
+            elif c == '\\': escaped = True
+            elif c == '"': in_string = False
+        elif c == '"': in_string = True
+        elif c in '[{': depth += 1
+        elif c in ']}':
+            if depth == 0:
+                if c != ']': raise ValueError('malformed array')
+                if text[begin:i].strip() or out: out.append(text[begin:i])
+                return out, i + 1
+            depth -= 1
+        elif c == ',' and depth == 0:
+            out.append(text[begin:i]); begin = i + 1
+        i += 1
+    raise ValueError('unterminated array')
+
+
+def run_split(raw: bytes) -> str:
+    """BI-01b: the request nests deeper than the parser allows. Each item is then read on its own, so an item that cannot be
+    read fails only itself, as its own per-record call would (exit 2), and every other item is answered exactly as before.
+    Only the envelope the bridge writes is accepted here: {"action":"calculate_many","engine":"scope1|scope2","items":[...]}."""
+    text = raw.decode('utf-8')
+    for name in ENGINES:
+        head = '{"action":"calculate_many","engine":"%s","items":[' % name
+        if text.startswith(head):
+            texts, end = item_texts(text, len(head))
+            if text[end:].strip() != '}':
+                raise Refused('invalid_request')
+            items = []
+            for item in texts:
+                try:
+                    items.append(json.loads(item))
+                except RecursionError:
+                    items.append(UNREADABLE)
+            return run({'action': 'calculate_many', 'engine': name, 'items': items})
+    raise Refused('invalid_request')
 
 
 if __name__ == '__main__':
@@ -76,7 +126,12 @@ if __name__ == '__main__':
         raw = sys.stdin.buffer.read(MAX_REQUEST_BYTES + 1)
         if len(raw) > MAX_REQUEST_BYTES:
             raise Refused('request_too_large')
-        print(run(json.loads(raw)))
+        try:
+            request = json.loads(raw)
+        except RecursionError:
+            print(run_split(raw))
+        else:
+            print(run(request))
     except Refused as e:
         print(canonical({'status': 'refused', 'code': e.code}))
         sys.exit(1)

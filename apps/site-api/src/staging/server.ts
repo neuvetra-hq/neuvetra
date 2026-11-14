@@ -28,9 +28,7 @@ import { createWorkspaceStore } from "../workspace/service"
 import { createM80BetaRoutes } from "../workspace/m80-beta-routes"
 import { createCompanySetupRoutes } from "../workspace/company-setup-routes"
 import { createCollectionRoutes, type CollectionEvidenceStorage } from "../workspace/collection-routes"
-import { createCollectionResultsRoutes, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256, REVIEWED_SCOPE12_BATCH_SHA256, type CollectionResultsEngines } from "../workspace/collection-results-routes"
-import { createScope1Engine } from "../calculation/scope1-authority"
-import { createScope2Engine } from "../calculation/scope2-authority"
+import { createCollectionResultsRoutes, reviewedResultsEngines, type CollectionResultsEngines } from "../workspace/collection-results-routes"
 import { createScope3Engine } from "../calculation/scope3-authority"
 import { createScope3ResultsRoutes, createScope3ResultsRunner, REVIEWED_SCOPE3_ENGINE_SHA256, type Scope3ResultsEngine } from "../workspace/scope3-results-routes"
 import { createSupabaseCollectionEvidenceStorage } from "../workspace/collection-storage"
@@ -240,7 +238,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   // features from 30; below that the route refuses the save with 503 before any SQL.
   const collectionRoutes=createCollectionRoutes({database,validateUser,origin:config.origin,evidenceStorage,schemaVersion:async()=>(await databaseReadiness()).schemaVersion})
   // Board 2026-09-29: draft numbers from unreleased methods only in this private synthetic staging server (profile checked above).
-  const resultsRoutes=createCollectionResultsRoutes({database,validateUser,origin:config.origin,environment:"synthetic_staging",engines:overrides.resultsEngines ?? { scope1: createScope1Engine({ expectedEngineSha256: REVIEWED_SCOPE1_ENGINE_SHA256, expectedBatchSha256: REVIEWED_SCOPE12_BATCH_SHA256 }), scope2: createScope2Engine({ expectedEngineSha256: REVIEWED_SCOPE2_ENGINE_SHA256, expectedBatchSha256: REVIEWED_SCOPE12_BATCH_SHA256 }) }})
+  const resultsRoutes=createCollectionResultsRoutes({database,validateUser,origin:config.origin,environment:"synthetic_staging",engines:overrides.resultsEngines ?? reviewedResultsEngines()})
   // I-04: Scope 3 results read the category assessments only when the database is at schema 30 (0030); below it, never.
   // I-10: the results route and the report route share one runner, so a frozen report version holds exactly the figures
   // /results/scope3 gives (one run per company at a time).
