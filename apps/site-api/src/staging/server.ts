@@ -28,7 +28,7 @@ import { createWorkspaceStore } from "../workspace/service"
 import { createM80BetaRoutes } from "../workspace/m80-beta-routes"
 import { createCompanySetupRoutes } from "../workspace/company-setup-routes"
 import { createCollectionRoutes, type CollectionEvidenceStorage } from "../workspace/collection-routes"
-import { createCollectionResultsRoutes, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256, type CollectionResultsEngines } from "../workspace/collection-results-routes"
+import { createCollectionResultsRoutes, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256, REVIEWED_SCOPE12_BATCH_SHA256, type CollectionResultsEngines } from "../workspace/collection-results-routes"
 import { createScope1Engine } from "../calculation/scope1-authority"
 import { createScope2Engine } from "../calculation/scope2-authority"
 import { createScope3Engine } from "../calculation/scope3-authority"
@@ -240,7 +240,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   // features from 30; below that the route refuses the save with 503 before any SQL.
   const collectionRoutes=createCollectionRoutes({database,validateUser,origin:config.origin,evidenceStorage,schemaVersion:async()=>(await databaseReadiness()).schemaVersion})
   // Board 2026-09-29: draft numbers from unreleased methods only in this private synthetic staging server (profile checked above).
-  const resultsRoutes=createCollectionResultsRoutes({database,validateUser,origin:config.origin,environment:"synthetic_staging",engines:overrides.resultsEngines ?? { scope1: createScope1Engine({ expectedEngineSha256: REVIEWED_SCOPE1_ENGINE_SHA256 }), scope2: createScope2Engine({ expectedEngineSha256: REVIEWED_SCOPE2_ENGINE_SHA256 }) }})
+  const resultsRoutes=createCollectionResultsRoutes({database,validateUser,origin:config.origin,environment:"synthetic_staging",engines:overrides.resultsEngines ?? { scope1: createScope1Engine({ expectedEngineSha256: REVIEWED_SCOPE1_ENGINE_SHA256, expectedBatchSha256: REVIEWED_SCOPE12_BATCH_SHA256 }), scope2: createScope2Engine({ expectedEngineSha256: REVIEWED_SCOPE2_ENGINE_SHA256, expectedBatchSha256: REVIEWED_SCOPE12_BATCH_SHA256 }) }})
   // I-04: Scope 3 results read the category assessments only when the database is at schema 30 (0030); below it, never.
   // I-10: the results route and the report route share one runner, so a frozen report version holds exactly the figures
   // /results/scope3 gives (one run per company at a time).
@@ -298,6 +298,9 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
     // the wait behind a run already in progress for the company). Every other request keeps the listener's 30 s.
     if (request.method === "POST" && SCOPE3_REPORT_PREPARE_ROUTE.test(url.pathname)) options.extendTimeout?.(SCOPE3_REPORT_PREPARE_TIMEOUT_SECONDS)
     if (isGet && SCOPE3_RESULTS_ROUTE.test(url.pathname)) options.extendTimeout?.(SCOPE3_RESULTS_TIMEOUT_SECONDS)
+    // BI-01: the Scope 1 and 2 results route gets the same allowance (one run has a 25 s budget, and a request that arrives
+    // while a run is in progress for the company waits for it first).
+    if (isGet && COLLECTION_RESULTS_ROUTE.test(url.pathname)) options.extendTimeout?.(SCOPE3_RESULTS_TIMEOUT_SECONDS)
     // Collection and draft-results SQL exist from schema 27 (0027), so both stay
     // available at 28, 29 and 30. Scope 3 records and Scope 3 results exist only
     // from 29 (0029): below it they are refused here, and the collection route
@@ -446,6 +449,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
 export const SCOPE3_REPORT_PREPARE_TIMEOUT_SECONDS = 120
 export const SCOPE3_RESULTS_TIMEOUT_SECONDS = 90
 const SCOPE3_REPORT_PREPARE_ROUTE = /^\/workspace\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/scope3\/reports$/i
+const COLLECTION_RESULTS_ROUTE = /^\/workspace\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/results$/i
 const SCOPE3_RESULTS_ROUTE = /^\/workspace\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/results\/scope3$/i
 /** Round 3 (EN-7): what the listener lets the server do for one request (the server decides when). */
 export interface StagingFetchOptions { extendTimeout?(seconds: number): void }

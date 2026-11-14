@@ -4,7 +4,7 @@ import { afterAll, describe, expect, test } from 'bun:test'
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
-import { createEngineRunner, EngineRefusal, type EngineRunnerConfig } from './method-engine-runner'
+import { createEngineRunner, EngineRefusal, KILL_GRACE_MS, type EngineRunnerConfig } from './method-engine-runner'
 
 const python = process.env.NEUVETRA_PYTHON ?? 'python3'
 const dir = mkdtempSync(path.join(tmpdir(), 'neuvetra-runner-'))
@@ -125,5 +125,104 @@ describe('engine runner: a call\'s own deadline (I-03)', () => {
     const run = runner({ queue: { maxConcurrent: 2, maxQueued: 32 } })
     for (const timeoutMs of [0, -5, 1.5, Number.NaN]) await expect(run({ action: 'calculate' }, { timeoutMs })).rejects.toThrow('Invalid engine call timeout.')
     expect((await run({ action: 'calculate', n: 9 }, {})).n).toBe(9)
+  }, TIMEOUT)
+})
+
+// BI-10 (backend audit, 12 November 2026): an engine that ignores SIGTERM or leaves a child holding its output used to
+// keep the call (and its engine slot) for 30-60 s past a 5 s timeout. Each stand-in below writes its process IDs first.
+describe('BI-10: a stopped engine is killed with its process group, and the call never waits for its pipes', () => {
+  const stub = (name: string, body: string[]) => {
+    const file = path.join(dir, name)
+    writeFileSync(file, ['import json, os, signal, subprocess, sys, time', 'v = json.loads(sys.stdin.buffer.read())', ...body, ''].join('\n'))
+    return { file, sha: new Bun.CryptoHasher('sha256').update(readFileSync(file)).digest('hex') }
+  }
+  // Writes "<pid> [<grandchild pid>]" to v['pids'] before misbehaving.
+  const ignoresTerm = stub('ignores_term.py', ["signal.signal(signal.SIGTERM, signal.SIG_IGN)", "open(v['pids'], 'w').write(str(os.getpid()))", 'time.sleep(60)'])
+  const grandchildHangs = stub('grandchild_hangs.py', ["c = subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(60)'])", "open(v['pids'], 'w').write(f'{os.getpid()} {c.pid}')", 'time.sleep(60)'])
+  const grandchildOutlives = stub('grandchild_outlives.py', ["c = subprocess.Popen([sys.executable, '-c', 'import signal, time; signal.signal(signal.SIGTERM, signal.SIG_IGN); time.sleep(60)'])",
+    "open(v['pids'], 'w').write(f'{os.getpid()} {c.pid}')", "print(json.dumps({'status': 'ok'}))", 'sys.stdout.flush()', 'os._exit(0)'])
+  const sleeper = stub('sleeper.py', ["open(v['pids'], 'w').write(str(os.getpid()))", "time.sleep(v.get('sleepMs', 0) / 1000)", "print(json.dumps({'status': 'ok', 'n': v.get('n')}))"])
+  const make = (s: { file: string; sha: string }, config: Partial<EngineRunnerConfig> = {}, timeoutMs = 600) =>
+    createEngineRunner({ engine: s.file, data: [], unavailable: 'Stand-in engine unavailable.', ...config }, { python, expectedEngineSha256: s.sha, timeoutMs })
+  let calls = 0
+  const pidsFile = () => path.join(dir, `pids-${++calls}.txt`)
+  // A killed process whose parent has gone may stay a zombie until init reaps it: that is not running.
+  const alive = (pid: number) => {
+    try { process.kill(pid, 0) } catch { return false }
+    try { return !/^\d+ \(.*\) Z/.test(readFileSync(`/proc/${pid}/stat`, 'utf8')) } catch { return true }
+  }
+  const pidsOf = async (file: string) => { for (let i = 0; i < 100 && !Bun.file(file).size; i++) await Bun.sleep(20); return readFileSync(file, 'utf8').trim().split(' ').map(Number) }
+  const timed = async (call: Promise<unknown>) => { const start = performance.now(); const outcome = await call.then(() => 'ok', (error: Error) => error.message); return { outcome, ms: performance.now() - start } }
+
+  for (const [label, engine] of [['ignores SIGTERM', ignoresTerm], ['leaves a child holding its output and hangs', grandchildHangs], ['answers, exits and leaves a child holding its output', grandchildOutlives]] as const)
+    test(`an engine that ${label} is unavailable at its timeout, and every process of it is gone within the grace`, async () => {
+      const run = make(engine), pids = pidsFile()
+      const { outcome, ms } = await timed(run({ action: 'calculate', pids }))
+      expect(outcome).toBe('Stand-in engine unavailable.')
+      expect(ms).toBeLessThan(600 + 400)  // rejected on the timer (before: 30-60 s)
+      await Bun.sleep(KILL_GRACE_MS + 300)
+      expect((await pidsOf(pids)).filter(alive)).toEqual([])
+      // Both slots are free again.
+      const again = make(sleeper)
+      expect((await Promise.all([1, 2].map(n => again({ action: 'calculate', n, pids: pidsFile() })))).map(r => r.n)).toEqual([1, 2])
+    }, TIMEOUT)
+
+  test('the slot is held until the stopped engine has exited, so never more than two run at once', async () => {
+    const run = make(ignoresTerm)
+    const pids = [pidsFile(), pidsFile()]
+    await Promise.allSettled(pids.map(file => run({ action: 'calculate', pids: file })))
+    // Both calls have been rejected, but both engines are still in their grace: a third call is refused, not started.
+    await expect(run({ action: 'calculate', pids: pidsFile() })).rejects.toThrow('Stand-in engine unavailable.')
+    await Bun.sleep(KILL_GRACE_MS + 300)
+    for (const file of pids) expect((await pidsOf(file)).filter(alive)).toEqual([])
+  }, TIMEOUT)
+
+  test('an aborted call stops its engine at once; an aborted waiting call leaves the queue and the others run in order', async () => {
+    const run = make(sleeper, { queue: { maxConcurrent: 1, maxQueued: 4 } }, 10_000)
+    const controller = new AbortController(), pids = pidsFile()
+    const running = timed(run({ action: 'calculate', n: 1, sleepMs: 5000, pids }, { signal: controller.signal }))
+    const waitingController = new AbortController()
+    const waiting = run({ action: 'calculate', n: 2, pids: pidsFile() }, { signal: waitingController.signal })
+    const after = run({ action: 'calculate', n: 3, pids: pidsFile() })
+    const [pid] = await pidsOf(pids)
+    waitingController.abort()
+    await expect(waiting).rejects.toThrow('Stand-in engine unavailable.')
+    controller.abort()
+    const { outcome, ms } = await running
+    expect(outcome).toBe('Stand-in engine unavailable.')
+    expect(ms).toBeLessThan(3000)
+    expect((await after).n).toBe(3)
+    expect(alive(pid!)).toBe(false)
+    // A signal that has already aborted never starts an engine.
+    const gone = new AbortController(); gone.abort()
+    await expect(run({ action: 'calculate', n: 4, pids: pidsFile() }, { signal: gone.signal })).rejects.toThrow('Stand-in engine unavailable.')
+  }, TIMEOUT)
+})
+
+describe('BI-01: pinned entry scripts and queued actions', () => {
+  const entryFile = path.join(dir, 'entry.py')
+  writeFileSync(entryFile, ['import json, sys', 'v = json.loads(sys.stdin.buffer.read())', "print(json.dumps({'status': 'ok', 'via': 'entry', 'pad': 'x' * v.get('pad', 0)}))", ''].join('\n'))
+  const entrySha = new Bun.CryptoHasher('sha256').update(readFileSync(entryFile)).digest('hex')
+
+  test('an action with an entry runs that script, which is hashed before every call; the engine is still hashed too', async () => {
+    const run = runner({ entries: { many: { path: entryFile, sha256: entrySha, maxBytes: 6 * 1024 * 1024 } } })
+    expect((await run({ action: 'many' })).via).toBe('entry')
+    expect((await run({ action: 'calculate', n: 1 })).n).toBe(1)  // other actions still run the engine
+    // Its own cap: 5 MiB is over the engine's 4 MiB but within the entry's 6 MiB.
+    expect(((await run({ action: 'many', pad: 5 * 1024 * 1024 })).pad as string).length).toBe(5 * 1024 * 1024)
+    await expect(run({ action: 'many', pad: 7 * 1024 * 1024 })).rejects.toThrow('Stand-in engine unavailable.')
+    await expect(runner({ entries: { many: { path: entryFile, sha256: '0'.repeat(64), maxBytes: 1024 } } })({ action: 'many' })).rejects.toThrow('Stand-in engine unavailable.')
+    const changedEngine = createEngineRunner({ engine, data: [], unavailable: 'Stand-in engine unavailable.', entries: { many: { path: entryFile, sha256: entrySha, maxBytes: 1024 } } }, { python, expectedEngineSha256: '0'.repeat(64) })
+    await expect(changedEngine({ action: 'many' })).rejects.toThrow('Stand-in engine unavailable.')
+    expect(() => runner({ entries: { many: { path: entryFile, sha256: 'nope', maxBytes: 1024 } } })).toThrow('Invalid engine runner configuration.')
+  }, TIMEOUT)
+
+  test('with queuedActions only those actions wait; any other action is refused when both slots are busy (A18)', async () => {
+    const run = runner({ queue: { maxConcurrent: 2, maxQueued: 4 }, queuedActions: ['calculate_many'] })
+    const busy = [0, 1].map(n => run({ action: 'calculate_many', n, sleepMs: 600 }))
+    await Bun.sleep(150)
+    const waits = run({ action: 'calculate_many', n: 2 })
+    await expect(run({ action: 'calculate', n: 3 })).rejects.toThrow('Stand-in engine unavailable.')
+    expect((await Promise.all([...busy, waits])).map(r => r.n)).toEqual([0, 1, 2])
   }, TIMEOUT)
 })
