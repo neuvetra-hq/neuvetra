@@ -14,6 +14,7 @@ import {
   COLLECTION_EVIDENCE_BUCKET,
   COLLECTION_EVIDENCE_MAX_BYTES,
   COLLECTION_PROFILE,
+  CollectionTextLimitError,
   validateCollectionSaveInput,
   type CollectionActivityRecord,
   type CollectionActivityVersion,
@@ -129,13 +130,20 @@ async function readBoundedBytes(request: Request): Promise<Uint8Array<ArrayBuffe
   return bytes
 }
 
+/** BF-32: the file name limit is 255 characters, counted as everywhere else on the save path: NFC first, then UTF-16 code units. */
+const EVIDENCE_NAME_MAX = 255
 function originalName(request: Request): string {
   const encoded = request.headers.get("x-neuvetra-original-name")
-  if (!encoded || encoded.length > 1024) throw new RequestProblem(422, "Evidence file name is required.")
+  // The header is percent-encoded (up to 9 characters for one 3-byte character), so its length is not the name's: it is decoded first
+  // and only an absurd header is refused unread. HTTP stacks cap a header well below this.
+  if (!encoded) throw new RequestProblem(422, "Evidence file name is required.")
+  if (encoded.length > 16384) throw new RequestProblem(422, "Evidence file name is too long: the limit is 255 characters.", "text_too_long")
   let decoded: string
   try { decoded = decodeURIComponent(encoded) } catch { throw new RequestProblem(422, "Evidence file name is invalid.") }
   decoded = decoded.normalize("NFC")
-  if (!decoded.trim() || decoded.length > 255 || /[\u0000-\u001f\u007f-\u009f\ud800-\udfff]/u.test(decoded)) throw new RequestProblem(422, "Evidence file name is invalid.")
+  if (!decoded.trim()) throw new RequestProblem(422, "Evidence file name is required.")
+  if (/[\u0000-\u001f\u007f-\u009f\ud800-\udfff]/u.test(decoded)) throw new RequestProblem(422, "Evidence file name is invalid.")
+  if (decoded.length > EVIDENCE_NAME_MAX) throw new RequestProblem(422, new CollectionTextLimitError("Evidence file name", EVIDENCE_NAME_MAX, decoded.length, /[\ud800-\udbff][\udc00-\udfff]/.test(decoded) ? " Emoji and other rare characters count as 2 characters." : "").message, "text_too_long")
   return decoded
 }
 
@@ -242,7 +250,11 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
         if (operation || versionId || request.method !== "POST") return fail(405, "Method not allowed.")
         const input = await jsonBody(request)
         let validated: ReturnType<typeof validateCollectionSaveInput>
-        try { validated = validateCollectionSaveInput(input) } catch { throw new RequestProblem(422, "Invalid or unsupported collection record.") }
+        try { validated = validateCollectionSaveInput(input) } catch (error) {
+          // BF-32: over-long text is refused by name, with the limit and how far over it is; every other refusal keeps its answer.
+          if (error instanceof CollectionTextLimitError) throw new RequestProblem(422, error.message, error.code)
+          throw new RequestProblem(422, "Invalid or unsupported collection record.")
+        }
         if (isScope3CollectionKind(validated.activity.kind)) {
           const schema = await (deps.schemaVersion?.() ?? 0)
           if (schema < STAGING_SCOPE3_SCHEMA_VERSION) throw new RequestProblem(503, "Scope 3 activity is not available yet.", "scope3_unavailable")

@@ -1,4 +1,6 @@
 import type { CompanySetup } from './company-setup-contract'
+import { checkTextLimits, normalizeTextDeep } from './collection-text-rule'
+export { CollectionTextLimitError, SAVE_TEXT_LIMITS } from './collection-text-rule'
 import {
   SCOPE3_COLLECTION_KINDS, SCOPE3_COLLECTION_UNITS, isScope3CollectionKind, validateScope3Payload, type BusinessTravelCollectionPayload, type CommutingCollectionPayload, type Scope3CollectionKind,
   type Scope3CompletionPayload, type Scope3PayloadByKind, type TransportCollectionPayload, type WasteCollectionPayload,
@@ -338,15 +340,30 @@ export function validateCollectionActivity(value: unknown): CollectionActivity {
   return { kind, locationId, setupVersionId, sourceId, state, withdrawalReason, quantity, quality, estimateBasis, period:{start,endExclusive}, reference:text(row.reference,1000), notes:text(row.notes,4000), evidenceIds, payload } as CollectionActivity
 }
 
+/**
+ * BF-32: the SAVE-path check of an activity: NFC first, then the text limits (counted in UTF-16 code units, naming the field, the
+ * limit and how far over), then the unchanged contract below on the normalised value. Reads keep using `validateCollectionActivity`
+ * as it was, so a record saved under the old rule stays readable with the same payload hash.
+ */
+export function validateCollectionActivityForSave(value: unknown): CollectionActivity {
+  const normalized = normalizeTextDeep(value)
+  checkTextLimits(normalized)
+  return validateCollectionActivity(normalized)
+}
+
 export function validateCollectionSaveInput(value: unknown): CollectionActivitySaveInput {
   const row = object(value, ['idempotencyKey','expectedRevision','expectedVersionId','correctionReason','activity'])
+  // BF-32: text is normalised and counted before anything else, so an over-long value is named, not "Invalid collection record".
+  const normalizedActivity = normalizeTextDeep(row.activity)
+  const normalizedReason = typeof row.correctionReason === 'string' ? row.correctionReason.normalize('NFC') : row.correctionReason
+  checkTextLimits(normalizedActivity, normalizedReason)
   uuid(row.idempotencyKey)
   if (!Number.isInteger(row.expectedRevision) || (row.expectedRevision as number) < 0 || (row.expectedRevision as number) > 1000) fail()
   if (!(row.expectedVersionId === null || typeof row.expectedVersionId === 'string' && UUID.test(row.expectedVersionId))) fail()
-  const correctionReason = nullableText(row.correctionReason,2000)
+  const correctionReason = nullableText(normalizedReason,2000)
   if ((row.expectedRevision === 0) !== (row.expectedVersionId === null) || (row.expectedRevision === 0 ? correctionReason !== null : !correctionReason?.trim())) fail()
   if(row.expectedRevision===0 && (row.activity as CollectionActivity)?.state==='withdrawn')fail('Save a record before withdrawing it.')
-  return { idempotencyKey:row.idempotencyKey as string, expectedRevision:row.expectedRevision as number, expectedVersionId:row.expectedVersionId as string|null, correctionReason, activity:validateCollectionActivity(row.activity) }
+  return { idempotencyKey:row.idempotencyKey as string, expectedRevision:row.expectedRevision as number, expectedVersionId:row.expectedVersionId as string|null, correctionReason, activity:validateCollectionActivity(normalizedActivity) }
 }
 
 export function validateCollectionEvidenceUpload(value: unknown, companyId: string): CollectionEvidenceUploadInput {

@@ -11,7 +11,7 @@
 import { createHash } from 'node:crypto'
 import type { WorkspaceSql } from './workspace'
 import { readCollectionActivities, readCollectionEvidence } from './collection'
-import { validateCollectionActivity, type CollectionActivityRecord } from './collection-contract'
+import { validateCollectionActivityForSave, type CollectionActivityRecord } from './collection-contract'
 import { scope3ReportingYearOf } from './scope3-assessment-contract'
 import { scope3SpendNaicsAllowed, SCOPE3_SPEND_IMPORT_CATEGORIES, type PurchaseSpendCollectionPayload, type Scope3SpendMappingRequest } from './scope3-collection-contract'
 import { scope3SpendMappingKeyInput } from './scope3-collection'
@@ -295,7 +295,7 @@ export async function saveScope3SpendCorrections(tx: WorkspaceSql, actorId: stri
   if (!UUID.test(actorId) || !UUID.test(companyId)) throw problem('Invalid Scope 3 spend corrections.', '22023')
   if (typeof input.reason !== 'string' || input.reason.trim().length < 3 || input.reason.length > 2000 || !Array.isArray(input.corrections) || input.corrections.length < 1 || input.corrections.length > 3000
     || input.corrections.some(item => !exactKeys(item, ['recordId', 'expectedVersionId', 'activity']) || !UUID.test(item.recordId) || !UUID.test(item.expectedVersionId))) throw problem('Invalid Scope 3 spend corrections.', '22023')
-  const corrections = input.corrections.map(item => ({ recordId: item.recordId, expectedVersionId: item.expectedVersionId, activity: validateCollectionActivity(item.activity) }))
+  const corrections = input.corrections.map(item => ({ recordId: item.recordId, expectedVersionId: item.expectedVersionId, activity: validateCollectionActivityForSave(item.activity) }))
   await checkActor(tx, actorId, 'Scope 3 spend corrections unavailable.')
   const row = (await tx.query<{ corrected: number; unchanged: number }>('select * from neuvetra.save_scope3_spend_corrections($1,$2::text::jsonb)', [companyId, JSON.stringify({ reason: input.reason.normalize('NFC'), corrections })])).rows[0]
   if (!row) throw new Error('Scope 3 spend corrections returned no receipt.')

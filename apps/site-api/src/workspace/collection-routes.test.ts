@@ -105,6 +105,42 @@ describe("collection routes", () => {
     expect(sent.activity.quantity.originalValue).toBe("12.5")
   })
 
+  // BF-32: one text-length rule on the save path: NFC first, then count (UTF-16 code units); every refusal names the field, the limit and the excess.
+  test("BF-32: refuses over-long text with a 422 that names the field, the limit and how far over it is; never reaches the database", async () => {
+    const h = harness()
+    const post = (body: unknown) => h.request(`/workspace/${COMPANY}/collection/activities/${RECORD}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
+    // U+0958 normalises to two characters: 4,000 of them were accepted before, then refused by PostgreSQL (23514 / 22023, a 500).
+    const expanding = activity(); (expanding.activity as any).notes = "\u0958".repeat(4000)
+    const expandingResponse = await post(expanding)
+    expect(expandingResponse.status).toBe(422)
+    expect(await expandingResponse.json()).toEqual({ error: "Notes is 8,000 characters; the limit is 4,000 (4,000 over). Shorten it and save again.", code: "text_too_long" })
+    const plain = activity(); (plain.activity as any).reference = "x".repeat(1001)
+    expect(await (await post(plain)).json()).toEqual({ error: "Reference is 1,001 characters; the limit is 1,000 (1 over). Shorten it and save again.", code: "text_too_long" })
+    // An emoji is two characters, and the answer says so.
+    const emoji = activity(); (emoji.activity as any).reference = "\u{1F600}".repeat(501)
+    expect((await (await post(emoji)).json() as any).error).toBe("Reference is 1,002 characters; the limit is 1,000 (2 over). Emoji and other rare characters count as 2 characters. Shorten it and save again.")
+    // Counted after normalising: 1,000 pairs of e + U+0301 are 1,000 characters once composed, so they fit.
+    const composed = activity(); (composed.activity as any).reference = "e\u0301".repeat(1000)
+    expect((await post(composed)).status).toBe(201)
+    // (The database layer validates again and stores the composed text; the package test proves it against PostgreSQL.)
+    expect(h.calls.filter(call => call.name === "save").length).toBe(1)
+    // Leading formula characters are kept as written (the CSV export neutralises them; unchanged).
+    for (const lead of ["=", "+", "-", "@"]) { const formula = activity(); (formula.activity as any).reference = lead + "a".repeat(999); expect((await post(formula)).status).toBe(201) }
+  })
+
+  test("BF-32: an evidence file name is counted in characters after NFC, and every refusal is a named 422", async () => {
+    const upload = (name: string) => harness().request(`/workspace/${COMPANY}/collection/evidence`, { method: "POST", headers: { "content-type": "application/pdf", "x-neuvetra-original-name": encodeURIComponent(name), "x-neuvetra-upload-id": EVIDENCE }, body: EVIDENCE_BYTES })
+    // 255 CJK characters encode to 2,295 header characters: refused before ("Evidence file name is required."), accepted now.
+    expect((await upload("\u6f22".repeat(251) + ".pdf")).status).toBe(201)
+    const long = await upload("\u6f22".repeat(252) + ".pdf")
+    expect(long.status).toBe(422)
+    expect(await long.json()).toEqual({ error: "Evidence file name is 256 characters; the limit is 255 (1 over). Shorten it and save again.", code: "text_too_long" })
+    const expanding = await upload("\u0958".repeat(200) + ".pdf")
+    expect((await expanding.json() as any).error).toBe("Evidence file name is 404 characters; the limit is 255 (149 over). Shorten it and save again.")
+    expect((await upload("e\u0301".repeat(200) + ".pdf")).status).toBe(201)
+    expect((await upload("   ")).status).toBe(422)
+  })
+
   // BF-09: the same image runs against hosted staging at schema 30 (before the owner applies 0031) and at 31. At both the BF-03
   // route check refuses a new record at 400 before any SQL; 0031's own refusal (54N31: reactivation, or a save that raced
   // past the check) is the same 422; duplicateConfirmedDistinct is refused before any SQL below 31 and passed on at 31.
