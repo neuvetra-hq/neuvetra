@@ -4,7 +4,7 @@ import { afterAll, describe, expect, test } from 'bun:test'
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
-import { createEngineRunner, EngineRefusal, KILL_GRACE_MS, type EngineRunnerConfig } from './method-engine-runner'
+import { createEngineRunner, EngineRefusal, KILL_GRACE_MS, ownedProcesses, type EngineRunnerConfig } from './method-engine-runner'
 
 const python = process.env.NEUVETRA_PYTHON ?? 'python3'
 const dir = mkdtempSync(path.join(tmpdir(), 'neuvetra-runner-'))
@@ -224,5 +224,45 @@ describe('BI-01: pinned entry scripts and queued actions', () => {
     const waits = run({ action: 'calculate_many', n: 2 })
     await expect(run({ action: 'calculate', n: 3 })).rejects.toThrow('Stand-in engine unavailable.')
     expect((await Promise.all([...busy, waits])).map(r => r.n)).toEqual([0, 1, 2])
+  }, TIMEOUT)
+})
+
+// BI-01b (QA follow-up 2 of PR #68): the delayed SIGKILL, and the clean-up after a finished engine, used kill(-pgid). Once the
+// engine has been reaped its process ID can be reused, and a new process group with that ID would have been signalled.
+describe('BI-01b: only processes proven to be the engine\'s own are ever signalled', () => {
+  const pgid = 4242, spawnedAt = 1000, out = 'socket:[777]', err = 'socket:[778]'
+  const proc = (pid: number, start: number, pgrp = pgid, pipes: string[] = [], zombie = false) => ({ pid, pgrp, start, zombie, pipes })
+  const group = { pgid, leaderStart: 1001, spawnedAt, pipes: [out, err] }
+  test('while the engine itself exists with its own start time, every member of its group is ours', () => {
+    expect(ownedProcesses(group, [proc(pgid, 1001, pgid, [out, err]), proc(5000, 1002), proc(5001, 1500), proc(6000, 1100, 77)]).map(p => p.pid)).toEqual([pgid, 5000, 5001])
+  })
+  test('a reused engine ID (another start time) and its new group are never signalled; a process holding our output still is', () => {
+    // Our engine ended and was reaped. ID 4242 was then reused by a process that made its own group 4242 with a child.
+    // Our leftover (start 1100) still holds the engine's stdout, in the old group or after leaving it.
+    expect(ownedProcesses(group, [proc(pgid, 1300), proc(7000, 1310), proc(5000, 1100, pgid, [out]), proc(5005, 1100, 99, [err])]).map(p => p.pid)).toEqual([5000, 5005])
+    // No reused ID and no holder: nothing at all, even if the old group still has members (they can't be proven ours).
+    expect(ownedProcesses(group, [proc(5000, 1100), proc(5001, 1200)])).toEqual([])
+    // Zombies, and processes older than the spawn (which cannot be the engine's), are left alone.
+    expect(ownedProcesses(group, [proc(5000, 1100, pgid, [out], true), proc(5002, 999, pgid, [out])])).toEqual([])
+  })
+  // Not covered on purpose (QA follow-up 1 of PR #71): a detached leftover that has closed the engine's output survives a
+  // normal finish, since it can no longer be proven ours. The engines and the batch entry point never start processes.
+  test('a real leftover holding the output is killed after the engine answered and exited; a bystander never is', async () => {
+    const bystander = Bun.spawn([python, '-c', 'import time; time.sleep(30)'], { detached: true, stdout: 'ignore', stderr: 'ignore' })
+    try {
+      const file = path.join(dir, 'leftover.py')
+      writeFileSync(file, ['import json, os, subprocess, sys', 'v = json.loads(sys.stdin.buffer.read())',
+        // The leftover leaves the engine's group (its own session) and ignores SIGTERM, but keeps stdout.
+        "c = subprocess.Popen([sys.executable, '-c', 'import os, signal, time; os.setsid(); signal.signal(signal.SIGTERM, signal.SIG_IGN); time.sleep(60)'])",
+        "open(v['pids'], 'w').write(str(c.pid))", "print(json.dumps({'status': 'ok'}))", 'sys.stdout.flush()', 'os._exit(0)', ''].join('\n'))
+      const sha = new Bun.CryptoHasher('sha256').update(readFileSync(file)).digest('hex')
+      const pids = path.join(dir, `leftover-${Date.now()}.txt`)
+      const run = createEngineRunner({ engine: file, data: [], unavailable: 'Stand-in engine unavailable.' }, { python, expectedEngineSha256: sha, timeoutMs: 600 })
+      await expect(run({ action: 'calculate', pids })).rejects.toThrow('Stand-in engine unavailable.')
+      await Bun.sleep(KILL_GRACE_MS + 300)
+      const running = (pid: number) => { try { process.kill(pid, 0) } catch { return false } try { return !/^\d+ \(.*\) Z/.test(readFileSync(`/proc/${pid}/stat`, 'utf8')) } catch { return true } }
+      expect(running(Number(readFileSync(pids, 'utf8')))).toBe(false)
+      expect(running(bystander.pid)).toBe(true)
+    } finally { bystander.kill('SIGKILL') }
   }, TIMEOUT)
 })
