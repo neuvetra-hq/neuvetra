@@ -207,6 +207,13 @@ export interface Scope3ReportApproveRequest { versionId: string; reportSha256: s
  */
 export const SCOPE3_REPORT_MAX_TEXT_BYTES = 134_217_728
 /**
+ * BF-21 (CEO ruling, 13 November 2026): the most report and CSV text together that one prepare may send. The database
+ * backend that stores a version peaks at about 3.4 MiB per MB of the two texts (it assembles, hashes and stores them);
+ * this keeps it near 650 MiB, well inside owner decision 6's 768 MiB. Measured natively at schema 31 and 32 (see
+ * scope3-round3-postgres.test.ts, BF-21). `scope3ReportDraft` refuses more before any call (report_too_large).
+ */
+export const SCOPE3_REPORT_MAX_COMBINED_TEXT_BYTES = 158_000_000
+/**
  * Round 3 (owner decision 6): 0030's limit on the prepare request's text form (`octet_length(request::text)`), 4 MiB. The
  * texts no longer travel in the request (round 2c's 255 MiB bound them together inside one jsonb); what is left is small
  * (at most 20,000 input version ids, about 0.8 MB). `scope3ReportDraft` refuses a larger one before any call.

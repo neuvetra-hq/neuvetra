@@ -486,7 +486,14 @@ integration("BF-18: the same server at schema 31, then after 0032 is applied at 
     // Every record, Result, Scope 3 result, report version and frozen text and CSV is exactly as before, for both companies.
     expect(await database.findCollectionActivities(owner, company)).toEqual(recordsBefore)
     expect(recordsBefore.filter(r => recordsAt31.some(x => x.id === r.id))).toEqual(recordsAt31)
-    for (const id of [company, small]) expect([id, await observe(id)]).toEqual([id, after31[id]])
+    // BF-21 (CEO ruling): only the Scope 3 results' lineBudget changes at 32, so that it states 0032's count truthfully: each
+    // company lists 11 lines (one flight, and 10 category 3 lines from three electricity records and a gas record, which no
+    // longer count): max = 3,000 + 10, remaining = 3,000 - 1 stored. Every figure, row, frozen text and CSV is unchanged.
+    for (const id of [company, small]) {
+      const at32 = await observe(id)
+      expect([after31[id]!.scope3.lineBudget, at32.scope3.lineBudget]).toEqual([{ max: 3000, used: 11, remaining: 2989 }, { max: 3010, used: 11, remaining: 2999 }])
+      expect([id, { ...at32, scope3: { ...at32.scope3, lineBudget: null } }]).toEqual([id, { ...after31[id], scope3: { ...after31[id]!.scope3, lineBudget: null } }])
+    }
     expect(after31[small]).toEqual(at31[small])
     // BF-24: the instrument rows equal their payloads; BI-05: each approval carries its version's CSV hash.
     expect((await operator.query(`select i.mwh::text mwh,i.rate_co2_lb_per_mwh::text co2,i.rate_ch4_lb_per_mwh::text ch4,i.rate_n2o_lb_per_mwh::text n2o from neuvetra.collection_electricity_instruments i

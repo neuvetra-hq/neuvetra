@@ -1,4 +1,4 @@
-import { MAX_SCOPE3_LINES } from "./scope3-results-routes"
+import { MAX_SCOPE3_LINES, scope3LineCountRule } from "./scope3-results-routes"
 import { isActiveScope12Record, MAX_ACTIVE_SCOPE12_RECORDS, RECORD_LIMIT_SAVE_TEXT } from "./collection-results-routes"
 import { SCOPE3_CAPACITY_TEXT } from "../../../../packages/neuvetra-database/src/scope3-text"
 import {
@@ -168,7 +168,7 @@ const RECORD_ID_UNAVAILABLE_TEXT = "This record ID can’t be used. Save again t
  * actor may view the company but not change it: 403 read_only. Without a readable company (or on a read) 42501 stays 404, the
  * same answer as for a company that does not exist, so a 403 is never said to someone outside the company.
  */
-function mappedError(error: unknown, readable = false): Response {
+function mappedError(error: unknown, readable = false, schemaVersion = 0): Response {
   if (error instanceof RequestProblem) return fail(error.status, error.publicMessage, error.publicCode)
   const code = (error as { code?: string }).code
   if (code === "42501") return readable ? fail(403, READ_ONLY_TEXT, "read_only") : fail(404, "Collection resource not found.")
@@ -177,7 +177,8 @@ function mappedError(error: unknown, readable = false): Response {
   if (["23505", "23N32", "40001", "23P01"].includes(code ?? "")) return fail(409, "Collection record changed. Refresh and try again.", "revision_conflict")
   if (code === "54000") return fail(422, "Collection history capacity reached.", "history_limit")
   // Round 3 (owner decision 7, EN-3): 0030 refuses a Scope 3 save that adds a line past the 3,000-line cap.
-  if (code === "54N30") return fail(409, SCOPE3_CAPACITY_TEXT.lineBudgetSaveRefused(MAX_SCOPE3_LINES), "line_budget_exceeded")
+  // BF-21: from schema 32 (0032's count) only stored Scope 3 records count, so the answer no longer says derived lines do.
+  if (code === "54N30") return fail(409, scope3LineCountRule(schemaVersion) === "stored" ? SCOPE3_CAPACITY_TEXT.storedLineBudgetSaveRefused(MAX_SCOPE3_LINES) : SCOPE3_CAPACITY_TEXT.lineBudgetSaveRefused(MAX_SCOPE3_LINES), "line_budget_exceeded")
   // BF-09 (0031): the database's own Scope 1 and 2 cap, checked under the company lock (also for a withdrawn record made active
   // again, and for saves that raced past the route's check below): the same answer as that check.
   if (code === "54N31") return fail(422, RECORD_LIMIT_SAVE_TEXT, "record_limit_reached")
@@ -353,6 +354,10 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
       const bytes = await deps.evidenceStorage.get(token, locator.bucket, locator.objectKey)
       if (bytes.byteLength !== locator.byteLength || await sha256(bytes) !== locator.sha256) return fail(503, "Evidence integrity could not be verified.")
       return new Response(bytes.buffer, { status: 200, headers: { "cache-control": "no-store", "x-content-type-options": "nosniff", "content-type": locator.mediaType, "content-length": String(bytes.byteLength), "x-content-sha256": locator.sha256, "content-disposition": `attachment; filename="evidence-${resourceId}"` } })
-    } catch (error) { return mappedError(error, readable && request.method === "POST") }
+    } catch (error) {
+      // BF-21: the line-budget answer depends on the schema's count (read only for that refusal).
+      const schema = (error as { code?: string }).code === "54N30" ? await (deps.schemaVersion?.() ?? Promise.resolve(0)).catch(() => 0) : 0
+      return mappedError(error, readable && request.method === "POST", schema)
+    }
   }
 }

@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import type { CompanySetupSaveResult, CompanySetupVersion, CompanySetupView } from "@neuvetra/database"
 import { createCompanySetupRoutes, type CompanySetupRouteDatabase } from "./company-setup-routes"
+import { SCOPE3_CAPACITY_TEXT, type CollectionActivityRecord } from "@neuvetra/database"
 
 const ORIGIN = "https://staging.example.test"
 const COMPANY = "80000000-0000-4000-8000-000000000901"
@@ -93,4 +94,36 @@ test("BF1: an uppercase company or version ID reaches the same setup as its lowe
   expect((await app(request(`/workspace/${company.toUpperCase()}/setup`))).status).toBe(200)
   expect((await app(request(`/workspace/${company.toUpperCase()}/setup/versions/${versionId.toUpperCase()}`))).status).toBe(200)
   expect(seen).toEqual([company, `${company}/${versionId}`])
+})
+
+// BF-21 (BI-03 option C, CEO decision): from schema 32 nothing refuses a setup save for Scope 3 volume, so a save that includes
+// category 3 while energy-resold records are saved (each then counts twice) can take the stored count past 3,000. The save
+// stands and says so; every other answer is exactly as before (no extra key).
+test("BF-21: a setup save that takes the stored Scope 3 lines over 3,000 (schema 32, category 3 included) is saved with a warning", async () => {
+  const withCategory3 = (included: boolean) => {
+    const v = { ...version, setup: { screening: [{ id: "s3-3", scope: 3, category: "fuel_and_energy_related_activities", state: included ? "yes" : "no", reason: included ? "" : "Not material.", details: "", locationId: null }] } as unknown as CompanySetupVersion["setup"] }
+    return { foundation: { ...view, currentVersion: v }, savedVersion: v, replayed: false } as CompanySetupSaveResult
+  }
+  const rec = (i: number, kind: string, state = "active") => ({ id: `81000000-0000-4000-8000-${String(i).padStart(12, "0")}`, companyId: COMPANY, kind, currentVersion: { activity: { state } }, history: [] }) as unknown as CollectionActivityRecord
+  // 2,998 stored Scope 3 lines plus two energy-resold records: 3,000 with category 3 excluded, 3,002 with it included.
+  const records = [...Array.from({ length: 2998 }, (_, i) => rec(i, "waste")), rec(9001, "energy_resold"), rec(9002, "energy_resold"), rec(9003, "electricity"), rec(9004, "waste", "withdrawn")]
+  let reads = 0
+  const app = (schema: number | undefined, included: boolean, list = records) => createCompanySetupRoutes({ database: database({ saveCompanySetup: async () => withCategory3(included), findCollectionActivities: async () => { reads++; return list } }), origin: ORIGIN,
+    ...(schema === undefined ? {} : { schemaVersion: async () => schema }), validateUser: async token => token === "ok" ? { id: ACTOR, email: null, phone: null, fullName: null } : null })
+  const save = async (schema: number | undefined, included: boolean, list = records) => { const r = await app(schema, included, list)(request(undefined, { method: "POST", body: JSON.stringify(body) })); return { status: r.status, body: await r.json() as Record<string, unknown> } }
+  const warned = await save(32, true)
+  expect(warned.status).toBe(201)
+  expect(warned.body.warnings).toEqual([{ code: "scope3_line_budget_exceeded", lineBudget: { max: 3000, used: 3002 }, message: SCOPE3_CAPACITY_TEXT.setupOverLineBudget(3000, 3002) }])
+  expect(SCOPE3_CAPACITY_TEXT.setupOverLineBudget(3000, 3002)).toBe("Company setup is saved. With category 3 included, Scope 3 now has 3,002 saved lines, more than its limit of 3,000 (each energy-resold record counts twice while category 3 is included), so Scope 3 results and report versions can’t be prepared until it is back within the limit. Withdraw Scope 3 lines you no longer need, or exclude category 3 again. Scope 1 and 2 are not affected.")
+  // No warning (and the exact answer before BF-21) when category 3 is excluded, below schema 32, without a schema reader, or within the limit.
+  reads = 0
+  for (const [schema, included, list] of [[32, false, records], [31, true, records], [undefined, true, records], [32, true, records.slice(2)]] as const) {
+    const plain = await save(schema, included, list)
+    expect([plain.status, Object.keys(plain.body).sort()]).toEqual([201, ["foundation", "replayed", "savedVersion"]])
+  }
+  expect(reads).toBe(1) // only the in-limit case at 32 with category 3 included reads the records
+  // A failed read never fails a committed save.
+  const failing = createCompanySetupRoutes({ database: database({ saveCompanySetup: async () => withCategory3(true), findCollectionActivities: async () => { throw new Error("read failed") } }), origin: ORIGIN, schemaVersion: async () => 32, validateUser: async () => ({ id: ACTOR, email: null, phone: null, fullName: null }) })
+  const committed = await failing(request(undefined, { method: "POST", body: JSON.stringify(body) }))
+  expect([committed.status, Object.keys(await committed.json()).sort()]).toEqual([201, ["foundation", "replayed", "savedVersion"]])
 })

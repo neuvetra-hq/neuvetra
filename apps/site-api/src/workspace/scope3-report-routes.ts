@@ -1,8 +1,8 @@
 // Round 3 (EN-9): the package's public exports, never its source paths.
-import { scope3ReportDraft, scope3ReportingYearOf, scope3TextChunks, SCOPE3_CAPACITY_TEXT, type CompanySetupView, type Scope3CsvLabels, type Scope3ReportApproveRequest, type Scope3ReportPrepareCall, type Scope3ReportPrevious, type Scope3ReportVersionDetail, type Scope3ReportVersionSummary } from "@neuvetra/database"
+import { scope3ReportDraft, scope3ReportingYearOf, scope3TextChunks, SCOPE3_CAPACITY_TEXT, type CompanySetupView, type Scope3CsvLabels, type Scope3ReportApproveRequest, type Scope3ReportPrepareCall, type Scope3ReportPrevious, type Scope3ReportSize, type Scope3ReportVersionDetail, type Scope3ReportVersionSummary } from "@neuvetra/database"
 import type { AuthenticatedUser } from "../lib/auth"
 import { hasExactKeys, readScope3JsonBody, scope3BusyResponse, scope3CollectGarbage, scope3RespondRetry, scope3RoutePrelude, Scope3RouteProblem, SCOPE3_UUID, SCOPE3_UUID_SOURCE } from "./scope3-route-helpers"
-import { MAX_SCOPE3_LINES, SCOPE3_BUDGET_WARNING, SCOPE3_FORMULA_WARNING, type Scope3ResultsRunner } from "./scope3-results-routes"
+import { MAX_SCOPE3_LINES, scope3OverBudgetBody, SCOPE3_BUDGET_WARNING, SCOPE3_FORMULA_WARNING, type Scope3ResultsRunner } from "./scope3-results-routes"
 
 /**
  * Frozen Scope 3 report versions (Scope 3 completion I-10; Claude, 30 October 2026; DESIGN 3.7, 7.4, A16, A31;
@@ -133,6 +133,8 @@ export function createScope3ReportRoutes(deps: {
   now?: () => Date
   /** Round 2: the size limit of each stored text (default 0030's); tests lower it to reach the refusal. */
   maxReportTextBytes?: number
+  /** BF-21: a test may lower the combined limit of the two texts (default SCOPE3_REPORT_MAX_COMBINED_TEXT_BYTES). */
+  maxReportCombinedTextBytes?: number
   /** Round 3 (owner decision 6): the instance's one-prepare-at-a-time gate (a new one per route by default). */
   prepareGate?: Scope3PrepareGate
 }) {
@@ -237,7 +239,8 @@ export function createScope3ReportRoutes(deps: {
           let results: Awaited<ReturnType<Scope3ResultsRunner>>
           try { results = await deps.results(actor.id, companyId) } catch (error) {
             // Round 3 (owner decision 7, EN-3): results over the line budget (the runner's 54000) are the line-budget error here too.
-            if ((error as { code?: string }).code === "54000") return respond(422, { code: "line_budget_exceeded", error: SCOPE3_CAPACITY_TEXT.resultsOverBudget(MAX_SCOPE3_LINES) })
+            // BF-21: worded from the rule and count the run was refused on (below schema 32 exactly the answer before).
+            if ((error as { code?: string }).code === "54000") return respond(422, scope3OverBudgetBody(error))
             throw error
           }
           if (!results) return respond(404, NOT_FOUND)
@@ -251,12 +254,17 @@ export function createScope3ReportRoutes(deps: {
             const draft = scope3ReportDraft({
               results, previous, reportingYear, expectedRevision: input.expectedRevision, reason: input.reason, idempotencyKey: input.idempotencyKey, setupVersionId: current.id,
               consolidationApproach: current.setup.boundary.approach, preparedBy: actor.id, preparedAt: now().toISOString(), engineSha256: deps.engineSha256, labels: deps.labels,
-              ...(deps.maxReportTextBytes === undefined ? {} : { maxTextBytes: deps.maxReportTextBytes }), betweenPhases: scope3CollectGarbage,
+              ...(deps.maxReportTextBytes === undefined ? {} : { maxTextBytes: deps.maxReportTextBytes }),
+              ...(deps.maxReportCombinedTextBytes === undefined ? {} : { maxCombinedTextBytes: deps.maxReportCombinedTextBytes }), betweenPhases: scope3CollectGarbage,
             })
             return { request: draft.request, reportText: draft.reportText, csvText: draft.csvText }
           } catch (error) {
             // Round 2 (owner decision 10, ENG-3): larger than 0030 stores; refused before any call, with its own code.
-            if ((error as { code?: string }).code === "report_too_large") return respond(413, { code: "report_too_large", error: SCOPE3_CAPACITY_TEXT.reportTooLarge })
+            if ((error as { code?: string }).code === "report_too_large") {
+              // BF-21 (CEO ruling): what is too large and the way back; the sizes measured go with the answer.
+              const size = (error as { size?: Scope3ReportSize }).size
+              return respond(413, { code: "report_too_large", ...(size ? { size } : {}), error: SCOPE3_CAPACITY_TEXT.reportTooLarge(size) })
+            }
             throw error
           }
         }

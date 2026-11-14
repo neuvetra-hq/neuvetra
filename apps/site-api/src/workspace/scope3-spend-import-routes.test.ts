@@ -29,7 +29,7 @@ function setupView(canManage = true, saved = true): CompanySetupView {
 const context: CollectionContext = { companyId: company, setupVersionId: setupId, setupRevision: 1, sameContentSetupVersionIds: [setupId], boundaryApproach: "operational_control", reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, locations: [{ id: location, name: "HQ", inclusion: "included", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" }, { id: excluded, name: "Sold site", inclusion: "excluded", control: "reporting_company", entityId: null, startMode: "period_start", endMode: "period_end" }] }
 
 /** An in-memory database: imports build their records with the shared builder (as the SQL RPC saves them). */
-function harness(overrides: Partial<Scope3SpendImportRouteDatabase> & { setup?: CompanySetupView | null } = {}) {
+function harness(overrides: Partial<Scope3SpendImportRouteDatabase> & { setup?: CompanySetupView | null; schemaVersion?: number } = {}) {
   const calls: Array<{ fn: string; args: unknown[] }> = []
   const records: CollectionActivityRecord[] = [], imports: Scope3SpendImportRecord[] = [], evidence: CollectionEvidenceMetadata[] = []
   const database: Scope3SpendImportRouteDatabase = {
@@ -62,7 +62,7 @@ function harness(overrides: Partial<Scope3SpendImportRouteDatabase> & { setup?: 
     saveScope3SpendMapping: overrides.saveScope3SpendMapping ?? (async (...args) => { calls.push({ fn: "mapping", args }); return { mapping: { revision: 1 } as Scope3SpendMappingRecord, corrected: [], unchanged: 0 } }),
     convertScope3SpendCurrency: overrides.convertScope3SpendCurrency ?? (async (...args) => { calls.push({ fn: "convert", args }); return { converted: [{ recordId: "r1", sourceId: "FX-1", versionId: "v2", revision: 2, from: "100", usd: "108.23" }], skipped: [] } }),
   }
-  const route = createScope3SpendImportRoutes({ database, origin: ORIGIN, validateUser: async token => token === "ok" ? { id: owner, email: null, phone: null, fullName: null } : token === "down" ? (() => { throw new Error("auth down") })() : null })
+  const route = createScope3SpendImportRoutes({ database, origin: ORIGIN, ...(overrides.schemaVersion === undefined ? {} : { schemaVersion: async () => overrides.schemaVersion! }), validateUser: async token => token === "ok" ? { id: owner, email: null, phone: null, fullName: null } : token === "down" ? (() => { throw new Error("auth down") })() : null })
   const send = (path: string, init: { method?: string; token?: string; origin?: string | null; body?: BodyInit; type?: string } = {}) => route(new Request(`https://api.example.test${path}`, {
     method: init.method ?? "GET", body: init.body, headers: { authorization: `Bearer ${init.token ?? "ok"}`, ...(init.type ? { "content-type": init.type } : {}), ...(init.origin === null ? {} : { origin: init.origin ?? ORIGIN }) } }))
   return { calls, send, records, imports }
@@ -365,6 +365,41 @@ describe("round 3: spend import refusals and withdraw-import", () => {
     expect(Object.keys(racedBody.lineBudget).sort()).toEqual(["max", "remaining", "used"])
     expect([racedBody.code, racedBody.fileLines]).toEqual([beforeBody.code, 1])
     expect(racedBody.error).toContain("3,000 active lines")
+  })
+
+  test("BF-21: the pre-check counts as the database does: every listed line below schema 32, stored Scope 3 records only from 32", async () => {
+    const one = `${HEADER}\nL1,2025-03-01,Acme,6100,Office,Toner,10,USD,2025,1,339940,with_margins,\n`
+    const two = `${HEADER}\nM1,2025-03-01,Acme,6100,Office,Toner,10,USD,2025,1,339940,with_margins,\nM2,2025-03-02,Acme,6100,Office,Toner,11,USD,2025,1,339940,with_margins,\n`
+    // Category 3 included; 2,999 spend lines and one electricity record (its 3 category 3 lines): 3,002 listed, 2,999 stored.
+    const withCategory3 = setupView() as unknown as { currentVersion: { setup: Record<string, unknown> } }
+    withCategory3.currentVersion.setup.screening = [{ id: "s3-3", scope: 3, category: "fuel_and_energy_related_activities", state: "yes", reason: "", details: "", locationId: null }]
+    const fill = async (schemaVersion?: number) => {
+      const h = harness({ setup: withCategory3 as unknown as CompanySetupView, ...(schemaVersion === undefined ? {} : { schemaVersion }) })
+      expect((await h.send(importPath(), csv(`${HEADER}\nF1,2025-03-01,Acme,6100,Office,Toner,10,USD,2025,1,339940,with_margins,\n`))).status).toBe(201)
+      const example = h.records[0]!
+      h.records.push(...Array.from({ length: 2998 }, (_, index) => ({ ...example, id: `93900000-0000-4000-8000-${String(index + 5000).padStart(12, "0")}` })))
+      const activity = { ...example.currentVersion.activity, kind: "electricity", sourceId: "M-1", quantity: { originalValue: "100", originalUnit: "kWh", normalizedValue: "100", normalizedUnit: "kWh" },
+        payload: { meterOrAccountNumber: "M-1", utilityName: "City & County of San Francisco", site: "Office", zip: "94105", subregion: "CAMX", utilityEiaId: "16612", instruments: [] } }
+      h.records.push({ ...example, id: "93900000-0000-4000-8000-00000000ee01", kind: "electricity", currentVersion: { ...example.currentVersion, activity } } as unknown as CollectionActivityRecord)
+      return h
+    }
+    // Below schema 32 (and with no schema reader): exactly as before BF-21.
+    for (const schema of [undefined, 31]) {
+      const refused = await (await fill(schema)).send(importPath(), csv(one))
+      expect([refused.status, await refused.json()]).toEqual([409, { code: "line_budget_exceeded", lineBudget: { max: 3000, used: 3002, remaining: 0 }, fileLines: 1,
+        error: "This would take Scope 3 past its limit of 3,000 active lines (3,002 in use, 1 more). Withdraw lines you no longer need, or import a smaller file. Nothing was saved." }])
+    }
+    // At 32: one line fits 0032's count (2,999 stored), so the database is called; two lines are refused with the stored count.
+    const at32 = await fill(32)
+    const fits = await at32.send(importPath(), csv(one))
+    expect(fits.status).toBe(201)
+    expect(at32.calls.filter(call => call.fn === "import")).toHaveLength(2)
+    const over = await (await fill(32)).send(importPath(), csv(two))
+    expect([over.status, await over.json()]).toEqual([409, { code: "line_budget_exceeded", lineBudget: { max: 3003, used: 3002, remaining: 1 }, fileLines: 2,
+      error: "This would take Scope 3 past its limit of 3,000 saved lines (2,999 saved, 2 more). Each active Scope 3 record counts once (an energy-resold record twice while category 3 is included); Scope 1 and 2 records don’t count. Withdraw lines you no longer need, or import a smaller file. Nothing was saved." }])
+    // 0032's own refusal (a race past the pre-check) answers the same way at 32.
+    const raced = await harness({ schemaVersion: 32, importScope3Spend: coded("54N30") }).send(importPath(), csv(one))
+    expect([raced.status, (await raced.json()).error]).toEqual([409, expect.stringContaining("saved lines (0 saved, 1 more)")])
   })
 })
 

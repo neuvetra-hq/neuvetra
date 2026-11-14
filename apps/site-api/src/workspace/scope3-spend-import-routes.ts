@@ -10,7 +10,7 @@ import type { AuthenticatedUser } from "../lib/auth"
 // Round 2b integration (ENG-14): the shared Scope 3 route helpers (prelude, body readers, UUID, responses).
 import { readScope3Body, readScope3JsonBody, scope3BusyResponse, scope3Respond, scope3RoutePrelude, Scope3RouteProblem, SCOPE3_UUID, SCOPE3_UUID_SOURCE } from "./scope3-route-helpers"
 // Round 2, lane B (owner decision 10): the active-line budget check before an import saves anything.
-import { scope3LineBudget } from "./scope3-results-routes"
+import { MAX_SCOPE3_LINES, scope3GridLossesIncluded, scope3LineBudget, scope3LineCountRule, scope3StoredLineCount, type Scope3LineCountRule } from "./scope3-results-routes"
 
 /**
  * Spend CSV import (Scope 3 completion I-09; Claude, 30 October 2026; DESIGN §3.6, §7.3, D9, A11, A29):
@@ -185,7 +185,9 @@ export async function scope3LinesAtRemovedLocations(database: Pick<Scope3SpendIm
   }).length
 }
 
-export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImportRouteDatabase; validateUser: (token: string) => Promise<AuthenticatedUser | null>; origin: string }) {
+export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImportRouteDatabase; validateUser: (token: string) => Promise<AuthenticatedUser | null>; origin: string
+  /** BF-21: the database's schema version; from 32 the pre-check counts as 0032 does (stored Scope 3 records only). Absent: 0. */
+  schemaVersion?: () => Promise<number> }) {
   return async (request: Request): Promise<Response> => {
     const respond = scope3Respond
     const url = new URL(request.url)
@@ -199,10 +201,16 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
     const actor: AuthenticatedUser = prelude.actor
     let attemptedFileLines = 0
     let completedImport: Awaited<ReturnType<Scope3SpendImportRouteDatabase["importScope3Spend"]>> | null = null
-    const capRefusal = (lineBudget: ReturnType<typeof scope3LineBudget>) => respond(409, {
-      code: "line_budget_exceeded", lineBudget, fileLines: attemptedFileLines,
-      error: SCOPE3_CAPACITY_TEXT.lineBudgetExceeded(lineBudget.max, lineBudget.used, attemptedFileLines),
-    })
+    // BF-21: the count the database at this schema enforces (0030's below 32, 0032's from 32), read once per request.
+    let rule: Scope3LineCountRule | null = null
+    const lineRule = async () => rule ??= scope3LineCountRule(await (deps.schemaVersion?.() ?? Promise.resolve(0)))
+    const capRefusal = (records: Parameters<typeof scope3LineBudget>[0], setup: Parameters<typeof scope3LineBudget>[1], counted: Scope3LineCountRule) => {
+      const lineBudget = scope3LineBudget(records, setup, counted)
+      // Below schema 32 exactly the answer before BF-21; from 32 the stored count, as the database counts it.
+      return respond(409, { code: "line_budget_exceeded", lineBudget, fileLines: attemptedFileLines,
+        error: counted === "stored" ? SCOPE3_CAPACITY_TEXT.storedLineBudgetExceeded(MAX_SCOPE3_LINES, scope3StoredLineCount(records, scope3GridLossesIncluded(setup)), attemptedFileLines)
+          : SCOPE3_CAPACITY_TEXT.lineBudgetExceeded(lineBudget.max, lineBudget.used, attemptedFileLines) })
+    }
     try {
       const setup = await deps.database.findCompanySetup(actor.id, companyId)
       if (!setup) return respond(404, NOT_FOUND)
@@ -261,9 +269,10 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
       // refused before anything is saved (withdrawn lines never count; a replay of the same bytes saves nothing, so it is
       // never refused). The body carries the budget and the file's line count.
       const [earlier, records] = await Promise.all([deps.database.findScope3SpendImports(actor.id, companyId), deps.database.findCollectionActivities(actor.id, companyId)])
-      const budget = scope3LineBudget(records, setup)
+      const counted = await lineRule()
+      const budget = scope3LineBudget(records, setup, counted)
       if (!earlier.some(item => item.fileSha256 === fileSha256) && parsed.lines.length > budget.remaining)
-        return capRefusal(budget)
+        return capRefusal(records, setup, counted)
       const result = await deps.database.importScope3Spend(actor.id, companyId, { parsed, fileSha256, evidenceId, locationId })
       completedImport = result
       const ids = new Set(result.import.lines.map(line => line.recordId))
@@ -296,7 +305,7 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
         try {
           const [setup, records] = await Promise.all([deps.database.findCompanySetup(actor.id, companyId), deps.database.findCollectionActivities(actor.id, companyId)])
           if (!setup) return respond(404, NOT_FOUND)
-          return capRefusal(scope3LineBudget(records, setup))
+          return capRefusal(records, setup, await lineRule())
         } catch { return respond(503, { error: "The current Scope 3 line budget could not be read. Nothing was saved. Reload and try again." }) }
       }
       // Bug hunt (PR 22, 1 November 2026): every bulk spend write saves its lines against the current setup version, and 0030

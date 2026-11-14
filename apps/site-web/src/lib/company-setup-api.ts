@@ -96,7 +96,11 @@ export async function loadCompanySetupVersion(companyId: string, versionId: stri
 export async function saveCompanySetup(companyId: string, input: CompanySetupSaveInput, actor: HostedWorkspaceActor) {
   const value = await request<unknown>(actor, url(companyId), input)
   const row = record(value)
-  if (!keys(row, ["foundation", "savedVersion", "replayed"]) || typeof row.replayed !== "boolean") fail()
+  // BF-21: from schema 32 the API may add `warnings` (a setup save that includes category 3 took Scope 3 past its line
+  // limit; the save stands). Tolerated as an array of objects; the saved setup is decoded exactly as before.
+  const warned = Object.prototype.hasOwnProperty.call(row, "warnings")
+  if (!keys(row, warned ? ["foundation", "savedVersion", "replayed", "warnings"] : ["foundation", "savedVersion", "replayed"]) || typeof row.replayed !== "boolean") fail()
+  if (warned && (!Array.isArray(row.warnings) || row.warnings.some(item => !item || typeof item !== "object" || Array.isArray(item)))) fail()
   const foundation = await view(row.foundation, companyId)
   const savedVersion = await version(row.savedVersion, companyId, input.expectedRevision + 1, input.expectedVersionId)
   if (savedVersion.createdBy !== actor.userId || savedVersion.correctionReason !== input.correctionReason || canonical(savedVersion.setup) !== canonical(input.setup) || !foundation.history.some(item => item.id === savedVersion.id && item.revision === savedVersion.revision && item.payloadSha256 === savedVersion.payloadSha256)) fail()
