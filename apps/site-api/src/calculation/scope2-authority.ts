@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { ELECTRICITY_REGISTER_GREENE2025_SHA256, ELECTRICITY_REGISTER_GREENE2025_URL } from '../../../../packages/neuvetra-database/src/method-reference'
-import { createEngineRunner, sortedKeys, type EngineOptions } from './method-engine-runner'
+import { createEngineRunner, runEngineBatch, scope12BatchConfig, sortedKeys, type EngineBatchItem, type EngineCallOptions, type EngineOptions } from './method-engine-runner'
 
 /** Bridge to scope2_engine.py (purchased electricity). Every call re-hashes the register and ZIP lookup first. */
 export const ZIP_LOOKUP_EGRID2023_URL = new URL('../../../../packages/neuvetra-database/src/method-reference/egrid2023-zip-subregion-utility.csv', import.meta.url)
@@ -39,17 +39,25 @@ export interface Scope2Aggregate {
 }
 export interface Scope2Lookup { zip: string; subregions: string[]; utilities: Array<{ subregion: string; utility: string; eiaId: string; state: string; predominantUtility: boolean }>; needsUtilityChoice: boolean; found: boolean; source: string }
 
+export type Scope2BatchItem = EngineBatchItem<Scope2Result>
+const echoes = (result: Scope2Result, input: Scope2Input) => JSON.stringify(sortedKeys(result.input)) === JSON.stringify(sortedKeys(input))
+
+/** BI-01: with options.expectedBatchSha256 the bridge also offers `calculateMany` (scope12_batch.py, registers read once per batch). */
 export function createScope2Engine(options: EngineOptions) {
+  const batch = options.expectedBatchSha256 === undefined ? null : scope12BatchConfig(options.expectedBatchSha256)
   const run = createEngineRunner({ engine: path.join(import.meta.dir, 'scope2_engine.py'), unavailable: 'Scope 2 engine unavailable.', data: [
-    { url: ELECTRICITY_REGISTER_GREENE2025_URL, sha256: ELECTRICITY_REGISTER_GREENE2025_SHA256 }, { url: ZIP_LOOKUP_EGRID2023_URL, sha256: ZIP_LOOKUP_EGRID2023_SHA256 }] }, options)
+    { url: ELECTRICITY_REGISTER_GREENE2025_URL, sha256: ELECTRICITY_REGISTER_GREENE2025_SHA256 }, { url: ZIP_LOOKUP_EGRID2023_URL, sha256: ZIP_LOOKUP_EGRID2023_SHA256 }], ...batch }, options)
+  const calculateMany = (inputs: Scope2Input[], call: EngineCallOptions = {}) =>
+    runEngineBatch<Scope2Result>(run, 'scope2', inputs.map(input => ({ action: 'calculate', input })), (result, index) => echoes(result, inputs[index]!), call)
   return {
+    ...(batch ? { calculateMany } : {}),
     async describe() { return (await run({ action: 'describe' })).description as { engineSha256: string; registerSha256: string; zipLookupSha256: string; methods: Array<Record<string, unknown> & { id: string; factorValues: Record<string, string>; constantValues: Record<string, { value: string; unit: string }> }> } },
     async lookupZip(zip: string) { return (await run({ action: 'lookup_zip', zip })).lookup as Scope2Lookup },
     async calculate(input: Scope2Input) {
       const result = (await run({ action: 'calculate', input })).result as Scope2Result
-      if (JSON.stringify(sortedKeys(result.input)) !== JSON.stringify(sortedKeys(input))) throw new Error('Scope 2 engine unavailable.')
+      if (!echoes(result, input)) throw new Error('Scope 2 engine unavailable.')
       return result
     },
-    async aggregate(results: Scope2Result[]) { return (await run({ action: 'aggregate', results })).aggregate as Scope2Aggregate },
+    async aggregate(results: Scope2Result[], call: EngineCallOptions = {}) { return (await run({ action: 'aggregate', results }, call)).aggregate as Scope2Aggregate },
   }
 }
