@@ -36,6 +36,8 @@ function render(results: ResultsResponse, coverage: Coverage = READY, scope3Over
     ...journeyStatus, ...plainLanguage, ...resultsApi, ...resultsView, ...scope3ResultsApi, ...scope3Results, ...scope3Checklist, ...scope3ResultsText, ...scope3DisplayR3d, ...scope3TextR3d, formatTimeR2E,
     // Round 2 lane D: the Results screen renders the panel through its stateful wrapper; here the pure panel stands in.
     Scope3ResultsPanel: scope3Results.Scope3Panel,
+    // BF-13b: the printed Scope 3 section is not under test here; a stub keeps a Scope 3 state with data renderable.
+    Scope3ReportSection: () => null,
     h: (type: any, props: any, ...children: any[]) => typeof type === "function" ? type({ ...props, children }) : { type, props: props ?? {}, children },
     React: { Fragment: "fragment" }, Icon: () => null,
     useReducer: () => [{ results, error: null, busy: false }, () => {}], useState: (initial: any) => [initial === scope3ResultsApi.INITIAL_SCOPE3_STATE && scope3Override ? { ...initial, ...scope3Override } : initial, () => {}], useRef: (current: any) => ({ current }),
@@ -424,9 +426,27 @@ describe("BF-13: truthful coverage statement on Results, in print and in the CSV
     const months = Array.from({ length: 12 }, (_, index) => bill(`2025-${String(index + 1).padStart(2, "0")}-01`, index === 11 ? "2026-01-01" : `2025-${String(index + 2).padStart(2, "0")}-01`))
     const view = render(synthetic, coverageFor(months))
     expect(view.completeness.scope2Location).toBe(journeyStatus.COVERAGE_TEXT.resultsNoGaps(2))
-    expect(view.completeness.scope2Location).toContain("Not checked: whether every meter has its own record.")
+    expect(view.completeness.scope2Location).toContain("Not checked: whether each meter has its own records covering those days.")
     expect(csvLines(view.csv)).toContain(`# Completeness, Scope 2 location-based: ${journeyStatus.COVERAGE_TEXT.resultsNoGaps(2)}`)
     expect(csvLines(view.csv)).toContain(`# ${journeyStatus.COVERAGE_TEXT.csvNoGaps}`)
     for (const phrase of retired) { expect(view.csv).not.toContain(phrase); expect(view.printed).not.toContain(phrase) }
+  })
+})
+
+// BF-13b F1 (QA round 3 on PR #66, company q13): Scope 3 category 6 answered yes with a held (Needs input) travel record, and
+// clean Scope 1 and 2. The printed "None found" line sits in the Scope 1 and 2 part and must not claim every record is counted.
+const scope3Fixture: scope3ResultsApi.Scope3ResultsResponse = await Bun.file(new URL("../lib/scope3-results.fixture.json", import.meta.url)).json()
+describe("BF-13b: the printed \"None found\" line claims only Scope 1 and 2 records", () => {
+  test("q13: a held Scope 3 record beside clean Scope 1 and 2", () => {
+    const heldScope3 = (scope3Fixture as unknown as { records: Array<{ outcome: string }> }).records.filter(record => record.outcome === "held")
+    expect(heldScope3.length).toBeGreaterThan(0)
+    const gas = row("GAS-Q13", "natural_gas", 1, { inSubtotal: { scope1: true, scope2LocationBased: false, scope2MarketBased: false }, scope1: s1(GAS, "complete", { total: kg("531.1450") }) })
+    const clean = { ...synthetic, records: [gas], methods: [method(GAS, 1)], scope2: null,
+      scope1: { knownSourceSubtotal: kg("531.1450"), includedResults: [gas.scope1!.resultSha256], incompleteResults: [], notCalculated: [], reportedOutsideScopes: [], resultCount: 1, complete: true } } as unknown as ResultsResponse
+    const view = render(clean, READY, { data: scope3Fixture })
+    expect(view.notCounted).toEqual([])
+    expect(view.printed).toContain(journeyStatus.COVERAGE_TEXT.reportNoneFound)
+    expect(journeyStatus.COVERAGE_TEXT.reportNoneFound.startsWith("None found by these checks: every Scope 1 and 2 record is counted, ")).toBe(true)
+    expect(view.printed).not.toContain(["every record", "is counted"].join(" "))
   })
 })

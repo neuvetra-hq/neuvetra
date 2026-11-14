@@ -6,6 +6,9 @@ import { readdirSync, readFileSync, statSync } from "node:fs"
 import { join, relative } from "node:path"
 import { COVERAGE_TEXT, coverageGaps, coverageIssues, coverageLines, setupMissing, type JourneyRecord } from "./journey-status"
 import { periodCoverageGaps, siteCoverageWindow, uncoveredStretches } from "./period-coverage"
+import { READINESS_TEXT } from "./readiness"
+import { collectionBoundaryHold } from "../../../../packages/neuvetra-database/src/collection-engine-input"
+import { HELP_ENTRIES } from "./help-content"
 
 const office = "29400000-0000-4000-8000-000000000001", depot = "29400000-0000-4000-8000-000000000002"
 /** The phrases B-3 retired. Built from parts so this file never matches its own search. */
@@ -13,7 +16,15 @@ const RETIRED = [["No known", "gaps"].join(" "), ["No open setup answers or", "p
   // F1 (QA on PR #66): the Overview hint and the help answer that described the old one-record check.
   ["has a record — not that records cover", "the whole year"].join(" "), ["The check looks for at least one record per source type", "and included site"].join(" "),
   // B1 (QA on PR #66): the first BF-13 wording, which claimed the whole period for sites with their own dates.
-  ["the records cover every day of the reporting period for each site", "and source type"].join(" "), ["has records covering every day of the", "reporting period. Not checked"].join(" ")]
+  ["the records cover every day of the reporting period for each site", "and source type"].join(" "), ["has records covering every day of the", "reporting period. Not checked"].join(" "),
+  // BF-13b F5 (QA round 3 on PR #66): round 1's Overview hint and help sentence, and main's old printed "None found" line.
+  ["has records covering every day of the reporting period", "— not that"].join(" "), ["cover every day of the reporting period.", "It doesn’t check"].join(" "),
+  ["has at least one record. This checks coverage", "by type and site"].join(" "),
+  // BF-13b: round 2's wording, retired for F1 ("every record is counted"), F3 (per-unit records) and F6 ("site's dates").
+  ["None found by these checks:", "every record is counted"].join(" "), ["that the site's dates", "in company setup include"].join(" "), ["of the reporting period that the site's", "dates include"].join(" "),
+  ["within the site's dates", "— not that"].join(" "), ["within the site’s dates", "in company setup"].join(" "), ["has its own record,", "or whether"].join(" "), ["whether every meter has its own", "record."].join(" "),
+  // BF-13b G1: PR #70's first CSV qualifier and "no open answers for Scope 1 and 2", which ignored entity and control details.
+  ["other than any site coverage dates left", "“Not sure”"].join(" "), ["has no open answers for", "Scope 1 and 2,"].join(" "), ["no open company-setup answers for", "Scope 1 and 2"].join(" ")]
 type Location = { id: string; name: string; inclusion: string; operatorDetails: string; startMode?: string; endMode?: string; start?: string | null; endExclusive?: string | null }
 function view(locations: Location[] = [{ id: office, name: "Office", inclusion: "included", operatorDetails: "" }], screening: unknown[] = []) {
   return { currentVersion: { revision: 1, setup: { company: { legalName: "Acme" }, reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, boundary: { approach: "operational_control" }, screening, locations } } } as never
@@ -52,10 +63,10 @@ describe("BF-13: the period-coverage check", () => {
     const coverage = coverageOf(view(), records)
     expect(coverage.gaps).toEqual([])
     expect(coverageLines(coverage)).toEqual([COVERAGE_TEXT.csvNoGaps])
-    expect(COVERAGE_TEXT.csvNoGaps).toBe("Coverage checks: no open company-setup answers for Scope 1 and 2; every Scope 1 and 2 source type in company setup and every included site has records, and at each included site each source type's records (counted or not) cover every day of the reporting period that the site's dates include. Not checked: whether every meter, vehicle and piece of equipment has a record, or whether a site uses a Scope 1 source type recorded only at other sites.")
-    expect(COVERAGE_TEXT.resultsNoGaps(1)).toBe("No gaps found by these checks: every Scope 1 source type in company setup has records, and at each included site the records of each Scope 1 source type it has cover every day of the reporting period that the site's dates in company setup include. Not checked: whether every meter, vehicle and piece of equipment has its own record, or whether a site uses a source type that has records only at other sites.")
-    expect(COVERAGE_TEXT.resultsNoGaps(2)).toBe("No gaps found by these checks: every Scope 2 source type in company setup and every included site has records, and at each included site the records of each Scope 2 source type it has cover every day of the reporting period that the site's dates in company setup include. Not checked: whether every meter has its own record.")
-    expect(COVERAGE_TEXT.reportNoneFound).toBe("None found by these checks: every record is counted, company setup has no open answers for Scope 1 and 2, every Scope 1 and 2 source type it lists and every included site has records, and at each included site each source type's records cover every day of the reporting period that the site's dates include. Not checked: whether every meter, vehicle and piece of equipment has its own record, or whether a site uses a Scope 1 source type recorded only at other sites.")
+    expect(COVERAGE_TEXT.csvNoGaps).toBe("Coverage checks: no open company-setup answers that affect Scope 1 and 2 records, other than any site or entity details left “Not sure” or incomplete (Scope 1 and 2 records held for them are not counted); every Scope 1 and 2 source type in company setup and every included site has records, and at each included site each source type's records (counted or not) cover every day of the reporting period that the site's coverage dates include. Not checked: whether each meter, vehicle and piece of equipment has its own records covering those days, or whether a site uses a Scope 1 source type recorded only at other sites.")
+    expect(COVERAGE_TEXT.resultsNoGaps(1)).toBe("No gaps found by these checks: every Scope 1 source type in company setup has records, and at each included site the records of each Scope 1 source type it has cover every day of the reporting period that the site's coverage dates include. Not checked: whether each meter, vehicle and piece of equipment has its own records covering those days, or whether a site uses a source type that has records only at other sites.")
+    expect(COVERAGE_TEXT.resultsNoGaps(2)).toBe("No gaps found by these checks: every Scope 2 source type in company setup and every included site has records, and at each included site the records of each Scope 2 source type it has cover every day of the reporting period that the site's coverage dates include. Not checked: whether each meter has its own records covering those days.")
+    expect(COVERAGE_TEXT.reportNoneFound).toBe("None found by these checks: every Scope 1 and 2 record is counted, company setup has no open answers that affect Scope 1 and 2 records, every Scope 1 and 2 source type it lists and every included site has records, and at each included site each source type's records cover every day of the reporting period that the site's coverage dates include. Not checked: whether each meter, vehicle and piece of equipment has its own records covering those days, or whether a site uses a Scope 1 source type recorded only at other sites.")
   })
   test("eleven months with March missing: one gap naming March only", () => {
     const records = Array.from({ length: 12 }, (_, index) => bill(`m${index + 1}`, monthStart(index + 1), monthStart(index + 2))).filter(record => record.id !== "m3")
@@ -109,9 +120,9 @@ describe("BF-13: the no-gaps statements claim only what was checked (QA B1)", ()
       ...Array.from({ length: 6 }, (_, index) => bill(`w${index + 7}`, monthStart(index + 7), monthStart(index + 8), { locationId: warehouse, site: "New warehouse" }))]
     const coverage = coverageOf(setupView, records)
     expect(coverage.gaps).toEqual([])
-    // The statements that now print say "that the site's dates include", never "every day of the reporting period" alone.
+    // The statements that now print say "that the site's coverage dates include", never "every day of the reporting period" alone.
     for (const statement of [COVERAGE_TEXT.resultsNoGaps(2), ...coverageLines(coverage), COVERAGE_TEXT.reportNoneFound]) {
-      expect(statement).toMatch(/every day of the reporting period that the site's dates (in company setup )?include/)
+      expect(statement).toMatch(/every day of the reporting period that the site's coverage dates include/)
       expect(statement).not.toMatch(/every day of the reporting period(\.| for each site)/)
     }
   })
@@ -122,7 +133,7 @@ describe("BF-13: the no-gaps statements claim only what was checked (QA B1)", ()
     const coverage = coverageOf(setupView, records)
     expect(coverage.gaps).toEqual([])
     expect(coverageIssues(coverage, 1)).toEqual({ open: 0, gaps: 0, unchecked: false })
-    expect(COVERAGE_TEXT.resultsNoGaps(1)).toContain("Not checked: whether every meter, vehicle and piece of equipment has its own record, or whether a site uses a source type that has records only at other sites.")
+    expect(COVERAGE_TEXT.resultsNoGaps(1)).toContain("Not checked: whether each meter, vehicle and piece of equipment has its own records covering those days, or whether a site uses a source type that has records only at other sites.")
     expect(COVERAGE_TEXT.resultsNoGaps(1)).toContain("at each included site the records of each Scope 1 source type it has")
     expect(coverageLines(coverage)).toEqual([COVERAGE_TEXT.csvNoGaps])
     expect(COVERAGE_TEXT.csvNoGaps).toContain("or whether a site uses a Scope 1 source type recorded only at other sites.")
@@ -143,6 +154,80 @@ describe("BF-13: the no-gaps statements claim only what was checked (QA B1)", ()
   })
 })
 
+// BF-13b (QA round 3 on PR #66): the remaining follow-ups, each in a state that made the round-2 wording false or loose.
+describe("BF-13b: coverage wording follow-ups", () => {
+  test("F3: two meters (or two vans) each recorded for half the year read no gaps, and the statements say per-unit coverage is not checked", () => {
+    const meters = [bill("m1", "2025-01-01", "2025-07-01", { sourceId: "M-1" }), bill("m2", "2025-07-01", "2026-01-01", { sourceId: "M-2" })]
+    expect(coverageOf(view(), meters).gaps).toEqual([])
+    const vans = [bill("v1", "2025-01-01", "2025-07-01", { kind: "vehicle", sourceId: "VAN-1" }), bill("v2", "2025-07-01", "2026-01-01", { kind: "vehicle", sourceId: "VAN-2" }), bill("e", "2025-01-01", "2026-01-01")]
+    expect(coverageOf(view(undefined, [{ id: "veh", scope: 1, category: "Road & off-road vehicles", state: "yes", details: "2 vans" }]), vans).gaps).toEqual([])
+    // Each meter and van has its own record, so "has its own record" would not name what is left unchecked: coverage per unit is.
+    expect(COVERAGE_TEXT.resultsNoGaps(2)).toContain("Not checked: whether each meter has its own records covering those days.")
+    for (const statement of [COVERAGE_TEXT.resultsNoGaps(1), COVERAGE_TEXT.csvNoGaps, COVERAGE_TEXT.reportNoneFound]) expect(statement).toContain("whether each meter, vehicle and piece of equipment has its own records covering those days")
+  })
+  test("F6: the statements name the site's coverage dates (not its original opening date), which is what the check uses", () => {
+    const opened = view([{ id: office, name: "Office", inclusion: "included", operatorDetails: "", startMode: "specific", start: "2025-07-01", endMode: "period_end", opened: "2025-03-01" } as Location])
+    expect(coverageOf(opened, [bill("h2", "2025-07-01", "2026-01-01")]).gaps).toEqual([])
+    for (const statement of [COVERAGE_TEXT.resultsNoGaps(1), COVERAGE_TEXT.resultsNoGaps(2), COVERAGE_TEXT.csvNoGaps, COVERAGE_TEXT.reportNoneFound]) {
+      expect(statement).toContain("the site's coverage dates include")
+      expect(statement).not.toContain("the site's dates")
+    }
+  })
+  test("F4: the Overview hint and the help answer carry the same scope of checks as Results, including the unchecked other-sites case", () => {
+    const hint = READINESS_TEXT.s2Hint
+    expect(hint).toContain("each included site has electricity records")
+    expect(hint).toContain("the records of each Scope 1 and 2 source type it has cover every day of the reporting period that the site's coverage dates include")
+    expect(hint).toContain("or whether a site uses a Scope 1 source type recorded only at other sites.")
+    expect(hint).toContain("whether each meter, vehicle and piece of equipment has its own records covering those days")
+    const help = JSON.stringify(HELP_ENTRIES)
+    expect(help).toContain("It doesn’t check whether a site uses a Scope 1 source type that only other sites have records for.")
+    expect(help).toContain("within the site’s coverage dates in company setup")
+  })
+  test("F2: with a site's coverage dates left \"Not sure\", the CSV line still prints and says such dates are not counted as open answers", () => {
+    const unsure = view([{ id: office, name: "Office", inclusion: "included", operatorDetails: "", startMode: "unknown", endMode: "unknown" }])
+    const coverage = coverageOf(unsure, Array.from({ length: 12 }, (_, index) => bill(`m${index + 1}`, monthStart(index + 1), monthStart(index + 2))))
+    expect(coverage.setupOpen).toEqual([])
+    expect(coverageLines(coverage)).toEqual([COVERAGE_TEXT.csvNoGaps])
+    expect(COVERAGE_TEXT.csvNoGaps).toContain("no open company-setup answers that affect Scope 1 and 2 records, other than any site or entity details left “Not sure” or incomplete (Scope 1 and 2 records held for them are not counted);")
+  })
+})
+
+// BF-13b G1 (QA on PR #70, companies q33, q34 and q35): setup answers left "Not sure" that company setup does not list as
+// open answers. Each holds every Scope 1 and 2 record it applies to (collectionBoundaryHold, the rule every Scope 1 and 2
+// record passes before an engine), and the CSV line names them instead of claiming no open answers.
+describe("BF-13b G1: \"Not sure\" site and entity details are named, and their records are held", () => {
+  const entity = "29400000-0000-4000-8000-0000000000e1"
+  const site = (fields: Record<string, unknown>) => ({ id: office, name: "Office", inclusion: "included", operatorDetails: "", startMode: "period_start", endMode: "period_end", control: "reporting_company", entityId: entity, ...fields })
+  const entityRow = (fields: Record<string, unknown>) => ({ id: entity, name: "Acme Holdings", ownershipPercent: "100", control: "operational_control", inclusion: "included", reason: "", ...fields })
+  const setupOf = (location: Record<string, unknown>, entityFields: Record<string, unknown> = {}) => ({ currentVersion: { revision: 1, setup: { company: { legalName: "Acme" }, reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" },
+    boundary: { approach: "operational_control" }, screening: [], entities: [entityRow(entityFields)], locations: [site(location)] } } }) as never
+  const contextOf = (location: Record<string, unknown>, entityFields: Record<string, unknown> = {}) => ({ companyId: "c", setupVersionId: "s", setupRevision: 1, boundaryApproach: "operational_control", reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" },
+    locations: [{ ...site(location), entity: entityRow(entityFields) }] }) as never
+  const electricity = { kind: "electricity", locationId: office, period: { start: "2025-01-01", endExclusive: "2025-02-01" } } as never
+  const cases: Array<[string, Record<string, unknown>, Record<string, unknown>, string]> = [
+    ["q33: \"Who controls the equipment?\" Not sure", { control: "unknown" }, {}, "location_control_unresolved"],
+    ["q34: the entity's proposed inclusion Not sure", {}, { inclusion: "unknown" }, "entity_inclusion_unknown"],
+    ["q35: the entity's control Not sure", {}, { control: "unknown" }, "entity_control_unresolved"],
+    // The enumeration's other members (PR #70's F2): coverage dates Not sure, or "On a specific date" with no date.
+    ["coverage starts Not sure", { startMode: "unknown" }, {}, "location_coverage_unknown"],
+    ["coverage ends on a specific date with no date", { endMode: "specific", endExclusive: null }, {}, "location_coverage_unknown"],
+  ]
+  for (const [name, location, entityFields, reason] of cases) test(name, () => {
+    const setupView = setupOf(location, entityFields)
+    // Not listed as an open answer, so with twelve bills the CSV line prints ...
+    expect(setupMissing(setupView)).toEqual([])
+    const coverage = coverageOf(setupView, Array.from({ length: 12 }, (_, index) => bill(`m${index + 1}`, monthStart(index + 1), monthStart(index + 2))))
+    expect(coverageLines(coverage)).toEqual([COVERAGE_TEXT.csvNoGaps])
+    // ... and it names these details instead of claiming no open answers ...
+    expect(COVERAGE_TEXT.csvNoGaps).toContain("no open company-setup answers that affect Scope 1 and 2 records, other than any site or entity details left “Not sure” or incomplete (Scope 1 and 2 records held for them are not counted)")
+    // ... which is true: every Scope 1 and 2 record they apply to is held, never counted.
+    expect(collectionBoundaryHold(electricity, contextOf(location, entityFields))).toEqual({ status: "input_needed", reasons: [reason] })
+  })
+  test("the same setup with every detail answered holds nothing", () => {
+    expect(collectionBoundaryHold(electricity, contextOf({}, {}))).toBeNull()
+  })
+})
+
 describe("BF-13: the retired claims appear nowhere", () => {
   // apps/site-web/src (screens, the live CSV and the printed report are all produced there) and the server-side text modules
   // (apps/site-api/src and packages/neuvetra-database/src: Scope 3 texts, frozen report and CSV builders).
@@ -158,5 +243,6 @@ describe("BF-13: the retired claims appear nowhere", () => {
     expect(scanned.length).toBeGreaterThan(100)
     const hits = scanned.flatMap(path => RETIRED.filter(phrase => readFileSync(path, "utf8").toLowerCase().includes(phrase.toLowerCase())).map(phrase => `${relative(root, path)}: ${phrase}`))
     expect(hits).toEqual([])
-  })
+  // BF-13b G2 (QA on PR #70): the scan reads every source file and took 5.4 s on a loaded host; bun's default is 5 s.
+  }, 60_000)
 })
