@@ -208,7 +208,7 @@ export async function differential(db: DiffDb, fx: Fixture, other: Fixture, inpu
     same(reasons(b.after).map(r => r.correction_reason), reasons(b.after).map(r => { const c = byRecord.get(r.record_id)!; return scope3SpendConversionReason({ ...input, amount: c.from, usd: c.usd }).normalize('NFC') }))
   }
   // The other company's rows are exactly as before (tenant isolation), in every table.
-  const theirs = (s: Record<string, string[]>) => Object.values(s).flat().filter(text => text.includes(other.company))
+  const theirs = (s: Record<string, string[]>) => Object.entries(s).flatMap(([table, rows]) => rows.filter(text => text.includes(other.company)).map(text => `${table} ${text}`)).sort()
   same(theirs(n.after), theirs(before))
   return { input, converted: n.value.converted.length, skipped: n.value.skipped.length, refused: null, mismatches, rows: Object.values(nn.rows).flat().length, chunks: n.calls }
 }

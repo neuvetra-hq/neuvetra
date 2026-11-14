@@ -400,7 +400,7 @@ integration("round 3 owner decision 7 natively: the line cap holds in SQL (impor
 async function companyLockHeld(operator: WorkspaceConnection, companyId: string, ms: number) {
   const until = performance.now() + ms
   while (performance.now() < until) {
-    const held = await operator.transaction(async tx => { try { await tx.query("select 1 from neuvetra.companies where id=$1 for update nowait", [companyId]); return false } catch { return true } })
+    const held = await operator.transaction(tx => tx.query("select 1 from neuvetra.companies where id=$1 for update nowait", [companyId])).then(() => false, () => true)
     if (held) return true
     await Bun.sleep(20)
   }
@@ -410,7 +410,7 @@ async function companyLockHeld(operator: WorkspaceConnection, companyId: string,
 async function companyLockSpan(operator: WorkspaceConnection, companyId: string, done: () => boolean) {
   let first = 0, last = 0
   while (!done()) {
-    const held = await operator.transaction(async tx => { try { await tx.query("select 1 from neuvetra.companies where id=$1 for update nowait", [companyId]); return false } catch { return true } })
+    const held = await operator.transaction(tx => tx.query("select 1 from neuvetra.companies where id=$1 for update nowait", [companyId])).then(() => false, () => true)
     if (held) { last = performance.now(); first ||= last }
     await Bun.sleep(20)
   }
