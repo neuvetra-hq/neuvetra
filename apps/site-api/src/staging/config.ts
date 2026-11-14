@@ -15,7 +15,13 @@ export interface StagingConfig {
   databaseCaFile?: string
   webRoot: string
   port: number
+  /** BF-19: request-pool connections per API instance (`NEUVETRA_STAGING_DB_POOL_SIZE`, 1-8, default 4); readiness has one more. Absent (hand-built test configs) means the adapter default, 4. */
+  databasePoolSize?: number
 }
+
+/** BF-19: the request pool's default size, and the adapter's ceiling (hosted.ts refuses more than 8). */
+export const STAGING_DB_POOL_SIZE_DEFAULT = 4
+export const STAGING_DB_POOL_SIZE_MAX = 8
 
 function invalid(): never { throw new Error("Private staging configuration is invalid.") }
 
@@ -44,13 +50,17 @@ export function readStagingConfig(environment: Record<string, string | undefined
   const direct = database.hostname === `db.${projectRef}.supabase.co` && database.username === "neuvetra_runtime"
   const pooler = /^[a-z0-9-]+\.pooler\.supabase\.com$/.test(database.hostname) && database.username === `neuvetra_runtime.${projectRef}`
   if (!["postgres:", "postgresql:"].includes(database.protocol) || (!direct && !pooler) || !database.password || database.pathname !== "/postgres" || database.hash || database.search || (database.port && database.port !== "5432" && !(pooler && database.port === "6543"))) invalid()
+  // BF-19: the pool size is an integer 1-8 written plainly ("4", never "04", "4.0" or ""); anything else refuses to start.
+  const poolSetting = environment.NEUVETRA_STAGING_DB_POOL_SIZE
+  if (poolSetting !== undefined && !new RegExp(`^[1-${STAGING_DB_POOL_SIZE_MAX}]$`).test(poolSetting)) invalid()
+  const databasePoolSize = poolSetting === undefined ? STAGING_DB_POOL_SIZE_DEFAULT : Number(poolSetting)
   // The hosted adapter re-validates this target at startup; refuse here anything it would refuse there.
-  try { validateHostedTarget({ connectionString: database.toString(), expectedProjectRef: projectRef, reuseExistingProject }) } catch { invalid() }
+  try { validateHostedTarget({ connectionString: database.toString(), expectedProjectRef: projectRef, reuseExistingProject, maxConnections: databasePoolSize }) } catch { invalid() }
   const port = Number(environment.PORT ?? "3000")
   if (!Number.isInteger(port) || port < 1 || port > 65535) invalid()
   const databaseCaPem = environment.NEUVETRA_STAGING_DB_CA_PEM
   const databaseCaFile = environment.NEUVETRA_STAGING_DB_CA_FILE
   if ((databaseCaPem !== undefined && databaseCaFile !== undefined) || databaseCaPem === "" || databaseCaFile === "") invalid()
   const webRoot = path.resolve(environment.NEUVETRA_STAGING_WEB_ROOT ?? "/app/apps/site-web/dist-staging")
-  return { profile: STAGING_PROFILE, origin: origin.origin, projectRef, reuseExistingProject, supabaseUrl, supabaseAnonKey, databaseUrl: database.toString(), databaseCaPem, databaseCaFile, webRoot, port }
+  return { profile: STAGING_PROFILE, origin: origin.origin, projectRef, reuseExistingProject, supabaseUrl, supabaseAnonKey, databaseUrl: database.toString(), databaseCaPem, databaseCaFile, webRoot, port, databasePoolSize }
 }
