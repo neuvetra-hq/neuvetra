@@ -53,6 +53,8 @@ export const REVIEWED_SCOPE12_BATCH_SHA256 = "5460cfecea60acefaff8f7b32f578e2a78
 export const COLLECTION_RESULTS_BUDGET_MS = 25_000
 /** BI-01: the answer when every record sent to an engine came back unavailable (no engine could run). Never a 200. */
 export const RESULTS_ENGINE_UNAVAILABLE_TEXT = "Results could not be prepared. Try again shortly."
+/** BF-29: the Retry-After (seconds) on that 503. */
+export const RESULTS_RETRY_AFTER_SECONDS = 5
 
 const UUID_SOURCE = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 const ROUTE = new RegExp(`^/workspace/(${UUID_SOURCE})/results$`, "i")
@@ -515,7 +517,9 @@ export function createCollectionResultsRoutes(deps: {
       const body = await job
       // BI-01: when no record sent to an engine could be calculated or refused (no engine could run), there is no answer to show.
       const sent = body.records.filter(row => row.outcome !== "held")
-      if (sent.length && sent.every(row => row.outcome === "unavailable")) return respond(503, { code: "results_engine_unavailable", error: RESULTS_ENGINE_UNAVAILABLE_TEXT })
+      // BF-29: it is a short wait for capacity, so the answer says when to ask again. Refused records are answers (the engine
+      // looked at them), so a mix of refused and unavailable records is still a 200; only "nothing could run" is a 503.
+      if (sent.length && sent.every(row => row.outcome === "unavailable")) return Response.json({ code: "results_engine_unavailable", error: RESULTS_ENGINE_UNAVAILABLE_TEXT }, { status: 503, headers: { "cache-control": "no-store", "retry-after": String(RESULTS_RETRY_AFTER_SECONDS) } })
       return respond(200, body)
     } catch (error) {
       const code = (error as { code?: string }).code
