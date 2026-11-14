@@ -237,7 +237,7 @@ integration("BF-09 at schema 31: the Scope 1 and 2 cap holds in SQL for new reco
   const app = await serve(database, { owner })
   const call = caller(app)
   try {
-    expect((await call("GET", "/ready")).body.schemaVersion).toBe(31)
+    expect((await call("GET", "/ready")).body.schemaVersion).toBe(32)
     await operator.query("insert into auth.users(id) values($1)", [owner])
     await provisionStagingRoster(operator, { expectedProjectRef: "abcdefghijklmnopqrst", workspaceId: company, ownerUserId: owner, members: [] })
     const { electricity, travel } = await setUp(call, company)
@@ -361,13 +361,14 @@ integration("BF-09: the same server at schema 30, then after 0031 is applied at 
     expect((await call("GET", `${root}/results`)).status).toBe(200)
     const recordsAt30 = await database.findCollectionActivities(owner, company)
 
-    // The owner's step: apply 0031 through the operator path while the server keeps running.
+    // The owner's step: apply 0031 through the operator path while the server keeps running (from BF-18 the same call also
+    // applies 0032, whose two altered tables gain columns; this company has no instrument or approval row to backfill).
     const before = await snapshotStagingTables(operator)
-    expect((await migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true })).schemaVersion).toBe(31)
+    expect((await migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true })).schemaVersion).toBe(32)
     const after = await snapshotStagingTables(operator)
-    expect(Object.keys(before).filter(table => JSON.stringify(before[table]) !== JSON.stringify(after[table]))).toEqual(["neuvetra.schema_migrations"])
+    expect(Object.keys(before).filter(table => JSON.stringify(before[table]) !== JSON.stringify(after[table]))).toEqual(["neuvetra.collection_electricity_instruments", "neuvetra.schema_migrations", "neuvetra.scope3_report_approvals"])
     const ready31 = await call("GET", "/ready")
-    expect([ready31.status, ready31.body.schemaVersion]).toEqual([200, 31])
+    expect([ready31.status, ready31.body.schemaVersion]).toEqual([200, 32])
     expect(await database.findCollectionActivities(owner, company)).toEqual(recordsAt30)
     // At 31 the same withdrawn record cannot be made active past 400 (399 active plus one new = 400 first).
     expect((await call("POST", `${root}/collection/activities/${crypto.randomUUID()}`, request(0, null, electricity("M-402")))).status).toBe(201)
@@ -385,6 +386,127 @@ integration("BF-09: the same server at schema 30, then after 0031 is applied at 
     const scope3At31 = await callOther("GET", `/workspace/${small}/results/scope3`)
     expect({ ...resultsAt31.body, generatedAt: "" }).toEqual({ ...resultsAt30.body, generatedAt: "" })
     expect({ ...scope3At31.body, generatedAt: "" }).toEqual({ ...scope3At30.body, generatedAt: "" })
+  } finally { await app?.close(); await database.close().catch(() => {}); await fixture.close() }
+}, 600_000)
+
+// BF-18: the image this PR deploys, against an existing-project database at schema 31 (hosted staging today), behaves as
+// before 0032: an instrument identity key and BF-17's flag are refused before any SQL, a reused idempotency key answers
+// as it did, and a Scope 3 report version is prepared and approved as before. Then 0032 is applied the way the owner will
+// apply it (migratePrivateStaging, which tools/staging/apply-existing.ts calls) while the same server keeps running: /ready
+// reports 32; both companies' Results, Scope 3 results, frozen report versions and their CSVs are byte for byte as at 31;
+// the instrument rows equal their payloads; the approval carries its CSV hash; and the new keys are stored.
+integration("BF-18: the same server at schema 31, then after 0032 is applied at 32 (existing-project bridge)", async () => {
+  const { construct, serve, caller, request } = bf09()
+  const owner = crypto.randomUUID(), other = crypto.randomUUID(), company = crypto.randomUUID(), small = crypto.randomUUID()
+  const fixture = await createStagingSchemaFixture(target!, "m63_bf18_routes", 31, EXISTING_PROJECT_REF)
+  const operator = fixture.operator
+  const database = construct(fixture.runtimeUrl, EXISTING_PROJECT_REF)
+  let app: Awaited<ReturnType<typeof serve>> | undefined
+  try {
+    for (const [user, id] of [[owner, company], [other, small]] as const) {
+      await operator.query("insert into auth.users(id) values($1)", [user])
+      await operator.transaction(async tx => {
+        await tx.query("insert into neuvetra.staging_access(user_id,active) values($1,true)", [user])
+        await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [user])
+        await tx.query("select neuvetra.create_company_workspace($1,'Synthetic Acme, Inc.',$2,'Synthetic California office',$3,2023,$4)", [id, crypto.randomUUID(), crypto.randomUUID(), crypto.randomUUID()])
+        await tx.query("insert into neuvetra.company_members(company_id,user_id,role) values($1,$2,'owner') on conflict(company_id,user_id) do update set role=excluded.role", [id, user])
+        await tx.query("update neuvetra.staging_access set company_id=$2,active=true where user_id=$1", [user, id])
+      })
+    }
+    app = await serve(database, { owner, other }, EXISTING_PROJECT_REF)
+    const calls = { [company]: caller(app), [small]: caller(app, "other") }
+    expect((await calls[company]!("GET", "/ready")).body.schemaVersion).toBe(31)
+    // Each company: one included California site, categories 3 and 6 included; electricity with certificates and a stated
+    // rate (whose 4-decimal figures 0031 stored as null), gas, a flight; then a Scope 3 report version, approved.
+    const seed = async (id: string) => {
+      const call = calls[id]!
+      const base = createSyntheticCompanySetup(), site = { ...base.locations[0]!, inclusion: "included" as const, control: "reporting_company" as const, startMode: "period_start" as const, endMode: "period_end" as const }
+      const setup = { ...base, boundary: { ...base.boundary, approach: "operational_control" as const }, entities: base.entities.map(e => ({ ...e, inclusion: "included" as const, control: "operational_control" as const })), locations: [site],
+        screening: [...base.screening.filter(s => s.scope !== 3), { id: "s3-3", scope: 3, category: "fuel_and_energy_related_activities", state: "yes", reason: "", details: "", locationId: null }, { id: "s3-6", scope: 3, category: "business_travel", state: "yes", reason: "", details: "", locationId: null }] }
+      const saved = await call("POST", `/workspace/${id}/setup`, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, setup })
+      expect(saved.status).toBe(201)
+      const common = { locationId: site.id, setupVersionId: saved.body.savedVersion.id, state: "active", withdrawalReason: null, quality: "actual", estimateBasis: null, period: { start: "2025-01-01", endExclusive: "2026-01-01" }, reference: "Synthetic BF-18", notes: "", evidenceIds: [] }
+      const q = (value: string, unit: string) => ({ originalValue: value, originalUnit: unit, normalizedValue: value, normalizedUnit: unit })
+      const cert = (extra: Record<string, unknown> = {}) => ({ type: "energy_attribute_certificate", mwh: "12.5", qualityCriteriaMet: true, vintageYear: 2025, evidenceReference: null, generationTechnology: "wind", rateLbPerMwh: null, ...extra })
+      const meter = (sourceId: string, instruments: unknown[]) => ({ ...common, kind: "electricity", sourceId, quantity: q("25000", "kWh"), payload: { meterOrAccountNumber: sourceId, utilityName: "City & County of San Francisco", site: "Office", zip: "94105", subregion: "CAMX", utilityEiaId: "16612", instruments } })
+      const records = [
+        meter("M-1", [cert()]),
+        meter("M-2", [cert({ type: "supplier_specific_rate", mwh: "10.125", generationTechnology: "natural_gas", rateLbPerMwh: { co2: "800.1234", ch4: "0.0331", n2o: "0.0045" } })]),
+        meter("M-3", []),
+        { ...common, kind: "natural_gas", sourceId: "GAS-1", quantity: q("1250", "therm"), payload: { heatContent: null } },
+        { ...common, kind: "business_travel", sourceId: "T-1", quantity: q("2400", "mile"), payload: { mode: "air", passengerSegments: 4, haulBasis: null } },
+      ]
+      for (const activity of records) expect((await call("POST", `/workspace/${id}/collection/activities/${crypto.randomUUID()}`, request(0, null, activity))).status).toBe(201)
+      const reports = `/workspace/${id}/scope3/reports`
+      const version = await call("POST", reports, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, reason: null })
+      expect(version.status).toBe(201)
+      const v = version.body.version
+      const approved = await call("POST", `${reports}/${v.id}/approval`, { reportSha256: v.reportSha256, acknowledgeOpenIssues: v.openIssues.length > 0, confirmSelfApproval: true })
+      expect(approved.status).toBe(201)
+      return { meter, cert, common, q, versionId: v.id as string }
+    }
+    const seeded = { [company]: await seed(company), [small]: await seed(small) }
+    // What the owner compares: Results, Scope 3 results, the report versions and each frozen version (text and CSV).
+    const observe = async (id: string) => {
+      const call = calls[id]!, reports = `/workspace/${id}/scope3/reports`
+      const results = await call("GET", `/workspace/${id}/results`), scope3 = await call("GET", `/workspace/${id}/results/scope3`), versions = await call("GET", reports)
+      const frozen = await call("GET", `${reports}/${seeded[id]!.versionId}`)
+      expect([results.status, scope3.status, versions.status, frozen.status]).toEqual([200, 200, 200, 200])
+      return { results: { ...results.body, generatedAt: "" }, scope3: { ...scope3.body, generatedAt: "" }, versions: versions.body, frozen: frozen.body }
+    }
+    const at31 = { [company]: await observe(company), [small]: await observe(small) }
+    expect(at31[company]!.results.records.filter((row: any) => row.kind === "electricity" && row.outcome === "calculated").length).toBe(3)
+    const recordsAt31 = await database.findCollectionActivities(owner, company)
+
+    // At 31 the new keys are refused before any SQL (422, the answer any unknown key got), and the capabilities say so.
+    const call = calls[company]!, root = `/workspace/${company}`, { meter, cert, common, q } = seeded[company]!
+    const capabilities31 = (await call("GET", `${root}/collection`)).body.capabilities
+    expect([capabilities31.instrumentIdentity, capabilities31.scope3.overlapConfirmation]).toEqual([false, false])
+    const identified = meter("M-4", [cert({ instrumentId: "WREGIS-123", registry: "WREGIS", faceMwh: "12.5" })])
+    expect(await call("POST", `${root}/collection/activities/${crypto.randomUUID()}`, request(0, null, identified))).toEqual({ status: 422, body: { error: "Invalid or unsupported collection record." } })
+    const lease = { ...common, kind: "asset_energy", sourceId: "LEASE-1", quantity: q("48000", "kWh"), payload: { category: 8, carrier: "electricity", assetLabel: "Leased floor", counterpartyName: "Synthetic Landlord", leaseType: "operating", noOperationalControlBasis: "Landlord operates the building systems.",
+      zip: "94105", subregion: "CAMX", utilityEiaId: "16612", refrigerantGas: null, allocation: null, scope2OverlapConfirmedDistinct: true } }
+    expect(await call("POST", `${root}/collection/activities/${crypto.randomUUID()}`, request(0, null, lease))).toEqual({ status: 422, body: { error: "Invalid or unsupported collection record." } })
+    // A reused idempotency key: the answer at 31 (23505), compared with the answer at 32 (23N32) below.
+    const key = crypto.randomUUID(), gas = { ...common, kind: "natural_gas", sourceId: "GAS-9", quantity: q("10", "therm"), payload: { heatContent: null } }
+    expect((await call("POST", `${root}/collection/activities/${crypto.randomUUID()}`, { ...request(0, null, gas), idempotencyKey: key })).status).toBe(201)
+    const reused31 = await call("POST", `${root}/collection/activities/${crypto.randomUUID()}`, { ...request(0, null, { ...gas, sourceId: "GAS-10" }), idempotencyKey: key })
+    expect(reused31.status).toBe(409)
+    const after31 = { [company]: await observe(company), [small]: await observe(small) }
+    const recordsBefore = await database.findCollectionActivities(owner, company)
+
+    // The owner's step: 0032 through the operator path while the server keeps running.
+    const before = await snapshotStagingTables(operator)
+    const migrated = await migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true })
+    expect([migrated.schemaVersion, migrated.postMigrationAudit]).toEqual([32, { legacyContainmentVerified: true, storageGuardGrantsVerified: true }])
+    const after = await snapshotStagingTables(operator)
+    expect(Object.keys(before).filter(table => JSON.stringify(before[table]) !== JSON.stringify(after[table]))).toEqual(["neuvetra.collection_electricity_instruments", "neuvetra.schema_migrations", "neuvetra.scope3_report_approvals"])
+    const ready32 = await call("GET", "/ready")
+    expect([ready32.status, ready32.body]).toEqual([200, { status: "ready", profile: STAGING_PROFILE, schemaVersion: 32, legacyContainmentVerified: true }])
+    // Every record, Result, Scope 3 result, report version and frozen text and CSV is exactly as before, for both companies.
+    expect(await database.findCollectionActivities(owner, company)).toEqual(recordsBefore)
+    expect(recordsBefore.filter(r => recordsAt31.some(x => x.id === r.id))).toEqual(recordsAt31)
+    for (const id of [company, small]) expect([id, await observe(id)]).toEqual([id, after31[id]])
+    expect(after31[small]).toEqual(at31[small])
+    // BF-24: the instrument rows equal their payloads; BI-05: each approval carries its version's CSV hash.
+    expect((await operator.query(`select i.mwh::text mwh,i.rate_co2_lb_per_mwh::text co2,i.rate_ch4_lb_per_mwh::text ch4,i.rate_n2o_lb_per_mwh::text n2o from neuvetra.collection_electricity_instruments i
+      join neuvetra.collection_activity_versions v on v.id=i.version_id where v.company_id=$1 order by v.source_id`, [company])).rows).toEqual([{ mwh: "12.5", co2: null, ch4: null, n2o: null }, { mwh: "10.125", co2: "800.1234", ch4: "0.0331", n2o: "0.0045" }])
+    expect((await operator.query("select count(*)::int n from neuvetra.scope3_report_approvals a join neuvetra.scope3_report_versions v on v.id=a.version_id and v.csv_sha256=a.csv_sha256")).rows).toEqual([{ n: 2 }])
+
+    // At 32 the new keys are stored and read back; a reused idempotency key answers exactly as at 31.
+    const capabilities32 = (await call("GET", `${root}/collection`)).body.capabilities
+    expect([capabilities32.instrumentIdentity, capabilities32.scope3.overlapConfirmation]).toEqual([true, true])
+    const stored = await call("POST", `${root}/collection/activities/${crypto.randomUUID()}`, request(0, null, identified))
+    expect([stored.status, stored.body.version.activity.payload.instruments]).toEqual([201, identified.payload.instruments])
+    const leased = await call("POST", `${root}/collection/activities/${crypto.randomUUID()}`, request(0, null, lease))
+    expect([leased.status, leased.body.version.activity.payload.scope2OverlapConfirmedDistinct]).toEqual([201, true])
+    const reused32 = await call("POST", `${root}/collection/activities/${crypto.randomUUID()}`, { ...request(0, null, { ...gas, sourceId: "GAS-11" }), idempotencyKey: key })
+    expect(reused32).toEqual(reused31)
+    // A second revision is prepared and approved through today's route (no csvSha256 sent); the approval binds its CSV.
+    const reports = `${root}/scope3/reports`
+    const two = (await call("POST", reports, { idempotencyKey: crypto.randomUUID(), expectedRevision: 1, reason: "Second revision after 0032." })).body.version
+    expect((await call("POST", `${reports}/${two.id}/approval`, { reportSha256: two.reportSha256, acknowledgeOpenIssues: two.openIssues.length > 0, confirmSelfApproval: true })).status).toBe(201)
+    expect((await operator.query("select csv_sha256 from neuvetra.scope3_report_approvals where version_id=$1", [two.id])).rows).toEqual([{ csv_sha256: two.csvSha256 }])
   } finally { await app?.close(); await database.close().catch(() => {}); await fixture.close() }
 }, 600_000)
 

@@ -336,8 +336,15 @@ export type CommutingAverageCollectionPayload = DQ & { workingDays: number; mode
 /** Category 7, teleworking: the incremental home-office energy (electricity or natural gas). */
 export type TeleworkingCollectionPayload = DQ & { carrier: 'electricity' | 'natural_gas'; baselineBasis: string } & GridLocation
 export interface Scope3AreaAllocation { reportingArea: string; buildingArea: string; occupancyPercent: string; areaUnit: 'sqft' | 'm2' }
+/**
+ * BF-18 (0032), for BF-17 (B-9): the user's confirmation that a leased asset's energy (or a building estimate) is a different
+ * meter from any Scope 2 electricity record at the same site. Optional: absent (every record saved before 0032), true or
+ * false. Storage and validation only; nothing reads it yet. A database below schema 32 refuses the key, so the route refuses
+ * such a save first (`scope3OverlapConfirmationAvailable`).
+ */
+export type Scope2OverlapConfirmation = { scope2OverlapConfirmedDistinct?: boolean }
 /** Categories 4, 8, 9, 10, 13 and 14 from an asset's own energy or refrigerant use (4 and 9: a third-party warehouse or distribution centre). */
-export type AssetEnergyCollectionPayload = DQ & {
+export type AssetEnergyCollectionPayload = DQ & Scope2OverlapConfirmation & {
   category: typeof SCOPE3_ASSET_CATEGORIES[number]; carrier: 'electricity' | 'natural_gas' | 'refrigerant'; assetLabel: string; counterpartyName: string; leaseType: LeaseType
   noOperationalControlBasis: string | null; refrigerantGas: string | null; allocation: Scope3AreaAllocation | null
 } & GridLocation
@@ -348,7 +355,7 @@ export type PartnerReportedCollectionPayload = DQ & {
   leaseType: LeaseType; noOperationalControlBasis: string | null; gwpBasis: GwpBasis; verification: Verification; periodMatches: boolean; supersedesSpend: Scope3SupersedesSpend | null
 }
 /** Categories 8, 13 and 14 from floor area and CBECS 2018 average intensities (factor source loaded late, I-12b). */
-export type BuildingAverageCollectionPayload = DQ & {
+export type BuildingAverageCollectionPayload = DQ & Scope2OverlapConfirmation & {
   category: 8 | 13 | 14; cbecsActivity: string; usesNaturalGas: 'yes' | 'no' | 'unknown'; gridBasis: typeof SCOPE3_GRID_BASES[number]; coveredDays: number
   leaseType: LeaseType; noOperationalControlBasis: string | null
 } & GridLocation
@@ -530,6 +537,10 @@ function gridLocation(p: Record<string, unknown>, required: boolean): GridLocati
 }
 const LOCATION = ['zip', 'subregion', 'utilityEiaId'] as const
 const OPTIONAL = ['dataQuality'] as const
+/** BF-18 (0032): asset_energy and building_average may also carry `scope2OverlapConfirmedDistinct`. */
+const OPTIONAL_WITH_OVERLAP = ['dataQuality', 'scope2OverlapConfirmedDistinct'] as const
+/** The optional `scope2OverlapConfirmedDistinct` key: a boolean, kept absent when absent (a saved payload reads back byte for byte). */
+const withOverlapConfirmation = <T extends object>(p: Record<string, unknown>, payload: T): T & Scope2OverlapConfirmation => own(p, 'scope2OverlapConfirmedDistinct') ? { ...payload, scope2OverlapConfirmedDistinct: bool(p.scope2OverlapConfirmedDistinct, 'Scope 2 overlap confirmation') } : payload
 const SHA256 = /^[0-9a-f]{64}$/
 /** [scope3_assert_date] A real calendar date written YYYY-MM-DD, 1900-2099 (the years PostgreSQL and JavaScript read the same way). */
 function calendarDate(value: unknown, label: string): string {
@@ -628,7 +639,7 @@ function validateCompletionPayload(kind: Scope3CompletionKind, value: unknown): 
     return withDataQuality(p, { carrier, ...gridLocation(p, carrier === 'electricity'), baselineBasis: text(p.baselineBasis, 'baseline basis', 3, 300) })
   }
   if (kind === 'asset_energy') {
-    const p = exact(value, ['category', 'carrier', 'assetLabel', 'counterpartyName', 'leaseType', 'noOperationalControlBasis', ...LOCATION, 'refrigerantGas', 'allocation'], OPTIONAL, 'asset energy')
+    const p = exact(value, ['category', 'carrier', 'assetLabel', 'counterpartyName', 'leaseType', 'noOperationalControlBasis', ...LOCATION, 'refrigerantGas', 'allocation'], OPTIONAL_WITH_OVERLAP, 'asset energy')
     const carrier = choice(p.carrier, ['electricity', 'natural_gas', 'refrigerant'] as const, 'asset carrier')
     const refrigerantGas = carrier === 'refrigerant' ? tokenText(p.refrigerantGas, 'Refrigerant') : p.refrigerantGas === null ? null : fail('a refrigerant gas is given where none applies')
     let allocation: Scope3AreaAllocation | null = null
@@ -636,11 +647,11 @@ function validateCompletionPayload(kind: Scope3CompletionKind, value: unknown): 
       const a = exact(p.allocation, ['reportingArea', 'buildingArea', 'occupancyPercent', 'areaUnit'], [], 'area allocation')
       allocation = { reportingArea: decimal(a.reportingArea, 'reporting area'), buildingArea: decimal(a.buildingArea, 'building area'), occupancyPercent: decimal(a.occupancyPercent, 'occupancy percent'), areaUnit: choice(a.areaUnit, ['sqft', 'm2'] as const, 'area unit') }
     }
-    return withDataQuality(p, {
+    return withOverlapConfirmation(p, withDataQuality(p, {
       category: categoryIn(p.category, SCOPE3_ASSET_CATEGORIES, 'asset category'), carrier, assetLabel: text(p.assetLabel, 'asset label', 1, 200), counterpartyName: text(p.counterpartyName, 'counterparty', 0, 200),
       leaseType: nullableChoice(p.leaseType, SCOPE3_LEASE_TYPES, 'lease type'), noOperationalControlBasis: nullableText(p.noOperationalControlBasis, 'operational control basis', 0, 500),
       ...gridLocation(p, carrier === 'electricity'), refrigerantGas, allocation,
-    })
+    }))
   }
   if (kind === 'partner_reported') {
     const p = exact(value, ['category', 'counterpartyName', 'scope2Basis', 'allocationBasis', 'allocationNumerator', 'allocationDenominator', 'leaseType', 'noOperationalControlBasis', 'gwpBasis', 'verification', 'periodMatches', 'supersedesSpend'], OPTIONAL, 'partner figure')
@@ -658,14 +669,14 @@ function validateCompletionPayload(kind: Scope3CompletionKind, value: unknown): 
     })
   }
   if (kind === 'building_average') {
-    const p = exact(value, ['category', 'cbecsActivity', 'usesNaturalGas', 'gridBasis', ...LOCATION, 'coveredDays', 'leaseType', 'noOperationalControlBasis'], OPTIONAL, 'building average')
+    const p = exact(value, ['category', 'cbecsActivity', 'usesNaturalGas', 'gridBasis', ...LOCATION, 'coveredDays', 'leaseType', 'noOperationalControlBasis'], OPTIONAL_WITH_OVERLAP, 'building average')
     const gridBasis = choice(p.gridBasis, SCOPE3_GRID_BASES, 'grid basis')
-    return withDataQuality(p, {
+    return withOverlapConfirmation(p, withDataQuality(p, {
       category: categoryIn(p.category, SCOPE3_BUILDING_CATEGORIES, 'building category'), cbecsActivity: tokenText(p.cbecsActivity, 'Building activity'),
       usesNaturalGas: choice(p.usesNaturalGas, ['yes', 'no', 'unknown'] as const, 'uses natural gas'), gridBasis, ...gridLocation(p, gridBasis === 'subregion'),
       coveredDays: integer(p.coveredDays, 'covered days', 1, 366), leaseType: nullableChoice(p.leaseType, SCOPE3_LEASE_TYPES, 'lease type'),
       noOperationalControlBasis: nullableText(p.noOperationalControlBasis, 'operational control basis', 0, 500),
-    })
+    }))
   }
   if (kind === 'sold_fuel') {
     const p = exact(value, ['fuel', 'combustedInUse'], OPTIONAL, 'fuel sold')
