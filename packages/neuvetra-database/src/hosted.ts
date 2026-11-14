@@ -227,6 +227,18 @@ function requireSubject(userId: string) {
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId)) throw new Error("Verified authentication subject required.")
 }
 
+/** BF-19: what every runtime session must show (PostgreSQL's display of the connect options in createPostgresConnection). */
+export const STAGING_LOCK_TIMEOUT_SETTING = "5s"
+export const STAGING_STATEMENT_TIMEOUT_SETTING = "15s"
+/**
+ * BF-19: readiness found a session without the connect options (`lock_timeout` 5 s, `statement_timeout` 15 s), which a
+ * transaction-mode pooler can drop. `reason` is the only detail that leaves the process (/ready, the start-up log).
+ */
+export class StagingSessionSettingsError extends Error {
+  readonly reason = "database_session_settings_not_applied" as const
+  constructor() { super("Database session settings (lock_timeout, statement_timeout) are not applied.") }
+}
+
 /** What readiness reports. The two BF-10 fields appear only while a reviewed Storage guard grant is missing. */
 export interface StagingReadinessReceipt {
   profile: typeof STAGING_PROFILE
@@ -241,13 +253,30 @@ export class HostedWorkspaceDatabase extends WorkspaceDatabase {
   // never change while the process runs, so read and hash them once (0028
   // alone is 3 MB); a failed read is not kept and is retried next time.
   private migrationManifest?: Promise<StagingMigration[]>
-  private constructor(db: WorkspaceConnection, private readonly expectedProjectRef: string, private readonly reuseExistingProject = false) { super(db) }
+  /**
+   * BF-19 (lead 5): readiness runs on its own one-connection pool, so /ready and the per-request readiness guard never
+   * wait behind long bulk writes on the request pool. Tests that construct the adapter on one connection share it.
+   */
+  private readonly readinessDb: WorkspaceConnection
+  private constructor(db: WorkspaceConnection, private readonly expectedProjectRef: string, private readonly reuseExistingProject = false, readinessDb?: WorkspaceConnection) {
+    super(db)
+    this.readinessDb = readinessDb ?? db
+  }
 
   static async create(options: HostedWorkspaceOptions): Promise<HostedWorkspaceDatabase> {
     validateHostedTarget(options)
     const db = createPostgresConnection(options.connectionString, { maxConnections: options.maxConnections, tlsCaPem:options.tlsCaPem })
-    const workspace = new HostedWorkspaceDatabase(db, options.expectedProjectRef, options.reuseExistingProject)
-    try { await workspace.checkReadiness(); return workspace } catch { await db.close(); throw new Error("Staging database readiness validation failed.") }
+    const readiness = createPostgresConnection(options.connectionString, { maxConnections: 1, tlsCaPem:options.tlsCaPem })
+    const workspace = new HostedWorkspaceDatabase(db, options.expectedProjectRef, options.reuseExistingProject, readiness)
+    try { await workspace.checkReadiness(); return workspace } catch (error) {
+      await Promise.all([db.close(), readiness.close()])
+      // BF-19: the one cause the owner can act on is named (no value, server message or credential is carried).
+      throw Object.assign(new Error("Staging database readiness validation failed."), error instanceof StagingSessionSettingsError ? { reason: error.reason } : {})
+    }
+  }
+
+  override async close() {
+    await Promise.all([super.close(), this.readinessDb === this.db ? undefined : this.readinessDb.close()])
   }
 
   async checkReadiness(): Promise<StagingReadinessReceipt> {
@@ -255,12 +284,16 @@ export class HostedWorkspaceDatabase extends WorkspaceDatabase {
     // the workspace, so it is reported (and only then: the healthy receipt keeps its exact shape) instead of failing.
     let missingStorageGuardGrants: Array<{ signature: string; role: string }> = []
     if (this.expectedProjectRef === EXISTING_PROJECT_REF) {
-      const audit = this.reuseExistingProject ? await auditLegacyStagingExposure(this.db) : null
+      const audit = this.reuseExistingProject ? await auditLegacyStagingExposure(this.readinessDb) : null
       if (!audit?.legacyContainmentVerified) throw new Error("Legacy project containment is not verified.")
       missingStorageGuardGrants = audit.missingStorageGuardGrants
     }
     const manifest = await (this.migrationManifest ??= readMigrationManifest().catch(error => { this.migrationManifest = undefined; throw error }))
-    const schemaVersion = await this.db.transaction(async tx => {
+    const schemaVersion = await this.readinessDb.transaction(async tx => {
+      // BF-19: the session options set at connect (lock_timeout 5 s, statement_timeout 15 s) must reach the database. A
+      // transaction-mode pooler can drop them; every bulk-write and lock budget assumes them, so readiness fails instead.
+      const settings = await tx.query<{ lock_timeout: string; statement_timeout: string }>("select current_setting('lock_timeout') lock_timeout,current_setting('statement_timeout') statement_timeout")
+      if (settings.rows[0]?.lock_timeout !== STAGING_LOCK_TIMEOUT_SETTING || settings.rows[0]?.statement_timeout !== STAGING_STATEMENT_TIMEOUT_SETTING) throw new StagingSessionSettingsError()
       const role = await tx.query<{ safe: boolean }>(`select
         current_user='neuvetra_runtime' and session_user='neuvetra_runtime'
         and not r.rolsuper and not r.rolbypassrls and not r.rolcreatedb and not r.rolcreaterole and not r.rolreplication and not r.rolinherit

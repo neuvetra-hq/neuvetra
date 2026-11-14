@@ -36,11 +36,13 @@ import { createScope3ResultsRoutes, createScope3ResultsRunner, REVIEWED_SCOPE3_E
 import { createSupabaseCollectionEvidenceStorage } from "../workspace/collection-storage"
 import { createScope3AssessmentRoutes } from "../workspace/scope3-assessment-routes"
 import { createScope3SpendImportRoutes } from "../workspace/scope3-spend-import-routes"
+import { createBulkWriteGate } from "../workspace/bulk-write-gate"
 // Round 3 (EN-9): the package's public export.
 import { SCOPE3_SPEND_IMPORT_MAX_BYTES } from "@neuvetra/database"
 import { createScope3ReportRoutes } from "../workspace/scope3-report-routes"
 import { readStagingConfig, STAGING_PROFILE, type StagingConfig } from "./config"
 import { serveStagingAsset, verifyStagingAssets } from "./assets"
+import { createReadinessCache } from "./readiness-cache"
 
 const MAX_BODY_BYTES = 300_000
 const COLLECTION_EVIDENCE_UPLOAD = /^\/workspace\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/collection\/evidence$/i
@@ -98,7 +100,13 @@ export interface StagingOverrides {
   warn?: (event: StagingAddressWarning) => void
   /** BF-10: sink for `StagingStorageGuardWarning`; defaults to one JSON line on stderr. */
   storageGuardWarn?: (event: StagingStorageGuardWarning) => void
+  /** BF-19: the readiness cache's clock in milliseconds (tests only; default `performance.now`). */
+  readinessClock?: () => number
 }
+
+/** BF-19: the one readiness failure the owner can act on; /ready and the start-up log name it (nothing else is disclosed). */
+const SESSION_SETTINGS_REASON = "database_session_settings_not_applied"
+const failureReason = (error: unknown) => (error as { reason?: unknown } | null)?.reason === SESSION_SETTINGS_REASON ? { reason: SESSION_SETTINGS_REASON } : {}
 
 function json(status: number, value: unknown) { return Response.json(value, { status }) }
 /** Round 3 lane C (PR-3): a refused request says to wait, and when (Retry-After, seconds until the window resets). */
@@ -130,7 +138,7 @@ async function boundedRequest(request: Request, url: URL, maxBytes = MAX_BODY_BY
 /** No listener, migration or credential read occurs at import time. */
 export async function createStagingServer(config: StagingConfig, overrides: StagingOverrides = {}) {
   if (config.profile !== STAGING_PROFILE) throw new Error("Private staging profile is invalid.")
-  const database: StagingDatabase = overrides.database ?? await HostedWorkspaceDatabase.create({ connectionString: config.databaseUrl, expectedProjectRef: config.projectRef, reuseExistingProject: config.reuseExistingProject, tlsCaPem: await loadStagingDatabaseCa({ caPem: config.databaseCaPem, caFile: config.databaseCaFile }) })
+  const database: StagingDatabase = overrides.database ?? await HostedWorkspaceDatabase.create({ connectionString: config.databaseUrl, expectedProjectRef: config.projectRef, reuseExistingProject: config.reuseExistingProject, maxConnections: config.databasePoolSize, tlsCaPem: await loadStagingDatabaseCa({ caPem: config.databaseCaPem, caFile: config.databaseCaFile }) })
   // API-02: the cheap structural/`exp` pre-check accompanies the real Supabase validator, whose tokens are JWTs. A test
   // that injects its own validator also chooses its own token format, so the pre-check is not applied to it.
   const precheck = overrides.validateUser ? null : isPlausibleUnexpiredJwt
@@ -253,7 +261,9 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   // I-04: Scope 3 category assessments (0030); the /scope3/ gate below refuses them before any SQL below schema 30.
   const scope3AssessmentRoutes=createScope3AssessmentRoutes({database,validateUser,origin:config.origin})
   // I-09: spend CSV imports and mappings (0030); behind the same /scope3/ schema-30 gate.
-  const scope3SpendImportRoutes=createScope3SpendImportRoutes({database,validateUser,origin:config.origin})
+  // BF-19 (BI-02): one gate per instance for every bulk spend write (import, conversion, mapping correction, withdrawal).
+  const bulkWriteGate=createBulkWriteGate()
+  const scope3SpendImportRoutes=createScope3SpendImportRoutes({database,validateUser,origin:config.origin,bulkWriteGate})
   const mobileDieselRoutes=createM74Routes({database,validateUser,origin:config.origin,authority:createM74Authority()})
   const annualEvidenceRoutes=createAnnualEvidenceRoutes({database,validateUser,origin:config.origin})
   const annualEvidenceReportRoutes=createAnnualEvidenceReportRoutes({database,validateUser,origin:config.origin})
@@ -264,7 +274,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const electricitySourceRoutes=createElectricitySourceRoutes({database,validateUser,origin:config.origin})
   const reportRoutes = createWorksheetReportRoutes({ database, validateUser, origin: config.origin })
   const worksheetRoutes = createWorksheetRoutes({ database, validateUser, origin: config.origin })
-  const databaseReadiness = async () => {
+  const checkDatabaseReadiness = async () => {
     const receipt = await database.checkReadiness()
     // BF-10 (CEO ruling): reported and logged, never a reason to stop serving.
     if (receipt.storageGuardGrantsMissing) noteStorageGuards(receipt.missingStorageGuardGrants)
@@ -276,16 +286,25 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
     if (existingProject && (!config.reuseExistingProject || receipt.legacyContainmentVerified !== true)) throw new Error("Existing project containment unavailable.")
     return receipt
   }
+  // BF-19 (lead 5): the guard before every workspace request keeps a fully validated success for 5 s and never a failure;
+  // /ready always checks afresh (and its answer replaces the kept one). See readiness-cache.ts.
+  const readinessCache = createReadinessCache(checkDatabaseReadiness, overrides.readinessClock ? { now: overrides.readinessClock } : {})
+  const databaseReadiness = async (fresh = false) => {
+    const receipt = await readinessCache.get({ fresh })
+    // BF-10: a kept receipt still reports a missing Storage guard grant (the warning keeps its own once-a-minute limit).
+    if (receipt.storageGuardGrantsMissing) noteStorageGuards(receipt.missingStorageGuardGrants)
+    return receipt
+  }
   const served = (schemaVersion: number) => STAGING_SERVED_SCHEMA_VERSIONS.includes(schemaVersion)
   const readiness = async () => {
-    const receipt = await databaseReadiness()
+    const receipt = await databaseReadiness(true)
     if (!served(receipt.schemaVersion)) throw new Error("Staging database is upgrading.")
     await checkAssets()
     return receipt
   }
   // The schema-30 image starts and reports ready at exactly 28, 29 and 30 (hosted
   // 0029 is on hold); any other prefix refuses to start.
-  try { await databaseReadiness(); await checkAssets() } catch { await database.close(); throw new Error("Private staging dependencies are unavailable.") }
+  try { await databaseReadiness(true); await checkAssets() } catch (error) { await database.close(); throw Object.assign(new Error("Private staging dependencies are unavailable."), failureReason(error)) }
 
   const routeName = (pathname: string): StagingLog["route"] => pathname === "/health" ? "health" : pathname === "/ready" ? "ready" : pathname === "/workspace-api/config" ? "config" : pathname === "/workspace-api/session" ? "session" : pathname.startsWith("/workspace-api/workspace") ? "workspace" : pathname === "/" || pathname === "/workspace" || pathname.startsWith("/assets/") ? "asset" : "unknown"
 
@@ -364,7 +383,8 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
     if (url.pathname === "/health" && isGet) return json(200, { status: "alive" })
     if (url.pathname === "/ready" && isGet) {
       try { const receipt = await readiness(); return json(200, { status: "ready", ...receipt }) }
-      catch { return json(503, { status: "unavailable" }) }
+      // BF-19: a session without lock_timeout/statement_timeout says so; every other failure keeps its exact body.
+      catch (error) { return json(503, { status: "unavailable", ...failureReason(error) }) }
     }
     if (url.pathname.startsWith("/workspace-api/")) {
       const origin = request.headers.get("origin")
@@ -466,8 +486,9 @@ if (import.meta.main) {
     process.once("SIGINT", shutdown)
     process.once("SIGTERM", shutdown)
     console.info(JSON.stringify({ event: "staging_started", profile: STAGING_PROFILE }))
-  } catch {
-    console.error(JSON.stringify({ event: "staging_start_failed" }))
+  } catch (error) {
+    // BF-19: the session-settings cause is named for the owner (operations/hosted-setup/bf19-database-pool-runbook.md).
+    console.error(JSON.stringify({ event: "staging_start_failed", ...failureReason(error) }))
     process.exitCode = 1
   }
 }

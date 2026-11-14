@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, setSystemTime, test } from "bun:test"
-import { DevelopmentWorkspaceDatabase } from "@neuvetra/database"
+import { DevelopmentWorkspaceDatabase, StagingSessionSettingsError } from "@neuvetra/database"
 import { createStagingServer, SCOPE3_RESULTS_TIMEOUT_SECONDS, type StagingAddressWarning, type StagingDatabase, type StagingLog } from "./server"
 import { readStagingConfig, STAGING_PROFILE } from "./config"
 import { serveStagingAsset, verifyStagingAssets } from "./assets"
@@ -190,10 +190,14 @@ describe("M63 private staging boundary", () => {
     expect(closed).toBe(true)
     let contained = true
     database.checkReadiness = async () => ({ profile: STAGING_PROFILE, schemaVersion: 28, legacyContainmentVerified: contained })
-    const app = await createStagingServer(config, { database, validateUser: async token => token === "any-token" ? { id: OWNER, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, log: () => {} })
+    let clock = 0
+    const app = await createStagingServer(config, { database, validateUser: async token => token === "any-token" ? { id: OWNER, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, log: () => {}, readinessClock: () => clock })
     cleanup = app.close
     expect((await app.fetch(new Request(`${ORIGIN}/workspace-api/config`))).status).toBe(200)
     contained = false
+    // BF-19: the guard keeps the last success for at most 5 s; after that the lost containment refuses everything.
+    expect((await app.fetch(new Request(`${ORIGIN}/workspace-api/config`))).status).toBe(200)
+    clock += 5_000
     expect((await app.fetch(new Request(`${ORIGIN}/workspace-api/config`))).status).toBe(503)
     expect((await app.fetch(new Request(`${ORIGIN}/workspace-api/session`, { headers: { authorization: "Bearer any-token" } }))).status).toBe(503)
     // API-02: an invalid token never reaches the readiness query (401, no SQL).
@@ -605,6 +609,8 @@ describe("API-02: token pre-check, readiness after validation, address observabi
   async function realValidatorServer() {
     const live = jwt({ sub: OWNER, exp: nowSeconds() + 3600 })
     let supabaseCalls = 0, readinessQueries = 0, accessQueries = 0
+    // BF-19: the readiness guard keeps a success for 5 s; this clock moves 6 s per request, so every admitted request checks.
+    let clock = 0
     const original = globalThis.fetch
     globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input instanceof Request ? input.url : input)
@@ -620,9 +626,9 @@ describe("API-02: token pre-check, readiness after validation, address observabi
       hasStagingAccess: async (userId: string) => { accessQueries++; return userId === OWNER },
       findStagingMembershipForUser: async () => ({ companyId: "80000000-0000-4000-8000-000000000901", role: "owner" as const, evidenceId: null }),
     } as unknown as StagingDatabase
-    const app = await createStagingServer(existingConfig(), { database, verifyAssets: async () => {}, log: () => {}, warn: () => {} })
+    const app = await createStagingServer(existingConfig(), { database, verifyAssets: async () => {}, log: () => {}, warn: () => {}, readinessClock: () => clock })
     cleanup = async () => { globalThis.fetch = original; await app.close() }
-    const session = (token: string, address = "198.51.100.70") => app.fetch(new Request(`${ORIGIN}/workspace-api/session`, { headers: { origin: ORIGIN, authorization: `Bearer ${token}`, ...from(address) } }))
+    const session = (token: string, address = "198.51.100.70") => (clock += 6_000, app.fetch(new Request(`${ORIGIN}/workspace-api/session`, { headers: { origin: ORIGIN, authorization: `Bearer ${token}`, ...from(address) } })))
     return { live, session, counts: () => ({ supabaseCalls, readinessQueries, accessQueries }) }
   }
 
@@ -659,21 +665,29 @@ describe("API-02: token pre-check, readiness after validation, address observabi
     expect(s.counts()).toEqual({ supabaseCalls: start.supabaseCalls + 4, readinessQueries: start.readinessQueries + 1, accessQueries: start.accessQueries + 1 })
   })
 
-  test("existing project: readiness SQL runs only after a token is validated, once per admitted request", async () => {
-    let readinessQueries = 0, validations = 0
+  test("existing project: readiness SQL runs only after a token is validated, at most once per 5 s (BF-19)", async () => {
+    let readinessQueries = 0, validations = 0, clock = 0
     const database = {
       checkReadiness: async () => { readinessQueries++; return { profile: STAGING_PROFILE, schemaVersion: 30, legacyContainmentVerified: true } },
       close: async () => {}, hasStagingAccess: async () => true,
       findStagingMembershipForUser: async () => ({ companyId: "80000000-0000-4000-8000-000000000901", role: "owner" as const, evidenceId: null }),
     } as unknown as StagingDatabase
-    const app = await createStagingServer(existingConfig(), { database, validateUser: async token => (validations++, token === "ok" ? { id: OWNER, email: null, phone: null, fullName: null } : null), verifyAssets: async () => {}, log: () => {}, warn: () => {} })
+    const app = await createStagingServer(existingConfig(), { database, validateUser: async token => (validations++, token === "ok" ? { id: OWNER, email: null, phone: null, fullName: null } : null), verifyAssets: async () => {}, log: () => {}, warn: () => {}, readinessClock: () => clock })
     cleanup = app.close
+    clock += 5_001
     const afterStartup = readinessQueries
     const session = (token: string) => app.fetch(new Request(`${ORIGIN}/workspace-api/session`, { headers: { authorization: `Bearer ${token}`, ...from("198.51.100.80") } }))
     for (let i = 0; i < 50; i++) expect((await session(`junk-${i}`)).status).toBe(401)
     expect([validations, readinessQueries - afterStartup]).toEqual([50, 0])
     expect((await session("ok")).status).toBe(200)
     expect(readinessQueries - afterStartup).toBe(1)
+    // BF-19: within 5 s of a success the guard answers from it (no SQL); after 5 s it checks again.
+    clock += 4_999
+    expect((await session("ok")).status).toBe(200)
+    expect(readinessQueries - afterStartup).toBe(1)
+    clock += 1
+    expect((await session("ok")).status).toBe(200)
+    expect(readinessQueries - afterStartup).toBe(2)
   })
 
   test("an admitted workspace request validates its token once, and routes keep their own per-user authorization", async () => {
@@ -720,5 +734,53 @@ describe("API-02: token pre-check, readiness after validation, address observabi
     expect(lines).toHaveLength(1)
     expect(JSON.parse(lines[0]!)).toEqual({ event: "client_address_unknown", headers: { "x-real-ip": "absent", "x-forwarded-for": "absent" }, occurrences: 1 })
     expect(lines[0]).not.toContain("secret-token-value")
+  })
+})
+
+// BF-19 (BI-02, lead 5): the request pool's size is configuration (1-8, default 4); readiness checks that the session
+// options reach the database, says so when they do not, and /ready always checks afresh while requests use a kept success.
+describe("BF-19: pool size, readiness session settings and the readiness cache", () => {
+  test("NEUVETRA_STAGING_DB_POOL_SIZE is an integer from 1 to 8 (default 4); anything else refuses to start", () => {
+    expect(readStagingConfig(environment).databasePoolSize).toBe(4)
+    for (const size of [1, 2, 3, 4, 5, 6, 7, 8]) expect(readStagingConfig({ ...environment, NEUVETRA_STAGING_DB_POOL_SIZE: String(size) }).databasePoolSize).toBe(size)
+    for (const bad of ["", "0", "9", "10", "-1", "4.0", "04", " 4", "4 ", "four", "1e0", "0x4", "+4"])
+      expect(() => readStagingConfig({ ...environment, NEUVETRA_STAGING_DB_POOL_SIZE: bad })).toThrow("Private staging configuration is invalid.")
+  })
+
+  test("session settings not applied: start-up refuses naming the cause; a running /ready says so; other failures keep their body", async () => {
+    let failure: Error | null = new StagingSessionSettingsError()
+    let closed = false
+    const database = { checkReadiness: async () => { if (failure) throw failure; return { profile: STAGING_PROFILE, schemaVersion: 31 } }, close: async () => { closed = true } } as unknown as StagingDatabase
+    const options = { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {} }
+    const refused = await createStagingServer(readStagingConfig(environment), options).then(() => null, (error: Error & { reason?: string }) => error)
+    expect([refused?.message, refused?.reason, closed]).toEqual(["Private staging dependencies are unavailable.", "database_session_settings_not_applied", true])
+    // A database that is unavailable for any other reason is refused as before, with no reason.
+    failure = new Error("sensitive-driver-value")
+    expect(await createStagingServer(readStagingConfig(environment), options).then(() => null, (error: Error & { reason?: string }) => [error.message, error.reason])).toEqual(["Private staging dependencies are unavailable.", undefined])
+    failure = null
+    const app = await createStagingServer(readStagingConfig(environment), options)
+    cleanup = app.close
+    expect(await (await app.fetch(new Request(`${ORIGIN}/ready`))).json()).toEqual({ status: "ready", profile: STAGING_PROFILE, schemaVersion: 31 })
+    failure = new StagingSessionSettingsError()
+    const ready = await app.fetch(new Request(`${ORIGIN}/ready`))
+    expect([ready.status, await ready.json()]).toEqual([503, { status: "unavailable", reason: "database_session_settings_not_applied" }])
+    failure = new Error("sensitive-driver-value")
+    const other = await app.fetch(new Request(`${ORIGIN}/ready`))
+    expect([other.status, await other.json()]).toEqual([503, { status: "unavailable" }])
+  })
+
+  test("/ready checks afresh every time and its answer updates the guard the requests use", async () => {
+    let schemaVersion = 31, checks = 0, clock = 0
+    const database = { checkReadiness: async () => { checks++; return { profile: STAGING_PROFILE, schemaVersion } }, close: async () => {} } as unknown as StagingDatabase
+    const app = await createStagingServer(readStagingConfig(environment), { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {}, readinessClock: () => clock })
+    cleanup = app.close
+    const before = checks
+    for (let i = 0; i < 3; i++) expect((await app.fetch(new Request(`${ORIGIN}/ready`))).status).toBe(200)
+    expect(checks - before).toBe(3)
+    // The database leaves the served schemas: /ready reports it at once, and the guard has no kept success left.
+    schemaVersion = 30
+    expect((await app.fetch(new Request(`${ORIGIN}/ready`))).status).toBe(503)
+    schemaVersion = 31
+    expect((await app.fetch(new Request(`${ORIGIN}/ready`))).status).toBe(200)
   })
 })
