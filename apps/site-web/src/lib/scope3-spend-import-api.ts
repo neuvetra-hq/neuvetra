@@ -58,9 +58,21 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 const SHA = /^[0-9a-f]{64}$/
 const DECIMAL = /^-?(0|[1-9][0-9]{0,15})(\.[0-9]{1,3})?$/
 const DATE = /^\d{4}-\d{2}-\d{2}$/
-const fail = (): never => { throw new Error("The spend import response was not recognized.") }
+/**
+ * BF-12b (QA F-2): a response this page can't read. After a release the server can answer in a shape an open page doesn't
+ * know; the spend import then offers the existing "A newer version is available — reload" notice (lazy-forms.tsx).
+ */
+export class Scope3SpendResponseUnrecognized extends Error {
+  constructor() { super("The spend import response was not recognized.") }
+}
+const fail = (): never => { throw new Scope3SpendResponseUnrecognized() }
 const object = (value: unknown): value is Record<string, unknown> => value !== null && typeof value === "object" && !Array.isArray(value)
-const exact = (value: unknown, expected: readonly string[]): Record<string, unknown> => object(value) && Object.keys(value).sort().join("|") === [...expected].sort().join("|") ? value : fail()
+/**
+ * Every listed key must be present; BF-12b (QA F-2): keys this page doesn't know are ignored (never copied into the
+ * decoded value), so a field the server adds later can't make an open page refuse the whole response. Each decoder
+ * builds its result from the listed keys only.
+ */
+const exact = (value: unknown, expected: readonly string[]): Record<string, unknown> => object(value) && expected.every(key => Object.prototype.hasOwnProperty.call(value, key)) ? value : fail()
 const uuid = (value: unknown) => typeof value === "string" && UUID.test(value) ? value : fail()
 const str = (value: unknown, max = 4000) => typeof value === "string" && value.length <= max ? value : fail()
 const int = (value: unknown, min: number, max: number) => Number.isSafeInteger(value) && (value as number) >= min && (value as number) <= max ? value as number : fail()
@@ -161,9 +173,8 @@ export function decodeScope3SpendImports(value: unknown, companyId: string): Sco
   const kindOf = (x: unknown) => x === "purchase_supplier" || x === "partner_reported" ? x as "purchase_supplier" | "partner_reported" : fail()
   const superseded = array(v.superseded).map(item => {
     // BF-12: `vendorKeyMatch` is either absent or exactly true.
-    const keys = ["spendRecordId", "supersededBy", "supplierName", "kind", "spendSourceId", "spendDescription", "spendAmount", "spendCurrency"]
-    const s = object(item) && "vendorKeyMatch" in item ? exact(item, [...keys, "vendorKeyMatch"]) : exact(item, keys)
-    if ("vendorKeyMatch" in s && s.vendorKeyMatch !== true) fail()
+    const s = exact(item, ["spendRecordId", "supersededBy", "supplierName", "kind", "spendSourceId", "spendDescription", "spendAmount", "spendCurrency"])
+    if (Object.prototype.hasOwnProperty.call(s, "vendorKeyMatch") && s.vendorKeyMatch !== true) fail()
     return { spendRecordId: uuid(s.spendRecordId), supersededBy: uuid(s.supersededBy), supplierName: str(s.supplierName, 200), kind: kindOf(s.kind),
       spendSourceId: str(s.spendSourceId, 120), spendDescription: str(s.spendDescription, 200), spendAmount: str(s.spendAmount, 100), spendCurrency: str(s.spendCurrency, 80),
       ...(s.vendorKeyMatch === true ? { vendorKeyMatch: true as const } : {}) }
