@@ -20,7 +20,8 @@ import {
   SCOPE3_METHOD_TYPE_TEXT, SCOPE3_ORIGIN_TEXT, SCOPE3_STATUS_TEXT, SCOPE3_TOTAL_TEXT, SCOPE3_UNCERTAINTY_TEXT, SCOPE3_DQ_CAP_REASON_TEXT,
 } from './scope3-text'
 import { scope3MemoText } from './scope3-r3a'
-import { SCOPE3_REPLACING_RECORD_CSV_TEXT, SCOPE3_SUPERSEDED_MEMO_TEXT_R3A } from './scope3-text'
+import { SCOPE3_REPLACING_RECORD_CSV_TEXT, SCOPE3_SUPERSEDED_MEMO_TEXT_R3A, SCOPE3_VENDOR_KEY_MATCH_DETAIL } from './scope3-text'
+import { SCOPE3_VENDOR_KEY_MATCH_NOTE } from './scope3-collection'
 import { SCOPE3_REPORT_TEXT_V3 } from './scope3-text-v3'
 import { scope3SpendConversionNote } from './scope3-spend-currency'
 import { scope3VisibleReviewFlags } from './scope3-trace'
@@ -72,6 +73,22 @@ export function scope3HeldReplacementText(row: Pick<Scope3ResultsLine, 'plan'>, 
   if (id === null) return ''
   const by = lines.find(line => line.recordId === id && line.derivedFrom === null)
   return SCOPE3_REPLACING_RECORD_CSV_TEXT(id, by?.sourceId ?? null)
+}
+/**
+ * BF-12 (CEO decision): a line replaced only by the vendor key (plan note `superseded_by_vendor_key_match:<text>`) says so
+ * next to its replacing record, with the supplier as the replacing record writes it; null for every other line.
+ */
+export function scope3VendorKeyMatchText(row: Pick<Scope3ResultsLine, 'plan'>): string | null {
+  const note = row.plan.notes.find(item => item.startsWith(SCOPE3_VENDOR_KEY_MATCH_NOTE))
+  return note === undefined ? null : SCOPE3_VENDOR_KEY_MATCH_DETAIL(note.slice(SCOPE3_VENDOR_KEY_MATCH_NOTE.length))
+}
+/**
+ * The "Superseded by" cell: the replacing record of an excluded line (its bare ID) or of a held one (BF-02b), followed, for
+ * a line matched only by the vendor key, by `; ` and that match (BF-12). Unchanged for every other line.
+ */
+export function scope3SupersededByCell(row: Pick<Scope3ResultsLine, 'plan'>, lines: ReadonlyArray<Pick<Scope3ResultsLine, 'recordId' | 'derivedFrom' | 'sourceId'>>): string {
+  const by = scope3SupersededBy(row) ?? scope3HeldReplacementText(row, lines), match = scope3VendorKeyMatchText(row)
+  return by !== '' && match !== null ? `${by}; ${match}` : by
 }
 /** Every reason code of a line, in the order the screen shows them. */
 export function scope3LineReasonCodes(row: Pick<Scope3ResultsLine, 'outcome' | 'periodCheck' | 'plan' | 'result'>): string[] {
@@ -257,7 +274,7 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
       row.recordId, row.versionId, String(row.revision), row.derivedFrom ? `${row.derivedFrom.kind} ${row.derivedFrom.recordId}` : '', row.reference, row.estimateBasis ?? '',
       row.methodType ? SCOPE3_METHOD_TYPE_TEXT[row.methodType] : '', origin ? `${SCOPE3_ORIGIN_TEXT[origin.origin] ?? origin.origin} (${origin.setBy === 'user' ? 'set by the company' : origin.setBy === 'method_type' ? 'fixed by the method type' : 'method default'})` : '',
       scope3DataQualityText(row), (r?.factorsUsed ?? []).map(f => (f as { key: string }).key).join('; '), (r?.factorsUsed ?? []).map(f => (f as { value: string }).value).join('; '),
-      (r?.conversions ?? []).map(scope3ConversionText).join('; '), r?.biogenicCo2?.mass ?? '', scope3SupersededBy(row) ?? scope3HeldReplacementText(row, lines), r?.inputSha256 ?? '', r?.resultSha256 ?? '',
+      (r?.conversions ?? []).map(scope3ConversionText).join('; '), r?.biogenicCo2?.mass ?? '', scope3SupersededByCell(row, lines), r?.inputSha256 ?? '', r?.resultSha256 ?? '',
       row.kind, r?.total?.unrounded ?? '', r ? scope3GasTexts(r).join('; ') : '', (r?.constantsUsed ?? []).map(scope3ConstantText).join('; '),
       r ? scope3CanonicalJson(r.input) : '', r ? scope3CanonicalJson(r.activity) : '', scope3LineEvidenceLinked(row) ? 'yes' : 'no',
       scope3LineMemoText(row), TAX_TEXT[row.plan.notes.find(note => note in TAX_TEXT) ?? ''] ?? '', row.currencyConversion ? scope3SpendConversionNote(row.currencyConversion) : '']
@@ -306,7 +323,9 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
     const label = (row.result?.factorsUsed as Array<{ key: string; label: string }> | undefined)?.find(f => f.key.startsWith(`epa_scghg_v130.${str(payload.naicsCode)}.`))?.label
     if (!group.title && label) group.title = label
     const by = scope3SupersededBy(row)
-    if (by) group.superseded.push(`${row.recordId} → ${by}`)
+    // BF-12: a line replaced only by the vendor key says so (CEO decision); every other row prints as before.
+    const match = scope3VendorKeyMatchText(row)
+    if (by) group.superseded.push(`${row.recordId} → ${by}${match !== null ? ` [${match}]` : ''}`)
     // I-09: amounts per currency (plain decimals only), the import row, and a held possible duplicate.
     const amount = row.quantity?.value ?? '', currency = row.quantity?.unit ?? ''
     if (/^-?(0|[1-9][0-9]{0,11})(\.[0-9]{1,3})?$/.test(amount)) group.amounts.set(currency, [...(group.amounts.get(currency) ?? []), amount])

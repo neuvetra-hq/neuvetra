@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- the injected hook harness drives the real component without a DOM. */
 // Scope 3 completion I-09 (Claude, 30 October 2026; DESIGN 7.3): the spend import panel. A chosen file is previewed with
+import { SCOPE3_VENDOR_KEY_MATCH_DETAIL } from "../../../../packages/neuvetra-database/src/scope3-text"
 // the shared parser (refusals block the import; totals and hold counts shown); an import uploads the file as evidence,
 // imports those bytes at the chosen location and shows the reconciliation and holds by reason; a mapping group saves the
 // chosen code; a possible duplicate is confirmed distinct or withdrawn by a correction of that record.
@@ -34,7 +35,7 @@ async function panel(initial: any = view([]), onOpenRecord?: (id: string) => voi
   let changed = 0, saves = 0
   const record = { id: rec(2), currentVersion: { id: rec(52), revision: 1, activity: { kind: "purchase_spend", state: "active", withdrawalReason: null, payload: { duplicateConfirmedDistinct: false, possibleDuplicateOf: { importId: imp, row: 1 } } } } }
   const make = await loadComponent("./scope3/SpendImport.tsx", "SpendImport", {
-    ...parser, ...api, ...review, reasonText, scope3NaicsChoices: naics.scope3NaicsChoices, scope3NaicsGuard: forms.scope3NaicsGuard, SCOPE3_NAICS_GUARD_TEXT: forms.SCOPE3_NAICS_GUARD_TEXT, scope3NaicsTitle: naics.scope3NaicsTitle,
+    ...parser, ...api, ...review, reasonText, SCOPE3_VENDOR_KEY_MATCH_DETAIL, scope3NaicsChoices: naics.scope3NaicsChoices, scope3NaicsGuard: forms.scope3NaicsGuard, SCOPE3_NAICS_GUARD_TEXT: forms.SCOPE3_NAICS_GUARD_TEXT, scope3NaicsTitle: naics.scope3NaicsTitle,
     loadScope3SpendImports: async () => { if (loadFailures-- > 0 || (correctionFailure && saves)) throw new Error("Rate limited."); return current },
     uploadCollectionEvidence: async (...args: any[]) => { calls.push(["upload", args[1].name, args[1].type]); return { receipt: { evidenceId } } },
     importScope3SpendFile: async (...args: any[]) => { calls.push(["import", new TextDecoder().decode(args[1]), args[2], args[3]]); current = view([line(1, {}), line(2, {})])
@@ -294,6 +295,13 @@ describe("SpendImport (I-09)", () => {
       superseders: [{ recordId: sup, kind: "purchase_supplier", sourceId: "SUP-1", name: "Acme Metals", category: 1, quantity: "12.4", unit: "metric_ton CO2e", basis: "allocated_total", factorValue: null, factorUnit: null, allocationNumerator: null, allocationDenominator: null }] }))
     p.says("Spend replaced (2 lines) $241,000.50")
     p.says("Counted instead 12.4 metric tons CO2e (supplier-allocated total)")
+    // BF-12 (QA F1): a line the record matches only by the vendor key says so; the others don't.
+    expect(p.app.text()).not.toContain("matched as the same supplier")
+    const keyed = await panel(view(lines, {
+      superseded: lines.map((l, i) => ({ spendRecordId: l.recordId, supersededBy: sup, supplierName: "Acme Metals", kind: "purchase_supplier", spendSourceId: l.sourceId, spendDescription: l.description, spendAmount: l.amount, spendCurrency: "USD", ...(i === 1 ? { vendorKeyMatch: true } : {}) })),
+      superseders: [{ recordId: sup, kind: "purchase_supplier", sourceId: "SUP-1", name: "Acme Metals", category: 1, quantity: "12.4", unit: "metric_ton CO2e", basis: "allocated_total", factorValue: null, factorUnit: null, allocationNumerator: null, allocationDenominator: null }] }))
+    expect(keyed.app.text().split("matched as the same supplier").length - 1).toBe(1)
+    keyed.says("(supplier on the replacing record: Acme Metals)")
     // Replaced lines are not lines to map.
     p.says("Lines with a code 0 of 0")
   })

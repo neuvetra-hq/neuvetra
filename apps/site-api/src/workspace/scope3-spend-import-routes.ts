@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto"
 import {
   type CollectionActivityRecord, type CollectionContext, type CollectionEvidenceMetadata, type CompanySetupView,
-  scope3ReportingYearOf, planScope3Calculation, planScope3SupersessionClaimants, scope3SpendMappingKeyInput, type Scope3CollectionVersion,
+  scope3ReportingYearOf, planScope3Calculation, planScope3SupersessionClaimants, planScope3SupersessionMatches, scope3SpendMappingKeyInput, type Scope3CollectionVersion,
   type PurchaseSpendCollectionPayload, type Scope3SpendLineRef, parseScope3SpendCsv, SCOPE3_SPEND_IMPORT_MAX_BYTES,
   type Scope3SpendImportProblem, type Scope3SpendParse, scope3SpendConversionOf, scope3SpendNotesWithoutConversion,
   type Scope3SpendConversion, type Scope3SpendImportRecord, type Scope3SpendMappingRecord, SCOPE3_CAPACITY_TEXT,
@@ -48,7 +48,7 @@ export interface Scope3SpendLineView {
   conversion: Scope3SpendConversion | null
 }
 /** Round 2 ACC-16: a spend line a supplier or partner record replaces, with its amount as recorded (never counted). */
-export interface Scope3SpendSupersededView { spendRecordId: string; supersededBy: string; supplierName: string; kind: string; spendSourceId: string; spendDescription: string; spendAmount: string; spendCurrency: string }
+export interface Scope3SpendSupersededView { spendRecordId: string; supersededBy: string; supplierName: string; kind: string; spendSourceId: string; spendDescription: string; spendAmount: string; spendCurrency: string; vendorKeyMatch?: true }
 /** Round 2 ACC-16: the record that replaces spend lines, with its own figure exactly as entered (the engine calculates it). */
 export interface Scope3SpendSupersederView {
   recordId: string; kind: string; sourceId: string; name: string; category: number; quantity: string; unit: string
@@ -120,6 +120,8 @@ export function scope3SpendLineViews(records: readonly CollectionActivityRecord[
   // line whose every claimant is held is shown as Results shows it (held, `replacing_record_not_counted`), never as replaced;
   // a line with a claimant that can calculate is shown as replaced by it (Results confirms it after the engine run). Display only.
   const claimants = planScope3SupersessionClaimants(versions, context, { reportingPeriod, sha256 })
+  // BF-12 (QA F1): how each line matches each claimant, so a line shown as replaced only by the vendor key says so.
+  const matches = planScope3SupersessionMatches(versions, context, { reportingPeriod, sha256 })
   const adapterHeld = new Set(versions.filter(v => (v.activity.kind === "purchase_supplier" || v.activity.kind === "partner_reported")
     && planScope3Calculation(v, context, evidence, { reportingPeriod }).action === "hold").map(v => v.recordId))
   const supersession = new Map<string, string>(), heldFor = new Map<string, string>()
@@ -153,7 +155,9 @@ export function scope3SpendLineViews(records: readonly CollectionActivityRecord[
     const by = byId.get(supersededBy)!.currentVersion.activity, spend = byId.get(spendRecordId)!.currentVersion.activity
     const sp = spend.payload as PurchaseSpendCollectionPayload
     return { spendRecordId, supersededBy, supplierName: (by.payload as { supersedesSpend: { supplierName: string } }).supersedesSpend.supplierName, kind: by.kind,
-      spendSourceId: spend.sourceId, spendDescription: sp.description, spendAmount: spend.quantity.originalValue, spendCurrency: spend.quantity.originalUnit }
+      spendSourceId: spend.sourceId, spendDescription: sp.description, spendAmount: spend.quantity.originalValue, spendCurrency: spend.quantity.originalUnit,
+      // BF-12: present (true) only for a line the named record matches only by the vendor key, so other responses are unchanged.
+      ...(matches.get(spendRecordId)?.get(supersededBy)?.match === "vendor_key" ? { vendorKeyMatch: true as const } : {}) }
   })
   // Round 2 ACC-16: each replacing record once, with its own figure as entered, so the screen can set it beside the spend it replaces.
   const superseders = [...new Set(superseded.map(entry => entry.supersededBy))].sort().map(recordId => {
