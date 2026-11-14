@@ -28,7 +28,7 @@ export const SPEND_TEXT_R3C = {
   convertButton: (lines: number, currency: string) => `Convert ${lines} ${currency} line${lines === 1 ? "" : "s"}`,
   convertFailed: "The lines could not be converted; nothing was changed.",
   converted: (count: number, currency: string, rate: string, source: string, date: string, skipped: ReadonlyArray<{ sourceId: string; reason: string }>) =>
-    `${count} ${currency} line${count === 1 ? "" : "s"} converted to US dollars at ${rate} USD per ${currency} (${source}, ${date}).${skipped.length ? ` ${skipped.length} line${skipped.length === 1 ? "" : "s"} not converted: ${skipped.map(s => `${s.sourceId} (${s.reason === "negative_amount_not_supported" ? "a credit or refund" : "not a plain amount"})`).join(", ")}.` : ""}`,
+    `${count} ${currency} line${count === 1 ? "" : "s"} converted to US dollars at ${rate} USD per ${currency} (${source}, ${date}).${skipped.length ? ` ${skipped.length} line${skipped.length === 1 ? "" : "s"} not converted: ${skipped.map(s => `${s.sourceId} (${s.reason === "negative_amount_not_supported" ? "a credit or refund" : s.reason === "rate_date_outside_line_year" ? "the rate date is in a different year from the line; convert that year at its own rate" : "not a plain amount"})`).join(", ")}.` : ""}`,
   convertedFrom: (original: string, rate: string, currency: string, source: string, date: string) => `from ${original} at ${rate} USD per ${currency} (${source}, ${date})`,
   naicsEditionShort: "These are 2017 NAICS codes, the edition of the EPA Supply Chain factors v1.3 (company setup’s 2022 code describes only your own industry).",
   setupNaicsHint: "Your company’s own industry, in the current 2022 NAICS edition. Spend lines are mapped separately, to the 2017 codes the EPA spend factors use.",

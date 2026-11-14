@@ -57,6 +57,7 @@ import {
 } from './scope3-collection-contract'
 
 import { scope3TaxTreatmentNote } from './scope3-r3a'
+import { scope3SpendConversionOf, scope3SpendRateMatchesLineYear } from './scope3-spend-currency'
 import { LEGAL_SUFFIXES, scope3SpendMappingKeyInput, scope3SpendVendorKey } from './scope3-spend-grouping'
 
 export const SCOPE3_COLLECTION_INPUT_PROFILE = 'neuvetra.scope3-collection-input.v1' as const
@@ -361,6 +362,10 @@ function planScope3Purchases(state: Scope3PlanState): Scope3CalculationPlan | nu
     if (!NUMERIC.test(written)) need(false, 'amount_not_a_number')
     else if (written.startsWith('-') && /[1-9]/.test(written)) need(false, 'negative_amount_not_supported')
     else if (usd) need(recorded(q), 'quantity_not_calculable')
+    // BF-14 (audit B-5): a line converted from another currency counts only at a rate dated in its own calendar year (the year of
+    // its line date; without one, of a period inside one year). This also holds a line converted before the fix at another year's rate.
+    const conversion = usd ? scope3SpendConversionOf(a.notes) : null
+    if (conversion !== null) need(scope3SpendRateMatchesLineYear({ lineDate: p.lineDate, period }, conversion.rateDate), 'currency_rate_outside_line_year')
     // NAICS code sets (DESIGN §3.3, B3, B6): categories 1 and 2 take any code, except that energy, other-category and
     // trade-margin codes need the category confirmed; the fallback categories take only their own set.
     const naics = p.naicsCode
