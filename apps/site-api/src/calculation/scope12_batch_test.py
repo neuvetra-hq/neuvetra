@@ -169,6 +169,25 @@ class BatchEnvelope(unittest.TestCase):
             self.assertNotIn('"result"', out)
         self.assertEqual(self.run_raw(b'x' * (32 * 1024 * 1024 + 1)), (1, '{"code":"request_too_large","status":"refused"}'))
 
+    def test_an_item_nested_too_deeply_to_parse_fails_only_itself(self):
+        # BI-01b (QA follow-up 4 of PR #68): such an item used to make the whole batch unreadable (every item unavailable).
+        deep = '{"action":"calculate","request":{"kind":"natural_gas","input":' + '[' * 200000 + ']' * 200000 + '}}'
+        ok1 = {'action': 'calculate', 'request': {'kind': 'natural_gas', 'input': {'period': P, 'quantity': '1', 'unit': 'MMBtu'}}}
+        ok2 = {'action': 'calculate', 'input': {'period': P, 'quantity': '1000', 'unit': 'kWh', 'zip': '94105', 'subregion': 'CAMX'}}
+        for engine, good, error in (('scope1', ok1, '{"status":"error","code":"scope1_engine_unavailable"}'), ('scope2', ok2, '{"status":"error","code":"scope2_engine_unavailable"}')):
+            # Per record, the deep item fails with the engine's own error line (exit 2); the good item answers.
+            run = subprocess.run([sys.executable, str(HERE / f'{engine}_engine.py')], input=deep.encode(), capture_output=True, timeout=60)
+            self.assertEqual((run.returncode, run.stdout.decode().strip()), (2, error))
+            expected = per_record(engine, good)[1].strip()
+            envelope = '{"action":"calculate_many","engine":"%s","items":[%s,%s,%s,"x,]}[",%s]}' % (engine, json.dumps(good, separators=(',', ':')), deep, json.dumps(good, separators=(',', ':')), json.dumps(good, separators=(',', ':')))
+            code, out = self.run_raw(envelope.encode())
+            self.assertEqual(code, 0)
+            refused_string = '{"code":"invalid_request","status":"refused"}'
+            self.assertEqual(out, '{"results":[%s,%s,%s,%s,%s],"status":"ok"}' % (expected, error, expected, refused_string, expected))
+        # Outside the bridge's own envelope the fallback refuses rather than guesses.
+        code, out = self.run_raw(('{"engine":"scope1","action":"calculate_many","items":[' + deep + ']}').encode())
+        self.assertEqual((code, out), (1, '{"code":"invalid_request","status":"refused"}'))
+
     def test_the_engine_is_read_from_source_and_writes_no_bytecode(self):
         before = set(HERE.glob('__pycache__/*engine*'))
         code, _ = self.run_raw(json.dumps({'action': 'calculate_many', 'engine': 'scope2', 'items': [{'action': 'calculate', 'input': {}}]}).encode())

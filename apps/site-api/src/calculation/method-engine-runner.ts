@@ -22,6 +22,7 @@
  * that ignores SIGTERM or leaves a child holding its output cannot keep running. The engine slot is released when the
  * engine process has exited.
  */
+import { readdirSync, readFileSync, readlinkSync } from 'node:fs'
 import path from 'node:path'
 
 export class EngineRefusal extends Error { constructor(readonly code: string) { super(`Input refused: ${code}`) } }
@@ -32,6 +33,44 @@ const DEFAULT_TIMEOUT_MS = 5000
 export const KILL_GRACE_MS = 500
 // A new process group needs POSIX (Bun's `detached`); on Windows only the engine process itself can be signalled.
 const PROCESS_GROUPS = process.platform !== 'win32'
+
+/**
+ * BI-01b (QA follow-up 2 of PR #68): which processes a stop may signal. A process group is named by its leader's process ID,
+ * and an ID can be reused once nothing uses it any more, so the runner never signals by group ID (`kill(-pgid)`). It signals
+ * processes one by one, each one it can prove is its own:
+ * - while the engine itself still exists with the start time it had when it was spawned (running, or ended but not yet
+ *   reaped), its ID cannot have been reused, so every member of its group is ours;
+ * - any process holding the engine's own stdout or stderr (Bun gives the engine one end of a socket pair for each, named by
+ *   its inode, which stays the same object while any process still holds it) is ours, whatever its group, since it is what
+ *   keeps the call from finishing.
+ * Nothing else is signalled: a process that left the pipes and outlived an engine that has been reaped is left alone,
+ * because its ownership can no longer be proven. Start times are /proc clock ticks since boot.
+ */
+export interface ProcessFacts { pid: number; pgrp: number; start: number; zombie: boolean; pipes: readonly string[] }
+export interface EngineGroup { pgid: number; leaderStart: number | null; spawnedAt: number; pipes: readonly string[] }
+export function ownedProcesses(group: EngineGroup, processes: readonly ProcessFacts[]): Array<{ pid: number; start: number }> {
+  const leader = processes.find(p => p.pid === group.pgid)
+  const leaderIsOurs = leader !== undefined && group.leaderStart !== null && leader.start === group.leaderStart
+  return processes.filter(p => !p.zombie && p.start >= group.spawnedAt
+    && ((leaderIsOurs && p.pgrp === group.pgid) || p.pipes.some(pipe => group.pipes.includes(pipe)))).map(p => ({ pid: p.pid, start: p.start }))
+}
+/** Linux only (null elsewhere): one process's group, start time (clock ticks since boot) and whether it is a zombie. */
+function processFacts(pid: number, withPipes = false): ProcessFacts | null {
+  try {
+    const stat = readFileSync(`/proc/${pid}/stat`, 'utf8')
+    const fields = stat.slice(stat.lastIndexOf(')') + 2).split(' ')  // fields 3 onwards: state, ppid, pgrp, ..., starttime (22)
+    return { pid, pgrp: Number(fields[2]), start: Number(fields[19]), zombie: fields[0] === 'Z', pipes: withPipes ? pipesOf(pid) : [] }
+  } catch { return null }
+}
+function pipesOf(pid: number): string[] {
+  try { return readdirSync(`/proc/${pid}/fd`).map(fd => { try { return readlinkSync(`/proc/${pid}/fd/${fd}`) } catch { return '' } }).filter(link => link.startsWith('pipe:') || link.startsWith('socket:')) } catch { return [] }
+}
+const HAS_PROC = (() => { try { readFileSync('/proc/self/stat'); return true } catch { return false } })()
+/** Every process that started at or after `since` (only those can be an engine's), with the pipes it holds. */
+const processesSince = (since: number): ProcessFacts[] => readdirSync('/proc').filter(name => /^[0-9]+$/.test(name)).map(name => processFacts(Number(name)))
+  .filter((p): p is ProcessFacts => p !== null && p.start >= since && p.pid !== process.pid).map(p => ({ ...p, pipes: pipesOf(p.pid) }))
+/** Clock ticks since boot (USER_HZ is 100 on Linux), the unit of a process's start time. */
+const bootTicks = () => Math.floor(Number(readFileSync('/proc/uptime', 'utf8').split(' ')[0]) * 100)
 const sha256 = (bytes: Uint8Array) => new Bun.CryptoHasher('sha256').update(bytes).digest('hex')
 export const sortedKeys = (v: unknown): unknown => Array.isArray(v) ? v.map(sortedKeys) : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).sort(([a], [b]) => a < b ? -1 : 1).map(([k, x]) => [k, sortedKeys(x)])) : v
 
@@ -100,10 +139,19 @@ export function createEngineRunner(config: EngineRunnerConfig, options: EngineOp
     if (new TextEncoder().encode(encoded).length > cap) throw new Error(config.unavailable)
     await acquire(deadline, !config.queuedActions || config.queuedActions.includes(action), call.signal)
     let child: ReturnType<typeof Bun.spawn> | undefined, timer: ReturnType<typeof setTimeout> | undefined, stopping = false
-    const signalGroup = (signal: 'SIGTERM' | 'SIGKILL') => {
+    let group: EngineGroup | null = null
+    // BI-01b: SIGTERM goes to the processes proven ours at that moment; SIGKILL, after the grace, to the same processes
+    // (each re-checked by start time) and to any new one still proven ours. The engine itself is also signalled through Bun
+    // while it hasn't ended (that handle is never a reused ID).
+    let targets: Array<{ pid: number; start: number }> = []
+    const signalOurs = (signal: 'SIGTERM' | 'SIGKILL') => {
       if (!child) return
-      // The group first (the engine and anything it started), then the engine itself in case no group was made.
-      if (PROCESS_GROUPS) try { process.kill(-child.pid, signal) } catch { /* no such group: already gone */ }
+      if (PROCESS_GROUPS && HAS_PROC && group) {
+        const now = ownedProcesses(group, processesSince(group.spawnedAt))
+        const still = targets.filter(t => { const p = processFacts(t.pid); return p !== null && !p.zombie && p.start === t.start })
+        targets = [...new Map([...still, ...now].map(t => [t.pid, t])).values()]
+        for (const t of targets) try { process.kill(t.pid, signal) } catch { /* already gone */ }
+      }
       try { if (child.exitCode === null && child.signalCode === null) child.kill(signal) } catch { /* already gone */ }
     }
     let halt = (_reason: string) => {}
@@ -113,19 +161,27 @@ export function createEngineRunner(config: EngineRunnerConfig, options: EngineOp
       for (const d of config.data) if (sha256(await Bun.file(d.url).bytes()) !== d.sha256) throw new Error('data')
       if (entry && sha256(await Bun.file(entry.path).bytes()) !== entry.sha256) throw new Error('entry')
       if (call.signal?.aborted) throw new Error('aborted')
+      const spawnedAt = HAS_PROC ? bootTicks() : 0
       child = Bun.spawn([options.python ?? process.env.NEUVETRA_PYTHON ?? 'python', entry?.path ?? config.engine], {
         stdin: new Blob([encoded]), stdout: 'pipe', stderr: 'pipe', env: { PATH: process.env.PATH ?? '', SYSTEMROOT: process.env.SYSTEMROOT ?? '', PYTHONIOENCODING: 'utf-8' },
         // BI-10: its own process group, so a stop reaches any process it started.
         detached: PROCESS_GROUPS,
       })
+      if (PROCESS_GROUPS && HAS_PROC) {
+        // The engine's start time and its stdout and stderr pipes, read while it cannot have ended unnoticed.
+        const leader = processFacts(child.pid)
+        const output = [1, 2].map(fd => { try { return readlinkSync(`/proc/${child!.pid}/fd/${fd}`) } catch { return '' } }).filter(link => link.startsWith('pipe:') || link.startsWith('socket:'))
+        group = { pgid: child.pid, leaderStart: leader?.start ?? null, spawnedAt, pipes: output }
+      }
       const readers: Array<ReadableStreamDefaultReader<Uint8Array>> = []
       // BI-10: a stop rejects the call at once; the pipes are cancelled, not waited for.
       const stopped = new Promise<never>((_, reject) => {
         halt = reason => {
           if (stopping) return
           stopping = true
-          signalGroup('SIGTERM')
-          setTimeout(() => signalGroup('SIGKILL'), KILL_GRACE_MS)
+          // The processes are found before the pipes are cancelled, while the runner still holds their read ends.
+          signalOurs('SIGTERM')
+          setTimeout(() => signalOurs('SIGKILL'), KILL_GRACE_MS)
           for (const reader of readers) reader.cancel().catch(() => {})
           reject(new Error(reason))
         }
@@ -154,8 +210,8 @@ export function createEngineRunner(config: EngineRunnerConfig, options: EngineOp
       if (timer) clearTimeout(timer)
       call.signal?.removeEventListener('abort', onAbort)
       const ran = child
-      // A finished engine leaves nothing behind either: anything still in its group is killed (BI-10).
-      if (ran && !stopping) signalGroup('SIGKILL')
+      // An engine that finished closed its pipes and was reaped: what it may have left behind can no longer be proven ours
+      // (BI-01b), so nothing is signalled. A process still holding its pipes keeps the call open until the timeout stops it.
       // The slot stays taken until the engine process has exited, so no more than maxConcurrent ever run.
       if (ran) void ran.exited.then(release, release)
       else release()

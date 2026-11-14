@@ -7,7 +7,7 @@ import { validateCollectionActivity, type CollectionActivityRecord, type Collect
 import { SCOPE12_BATCH_ENGINE } from "../calculation/method-engine-runner"
 import { createScope1Engine } from "../calculation/scope1-authority"
 import { createScope2Engine } from "../calculation/scope2-authority"
-import { buildCollectionResults, COLLECTION_RESULTS_BUDGET_MS, createCollectionResultsRoutes, RESULTS_ENGINE_UNAVAILABLE_TEXT, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE12_BATCH_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256, type CollectionResultsDatabase, type CollectionResultsEngines, type CollectionResultsResponse } from "./collection-results-routes"
+import { buildCollectionResults, checkResultsEngines, reviewedResultsEngines, COLLECTION_RESULTS_BUDGET_MS, createCollectionResultsRoutes, RESULTS_ENGINE_UNAVAILABLE_TEXT, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE12_BATCH_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256, type CollectionResultsDatabase, type CollectionResultsEngines, type CollectionResultsResponse } from "./collection-results-routes"
 
 const python = process.env.NEUVETRA_PYTHON ?? "python3"
 const perRecord = { scope1: createScope1Engine({ python, expectedEngineSha256: REVIEWED_SCOPE1_ENGINE_SHA256 }), scope2: createScope2Engine({ python, expectedEngineSha256: REVIEWED_SCOPE2_ENGINE_SHA256 }) }
@@ -198,4 +198,24 @@ describe("BI-01: the results route", () => {
     expect((await pending).status).toBe(503)
     expect(seen).toHaveLength(1)  // the Scope 2 batch never started
   }, 60_000)
+})
+
+// BI-01b (QA follow-up 3 of PR #68): the image job makes one real batch call per scope (tools/staging/scope12-batch-image-smoke.ts).
+describe("BI-01b: the results engine self-check", () => {
+  test("the reviewed engines pass; a missing or mis-pinned batch entry point fails the scope it serves", async () => {
+    expect(await checkResultsEngines(reviewedResultsEngines({ python }))).toEqual({ scope1: "ok", scope2: "ok" })
+    const misPinned = { scope1: createScope1Engine({ python, expectedEngineSha256: REVIEWED_SCOPE1_ENGINE_SHA256, expectedBatchSha256: "0".repeat(64) }), scope2: batched.scope2 }
+    expect(await checkResultsEngines(misPinned)).toEqual({ scope1: "failed", scope2: "ok" })
+    // Without a batch entry point at all (the engines without expectedBatchSha256).
+    expect(await checkResultsEngines(perRecord)).toEqual({ scope1: "failed", scope2: "failed" })
+    // No Python able to run anything.
+    expect(await checkResultsEngines(reviewedResultsEngines({ python: "/bin/false" }))).toEqual({ scope1: "failed", scope2: "failed" })
+  }, 120_000)
+  test("the staging image copies the check and the image job runs it", async () => {
+    const root = new URL("../../../../", import.meta.url)
+    const [dockerfile, ignore, workflow] = await Promise.all(["Dockerfile.staging", "Dockerfile.staging.dockerignore", ".github/workflows/verify.yml"].map(name => Bun.file(new URL(name, root)).text()))
+    expect(dockerfile).toContain("tools/staging/scope12-batch-image-smoke.ts ./tools/staging/")
+    expect(ignore.split("\n")).toContain("!tools/staging/scope12-batch-image-smoke.ts")
+    expect(workflow).toContain("--entrypoint bun neuvetra-m63:${{ github.sha }} tools/staging/scope12-batch-image-smoke.ts")
+  })
 })

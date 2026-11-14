@@ -3,17 +3,19 @@
  * no longer spins forever: after 8 s it is reported as slow (SlowRequestNotice shows "Taking longer than usual…"), and at
  * its limit it is aborted with a RequestTimeoutError whose text offers Try again. The limits by kind of request:
  * 35 s by default, 95 s for Scope 3 results, 125 s for preparing a report version and 125 s for an evidence upload.
+ * BI-01b (13 November 2026): 60 s for Scope 1 and 2 results. One run has a 25 s budget, and a request that arrives
+ * while a run is in progress for the same user waits for it first (about 50 s measured); the server allows 90 s.
  *
  * A timeout changes nothing about the request itself: the same body (and so the same idempotency key) is sent again
  * by a retry, which the server answers as a replay instead of recording a second version.
  */
-export type RequestKind = "default" | "scope3Results" | "reportPrepare" | "upload"
+export type RequestKind = "default" | "results" | "scope3Results" | "reportPrepare" | "upload"
 
 export const SLOW_REQUEST_TEXT = "Taking longer than usual…"
 export const REQUEST_TIMEOUT_TEXT = "Neuvetra didn't answer in time. Nothing was lost — Try again."
 export const SERVER_BUSY_TEXT = "Neuvetra is busy — try again in a moment."
 
-const DEFAULT_LIMITS: Readonly<Record<RequestKind, number>> = { default: 35_000, scope3Results: 95_000, reportPrepare: 125_000, upload: 125_000 }
+const DEFAULT_LIMITS: Readonly<Record<RequestKind, number>> = { default: 35_000, results: 60_000, scope3Results: 95_000, reportPrepare: 125_000, upload: 125_000 }
 const DEFAULT_SLOW_AFTER_MS = 8_000
 let limits: Record<RequestKind, number> = { ...DEFAULT_LIMITS }
 let slowAfterMs = DEFAULT_SLOW_AFTER_MS

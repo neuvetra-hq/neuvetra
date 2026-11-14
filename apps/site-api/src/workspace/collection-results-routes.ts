@@ -4,10 +4,10 @@ import { isScope3CollectionKind } from "../../../../packages/neuvetra-database/s
 import { applyDuplicatePolicy, COLLECTION_DUPLICATE_POLICY, possibleDuplicateCounts, possibleDuplicateNotes, possibleDuplicatePairs, possibleDuplicateRecords, possibleDuplicatesCountedWarning, type CollectionDuplicatePolicy } from "../../../../packages/neuvetra-database/src/collection-duplicates"
 import { assertEngineMatchesRelease, type ReleasedMethod } from "../../../../packages/neuvetra-database/src/method-reference"
 import { extractBearerToken, type AuthenticatedUser } from "../lib/auth"
-import { EngineRefusal } from "../calculation/method-engine-runner"
+import { EngineRefusal, sortedKeys } from "../calculation/method-engine-runner"
 import type { EngineBatchItem, EngineCallOptions } from "../calculation/method-engine-runner"
-import type { Scope1Aggregate, Scope1Kind, Scope1Result } from "../calculation/scope1-authority"
-import type { Scope2Aggregate, Scope2Input, Scope2Result } from "../calculation/scope2-authority"
+import { createScope1Engine, type Scope1Aggregate, type Scope1Kind, type Scope1Result } from "../calculation/scope1-authority"
+import { createScope2Engine, type Scope2Aggregate, type Scope2Input, type Scope2Result } from "../calculation/scope2-authority"
 import { createResultsScheduler } from "./results-scheduler"
 
 /**
@@ -45,8 +45,9 @@ export type MethodReleaseStatus = "released_beta" | "unreleased_beta"
 export const REVIEWED_SCOPE1_ENGINE_SHA256 = "5dcbdb5b3e7615b44c0f76a8c4a3bfd8131640fa6bde1bbcb99a4db0756faed1"
 export const REVIEWED_SCOPE2_ENGINE_SHA256 = "56f1245df2e5eac10adbbd7f553f2fa63ba64135b6153b5edc1025cf0e3e8dbb"
 /** BI-01: the reviewed bytes of scope12_batch.py, the batch entry point that loads the two engine files above unchanged
- *  and calls their per-record `handle`. It holds no method, factor or rounding; a changed file must be re-reviewed. */
-export const REVIEWED_SCOPE12_BATCH_SHA256 = "6675e01b5d7b6b36d8d89c1a65fa7ebb2e9d4a616861ce01d803b13bffa80ed6"
+ *  and calls their per-record `handle`. It holds no method, factor or rounding; a changed file must be re-reviewed.
+ *  BI-01b (13 November 2026): 6675e01b… became 5460cfec… (a request nested too deeply to parse is read item by item). */
+export const REVIEWED_SCOPE12_BATCH_SHA256 = "5460cfecea60acefaff8f7b32f578e2a78fda69651b3b84082182fb6cee2a069"
 /** BI-01: one results run's time budget, from the moment it starts (reads included), as the Scope 3 results run (I-06):
  *  each engine call gets what is left of it, inside the web's 35 s limit for this request. */
 export const COLLECTION_RESULTS_BUDGET_MS = 25_000
@@ -86,6 +87,43 @@ export interface CollectionResultsEngines {
     calculateMany?(requests: Array<{ kind: Scope1Kind; input: unknown }>, call?: EngineCallOptions): Promise<Array<EngineBatchItem<Scope1Result>>> }
   scope2: { calculate(input: Scope2Input): Promise<Scope2Result>; aggregate(results: Scope2Result[], call?: EngineCallOptions): Promise<Scope2Aggregate>; describe(): Promise<EngineDescription>
     calculateMany?(inputs: Scope2Input[], call?: EngineCallOptions): Promise<Array<EngineBatchItem<Scope2Result>>> }
+}
+/** The engines the staged server runs: the reviewed Scope 1 and 2 engines with the reviewed batch entry point (BI-01). */
+export function reviewedResultsEngines(options: { python?: string } = {}) {
+  return {
+    scope1: createScope1Engine({ ...options, expectedEngineSha256: REVIEWED_SCOPE1_ENGINE_SHA256, expectedBatchSha256: REVIEWED_SCOPE12_BATCH_SHA256 }),
+    scope2: createScope2Engine({ ...options, expectedEngineSha256: REVIEWED_SCOPE2_ENGINE_SHA256, expectedBatchSha256: REVIEWED_SCOPE12_BATCH_SHA256 }),
+  }
+}
+/** The fixed records the engine self-check calculates: one natural gas bill and one electricity bill (synthetic). */
+export const RESULTS_ENGINE_CHECK_INPUTS = {
+  scope1: { kind: "natural_gas" as const, input: { period: { start: "2025-01-01", endExclusive: "2026-01-01" }, quantity: "61500", unit: "therm" } },
+  scope2: { period: { start: "2025-01-01", endExclusive: "2026-01-01" }, quantity: "250000", unit: "kWh" as const, subregion: "CAMX", zip: "94105", utilityEiaId: "16612", instruments: [] },
+}
+export interface ResultsEngineCheck { scope1: "ok" | "failed"; scope2: "ok" | "failed" }
+/**
+ * BI-01b (QA follow-up 3 of PR #68): one real `calculate_many` call per scope, so an image without the batch entry point,
+ * or with one whose bytes differ from REVIEWED_SCOPE12_BATCH_SHA256, fails its smoke check instead of answering every
+ * /results with 503. A scope is "ok" only when its batch answers the fixed record exactly as the per-record call does, with
+ * the reviewed engine. Reporting only: nothing here changes what /results does.
+ */
+export async function checkResultsEngines(engines: CollectionResultsEngines): Promise<ResultsEngineCheck> {
+  const same = (a: unknown, b: unknown) => JSON.stringify(sortedKeys(a)) === JSON.stringify(sortedKeys(b))
+  const check = async <R extends { engineSha256: string }>(reviewed: string, many: (() => Promise<Array<EngineBatchItem<R>>>) | null, single: () => Promise<R>): Promise<"ok" | "failed"> => {
+    try {
+      if (!many) return "failed"
+      const items = await many()
+      const item = items.length === 1 ? items[0]! : null
+      if (item?.status !== "ok" || item.result.engineSha256 !== reviewed) return "failed"
+      return same(item.result, await single()) ? "ok" : "failed"
+    } catch { return "failed" }
+  }
+  const { scope1, scope2 } = RESULTS_ENGINE_CHECK_INPUTS
+  const many1 = engines.scope1.calculateMany, many2 = engines.scope2.calculateMany
+  return {
+    scope1: await check(REVIEWED_SCOPE1_ENGINE_SHA256, many1 ? () => many1.call(engines.scope1, [scope1]) : null, () => engines.scope1.calculate(scope1.kind, scope1.input)),
+    scope2: await check(REVIEWED_SCOPE2_ENGINE_SHA256, many2 ? () => many2.call(engines.scope2, [scope2]) : null, () => engines.scope2.calculate(scope2)),
+  }
 }
 /** One method as the running engine describes it (from `describe`, keyed by method version id). */
 export interface EngineMethodFacts { engineSha256: string; registerSha256: string; factorValues: Record<string, string>; constantValues: Record<string, { value: string; unit: string }> }
