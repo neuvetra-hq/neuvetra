@@ -49,7 +49,7 @@ export const REVIEWED_SCOPE2_ENGINE_SHA256 = "56f1245df2e5eac10adbbd7f553f2fa63b
  *  BI-01b (13 November 2026): 6675e01b… became 5460cfec… (a request nested too deeply to parse is read item by item). */
 export const REVIEWED_SCOPE12_BATCH_SHA256 = "5460cfecea60acefaff8f7b32f578e2a78fda69651b3b84082182fb6cee2a069"
 /** BI-01: one results run's time budget, from the moment it starts (reads included), as the Scope 3 results run (I-06):
- *  each engine call gets what is left of it, inside the web's 35 s limit for this request. */
+ *  each engine call gets what is left of it, inside the web's 60 s limit for this request (BI-01b; before it, the web set no limit). */
 export const COLLECTION_RESULTS_BUDGET_MS = 25_000
 /** BI-01: the answer when every record sent to an engine came back unavailable (no engine could run). Never a 200. */
 export const RESULTS_ENGINE_UNAVAILABLE_TEXT = "Results could not be prepared. Try again shortly."

@@ -245,6 +245,8 @@ describe('BI-01b: only processes proven to be the engine\'s own are ever signall
     // Zombies, and processes older than the spawn (which cannot be the engine's), are left alone.
     expect(ownedProcesses(group, [proc(5000, 1100, pgid, [out], true), proc(5002, 999, pgid, [out])])).toEqual([])
   })
+  // Not covered on purpose (QA follow-up 1 of PR #71): a detached leftover that has closed the engine's output survives a
+  // normal finish, since it can no longer be proven ours. The engines and the batch entry point never start processes.
   test('a real leftover holding the output is killed after the engine answered and exited; a bystander never is', async () => {
     const bystander = Bun.spawn([python, '-c', 'import time; time.sleep(30)'], { detached: true, stdout: 'ignore', stderr: 'ignore' })
     try {

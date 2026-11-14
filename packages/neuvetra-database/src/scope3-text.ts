@@ -805,3 +805,20 @@ Object.assign(SCOPE3_DISCLOSURE_TEXT, SCOPE3_REASON_TEXT_BF02)
 /** BF-02b (a): the CSV "Superseded by" cell of a line held because its replacing record isn't counted (newly written CSVs only). */
 export const SCOPE3_REPLACING_RECORD_CSV_TEXT = (recordId: string, sourceId: string | null) => `${sourceId === null ? 'record' : `${sourceId}, record`} ${recordId} (not counted right now; this line is held until it is)`
 // --- end BF-02 ---
+
+// --- BF-12 --- (accounting audit B-2; 13 November 2026). New text only; no shipped text is edited.
+/**
+ * The words for the plan note `superseded_by_vendor_key_match:<supplier named on the record>`: a spend line replaced only
+ * because its supplier and the replacing record's named supplier are the same vendor under `scope3SpendVendorKey`, and not
+ * under the earlier rule (capitals and spacing only). QA F2: says what that rule ignores, and that accents still count.
+ */
+export const SCOPE3_VENDOR_KEY_MATCH_TEXT = 'matched as the same supplier ignoring punctuation, symbols, “&” or “and”, a leading “The”, full-width letters and endings such as Inc, LLC or Co (accents count)'
+/**
+ * BF-12 (CEO decision, 13 November 2026): what follows a line's replacing record wherever it is named (CSV "Superseded by"
+ * cell and Mapping rows, the screen's and print's calculation details, the spend import's reconciliation) when the line was
+ * matched only by the vendor key: the rule and the supplier as the replacing record writes it.
+ */
+export const SCOPE3_VENDOR_KEY_MATCH_DETAIL = (named: string) => `${SCOPE3_VENDOR_KEY_MATCH_TEXT} (supplier on the replacing record: ${named})`
+/** BF-12 (QA F1): the same, as a sentence after the record form's "Another record replaces this spend line: …". */
+export const SCOPE3_VENDOR_KEY_MATCH_SENTENCE = (named: string) => `It was ${SCOPE3_VENDOR_KEY_MATCH_DETAIL(named)}.`
+// --- end BF-12 ---

@@ -10,14 +10,25 @@
  * new description is mapped from memory. A line's own remembered mapping (a per-line override, keyed by the line key)
  * always wins over its group's. Nothing here calculates emissions.
  */
-import { scope3SpendMappingKeyInput } from './scope3-collection'
+/**
+ * The text whose SHA-256 (lowercase hex) is a spend line's mapping key (DESIGN §3.6 revision 1, as 0030's mapping
+ * table stores it): the GL account, the vendor (the line's supplier name) and the description, each trimmed and
+ * lower-cased, separated by U+001F. The spend import (I-09) computes the same key for a file line.
+ */
+export function scope3SpendMappingKeyInput(line: { glAccount: string; supplierName: string; description: string }): string {
+  return [line.glAccount, line.supplierName, line.description].map(text => text.trim().toLowerCase()).join('\u001f')
+}
 
 /** Legal-form words dropped from the end (and "the" from the start) of a vendor name when grouping. */
 const LEGAL_SUFFIXES = new Set(['inc', 'incorporated', 'llc', 'l l c', 'ltd', 'limited', 'corp', 'corporation', 'co', 'company', 'plc', 'lp', 'llp', 'l p', 'gmbh', 'ag', 'sa', 'bv', 'pty', 'pc', 'pllc'])
 
-/** A vendor name as groups compare it: NFKC, lower case, `&` as "and", punctuation as spaces, legal suffixes dropped. */
+/**
+ * A vendor name as groups compare it: NFKC, lower case, `&` as "and", punctuation and symbols as spaces, legal suffixes
+ * dropped. BF-12 (QA F4): combining marks (\p{M}: Devanagari and Thai vowel signs, for example) are part of the name and
+ * kept, so names that differ only in them stay apart.
+ */
 export function scope3SpendVendorKey(vendor: string): string {
-  const words = vendor.normalize('NFKC').toLowerCase().replace(/&/g, ' and ').replace(/[^\p{L}\p{N}]+/gu, ' ').trim()
+  const words = vendor.normalize('NFKC').toLowerCase().replace(/&/g, ' and ').replace(/[^\p{L}\p{M}\p{N}]+/gu, ' ').trim()
   if (!words) return ''
   let out = words
   for (;;) {

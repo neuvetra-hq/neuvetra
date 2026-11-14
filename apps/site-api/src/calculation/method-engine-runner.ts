@@ -164,7 +164,9 @@ export function createEngineRunner(config: EngineRunnerConfig, options: EngineOp
       const spawnedAt = HAS_PROC ? bootTicks() : 0
       child = Bun.spawn([options.python ?? process.env.NEUVETRA_PYTHON ?? 'python', entry?.path ?? config.engine], {
         stdin: new Blob([encoded]), stdout: 'pipe', stderr: 'pipe', env: { PATH: process.env.PATH ?? '', SYSTEMROOT: process.env.SYSTEMROOT ?? '', PYTHONIOENCODING: 'utf-8' },
-        // BI-10: its own process group, so a stop reaches any process it started.
+        // BI-10: its own process group, so a stop reaches any process it started. The Scope 1, 2 and 3 engines and the batch
+        // entry point never start processes; a detached leftover (one that left the engine's output) is not killed after a
+        // normal finish, because it can no longer be proven the engine's own (BI-01b; QA follow-up 1 of PR #71).
         detached: PROCESS_GROUPS,
       })
       if (PROCESS_GROUPS && HAS_PROC) {
