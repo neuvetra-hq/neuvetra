@@ -74,7 +74,8 @@ describe('bulk currency conversion in the database (PR-11)', () => {
     expect(result.skipped).toEqual([{ recordId: expect.any(String), sourceId: 'FX-3', reason: 'negative_amount_not_supported' }])
     const [fx1, fx2, fx3, fx4, fx5] = await spend()
     expect(fx1!.currentVersion.activity.quantity).toEqual({ originalValue: '4883.66', originalUnit: 'USD', normalizedValue: '4883.66', normalizedUnit: 'USD' })
-    expect(fx1!.currentVersion.correctionReason).toBe('Converted from EUR 4512.3 to USD 4883.66 at 1.0823 USD per EUR (ECB euro reference rate, rate date 2025-06-30; rounded half-even to the cent).')
+    // BF-20: one correction reason for the whole conversion (the lines are written set-based); each line's own amounts stay in its notes.
+    expect([fx1!.currentVersion.correctionReason, fx2!.currentVersion.correctionReason]).toEqual(Array(2).fill('Converted from EUR to USD at 1.0823 USD per EUR (ECB euro reference rate, rate date 2025-06-30; rounded half-even to the cent).'))
     expect(scope3SpendConversionOf(fx1!.currentVersion.activity.notes)).toEqual({ currency: 'EUR', amount: '4512.3', rate: '1.0823', rateSource: 'ECB euro reference rate', rateDate: '2025-06-30', usd: '4883.66' })
     // The GL description note the import wrote stays the first line.
     expect(fx1!.currentVersion.activity.notes.split('\n')[0]).toBe('GL description: Components')

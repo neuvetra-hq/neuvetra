@@ -1,0 +1,280 @@
+// BF-20 test fixture (test-only; never imported by product code). The differential harness for the currency conversion:
+// the same generated companies on PGlite or native PostgreSQL, the per-line reference (main at 5b98b86) and the set-based
+// implementation run over the same database state (each in its own transaction, the first rolled back), and every stored
+// row of every company table, every table's row count and the response compared after normalising only what is random
+// by construction (new version IDs, idempotency keys, the transaction time).
+import { createHash } from 'node:crypto'
+import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
+import { PGlite } from '@electric-sql/pglite'
+import { readMigrationManifest } from './staging-migrations'
+import type { WorkspaceSql } from './workspace'
+import { parseScope3SpendCsv, SCOPE3_SPEND_IMPORT_COLUMNS } from './scope3-spend-import'
+import { convertScope3SpendCurrency, importScope3SpendFile } from './scope3-spend-imports'
+import { convertScope3SpendCurrencyPerLineReference } from './scope3-spend-currency-per-line.reference'
+import { scope3SpendConversionGroupReason, scope3SpendConversionReason, type Scope3SpendConversionInput } from './scope3-spend-currency'
+
+export interface DiffDb extends WorkspaceSql { transaction<T>(operation: (tx: WorkspaceSql) => Promise<T>): Promise<T>; close(): Promise<void> }
+
+/** A PGlite database at schema `length` (31 or 32), built as the package's PGlite tests build it. */
+export async function pgliteAt(length: number): Promise<DiffDb> {
+  const db = new PGlite()
+  await db.exec(`create role authenticated; create role anon; create schema auth; create table auth.users(id uuid primary key);
+    create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
+    grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated;`)
+  const manifest = await readMigrationManifest()
+  for (const migration of manifest.slice(0, 26)) await db.exec(migration.sql)
+  await db.exec(`create schema storage;
+    create table storage.buckets(id text primary key,name text not null,public boolean not null,file_size_limit bigint,allowed_mime_types text[]);
+    create table storage.objects(id uuid primary key default gen_random_uuid(),bucket_id text not null references storage.buckets(id),name text not null,unique(bucket_id,name));
+    alter table storage.objects enable row level security; grant usage on schema storage to authenticated,anon;`)
+  for (const migration of manifest.slice(26, length)) await db.exec(migration.sql)
+  const wrap = (q: { query: PGlite['query']; exec: PGlite['exec'] }): WorkspaceSql => ({ query: async <R,>(sql: string, args: unknown[] = []) => ({ rows: (await q.query<R>(sql, args)).rows }), exec: async (sql: string) => { await q.exec(sql) } })
+  return { ...wrap(db), transaction: operation => db.transaction(tx => operation(wrap(tx))), close: () => db.close() }
+}
+
+export class Rollback<T> extends Error { constructor(readonly value: T) { super('rollback') } }
+/** Runs `operation` as `actor` (the runtime role and the hosted timeouts), then commits, or rolls back when `keep` is false. */
+export async function asActor<T>(db: DiffDb, actor: string, operation: (tx: WorkspaceSql) => Promise<T>, options: { keep?: boolean; after?: (tx: WorkspaceSql) => Promise<unknown> } = {}): Promise<{ value: T; after: unknown }> {
+  try {
+    return await db.transaction(async tx => {
+      await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [actor])
+      await tx.exec("set local lock_timeout='5s'; set local statement_timeout='15s'; set local role neuvetra_runtime")
+      const value = await operation(tx)
+      await tx.exec('reset role')
+      const after = options.after ? await options.after(tx) : undefined
+      if (options.keep === false) throw new Rollback({ value, after })
+      return { value, after }
+    })
+  } catch (error) {
+    if (error instanceof Rollback) return error.value as { value: T; after: unknown }
+    throw error
+  }
+}
+
+/**
+ * The rows of every company table that belong to `companies` (as jsonb text, sorted) and every neuvetra table's row count
+ * (company tables included, so a row written for any other company shows), read in one statement by the caller's role.
+ */
+export async function snapshot(tx: WorkspaceSql, companies: readonly string[]): Promise<Record<string, string[]>> {
+  // The table list is read each time (schemas 31 and 32 differ; one process may hold databases at both).
+  const tables = (await tx.query<{ table_name: string; has_company: boolean }>(`select t.table_name,exists(select 1 from information_schema.columns c where c.table_schema=t.table_schema and c.table_name=t.table_name and c.column_name='company_id') has_company
+    from information_schema.tables t where t.table_schema='neuvetra' and t.table_type='BASE TABLE' order by t.table_name`)).rows
+  const sql = tables.flatMap(t => [`select '#count' t,'${t.table_name}='||count(*) r from neuvetra.${t.table_name} x`, ...(t.has_company ? [`select '${t.table_name}' t,to_jsonb(x)::text r from neuvetra.${t.table_name} x where x.company_id=any($1::uuid[])`] : [])]).join('\nunion all\n')
+  const out: Record<string, string[]> = {}
+  for (const row of (await tx.query<{ t: string; r: string }>(sql, [companies])).rows) (out[row.t] ??= []).push(row.r)
+  for (const k of Object.keys(out)) out[k]!.sort()
+  return out
+}
+
+/**
+ * A snapshot with what is random by construction replaced: each new version ID by `version:<record>:<revision>` (wherever
+ * it appears), each new idempotency key, and the transaction time of new rows. `mask` names further keys to blank in new
+ * rows (the expected differences, e.g. correction_reason). Rows present before the run are compared verbatim.
+ */
+export function normalise(before: Record<string, string[]>, after: Record<string, string[]>, mask: string[] = []) {
+  const old = new Set(Object.values(before).flat())
+  const ids = new Map<string, string>()
+  for (const text of after.collection_activity_versions ?? []) if (!old.has(text)) { const row = JSON.parse(text); ids.set(row.id, `version:${row.record_id}:${row.revision}`) }
+  const swap = (value: unknown): unknown => typeof value === 'string' ? (ids.get(value) ?? value) : Array.isArray(value) ? value.map(swap) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([k, v]) => [k, swap(v)])) : value
+  const out: Record<string, string[]> = {}
+  for (const [table, rows] of Object.entries(after)) out[table] = rows.map(text => {
+    if (old.has(text) || table === '#count') return text
+    const row = swap(JSON.parse(text)) as Record<string, unknown>
+    for (const key of ['created_at', 'idempotency_key', ...mask]) if (key in row) row[key] = `<${key}>`
+    return JSON.stringify(row)
+  }).sort()
+  return { rows: out, ids }
+}
+
+export const sha = (bytes: Uint8Array) => createHash('sha256').update(bytes).digest('hex')
+/** A seeded PRNG (mulberry32), so a failure names a reproducible seed. */
+export function prng(seed: number) {
+  let a = seed >>> 0
+  const next = () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296 }
+  const int = (n: number) => Math.floor(next() * n)
+  return { next, int, pick: <T,>(items: readonly T[]) => items[int(items.length)]! }
+}
+
+/** Adversarial amounts as written in a file: plain decimals of 1-12 integer and 0-3 decimal digits, half-cent boundaries, the extremes, and the kinds a conversion skips. */
+export function amountText(r: ReturnType<typeof prng>, huge = true): string {
+  const digits = (n: number) => Array.from({ length: n }, (_, i) => String(i === 0 ? 1 + r.int(9) : r.int(10))).join('')
+  switch (r.int(14)) {
+    case 0: return r.pick(['0.005', '0.015', '0.025', '0.5', '1.5', '2.5', '0.125', '0.375', '10.005', '0.001', '0.999', '0', '0.000', '1.000'])
+    case 1: return huge ? r.pick(['999999999999.999', '999999999999', '100000000000.001', '0.001', '1']) : r.pick(['99999999999.999', '0.001', '1'])
+    case 2: return r.pick(['-50', '-0.01', '-1,200.00', '-0'])
+    case 3: return r.pick(['n/a', 'TBD', '1.2.3', '12 EUR'])
+    case 4: return r.pick(['1234.5678', '1234567890123', '0.0001'])
+    case 5: return `${digits(1 + r.int(4))},${String(r.int(1000)).padStart(3, '0')}.${String(r.int(100)).padStart(2, '0')}`
+    case 6: return `${digits(1 + r.int(huge ? 12 : 11))}`
+    default: return `${r.int(3) === 0 ? '0' : digits(1 + r.int(7))}.${String(r.int(10 ** (1 + r.int(3)))).padStart(1 + r.int(3), '0').slice(0, 3)}`
+  }
+}
+
+export interface Fixture { owner: string; company: string; location: string; setups: string[] }
+const HEADER = SCOPE3_SPEND_IMPORT_COLUMNS.join(',')
+
+/**
+ * A company with two setup versions (a fiscal year 2025-07-01..2026-07-01, then calendar 2025, the same location) and two
+ * imported files of generated lines: many currencies, dated in 2024-2026 or undated, every amount kind above, long and
+ * Unicode texts. Amounts of 12 integer digits only in CAD (a conversion at a rate above 1 then overflows the 12-digit
+ * contract and is refused whole, by both implementations). File 1 is imported under the fiscal setup (its lines keep that setup version and period), file 2 under
+ * the calendar one.
+ */
+export async function seedCompany(db: DiffDb, seed: number, lines: [number, number], ids: { prefix: string; currencies?: readonly string[]; plain?: boolean }): Promise<Fixture> {
+  const r = prng(seed)
+  const id = (n: number) => `${ids.prefix}-0000-4000-8000-${String(n).padStart(12, '0')}`
+  const fx: Fixture = { owner: id(1), company: id(2), location: id(3), setups: [id(4), id(5)] }
+  await db.query('insert into auth.users(id) values($1)', [fx.owner])
+  await db.query("insert into neuvetra.companies(id,name,country_code,state_code,created_by) values($1,'Synthetic BF-20','US','CA',$2)", [fx.company, fx.owner])
+  await db.query("insert into neuvetra.company_members(company_id,user_id,role) values($1,$2,'owner')", [fx.company, fx.owner])
+  await db.query('insert into neuvetra.staging_access(user_id,company_id,active) values($1,$2,true)', [fx.owner, fx.company])
+  const setup = async (version: string, revision: number, start: string, end: string, previous: string | null) => {
+    await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,payload,payload_sha256,period_start,period_end_exclusive,boundary_approach,created_by,previous_version_id) values($1,$2,$3,'{}',$4,$5,$6,'operational_control',$7,$8)", [version, fx.company, revision, String(revision).repeat(64), start, end, fx.owner, previous])
+    await db.query("insert into neuvetra.company_setup_locations(company_id,version_id,id,name,locality,purpose,occupancy,control,inclusion,reason,other_entity,operator_details,start_mode,end_mode) values($1,$2,$3,'Synthetic plant','Fresno','Plant','owned','reporting_company','included','','','','period_start','period_end')", [fx.company, version, fx.location])
+    if (revision === 1) await db.query('insert into neuvetra.company_setup_heads(company_id,version_id,revision) values($1,$2,1)', [fx.company, version])
+    else await db.query('update neuvetra.company_setup_heads set version_id=$2, revision=$3 where company_id=$1', [fx.company, version, revision])
+  }
+  const csvCell = (text: string) => /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text
+  const file = async (n: number, count: number, dates: string[]) => {
+    const vendors = ['Bosch Rexroth GmbH', 'Magna Components Canada', 'Søren & Ærø ApS', 'Café Crème SARL', 'Société Générale "Services"', 'Ünïcödé Supplies Kft', 'Nakamura 株式会社', 'Plain Vendor LLC']
+    const body = Array.from({ length: count }, (_, i) => {
+      const currency = r.pick(ids.currencies ?? ['EUR', 'EUR', 'EUR', 'EUR', 'CAD', 'GBP', 'JPY', 'CHF', 'USD'])
+      const date = ids.plain ? dates[0]! : r.int(6) === 0 ? '' : r.pick(dates)
+      const description = r.int(10) === 0 ? 'Long description '.repeat(11).slice(0, 190) : `Line ${n}-${i} ${r.pick(['valves', 'motor housings', 'consulting', 'freight, inbound', 'boxes'])}`
+      return [`L${n}-${String(i).padStart(4, '0')}`, date, r.pick(vendors), String(5000 + r.int(80)), r.pick(['Components', 'Services', 'Packaging, misc']), description, ids.plain ? `${1 + r.int(99999)}.${String(r.int(1000)).padStart(3, '0')}` : amountText(r, currency === 'CAD'), currency, '2025', '', '', '', ''].map(csvCell).join(',')
+    }).join('\n')
+    const bytes = new TextEncoder().encode(`${HEADER}\n${body}\n`)
+    const evidence = id(100 + n)
+    await db.query("insert into neuvetra.collection_evidence_objects(id,company_id,storage_key,original_name,media_type,byte_length,sha256,uploaded_by) values($1,$2,$3,$4,'text/csv',$5,$6,$7)", [evidence, fx.company, `${fx.company}/original/${evidence}`, `file-${n}.csv`, bytes.byteLength, sha(bytes), fx.owner])
+    await asActor(db, fx.owner, tx => importScope3SpendFile(tx, fx.owner, fx.company, { parsed: parseScope3SpendCsv(bytes), fileSha256: sha(bytes), evidenceId: evidence, locationId: fx.location }))
+  }
+  await setup(fx.setups[0]!, 1, '2025-07-01', '2026-07-01', null)
+  if (lines[0] > 0) await file(1, lines[0], [ids.plain ? '2025-12-31' : '2025-07-14', '2025-12-31', '2026-01-01', '2026-03-15', '2026-06-30', '2025-02-01', '03/14/2026'])
+  await setup(fx.setups[1]!, 2, '2025-01-01', '2026-01-01', fx.setups[0]!)
+  if (lines[1] > 0) await file(2, lines[1], ['2025-01-01', '2025-06-30', '2025-12-31', '2024-12-31', '2026-01-02', '12/01/2025'])
+  return fx
+}
+
+export type Impl = (tx: WorkspaceSql, actor: string, company: string, input: unknown) => Promise<{ converted: Array<{ recordId: string; sourceId: string; versionId: string; revision: number; from: string; usd: string }>; skipped: Array<{ recordId: string; sourceId: string; reason: string }> }>
+// The reference with BF-20's two declared changes (the shared reason; QA F2's overflow skip): must equal the new one exactly.
+const shared: Impl = (tx, actor, company, input) => convertScope3SpendCurrencyPerLineReference(tx, actor, company, input, { reason: c => scope3SpendConversionGroupReason(c), skipOverflow: true })
+const original: Impl = (tx, actor, company, input) => convertScope3SpendCurrencyPerLineReference(tx, actor, company, input)
+
+async function run(db: DiffDb, fx: Fixture, impl: Impl, input: unknown, keep: boolean, companies: string[]) {
+  let calls = 0
+  const counting = (tx: WorkspaceSql): WorkspaceSql => ({ query: (sql, args) => { if (sql.includes('save_scope3_spend_corrections')) calls++; return tx.query(sql, args) }, exec: sql => tx.exec(sql) })
+  try {
+    const { value, after } = await asActor(db, fx.owner, tx => impl(counting(tx), fx.owner, fx.company, input), { keep, after: tx => snapshot(tx, companies) })
+    return { ok: true as const, value, after: after as Record<string, string[]>, calls }
+  } catch (error) {
+    return { ok: false as const, code: (error as { code?: string }).code ?? `no code: ${(error as Error).message}`, message: (error as Error).message }
+  }
+}
+const responseOf = (value: Awaited<ReturnType<Impl>>, ids: Map<string, string>) => ({ converted: value.converted.map(c => ({ ...c, versionId: ids.get(c.versionId) ?? `UNMAPPED ${c.versionId}` })), skipped: value.skipped })
+
+/** `declared`: main refused this conversion for an overflowing line (uncoded error) where BF-20 skips that line (QA F2). */
+export interface DifferentialCase { input: Scope3SpendConversionInput; converted: number; skipped: number; refused: string | null; mismatches: number; rows: number; chunks: number; declared: boolean }
+export const OVERFLOW_REFUSAL = 'no code: Collection decimals allow 12 integer digits and 3 fractional digits.'
+/** One conversion, three runs from the same state: reference (shared reason) and reference (main) rolled back, then the new one committed. */
+export async function differential(db: DiffDb, fx: Fixture, other: Fixture, input: Scope3SpendConversionInput, options: { againstMain?: boolean } = {}): Promise<DifferentialCase> {
+  const companies = [fx.company, other.company]
+  const before = await db.transaction(tx => snapshot(tx, companies))
+  const a = await run(db, fx, shared, input, false, companies)
+  const b = options.againstMain === false ? a : await run(db, fx, original, input, false, companies)
+  const n = await run(db, fx, convertScope3SpendCurrency, input, true, companies)
+  let mismatches = 0
+  const same = (x: unknown, y: unknown) => { try { expect(x).toEqual(y) } catch (error) { mismatches++; throw error } }
+  const code = (r: typeof n) => r.ok ? null : r.code
+  const tooLarge = (r: typeof n) => r.ok ? r.value.skipped.filter(x => x.reason === 'converted_amount_too_large').length : 0
+  // The only declared difference from main besides the reason (QA F2): main refuses the whole conversion, uncoded, when a
+  // line would overflow; BF-20 skips exactly those lines. Otherwise main and BF-20 succeed or refuse alike.
+  const declared = !b.ok && b.code === OVERFLOW_REFUSAL && n.ok
+  same([a.ok, code(a)], [n.ok, code(n)])
+  if (declared) same(tooLarge(n) > 0, true)
+  else { same([b.ok, code(b)], [n.ok, code(n)]); same(tooLarge(n), 0) }
+  if (!n.ok || !a.ok) {
+    // A refusal: the same SQLSTATE from every implementation, and nothing saved (the next snapshot equals `before`).
+    same(await db.transaction(tx => snapshot(tx, companies)), before)
+    return { input, converted: 0, skipped: 0, refused: code(n), mismatches, rows: 0, chunks: 0, declared }
+  }
+  const na = normalise(before, a.after), nn = normalise(before, n.after)
+  same(nn.rows, na.rows)
+  same(responseOf(n.value, nn.ids), responseOf(a.value, na.ids))
+  const fresh = new Set(before.collection_activity_versions ?? [])
+  const reasons = (after: Record<string, string[]>) => (after.collection_activity_versions ?? []).filter(text => !fresh.has(text)).map(text => JSON.parse(text) as { record_id: string; correction_reason: string }).sort((x, y) => x.record_id.localeCompare(y.record_id))
+  // The new reason: one for the whole conversion.
+  const groupReason = scope3SpendConversionGroupReason(input).normalize('NFC')
+  same(reasons(n.after).map(r => r.correction_reason), reasons(n.after).map(() => groupReason))
+  if (options.againstMain !== false && b.ok) {
+    // Against main exactly: only the reason (main's is per line) and the receipt request hash that covers it differ.
+    const mask = ['correction_reason', 'request_sha256']
+    same(normalise(before, n.after, mask).rows, normalise(before, b.after, mask).rows)
+    same(responseOf(n.value, nn.ids), responseOf(b.value, normalise(before, b.after).ids))
+    const byRecord = new Map(n.value.converted.map(c => [c.recordId, c]))
+    same(reasons(b.after).map(r => r.correction_reason), reasons(b.after).map(r => { const c = byRecord.get(r.record_id)!; return scope3SpendConversionReason({ ...input, amount: c.from, usd: c.usd }).normalize('NFC') }))
+  }
+  // The other company's rows are exactly as before (tenant isolation), in every table.
+  const theirs = (s: Record<string, string[]>) => Object.entries(s).flatMap(([table, rows]) => rows.filter(text => text.includes(other.company)).map(text => `${table} ${text}`)).sort()
+  same(theirs(n.after), theirs(before))
+  return { input, converted: n.value.converted.length, skipped: n.value.skipped.length, refused: null, mismatches, rows: Object.values(nn.rows).flat().length, chunks: n.calls, declared }
+}
+
+/** The adversarial conversion sequence run on every database (each committed with the new implementation before the next). */
+export const SEQUENCE: Scope3SpendConversionInput[] = [
+  { currency: 'EUR', rate: '1.0823', rateSource: 'ECB euro reference rate', rateDate: '2025-06-30' },
+  { currency: 'EUR', rate: '1.0823', rateSource: 'ECB euro reference rate', rateDate: '2025-06-30' }, // again: nothing new converts
+  { currency: 'EUR', rate: '0.00000001', rateSource: 'Tiny synthetic rate (8 decimals)', rateDate: '2026-01-15' },
+  { currency: 'GBP', rate: '1.005', rateSource: 'Half-cent boundary rate', rateDate: '2025-12-31' },
+  { currency: 'JPY', rate: '0.00671234', rateSource: `Banque de France — taux de référence; "quoted", (paren) ${'x'.repeat(120)}`, rateDate: '2025-03-01' },
+  { currency: 'CAD', rate: '999999.99999999', rateSource: 'Huge synthetic rate', rateDate: '2025-07-01' },
+  { currency: 'CHF', rate: '0.5', rateSource: 'Half rate (every .x05 a tie)', rateDate: '2026-03-01' },
+  { currency: 'CAD', rate: '0.73', rateSource: 'Bank of Canada', rateDate: '2025-07-01' },
+  { currency: 'CHF', rate: '1.1', rateSource: 'SNB', rateDate: '2025-08-01' },
+  { currency: 'SEK', rate: '0.1', rateSource: 'No lines in this currency', rateDate: '2025-08-01' },
+]
+
+/** The BF-20 differential suite on one database (the test files register it per target). */
+export function registerDifferentialSuite(name: string, open: () => Promise<DiffDb>) {
+describe(`BF-20 differential: per-line (main) vs set-based, ${name}`, () => {
+  let db: DiffDb, fx: Fixture, other: Fixture
+  const results: DifferentialCase[] = []
+  beforeAll(async () => {
+    db = await open()
+    other = await seedCompany(db, 7, [40, 40], { prefix: '20b00000' })
+    fx = await seedCompany(db, 20, [120, 120], { prefix: '20a00000' })
+  }, 300_000)
+  afterAll(async () => { console.info(`BF-20 differential ${name}:`, JSON.stringify(results.map(r => [r.input.currency, r.input.rate, r.input.rateDate, r.converted, r.skipped, r.refused, r.mismatches, r.declared ? 'declared' : '']))); await db?.close() })
+
+  test('every conversion of the adversarial sequence: identical rows, row counts, response and refusals', async () => {
+    for (const input of SEQUENCE) results.push(await differential(db, fx, other, input))
+    expect(results.every(r => r.mismatches === 0)).toBe(true)
+    // The sequence exercises conversions, skips of every reason, a refusal and a conversion with nothing to do.
+    expect(results.reduce((n, r) => n + r.converted, 0)).toBeGreaterThan(100)
+    // QA F2: exactly the overflow conversion differs from main (main refused it whole); BF-20 skips the overflowing lines and converts the rest.
+    expect(results.filter(r => r.declared).map(r => [r.input.currency, r.input.rate, r.refused, r.converted > 0])).toEqual([['CAD', '999999.99999999', null, true]])
+    expect(results.some(r => r.refused === null && r.converted === 0)).toBe(true)
+  }, 600_000)
+
+  test('refusals from SQL: the line location no longer in setup (23503), rejected evidence (22023); the same SQLSTATE from both, nothing saved', async () => {
+    const gbp2026 = { currency: 'GBP', rate: '1.27', rateSource: 'Bank of England', rateDate: '2026-02-01' }
+    // A third setup version without the lines' location: every line is refused by both (23503); then back to setup 2.
+    const v3 = fx.setups[1]!.replace(/.{12}$/, '000000000006'), elsewhere = fx.setups[1]!.replace(/.{12}$/, '000000000007')
+    await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,payload,payload_sha256,period_start,period_end_exclusive,boundary_approach,created_by,previous_version_id) values($1,$2,3,'{}',$3,'2025-01-01','2026-01-01','operational_control',$4,$5)", [v3, fx.company, '3'.repeat(64), fx.owner, fx.setups[1]])
+    await db.query("insert into neuvetra.company_setup_locations(company_id,version_id,id,name,locality,purpose,occupancy,control,inclusion,reason,other_entity,operator_details,start_mode,end_mode) values($1,$2,$3,'Other plant','Fresno','Plant','owned','reporting_company','included','','','','period_start','period_end')", [fx.company, v3, elsewhere])
+    await db.query('update neuvetra.company_setup_heads set version_id=$2, revision=3 where company_id=$1', [fx.company, v3])
+    const moved = await differential(db, fx, other, gbp2026)
+    await db.query('update neuvetra.company_setup_heads set version_id=$2, revision=2 where company_id=$1', [fx.company, fx.setups[1]])
+    // Both imported files' evidence rejected by quarantine review: both refuse 22023.
+    for (const n of [101, 102]) await db.query("insert into neuvetra.collection_evidence_quarantine_events(id,company_id,evidence_id,status,scanner_reference,details,event_seq) values(gen_random_uuid(),$1,$2,'rejected','bf20','Synthetic rejection',(select coalesce(max(event_seq),0)+1 from neuvetra.collection_evidence_quarantine_events))", [fx.company, fx.company.replace(/.{12}$/, String(n).padStart(12, '0'))])
+    const rejected = await differential(db, fx, other, gbp2026)
+    expect([moved.refused, moved.mismatches, rejected.refused, rejected.mismatches]).toEqual(['23503', 0, '22023', 0])
+    results.push(moved, rejected)
+  }, 120_000)
+
+  test('a converted version is immutable, as before (the same triggers apply to the set-based writer)', async () => {
+    const id = (await db.query<{ id: string }>("select id from neuvetra.collection_activity_versions where company_id=$1 and correction_reason like 'Converted from %' limit 1", [fx.company])).rows[0]!.id
+    expect(await db.query("update neuvetra.collection_activity_versions set notes='x' where id=$1", [id]).then(() => 'updated', () => 'refused')).toBe('refused')
+    expect(await db.query('delete from neuvetra.collection_activity_versions where id=$1', [id]).then(() => 'deleted', () => 'refused')).toBe('refused')
+  })
+})
+}
