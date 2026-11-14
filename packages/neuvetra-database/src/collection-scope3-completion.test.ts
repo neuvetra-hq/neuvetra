@@ -146,7 +146,7 @@ describe('0030: Scope 3 completion in the database (I-02)', () => {
 
   // BF-09: 0031 follows 0030 (hosted.test.ts and the native suites test it); this file keeps testing the database at schema 30.
   test('0030 follows 0029; every row saved before it is byte-identical; only the two collection functions change', async () => {
-    expect(STAGING_MIGRATIONS.slice(26)).toEqual(['0027_collection.sql', '0028_collection_zip_check.sql', '0029_scope3_collection.sql', '0030_scope3_completion.sql', '0031_integrity_guards.sql'])
+    expect(STAGING_MIGRATIONS.slice(26)).toEqual(['0027_collection.sql', '0028_collection_zip_check.sql', '0029_scope3_collection.sql', '0030_scope3_completion.sql', '0031_integrity_guards.sql', '0032_instrument_identity_and_bindings.sql'])
     expect(before.collection_activity_versions).toHaveLength(9)
     expect(await snapshot()).toEqual(before)
     const after = await functions()

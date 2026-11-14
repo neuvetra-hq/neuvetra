@@ -1,10 +1,10 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test"
 import { fileURLToPath } from "node:url"
-import { HostedWorkspaceDatabase, STAGING_SCHEMA_BRIDGE_VERSION, STAGING_SCHEMA_VERSION, STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION, STAGING_SCOPE3_SCHEMA_VERSION, STAGING_INTEGRITY_GUARDS_SCHEMA_VERSION, STAGING_SERVED_SCHEMA_VERSIONS, createPostgresConnection, scope12PayloadAvailable, scope3ActivityAvailable, scope3KindsAvailable, validateHostedSchemaReceipts, validateHostedTarget } from "./hosted"
+import { HostedWorkspaceDatabase, INSTRUMENT_IDENTITY_KEYS, STAGING_SCHEMA_BRIDGE_VERSION, STAGING_SCHEMA_VERSION, STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION, STAGING_SCOPE3_SCHEMA_VERSION, STAGING_INSTRUMENT_IDENTITY_SCHEMA_VERSION, STAGING_INTEGRITY_GUARDS_SCHEMA_VERSION, STAGING_SERVED_SCHEMA_VERSIONS, createPostgresConnection, scope12PayloadAvailable, scope3ActivityAvailable, scope3KindsAvailable, scope3OverlapConfirmationAvailable, validateHostedSchemaReceipts, validateHostedTarget } from "./hosted"
 import { SCOPE3_COLLECTION_KINDS, SCOPE3_COLLECTION_SCHEMA, SCOPE3_COMPLETION_SCHEMA, SCOPE3_LEGACY_KINDS } from "./scope3-collection-contract"
 import { loadStagingDatabaseCa, validateDatabaseCaPem } from "./staging-tls"
 import { auditLegacyStagingExposure, planLegacyStagingContainment } from "./staging-audit"
-import { migratePrivateStaging, provisionStagingRoster, readMigrationManifest, revokeStagingAccess } from "./staging-migrations"
+import { migratePrivateStaging, migratePrivateStagingFromManifest, provisionStagingRoster, readMigrationManifest, revokeStagingAccess } from "./staging-migrations"
 import { M57_WARNINGS, M58_WARNINGS, M61_LIMITATION_ACKNOWLEDGMENTS, type WorkspaceConnection } from "./workspace"
 import { EXISTING_PROJECT_REF } from "./staging-audit"
 import { createStagingSchemaFixture, snapshotStagingTables } from "./staging-schema-fixture"
@@ -26,38 +26,56 @@ test("hosted target binding refuses wrong projects, privileged users and connect
   for (const value of [options.connectionString.replace(REF, "z".repeat(20)), options.connectionString.replace("neuvetra_runtime", "postgres"), `${options.connectionString}?sslmode=disable`, options.connectionString.replace("supabase.co", "supabase.co.attacker.test"), options.connectionString.replace("/postgres", "/customer")]) expect(() => validateHostedTarget({ ...options, connectionString: value })).toThrow()
 })
 
-test("the schema-31 image serves the existing project at exactly 28, 29, 30 or 31, and a new project only at 31", () => {
-  const manifest = Array.from({ length: 31 }, (_, index) => ({ name: `${String(index + 1).padStart(4, "0")}_migration.sql`, sha256: String(index + 1).padStart(64, "0") }))
-  const schema28 = manifest.slice(0, 28), schema29 = manifest.slice(0, 29), schema30 = manifest.slice(0, 30)
+test("the schema-32 image serves the existing project at exactly 28 to 32, and a new project only at 32", () => {
+  const manifest = Array.from({ length: 32 }, (_, index) => ({ name: `${String(index + 1).padStart(4, "0")}_migration.sql`, sha256: String(index + 1).padStart(64, "0") }))
+  const schema28 = manifest.slice(0, 28), schema29 = manifest.slice(0, 29), schema30 = manifest.slice(0, 30), schema31 = manifest.slice(0, 31)
   const existing = { expectedProjectRef: "icockcoguyadhryzydvl", reuseExistingProject: true }
-  expect(STAGING_SCHEMA_VERSION).toBe(31)
+  expect(STAGING_SCHEMA_VERSION).toBe(32)
   expect(STAGING_SCHEMA_BRIDGE_VERSION).toBe(28)
   expect(STAGING_INTEGRITY_GUARDS_SCHEMA_VERSION).toBe(31)
+  expect(STAGING_INSTRUMENT_IDENTITY_SCHEMA_VERSION).toBe(32)
   expect([STAGING_SCOPE3_SCHEMA_VERSION, STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION]).toEqual([SCOPE3_COLLECTION_SCHEMA, SCOPE3_COMPLETION_SCHEMA])
-  expect(STAGING_SERVED_SCHEMA_VERSIONS).toEqual([28, 29, 30, 31])
-  expect(validateHostedSchemaReceipts(manifest, manifest, options)).toBe(31)
-  expect(validateHostedSchemaReceipts(manifest, manifest, existing)).toBe(31)
-  // BF-09: hosted staging is at 30 when this image deploys; the owner applies 0031 by hand afterwards.
+  expect(STAGING_SERVED_SCHEMA_VERSIONS).toEqual([28, 29, 30, 31, 32])
+  expect(validateHostedSchemaReceipts(manifest, manifest, options)).toBe(32)
+  expect(validateHostedSchemaReceipts(manifest, manifest, existing)).toBe(32)
+  // BF-18: hosted staging is at 31 when this image deploys; the owner applies 0032 by hand afterwards.
+  expect(validateHostedSchemaReceipts(schema31, manifest, existing)).toBe(31)
   expect(validateHostedSchemaReceipts(schema30, manifest, existing)).toBe(30)
   expect(validateHostedSchemaReceipts(schema29, manifest, existing)).toBe(29)
   expect(validateHostedSchemaReceipts(schema28, manifest, existing)).toBe(28)
-  for (const prefix of [schema28, schema29, schema30]) {
+  for (const prefix of [schema28, schema29, schema30, schema31]) {
     expect(() => validateHostedSchemaReceipts(prefix, manifest, options)).toThrow("Staging schema receipt mismatch.")
     expect(() => validateHostedSchemaReceipts(prefix, manifest, { ...existing, reuseExistingProject: false })).toThrow("Staging schema receipt mismatch.")
   }
   // The schema-27 bridge is closed: hosted is already at 28.
   for (const length of [22, 23, 24, 25, 26, 27]) expect(() => validateHostedSchemaReceipts(manifest.slice(0, length), manifest, existing)).toThrow("Staging schema receipt mismatch.")
-  expect(() => validateHostedSchemaReceipts([...manifest, { name: "0032_unknown.sql", sha256: "f".repeat(64) }], manifest, existing)).toThrow("Staging schema receipt mismatch.")
-  for (const [prefix, index] of [[schema28, 27], [schema29, 28], [schema30, 29], [manifest, 30]] as const)
+  expect(() => validateHostedSchemaReceipts([...manifest, { name: "0033_unknown.sql", sha256: "f".repeat(64) }], manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  for (const [prefix, index] of [[schema28, 27], [schema29, 28], [schema30, 29], [schema31, 30], [manifest, 31]] as const)
     expect(() => validateHostedSchemaReceipts(prefix.map((receipt, i) => i === index ? { ...receipt, sha256: "f".repeat(64) } : receipt), manifest, existing)).toThrow("Staging schema receipt mismatch.")
-  for (const prefix of [schema28, schema29, schema30]) expect(() => validateHostedSchemaReceipts(prefix, prefix, existing)).toThrow("Staging schema receipt mismatch.")
+  for (const prefix of [schema28, schema29, schema30, schema31]) expect(() => validateHostedSchemaReceipts(prefix, prefix, existing)).toThrow("Staging schema receipt mismatch.")
 })
 
 test("BF-09: a Scope 1 or 2 payload carrying duplicateConfirmedDistinct needs schema 31; any other payload is unaffected", () => {
-  for (const version of [28, 29, 30, 31]) expect(scope12PayloadAvailable({ heatContent: null }, version)).toBe(true)
-  expect([28, 29, 30, 31].map(v => scope12PayloadAvailable({ heatContent: null, duplicateConfirmedDistinct: true }, v))).toEqual([false, false, false, true])
+  for (const version of [28, 29, 30, 31, 32]) expect(scope12PayloadAvailable({ heatContent: null }, version)).toBe(true)
+  expect([28, 29, 30, 31, 32].map(v => scope12PayloadAvailable({ heatContent: null, duplicateConfirmedDistinct: true }, v))).toEqual([false, false, false, true, true])
   expect([30, 31].map(v => scope12PayloadAvailable({ heatContent: null, duplicateConfirmedDistinct: false }, v))).toEqual([false, true])
   expect(scope12PayloadAvailable(null, 30)).toBe(true)
+})
+
+test("BF-18: an instrument carrying instrumentId, registry or faceMwh needs schema 32; instruments without them are unaffected", () => {
+  expect(INSTRUMENT_IDENTITY_KEYS).toEqual(["instrumentId", "registry", "faceMwh"])
+  const instrument = { type: "energy_attribute_certificate", mwh: "250", qualityCriteriaMet: true, vintageYear: 2025, evidenceReference: null, generationTechnology: "wind", rateLbPerMwh: null }
+  const electricity = (instruments: unknown[]) => ({ meterOrAccountNumber: "M-2", utilityName: "Utility", site: "Site", zip: "94105", subregion: "CAMX", utilityEiaId: null, instruments })
+  for (const version of [28, 29, 30, 31, 32]) {
+    expect(scope12PayloadAvailable(electricity([]), version)).toBe(true)
+    expect(scope12PayloadAvailable(electricity([instrument]), version)).toBe(true)
+  }
+  for (const key of INSTRUMENT_IDENTITY_KEYS) {
+    const flagged = electricity([instrument, { ...instrument, [key]: key === "registry" ? null : key === "faceMwh" ? "250" : "WREGIS-123" }])
+    expect([30, 31, 32].map(v => scope12PayloadAvailable(flagged, v))).toEqual([false, false, true])
+  }
+  // Both 0031's flag and an identity key: needs 32.
+  expect([31, 32].map(v => scope12PayloadAvailable({ ...electricity([{ ...instrument, instrumentId: "GT-2025" }]), duplicateConfirmedDistinct: true }, v))).toEqual([false, true])
 })
 
 test("Scope 3 gates: the 0029 kinds from 29, everything 0030 added from 30", () => {
@@ -70,9 +88,13 @@ test("Scope 3 gates: the 0029 kinds from 29, everything 0030 added from 30", () 
   expect([28, 29, 30].map(v => scope3ActivityAvailable(travel({ mode: "hotel", passengerSegments: null, haulBasis: null }, "room-night"), v))).toEqual([false, false, true])
   expect([28, 29, 30].map(v => scope3ActivityAvailable(travel({ mode: "hotel", passengerSegments: null, haulBasis: null }, null), v))).toEqual([false, true, true])
   expect([28, 29, 30].map(v => scope3ActivityAvailable({ kind: "purchase_spend", payload: {}, quantity: { normalizedUnit: "USD" } }, v))).toEqual([false, false, true])
+  // BF-18 (0032): BF-17's flag on an asset_energy or building_average payload needs 32; without it nothing changes.
+  for (const value of [true, false]) expect([30, 31, 32].map(v => scope3OverlapConfirmationAvailable({ category: 8, scope2OverlapConfirmedDistinct: value }, v))).toEqual([false, false, true])
+  expect([30, 31, 32].map(v => scope3OverlapConfirmationAvailable({ category: 8 }, v))).toEqual([true, true, true])
+  expect(scope3OverlapConfirmationAvailable(null, 30)).toBe(true)
 })
 
-test("the image manifest is 0001–0031, ending with the reviewed 0027, 0028, 0029, 0030 and 0031 bytes", async () => {
+test("the image manifest is 0001–0032, ending with the reviewed 0027 to 0032 bytes", async () => {
   const manifest = await readMigrationManifest()
   expect(manifest).toHaveLength(STAGING_SCHEMA_VERSION)
   expect(manifest.slice(26).map(({ name, sha256 }) => ({ name, sha256 }))).toEqual([
@@ -81,11 +103,13 @@ test("the image manifest is 0001–0031, ending with the reviewed 0027, 0028, 00
     { name: "0029_scope3_collection.sql", sha256: "f191ce06fd50edd8c65b7d3f6f659c6713392123a9ea8cba074e3f0c4954f0ad" },
     { name: "0030_scope3_completion.sql", sha256: "8aaec185c30443b0c4f8b2434f0fb4c3565d207c6bba5e1050319860d924105b" },
     { name: "0031_integrity_guards.sql", sha256: "3513b5da55e41133d94faaf3a8b610e1fb66f415a95393272d3f8b1c49246cd7" },
+    { name: "0032_instrument_identity_and_bindings.sql", sha256: "1d9a2c5ee01f90f6c1fd6a56baebc92c2d1a70a1442db2a1ff00085a5555033f" },
   ])
   expect(new TextEncoder().encode(manifest[27]!.sql).byteLength).toBe(3155532)
   expect(new TextEncoder().encode(manifest[28]!.sql).byteLength).toBe(26375)
   expect(new TextEncoder().encode(manifest[29]!.sql).byteLength).toBe(162929)
   expect(new TextEncoder().encode(manifest[30]!.sql).byteLength).toBe(63029)
+  expect(new TextEncoder().encode(manifest[31]!.sql).byteLength).toBe(78957)
 })
 
 // BF-09: 0031 replaces three 0030 functions. Their new bodies are 0030's with exactly these changes and nothing else, so a
@@ -115,6 +139,69 @@ test("0031's three functions are 0030's bodies with only the marked BF-09 change
   expect(approve31).toBe(body(sql30, "approve_scope3_report"))
   // Outside the function bodies (which run only when called) and comments, 0031 creates, alters or drops no table and writes no row.
   expect(sql31.replace(/\$\$[\s\S]*?\$\$/g, "").replace(/^\s*--.*$/gm, "")).not.toMatch(/\b(?:create|alter|drop) table\b|\binsert into\b|\bupdate neuvetra\.|\bdelete from\b|\btruncate neuvetra\./i)
+})
+
+// BF-18: 0032 replaces three 0031 functions and one 0030 function. Their new bodies are the applied bodies with exactly the
+// marked changes below and nothing else, so a reviewer reads only these deltas; any other drift fails here.
+test("0032's four functions are the applied bodies with only the marked BF-18 changes", async () => {
+  const manifest = await readMigrationManifest()
+  const sql30 = manifest[29]!.sql, sql31 = manifest[30]!.sql, sql32 = manifest[31]!.sql
+  const body = (sql: string, name: string, end = "\nend $$;") => {
+    const start = sql.search(new RegExp(`^create (?:or replace )?function neuvetra\\.${name}\\(`, "m"))
+    expect(start).toBeGreaterThanOrEqual(0)
+    return sql.slice(start, sql.indexOf(end, start) + end.length)
+  }
+  // Each marked change, undone exactly once: the text must occur exactly once where it is removed or replaced.
+  const undo = (text: string, from: string, to = "") => { expect([from.slice(0, 60), text.split(from).length - 1]).toEqual([from.slice(0, 60), 1]); return text.replace(from, () => to) }
+  // 1. collection_assert_activity: the instrument identity keys and BF-17's flag on two Scope 3 kinds.
+  let assert32 = body(sql32, "collection_assert_activity")
+  for (const kind of ["asset_energy", "building_average"]) {
+    assert32 = undo(assert32, kind === "asset_energy"
+      ? "    -- 0032 (BF-17, B-9): the optional boolean scope2OverlapConfirmedDistinct (the user confirmed that this asset's energy is a\n    -- different meter from any Scope 2 electricity record at the same site). Absent, true or false; never null.\n"
+      : "    -- 0032 (BF-17, B-9): the same optional scope2OverlapConfirmedDistinct as asset_energy.\n")
+  }
+  const overlapCheck = "    if p ? 'scope2OverlapConfirmedDistinct' then perform neuvetra.scope3_assert_bool(p->'scope2OverlapConfirmedDistinct',false,'Scope 2 overlap confirmation'); end if;\n"
+  expect(assert32.split(overlapCheck).length - 1).toBe(2)
+  assert32 = assert32.replaceAll(overlapCheck, "")
+  expect(assert32.split("m71_keys(p-'dataQuality'-'scope2OverlapConfirmedDistinct','").length - 1).toBe(2)
+  assert32 = assert32.replaceAll("m71_keys(p-'dataQuality'-'scope2OverlapConfirmedDistinct','", "m71_keys(p-'dataQuality','")
+  assert32 = undo(assert32, "      -- 0032 (BF-11, B-1/B-4): an instrument may carry its certificate or contract identity: instrumentId (1-120 characters,\n      -- not blank, no control character), registry (1-80 such characters, or null) and faceMwh (a QUANTITY decimal above 0,\n      -- through collection_assert_numeric_input first). Each optional; the seven keys of 0027 are read without them.\n")
+  assert32 = undo(assert32, "m71_keys(x-'instrumentId'-'registry'-'faceMwh','", "m71_keys(x,'")
+  assert32 = undo(assert32, "      if (x ? 'instrumentId' and (jsonb_typeof(x->'instrumentId') is distinct from 'string' or length(x->>'instrumentId') not between 1 and 120 or btrim(x->>'instrumentId')='' or x->>'instrumentId' ~ '[\\u0001-\\u001f\\u007f-\\u009f]'))\n        or (x ? 'registry' and x->'registry'<>'null'::jsonb and (jsonb_typeof(x->'registry') is distinct from 'string' or length(x->>'registry') not between 1 and 80 or btrim(x->>'registry')='' or x->>'registry' ~ '[\\u0001-\\u001f\\u007f-\\u009f]')) then raise exception 'invalid electricity instrument identity' using errcode='22023'; end if;\n")
+  assert32 = undo(assert32, "      if x ? 'faceMwh' then perform neuvetra.collection_assert_numeric_input(x->'faceMwh'); if (case when x->>'faceMwh' ~ '^(0|[1-9][0-9]{0,11})(\\.[0-9]{1,3})?$' then (x->>'faceMwh')::numeric<=0 else true end) then raise exception 'invalid electricity instrument face value' using errcode='22023'; end if; end if;\n")
+  expect(assert32).toBe(body(sql31, "collection_assert_activity"))
+  // 2. save_collection_activity: 23N32 for the receipt mismatch, and the instrument insert (identity columns; any plain decimal).
+  let save32 = body(sql32, "save_collection_activity")
+  save32 = undo(save32, "  -- 0032 (BF-28, BI-11): a receipt for this key that names another actor, request or record is its own SQLSTATE, 23N32, so the\n  -- route can tell it from a revision conflict (23505 below).\n")
+  save32 = undo(save32, "then raise exception 'collection idempotency conflict' using errcode='23N32';", "then raise exception 'collection idempotency conflict' using errcode='23505';")
+  save32 = undo(save32, "      -- 0032 (BI-06, BF-24): each numeric column is its payload value exactly, whenever that value is a plain decimal\n      -- (unconstrained numeric; no 3-decimal limit), and null only when the payload value is null, blank or not a plain\n      -- decimal (the engine holds those). 0032 (BF-11): the identity columns are the payload's, as given.\n")
+  save32 = undo(save32, ",rate_n2o_lb_per_mwh,instrument_id,registry,face_mwh)", ",rate_n2o_lb_per_mwh)")
+  save32 = undo(save32, ",instrument->>'instrumentId',instrument->>'registry',case when instrument->>'faceMwh' ~ '^(0|[1-9][0-9]*)(\\.[0-9]+)?$' then (instrument->>'faceMwh')::numeric end);", ");")
+  expect(save32.split("~ '^(0|[1-9][0-9]*)(\\.[0-9]+)?$'").length - 1).toBe(4)
+  save32 = save32.replaceAll("~ '^(0|[1-9][0-9]*)(\\.[0-9]+)?$'", () => "~ '^(0|[1-9][0-9]{0,11})(\\.[0-9]{1,3})?$'")
+  expect(save32).toBe(body(sql31, "save_collection_activity"))
+  // 3. approve_scope3_report: the optional csvSha256, the CSV hash read and checked, and written with the approval.
+  let approve32 = body(sql32, "approve_scope3_report")
+  approve32 = undo(approve32, "  -- 0032 (BF-23, BI-05): the request may also name the CSV hash the approver saw (csvSha256, optional so a request without it\n  -- is still accepted); the approval stores the version's CSV hash either way.\n")
+  approve32 = undo(approve32, "m71_keys(request-'csvSha256','", "m71_keys(request,'")
+  approve32 = undo(approve32, "  if request ? 'csvSha256' then perform neuvetra.scope3_assert_match(request->'csvSha256','^[0-9a-f]{64}$',false,'CSV SHA-256'); end if;\n")
+  approve32 = undo(approve32, "x.report_sha256,x.csv_sha256,x.open_issues", "x.report_sha256,x.open_issues")
+  approve32 = undo(approve32, "  -- 0032 (BF-23): a CSV hash other than the stored one is the same refusal as a report hash other than the stored one.\n  if request ? 'csvSha256' and v.csv_sha256<>request->>'csvSha256' then raise exception 'Scope 3 report changed' using errcode='23505'; end if;\n")
+  approve32 = undo(approve32, "  -- 0032 (BI-05): the approval binds the CSV as well (its foreign key now covers both hashes of the version).\n")
+  approve32 = undo(approve32, "(version_id,company_id,report_sha256,csv_sha256,approved_by", "(version_id,company_id,report_sha256,approved_by")
+  approve32 = undo(approve32, "values(v.id,target_company,v.report_sha256,v.csv_sha256,actor", "values(v.id,target_company,v.report_sha256,actor")
+  expect(approve32).toBe(body(sql31, "approve_scope3_report"))
+  // 4. scope3_active_line_count (0030's): the two branches counting lines derived from Scope 1 and 2 records are gone.
+  let count32 = body(sql32, "scope3_active_line_count", "\n$$;").replace("create or replace function", "create function")
+  count32 = undo(count32, "  -- 0032 (BF-21 option C, CEO decision 13 Nov 2026): only the lines of stored Scope 3 records count (each record, plus the 3D\n  -- upstream line of an energy-resold record when category 3 is included). The category 3 lines derived from Scope 1 and 2\n  -- records no longer count: they are bounded by the 400 active Scope 1 and 2 records (at most 3 each), so a Scope 1 or 2\n  -- save can never push the Scope 3 budget over.\n")
+  count32 = undo(count32, "\n    else 0 end),0)::integer", "\n    when c.yes and r.kind='electricity' then 3 when c.yes and r.kind in('natural_gas','distillate_no2','vehicle') then 1 else 0 end),0)::integer")
+  expect(count32).toBe(body(sql30, "scope3_active_line_count", "\n$$;"))
+  // Outside the function bodies and comments, 0032 creates no table, function, role, policy or grant, inserts and deletes
+  // no row, and updates only the two backfilled tables.
+  const outside = sql32.replace(/\$\$[\s\S]*?\$\$/g, "").replace(/\$(drift|columns|projection|grants|approvals|tables)\$[\s\S]*?\$\1\$/g, "").replace(/^\s*--.*$/gm, "")
+  expect(outside).not.toMatch(/\bcreate (?:table|role|policy|view)\b|\bgrant\b|\brevoke\b|\binsert into\b|\bdelete from\b|\btruncate neuvetra\.|\bdrop table\b/i)
+  expect(outside.match(/\bupdate neuvetra\.\w+/gi)).toEqual(["update neuvetra.collection_electricity_instruments", "update neuvetra.scope3_report_approvals"])
+  expect(sql32.match(/^create (?:or replace )?function neuvetra\.\w+/gm)).toEqual(["create or replace function neuvetra.collection_assert_activity", "create or replace function neuvetra.save_collection_activity", "create or replace function neuvetra.approve_scope3_report", "create or replace function neuvetra.scope3_active_line_count"])
 })
 
 test("explicit database CA accepts certificates only and never disables TLS verification", async () => {
@@ -479,27 +566,202 @@ pg("BF-09 migration 0031 on a populated schema-30 existing-project database", ()
       expect(drift).toEqual(["55000", "0031: neuvetra.approve_scope3_report(uuid,jsonb) differs from 0030; re-derive 0031 from the applied 0030"])
       expect(await snapshotStagingTables(operator)).toEqual(before)
       const migrated = await migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true })
-      expect(migrated.schemaVersion).toBe(31)
+      expect(migrated.schemaVersion).toBe(32)
       const after = await snapshotStagingTables(operator)
       expect(Object.keys(after)).toEqual(Object.keys(before))
       const changed = Object.keys(before).filter(table => JSON.stringify(before[table]) !== JSON.stringify(after[table]))
-      expect(changed).toEqual(["neuvetra.schema_migrations"])
-      expect([before["neuvetra.schema_migrations"]!.rows, after["neuvetra.schema_migrations"]!.rows, after["neuvetra.schema_migrations"]!.columns]).toEqual([30, 31, before["neuvetra.schema_migrations"]!.columns])
+      // From 32 (BF-18) the two tables 0032 alters gain columns; this database has no instrument or approval row to backfill.
+      expect(changed).toEqual(["neuvetra.collection_electricity_instruments", "neuvetra.schema_migrations", "neuvetra.scope3_report_approvals"])
+      expect([before["neuvetra.schema_migrations"]!.rows, after["neuvetra.schema_migrations"]!.rows, after["neuvetra.schema_migrations"]!.columns]).toEqual([30, 32, before["neuvetra.schema_migrations"]!.columns])
       const receipts = await operator.query<{ name: string; sha256: string }>("select name,sha256 from neuvetra.schema_migrations order by name")
       expect(receipts.rows).toEqual(manifest.map(({ name, sha256 }) => ({ name, sha256 })))
-      // Readiness moves to 31 with no restart, and the records read back exactly as at 30.
-      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 31, legacyContainmentVerified: true })
+      // Readiness moves to the image schema (32: 0031 and 0032) with no restart, and the records read back exactly as at 30.
+      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 32, legacyContainmentVerified: true })
       expect(await database.findCollectionActivities(owner, company)).toEqual(recordsAt30)
-      // A second operator run applies nothing; 0031's SQL run again changes nothing.
-      expect((await migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true })).schemaVersion).toBe(31)
-      await operator.transaction(tx => tx.exec(manifest[30]!.sql))
+      // A second operator run applies nothing; the newest migration (0032) run again changes nothing.
+      expect((await migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true })).schemaVersion).toBe(32)
+      await operator.transaction(tx => tx.exec(manifest[31]!.sql))
       expect(await snapshotStagingTables(operator)).toEqual(after)
-      expect((await database.checkReadiness()).schemaVersion).toBe(31)
+      expect((await database.checkReadiness()).schemaVersion).toBe(32)
       // At 31 the flag is stored, and the record reads back with it.
       await revise(0, { quantity: q("12600", "therm"), payload: { heatContent: null, duplicateConfirmedDistinct: true } }, "Confirmed distinct")
       expect((await database.findCollectionActivities(owner, company)).find(record => record.id === ids[0])!.currentVersion.activity.payload).toEqual({ heatContent: null, duplicateConfirmedDistinct: true })
     } finally { await database.close(); await fixture.close() }
   }, 120_000)
+})
+
+// BF-18: the release order for 0032, as for 0031. The schema-32 image first serves the existing project at schema 31 (hosted
+// staging today); later the owner applies 0032 through tools/staging/apply-existing.ts, which makes exactly this call. A
+// populated schema-31 database (electricity instruments whose numbers 0027/0031 stored rounded or as null, a corrected
+// version, a frozen and approved Scope 3 report version) migrates to 32 in one transaction. Only the two backfilled tables and
+// the receipts change; every instrument row then equals its payload (BF-24); every approval carries its version's CSV hash;
+// every payload, version, receipt and report is byte for byte as before; readiness moves to 32 with no restart; and a second
+// operator run, and a second run of 0032's SQL, change nothing.
+pg("BF-18 migration 0032 on a populated schema-31 existing-project database", () => {
+  test("migrates 31 to 32: backfills the instrument projection and the approval CSV hash, and changes nothing else", async () => {
+    const fixture = await createStagingSchemaFixture(testUrl!, "m63_bf18_upgrade", 31, EXISTING_PROJECT_REF)
+    const runtime = createPostgresConnection(fixture.runtimeUrl, { tls: false, maxConnections: 2 })
+    const database = new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string, reuse: boolean) => HostedWorkspaceDatabase)(runtime, EXISTING_PROJECT_REF, true)
+    const operator = fixture.operator
+    const failure = (promise: Promise<unknown>) => promise.then(() => "ok", (error: { code?: string; message?: string }) => `${error.code ?? "no code"} ${error.message ?? ""}`)
+    try {
+      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 31, legacyContainmentVerified: true })
+      const owner = crypto.randomUUID(), company = crypto.randomUUID()
+      await operator.query("insert into auth.users(id) values($1)", [owner])
+      // provisionStagingRoster's statements (it validates a complete receipt set, so it cannot run below the image schema).
+      await operator.transaction(async tx => {
+        await tx.query("insert into neuvetra.staging_access(user_id,active) values($1,true)", [owner])
+        await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [owner])
+        await tx.query("select neuvetra.create_company_workspace($1,'Synthetic Acme, Inc.',$2,'Synthetic California office',$3,2023,$4)", [company, crypto.randomUUID(), crypto.randomUUID(), crypto.randomUUID()])
+      })
+      await operator.query("insert into neuvetra.company_members(company_id,user_id,role) values($1,$2,'owner') on conflict(company_id,user_id) do update set role=excluded.role", [company, owner])
+      await operator.query("insert into neuvetra.staging_access(user_id,company_id,active) values($1,$2,true) on conflict(user_id) do update set company_id=excluded.company_id,active=true", [owner, company])
+      const base = createSyntheticCompanySetup()
+      const site = { ...base.locations[0]!, inclusion: "included" as const, control: "reporting_company" as const, startMode: "period_start" as const, endMode: "period_end" as const }
+      // Category 3 included, so the line count before 0032 also counts the lines derived from Scope 1 and 2 records.
+      const setup = { ...base, boundary: { ...base.boundary, approach: "operational_control" as const }, entities: base.entities.map(entity => ({ ...entity, inclusion: "included" as const, control: "operational_control" as const })), locations: [site],
+        screening: [...base.screening, { id: "fuel", scope: 3 as const, category: "fuel_and_energy_related_activities", state: "yes" as const, reason: "", details: "", locationId: null }] }
+      const saved = await database.saveCompanySetup(owner, company, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, setup: setup as typeof base })
+      const setupVersionId = (saved as { savedVersion: { id: string } }).savedVersion.id
+      const common = { locationId: site.id, setupVersionId, state: "active", withdrawalReason: null, quality: "actual", estimateBasis: null, period: { start: "2025-01-01", endExclusive: "2026-01-01" }, reference: "Synthetic BF-18", notes: "", evidenceIds: [] }
+      const q = (value: string, unit: string) => ({ originalValue: value, originalUnit: unit, normalizedValue: value, normalizedUnit: unit })
+      const instrument = (extra: Record<string, unknown>) => ({ type: "energy_attribute_certificate", mwh: "250", qualityCriteriaMet: true, vintageYear: 2025, evidenceReference: null, generationTechnology: "wind", rateLbPerMwh: null, ...extra })
+      const electricity = (sourceId: string, instruments: unknown[]) => ({ ...common, kind: "electricity", sourceId, quantity: q("250000", "kWh"), payload: { meterOrAccountNumber: sourceId, utilityName: "City & County of San Francisco", site: "Office", zip: "94105", subregion: "CAMX", utilityEiaId: "16612", instruments } })
+      const activities = [
+        // 12.5 was stored as 12.500 (numeric(15,3)); the auditor's J1 rate (four decimals) was stored as null.
+        electricity("M-1", [instrument({ mwh: "12.5" }), instrument({ type: "supplier_specific_rate", mwh: "250.125", generationTechnology: "natural_gas", rateLbPerMwh: { co2: "800.1234", ch4: "0.0331", n2o: "0.0045" } })]),
+        // Blank and non-decimal input: null before and after.
+        electricity("M-2", [instrument({ type: "power_purchase_agreement", mwh: "", rateLbPerMwh: null }), instrument({ type: "supplier_specific_rate", mwh: "1.2345", generationTechnology: "natural_gas", rateLbPerMwh: { co2: "", ch4: "0.0001", n2o: null } })]),
+        electricity("M-3", []),
+        { ...common, kind: "natural_gas", sourceId: "GAS-1", quantity: q("12500", "therm"), payload: { heatContent: null } },
+        { ...common, kind: "business_travel", sourceId: "T-1", quantity: q("2400", "mile"), payload: { mode: "air", passengerSegments: 4, haulBasis: null } },
+      ]
+      const ids: string[] = [], keys: string[] = []
+      for (const activity of activities) { const id = crypto.randomUUID(), key = crypto.randomUUID(); ids.push(id); keys.push(key); await database.saveCollectionActivity(owner, company, id, { idempotencyKey: key, expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity }) }
+      // A corrected version of M-1: both versions keep their own instrument rows.
+      const m1 = (await database.findCollectionActivities(owner, company)).find(record => record.id === ids[0])!.currentVersion
+      await database.saveCollectionActivity(owner, company, ids[0]!, { idempotencyKey: crypto.randomUUID(), expectedRevision: m1.revision, expectedVersionId: m1.id, correctionReason: "Corrected certificate MWh",
+        activity: electricity("M-1", [instrument({ mwh: "12.75" }), instrument({ type: "supplier_specific_rate", mwh: "250.125", generationTechnology: "natural_gas", rateLbPerMwh: { co2: "800.1234", ch4: "0.0331", n2o: "0.0045" } })]) })
+      // At 31 an idempotency key reused for different content is 23505 (BI-11).
+      const reuse = { idempotencyKey: keys[3]!, expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity: activities[3] }
+      expect(await failure(database.saveCollectionActivity(owner, company, crypto.randomUUID(), reuse))).toStartWith("23505 ")
+      // At 31 the identity keys are refused by the database (the route refuses them first).
+      expect(await failure(operator.transaction(async tx => {
+        await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [owner])
+        await tx.query("select * from neuvetra.save_collection_activity($1,$2,$3::jsonb)", [company, crypto.randomUUID(), JSON.stringify({ idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity: electricity("M-9", [instrument({ instrumentId: "WREGIS-123" })]) })])
+      }))).toStartWith("22023 ")
+      // A frozen, approved Scope 3 report version (written as the operator: the table checks recompute both hashes).
+      const version = crypto.randomUUID()
+      await operator.query(`insert into neuvetra.scope3_report_versions(id,company_id,reporting_year,revision,previous_id,setup_version_id,reason,report_text,report_sha256,csv_text,csv_sha256,engine_sha256,register_sha256s,input_version_ids,change_log_basis,open_issues,created_by)
+        values($1,$2,2025,1,null,$3,null,$4,encode(sha256(convert_to($4,'UTF8')),'hex'),$5,encode(sha256(convert_to($5,'UTF8')),'hex'),$6,'{}'::jsonb,$7::uuid[],'{}','[]'::jsonb,$8)`,
+        [version, company, setupVersionId, '{"synthetic":"report"}', "line,total\r\n1,2.000\r\n", "e".repeat(64), [ids[4]], owner])
+      await operator.query("insert into neuvetra.scope3_report_approvals(version_id,company_id,report_sha256,approved_by,self_approved,self_approval_confirmed) select id,company_id,report_sha256,$2,true,true from neuvetra.scope3_report_versions where id=$1", [version, owner])
+      const lineCount = async () => Number((await operator.query<{ n: number }>("select neuvetra.scope3_active_line_count($1) n", [company])).rows[0]!.n)
+      // Before 0032: 1 Scope 3 record + 3 lines for each of the 3 electricity records + 1 for the gas record.
+      expect(await lineCount()).toBe(11)
+      const instrumentRows = () => operator.query<Record<string, string | number | null>>(`select i.version_id,i.ordinal,i.mwh::text mwh,i.rate_co2_lb_per_mwh::text co2,i.rate_ch4_lb_per_mwh::text ch4,i.rate_n2o_lb_per_mwh::text n2o
+        from neuvetra.collection_electricity_instruments i join neuvetra.collection_activity_versions v on v.id=i.version_id where v.company_id=$1 order by v.source_id,v.revision,i.ordinal`, [company]).then(r => r.rows.map(({ version_id: _v, ...row }) => row))
+      expect(await instrumentRows()).toEqual([
+        { ordinal: 1, mwh: "12.500", co2: null, ch4: null, n2o: null }, { ordinal: 2, mwh: "250.125", co2: null, ch4: null, n2o: null },
+        { ordinal: 1, mwh: "12.750", co2: null, ch4: null, n2o: null }, { ordinal: 2, mwh: "250.125", co2: null, ch4: null, n2o: null },
+        { ordinal: 1, mwh: null, co2: null, ch4: null, n2o: null }, { ordinal: 2, mwh: null, co2: null, ch4: null, n2o: null },
+      ])
+      const recordsAt31 = await database.findCollectionActivities(owner, company)
+      const before = await snapshotStagingTables(operator)
+      const manifest = await readMigrationManifest()
+
+      // 0032's drift guard: over a function that is not 0031's (here the line count changed by hand) it stops with 55000.
+      const drift = await operator.transaction(async tx => {
+        await tx.exec("create or replace function neuvetra.scope3_active_line_count(target_company uuid) returns integer language sql stable security definer set search_path=pg_catalog,neuvetra,pg_temp as $$ select 0 $$")
+        await tx.exec(manifest[31]!.sql)
+      }).then(() => null, (error: { code?: string; message: string }) => [error.code, error.message])
+      expect(drift).toEqual(["55000", "0032: neuvetra.scope3_active_line_count(uuid) differs from 0031; re-derive 0032 from the applied 0031"])
+      expect(await snapshotStagingTables(operator)).toEqual(before)
+      // The operator migration refuses to commit anything that a migration would expose: here 0032 plus a stray function
+      // left executable by PUBLIC (which readiness would also refuse); nothing is applied.
+      const leaky = manifest.map(m => m.name !== "0032_instrument_identity_and_bindings.sql" ? m : (() => { const sql = `${m.sql}\ncreate function neuvetra.bf18_probe() returns integer language sql as $$ select 1 $$;\n`; return { ...m, sql, sha256: new Bun.CryptoHasher("sha256").update(sql).digest("hex") } })())
+      expect(await failure(migratePrivateStagingFromManifest(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true }, leaky))).toBe("no code A migration would break the verified legacy containment.")
+      expect(await snapshotStagingTables(operator)).toEqual(before)
+      expect((await database.checkReadiness()).schemaVersion).toBe(31)
+
+      // The owner's step.
+      const migrated = await migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true })
+      expect([migrated.schemaVersion, migrated.postMigrationAudit]).toEqual([32, { legacyContainmentVerified: true, storageGuardGrantsVerified: true }])
+      const after = await snapshotStagingTables(operator)
+      expect(Object.keys(after)).toEqual(Object.keys(before))
+      expect(Object.keys(before).filter(table => JSON.stringify(before[table]) !== JSON.stringify(after[table]))).toEqual(["neuvetra.collection_electricity_instruments", "neuvetra.schema_migrations", "neuvetra.scope3_report_approvals"])
+      // Same rows in each (none added or lost); the instrument columns gain the identity and lose the numeric(15,3) limit.
+      for (const table of ["neuvetra.collection_electricity_instruments", "neuvetra.scope3_report_approvals"]) expect(after[table]!.rows).toBe(before[table]!.rows)
+      expect(after["neuvetra.collection_electricity_instruments"]!.columns).toBe(before["neuvetra.collection_electricity_instruments"]!.columns.replaceAll("numeric(15,3)", "numeric") + ", instrument_id text f , registry text f , face_mwh numeric f ")
+      expect(after["neuvetra.scope3_report_approvals"]!.columns).toBe(before["neuvetra.scope3_report_approvals"]!.columns + ", csv_sha256 text t ")
+      expect([before["neuvetra.schema_migrations"]!.rows, after["neuvetra.schema_migrations"]!.rows]).toEqual([31, 32])
+      // BF-24 (auditor J1): every instrument column now equals its payload value.
+      expect(await instrumentRows()).toEqual([
+        { ordinal: 1, mwh: "12.5", co2: null, ch4: null, n2o: null }, { ordinal: 2, mwh: "250.125", co2: "800.1234", ch4: "0.0331", n2o: "0.0045" },
+        { ordinal: 1, mwh: "12.75", co2: null, ch4: null, n2o: null }, { ordinal: 2, mwh: "250.125", co2: "800.1234", ch4: "0.0331", n2o: "0.0045" },
+        { ordinal: 1, mwh: null, co2: null, ch4: null, n2o: null }, { ordinal: 2, mwh: "1.2345", co2: null, ch4: "0.0001", n2o: null },
+      ])
+      expect((await operator.query("select version_id from neuvetra.scope3_report_approvals a join neuvetra.scope3_report_versions v on v.id=a.version_id where a.csv_sha256=v.csv_sha256 and a.report_sha256=v.report_sha256")).rows).toEqual([{ version_id: version }])
+      // Readiness moves to 32 with no restart; every record reads back exactly as at 31.
+      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 32, legacyContainmentVerified: true })
+      expect(await database.findCollectionActivities(owner, company)).toEqual(recordsAt31)
+      // BF-21 option C: the count is the stored Scope 3 records only (the one travel record).
+      expect(await lineCount()).toBe(1)
+      // A second operator run applies nothing; 0032's SQL run again changes nothing.
+      expect((await migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true })).schemaVersion).toBe(32)
+      await operator.transaction(tx => tx.exec(manifest[31]!.sql))
+      expect(await snapshotStagingTables(operator)).toEqual(after)
+
+      // At 32: the identity keys are saved, read back and projected (BF-24 with BF-11's faceMwh); the receipt mismatch is 23N32.
+      const certified = electricity("M-4", [instrument({ mwh: "250.000", instrumentId: "WREGIS-123", registry: "WREGIS", faceMwh: "250" }), instrument({ type: "green_tariff", mwh: "10", instrumentId: "GT-2025", registry: null, faceMwh: "120.5" }),
+        instrument({ type: "supplier_specific_rate", mwh: "1.25", generationTechnology: "natural_gas", rateLbPerMwh: { co2: "800.1234", ch4: "0.0331", n2o: "0.0045" }, instrumentId: "PG&E 2025 disclosure" })])
+      const m4 = crypto.randomUUID()
+      const stored = await database.saveCollectionActivity(owner, company, m4, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity: certified })
+      expect(stored.version.activity.payload as unknown).toEqual(certified.payload)
+      expect((await operator.query(`select i.ordinal,i.instrument_type,i.mwh::text mwh,i.rate_co2_lb_per_mwh::text co2,i.rate_ch4_lb_per_mwh::text ch4,i.rate_n2o_lb_per_mwh::text n2o,i.instrument_id,i.registry,i.face_mwh::text face_mwh
+        from neuvetra.collection_electricity_instruments i where i.version_id=$1 order by i.ordinal`, [stored.version.id])).rows).toEqual([
+        { ordinal: 1, instrument_type: "energy_attribute_certificate", mwh: "250.000", co2: null, ch4: null, n2o: null, instrument_id: "WREGIS-123", registry: "WREGIS", face_mwh: "250" },
+        { ordinal: 2, instrument_type: "green_tariff", mwh: "10", co2: null, ch4: null, n2o: null, instrument_id: "GT-2025", registry: null, face_mwh: "120.5" },
+        { ordinal: 3, instrument_type: "supplier_specific_rate", mwh: "1.25", co2: "800.1234", ch4: "0.0331", n2o: "0.0045", instrument_id: "PG&E 2025 disclosure", registry: null, face_mwh: null },
+      ])
+      expect(await failure(database.saveCollectionActivity(owner, company, crypto.randomUUID(), reuse))).toStartWith("23N32 ")
+      // The database refuses what the contract refuses: a zero face value, a blank or over-long identity, a control character.
+      for (const bad of [{ faceMwh: "0" }, { faceMwh: "0.000" }, { faceMwh: "1.2345" }, { faceMwh: "" }, { instrumentId: " " }, { instrumentId: "x".repeat(121) }, { instrumentId: "A\tB" }, { registry: "" }, { registry: "r".repeat(81) }, { instrumentId: 7 }]) {
+        const sent = { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity: electricity("M-8", [instrument(bad)]) }
+        expect([JSON.stringify(bad), await failure(operator.transaction(async tx => {
+          await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [owner])
+          await tx.query("select * from neuvetra.save_collection_activity($1,$2,$3::jsonb)", [company, crypto.randomUUID(), JSON.stringify(sent)])
+        }))]).toEqual([JSON.stringify(bad), expect.stringMatching(/^22023 /)])
+      }
+      // BI-05: an approval row must match both hashes of its version (the foreign key), and the approval function writes the
+      // CSV hash, refusing a csvSha256 the version does not have (23505, as for the report hash).
+      const second = crypto.randomUUID()
+      await operator.query(`insert into neuvetra.scope3_report_versions(id,company_id,reporting_year,revision,previous_id,setup_version_id,reason,report_text,report_sha256,csv_text,csv_sha256,engine_sha256,register_sha256s,input_version_ids,change_log_basis,open_issues,created_by)
+        values($1,$2,2025,2,$9,$3,'Second revision',$4,encode(sha256(convert_to($4,'UTF8')),'hex'),$5,encode(sha256(convert_to($5,'UTF8')),'hex'),$6,'{}'::jsonb,$7::uuid[],'{}','[]'::jsonb,$8)`,
+        [second, company, setupVersionId, '{"synthetic":"report 2"}', "line,total\r\n1,3.000\r\n", "e".repeat(64), [ids[4]], owner, version])
+      expect(await failure(operator.query("insert into neuvetra.scope3_report_approvals(version_id,company_id,report_sha256,csv_sha256,approved_by,self_approved,self_approval_confirmed) select id,company_id,report_sha256,$2,$3,true,true from neuvetra.scope3_report_versions where id=$1", [second, "0".repeat(64), owner]))).toStartWith("23503 ")
+      const hashes = (await operator.query<{ report_sha256: string; csv_sha256: string }>("select report_sha256,csv_sha256 from neuvetra.scope3_report_versions where id=$1", [second])).rows[0]!
+      const approve = (request: Record<string, unknown>) => operator.transaction(async tx => {
+        await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [owner])
+        return (await tx.query<{ version_id: string; replayed: boolean }>("select * from neuvetra.approve_scope3_report($1,$2::jsonb)", [company, JSON.stringify(request)])).rows[0]
+      })
+      const flags = { versionId: second, reportSha256: hashes.report_sha256, acknowledgeOpenIssues: false, confirmSelfApproval: true }
+      expect(await failure(approve({ ...flags, csvSha256: "0".repeat(64) }))).toStartWith("23505 ")
+      expect(await failure(approve({ ...flags, csvSha256: "not a hash" }))).toStartWith("22023 ")
+      expect(await approve({ ...flags, csvSha256: hashes.csv_sha256 })).toMatchObject({ version_id: second, replayed: false })
+      // A request without csvSha256 (today's route) is still accepted, and replays.
+      expect(await approve(flags)).toMatchObject({ version_id: second, replayed: true })
+      expect((await operator.query("select csv_sha256 from neuvetra.scope3_report_approvals where version_id=$1", [second])).rows).toEqual([{ csv_sha256: hashes.csv_sha256 }])
+      // The approval stays immutable after the backfill (its row trigger is back on).
+      expect(await failure(operator.query("update neuvetra.scope3_report_approvals set csv_sha256=$2 where version_id=$1", [version, "0".repeat(64)]))).not.toBe("ok")
+      expect(await failure(operator.query("update neuvetra.collection_electricity_instruments set mwh=1 where version_id=$1", [stored.version.id]))).not.toBe("ok")
+      // The runtime still reads both tables and still cannot write them; the containment audit is unchanged.
+      expect(await failure(runtime.query("update neuvetra.collection_electricity_instruments set mwh=1"))).toStartWith("42501 ")
+      const audit = await auditLegacyStagingExposure(operator)
+      expect([audit.legacyContainmentVerified, audit.storageGuardGrantsVerified, audit.callableFunctions.map(f => f.signature).sort()]).toEqual([true, true, [
+        "neuvetra.collection_storage_can_read(text,text)", "neuvetra.collection_storage_can_read(text,text)", "neuvetra.collection_storage_can_upload(text,text)", "neuvetra.collection_storage_can_upload(text,text)"]])
+    } finally { await database.close(); await fixture.close() }
+  }, 180_000)
 })
 
 // BF-10: tools/staging/apply-existing.ts runs every containment statement before migrating. The blanket
@@ -594,8 +856,8 @@ pg("BF-10 the legacy containment plan keeps the Storage policy guards callable",
       expect(plan.statements.filter(sql => sql.startsWith("GRANT"))).toEqual(BF10_GRANTS)
       // The image keeps serving this database at schema 30, and at 31 after the operator migration.
       expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 30, legacyContainmentVerified: true })
-      expect((await migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true })).schemaVersion).toBe(31)
-      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 31, legacyContainmentVerified: true })
+      expect((await migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true })).schemaVersion).toBe(32)
+      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 32, legacyContainmentVerified: true })
       expect(await probes()).toEqual(before)
       // A second plan on the contained database is the same list, and running it again changes nothing.
       expect((await planLegacyStagingContainment(operator)).statements).toEqual(plan.statements)
@@ -610,7 +872,7 @@ pg("BF-10 the legacy containment plan keeps the Storage policy guards callable",
       ]
       expect([revoked.legacyContainmentVerified, revoked.storageGuardGrantsVerified, revoked.missingStorageGuardGrants]).toEqual([true, false, missingRead])
       expect((await probes()).readEvidence).toStartWith("error 42501 permission denied for function collection_storage_can_read")
-      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 31, legacyContainmentVerified: true, storageGuardGrantsMissing: true, missingStorageGuardGrants: missingRead })
+      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 32, legacyContainmentVerified: true, storageGuardGrantsMissing: true, missingStorageGuardGrants: missingRead })
       expect(await rejectionMessage(migratePrivateStaging(operator, { expectedProjectRef: EXISTING_PROJECT_REF, syntheticTargetConfirmed: true, reuseExistingProject: true }))).toBe("Confirmed existing project reuse and verified legacy containment required.")
       // Granted to authenticated only: anon still missing, still not verified.
       await operator.exec("grant execute on function neuvetra.collection_storage_can_read(text,text) to authenticated")
@@ -620,7 +882,7 @@ pg("BF-10 the legacy containment plan keeps the Storage policy guards callable",
       expect(await privileges()).toEqual(callable)
       const restored = await auditLegacyStagingExposure(operator)
       expect([restored.legacyContainmentVerified, restored.storageGuardGrantsVerified]).toEqual([true, true])
-      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 31, legacyContainmentVerified: true })
+      expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 32, legacyContainmentVerified: true })
       expect(await probes()).toEqual(before)
     } finally { await database.close(); await fixture.close() }
   }, 120_000)

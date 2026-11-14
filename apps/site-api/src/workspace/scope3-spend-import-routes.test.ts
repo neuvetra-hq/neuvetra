@@ -223,11 +223,14 @@ describe("Scope 3 spend import route (I-09)", () => {
 
   test("import refusals from the database map to statuses (cross-company evidence, excluded location, setup, conflicts, outage)", async () => {
     const text = `${HEADER}\nA,,V,,,d,10,USD,,1,339940,,\n`
-    for (const [code, status] of [["evidence_mismatch", 422], ["location_not_included", 422], ["setup_required", 409], ["23503", 409], ["23505", 409], ["42501", 404], ["22023", 422], ["54000", 413], ["XX000", 503]] as const) {
+    for (const [code, status] of [["evidence_mismatch", 422], ["location_not_included", 422], ["setup_required", 409], ["23503", 409], ["23505", 409], ["23N32", 409], ["42501", 404], ["22023", 422], ["54000", 413], ["XX000", 503]] as const) {
       const failing = harness({ importScope3Spend: async () => { throw Object.assign(new Error("x"), { code }) } })
       const response = await failing.send(importPath(), csv(text))
       expect([code, response.status]).toEqual([code, status])
     }
+    // BF-18: a line's receipt mismatch inside the import is 23N32 from 0032; it gets exactly 23505's answer.
+    const answer = async (code: string) => (await harness({ importScope3Spend: async () => { throw Object.assign(new Error("x"), { code }) } }).send(importPath(), csv(text))).json()
+    expect(await answer("23N32")).toEqual(await answer("23505"))
   })
 
   test("round 2 (owner decision 10): a file that would pass the active-line budget is refused before saving; withdrawn lines don't count; a replay is never refused", async () => {

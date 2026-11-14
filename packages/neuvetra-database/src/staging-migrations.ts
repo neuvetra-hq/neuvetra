@@ -22,6 +22,7 @@ export const STAGING_MIGRATIONS = [
   "0029_scope3_collection.sql",
   "0030_scope3_completion.sql",
   "0031_integrity_guards.sql",
+  "0032_instrument_identity_and_bindings.sql",
 ] as const
 
 export interface StagingMigration { name: string; sha256: string; sql: string }
@@ -60,7 +61,9 @@ async function validateExisting(tx: WorkspaceSql, expectedProjectRef: string, ma
 export async function migratePrivateStagingFromManifest(db: WorkspaceConnection, approval: PrivateStagingMigrationApproval, sourceManifest: StagingMigrationManifest) {
   if (approval.syntheticTargetConfirmed !== true || !/^[a-z]{20}$/.test(approval.expectedProjectRef)) throw new Error("Reviewed synthetic staging target required.")
   const manifest = pinStagingMigrationManifest(sourceManifest)
-  if (approval.expectedProjectRef === EXISTING_PROJECT_REF && (approval.reuseExistingProject !== true || !containmentAndStorageGuardsVerified(await auditLegacyStagingExposure(db)))) throw new Error("Confirmed existing project reuse and verified legacy containment required.")
+  const existingProject = approval.expectedProjectRef === EXISTING_PROJECT_REF
+  if (existingProject && (approval.reuseExistingProject !== true || !containmentAndStorageGuardsVerified(await auditLegacyStagingExposure(db)))) throw new Error("Confirmed existing project reuse and verified legacy containment required.")
+  let postMigrationAudit: { legacyContainmentVerified: boolean; storageGuardGrantsVerified: boolean } | undefined
   await db.transaction(async tx => {
     await tx.query("select pg_advisory_xact_lock(630009)")
     const existing = await tx.query<{ present: boolean }>("select exists(select 1 from pg_namespace where nspname='neuvetra') present")
@@ -71,6 +74,14 @@ export async function migratePrivateStagingFromManifest(db: WorkspaceConnection,
       for (const migration of manifest.slice(receipts.rows.length)) {
         await tx.exec(migration.sql)
         await tx.query("insert into neuvetra.schema_migrations(name,sha256) values($1,$2)",[migration.name,migration.sha256])
+      }
+      // BF-18: the existing project's audit again, inside this transaction, over what the new migrations created or changed:
+      // a migration that would expose anything to anon or authenticated (for example a new function left executable by
+      // PUBLIC, which would also fail readiness) or lose a Storage guard grant rolls back here, with nothing applied.
+      if (existingProject) {
+        const audit = await auditLegacyStagingExposure(tx)
+        if (!containmentAndStorageGuardsVerified(audit)) throw new Error("A migration would break the verified legacy containment.")
+        postMigrationAudit = { legacyContainmentVerified: audit.legacyContainmentVerified, storageGuardGrantsVerified: audit.storageGuardGrantsVerified }
       }
       return
     }
@@ -89,7 +100,7 @@ export async function migratePrivateStagingFromManifest(db: WorkspaceConnection,
     for (const migration of manifest) await tx.query("insert into neuvetra.schema_migrations(name,sha256) values($1,$2)", [migration.name, migration.sha256])
     await tx.query("insert into neuvetra.staging_target(project_ref,profile) values($1,'neuvetra.private-synthetic-staging.v1')", [approval.expectedProjectRef])
   })
-  return { schemaVersion: manifest.length, migrations: manifest.map(({ name, sha256 }) => ({ name, sha256 })) }
+  return { schemaVersion: manifest.length, migrations: manifest.map(({ name, sha256 }) => ({ name, sha256 })), ...(postMigrationAudit ? { postMigrationAudit } : {}) }
 }
 
 export async function migratePrivateStaging(db: WorkspaceConnection, approval: PrivateStagingMigrationApproval) {
