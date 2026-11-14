@@ -822,3 +822,14 @@ export const SCOPE3_VENDOR_KEY_MATCH_DETAIL = (named: string) => `${SCOPE3_VENDO
 /** BF-12 (QA F1): the same, as a sentence after the record form's "Another record replaces this spend line: …". */
 export const SCOPE3_VENDOR_KEY_MATCH_SENTENCE = (named: string) => `It was ${SCOPE3_VENDOR_KEY_MATCH_DETAIL(named)}.`
 // --- end BF-12 ---
+
+// --- BF-14 --- (accounting audit B-5; 13 November 2026). New text only; no shipped text is edited.
+/**
+ * The hold of a spend line that was converted to US dollars at a rate dated in a different calendar year from the line, or
+ * whose year is not known (no date, and a period that crosses years). One exchange rate must not be applied across years. Which
+ * rate to use (date of the purchase, annual average or one per import) is for the company's accountant (question C-6).
+ */
+export const SCOPE3_REASON_TEXT_BF14: Readonly<Record<string, string>> = {
+  currency_rate_outside_line_year: 'This line was converted to US dollars at a rate dated in a different calendar year from the line (or it has no date and covers more than one year), and one exchange rate can’t be used across years. It isn’t counted until you convert that year at a rate dated in the same year: open the line, put back its original currency and amount (they are in its notes), and convert that currency again with a rate dated in the line’s own year. A line with no date needs its invoice date first.',
+}
+// --- end BF-14 ---

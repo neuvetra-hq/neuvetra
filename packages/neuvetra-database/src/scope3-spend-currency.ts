@@ -63,3 +63,29 @@ export function scope3SpendConversionOf(notes: string): Scope3SpendConversion | 
 export const scope3SpendNotesWithConversion = (notes: string, c: Scope3SpendConversion) => [...notes.split('\n').filter(line => line && !line.startsWith(NOTE_PREFIX)), scope3SpendConversionNote(c)].join('\n')
 /** Notes without the conversion line (the import's own notes, e.g. its GL description). */
 export const scope3SpendNotesWithoutConversion = (notes: string) => notes.split('\n').filter(line => !line.startsWith(NOTE_PREFIX)).join('\n')
+
+// --- BF-14 --- (accounting audit B-5; 13 November 2026)
+/**
+ * The calendar year a spend line belongs to for choosing an exchange rate (its "line year"): the year of its line date; a
+ * line without a date takes the year of its period when the whole period lies inside one calendar year; otherwise null
+ * (a period crossing years with no date: the year is not known, so no rate can be shown to be of the line's year). A
+ * fiscal period that crosses years therefore never gives a year by itself; the line's own date does. Which rate to use
+ * (transaction date, annual average or per import) is not decided here (accountant question C-6): this only says which
+ * calendar year a rate's date must be in.
+ */
+export function scope3SpendLineYear(line: { lineDate: string | null; period: { start: string; endExclusive: string } }): number | null {
+  const year = (date: string) => ISO.test(date) ? Number(date.slice(0, 4)) : null
+  if (line.lineDate !== null) return year(line.lineDate)
+  const start = year(line.period.start)
+  if (start === null || !realIso(line.period.endExclusive) || !realIso(line.period.start)) return null
+  const last = new Date(Date.parse(`${line.period.endExclusive}T00:00:00.000Z`) - 86_400_000).toISOString().slice(0, 10)
+  return Number(last.slice(0, 4)) === start && last >= line.period.start ? start : null
+}
+/** The calendar year of a rate date (`yyyy-mm-dd`), or null. */
+export const scope3SpendRateYear = (rateDate: string): number | null => realIso(rateDate) ? Number(rateDate.slice(0, 4)) : null
+/** Whether a conversion's rate date is in the line's year (false when the line's year is not known). */
+export const scope3SpendRateMatchesLineYear = (line: Parameters<typeof scope3SpendLineYear>[0], rateDate: string): boolean => {
+  const lineYear = scope3SpendLineYear(line)
+  return lineYear !== null && lineYear === scope3SpendRateYear(rateDate)
+}
+// --- end BF-14 ---

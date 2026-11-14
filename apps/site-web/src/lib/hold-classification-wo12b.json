@@ -99,6 +99,10 @@
   "level": "field",
   "why": "The amount isn't in US dollars: converting it on this record clears the hold, and every other field still applies to the converted record."
  },
+ "currency_rate_outside_line_year": {
+  "level": "field",
+  "why": "The line was converted at a rate dated in another calendar year than the line (BF-14): restoring its currency and amount on this record and converting that year at its own rate clears the hold, and every other field still applies."
+ },
  "dollar_year_index_missing": {
   "level": "field",
   "why": "An engine finding about a value on this record (a ratio, period, balance, factor match or instrument detail): correcting that value on this form clears it."
