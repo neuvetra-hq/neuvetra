@@ -4,6 +4,7 @@ import { SCOPE3_DERIVED_KINDS, SCOPE3_KIND_CATEGORIES } from "../../../../packag
 import { validateScope3AssessmentRecord } from "../../../../packages/neuvetra-database/src/scope3-assessment-contract"
 import { scope3SupersededMemosProblem } from "../../../../packages/neuvetra-database/src/scope3-r3a"
 import { SCOPE3_METHODS } from "../../../../packages/neuvetra-database/src/scope3-method-catalog"
+import { scope3SourceRecordsProblem } from "../../../../packages/neuvetra-database/src/scope3-report-v4"
 import { scope3CategoryEvidenceAndQuality, scope3MethodologyStatement } from "../../../../packages/neuvetra-database/src/scope3-methodology"
 import {
   scope3CanonicalJson, scope3ClosedLines, scope3EffectiveDataQuality, scope3LineAnnotation, scope3LineState, scope3ProfileProblem, scope3Readiness, scope3ReviewFlags, scope3CurrencyConversionValid,
@@ -224,5 +225,8 @@ export function decodeScope3Results(value: unknown, companyId: string): Scope3Re
   const budget = v.lineBudget
   if (!record(budget) || Object.keys(budget).sort().join() !== "max,remaining,used" || !count(budget.max) || budget.max < 1 || budget.used !== lines.length || budget.remaining !== Math.max(0, (budget.max as number) - lines.length)) fail()
   if (!sameJson(v.readiness, scope3Readiness(coverage.categories, lines))) fail()
+  // BF-31a: results that list their source records (report profile v4's shape, written from BF-31b) carry no payload copy
+  // on a derived line and exactly one entry per source version, none orphaned; results without the list decode as before.
+  if ("sourceRecords" in v && scope3SourceRecordsProblem(lines, v.sourceRecords) !== null) fail()
   return value as unknown as Scope3ResultsResponse
 }

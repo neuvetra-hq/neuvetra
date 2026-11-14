@@ -55,6 +55,8 @@ COPY packages/neuvetra-database/src/scope3-report-document.ts ./packages/neuvetr
 # Round 2 (lane B): the frozen report validators the document module imports (owner decision 11).
 COPY packages/neuvetra-database/src/scope3-report-v1.ts packages/neuvetra-database/src/scope3-report-v2.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/scope3-report-v3.ts packages/neuvetra-database/src/scope3-text-v3.ts ./packages/neuvetra-database/src/
+# BF-31a: the frozen report profile v4 validator (the report document module and the web results decoder import it).
+COPY packages/neuvetra-database/src/scope3-report-v4.ts ./packages/neuvetra-database/src/
 # Full web typechecking resolves this reviewed catalog; it is not a runtime corpus.
 COPY data/research/answer-units/scope2-website.epa-acquisition.v1.json ./data/research/answer-units/
 COPY output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf output/pdf/neuvetra-m66-synthetic-electricity-bill-b.pdf ./output/pdf/
@@ -153,6 +155,8 @@ COPY apps/site-api/src/workspace/scope3-report-routes.ts ./apps/site-api/src/wor
 # Round 2 (lane B): the frozen report validators (owner decision 11) and the shared Scope 3 route helpers (ENG-14).
 COPY packages/neuvetra-database/src/scope3-report-v1.ts packages/neuvetra-database/src/scope3-report-v2.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/scope3-report-v3.ts packages/neuvetra-database/src/scope3-text-v3.ts ./packages/neuvetra-database/src/
+# BF-31a: the frozen report profile v4 validator (the report document module and the web results decoder import it).
+COPY packages/neuvetra-database/src/scope3-report-v4.ts ./packages/neuvetra-database/src/
 COPY apps/site-api/src/workspace/scope3-route-helpers.ts ./apps/site-api/src/workspace/
 # Round 2 lane E (ENG-6): the CSV label functions live in the package (the API no longer imports web source).
 COPY packages/neuvetra-database/src/plain-language-labels.ts packages/neuvetra-database/src/scope3-text-r2e.ts ./packages/neuvetra-database/src/

@@ -245,6 +245,7 @@ apps/site-web/src/m71-local-preview.tsx
 !packages/neuvetra-database/src/scope3-report-v1.ts
 !packages/neuvetra-database/src/scope3-report-v2.ts
 !packages/neuvetra-database/src/scope3-report-v3.ts
+!packages/neuvetra-database/src/scope3-report-v4.ts
 !packages/neuvetra-database/src/scope3-text-v3.ts
 !apps/site-api/src/workspace/scope3-route-helpers.ts
 # Round 2 lane E (ENG-6): the plain-language labels (web and API).

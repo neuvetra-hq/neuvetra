@@ -3,7 +3,7 @@ import { notifyWrite } from "./shared-get"
 import { serverErrorText, withRequestTimeout, type RequestKind } from "./request-timeout"
 import { SCOPE3_REPORT_PROFILE_V1, validateScope3ReportDocument, validateScope3ReportVersionSummary, type Scope3ReportDocument, type Scope3ReportVersionSummary, type Scope3StoredReportDocument } from "../../../../packages/neuvetra-database/src/scope3-report-document"
 // Round 2 (owner decisions 7 and 11): the readiness and approval lines and the exported CSV (stored bytes + approval lines) for the screen and print.
-export { scope3ReportApprovalLines, scope3ReportExportCsv, scope3ReportReadinessLines, type Scope3ReportOpenIssue, type Scope3StoredReportDocument, SCOPE3_REPORT_PROFILE_V1, SCOPE3_REPORT_PROFILE_V2, SCOPE3_REPORT_PROFILE_V3 } from "../../../../packages/neuvetra-database/src/scope3-report-document"
+export { scope3ReportApprovalLines, scope3ReportExportCsv, scope3ReportReadinessLines, type Scope3ReportOpenIssue, type Scope3StoredReportDocument, SCOPE3_REPORT_PROFILE_V1, SCOPE3_REPORT_PROFILE_V2, SCOPE3_REPORT_PROFILE_V3, SCOPE3_REPORT_PROFILE_V4 } from "../../../../packages/neuvetra-database/src/scope3-report-document"
 
 /**
  * Frozen Scope 3 report versions (Scope 3 completion I-10; Claude, 30 October 2026; DESIGN 3.7, 7.4; assurance-ux M8).
@@ -12,7 +12,7 @@ export { scope3ReportApprovalLines, scope3ReportExportCsv, scope3ReportReadiness
  * approval hash equal to the version's, self-approval exactly when the approver prepared it), and an opened version's
  * texts re-hashed here and equal to the stored SHA-256, its document checked by the shared rules and its results by the
  * results decoder. The CSV download and print of a stored version use these stored bytes, never the live results.
- * Round 2 (owner decision 11, ENG-4): a stored document is decoded by the frozen validator of its own profile (v1 or v2):
+ * Round 2 (owner decision 11, ENG-4): a stored document is decoded by the frozen validator of its own profile (v1 to v4):
  * structure, internal consistency and the hashes, never the live results decoder, live wording or the live catalog, so an
  * approved version keeps opening after any later change. The exported CSV is the stored bytes followed by the approval
  * lines (`scope3ReportExportCsv`); approving takes the explicit open-issue acknowledgement and self-approval confirmation.
