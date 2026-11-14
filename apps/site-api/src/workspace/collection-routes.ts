@@ -98,7 +98,7 @@ function signatureMatches(bytes: Uint8Array, mediaType: string): boolean {
   return false
 }
 
-function validateElectricityLookup(activity: ReturnType<typeof validateCollectionSaveInput>["activity"], lookup: Scope2Lookup): void {
+export function validateElectricityLookup(activity: ReturnType<typeof validateCollectionSaveInput>["activity"], lookup: Scope2Lookup): void {
   if (activity.kind !== "electricity") return
   const payload = activity.payload
   if (!lookup.found || lookup.zip !== payload.zip || !lookup.subregions.includes(payload.subregion)) throw new RequestProblem(422, "Choose a grid subregion listed for this ZIP.", "zip_subregion_mismatch")
