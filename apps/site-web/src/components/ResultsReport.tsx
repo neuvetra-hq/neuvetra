@@ -5,7 +5,7 @@ import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { COVERAGE_TEXT, coverageIssues, coverageLines, noteLabel, type Coverage } from "@/lib/journey-status"
 import { countedDuplicatesIn, EVIDENCE_STATUS_TEXT, loadResults, methodLabel, NotSyntheticResultsError, possibleDuplicateText, possibleDuplicateTotalText, releaseState, ResultsApiError, resultsCsv, unclearedEvidence, type EngineGas, type MethodUsed, type ResultRow, type ResultsResponse } from "@/lib/results-api"
 import { ACTIVITY_KINDS, BOUNDARY_LABELS, groupDigits, kgToTonnes, kindIcon, kindLabel, periodLabel, QUALITY_LABELS, reasonText, shortUnit } from "@/lib/plain-language"
-import { attentionBannerText, attentionCounts, COULD_NOT_CALCULATE_NOW_TEXT, countedDuplicate, engineHold, factorSource, GAS_LABELS, INITIAL_RESULTS_STATE, KIND_COLORS, needsWork, notYetCounted, resultsReducer, rowReasons, rowStatus } from "@/lib/results-view"
+import { attentionBannerText, attentionCounts, COULD_NOT_CALCULATE_NOW_TEXT, couldNotCalculateCountText, couldNotCalculateNow, countedDuplicate, engineHold, factorSource, GAS_LABELS, heldForInput, INITIAL_RESULTS_STATE, KIND_COLORS, needsWork, resultsReducer, rowReasons, rowStatus } from "@/lib/results-view"
 import { COPY_TEXT_R2E, formatTimeR2E } from "../../../../packages/neuvetra-database/src/scope3-text-r2e"
 import { INITIAL_SCOPE3_STATE, loadScope3Results, Scope3ResultsApiError, type Scope3ResultsResponse, type Scope3State } from "@/lib/scope3-results-api"
 import { Scope3ReportSection, Scope3ResultsPanel } from "./scope3/lazy-results"
@@ -55,12 +55,14 @@ function RowDetail({ row, methods, records }: { row: ResultRow; methods: MethodU
 /** The completeness wording used by the report and the CSV. Never says "complete" while anything is held, open or unchecked. */
 function completeness(results: ResultsResponse, coverage: Coverage) {
   // Held by the adapter, the period check or the engine (B02): a record the engine held is not counted either.
-  const held = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && notYetCounted(row)).length
+  // BF-29: records the engine could not run for ("could not be calculated right now") are said apart from records held for input.
+  const held = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && heldForInput(row)).length
+  const outage = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && couldNotCalculateNow(row)).length
   const note = (complete: boolean, scope: 1 | 2) => {
-    const count = held(scope), issues = coverageIssues(coverage, scope)
+    const count = held(scope), down = outage(scope), issues = coverageIssues(coverage, scope)
     // BF-01 (count mode): a possible duplicate counted in the subtotal is a known gap too.
     const duplicates = results.records.filter(row => row.scope === scope && countedDuplicate(row)).length
-    const parts = [count ? `${plural(count, "record")} not yet counted` : "", duplicates ? `${plural(duplicates, "possible duplicate")} counted` : "", issues.open ? `${plural(issues.open, "setup answer")} still open` : "", issues.gaps ? plural(issues.gaps, "possible coverage gap") : "", !complete ? "some results only partly calculated" : "", issues.unchecked ? "coverage not checked against company setup" : ""].filter(Boolean)
+    const parts = [count ? `${plural(count, "record")} not yet counted` : "", down ? couldNotCalculateCountText(down) : "", duplicates ? `${plural(duplicates, "possible duplicate")} counted` : "", issues.open ? `${plural(issues.open, "setup answer")} still open` : "", issues.gaps ? plural(issues.gaps, "possible coverage gap") : "", !complete ? "some results only partly calculated" : "", issues.unchecked ? "coverage not checked against company setup" : ""].filter(Boolean)
     return parts.length ? `Incomplete — ${parts.join("; ")}` : COVERAGE_TEXT.resultsNoGaps(scope)
   }
   // BF1: no subtotal while a record was calculated means the engine's subtotal couldn't be verified, not that there are no records.
@@ -259,9 +261,10 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
   // BF-01 (count mode): a counted possible duplicate needs attention but is neither uncounted nor partly calculated.
   // WO-13 (QA F1 of PR #56): a possible duplicate that is also partly calculated is in the "Fix" count too.
   const attentionCountsNow = attentionCounts(attentionRows)
-  const heldInScope = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && notYetCounted(row)).length
+  const heldInScope = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && heldForInput(row)).length
+  const outageInScope = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && couldNotCalculateNow(row)).length
   const issues1 = coverageIssues(coverage, 1), issues2 = coverageIssues(coverage, 2)
-  const held1 = heldInScope(1), held2 = heldInScope(2)
+  const held1 = heldInScope(1), held2 = heldInScope(2), down1 = outageInScope(1), down2 = outageInScope(2)
   const open1 = issues1.open + issues1.gaps + (issues1.unchecked ? 1 : 0), open2 = issues2.open + issues2.gaps + (issues2.unchecked ? 1 : 0)
   const ordered = [...results.records].sort((a, b) => Number(needsWork(b)) - Number(needsWork(a)) || a.scope - b.scope)
   const visible = filter === "attention" ? attentionRows : ordered
@@ -274,7 +277,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
   const scope2Count = s2?.locationBasedIncluded.length ?? 0
   // BF-01 (count mode): counted possible duplicates in each subtotal; each card that includes one says so.
   const dup1 = countedDuplicatesIn(results, "scope1"), dupLocation = countedDuplicatesIn(results, "scope2LocationBased"), dupMarket = countedDuplicatesIn(results, "scope2MarketBased")
-  const warnLine = (held: number, issues: ReturnType<typeof coverageIssues>, noun: string, complete = true) => [held ? `${plural(held, noun)} not counted yet` : "", !complete ? "some results partly calculated" : "", issues.open ? `${plural(issues.open, "setup answer")} open` : "", issues.gaps ? plural(issues.gaps, "possible gap") : "", issues.unchecked ? "coverage not checked" : ""].filter(Boolean).join(" · ")
+  const warnLine = (held: number, down: number, issues: ReturnType<typeof coverageIssues>, noun: string, complete = true) => [held ? `${plural(held, noun)} not counted yet` : "", down ? `${plural(down, noun)} could not be calculated right now` : "", !complete ? "some results partly calculated" : "", issues.open ? `${plural(issues.open, "setup answer")} open` : "", issues.gaps ? plural(issues.gaps, "possible gap") : "", issues.unchecked ? "coverage not checked" : ""].filter(Boolean).join(" · ")
   const incompleteText = (complete: boolean, held: number, open: number) => complete && !held && !open ? "" : " · incomplete"
   return <section aria-busy={busy}>
     {header}
@@ -286,17 +289,17 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
       <div className="nv-stat">
         <span className="nv-stat__label">Scope 1 · direct</span>
         <span className="nv-stat__value">{s1?.includedResults.length ? kgToTonnes(s1.knownSourceSubtotal.unrounded) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
-        <div className="nv-stat__foot">{s1?.includedResults.length ? `${groupDigits(s1.knownSourceSubtotal.display)} kg · ${plural(scope1Count, "source")} counted${incompleteText(s1.complete, held1, open1)}` : s1 ? "No Scope 1 results calculated" : calculatedIn(1) ? "Subtotal could not be verified; per-record results are listed below" : outage(1) ? COULD_NOT_CALCULATE_NOW_TEXT : "No Scope 1 source calculated yet"}{held1 || open1 || (s1 && !s1.complete) ? <span className="nv-stat__warn">{warnLine(held1, issues1, "record", s1?.complete ?? true)}</span> : null}{s1?.includedResults.length && dup1 ? <span className="nv-stat__warn" role="note"><strong>{possibleDuplicateTotalText(dup1)}</strong></span> : null}</div>
+        <div className="nv-stat__foot">{s1?.includedResults.length ? `${groupDigits(s1.knownSourceSubtotal.display)} kg · ${plural(scope1Count, "source")} counted${incompleteText(s1.complete, held1 + down1, open1)}` : s1 ? "No Scope 1 results calculated" : calculatedIn(1) ? "Subtotal could not be verified; per-record results are listed below" : outage(1) ? COULD_NOT_CALCULATE_NOW_TEXT : "No Scope 1 source calculated yet"}{held1 || down1 || open1 || (s1 && !s1.complete) ? <span className="nv-stat__warn">{warnLine(held1, down1, issues1, "record", s1?.complete ?? true)}</span> : null}{s1?.includedResults.length && dup1 ? <span className="nv-stat__warn" role="note"><strong>{possibleDuplicateTotalText(dup1)}</strong></span> : null}</div>
       </div>
       <div className="nv-stat">
         <span className="nv-stat__label">Scope 2 · location-based</span>
         <span className="nv-stat__value">{s2?.locationBasedIncluded.length ? kgToTonnes(s2.locationBasedSubtotal.unrounded) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
-        <div className="nv-stat__foot">{s2?.locationBasedIncluded.length ? `${groupDigits(s2.locationBasedSubtotal.display)} kg · ${plural(scope2Count, "meter")} counted${incompleteText(s2.locationBasedComplete, held2, open2)}` : s2 ? "No location-based results calculated" : calculatedIn(2) ? "Subtotal could not be verified; per-record results are listed below" : outage(2) ? COULD_NOT_CALCULATE_NOW_TEXT : "No electricity calculated yet"}{held2 || open2 || (s2 && !s2.locationBasedComplete) ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter", s2?.locationBasedComplete ?? true)}</span> : null}{s2?.locationBasedIncluded.length && dupLocation ? <span className="nv-stat__warn" role="note"><strong>{possibleDuplicateTotalText(dupLocation)}</strong></span> : null}</div>
+        <div className="nv-stat__foot">{s2?.locationBasedIncluded.length ? `${groupDigits(s2.locationBasedSubtotal.display)} kg · ${plural(scope2Count, "meter")} counted${incompleteText(s2.locationBasedComplete, held2 + down2, open2)}` : s2 ? "No location-based results calculated" : calculatedIn(2) ? "Subtotal could not be verified; per-record results are listed below" : outage(2) ? COULD_NOT_CALCULATE_NOW_TEXT : "No electricity calculated yet"}{held2 || down2 || open2 || (s2 && !s2.locationBasedComplete) ? <span className="nv-stat__warn">{warnLine(held2, down2, issues2, "meter", s2?.locationBasedComplete ?? true)}</span> : null}{s2?.locationBasedIncluded.length && dupLocation ? <span className="nv-stat__warn" role="note"><strong>{possibleDuplicateTotalText(dupLocation)}</strong></span> : null}</div>
       </div>
       <div className="nv-stat">
         <span className="nv-stat__label">Scope 2 · market-based</span>
         <span className="nv-stat__value">{s2?.marketBasedIncluded.length ? kgToTonnes(s2.marketBasedSubtotal.unrounded) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
-        <div className="nv-stat__foot">{s2?.marketBasedIncluded.length ? `${groupDigits(s2.marketBasedSubtotal.display)} kg${incompleteText(s2.marketBasedComplete, held2, open2)}${s2.marketBasedProvisional.length ? " · provisional" : ""}` : s2 ? "No market-based results calculated" : calculatedIn(2) ? "Subtotal could not be verified; per-record results are listed below" : outage(2) ? COULD_NOT_CALCULATE_NOW_TEXT : "No electricity calculated yet"}{held2 || open2 || (s2 && !s2.marketBasedComplete) ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter", s2?.marketBasedComplete ?? true)}</span> : null}{s2?.marketBasedIncluded.length && dupMarket ? <span className="nv-stat__warn" role="note"><strong>{possibleDuplicateTotalText(dupMarket)}</strong></span> : null}</div>
+        <div className="nv-stat__foot">{s2?.marketBasedIncluded.length ? `${groupDigits(s2.marketBasedSubtotal.display)} kg${incompleteText(s2.marketBasedComplete, held2 + down2, open2)}${s2.marketBasedProvisional.length ? " · provisional" : ""}` : s2 ? "No market-based results calculated" : calculatedIn(2) ? "Subtotal could not be verified; per-record results are listed below" : outage(2) ? COULD_NOT_CALCULATE_NOW_TEXT : "No electricity calculated yet"}{held2 || down2 || open2 || (s2 && !s2.marketBasedComplete) ? <span className="nv-stat__warn">{warnLine(held2, down2, issues2, "meter", s2?.marketBasedComplete ?? true)}</span> : null}{s2?.marketBasedIncluded.length && dupMarket ? <span className="nv-stat__warn" role="note"><strong>{possibleDuplicateTotalText(dupMarket)}</strong></span> : null}</div>
       </div>
     </div>
     <p className="nv-subtle nv-stats-note">Headline figures are metric tonnes (1 t = 1,000 kg), rounded half-even to 2 decimals, the same rule as the engine. The kilogram figures are exact engine output.</p>
