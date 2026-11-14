@@ -1,7 +1,7 @@
 // Scope 3 completion I-01 (DESIGN 4.2, 8.3): the engine runner's opt-in FIFO queue, request and response cap and
 // per-action timeouts, against a stand-in engine; and the unchanged no-queue behaviour the Scope 1 and 2 engines keep.
 import { afterAll, describe, expect, test } from 'bun:test'
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { createEngineRunner, EngineRefusal, KILL_GRACE_MS, ownedProcesses, type EngineRunnerConfig } from './method-engine-runner'
@@ -16,6 +16,11 @@ writeFileSync(engine, [
   'v = json.loads(sys.stdin.buffer.read())',
   "if v.get('log'):",
   "    open(v['log'], 'a').write(str(v['n']) + '\\n')",
+  "if v.get('gate'):",
+  "    open(v['gate'] + '/started-' + str(v['n']), 'w').close()",
+  "    for _ in range(3000):",
+  "        if __import__('os').path.exists(v['gate'] + '/go-' + str(v['n'])): break",
+  "        time.sleep(0.01)",
   "time.sleep(v.get('sleepMs', 0) / 1000)",
   "if v.get('refuse'):",
   "    print(json.dumps({'status': 'refused', 'code': v['refuse']})); sys.exit(1)",
@@ -66,15 +71,35 @@ describe('engine runner with the Scope 3 queue (DESIGN 4.2)', () => {
 
   test('first in, first out; the 33rd queued call is unavailable; the rest succeed', async () => {
     const run = runner({ queue: { maxConcurrent: 2, maxQueued: 32 } })
-    const log = path.join(dir, 'order.log')
-    // 2 running + 32 queued = 34 accepted; the 35th call is the 33rd that would queue.
-    const results = await settle(Array.from({ length: 35 }, (_, n) => run({ action: 'calculate', n, sleepMs: 60, log })))
-    expect(results.map(r => r.status)).toEqual([...Array(34).fill('fulfilled'), 'rejected'])
-    expect((results[34] as PromiseRejectedResult).reason.message).toBe('Stand-in engine unavailable.')
-    // Calls start in arrival order (two at a time, so neighbours may swap when their processes start together).
-    const order = readFileSync(log, 'utf8').trim().split('\n').map(Number)
-    expect([...order].sort((a, b) => a - b)).toEqual(Array.from({ length: 34 }, (_, n) => n))
-    order.forEach((n, i) => expect(Math.abs(n - i)).toBeLessThanOrEqual(1))
+    // BF-29: admission order, not process start order. Each call holds its slot until the test releases it (a gate file), and
+    // each start writes a marker, so the test sees exactly which calls hold a slot at every step, however slow the host is.
+    // (Comparing the order in which the processes happened to write their first line made this test depend on host load.)
+    const gate = path.join(dir, 'gate')
+    mkdirSync(gate)
+    const started = () => readdirSync(gate).filter(name => name.startsWith('started-')).map(name => Number(name.slice('started-'.length))).sort((a, b) => a - b)
+    const until = async (count: number) => { for (let waited = 0; started().length < count; waited += 10) { if (waited > 45_000) throw new Error(`only ${started().length} of ${count} calls started`); await Bun.sleep(10) } }
+    // 2 running + 32 queued = 34 accepted; the 35th call is the 33rd that would queue and is refused at once.
+    const calls = Array.from({ length: 35 }, (_, n) => run({ action: 'calculate', n, gate }))
+    const results = settle(calls)
+    await until(2)
+    expect(started()).toEqual([0, 1])
+    // Release one slot at a time, newest running call first so the release order differs from the arrival order: the next
+    // call to start is always the oldest one still waiting, whichever slot freed up.
+    const running = [0, 1]
+    for (let next = 2; next < 34; next++) {
+      const freed = running.pop()!
+      writeFileSync(path.join(gate, `go-${freed}`), '')
+      await until(next + 1)
+      expect(started()).toEqual(Array.from({ length: next + 1 }, (_, n) => n))
+      running.unshift(next)
+    }
+    for (const n of running) writeFileSync(path.join(gate, `go-${n}`), '')
+    const settled = await results
+    expect(settled.map(r => r.status)).toEqual([...Array(34).fill('fulfilled'), 'rejected'])
+    expect((settled[34] as PromiseRejectedResult).reason.message).toBe('Stand-in engine unavailable.')
+    // Every accepted call ran exactly once, in admission order, and the refused one never started.
+    expect(started()).toEqual(Array.from({ length: 34 }, (_, n) => n))
+    expect(existsSync(path.join(gate, 'started-34'))).toBe(false)
     // A failed call frees its slot for the next one in the queue.
     const failing = await settle([run({ action: 'calculate', refuse: 'x', sleepMs: 200 }), run({ action: 'calculate', refuse: 'y', sleepMs: 200 }), run({ action: 'calculate', n: 99 })])
     expect(failing.map(r => r.status)).toEqual(['rejected', 'rejected', 'fulfilled'])

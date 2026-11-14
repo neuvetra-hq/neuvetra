@@ -4,7 +4,7 @@
 // a run stops when its request goes away, and that a run where no engine could answer is not presented as results.
 import { describe, expect, test } from "bun:test"
 import { validateCollectionActivity, type CollectionActivityRecord, type CollectionContext, type CollectionEvidenceMetadata, type CompanySetupView } from "@neuvetra/database"
-import { SCOPE12_BATCH_ENGINE } from "../calculation/method-engine-runner"
+import { EngineRefusal, SCOPE12_BATCH_ENGINE } from "../calculation/method-engine-runner"
 import { createScope1Engine } from "../calculation/scope1-authority"
 import { createScope2Engine } from "../calculation/scope2-authority"
 import { buildCollectionResults, checkResultsEngines, reviewedResultsEngines, COLLECTION_RESULTS_BUDGET_MS, createCollectionResultsRoutes, RESULTS_ENGINE_UNAVAILABLE_TEXT, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE12_BATCH_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256, type CollectionResultsDatabase, type CollectionResultsEngines, type CollectionResultsResponse } from "./collection-results-routes"
@@ -198,6 +198,46 @@ describe("BI-01: the results route", () => {
     expect((await pending).status).toBe(503)
     expect(seen).toHaveLength(1)  // the Scope 2 batch never started
   }, 60_000)
+})
+
+// BF-29: when nothing could run the answer is a 503 that says when to ask again; when something could, it stays a 200.
+describe("BF-29: all-unavailable is a 503 with Retry-After in every path; a partial outage stays a 200", () => {
+  const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => records, findCollectionEvidence: async () => evidence, findCompanySetup: async () => setupView, findCurrentMethodReleases: async () => [] }
+  const route = (engines: CollectionResultsEngines) => createCollectionResultsRoutes({ database, engines, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }) })
+  const get = (handler: ReturnType<typeof route>) => handler(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } }))
+  const everyItem = (status: "unavailable" | "refused") => async (items: unknown[]) => items.map(() => status === "refused" ? { status, code: "invalid_quantity" } : { status, code: null }) as never
+  /** Fake engines whose batch answers every item the same way (no Python needed): the engine cap forced, or every record refused. */
+  const fake = (scope1: "unavailable" | "refused", scope2: "unavailable" | "refused", perRecordOnly = false) => {
+    const fail = (status: "unavailable" | "refused") => async () => { throw status === "refused" ? new EngineRefusal("invalid_quantity") : new Error("busy") }
+    const aggregate = async () => { throw new Error("no aggregate") }
+    const describe = async () => ({ engineSha256: "a".repeat(64), registerSha256: "b".repeat(64), methods: [] })
+    return {
+      scope1: { calculate: fail(scope1), aggregate, describe, ...(perRecordOnly ? {} : { calculateMany: everyItem(scope1) }) },
+      scope2: { calculate: fail(scope2), aggregate, describe, ...(perRecordOnly ? {} : { calculateMany: everyItem(scope2) }) },
+    } as unknown as CollectionResultsEngines
+  }
+  test("every record sent to an engine is unavailable: 503, Retry-After 5, in the batch path and in the per-record path", async () => {
+    for (const perRecordOnly of [false, true]) {
+      const response = await get(route(fake("unavailable", "unavailable", perRecordOnly)))
+      expect([response.status, response.headers.get("retry-after")]).toEqual([503, "5"])
+      expect(await response.json()).toEqual({ code: "results_engine_unavailable", error: RESULTS_ENGINE_UNAVAILABLE_TEXT })
+    }
+  }, 60_000)
+  test("refused records are answers: all refused, or refused beside unavailable, is a 200 with no Retry-After", async () => {
+    for (const [one, two] of [["refused", "refused"], ["refused", "unavailable"], ["unavailable", "refused"]] as const) {
+      const response = await get(route(fake(one, two)))
+      expect([one, two, response.status, response.headers.get("retry-after")]).toEqual([one, two, 200, null])
+      const body = await response.json() as CollectionResultsResponse
+      expect(body.records.filter(row => row.outcome !== "held").length).toBeGreaterThan(0)
+      expect(body.scope1).toBeNull()
+    }
+  }, 60_000)
+  test("only some records unavailable: a 200 with the unavailable rows marked", async () => {
+    const half = await get(route({ scope1: batched.scope1, scope2: fake("unavailable", "unavailable").scope2 }))
+    expect([half.status, half.headers.get("retry-after")]).toEqual([200, null])
+    const body = await half.json() as CollectionResultsResponse
+    expect(body.records.some(row => row.outcome === "calculated") && body.records.some(row => row.outcome === "unavailable")).toBe(true)
+  }, 120_000)
 })
 
 // BI-01b (QA follow-up 3 of PR #68): the image job makes one real batch call per scope (tools/staging/scope12-batch-image-smoke.ts).
